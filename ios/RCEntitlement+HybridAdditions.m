@@ -4,7 +4,7 @@
 //
 
 #import "RCEntitlement+HybridAdditions.h"
-#import "SKProduct+Purchases.h"
+#import "SKProduct+HybridAdditions.h"
 
 @implementation RCEntitlement (HybridAdditions)
 
