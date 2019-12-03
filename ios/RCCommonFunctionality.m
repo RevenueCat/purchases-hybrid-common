@@ -166,6 +166,13 @@
     }];
 }
 
++ (void)setFinishTransactions:(BOOL)finishTransactions
+{
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    RCPurchases.sharedPurchases.finishTransactions = finishTransactions;
+}
+
+
 + (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion
 {
     return ^(RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error) {
