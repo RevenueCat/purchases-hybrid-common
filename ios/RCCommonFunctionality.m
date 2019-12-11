@@ -172,6 +172,21 @@
     RCPurchases.sharedPurchases.finishTransactions = finishTransactions;
 }
 
++ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase completionBlock:(RCHybridResponseBlock)completion
+{
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+
+    deferredPurchase(^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error, BOOL userCancelled) {
+        if (error) {
+            completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
+        } else {
+            completion(@{
+                @"purchaserInfo": purchaserInfo.dictionary,
+                @"productIdentifier": transaction.payment.productIdentifier
+            }, nil);
+        }
+    });
+}
 
 + (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion
 {
