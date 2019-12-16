@@ -188,6 +188,24 @@
     });
 }
 
++ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
+                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion
+{
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    
+    [RCPurchases.sharedPurchases checkTrialOrIntroductoryPriceEligibility:productIdentifiers completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *> * _Nonnull dictionary) {
+        NSMutableDictionary *response = [NSMutableDictionary new];
+        for (NSString *productID in dictionary) {
+            RCIntroEligibility *eligibility = dictionary[productID];
+            response[productID] = @{
+                @"status": @(eligibility.status),
+                @"description": eligibility.description
+            };
+        }
+        completion([NSDictionary dictionaryWithDictionary:response]);
+    }];
+}
+
 + (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion
 {
     return ^(RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error) {
