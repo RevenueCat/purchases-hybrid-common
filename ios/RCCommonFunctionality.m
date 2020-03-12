@@ -217,6 +217,11 @@
     };
 }
 
++ (void)invalidatePurchaserInfoCache { 
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
+}
+
 + (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:extraPayload];
