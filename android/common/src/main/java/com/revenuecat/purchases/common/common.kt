@@ -267,7 +267,7 @@ fun checkTrialOrIntroductoryPriceEligibility(
 }
 
 fun invalidatePurchaserInfoCache() { 
-    Purchases.sharedInstance.invalidatePurchaserInfoCache();
+    Purchases.sharedInstance.invalidatePurchaserInfoCache()
 }
 
 private fun getMakePurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
