@@ -9,15 +9,29 @@
 #import "RCPurchaserInfo+HybridAdditions.h"
 #import "SKPaymentDiscount+HybridAdditions.h"
 
+
+API_AVAILABLE(ios(12.2))
+@interface RCCommonFunctionality ()
+
+@property(class, readonly, nonatomic, retain) NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
+
+@end
+
+
 @implementation RCCommonFunctionality
 
 API_AVAILABLE(ios(12.2))
-NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
+static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
+
+
++ (NSMutableDictionary<NSString *, SKPaymentDiscount *> *)discounts API_AVAILABLE(ios(12.2)) {
+    return _discounts;
+}
 
 + (void)initialize
 {
     if (@available(iOS 12.2, *)) {
-        discounts = [NSMutableDictionary new];
+        _discounts = [NSMutableDictionary new];
     }
 }
 
@@ -167,7 +181,7 @@ NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
         if (aPackage) {
             if (discountIdentifier) {
                 if (@available(iOS 12.2, *)) {
-                    SKPaymentDiscount *discount = discounts[packageIdentifier];
+                    SKPaymentDiscount *discount = self.discounts[packageIdentifier];
                     if (discount.identifier == discountIdentifier) {
                         [RCPurchases.sharedPurchases purchasePackage:aPackage withDiscount:discount completionBlock:completionBlock];
                     } else {
@@ -243,7 +257,7 @@ NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
             if (aPackage) {
                 if (aPackage.product.discounts) {
                     [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:aPackage.product.discounts[0] product:aPackage.product completion:^(SKPaymentDiscount *discount, NSError *error) {
-                        discounts[packageIdentifier] = discount;
+                        self.discounts[packageIdentifier] = discount;
                         completion(discount.dictionary, nil);
                     }];
                 } else {
