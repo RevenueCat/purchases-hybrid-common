@@ -8,6 +8,7 @@ import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.util.Iso8601Utils
+import org.json.JSONObject
 
 fun EntitlementInfo.map(): Map<String, Any?> =
     mapOf(

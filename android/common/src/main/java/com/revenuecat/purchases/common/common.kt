@@ -292,6 +292,8 @@ fun setPushToken(fcmToken: String?) {
     Purchases.sharedInstance.setPushToken(fcmToken)
 }
 
+// region private functions
+
 private fun getMakePurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
