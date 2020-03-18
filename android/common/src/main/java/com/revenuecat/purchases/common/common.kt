@@ -266,6 +266,10 @@ fun checkTrialOrIntroductoryPriceEligibility(
     }.toMap()
 }
 
+fun invalidatePurchaserInfoCache() { 
+    Purchases.sharedInstance.invalidatePurchaserInfoCache()
+}
+
 private fun getMakePurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }

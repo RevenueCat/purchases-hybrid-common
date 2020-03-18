@@ -49,6 +49,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(void (^)(NSDictionary<NSString *, NSDictionary *> *))completion;
 
++ (void)invalidatePurchaserInfoCache;
+
 @end
 
 NS_ASSUME_NONNULL_END
