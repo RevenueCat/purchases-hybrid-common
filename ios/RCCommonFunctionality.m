@@ -244,9 +244,9 @@
     [RCPurchases.sharedPurchases setDisplayName:displayName];
 }
 
-+ (void)setPushToken:(nullable NSData *)pushToken {
++ (void)setPushToken:(nullable NSString *)pushToken {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases setPushToken:pushToken];
+    [RCPurchases.sharedPurchases setPushTokenString:pushToken];
 }
 
 + (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload
