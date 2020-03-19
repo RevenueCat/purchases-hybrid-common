@@ -1,5 +1,5 @@
 //
-// Created by Andrés Boedo on 3/19/20.
+// Created by RevenueCat on 3/19/20.
 // Copyright (c) 2020 Purchases. All rights reserved.
 //
 
@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RCPurchases (HybridAdditions)
 
-- (void)setPushTokenString:(nullable NSString *)pushToken;
+- (void)_setPushTokenString:(nullable NSString *)pushToken;
 
 @end
 
