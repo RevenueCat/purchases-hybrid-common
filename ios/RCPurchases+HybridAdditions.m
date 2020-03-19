@@ -9,12 +9,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface RCPurchases (HybridAdditions)
-@end
-
-
-
-
 @implementation RCPurchases (HybridAdditions)
 
 - (void)setPushTokenString:(nullable NSString *)pushToken {
