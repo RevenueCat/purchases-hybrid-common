@@ -161,7 +161,7 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
                                          }];
 }
 
-+ (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion
++ (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
@@ -179,10 +179,10 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *offerings, NSError *error) {
         RCPackage *aPackage = [[offerings offeringWithIdentifier:offeringIdentifier] packageWithIdentifier:packageIdentifier];
         if (aPackage) {
-            if (discountIdentifier) {
+            if (discountTimestamp) {
                 if (@available(iOS 12.2, *)) {
-                    SKPaymentDiscount *discount = self.discounts[packageIdentifier];
-                    if (discount.identifier == discountIdentifier) {
+                    SKPaymentDiscount *discount = self.discounts[discountTimestamp];
+                    if (discount) {
                         [RCPurchases.sharedPurchases purchasePackage:aPackage withDiscount:discount completionBlock:completionBlock];
                     } else {
                         NSError *error = [NSError errorWithDomain:RCPurchasesErrorDomain
@@ -247,7 +247,7 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     }];
 }
 
-+ (void)paymentDiscountForPackageIdentifier:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier completionBlock:(RCHybridResponseBlock)completion
++ (void)paymentDiscountForPackageIdentifier:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion
 {
     if (@available(iOS 12.2, *)) {
         NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -255,18 +255,34 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
         [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *offerings, NSError *error) {
             RCPackage *aPackage = [[offerings offeringWithIdentifier:offeringIdentifier] packageWithIdentifier:packageIdentifier];
             if (aPackage) {
-                if (aPackage.product.discounts) {
-                    [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:aPackage.product.discounts[0] product:aPackage.product completion:^(SKPaymentDiscount *discount, NSError *error) {
-                        self.discounts[packageIdentifier] = discount;
-                        completion(discount.dictionary, nil);
-                    }];
+                SKProductDiscount *discountToUse;
+                NSArray<SKProductDiscount *> *productDiscounts = aPackage.product.discounts;
+                if (discountIdentifier == nil && productDiscounts != nil && productDiscounts.count > 0) {
+                    discountToUse = productDiscounts.firstObject;
                 } else {
+                    for (SKProductDiscount *discount in productDiscounts) {
+                        if (discountIdentifier == discount.identifier) {
+                            discountToUse = discount;
+                        }
+                    }
+                }
+
+                if (discountToUse == nil) {
                     NSError *error = [NSError errorWithDomain:RCPurchasesErrorDomain
                                                          code:RCProductNotAvailableForPurchaseError
                                                      userInfo:@{
-                                                             NSLocalizedDescriptionKey: @"Product doesn't have discounts."
+                                                             NSLocalizedDescriptionKey: @"Couldn't find discount."
                                                      }];
                     completion(nil, [self payloadForError:error  withExtraPayload:@{}]);
+                } else {
+                    [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:discountToUse product:aPackage.product completion:^(SKPaymentDiscount *paymentDiscount, NSError *error) {
+                        if (paymentDiscount) {
+                            self.discounts[[paymentDiscount.timestamp stringValue]] = paymentDiscount;
+                            completion(paymentDiscount.dictionary, nil);
+                        } else {
+                            completion(nil, [self payloadForError:error  withExtraPayload:@{}]);
+                        }
+                    }];
                 }
             } else {
                 NSError *error = [NSError errorWithDomain:RCPurchasesErrorDomain
