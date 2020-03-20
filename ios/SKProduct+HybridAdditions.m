@@ -4,6 +4,7 @@
 //
 
 #import "SKProduct+HybridAdditions.h"
+#import "SKProductDiscount+HybridAdditions.h"
 
 @implementation SKProduct (RCPurchases)
 
@@ -37,16 +38,25 @@
             d[@"intro_price_period_unit"] = [self normalizeSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
             d[@"intro_price_period_number_of_units"] = @(self.introductoryPrice.subscriptionPeriod.numberOfUnits);
             d[@"intro_price_cycles"] = @(self.introductoryPrice.numberOfPeriods);
-            return d;
+            d[@"introPrice"] = self.introductoryPrice.dictionary;
+        }
+    } else {
+        d[@"intro_price"] = [NSNull null];
+        d[@"intro_price_string"] = [NSNull null];
+        d[@"intro_price_period"] = [NSNull null];
+        d[@"intro_price_period_unit"] = [NSNull null];
+        d[@"intro_price_period_number_of_units"] = [NSNull null];
+        d[@"intro_price_cycles"] = [NSNull null];
+        d[@"introPrice"] = [NSNull null];
+    }
+    
+    d[@"discounts"] = [NSNull null];
+    if (@available(iOS 12.2, *)) {
+        d[@"discounts"] = [NSMutableArray new];
+        for (SKProductDiscount* discount in self.discounts) {
+            [d[@"discounts"] addObject:discount.dictionary];
         }
     }
-
-    d[@"intro_price"] = [NSNull null];
-    d[@"intro_price_string"] = [NSNull null];
-    d[@"intro_price_period"] = [NSNull null];
-    d[@"intro_price_period_unit"] = [NSNull null];
-    d[@"intro_price_period_number_of_units"] = [NSNull null];
-    d[@"intro_price_cycles"] = [NSNull null];
     
     return d;
 }
