@@ -51,6 +51,18 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
 
++ (void)invalidatePurchaserInfoCache;
+
++ (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes;
+
++ (void)setEmail:(nullable NSString *)email;
+
++ (void)setPhoneNumber:(nullable NSString *)phoneNumber;
+
++ (void)setDisplayName:(nullable NSString *)displayName;
+
++ (void)setPushToken:(nullable NSString *)pushToken;
+
 @end
 
 NS_ASSUME_NONNULL_END
