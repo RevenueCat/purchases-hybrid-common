@@ -39,7 +39,7 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (BOOL)isAnonymous;
 
-+ (void)purchaseProduct:(NSString *)productIdentifier completionBlock:(RCHybridResponseBlock)completion;
++ (void)purchaseProduct:(NSString *)productIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion;
 
@@ -49,7 +49,7 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
-+ (void)paymentDiscountForPackageIdentifier:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
++ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
 
 @end
 
