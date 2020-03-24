@@ -30,6 +30,14 @@
                         @"currency_code": (self.rc_currencyCode) ? self.rc_currencyCode : [NSNull null]
                         }];
     
+    d[@"intro_price"] = [NSNull null];
+    d[@"intro_price_string"] = [NSNull null];
+    d[@"intro_price_period"] = [NSNull null];
+    d[@"intro_price_period_unit"] = [NSNull null];
+    d[@"intro_price_period_number_of_units"] = [NSNull null];
+    d[@"intro_price_cycles"] = [NSNull null];
+    d[@"introPrice"] = [NSNull null];
+    
     if (@available(iOS 11.2, *)) {
         if (self.introductoryPrice) {
             d[@"intro_price"] = @(self.introductoryPrice.price.floatValue);
@@ -40,17 +48,10 @@
             d[@"intro_price_cycles"] = @(self.introductoryPrice.numberOfPeriods);
             d[@"introPrice"] = self.introductoryPrice.dictionary;
         }
-    } else {
-        d[@"intro_price"] = [NSNull null];
-        d[@"intro_price_string"] = [NSNull null];
-        d[@"intro_price_period"] = [NSNull null];
-        d[@"intro_price_period_unit"] = [NSNull null];
-        d[@"intro_price_period_number_of_units"] = [NSNull null];
-        d[@"intro_price_cycles"] = [NSNull null];
-        d[@"introPrice"] = [NSNull null];
     }
     
     d[@"discounts"] = [NSNull null];
+    
     if (@available(iOS 12.2, *)) {
         d[@"discounts"] = [NSMutableArray new];
         for (SKProductDiscount* discount in self.discounts) {
