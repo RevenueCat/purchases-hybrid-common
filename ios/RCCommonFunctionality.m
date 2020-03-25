@@ -28,7 +28,7 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     return _discounts;
 }
 
-+ (void)initialize
++ (void)configure
 {
     if (@available(iOS 12.2, *)) {
         _discounts = [NSMutableDictionary new];
@@ -126,7 +126,9 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     return [RCPurchases.sharedPurchases isAnonymous];
 }
 
-+ (void)purchaseProduct:(NSString *)productIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion
++ (void)purchaseProduct:(NSString *)productIdentifier
+signedDiscountTimestamp:(nullable NSString *)discountTimestamp
+        completionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     
@@ -141,34 +143,34 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
         }
     };
     
-    [RCPurchases.sharedPurchases productsWithIdentifiers:@[productIdentifier]
-                                         completionBlock:^(NSArray<SKProduct *> *_Nonnull products) {
-        NSMutableDictionary *productsByIdentifiers = [NSMutableDictionary new];
-        for (SKProduct *p in products) {
-            productsByIdentifiers[p.productIdentifier] = p;
+    
+    [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct *_Nullable aProduct) {
+        if (aProduct == nil) {
+            [self productNotFoundErrorWithDescription:@"Couldn't find product." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+            return;
         }
         
-        if (productsByIdentifiers[productIdentifier]) {
+        if (@available(iOS 12.2, *)) {
             if (discountTimestamp) {
-                if (@available(iOS 12.2, *)) {
-                    SKPaymentDiscount *discount = self.discounts[discountTimestamp];
-                    if (discount) {
-                        [RCPurchases.sharedPurchases purchaseProduct:productsByIdentifiers[productIdentifier] withDiscount:discount completionBlock:completionBlock];
-                        return;
-                    }
+                SKPaymentDiscount *discount = self.discounts[discountTimestamp];
+                if (discount == nil) {
                     [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+                    return;
                 }
-            } else {
-                [RCPurchases.sharedPurchases purchaseProduct:productsByIdentifiers[productIdentifier]
-                                         withCompletionBlock:completionBlock];
+                
+                [RCPurchases.sharedPurchases purchaseProduct:aProduct withDiscount:discount completionBlock:completionBlock];
+                return;
             }
-        } else {
-            [self productNotFoundErrorWithDescription:@"Couldn't find product." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
         }
+        
+        [RCPurchases.sharedPurchases purchaseProduct:aProduct withCompletionBlock:completionBlock];
     }];
 }
 
-+ (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion
++ (void)purchasePackage:(NSString *)packageIdentifier
+               offering:(NSString *)offeringIdentifier
+signedDiscountTimestamp:(nullable NSString *)discountTimestamp
+        completionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
@@ -182,25 +184,27 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
             }, nil);
         }
     };
-
-    [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *offerings, NSError *error) {
-        RCPackage *aPackage = [[offerings offeringWithIdentifier:offeringIdentifier] packageWithIdentifier:packageIdentifier];
-        if (aPackage) {
-            if (discountTimestamp) {
-                if (@available(iOS 12.2, *)) {
-                    SKPaymentDiscount *discount = self.discounts[discountTimestamp];
-                    if (discount) {
-                        [RCPurchases.sharedPurchases purchasePackage:aPackage withDiscount:discount completionBlock:completionBlock];
-                        return;
-                    }
-                }
-                [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
-            } else {
-                [RCPurchases.sharedPurchases purchasePackage:aPackage withCompletionBlock:completionBlock];
-            }
-        } else {
+    
+    [self packageWithIdentifier:packageIdentifier offeringIdentifier:offeringIdentifier completionBlock:^(RCPackage *_Nullable aPackage) {
+        if (aPackage == nil) {
             [self productNotFoundErrorWithDescription:@"Couldn't find package." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+            return;
         }
+        
+        if (@available(iOS 12.2, *)) {
+           if (discountTimestamp) {
+               SKPaymentDiscount *discount = self.discounts[discountTimestamp];
+               if (discount == nil) {
+                   [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+                   return;
+               }
+               
+               [RCPurchases.sharedPurchases purchasePackage:aPackage withDiscount:discount completionBlock:completionBlock];
+               return;
+           }
+        }
+        
+        [RCPurchases.sharedPurchases purchasePackage:aPackage withCompletionBlock:completionBlock];
     }];
 }
 
@@ -244,7 +248,9 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     }];
 }
 
-+ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion
++ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
+                                   discount:(nullable NSString *)discountIdentifier
+                            completionBlock:(RCHybridResponseBlock)completion
 {
     if (@available(iOS 12.2, *)) {
         NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -336,7 +342,9 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     return [[RCErrorContainer alloc] initWithError:error info:dict];
 }
 
-+ (void)productNotFoundErrorWithDescription:(NSString *)errorDescription userCancelled:(nullable NSNumber *)userCancelled completion:(RCHybridResponseBlock)completion
++ (void)productNotFoundErrorWithDescription:(NSString *)errorDescription
+                              userCancelled:(nullable NSNumber *)userCancelled
+                                 completion:(RCHybridResponseBlock)completion
 {
     NSDictionary *extraPayload;
     if (userCancelled == nil) {
@@ -355,13 +363,14 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
 
 #pragma helpers
 
-+ (void)productWithIdentifier:(NSString *)productIdentifier completionBlock:(void (^)(SKProduct *))completion
++ (void)productWithIdentifier:(NSString *)productIdentifier
+              completionBlock:(void (^)(SKProduct *_Nullable))completion
 {
     [RCPurchases.sharedPurchases productsWithIdentifiers:@[productIdentifier]
                                          completionBlock:^(NSArray<SKProduct *> *_Nonnull products) {
                                              SKProduct *aProduct = nil;
                                              for (SKProduct *p in products) {
-                                                 if (                                                 [productIdentifier isEqualToString:p.productIdentifier]) {
+                                                 if ([productIdentifier isEqualToString:p.productIdentifier]) {
                                                      aProduct = p;
                                                  }
                                              }
@@ -369,7 +378,17 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
                                          }];
 }
 
-+ (nullable SKProductDiscount *)discountWithIdentifier:(NSString *)identifier forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2)) {
++ (void)packageWithIdentifier:(NSString *)packageIdentifier
+           offeringIdentifier:(NSString *)offeringIdentifier
+              completionBlock:(void (^)(RCPackage *_Nullable))completion
+{
+    [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *offerings, NSError *error) {
+        completion([[offerings offeringWithIdentifier:offeringIdentifier] packageWithIdentifier:packageIdentifier]);
+    }];
+}
+
++ (nullable SKProductDiscount *)discountWithIdentifier:(NSString *)identifier
+                                            forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2)) {
     SKProductDiscount *discountToUse = nil;
     NSArray<SKProductDiscount *> *productDiscounts = aProduct.discounts;
     if (identifier == nil && productDiscounts != nil && productDiscounts.count > 0) {

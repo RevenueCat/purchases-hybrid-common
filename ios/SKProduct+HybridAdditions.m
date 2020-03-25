@@ -42,8 +42,8 @@
         if (self.introductoryPrice) {
             d[@"intro_price"] = @(self.introductoryPrice.price.floatValue);
             d[@"intro_price_string"] = [formatter stringFromNumber:self.introductoryPrice.price];
-            d[@"intro_price_period"] = [self normalizeSubscriptionPeriod:self.introductoryPrice.subscriptionPeriod];
-            d[@"intro_price_period_unit"] = [self normalizeSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
+            d[@"intro_price_period"] = [SKProduct normalizedSubscriptionPeriod:self.introductoryPrice.subscriptionPeriod];
+            d[@"intro_price_period_unit"] = [SKProduct normalizedSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
             d[@"intro_price_period_number_of_units"] = @(self.introductoryPrice.subscriptionPeriod.numberOfUnits);
             d[@"intro_price_cycles"] = @(self.introductoryPrice.numberOfPeriods);
             d[@"introPrice"] = self.introductoryPrice.dictionary;
@@ -62,7 +62,7 @@
     return d;
 }
 
-- (NSString *)normalizeSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2)){
++ (NSString *)normalizedSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2)){
     NSString *unit;
     switch (subscriptionPeriod.unit) {
         case SKProductPeriodUnitDay:
@@ -81,7 +81,7 @@
     return [NSString stringWithFormat:@"%@%@%@", @"P", @(subscriptionPeriod.numberOfUnits), unit];
 }
 
-- (NSString *)normalizeSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2)){
++ (NSString *)normalizedSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2)){
     switch (subscriptionPeriodUnit) {
         case SKProductPeriodUnitDay:
             return @"DAY";

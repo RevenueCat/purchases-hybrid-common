@@ -9,15 +9,13 @@
 
 - (NSDictionary *)dictionary
 {
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
-                        @"identifier": self.identifier,
-                        @"keyIdentifier": self.keyIdentifier,
-                        @"nonce": self.nonce.UUIDString,
-                        @"signature": self.signature,
-                        @"timestamp": self.timestamp,
-                        }];
-    
-    return d;
+    return @{
+        @"identifier": self.identifier,
+        @"keyIdentifier": self.keyIdentifier,
+        @"nonce": self.nonce.UUIDString,
+        @"signature": self.signature,
+        @"timestamp": self.timestamp,
+    };
 }
 
 @end

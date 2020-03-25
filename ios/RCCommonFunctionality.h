@@ -13,6 +13,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 @interface RCCommonFunctionality : NSObject
 
++ (void)configure;
+
 + (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
 
 + (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId;

@@ -3,7 +3,9 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 
+#import "SKProduct+HybridAdditions.h"
 #import "SKProductDiscount+HybridAdditions.h"
+
 
 @implementation SKProductDiscount (RCPurchases)
 
@@ -22,11 +24,10 @@
     formatter.locale = self.priceLocale;
     
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
-       
         @"price": @(self.price.floatValue),
         @"priceString": [formatter stringFromNumber:self.price],
-        @"period": [self normalizeSubscriptionPeriod:self.subscriptionPeriod],
-        @"periodUnit": [self normalizeSubscriptionPeriodUnit:self.subscriptionPeriod.unit],
+        @"period": [SKProduct normalizedSubscriptionPeriod:self.subscriptionPeriod],
+        @"periodUnit": [SKProduct normalizedSubscriptionPeriodUnit:self.subscriptionPeriod.unit],
         @"periodNumberOfUnits": @(self.subscriptionPeriod.numberOfUnits),
         @"cycles": @(self.numberOfPeriods)
     }];
@@ -38,38 +39,6 @@
     }
     
     return d;
-}
-
-- (NSString *)normalizeSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2)){
-    NSString *unit;
-    switch (subscriptionPeriod.unit) {
-        case SKProductPeriodUnitDay:
-            unit = @"D";
-            break;
-        case SKProductPeriodUnitWeek:
-            unit = @"W";
-            break;
-        case SKProductPeriodUnitMonth:
-            unit = @"M";
-            break;
-        case SKProductPeriodUnitYear:
-            unit = @"Y";
-            break;
-    }
-    return [NSString stringWithFormat:@"%@%@%@", @"P", @(subscriptionPeriod.numberOfUnits), unit];
-}
-
-- (NSString *)normalizeSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2)){
-    switch (subscriptionPeriodUnit) {
-        case SKProductPeriodUnitDay:
-            return @"DAY";
-        case SKProductPeriodUnitWeek:
-            return @"WEEK";
-        case SKProductPeriodUnitMonth:
-            return @"MONTH";
-        case SKProductPeriodUnitYear:
-            return @"YEAR";
-    }
 }
 
 @end
