@@ -8,6 +8,7 @@
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
 #import "SKPaymentDiscount+HybridAdditions.h"
+#import "RCPurchases+HybridAdditions.h"
 
 
 API_AVAILABLE(ios(12.2))
