@@ -301,7 +301,15 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases setAttributes:attributes];
+    NSMutableDictionary *nonNilAttributes = [[NSMutableDictionary alloc] init];
+    for (NSString * key in attributes.allKeys) {
+        id object = attributes[key];
+        NSString *nonNilAttribute = ([object isEqual:NSNull.null])
+                                     ? @""
+                                     : object;
+        nonNilAttributes[key] = nonNilAttribute;
+    }
+    [RCPurchases.sharedPurchases setAttributes:nonNilAttributes];
 }
 
 + (void)setEmail:(nullable NSString *)email {
