@@ -1,3 +1,7 @@
+## 1.0.10
+
+- Fix crash when setting NSNull in setAttributes
+
 ## 1.0.9
 
 - Added subscription offers support
