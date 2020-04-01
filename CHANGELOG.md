@@ -1,3 +1,7 @@
+## 1.0.11
+
+- Converts all NSNull attributes to string or nil
+
 ## 1.0.10
 
 - Fix crash when setting NSNull in setAttributes
