@@ -117,8 +117,7 @@ private fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
             "intro_price" to introductoryPriceAmountMicros / 1000000.0,
             "intro_price_string" to introductoryPrice,
             "intro_price_period" to introductoryPricePeriod,
-            "intro_price_cycles" to (introductoryPriceCycles?.takeUnless { it.isBlank() }?.toInt()
-                ?: 0)
+            "intro_price_cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
         ) + introductoryPricePeriod.mapPeriodDeprecated()
     } else {
         mapOf(
@@ -157,8 +156,7 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
             "price" to introductoryPriceAmountMicros / 1000000.0,
             "priceString" to introductoryPrice,
             "period" to introductoryPricePeriod,
-            "cycles" to (introductoryPriceCycles?.takeUnless { it.isBlank() }?.toInt()
-                ?: 0)
+            "cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
         ) + introductoryPricePeriod.mapPeriod()
     } else {
         mapOf(
