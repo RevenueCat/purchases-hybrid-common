@@ -1,3 +1,7 @@
+## 1.0.12
+
+- Improves Unity compatibility https://github.com/RevenueCat/purchases-hybrid-common/pull/15
+
 ## 1.0.11
 
 - Converts all NSNull attributes to string or nil
