@@ -8,8 +8,11 @@ import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.util.Iso8601Utils
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.Currency
+import java.util.Date
 
 fun EntitlementInfo.map(): Map<String, Any?> =
     mapOf(
@@ -17,14 +20,19 @@ fun EntitlementInfo.map(): Map<String, Any?> =
         "isActive" to this.isActive,
         "willRenew" to this.willRenew,
         "periodType" to this.periodType.name,
-        "latestPurchaseDate" to Iso8601Utils.format(this.latestPurchaseDate),
-        "originalPurchaseDate" to Iso8601Utils.format(this.originalPurchaseDate),
-        "expirationDate" to this.expirationDate?.let { Iso8601Utils.format(it) },
+        "latestPurchaseDateMillis" to this.latestPurchaseDate.toMillis(),
+        "latestPurchaseDate" to this.latestPurchaseDate.toIso8601(),
+        "originalPurchaseDateMillis" to this.originalPurchaseDate.toMillis(),
+        "originalPurchaseDate" to this.originalPurchaseDate.toIso8601(),
+        "expirationDateMillis" to this.expirationDate?.toMillis(),
+        "expirationDate" to this.expirationDate?.toIso8601(),
         "store" to this.store.name,
         "productIdentifier" to this.productIdentifier,
         "isSandbox" to this.isSandbox,
-        "unsubscribeDetectedAt" to this.unsubscribeDetectedAt?.let { Iso8601Utils.format(it) },
-        "billingIssueDetectedAt" to this.billingIssueDetectedAt?.let { Iso8601Utils.format(it) }
+        "unsubscribeDetectedAt" to this.unsubscribeDetectedAt?.toIso8601(),
+        "unsubscribeDetectedAtMillis" to this.unsubscribeDetectedAt?.toMillis(),
+        "billingIssueDetectedAt" to this.billingIssueDetectedAt?.toIso8601(),
+        "billingIssueDetectedAtMillis" to this.billingIssueDetectedAt?.toMillis()
     )
 
 fun EntitlementInfos.map(): Map<String, Any> =
@@ -50,22 +58,23 @@ fun PurchaserInfo.map(): Map<String, Any?> =
         "entitlements" to entitlements.map(),
         "activeSubscriptions" to activeSubscriptions.toList(),
         "allPurchasedProductIdentifiers" to allPurchasedSkus.toList(),
-        "latestExpirationDate" to latestExpirationDate?.let { Iso8601Utils.format(it) },
-        "firstSeen" to Iso8601Utils.format(firstSeen),
+        "latestExpirationDate" to latestExpirationDate?.toIso8601(),
+        "latestExpirationDateMillis" to latestExpirationDate?.toMillis(),
+        "firstSeen" to firstSeen.toIso8601(),
+        "firstSeenMillis" to firstSeen.toMillis(),
         "originalAppUserId" to originalAppUserId,
-        "requestDate" to Iso8601Utils.format(requestDate),
-        "allExpirationDates" to allExpirationDatesByProduct.asIterable().associate {
-            it.key to it.value?.let { date -> Iso8601Utils.format(date) }
-        },
-        "allPurchaseDates" to allPurchaseDatesByProduct.asIterable().associate {
-            it.key to it.value?.let { date -> Iso8601Utils.format(date) }
-        },
+        "requestDate" to requestDate.toIso8601(),
+        "requestDateMillis" to requestDate.toMillis(),
+        "allExpirationDates" to allExpirationDatesByProduct.mapValues { it.value?.toIso8601() },
+        "allExpirationDatesMillis" to allExpirationDatesByProduct.mapValues { it.value?.toMillis() },
+        "allPurchaseDates" to allPurchaseDatesByProduct.mapValues { it.value?.toIso8601() },
+        "allPurchaseDatesMillis" to allPurchaseDatesByProduct.mapValues { it.value?.toMillis() },
         "originalApplicationVersion" to null
     )
 
 fun Offerings.map(): Map<String, Any?> =
     mapOf(
-        "all" to this.all.asIterable().associate { it.key to it.value.map() },
+        "all" to this.all.mapValues { it.value.map() },
         "current" to this.current?.map()
     )
 
@@ -108,8 +117,7 @@ private fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
             "intro_price" to introductoryPriceAmountMicros / 1000000.0,
             "intro_price_string" to introductoryPrice,
             "intro_price_period" to introductoryPricePeriod,
-            "intro_price_cycles" to (introductoryPriceCycles?.takeUnless { it.isBlank() }?.toInt()
-                ?: 0)
+            "intro_price_cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
         ) + introductoryPricePeriod.mapPeriodDeprecated()
     } else {
         mapOf(
@@ -148,8 +156,7 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
             "price" to introductoryPriceAmountMicros / 1000000.0,
             "priceString" to introductoryPrice,
             "period" to introductoryPricePeriod,
-            "cycles" to (introductoryPriceCycles?.takeUnless { it.isBlank() }?.toInt()
-                ?: 0)
+            "cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
         ) + introductoryPricePeriod.mapPeriod()
     } else {
         mapOf(
@@ -222,3 +229,35 @@ private fun String?.mapPeriod(): Map<String, Any?> {
         }
     }
 }
+
+fun Map<String, *>.convertToJson(): JSONObject {
+    val jsonObject = JSONObject()
+    for ((key, value) in this) {
+        when (value) {
+            null -> jsonObject.put(key, JSONObject.NULL)
+            is Map<*, *> -> jsonObject.put(key, (value as Map<String, *>).convertToJson())
+            is List<*> -> jsonObject.put(key, value.convertToJsonArray())
+            is Array<*> -> jsonObject.put(key, value.toList().convertToJsonArray())
+            else -> jsonObject.put(key, value)
+        }
+    }
+    return jsonObject
+}
+
+fun List<*>.convertToJsonArray(): JSONArray {
+    val writableArray = JSONArray()
+    for (item in this) {
+        when (item) {
+            null -> writableArray.put(JSONObject.NULL)
+            is Map<*, *> -> writableArray.put((item as Map<String, *>).convertToJson())
+            is Array<*> -> writableArray.put(item.asList().convertToJsonArray())
+            is List<*> -> writableArray.put(item.convertToJsonArray())
+            else -> writableArray.put(item)
+        }
+    }
+    return writableArray
+}
+
+private fun Date.toMillis(): Double = this.time.div(1000.0)
+
+private fun Date.toIso8601(): String = Iso8601Utils.format(this)
