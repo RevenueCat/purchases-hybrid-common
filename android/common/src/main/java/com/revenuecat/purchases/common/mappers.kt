@@ -254,6 +254,15 @@ fun List<*>.convertToJsonArray(): JSONArray {
     return writableArray
 }
 
+fun JSONObject.convertToMap(): Map<String, String?> =
+    this.keys().asSequence<String>().associate { key ->
+        if (this.isNull(key)) {
+            key to null
+        } else {
+            key to this.getString(key)
+        }
+    }
+
 private fun Date.toMillis(): Double = this.time.div(1000.0)
 
 private fun Date.toIso8601(): String = Iso8601Utils.format(this)
