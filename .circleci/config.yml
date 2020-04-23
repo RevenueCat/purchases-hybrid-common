@@ -11,8 +11,9 @@ jobs:
 
     steps:
       - checkout
-      - run: cd ios/PurchasesHybridCommon && pod install && fastlane scan # Run tests using Fastlane
+      - run:
         name: Run tests
+        command: cd ios/PurchasesHybridCommon && pod install && fastlane scan # Run tests using Fastlane
         environment:
           SCAN_SCHEME: PurchasesHybridCommon
 
