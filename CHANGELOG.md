@@ -1,3 +1,7 @@
+## 1.0.13
+
+- Small refactor on how periods are converted to map on Android https://github.com/RevenueCat/purchases-hybrid-common/pull/17
+
 ## 1.0.12
 
 - Improves Unity compatibility https://github.com/RevenueCat/purchases-hybrid-common/pull/15
