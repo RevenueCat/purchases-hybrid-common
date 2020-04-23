@@ -124,10 +124,8 @@ private fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
             "intro_price" to null,
             "intro_price_string" to null,
             "intro_price_period" to null,
-            "intro_price_cycles" to null,
-            "intro_price_period_unit" to null,
-            "intro_price_period_number_of_units" to null
-        )
+            "intro_price_cycles" to null
+        ) + introductoryPricePeriod.mapPeriodDeprecated()
     }
 }
 
@@ -163,10 +161,8 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
             "price" to null,
             "priceString" to null,
             "period" to null,
-            "cycles" to null,
-            "periodUnit" to null,
-            "periodNumberOfUnits" to null
-        )
+            "cycles" to null
+        ) + introductoryPricePeriod.mapPeriod()
     }
 }
 
@@ -257,6 +253,15 @@ fun List<*>.convertToJsonArray(): JSONArray {
     }
     return writableArray
 }
+
+fun JSONObject.convertToMap(): Map<String, String?> =
+    this.keys().asSequence<String>().associate { key ->
+        if (this.isNull(key)) {
+            key to null
+        } else {
+            key to this.getString(key)
+        }
+    }
 
 private fun Date.toMillis(): Double = this.time.div(1000.0)
 
