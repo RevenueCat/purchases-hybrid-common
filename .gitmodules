@@ -1,0 +1,3 @@
+[submodule "ios/dependencies/purchases-ios"]
+	path = ios/dependencies/purchases-ios
+	url = https://github.com/revenuecat/purchases-ios
