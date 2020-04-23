@@ -11,6 +11,7 @@ jobs:
 
     steps:
       - checkout
+      - run: cd ios/PurchasesHybridCommon
       - run: pod install # Install CocoaPods dependencies
       - run: fastlane scan # Run tests using Fastlane
 
