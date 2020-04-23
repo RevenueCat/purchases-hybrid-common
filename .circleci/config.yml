@@ -7,7 +7,7 @@ jobs:
   build:
 
     macos:
-      xcode: 11.4.0 # Specify the Xcode version to use
+      xcode: 11.4.0
 
     steps:
       - checkout
@@ -16,9 +16,9 @@ jobs:
           command:  |
             cd ios/PurchasesHybridCommon 
             pod install
-            fastlane scan # Run tests using Fastlane
+            fastlane scan
           environment:
-            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_SCHEME: PurchasesHybridCommonTests
       - store_test_results:
           path: test_output
       - store_artifacts:
