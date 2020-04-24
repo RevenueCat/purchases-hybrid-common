@@ -252,8 +252,9 @@
 				2D54BF362437AF5200FF4EE4 /* SKPaymentDiscount+HybridAdditions.h in Headers */,
 				2D6E335424521B450022A971 /* NSDate+HybridAdditions.h in Headers */,
 				2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */,
+				2D6E335424521B450022A971 /* NSDate+HybridAdditions.h in Headers */,
 				2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */,
-				2D54BF452437AF6900FF4EE4 /* PurchasesHybridCommon.h in Headers */,
+				2D6E330D2450F5880022A971 /* PurchasesHybridCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

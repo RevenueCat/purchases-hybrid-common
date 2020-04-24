@@ -8,24 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
-//! Project version number for PurchasesHybridCommonFramework.
-FOUNDATION_EXPORT double PurchasesHybridCommonFrameworkVersionNumber;
+//! Project version number for PurchasesHybridCommon.
+FOUNDATION_EXPORT double PurchasesHybridCommonVersionNumber;
 
-//! Project version string for PurchasesHybridCommonFramework.
-FOUNDATION_EXPORT const unsigned char PurchasesHybridCommonFrameworkVersionString[];
+//! Project version string for PurchasesHybridCommon.
+FOUNDATION_EXPORT const unsigned char PurchasesHybridCommonVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <PurchasesHybridCommonFramework/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <PurchasesHybridCommon/PublicHeader.h>
 
-#import "RCPurchases+HybridAdditions.h"
-#import "RCCommonFunctionality.h"
-#import "RCEntitlementInfo+HybridAdditions.h"
-#import "RCEntitlementInfos+HybridAdditions.h"
-#import "RCErrorContainer.h"
-#import "RCOffering+HybridAdditions.h"
-#import "RCOfferings+HybridAdditions.h"
-#import "RCPackage+HybridAdditions.h"
-#import "RCPurchaserInfo+HybridAdditions.h"
-#import "SKPaymentDiscount+HybridAdditions.h"
-#import "SKProduct+HybridAdditions.h"
-#import "SKProductDiscount+HybridAdditions.h"
-#import "PurchasesHybridCommon.h"
+#import <PurchasesHybridCommon/RCPurchases+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCCommonFunctionality.h>
+#import <PurchasesHybridCommon/RCEntitlementInfo+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCEntitlementInfos+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCErrorContainer.h>
+#import <PurchasesHybridCommon/RCOffering+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCOfferings+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCPackage+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCPurchaserInfo+HybridAdditions.h>
+#import <PurchasesHybridCommon/SKPaymentDiscount+HybridAdditions.h>
+#import <PurchasesHybridCommon/SKProduct+HybridAdditions.h>
+#import <PurchasesHybridCommon/SKProductDiscount+HybridAdditions.h>
+#import <PurchasesHybridCommon/NSDate+HybridAdditions.h>
