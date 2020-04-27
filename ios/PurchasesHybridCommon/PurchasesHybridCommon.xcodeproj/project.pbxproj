@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */; };
 		2D54BF2A2437AE1200FF4EE4 /* Purchases.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF252437AE0200FF4EE4 /* Purchases.framework */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -65,6 +66,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D54BF1F2437AE0200FF4EE4 /* Purchases.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Purchases.xcodeproj; path = "../dependencies/purchases-ios/Purchases.xcodeproj"; sourceTree = "<group>"; };
 		2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommon.h; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */,
 				2D6E333A2450F7A60022A971 /* PurchasesHybridCommonTests-Bridging-Header.h */,
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
+				2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -443,6 +446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */,
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
 				2D6E333C2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift in Sources */,
 			);
