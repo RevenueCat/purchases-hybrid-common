@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
                           appUserID:(nullable NSString *)appUserID
                        observerMode:(BOOL)observerMode
                        userDefaults:(nullable NSUserDefaults *)userDefaults
-                     platformFlavor:(NSString *)platformFlavor;
+                     platformFlavor:(nullable NSString *)platformFlavor
+              platformFlavorVersion:(nullable NSString *)platformFlavorVersion;
 
 @end
 
