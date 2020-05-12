@@ -23,7 +23,6 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaults: nil,
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3")
-                    
                 }.notTo(raiseException())
             }
         }
