@@ -13,6 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)_setPushTokenString:(nullable NSString *)pushToken;
 
++ (instancetype)configureWithAPIKey:(NSString *)APIKey
+                          appUserID:(nullable NSString *)appUserID
+                       observerMode:(BOOL)observerMode
+                       userDefaults:(nullable NSUserDefaults *)userDefaults
+                     platformFlavor:(NSString *)platformFlavor;
+
 @end
 
 
