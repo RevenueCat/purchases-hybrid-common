@@ -1,3 +1,14 @@
+## 1.0.14
+
+- New iOS headers for platformFlavor and platformFlavorVersion
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/23
+- CircleCI tests integration
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/20
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/21
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/22
+- Add xcproject and tests target
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/18
+
 ## 1.0.13
 
 - Small refactor on how periods are converted to map on Android https://github.com/RevenueCat/purchases-hybrid-common/pull/17
