@@ -8,6 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PurchasesHybridCommon : NSObject
-
-@end
+#import "NSDate+HybridAdditions.h"
+#import "RCCommonFunctionality.h"
+#import "RCEntitlementInfo+HybridAdditions.h"
+#import "RCEntitlementInfos+HybridAdditions.h"
+#import "RCErrorContainer.h"
+#import "RCOffering+HybridAdditions.h"
+#import "RCOfferings+HybridAdditions.h"
+#import "RCPackage+HybridAdditions.h"
+#import "RCPurchaserInfo+HybridAdditions.h"
+#import "RCPurchases+HybridAdditions.h"
+#import "SKPaymentDiscount+HybridAdditions.h"
+#import "SKProduct+HybridAdditions.h"
+#import "SKProductDiscount+HybridAdditions.h"
