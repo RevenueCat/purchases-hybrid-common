@@ -1,2 +1,0 @@
-include ':app', ':common'
-rootProject.name='purchases_hybrid_common'
