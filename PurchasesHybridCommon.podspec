@@ -30,7 +30,6 @@ Pod::Spec.new do |s|
 
 
   s.public_header_files = [
-    'ios/PurchasesHybridCommon/PurchasesHybridCommon/Public/PurchasesHybridCommon.h',
     'ios/PurchasesHybridCommon/PurchasesHybridCommon/Public/*.h'
   ]
 
