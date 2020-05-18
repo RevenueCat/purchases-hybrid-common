@@ -15,6 +15,8 @@ Pod::Spec.new do |s|
 
   s.framework      = 'StoreKit'
 
+  s.dependency 'Purchases', '3.3.1'
+
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.12'
   s.watchos.deployment_target = '6.2'
