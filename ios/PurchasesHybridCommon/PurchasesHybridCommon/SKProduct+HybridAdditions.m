@@ -9,7 +9,7 @@
 @implementation SKProduct (RCPurchases)
 
 - (nullable NSString *)rc_currencyCode {
-    if(@available(iOS 10.0, *)) {
+    if(@available(iOS 10.0, tvOS 10.0, macOS 10.12, *)) {
         return self.priceLocale.currencyCode;
     } else {
         return [self.priceLocale objectForKey:NSLocaleCurrencyCode];
@@ -38,7 +38,7 @@
     d[@"intro_price_cycles"] = [NSNull null];
     d[@"introPrice"] = [NSNull null];
     
-    if (@available(iOS 11.2, *)) {
+    if (@available(iOS 11.2, tvOS 11.2, macos 10.13.2, *)) {
         if (self.introductoryPrice) {
             d[@"intro_price"] = @(self.introductoryPrice.price.floatValue);
             d[@"intro_price_string"] = [formatter stringFromNumber:self.introductoryPrice.price];
@@ -52,7 +52,7 @@
     
     d[@"discounts"] = [NSNull null];
     
-    if (@available(iOS 12.2, *)) {
+    if (@available(iOS 12.2, tvOS 12.2, macos 10.13.2, *)) {
         d[@"discounts"] = [NSMutableArray new];
         for (SKProductDiscount* discount in self.discounts) {
             [d[@"discounts"] addObject:discount.dictionary];
