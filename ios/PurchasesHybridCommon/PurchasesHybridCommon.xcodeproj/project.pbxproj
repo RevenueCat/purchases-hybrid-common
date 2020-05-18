@@ -37,6 +37,7 @@
 		2D6E335524521B450022A971 /* NSDate+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E335324521B440022A971 /* NSDate+HybridAdditions.m */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
+		2DDE0B4F24734E9300899E7B /* NSDate+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E334F24521B440022A971 /* NSDate+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E41610DFFF84F4E7C60BC1A4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C972015FED49566F8D8DEA6 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -224,6 +225,7 @@
 				2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */,
 				2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */,
 				2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */,
+				2DDE0B4F24734E9300899E7B /* NSDate+HybridAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
