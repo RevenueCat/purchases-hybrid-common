@@ -21,7 +21,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 
 @implementation RCCommonFunctionality
 
-API_AVAILABLE(ios(12.2))
+API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
 
 
