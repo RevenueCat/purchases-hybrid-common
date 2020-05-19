@@ -11,7 +11,7 @@
 #import "RCPurchases+HybridAdditions.h"
 
 
-API_AVAILABLE(ios(12.2))
+API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 @interface RCCommonFunctionality ()
 
 @property(class, readonly, nonatomic, retain) NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
@@ -21,17 +21,17 @@ API_AVAILABLE(ios(12.2))
 
 @implementation RCCommonFunctionality
 
-API_AVAILABLE(ios(12.2))
+API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
 
 
-+ (NSMutableDictionary<NSString *, SKPaymentDiscount *> *)discounts API_AVAILABLE(ios(12.2)) {
++ (NSMutableDictionary<NSString *, SKPaymentDiscount *> *)discounts API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     return _discounts;
 }
 
 + (void)configure
 {
-    if (@available(iOS 12.2, *)) {
+    if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
         _discounts = [NSMutableDictionary new];
     }
 }
@@ -151,7 +151,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             return;
         }
         
-        if (@available(iOS 12.2, *)) {
+        if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
             if (discountTimestamp) {
                 SKPaymentDiscount *discount = self.discounts[discountTimestamp];
                 if (discount == nil) {
@@ -192,7 +192,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             return;
         }
         
-        if (@available(iOS 12.2, *)) {
+        if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
            if (discountTimestamp) {
                SKPaymentDiscount *discount = self.discounts[discountTimestamp];
                if (discount == nil) {
@@ -253,7 +253,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                                    discount:(nullable NSString *)discountIdentifier
                             completionBlock:(RCHybridResponseBlock)completion
 {
-    if (@available(iOS 12.2, *)) {
+    if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
         NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
         [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct *_Nullable aProduct) {
             if (aProduct) {
@@ -405,7 +405,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 }
 
 + (nullable SKProductDiscount *)discountWithIdentifier:(NSString *)identifier
-                                            forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2)) {
+                                            forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     SKProductDiscount *discountToUse = nil;
     NSArray<SKProductDiscount *> *productDiscounts = aProduct.discounts;
     if (identifier == nil && productDiscounts != nil && productDiscounts.count > 0) {
