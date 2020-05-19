@@ -1,3 +1,14 @@
+## 1.1.0
+
+-  Unified Android code into a single module
+	https://github.com/RevenueCat/purchases-hybrid-common/pull/25
+- Added podspec
+	https://github.com/RevenueCat/purchases-hybrid-common/pull/26
+- Set up Android tests using spek
+	https://github.com/RevenueCat/purchases-hybrid-common/pull/27
+- Moved dependency management away from git submodules and into Cocoapods
+	https://github.com/RevenueCat/purchases-hybrid-common/pull/29
+
 ## 1.0.14
 
 - New iOS headers for platformFlavor and platformFlavorVersion
