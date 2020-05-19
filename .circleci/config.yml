@@ -42,13 +42,23 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
           destination: scan-output
-      
 
   test-android:
     executor: android-executor
     steps:
       - checkout
       - android/accept-licenses
+      - restore_cache:
+          key: jars-{{ checksum "android/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+          working_directory: android
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "android/build.gradle" }}
+      - android/restore-build-cache
       - run:
           name: Run Tests
           command: ./gradlew lint test
@@ -60,11 +70,48 @@ jobs:
           path: build/test-results
           working_directory: android
 
+  deploy-android:
+    executor: android-executor
+    steps:
+      - checkout
+      - android/accept-licenses
+      - restore_cache:
+          key: jars-{{ checksum "android/build.gradle" }}
+      - android/restore-build-cache
+      - run:
+          name: Deployment
+          command: |
+            REPO="purchases-hybrid-common"
+            USERNAME="RevenueCat"
+            JDK="oraclejdk8"
+
+            if [ "$CIRCLE_PROJECT_REPONAME" != "$REPO" ]; then
+              echo "Skipping snapshot deployment: wrong repository. Expected '$REPO' but was '$CIRCLE_PROJECT_REPONAME'."
+            elif [ "$CIRCLE_PROJECT_USERNAME" != "$USERNAME" ]; then
+              echo "Skipping snapshot deployment: wrong owner. Expected '$USERNAME' but was '$CIRCLE_PROJECT_USERNAME'."
+            elif [ "$CIRCLE_JDK_VERSION" != "$JDK" ]; then
+              # $CIRCLE_JDK_VERSION must be manually set in circle.yml
+              echo "Skipping snapshot deployment: wrong JDK. Expected '$JDK' but was '$CIRCLE_JDK_VERSION'."
+            else
+              echo "Deploying snapshot..."
+              ./gradlew androidSourcesJar androidJavadocsJar uploadArchives -P signing.keyId=$GPG_SIGNING_KEY_ID -Psigning.password=$GPG_SIGNING_KEY_PW -Psigning.secretKeyRingFile=./secring.gpg \
+                                      -PSONATYPE_NEXUS_USERNAME=$SONATYPE_NEXUS_USERNAME -PSONATYPE_NEXUS_PASSWORD=$SONATYPE_NEXUS_PASSWORD -PRELEASE_SIGNING_ENABLED=true
+              echo "Snapshot deployed!"
+            fi
+          working_directory: android
 
 workflows:
   version: 2
-  build-test:
+  ios:
     jobs:
       - test-ios
+
+  android:
+    jobs:
       - test-android
-      
+      - deploy-android:
+          requires:
+            - test-android
+          filters:
+            branches:
+              only: cesar/maven_library
