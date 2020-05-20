@@ -117,5 +117,7 @@ workflows:
           requires:
             - test-android
           filters:
+            tags:
+              only: /^(\d+\.)(\d+\.)(\d+)$/
             branches:
-              only: cesar/maven_library
+              ignore: /.*/
