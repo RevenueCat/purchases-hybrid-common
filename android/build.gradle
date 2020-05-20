@@ -5,6 +5,7 @@ buildscript {
     ext.android_junit5_version='1.5.2.0'
     ext.junit5_runner='0.2.2'
     ext.spek_version='2.0.6'
+    ext.assertj_version='3.13.2'
 
     repositories {
         google()
@@ -83,6 +84,8 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
     testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    testImplementation "org.assertj:assertj-core:$assertj_version"
 }
 
 repositories {
