@@ -3,6 +3,7 @@ package com.revenuecat.purchases.common
 import android.app.Activity
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.revenuecat.purchases.PlatformInfo
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
@@ -290,6 +291,10 @@ fun setDisplayName(displayName: String?) {
 
 fun setPushToken(fcmToken: String?) {
     Purchases.sharedInstance.setPushToken(fcmToken)
+}
+
+fun setPlatformInfo(flavor: String, version: String) {
+    Purchases.platformInfo = PlatformInfo(flavor, version)
 }
 
 // region private functions
