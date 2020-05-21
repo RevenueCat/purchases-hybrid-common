@@ -412,7 +412,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         discountToUse = productDiscounts.firstObject;
     } else {
         for (SKProductDiscount *discount in productDiscounts) {
-            if (identifier == discount.identifier) {
+            if ([identifier isEqualToString:discount.identifier]) {
                 discountToUse = discount;
             }
         }
