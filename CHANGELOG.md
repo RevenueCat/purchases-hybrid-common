@@ -1,3 +1,13 @@
+## 1.1.1
+
+- Adds this library to Maven
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/31
+- Fixes discountWithIdentifier always returns null
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/35
+- Adds configure function to Android that lets pass a PlatformInfo
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/32
+
+
 ## 1.1.0
 
 -  Unified Android code into a single module
