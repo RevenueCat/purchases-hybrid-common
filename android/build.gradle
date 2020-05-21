@@ -5,6 +5,8 @@ buildscript {
     ext.android_junit5_version='1.5.2.0'
     ext.junit5_runner='0.2.2'
     ext.spek_version='2.0.6'
+    ext.assertj_version='3.13.2'
+    ext.mockk_version='1.10.0'
 
     repositories {
         google()
@@ -74,7 +76,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'com.revenuecat.purchases:purchases:3.1.0'
+    implementation 'com.revenuecat.purchases:purchases:3.1.1'
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
@@ -83,6 +85,10 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
     testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    testImplementation "org.assertj:assertj-core:$assertj_version"
+
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
 
 repositories {
