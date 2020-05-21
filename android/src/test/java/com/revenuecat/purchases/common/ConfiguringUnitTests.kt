@@ -118,5 +118,20 @@ object ConfiguringUnitTests : Spek({
                 }
             }
         }
+
+        context("with a platform info") {
+            it("should configure the Android SDK with that platform info") {
+                configure(
+                    context = mockContext,
+                    apiKey = "api_key",
+                    appUserID = "appUserID",
+                    observerMode = false,
+                    platformInfo = expectedPlatformInfo
+                )
+                verify(exactly = 1) {
+                    Purchases.platformInfo = expectedPlatformInfo
+                }
+            }
+        }
     }
 })
