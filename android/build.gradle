@@ -6,6 +6,7 @@ buildscript {
     ext.junit5_runner='0.2.2'
     ext.spek_version='2.0.6'
     ext.assertj_version='3.13.2'
+    ext.mockk_version='1.10.0'
 
     repositories {
         google()
@@ -86,6 +87,8 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     testImplementation "org.assertj:assertj-core:$assertj_version"
+
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
 
 repositories {

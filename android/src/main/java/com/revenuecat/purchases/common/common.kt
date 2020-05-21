@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.common
 
 import android.app.Activity
+import android.content.Context
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.revenuecat.purchases.PlatformInfo
@@ -293,8 +294,19 @@ fun setPushToken(fcmToken: String?) {
     Purchases.sharedInstance.setPushToken(fcmToken)
 }
 
-fun setPlatformInfo(flavor: String, version: String) {
-    Purchases.platformInfo = PlatformInfo(flavor, version)
+fun configure(
+    context: Context,
+    apiKey: String,
+    appUserID: String?,
+    observerMode: Boolean?,
+    platformInfo: PlatformInfo
+) {
+    Purchases.platformInfo = platformInfo
+    if (observerMode != null) {
+        Purchases.configure(context, apiKey, appUserID, observerMode)
+    } else {
+        Purchases.configure(context, apiKey, appUserID)
+    }
 }
 
 // region private functions
