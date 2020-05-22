@@ -16,6 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)configureWithAPIKey:(NSString *)APIKey
                           appUserID:(nullable NSString *)appUserID
                        observerMode:(BOOL)observerMode
+              userDefaultsSuiteName:(nullable NSString *)userDefaultsSuiteName
+                     platformFlavor:(nullable NSString *)platformFlavor
+              platformFlavorVersion:(nullable NSString *)platformFlavorVersion;
+
++ (instancetype)configureWithAPIKey:(NSString *)APIKey
+                          appUserID:(nullable NSString *)appUserID
+                       observerMode:(BOOL)observerMode
                        userDefaults:(nullable NSUserDefaults *)userDefaults
                      platformFlavor:(nullable NSString *)platformFlavor
               platformFlavorVersion:(nullable NSString *)platformFlavorVersion;

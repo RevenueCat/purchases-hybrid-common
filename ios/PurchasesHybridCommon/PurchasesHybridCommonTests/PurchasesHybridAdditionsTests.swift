@@ -26,5 +26,27 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 }.notTo(raiseException())
             }
         }
+        context("configure with user defaults suite name") {
+            it("initializes without raising exceptions if no suite name is passed") {
+                expect {
+                    Purchases.configure(withAPIKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: nil,
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3")
+                }.notTo(raiseException())
+            }
+            it("initializes without raising exceptions if a suite name is passed") {
+                expect {
+                    Purchases.configure(withAPIKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3")
+                }.notTo(raiseException())
+            }
+        }
     }
 }
