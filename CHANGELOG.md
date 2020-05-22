@@ -6,7 +6,8 @@
     https://github.com/RevenueCat/purchases-hybrid-common/pull/35
 - Adds configure function to Android that lets pass a PlatformInfo
     https://github.com/RevenueCat/purchases-hybrid-common/pull/32
-
+- Adds method to pass in a suite name to revenuecat
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/33
 
 ## 1.1.0
 
