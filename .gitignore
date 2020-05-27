@@ -1,3 +1,4 @@
 .DS_Store
 ios/purchases-common-build
 ios/PurchasesHybridCommon/Pods/
+ios/PurchasesHybridCommon/Carthage/
