@@ -6,6 +6,8 @@
 - Update purchases-ios pod version in `PurchasesHybridCommon.podspec`, `ios/PurchasesHybridCommon/Podfile`, and `ios/PurchasesHybridCommon/PurchasdsHybridCommon.xcworkspace` (open this last one with Xcode)
 - Update `CHANGELOG.md`
 - Open a PR, merge and tag master.
+- run `carthage build --archive --platform iOS`
+- Upload to the new release PurchasesHybridCommon.framework.zip
 - Create a github release
 - Release Android:
   1. Visit [Sonatype Nexus](https://oss.sonatype.org/)

@@ -1,3 +1,8 @@
+## 1.1.2
+
+- Added originalPurchaseDate to RCPurchaserInfo dict
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/36
+
 ## 1.1.1
 
 - Adds this library to Maven
