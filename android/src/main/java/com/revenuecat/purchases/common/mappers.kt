@@ -69,7 +69,8 @@ fun PurchaserInfo.map(): Map<String, Any?> =
         "allExpirationDatesMillis" to allExpirationDatesByProduct.mapValues { it.value?.toMillis() },
         "allPurchaseDates" to allPurchaseDatesByProduct.mapValues { it.value?.toIso8601() },
         "allPurchaseDatesMillis" to allPurchaseDatesByProduct.mapValues { it.value?.toMillis() },
-        "originalApplicationVersion" to null
+        "originalApplicationVersion" to null,
+        "managementURL" to managementURL?.toString()
     )
 
 fun Offerings.map(): Map<String, Any?> =
