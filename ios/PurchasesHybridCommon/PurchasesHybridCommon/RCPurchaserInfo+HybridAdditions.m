@@ -29,6 +29,7 @@
         allPurchases[productIdentifier] = [self formattedAsISO8601OrNull:date];
         allPurchasesMillis[productIdentifier] = [self timeIntervalSince1970OrNull:date];
     }
+    NSObject *managementURLorNull = self.managementURL.absoluteString ?: NSNull.null;
 
     return @{
         @"entitlements": self.entitlements.dictionary,
@@ -48,6 +49,7 @@
         @"originalApplicationVersion": self.originalApplicationVersion ?: NSNull.null,
         @"originalPurchaseDate": [self formattedAsISO8601OrNull:self.originalPurchaseDate],
         @"originalPurchaseDateMillis": [self timeIntervalSince1970OrNull:self.originalPurchaseDate],
+        @"managementURL": managementURLorNull
     };
 }
 
