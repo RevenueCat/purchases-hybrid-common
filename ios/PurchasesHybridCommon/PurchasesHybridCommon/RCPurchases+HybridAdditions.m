@@ -32,18 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
                platformFlavorVersion:platformFlavorVersion];
 }
 
-+ (void)setProxyURLString:(nullable NSString *)proxyURLString {
-    NSURL *proxyURL = [NSURL URLWithString:proxyURLString];
-    if (proxyURLString != nil && proxyURL == nil) {
-        NSAssert(false, @"couldn't parse the proxy URL string \"%@\" into a valid URL!", proxyURLString);
-    }
-    self.proxyURL = [NSURL URLWithString:proxyURLString];
-}
-
-+ (nullable NSString *)proxyURLString {
-    return self.proxyURL.absoluteString;
-}
-
 @end
 
 

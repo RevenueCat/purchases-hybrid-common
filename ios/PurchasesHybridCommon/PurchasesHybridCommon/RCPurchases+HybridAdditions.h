@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)_setPushTokenString:(nullable NSString *)pushToken;
 
-@property(class, nonatomic, nullable, copy) NSString *proxyURLString;
-
 + (instancetype)configureWithAPIKey:(NSString *)APIKey
                           appUserID:(nullable NSString *)appUserID
                        observerMode:(BOOL)observerMode
