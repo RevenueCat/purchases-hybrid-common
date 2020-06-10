@@ -13,6 +13,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 @interface RCCommonFunctionality : NSObject
 
+@property(class, nonatomic, nullable, copy) NSString *proxyURLString;
+
 + (void)configure;
 
 + (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
