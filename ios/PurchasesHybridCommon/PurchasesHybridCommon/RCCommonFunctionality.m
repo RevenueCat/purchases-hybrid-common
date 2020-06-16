@@ -97,6 +97,19 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     RCPurchases.debugLogsEnabled = enabled;
 }
 
+
++ (void)setProxyURLString:(nullable NSString *)proxyURLString {
+    NSURL *proxyURL = [NSURL URLWithString:proxyURLString];
+    if (proxyURLString != nil && proxyURL == nil) {
+        NSAssert(false, @"couldn't parse the proxy URL string \"%@\" into a valid URL!", proxyURLString);
+    }
+    RCPurchases.proxyURL = [NSURL URLWithString:proxyURLString];
+}
+
++ (nullable NSString *)proxyURLString {
+    return RCPurchases.proxyURL.absoluteString;
+}
+
 + (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");

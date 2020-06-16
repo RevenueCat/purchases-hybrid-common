@@ -21,6 +21,7 @@ import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
 import org.json.JSONObject
+import java.net.URL
 
 fun addAttributionData(
     data: Map<String, String>,
@@ -234,6 +235,14 @@ fun setDebugLogsEnabled(
     enabled: Boolean
 ) {
     Purchases.debugLogsEnabled = enabled
+}
+
+fun setProxyURLString(proxyURLString: String?) {
+    Purchases.proxyURL = if (proxyURLString != null) URL(proxyURLString) else null
+}
+
+fun getProxyURLString(): String? {
+    return Purchases.proxyURL.toString()
 }
 
 fun getPurchaserInfo(
