@@ -10,6 +10,7 @@
 		2878FCAF48744F49C350CB58 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C7B2216E5D23A90F5DF80F /* Pods_PurchasesHybridCommon.framework */; };
 		2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */; };
 		2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */; };
+		2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,6 +58,7 @@
 		0C972015FED49566F8D8DEA6 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoHybridAdditionsTests.swift; sourceTree = "<group>"; };
+		2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonTests.swift; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommon.h; sourceTree = "<group>"; };
 		2D6E330C2450F5880022A971 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
 				2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */,
 				2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */,
+				2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */,
+				2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */,
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
 				2D6E333C2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift in Sources */,
 				2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */,
