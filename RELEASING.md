@@ -1,6 +1,6 @@
 ### Releasing a version: 
 
-- Make a branch `bump/x.x.x`
+- Make a release branch `release/x.x.x`
 - Increase version number in `android/build.gradle`, `android/gradle.properties` and `PurchasesHybridCommon.podspec`
 - Update purchases-android version in `android/build.gradle`
 - Update purchases-ios pod version in `PurchasesHybridCommon.podspec`, `ios/PurchasesHybridCommon/Podfile`, and `ios/PurchasesHybridCommon/PurchasdsHybridCommon.xcworkspace` (open this last one with Xcode)

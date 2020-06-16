@@ -1,3 +1,15 @@
+## 1.2.0
+
+- Bumped iOS to 3.4.0 ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases))
+  Bumped Android to 3.2.0 ([Changelog here](https://github.com/RevenueCat/purchases-android/releases))
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/42
+- Added managementURL
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/41
+- Adds project name; updates to android plugin 4.0.0; changes api with implementation
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/44
+- Added setProxyURLString
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/43
+
 ## 1.1.2
 
 - Added originalPurchaseDate to RCPurchaserInfo dict
