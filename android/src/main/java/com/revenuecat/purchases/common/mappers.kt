@@ -143,8 +143,8 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
         // Check freeTrialPeriod first to give priority to trials
         // Format using device locale. iOS will format using App Store locale, but there's no way
         // to figure out how the price in the SKUDetails is being formatted.
-        val format = java.text.NumberFormat.getCurrencyInstance().apply {
-            currency = java.util.Currency.getInstance(priceCurrencyCode)
+        val format = NumberFormat.getCurrencyInstance().apply {
+            currency = Currency.getInstance(priceCurrencyCode)
         }
         mapOf(
             "price" to 0,
