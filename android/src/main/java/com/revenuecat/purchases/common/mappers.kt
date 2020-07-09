@@ -266,6 +266,6 @@ fun JSONObject.convertToMap(): Map<String, String?> =
         }
     }
 
-private fun Date.toMillis(): Double = this.time.div(1000.0)
+internal fun Date.toMillis(): Double = this.time.div(1000.0)
 
-private fun Date.toIso8601(): String = Iso8601Utils.format(this)
+internal fun Date.toIso8601(): String = Iso8601Utils.format(this)
