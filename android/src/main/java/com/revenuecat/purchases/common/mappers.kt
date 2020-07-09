@@ -70,7 +70,9 @@ fun PurchaserInfo.map(): Map<String, Any?> =
         "allPurchaseDates" to allPurchaseDatesByProduct.mapValues { it.value?.toIso8601() },
         "allPurchaseDatesMillis" to allPurchaseDatesByProduct.mapValues { it.value?.toMillis() },
         "originalApplicationVersion" to null,
-        "managementURL" to managementURL?.toString()
+        "managementURL" to managementURL?.toString(),
+        "originalPurchaseDate" to originalPurchaseDate?.toIso8601(),
+        "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis()
     )
 
 fun Offerings.map(): Map<String, Any?> =
@@ -118,7 +120,7 @@ private fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
             "intro_price" to introductoryPriceAmountMicros / 1000000.0,
             "intro_price_string" to introductoryPrice,
             "intro_price_period" to introductoryPricePeriod,
-            "intro_price_cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
+            "intro_price_cycles" to introductoryPriceCycles
         ) + introductoryPricePeriod.mapPeriodDeprecated()
     } else {
         mapOf(
@@ -141,8 +143,8 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
         // Check freeTrialPeriod first to give priority to trials
         // Format using device locale. iOS will format using App Store locale, but there's no way
         // to figure out how the price in the SKUDetails is being formatted.
-        val format = java.text.NumberFormat.getCurrencyInstance().apply {
-            currency = java.util.Currency.getInstance(priceCurrencyCode)
+        val format = NumberFormat.getCurrencyInstance().apply {
+            currency = Currency.getInstance(priceCurrencyCode)
         }
         mapOf(
             "price" to 0,
@@ -155,7 +157,7 @@ private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
             "price" to introductoryPriceAmountMicros / 1000000.0,
             "priceString" to introductoryPrice,
             "period" to introductoryPricePeriod,
-            "cycles" to introductoryPriceCycles?.ifBlank { "0" }?.toInt()
+            "cycles" to introductoryPriceCycles
         ) + introductoryPricePeriod.mapPeriod()
     } else {
         mapOf(
@@ -264,6 +266,6 @@ fun JSONObject.convertToMap(): Map<String, String?> =
         }
     }
 
-private fun Date.toMillis(): Double = this.time.div(1000.0)
+internal fun Date.toMillis(): Double = this.time.div(1000.0)
 
-private fun Date.toIso8601(): String = Iso8601Utils.format(this)
+internal fun Date.toIso8601(): String = Iso8601Utils.format(this)
