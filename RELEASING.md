@@ -1,10 +1,10 @@
 ### Releasing a version: 
 
 - Make a release branch `release/x.x.x`
-- Increase version number in `android/build.gradle`, `android/gradle.properties` and `PurchasesHybridCommon.podspec`
+- Create a CHANGELOG.latest.md with the changes for the current
+- Run `fastlane bump_and_update_changelog version:X.Y.Z` (where X.Y.Z is the new version) to update the version number in `android/build.gradle`, `android/gradle.properties` and `PurchasesHybridCommon.podspec`
 - Update purchases-android version in `android/build.gradle`
 - Update purchases-ios pod version in `PurchasesHybridCommon.podspec`, `ios/PurchasesHybridCommon/Podfile`, and `ios/PurchasesHybridCommon/PurchasdsHybridCommon.xcworkspace` (open this last one with Xcode)
-- Update `CHANGELOG.md`
 - Open a PR, merge and tag master.
 - run `carthage build --archive --platform iOS`
 - Upload to the new release PurchasesHybridCommon.framework.zip
