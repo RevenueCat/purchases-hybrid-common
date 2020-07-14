@@ -176,7 +176,7 @@ private fun String?.mapPeriodDeprecated(): Map<String, Any?> {
             "intro_price_period_number_of_units" to null
         )
     } else {
-        PurchasesPeriod.parse(this).let { period ->
+        PurchasesPeriod.parse(this)?.let { period ->
             when {
                 period.years > 0 -> mapOf(
                     "intro_price_period_unit" to "YEAR",
@@ -195,7 +195,10 @@ private fun String?.mapPeriodDeprecated(): Map<String, Any?> {
                     "intro_price_period_number_of_units" to 0
                 )
             }
-        }
+        } ?: mapOf(
+            "intro_price_period_unit" to null,
+            "intro_price_period_number_of_units" to null
+        )
     }
 }
 
@@ -206,7 +209,7 @@ private fun String?.mapPeriod(): Map<String, Any?> {
             "periodNumberOfUnits" to null
         )
     } else {
-        PurchasesPeriod.parse(this).let { period ->
+        PurchasesPeriod.parse(this)?.let { period ->
             when {
                 period.years > 0 -> mapOf(
                     "periodUnit" to "YEAR",
@@ -225,7 +228,10 @@ private fun String?.mapPeriod(): Map<String, Any?> {
                     "periodNumberOfUnits" to 0
                 )
             }
-        }
+        } ?: mapOf(
+            "intro_price_period_unit" to null,
+            "intro_price_period_number_of_units" to null
+        )
     }
 }
 

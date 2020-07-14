@@ -1,6 +1,9 @@
 package com.revenuecat.purchases.common;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +71,7 @@ class PurchasesPeriod {
      * @return the parsed period, not null
      * @throws RuntimeException if the text cannot be parsed to a period
      */
-    static PurchasesPeriod parse(@NonNull CharSequence text) {
+    @Nullable static PurchasesPeriod parse(@NonNull CharSequence text) {
         Matcher matcher = PATTERN.matcher(text);
         if (matcher.matches()) {
             int negate = ("-".equals(matcher.group(1)) ? -1 : 1);
@@ -84,12 +87,14 @@ class PurchasesPeriod {
                     int days = parseNumber(text, dayMatch, negate);
                     days = PurchasesMath.addExact(days, PurchasesMath.multiplyExact(weeks, 7));
                     return create(years, months, days);
-                } catch (NumberFormatException ex) {
-                    throw new RuntimeException("Text cannot be parsed to a Period: " + text, ex);
+                } catch (NumberFormatException | ArithmeticException ex) {
+                    Log.e("PURCHASES", "Text cannot be parsed to a Period: " + text);
+                    return null;
                 }
             }
         }
-        throw new RuntimeException("Text cannot be parsed to a Period: " + text);
+        Log.e("PURCHASES", "Text cannot be parsed to a Period: " + text);
+        return null;
     }
 
     private static int parseNumber(CharSequence text, String str, int negate) {
@@ -97,11 +102,7 @@ class PurchasesPeriod {
             return 0;
         }
         int val = Integer.parseInt(str);
-        try {
-            return PurchasesMath.multiplyExact(val, negate);
-        } catch (ArithmeticException ex) {
-            throw new RuntimeException("Text cannot be parsed to a Period: " + text, ex);
-        }
+        return PurchasesMath.multiplyExact(val, negate);
     }
 
 }
