@@ -96,10 +96,8 @@ dependencies {
 
     testImplementation "io.mockk:mockk:$mockk_version"
     // Core library
-    testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
     // AndroidJUnitRunner and JUnit Rules
-//    testImplementation 'org.robolectric:robolectric:4.3.1'
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'org.robolectric:robolectric:4.3.1'
 }
