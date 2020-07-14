@@ -1,3 +1,11 @@
+## 1.3.0
+
+- Bumped Android to 3.3.0 ([Changelog here](https://github.com/RevenueCat/purchases-android/releases))
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/46
+- Added parsing of original_purchase_date in Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/46
+- Bumped iOS to 3.5.0 ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases))
+
 ## 1.2.0
 
 - Bumped iOS to 3.4.0 ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases))
