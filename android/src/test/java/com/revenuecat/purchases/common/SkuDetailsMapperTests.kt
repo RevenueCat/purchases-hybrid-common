@@ -1,10 +1,8 @@
 package com.revenuecat.purchases.common
 
-import android.util.Log
 import com.android.billingclient.api.SkuDetails
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -82,8 +80,7 @@ object SkuDetailsMapperTests : Spek({
             describe("365") {
 
                 beforeEachTest {
-                    mockkStatic(Log::class)
-                    every { Log.e(any(), any()) } returns 0
+                    mockLogError()
                     every { mockSkuDetails.freeTrialPeriod } returns "365"
                     received = mockSkuDetails.mapIntroPrice()
                 }
@@ -168,8 +165,7 @@ object SkuDetailsMapperTests : Spek({
             describe("365") {
 
                 beforeEachTest {
-                    mockkStatic(Log::class)
-                    every { Log.e(any(), any()) } returns 0
+                    mockLogError()
                     every { mockSkuDetails.introductoryPricePeriod } returns "365"
                     received = mockSkuDetails.mapIntroPrice()
                 }

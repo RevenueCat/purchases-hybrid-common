@@ -1,24 +1,23 @@
 package com.revenuecat.purchases.common
 
-import android.os.Build
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-@RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.P])
-class PeriodTests {
-    @Test
-    fun `there is no exception when parsing an invalid PurchasesPeriod`() {
-        val period = PurchasesPeriod.parse("365")
-        assertThat(period).isNull()
+object PeriodTests : Spek({
+    describe("when parsing an invalid PurchasesPeriod") {
+        beforeEachTest {
+            mockLogError()
+        }
+        it("there is no exception") {
+            val period = PurchasesPeriod.parse("365")
+            assertThat(period).isNull()
+        }
     }
-
-    @Test
-    fun `parsing works`() {
-        val period = PurchasesPeriod.parse("P1D")
-        assertThat(period).isNotNull
+    describe("when parsing a valid PurchasesPeriod") {
+        it("should work") {
+            val period = PurchasesPeriod.parse("P1D")
+            assertThat(period).isNotNull
+        }
     }
-}
+})
