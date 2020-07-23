@@ -3,9 +3,11 @@ package com.revenuecat.purchases.common
 import com.android.billingclient.api.SkuDetails
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.text.NumberFormat
 
 object SkuDetailsMapperTests : Spek({
 
@@ -20,6 +22,7 @@ object SkuDetailsMapperTests : Spek({
             describe("7 days") {
 
                 beforeEachTest {
+                    mockCurrencyFormatter(0, "$0.00")
                     every { mockSkuDetails.freeTrialPeriod } returns "P7D"
                     received = mockSkuDetails.mapIntroPrice()
                 }
@@ -40,6 +43,7 @@ object SkuDetailsMapperTests : Spek({
             describe("1 month") {
 
                 beforeEachTest {
+                    mockCurrencyFormatter(0, "$0.00")
                     every { mockSkuDetails.freeTrialPeriod } returns "P1M"
                     received = mockSkuDetails.mapIntroPrice()
                 }
@@ -60,6 +64,7 @@ object SkuDetailsMapperTests : Spek({
             describe("0 days") {
 
                 beforeEachTest {
+                    mockCurrencyFormatter(0, "$0.00")
                     every { mockSkuDetails.freeTrialPeriod } returns "P0D"
                     received = mockSkuDetails.mapIntroPrice()
                 }

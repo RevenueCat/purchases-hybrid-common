@@ -114,7 +114,7 @@ internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
         freeTrialPeriod.mapPeriodDeprecated()?.let { periodFields ->
             mapOf(
                 "intro_price" to 0,
-                "intro_price_string" to formatUsingDeviceLocale().format(0),
+                "intro_price_string" to formatUsingDeviceLocale(0),
                 "intro_price_period" to freeTrialPeriod,
                 "intro_price_cycles" to 1
             ) + periodFields
@@ -133,10 +133,10 @@ internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
     }
 }
 
-private fun SkuDetails.formatUsingDeviceLocale(): NumberFormat {
+private fun SkuDetails.formatUsingDeviceLocale(number: Long): String {
     return NumberFormat.getCurrencyInstance().apply {
         currency = Currency.getInstance(priceCurrencyCode)
-    }
+    }.format(number)
 }
 
 internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
@@ -148,7 +148,7 @@ internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
         freeTrialPeriod.mapPeriod()?.let { periodFields ->
             mapOf(
                 "price" to 0,
-                "priceString" to formatUsingDeviceLocale().format(0),
+                "priceString" to formatUsingDeviceLocale(0),
                 "period" to freeTrialPeriod,
                 "cycles" to 1
             ) + periodFields
