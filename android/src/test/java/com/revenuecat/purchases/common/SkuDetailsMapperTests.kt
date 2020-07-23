@@ -3,11 +3,9 @@ package com.revenuecat.purchases.common
 import com.android.billingclient.api.SkuDetails
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.text.NumberFormat
 
 object SkuDetailsMapperTests : Spek({
 
