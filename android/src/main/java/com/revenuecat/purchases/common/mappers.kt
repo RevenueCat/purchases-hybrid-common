@@ -105,30 +105,31 @@ private fun Package.map(offeringIdentifier: String): Map<String, Any?> =
         "offeringIdentifier" to offeringIdentifier
     )
 
-private fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
-    val isFreeTrialAvailable = freeTrialPeriod != null && freeTrialPeriod.isNotBlank()
-    return if (isFreeTrialAvailable) {
-        val format = formatUsingDeviceLocale()
-        mapOf(
-            "intro_price" to 0,
-            "intro_price_string" to format.format(0),
-            "intro_price_period" to freeTrialPeriod,
-            "intro_price_cycles" to 1
-        ) + freeTrialPeriod.mapPeriodDeprecated()
-    } else if (introductoryPrice != null || introductoryPrice.isNotBlank()) {
-        mapOf(
-            "intro_price" to introductoryPriceAmountMicros / 1000000.0,
-            "intro_price_string" to introductoryPrice,
-            "intro_price_period" to introductoryPricePeriod,
-            "intro_price_cycles" to introductoryPriceCycles
-        ) + introductoryPricePeriod.mapPeriodDeprecated()
+internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
+    // isNullOrBlank() gives issues with older Kotlin stdlib versions
+    return if (freeTrialPeriod != null && freeTrialPeriod.isNotBlank()) {
+        // Check freeTrialPeriod first to give priority to trials
+        // Format using device locale. iOS will format using App Store locale, but there's no way
+        // to figure out how the price in the SKUDetails is being formatted.
+        freeTrialPeriod.mapPeriodDeprecated()?.let { periodFields ->
+            mapOf(
+                "intro_price" to 0,
+                "intro_price_string" to formatUsingDeviceLocale().format(0),
+                "intro_price_period" to freeTrialPeriod,
+                "intro_price_cycles" to 1
+            ) + periodFields
+        } ?: mapNullDeprecatedPeriod()
+    } else if (introductoryPrice != null && introductoryPrice.isNotBlank()) {
+        introductoryPricePeriod.mapPeriodDeprecated()?.let { periodFields ->
+            mapOf(
+                "intro_price" to introductoryPriceAmountMicros / 1000000.0,
+                "intro_price_string" to introductoryPrice,
+                "intro_price_period" to introductoryPricePeriod,
+                "intro_price_cycles" to introductoryPriceCycles
+            ) + periodFields
+        } ?: mapNullDeprecatedPeriod()
     } else {
-        mapOf(
-            "intro_price" to null,
-            "intro_price_string" to null,
-            "intro_price_period" to null,
-            "intro_price_cycles" to null
-        ) + introductoryPricePeriod.mapPeriodDeprecated()
+        mapNullDeprecatedPeriod()
     }
 }
 
@@ -138,45 +139,60 @@ private fun SkuDetails.formatUsingDeviceLocale(): NumberFormat {
     }
 }
 
-private fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
+internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
+    // isNullOrBlank() gives issues with older Kotlin stdlib versions
     return if (freeTrialPeriod != null && freeTrialPeriod.isNotBlank()) {
         // Check freeTrialPeriod first to give priority to trials
         // Format using device locale. iOS will format using App Store locale, but there's no way
         // to figure out how the price in the SKUDetails is being formatted.
-        val format = NumberFormat.getCurrencyInstance().apply {
-            currency = Currency.getInstance(priceCurrencyCode)
-        }
-        mapOf(
-            "price" to 0,
-            "priceString" to format.format(0),
-            "period" to freeTrialPeriod,
-            "cycles" to 1
-        ) + freeTrialPeriod.mapPeriod()
+        freeTrialPeriod.mapPeriod()?.let { periodFields ->
+            mapOf(
+                "price" to 0,
+                "priceString" to formatUsingDeviceLocale().format(0),
+                "period" to freeTrialPeriod,
+                "cycles" to 1
+            ) + periodFields
+        } ?: mapNullPeriod()
     } else if (introductoryPrice != null && introductoryPrice.isNotBlank()) {
-        mapOf(
-            "price" to introductoryPriceAmountMicros / 1000000.0,
-            "priceString" to introductoryPrice,
-            "period" to introductoryPricePeriod,
-            "cycles" to introductoryPriceCycles
-        ) + introductoryPricePeriod.mapPeriod()
+        introductoryPricePeriod.mapPeriod()?.let { periodFields ->
+            mapOf(
+                "price" to introductoryPriceAmountMicros / 1000000.0,
+                "priceString" to introductoryPrice,
+                "period" to introductoryPricePeriod,
+                "cycles" to introductoryPriceCycles
+            ) + periodFields
+        } ?: mapNullPeriod()
     } else {
-        mapOf(
-            "price" to null,
-            "priceString" to null,
-            "period" to null,
-            "cycles" to null
-        ) + introductoryPricePeriod.mapPeriod()
+        mapNullPeriod()
     }
 }
 
-private fun String?.mapPeriodDeprecated(): Map<String, Any?> {
-    return if (this == null || this.isBlank()) {
-        mapOf(
-            "intro_price_period_unit" to null,
-            "intro_price_period_number_of_units" to null
-        )
-    } else {
-        PurchasesPeriod.parse(this)?.let { period ->
+private fun mapNullDeprecatedPeriod(): Map<String, Nothing?> {
+    return mapOf(
+        "intro_price" to null,
+        "intro_price_string" to null,
+        "intro_price_period" to null,
+        "intro_price_cycles" to null,
+        "intro_price_period_unit" to null,
+        "intro_price_period_number_of_units" to null
+    )
+}
+
+private fun mapNullPeriod(): Map<String, Nothing?> {
+    return mapOf(
+        "price" to null,
+        "priceString" to null,
+        "period" to null,
+        "cycles" to null,
+        "periodUnit" to null,
+        "periodNumberOfUnits" to null
+    )
+}
+
+private fun String?.mapPeriodDeprecated(): Map<String, Any?>? {
+    return this.takeUnless { this == null || this.isBlank() }
+        ?.let { PurchasesPeriod.parse(it) }
+        ?.let { period ->
             when {
                 period.years > 0 -> mapOf(
                     "intro_price_period_unit" to "YEAR",
@@ -195,21 +211,13 @@ private fun String?.mapPeriodDeprecated(): Map<String, Any?> {
                     "intro_price_period_number_of_units" to 0
                 )
             }
-        } ?: mapOf(
-            "intro_price_period_unit" to null,
-            "intro_price_period_number_of_units" to null
-        )
-    }
+        }
 }
 
-private fun String?.mapPeriod(): Map<String, Any?> {
-    return if (this == null || this.isBlank()) {
-        mapOf(
-            "periodUnit" to null,
-            "periodNumberOfUnits" to null
-        )
-    } else {
-        PurchasesPeriod.parse(this)?.let { period ->
+private fun String?.mapPeriod(): Map<String, Any?>? {
+    return this.takeUnless { this == null || this.isBlank() }
+        ?.let { PurchasesPeriod.parse(it) }
+        ?.let { period ->
             when {
                 period.years > 0 -> mapOf(
                     "periodUnit" to "YEAR",
@@ -228,11 +236,7 @@ private fun String?.mapPeriod(): Map<String, Any?> {
                     "periodNumberOfUnits" to 0
                 )
             }
-        } ?: mapOf(
-            "intro_price_period_unit" to null,
-            "intro_price_period_number_of_units" to null
-        )
-    }
+        }
 }
 
 fun Map<String, *>.convertToJson(): JSONObject {
