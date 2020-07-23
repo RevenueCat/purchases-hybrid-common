@@ -64,11 +64,9 @@ jobs:
           command: ./gradlew lint test
           working_directory: android
       - store_artifacts:
-          path: build/reports
-          working_directory: android
+          path: android/build/reports
       - store_test_results:
-          path: build/test-results
-          working_directory: android
+          path: android/build/test-results
 
   deploy-android:
     executor: android-executor
