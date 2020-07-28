@@ -1,3 +1,9 @@
+## 1.3.1
+
+- Fix crash when Android periods come as "365"
+   https://github.com/RevenueCat/purchases-hybrid-common/pull/49
+- Bumped iOS to 3.5.1 ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases))
+
 ## 1.3.0
 
 - Bumped Android to 3.3.0 ([Changelog here](https://github.com/RevenueCat/purchases-android/releases))
