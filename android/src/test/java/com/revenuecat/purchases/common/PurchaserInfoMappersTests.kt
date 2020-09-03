@@ -2,6 +2,8 @@ package com.revenuecat.purchases.common
 
 import android.net.Uri
 import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.common.mappers.toIso8601
+import com.revenuecat.purchases.common.mappers.toMillis
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
