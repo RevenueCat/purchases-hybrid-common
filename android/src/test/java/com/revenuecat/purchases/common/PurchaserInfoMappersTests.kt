@@ -2,6 +2,7 @@ package com.revenuecat.purchases.common
 
 import android.net.Uri
 import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.common.mappers.map
 import com.revenuecat.purchases.common.mappers.toIso8601
 import com.revenuecat.purchases.common.mappers.toMillis
 import io.mockk.every

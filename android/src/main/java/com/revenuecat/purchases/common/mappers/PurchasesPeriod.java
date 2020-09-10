@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // The functionality of this class has been extracted from Java 8 time package
-class PurchasesPeriod {
+public class PurchasesPeriod {
     final int years;
     final int months;
     final int days;
@@ -71,7 +71,7 @@ class PurchasesPeriod {
      * @return the parsed period, not null
      * @throws RuntimeException if the text cannot be parsed to a period
      */
-    @Nullable static PurchasesPeriod parse(@NonNull CharSequence text) {
+    @Nullable public static PurchasesPeriod parse(@NonNull CharSequence text) {
         Matcher matcher = PATTERN.matcher(text);
         if (matcher.matches()) {
             int negate = ("-".equals(matcher.group(1)) ? -1 : 1);
