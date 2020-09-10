@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Context
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.PlatformInfo
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.UpgradeInfo
+import com.revenuecat.purchases.common.mappers.map
 import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -22,30 +22,6 @@ import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
 import org.json.JSONObject
 import java.net.URL
-
-fun addAttributionData(
-    data: Map<String, String>,
-    network: Int,
-    networkUserId: String?
-) {
-    for (attributionNetwork in Purchases.AttributionNetwork.values()) {
-        if (attributionNetwork.serverValue == network) {
-            Purchases.addAttributionData(data, attributionNetwork, networkUserId)
-        }
-    }
-}
-
-fun addAttributionData(
-    data: JSONObject,
-    network: Int,
-    networkUserId: String?
-) {
-    for (attributionNetwork in Purchases.AttributionNetwork.values()) {
-        if (attributionNetwork.serverValue == network) {
-            Purchases.addAttributionData(data, attributionNetwork, networkUserId)
-        }
-    }
-}
 
 fun setAllowSharingAppStoreAccount(
     allowSharingAppStoreAccount: Boolean
@@ -282,26 +258,6 @@ fun invalidatePurchaserInfoCache() {
 }
 
 // region Subscriber Attributes
-
-fun setAttributes(attributes: Map<String, String?>) {
-    Purchases.sharedInstance.setAttributes(attributes)
-}
-
-fun setEmail(email: String?) {
-    Purchases.sharedInstance.setEmail(email)
-}
-
-fun setPhoneNumber(phoneNumber: String?) {
-    Purchases.sharedInstance.setPhoneNumber(phoneNumber)
-}
-
-fun setDisplayName(displayName: String?) {
-    Purchases.sharedInstance.setDisplayName(displayName)
-}
-
-fun setPushToken(fcmToken: String?) {
-    Purchases.sharedInstance.setPushToken(fcmToken)
-}
 
 fun configure(
     context: Context,

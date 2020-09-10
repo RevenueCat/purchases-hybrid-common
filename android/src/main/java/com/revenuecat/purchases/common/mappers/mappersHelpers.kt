@@ -1,6 +1,6 @@
 package com.revenuecat.purchases.common.mappers
 
-import com.revenuecat.purchases.util.Iso8601Utils
+import com.revenuecat.purchases.utils.Iso8601Utils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Date

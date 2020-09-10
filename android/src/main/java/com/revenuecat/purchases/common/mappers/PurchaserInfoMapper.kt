@@ -21,5 +21,6 @@ fun PurchaserInfo.map(): Map<String, Any?> =
         "originalApplicationVersion" to null,
         "managementURL" to managementURL?.toString(),
         "originalPurchaseDate" to originalPurchaseDate?.toIso8601(),
-        "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis()
+        "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis(),
+        "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() }
     )
