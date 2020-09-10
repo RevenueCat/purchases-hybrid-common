@@ -124,8 +124,8 @@ workflows:
       - deploy-android:
           requires:
             - test-android
-          filters:
-            tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^(\d+\.)(\d+\.)(\d+)$/
+          #   branches:
+          #     ignore: /.*/
