@@ -115,12 +115,12 @@ workflows:
   
   android-deploy-on-tag:
     jobs:
-      - test-android:
-          filters:
-            tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
-            branches:
-              ignore: /.*/
+      - test-android
+          # filters:
+          #   tags:
+          #     only: /^(\d+\.)(\d+\.)(\d+)$/
+          #   branches:
+          #     ignore: /.*/
       - deploy-android:
           requires:
             - test-android
