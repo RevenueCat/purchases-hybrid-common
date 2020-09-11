@@ -310,7 +310,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
 }
 
-#pragma Subcriber Attributes
+#pragma mark - Subcriber Attributes
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -349,7 +349,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases _setPushTokenString:nonNSNullAttribute];
 }
 
-#pragma Attribution IDs
+#pragma mark Attribution IDs
 
 + (void)collectDeviceIdentifiers {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -386,7 +386,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases setOnesignalID:nonNSNullAttribute];
 }
 
-#pragma Campaign parameters
+#pragma mark Campaign parameters
 
 + (void)setMediaSource:(nullable NSString *)mediaSource {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -428,7 +428,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     return ([attribute isEqual:NSNull.null]) ? @"" : attribute;
 }
 
-#pragma errors
+#pragma mark - errors
 
 + (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload
 {
@@ -466,7 +466,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     completion(nil, [self payloadForError:error withExtraPayload:extraPayload]);
 }
 
-#pragma helpers
+#pragma mark - helpers
 
 + (void)productWithIdentifier:(NSString *)productIdentifier
               completionBlock:(void (^)(SKProduct *_Nullable))completion
