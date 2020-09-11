@@ -310,7 +310,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
 }
 
-#pragma mark Subcriber Attributes
+#pragma Subcriber Attributes
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -347,6 +347,81 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     NSString *nonNSNullAttribute = [self nonNSNullAttribute:pushToken];
     [RCPurchases.sharedPurchases _setPushTokenString:nonNSNullAttribute];
+}
+
+#pragma Attribution IDs
+
++ (void)collectDeviceIdentifiers {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases collectDeviceIdentifiers];
+}
+
++ (void)setAdjustID:(nullable NSString *)adjustID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:adjustID];
+    [RCPurchases.sharedPurchases setAdjustID:nonNSNullAttribute];
+}
+
++ (void)setAppsflyerID:(nullable NSString *)appsflyerID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:appsflyerID];
+    [RCPurchases.sharedPurchases setAppsflyerID:nonNSNullAttribute];
+}
+
++ (void)setFBAnonymousID:(nullable NSString *)fbAnonymousID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:fbAnonymousID];
+    [RCPurchases.sharedPurchases setFBAnonymousID:nonNSNullAttribute];
+}
+
++ (void)setMparticleID:(nullable NSString *)mparticleID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:mparticleID];
+    [RCPurchases.sharedPurchases setMparticleID:nonNSNullAttribute];
+}
+
++ (void)setOnesignalID:(nullable NSString *)onesignalID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:onesignalID];
+    [RCPurchases.sharedPurchases setOnesignalID:nonNSNullAttribute];
+}
+
+#pragma Campaign parameters
+
++ (void)setMediaSource:(nullable NSString *)mediaSource {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:mediaSource];
+    [RCPurchases.sharedPurchases setMediaSource:nonNSNullAttribute];
+}
+
++ (void)setCampaign:(nullable NSString *)campaign {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:campaign];
+    [RCPurchases.sharedPurchases setCampaign:nonNSNullAttribute];
+}
+
++ (void)setAdGroup:(nullable NSString *)adGroup {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:adGroup];
+    [RCPurchases.sharedPurchases setAdGroup:nonNSNullAttribute];
+}
+
++ (void)setAd:(nullable NSString *)ad {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:ad];
+    [RCPurchases.sharedPurchases setAd:nonNSNullAttribute];
+}
+
++ (void)setKeyword:(nullable NSString *)keyword {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:keyword];
+    [RCPurchases.sharedPurchases setKeyword:nonNSNullAttribute];
+}
+
++ (void)setCreative:(nullable NSString *)creative {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:creative];
+    [RCPurchases.sharedPurchases setCreative:nonNSNullAttribute];
 }
 
 + (NSString * _Nullable)nonNSNullAttribute:(NSString * _Nullable)attribute {
