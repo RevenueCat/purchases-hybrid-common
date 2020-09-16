@@ -32,6 +32,34 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     expect(dictionary?["managementURL"] as? NSNull) == NSNull()
                 }
             }
+            context("nonSubscriptionTransactions") {
+                it("contains all the non subscription transactions") {
+                    let purchaserInfo = PartialMockPurchaserInfo()
+                    
+                    let transactionDate = Date()
+                    let transaction = Purchases.Transaction(transactionId: "transactionid", productId: "productid", purchaseDate: transactionDate as Date)
+                    purchaserInfo.stubbedNonSubscriptionTransactions = [transaction]
+                    
+                    let dictionary = purchaserInfo.dictionary()
+                    let nonSubscriptionTransactions = dictionary?["nonSubscriptionTransactions"] as? Array<Any>
+                    expect(nonSubscriptionTransactions?.count) == 1
+                    
+                    let transactionDictionary = nonSubscriptionTransactions?[0] as? Dictionary<String, Any>
+                    expect(transactionDictionary?["revenueCatId"] as? String) == transaction.revenueCatId
+                    expect(transactionDictionary?["productId"] as? String) == transaction.productId
+                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == transactionDate.timeIntervalSince1970
+                    
+                    let dateformatter = ISO8601DateFormatter()
+                    expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
+                }
+                it ("is empty when there are no non subscription transactions") {
+                    let purchaserInfo = PartialMockPurchaserInfo()
+                
+                    let dictionary = purchaserInfo.dictionary()
+                    let nonSubscriptionTransactions = dictionary?["nonSubscriptionTransactions"] as? Array<Any>
+                    expect(nonSubscriptionTransactions?.count) == 0
+                }
+            }
         }
     }
 }
@@ -39,6 +67,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
 class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     
     var stubbedManagementURL: URL?
+    var stubbedNonSubscriptionTransactions: Array = Array<Purchases.Transaction>()
     
     override var managementURL: URL? {
         return stubbedManagementURL
@@ -62,5 +91,9 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     
     override var requestDate: Date? {
         return Date()
+    }
+    
+    override var nonSubscriptionTransactions: [Purchases.Transaction] {
+        return stubbedNonSubscriptionTransactions
     }
 }

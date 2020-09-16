@@ -55,7 +55,7 @@
         @"originalPurchaseDate": [self formattedAsISO8601OrNull:self.originalPurchaseDate],
         @"originalPurchaseDateMillis": [self timeIntervalSince1970OrNull:self.originalPurchaseDate],
         @"managementURL": managementURLorNull,
-        @"nonSubscriptionTransactions": self.nonSubscriptionTransactions
+        @"nonSubscriptionTransactions": nonSubscriptionTransactionsArray
     };
 }
 
