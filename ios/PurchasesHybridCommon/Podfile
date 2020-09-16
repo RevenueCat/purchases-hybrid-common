@@ -6,7 +6,7 @@ platform :ios, '9.0'
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  pod 'Purchases', '3.5.1'
+  pod 'Purchases', '3.7.0'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
