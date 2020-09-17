@@ -1,13 +1,13 @@
 PODS:
   - Nimble (8.0.8)
-  - Purchases (3.7.0):
-    - PurchasesCoreSwift (= 3.7.0)
-  - PurchasesCoreSwift (3.7.0)
+  - Purchases (3.7.1):
+    - PurchasesCoreSwift (= 3.7.1)
+  - PurchasesCoreSwift (3.7.1)
   - Quick (2.2.0)
 
 DEPENDENCIES:
   - Nimble
-  - Purchases (= 3.7.0)
+  - Purchases (= 3.7.1)
   - Quick
 
 SPEC REPOS:
