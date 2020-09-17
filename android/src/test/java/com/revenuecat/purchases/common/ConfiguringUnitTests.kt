@@ -2,7 +2,6 @@ package com.revenuecat.purchases.common
 
 import android.app.Application
 import android.content.Context
-import com.revenuecat.purchases.PlatformInfo
 import com.revenuecat.purchases.Purchases
 import io.mockk.every
 import io.mockk.mockk

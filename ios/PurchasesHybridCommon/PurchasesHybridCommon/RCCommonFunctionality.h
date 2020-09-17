@@ -67,6 +67,30 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)setPushToken:(nullable NSString *)pushToken;
 
++ (void)collectDeviceIdentifiers;
+
++ (void)setAdjustID:(nullable NSString *)adjustID;
+
++ (void)setAppsflyerID:(nullable NSString *)appsflyerID;
+
++ (void)setFBAnonymousID:(nullable NSString *)fbAnonymousID;
+
++ (void)setMparticleID:(nullable NSString *)mparticleID;
+
++ (void)setOnesignalID:(nullable NSString *)onesignalID;
+
++ (void)setMediaSource:(nullable NSString *)mediaSource;
+
++ (void)setCampaign:(nullable NSString *)campaign;
+
++ (void)setAdGroup:(nullable NSString *)adGroup;
+
++ (void)setAd:(nullable NSString *)ad;
+
++ (void)setKeyword:(nullable NSString *)keyword;
+
++ (void)setCreative:(nullable NSString *)creative;
+
 @end
 
 NS_ASSUME_NONNULL_END

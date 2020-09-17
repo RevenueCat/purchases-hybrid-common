@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common;
+package com.revenuecat.purchases.common.mappers;
 
 // The functionality of this class has been extracted from Java 8 Math class
 class PurchasesMath {

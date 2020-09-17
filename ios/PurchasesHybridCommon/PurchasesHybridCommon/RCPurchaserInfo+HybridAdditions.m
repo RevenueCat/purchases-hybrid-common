@@ -6,7 +6,7 @@
 #import "RCPurchaserInfo+HybridAdditions.h"
 #import "RCEntitlementInfos+HybridAdditions.h"
 #import "NSDate+HybridAdditions.h"
-
+#import "RCTransaction+HybridAdditions.h"
 
 @implementation RCPurchaserInfo (HybridAdditions)
 
@@ -30,6 +30,11 @@
         allPurchasesMillis[productIdentifier] = [self timeIntervalSince1970OrNull:date];
     }
     NSObject *managementURLorNull = self.managementURL.absoluteString ?: NSNull.null;
+    
+    NSMutableArray *nonSubscriptionTransactionsArray = [NSMutableArray new];
+    for (RCTransaction *transaction in self.nonSubscriptionTransactions) {
+        [nonSubscriptionTransactionsArray addObject:transaction.dictionary];
+    }
 
     return @{
         @"entitlements": self.entitlements.dictionary,
@@ -49,7 +54,8 @@
         @"originalApplicationVersion": self.originalApplicationVersion ?: NSNull.null,
         @"originalPurchaseDate": [self formattedAsISO8601OrNull:self.originalPurchaseDate],
         @"originalPurchaseDateMillis": [self timeIntervalSince1970OrNull:self.originalPurchaseDate],
-        @"managementURL": managementURLorNull
+        @"managementURL": managementURLorNull,
+        @"nonSubscriptionTransactions": nonSubscriptionTransactionsArray
     };
 }
 

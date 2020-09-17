@@ -1,45 +1,8 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.common.mappers
 
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.EntitlementInfo
-import com.revenuecat.purchases.EntitlementInfos
-import com.revenuecat.purchases.Offering
-import com.revenuecat.purchases.Offerings
-import com.revenuecat.purchases.Package
-import com.revenuecat.purchases.PurchaserInfo
-import com.revenuecat.purchases.util.Iso8601Utils
-import org.json.JSONArray
-import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.Currency
-import java.util.Date
-
-fun EntitlementInfo.map(): Map<String, Any?> =
-    mapOf(
-        "identifier" to this.identifier,
-        "isActive" to this.isActive,
-        "willRenew" to this.willRenew,
-        "periodType" to this.periodType.name,
-        "latestPurchaseDateMillis" to this.latestPurchaseDate.toMillis(),
-        "latestPurchaseDate" to this.latestPurchaseDate.toIso8601(),
-        "originalPurchaseDateMillis" to this.originalPurchaseDate.toMillis(),
-        "originalPurchaseDate" to this.originalPurchaseDate.toIso8601(),
-        "expirationDateMillis" to this.expirationDate?.toMillis(),
-        "expirationDate" to this.expirationDate?.toIso8601(),
-        "store" to this.store.name,
-        "productIdentifier" to this.productIdentifier,
-        "isSandbox" to this.isSandbox,
-        "unsubscribeDetectedAt" to this.unsubscribeDetectedAt?.toIso8601(),
-        "unsubscribeDetectedAtMillis" to this.unsubscribeDetectedAt?.toMillis(),
-        "billingIssueDetectedAt" to this.billingIssueDetectedAt?.toIso8601(),
-        "billingIssueDetectedAtMillis" to this.billingIssueDetectedAt?.toMillis()
-    )
-
-fun EntitlementInfos.map(): Map<String, Any> =
-    mapOf(
-        "all" to this.all.asIterable().associate { it.key to it.value.map() },
-        "active" to this.active.asIterable().associate { it.key to it.value.map() }
-    )
 
 fun SkuDetails.map(): Map<String, Any?> =
     mapOf(
@@ -53,57 +16,7 @@ fun SkuDetails.map(): Map<String, Any?> =
         "discounts" to null
     ) + mapIntroPriceDeprecated()
 
-fun PurchaserInfo.map(): Map<String, Any?> =
-    mapOf(
-        "entitlements" to entitlements.map(),
-        "activeSubscriptions" to activeSubscriptions.toList(),
-        "allPurchasedProductIdentifiers" to allPurchasedSkus.toList(),
-        "latestExpirationDate" to latestExpirationDate?.toIso8601(),
-        "latestExpirationDateMillis" to latestExpirationDate?.toMillis(),
-        "firstSeen" to firstSeen.toIso8601(),
-        "firstSeenMillis" to firstSeen.toMillis(),
-        "originalAppUserId" to originalAppUserId,
-        "requestDate" to requestDate.toIso8601(),
-        "requestDateMillis" to requestDate.toMillis(),
-        "allExpirationDates" to allExpirationDatesByProduct.mapValues { it.value?.toIso8601() },
-        "allExpirationDatesMillis" to allExpirationDatesByProduct.mapValues { it.value?.toMillis() },
-        "allPurchaseDates" to allPurchaseDatesByProduct.mapValues { it.value?.toIso8601() },
-        "allPurchaseDatesMillis" to allPurchaseDatesByProduct.mapValues { it.value?.toMillis() },
-        "originalApplicationVersion" to null,
-        "managementURL" to managementURL?.toString(),
-        "originalPurchaseDate" to originalPurchaseDate?.toIso8601(),
-        "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis()
-    )
-
-fun Offerings.map(): Map<String, Any?> =
-    mapOf(
-        "all" to this.all.mapValues { it.value.map() },
-        "current" to this.current?.map()
-    )
-
 fun List<SkuDetails>.map(): List<Map<String, Any?>> = this.map { it.map() }
-
-private fun Offering.map(): Map<String, Any?> =
-    mapOf(
-        "identifier" to identifier,
-        "serverDescription" to serverDescription,
-        "availablePackages" to availablePackages.map { it.map(identifier) },
-        "lifetime" to lifetime?.map(identifier),
-        "annual" to annual?.map(identifier),
-        "sixMonth" to sixMonth?.map(identifier),
-        "threeMonth" to threeMonth?.map(identifier),
-        "twoMonth" to twoMonth?.map(identifier),
-        "monthly" to monthly?.map(identifier),
-        "weekly" to weekly?.map(identifier)
-    )
-
-private fun Package.map(offeringIdentifier: String): Map<String, Any?> =
-    mapOf(
-        "identifier" to identifier,
-        "packageType" to packageType.name,
-        "product" to product.map(),
-        "offeringIdentifier" to offeringIdentifier
-    )
 
 internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
     // isNullOrBlank() gives issues with older Kotlin stdlib versions
@@ -238,44 +151,3 @@ private fun String?.mapPeriod(): Map<String, Any?>? {
             }
         }
 }
-
-fun Map<String, *>.convertToJson(): JSONObject {
-    val jsonObject = JSONObject()
-    for ((key, value) in this) {
-        when (value) {
-            null -> jsonObject.put(key, JSONObject.NULL)
-            is Map<*, *> -> jsonObject.put(key, (value as Map<String, *>).convertToJson())
-            is List<*> -> jsonObject.put(key, value.convertToJsonArray())
-            is Array<*> -> jsonObject.put(key, value.toList().convertToJsonArray())
-            else -> jsonObject.put(key, value)
-        }
-    }
-    return jsonObject
-}
-
-fun List<*>.convertToJsonArray(): JSONArray {
-    val writableArray = JSONArray()
-    for (item in this) {
-        when (item) {
-            null -> writableArray.put(JSONObject.NULL)
-            is Map<*, *> -> writableArray.put((item as Map<String, *>).convertToJson())
-            is Array<*> -> writableArray.put(item.asList().convertToJsonArray())
-            is List<*> -> writableArray.put(item.convertToJsonArray())
-            else -> writableArray.put(item)
-        }
-    }
-    return writableArray
-}
-
-fun JSONObject.convertToMap(): Map<String, String?> =
-    this.keys().asSequence<String>().associate { key ->
-        if (this.isNull(key)) {
-            key to null
-        } else {
-            key to this.getString(key)
-        }
-    }
-
-internal fun Date.toMillis(): Double = this.time.div(1000.0)
-
-internal fun Date.toIso8601(): String = Iso8601Utils.format(this)
