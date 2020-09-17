@@ -40,7 +40,7 @@
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
 		2DDE0B4F24734E9300899E7B /* NSDate+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E334F24521B440022A971 /* NSDate+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */; };
+		35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		35DCB4F8250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */; };
 		37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */; };
 		E41610DFFF84F4E7C60BC1A4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C972015FED49566F8D8DEA6 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };

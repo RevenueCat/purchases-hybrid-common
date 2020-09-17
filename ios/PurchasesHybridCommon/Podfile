@@ -11,7 +11,7 @@ platform :ios, '9.0'
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
     pod 'Quick'
-    pod 'Nimble'
+    pod 'Nimble', '9.0.0-rc.3'
   end
 
 end

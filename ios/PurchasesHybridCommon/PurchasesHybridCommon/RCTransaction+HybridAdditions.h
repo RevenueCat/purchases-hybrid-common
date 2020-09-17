@@ -6,7 +6,8 @@
 //  Copyright © 2020 RevenueCat. All rights reserved.
 //
 
-#import <Purchases/Purchases.h>
+@import Purchases;
+@import PurchasesCoreSwift;
 
 @interface RCTransaction (HybridAdditions)
 
