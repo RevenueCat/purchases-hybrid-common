@@ -2,7 +2,7 @@
 
 buildscript {
     ext.android_tools = '4.0.1'
-    ext.kotlin_version = '1.4.0'
+    ext.kotlin_version = '1.4.10'
     ext.android_junit5_version = '1.5.2.0'
     ext.junit5_runner = '0.2.2'
     ext.spek_version = '2.0.11'
