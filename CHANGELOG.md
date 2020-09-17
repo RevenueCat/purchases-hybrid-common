@@ -1,3 +1,12 @@
+## 1.4.0
+
+- Adds nonSubscriptionPurchases to RCPurchaserInfo
+- Adds attribution v2
+- Updates iOS to 3.7.1
+- Updates Android to 3.5.0
+  https://github.com/RevenueCat/purchases-hybrid-common/pull/51
+
+
 ## 1.3.1
 
 - Fix crash when Android periods come as "365"
