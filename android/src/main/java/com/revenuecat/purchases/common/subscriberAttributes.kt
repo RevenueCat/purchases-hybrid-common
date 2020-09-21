@@ -44,7 +44,7 @@ fun setAppsflyerID(appsflyerID: String?) {
 }
 
 fun setFBAnonymousID(fbAnonymousID: String?) {
-    Purchases.sharedInstance.setAppsflyerID(fbAnonymousID)
+    Purchases.sharedInstance.setFBAnonymousID(fbAnonymousID)
 }
 
 fun setMparticleID(mparticleID: String?) {
