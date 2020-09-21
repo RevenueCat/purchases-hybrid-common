@@ -1,3 +1,9 @@
+### 1.4.1
+
+- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead. 
+- Cleans up deprecations
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/53/
+
 ## 1.4.0
 
 - Adds nonSubscriptionPurchases to RCPurchaserInfo
