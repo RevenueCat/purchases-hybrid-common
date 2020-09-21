@@ -42,10 +42,13 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     RCPurchases.sharedPurchases.allowSharingAppStoreAccount = allowSharingStoreAccount;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 + (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId
 {
     [RCPurchases addAttributionData:data fromNetwork:(RCAttributionNetwork) network forNetworkUserId:networkUserId];
 }
+#pragma GCC diagnostic pop
 
 + (void)getProductInfo:(NSArray *)products
        completionBlock:(void (^)(NSArray<NSDictionary *> *))completion
