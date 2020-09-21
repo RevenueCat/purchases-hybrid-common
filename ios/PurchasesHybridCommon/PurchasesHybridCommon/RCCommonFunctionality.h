@@ -19,7 +19,7 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
 
-+ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId;
++ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *) networkUserId __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)getProductInfo:(NSArray *)products completionBlock:(void(^)(NSArray<NSDictionary *> *))completion;
 
