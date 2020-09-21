@@ -1,3 +1,13 @@
+### 1.4.1
+
+- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead. 
+- Cleans up deprecations
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/53/
+- updated Xcode version to use in CI to 12.0
+- updated bundler and fastlane
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/54
+
+
 ## 1.4.0
 
 - Adds nonSubscriptionPurchases to RCPurchaserInfo
