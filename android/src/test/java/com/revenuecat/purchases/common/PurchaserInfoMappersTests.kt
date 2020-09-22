@@ -68,7 +68,7 @@ object PurchaserInfoMappersTests : Spek({
                 assertThat(mappedNonSubscriptionTransactions).isNotEmpty
 
                 val transactionDictionary = mappedNonSubscriptionTransactions[0] as Map<*, *>
-                assertThat(transactionDictionary["revenuecatId"]).isEqualTo(transaction.revenuecatId)
+                assertThat(transactionDictionary["revenueCatId"]).isEqualTo(transaction.revenuecatId)
                 assertThat(transactionDictionary["productId"]).isEqualTo(transaction.productId)
                 assertThat(transactionDictionary["purchaseDateMillis"]).isEqualTo(transaction.purchaseDate.toMillis())
                 assertThat(transactionDictionary["purchaseDate"]).isEqualTo(transaction.purchaseDate.toIso8601())
