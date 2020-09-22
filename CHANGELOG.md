@@ -1,3 +1,8 @@
+### 1.4.2
+
+- Fixes a typo in the `Transaction` mapper in Android.
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/55
+
 ### 1.4.1
 
 - Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead. 
