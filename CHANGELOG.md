@@ -1,3 +1,8 @@
+### 1.4.3
+
+- Fixes build issues in some hybrid SDKs by compiling pods statically
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/56
+
 ### 1.4.2
 
 - Fixes a typo in the `Transaction` mapper in Android.
