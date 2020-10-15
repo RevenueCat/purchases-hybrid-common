@@ -190,8 +190,8 @@ object SkuDetailsMapperTests : Spek({
 
         describe("with no free trial nor introductory price") {
             beforeEachTest {
-                every { mockSkuDetails.freeTrialPeriod } returns null
-                every { mockSkuDetails.introductoryPrice } returns null
+                every { mockSkuDetails.freeTrialPeriod } returns ""
+                every { mockSkuDetails.introductoryPrice } returns ""
                 received = mockSkuDetails.mapIntroPrice()
             }
 
