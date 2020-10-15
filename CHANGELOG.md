@@ -1,3 +1,7 @@
+### 1.4.4
+
+- Updates Android to 3.5.2
+
 ### 1.4.3
 
 - Fixes build issues in some hybrid SDKs by compiling pods statically

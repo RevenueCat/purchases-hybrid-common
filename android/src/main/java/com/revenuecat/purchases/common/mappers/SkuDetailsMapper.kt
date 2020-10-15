@@ -20,7 +20,7 @@ fun List<SkuDetails>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
 internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
     // isNullOrBlank() gives issues with older Kotlin stdlib versions
-    return if (freeTrialPeriod != null && freeTrialPeriod.isNotBlank()) {
+    return if (freeTrialPeriod.isNotBlank()) {
         // Check freeTrialPeriod first to give priority to trials
         // Format using device locale. iOS will format using App Store locale, but there's no way
         // to figure out how the price in the SKUDetails is being formatted.
@@ -32,7 +32,7 @@ internal fun SkuDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
                 "intro_price_cycles" to 1
             ) + periodFields
         } ?: mapNullDeprecatedPeriod()
-    } else if (introductoryPrice != null && introductoryPrice.isNotBlank()) {
+    } else if (introductoryPrice.isNotBlank()) {
         introductoryPricePeriod.mapPeriodDeprecated()?.let { periodFields ->
             mapOf(
                 "intro_price" to introductoryPriceAmountMicros / 1000000.0,
@@ -54,7 +54,7 @@ private fun SkuDetails.formatUsingDeviceLocale(number: Long): String {
 
 internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
     // isNullOrBlank() gives issues with older Kotlin stdlib versions
-    return if (freeTrialPeriod != null && freeTrialPeriod.isNotBlank()) {
+    return if (freeTrialPeriod.isNotBlank()) {
         // Check freeTrialPeriod first to give priority to trials
         // Format using device locale. iOS will format using App Store locale, but there's no way
         // to figure out how the price in the SKUDetails is being formatted.
@@ -66,7 +66,7 @@ internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
                 "cycles" to 1
             ) + periodFields
         } ?: mapNullPeriod()
-    } else if (introductoryPrice != null && introductoryPrice.isNotBlank()) {
+    } else if (introductoryPrice.isNotBlank()) {
         introductoryPricePeriod.mapPeriod()?.let { periodFields ->
             mapOf(
                 "price" to introductoryPriceAmountMicros / 1000000.0,
