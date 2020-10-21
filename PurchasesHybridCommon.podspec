@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.framework      = 'StoreKit'
 
-  s.dependency 'Purchases', '3.7.2'
+  s.dependency 'Purchases', '3.7.4'
   s.swift_version = '5.0'
 
   s.ios.deployment_target = '9.0'
@@ -26,12 +26,7 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
-  s.source_files = [
-    'ios/PurchasesHybridCommon/PurchasesHybridCommon/PurchasesHybridCommon.h',
-    'ios/PurchasesHybridCommon/PurchasesHybridCommon/**/*.h',
-    'ios/PurchasesHybridCommon/PurchasesHybridCommon/**/*.m'
-  ]
-
+  s.source_files = ['ios/PurchasesHybridCommon/PurchasesHybridCommon/**/*.{h,m,swift}']
 
   s.public_header_files = [
     'ios/PurchasesHybridCommon/PurchasesHybridCommon/*.h'
