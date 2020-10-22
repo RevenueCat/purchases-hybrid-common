@@ -6,7 +6,9 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  pod 'Purchases', '3.7.4'
+  pod 'Purchases', branch: 'feature/make_cocoapods_dynamic_again', git:'https://github.com/revenuecat/purchases-ios'
+  pod 'PurchasesCoreSwift', branch: 'feature/make_cocoapods_dynamic_again', git:'https://github.com/revenuecat/purchases-ios'
+
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
