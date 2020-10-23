@@ -1,6 +1,12 @@
+### 1.4.5
+
+- Bumps iOS to 3.7.5, makes cocoapods compile statically, adds dummy Swift file
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/58
+
 ### 1.4.4
 
 - Updates Android to 3.5.2
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/57
 
 ### 1.4.3
 

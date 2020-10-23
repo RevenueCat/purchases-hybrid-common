@@ -6,7 +6,7 @@
 - Update purchases-android version in `android/build.gradle`
 - Update purchases-ios pod version in `PurchasesHybridCommon.podspec` and `ios/PurchasesHybridCommon/Podfile`.
 - Open a PR, merge and tag main.
-- run `carthage build --archive --platform iOS`
+- run `./carthage.sh build --archive --platform iOS`
 - Upload to the new release PurchasesHybridCommon.framework.zip
 - Create a github release
 - Release Android:
