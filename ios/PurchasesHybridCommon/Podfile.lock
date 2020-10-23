@@ -1,43 +1,28 @@
 PODS:
   - Nimble (9.0.0)
-  - Purchases (3.8.0-SNAPSHOT):
-    - PurchasesCoreSwift (= 3.8.0-SNAPSHOT)
-  - PurchasesCoreSwift (3.8.0-SNAPSHOT)
+  - Purchases (3.7.5):
+    - PurchasesCoreSwift (= 3.7.5)
+  - PurchasesCoreSwift (3.7.5)
   - Quick (3.0.0)
 
 DEPENDENCIES:
   - Nimble
-  - Purchases (from `https://github.com/revenuecat/purchases-ios`, branch `feature/make_cocoapods_dynamic_again`)
-  - PurchasesCoreSwift (from `https://github.com/revenuecat/purchases-ios`, branch `feature/make_cocoapods_dynamic_again`)
+  - Purchases (= 3.7.5)
   - Quick
 
 SPEC REPOS:
   trunk:
     - Nimble
+    - Purchases
+    - PurchasesCoreSwift
     - Quick
-
-EXTERNAL SOURCES:
-  Purchases:
-    :branch: feature/make_cocoapods_dynamic_again
-    :git: https://github.com/revenuecat/purchases-ios
-  PurchasesCoreSwift:
-    :branch: feature/make_cocoapods_dynamic_again
-    :git: https://github.com/revenuecat/purchases-ios
-
-CHECKOUT OPTIONS:
-  Purchases:
-    :commit: 9d00d3c45b1515317db5a8c7dfd0da4f0dcc0475
-    :git: https://github.com/revenuecat/purchases-ios
-  PurchasesCoreSwift:
-    :commit: 9d00d3c45b1515317db5a8c7dfd0da4f0dcc0475
-    :git: https://github.com/revenuecat/purchases-ios
 
 SPEC CHECKSUMS:
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
-  Purchases: 6778455b214c327fed4b850d6860c12e45db93f9
-  PurchasesCoreSwift: 10136558374deec2fa57586bc5026e899cee306b
+  Purchases: 7ebce9418bc16732c3c3bb4b6ff7e7e397de024e
+  PurchasesCoreSwift: 50636e307c1ab76c7a7894a87d042665f2fe0be9
   Quick: 6d9559f40647bc4d510103842ef2fdd882d753e2
 
-PODFILE CHECKSUM: 62ba6022fe23547205f64fa1d857e56f7a65e39d
+PODFILE CHECKSUM: aec0c83bee992980788bda1b4903f1442cb53806
 
 COCOAPODS: 1.9.3
