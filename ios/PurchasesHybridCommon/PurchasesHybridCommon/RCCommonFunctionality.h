@@ -25,6 +25,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion;
 
++ (void)syncPurchasesWithCompletionBlock:(RCHybridResponseBlock)completion;
+
 + (NSString *)appUserID;
 
 + (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion;
@@ -54,8 +56,6 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 + (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
-
-+ (void)syncPurchasesWithCompletionBlock:(nullable RCReceivePurchaserInfoBlock)completion;
 
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos);
 
