@@ -9,6 +9,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// some of the methods declared in the header are privately implemented in RCPurchases.h in the main SDK.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @implementation RCPurchases (HybridAdditions)
 
@@ -31,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
                       platformFlavor:platformFlavor
                platformFlavorVersion:platformFlavorVersion];
 }
+#pragma clang diagnostic pop
 
 @end
 
