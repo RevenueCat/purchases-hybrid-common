@@ -313,6 +313,14 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
 }
 
++ (void)syncPurchasesWithCompletionBlock:(nullable RCReceivePurchaserInfoBlock)completion {
+    [RCPurchases.sharedPurchases syncPurchasesWithCompletionBlock:completion];
+}
+
++ (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos) {
+    [RCPurchases.sharedPurchases presentCodeRedemptionSheet];
+}
+
 #pragma mark - Subcriber Attributes
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {

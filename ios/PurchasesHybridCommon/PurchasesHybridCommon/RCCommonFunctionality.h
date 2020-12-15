@@ -55,6 +55,10 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
 
++ (void)syncPurchasesWithCompletionBlock:(nullable RCReceivePurchaserInfoBlock)completion;
+
++ (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos);
+
 + (void)invalidatePurchaserInfoCache;
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes;
