@@ -19,7 +19,7 @@
     for (NSString *productIdentifier in sortedProductIdentifiers) {
         NSDate *date = [self expirationDateForProductIdentifier:productIdentifier];
         allExpirations[productIdentifier] = [self formattedAsISO8601OrNull:date];
-        allExpirationsMillis[productIdentifier] = [self timeIntervalSince1970OrNull:date];
+        allExpirationsMillis[productIdentifier] = [self millisecondsSince1970OrNull:date];
     }
 
     NSMutableDictionary *allPurchases = [NSMutableDictionary new];
@@ -27,7 +27,7 @@
     for (NSString *productIdentifier in sortedProductIdentifiers) {
         NSDate *date = [self purchaseDateForProductIdentifier:productIdentifier];
         allPurchases[productIdentifier] = [self formattedAsISO8601OrNull:date];
-        allPurchasesMillis[productIdentifier] = [self timeIntervalSince1970OrNull:date];
+        allPurchasesMillis[productIdentifier] = [self millisecondsSince1970OrNull:date];
     }
     NSObject *managementURLorNull = self.managementURL.absoluteString ?: NSNull.null;
     
@@ -41,27 +41,27 @@
         @"activeSubscriptions": self.activeSubscriptions.allObjects,
         @"allPurchasedProductIdentifiers": self.allPurchasedProductIdentifiers.allObjects,
         @"latestExpirationDate": [self formattedAsISO8601OrNull:self.latestExpirationDate],
-        @"latestExpirationDateMillis": [self timeIntervalSince1970OrNull:self.latestExpirationDate],
+        @"latestExpirationDateMillis": [self millisecondsSince1970OrNull:self.latestExpirationDate],
         @"firstSeen": self.firstSeen.formattedAsISO8601,
-        @"firstSeenMillis": @(self.firstSeen.timeIntervalSince1970),
+        @"firstSeenMillis": @(self.firstSeen.millisecondsSince1970),
         @"originalAppUserId": self.originalAppUserId,
         @"requestDate": self.requestDate.formattedAsISO8601,
-        @"requestDateMillis": @(self.requestDate.timeIntervalSince1970),
+        @"requestDateMillis": @(self.requestDate.millisecondsSince1970),
         @"allExpirationDates": allExpirations,
         @"allExpirationDatesMillis": allExpirationsMillis,
         @"allPurchaseDates": allPurchases,
         @"allPurchaseDatesMillis": allPurchasesMillis,
         @"originalApplicationVersion": self.originalApplicationVersion ?: NSNull.null,
         @"originalPurchaseDate": [self formattedAsISO8601OrNull:self.originalPurchaseDate],
-        @"originalPurchaseDateMillis": [self timeIntervalSince1970OrNull:self.originalPurchaseDate],
+        @"originalPurchaseDateMillis": [self millisecondsSince1970OrNull:self.originalPurchaseDate],
         @"managementURL": managementURLorNull,
         @"nonSubscriptionTransactions": nonSubscriptionTransactionsArray
     };
 }
 
-- (NSObject *)timeIntervalSince1970OrNull:(nullable NSDate *)date {
+- (NSObject *)millisecondsSince1970OrNull:(nullable NSDate *)date {
     if (date) {
-        return @(date.timeIntervalSince1970);
+        return @(date.millisecondsSince1970);
     } else {
         return NSNull.null;
     }

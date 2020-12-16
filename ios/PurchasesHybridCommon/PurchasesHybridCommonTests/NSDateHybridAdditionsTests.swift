@@ -34,5 +34,15 @@ class NSDateHybridAdditionsTests: QuickSpec {
                 expect(dateformatter.string(from: date4 as Date)) == date4.formattedAsISO8601()
             }
         }
+
+        describe("millisecondsSince1970") {
+            it("correctly returns results in milliseconds") {
+                let date = NSDate(timeIntervalSince1970: 1588044611)
+                expect(date.millisecondsSince1970()) == date.timeIntervalSince1970 * 1000.0
+
+                let now = NSDate()
+                expect(now.millisecondsSince1970) == now.timeIntervalSince1970 * 1000.0
+            }
+        }
     }
 }

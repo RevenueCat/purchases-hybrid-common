@@ -29,6 +29,10 @@ static NSString *stringFromDate(NSDate *date) {
     return stringFromDate(self);
 }
 
+- (double)millisecondsSince1970 {
+    return [self timeIntervalSince1970] * 1000.0;
+}
+
 @end
 
 
