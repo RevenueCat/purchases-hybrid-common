@@ -41,7 +41,7 @@ class NSDateHybridAdditionsTests: QuickSpec {
                 expect(date.millisecondsSince1970()) == date.timeIntervalSince1970 * 1000.0
 
                 let now = NSDate()
-                expect(now.millisecondsSince1970) == now.timeIntervalSince1970 * 1000.0
+                expect(now.millisecondsSince1970()) == now.timeIntervalSince1970 * 1000.0
             }
         }
     }
