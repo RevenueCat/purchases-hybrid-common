@@ -29,11 +29,13 @@
     }
 
     jsonDict[@"latestPurchaseDate"] = self.latestPurchaseDate.formattedAsISO8601;
-    jsonDict[@"latestPurchaseDateMillis"] = @(self.latestPurchaseDate.timeIntervalSince1970);
+    jsonDict[@"latestPurchaseDateMillis"] = @(self.latestPurchaseDate.millisecondsSince1970);
     jsonDict[@"originalPurchaseDate"] = self.originalPurchaseDate.formattedAsISO8601;
-    jsonDict[@"originalPurchaseDateMillis"] = @(self.originalPurchaseDate.timeIntervalSince1970);
+    jsonDict[@"originalPurchaseDateMillis"] = @(self.originalPurchaseDate.millisecondsSince1970);
     jsonDict[@"expirationDate"] = self.expirationDate.formattedAsISO8601 ?: [NSNull null];
-    jsonDict[@"expirationDateMillis"] = self.expirationDate ? @(self.expirationDate.timeIntervalSince1970) : [NSNull null];
+    jsonDict[@"expirationDateMillis"] = self.expirationDate
+                                        ? @(self.expirationDate.millisecondsSince1970)
+                                        : [NSNull null];
 
     switch (self.store) {
         case RCAppStore:
@@ -59,9 +61,13 @@
     jsonDict[@"productIdentifier"] = self.productIdentifier;
     jsonDict[@"isSandbox"] = @(self.isSandbox);
     jsonDict[@"unsubscribeDetectedAt"] = self.unsubscribeDetectedAt.formattedAsISO8601 ?: [NSNull null];
-    jsonDict[@"unsubscribeDetectedAtMillis"] = self.unsubscribeDetectedAt ? @(self.unsubscribeDetectedAt.timeIntervalSince1970) : [NSNull null];
+    jsonDict[@"unsubscribeDetectedAtMillis"] = self.unsubscribeDetectedAt
+                                               ? @(self.unsubscribeDetectedAt.millisecondsSince1970)
+                                               : [NSNull null];
     jsonDict[@"billingIssueDetectedAt"] = self.billingIssueDetectedAt.formattedAsISO8601 ?: [NSNull null];
-    jsonDict[@"billingIssueDetectedAtMillis"] = self.billingIssueDetectedAt ? @(self.billingIssueDetectedAt.timeIntervalSince1970) : [NSNull null];
+    jsonDict[@"billingIssueDetectedAtMillis"] = self.billingIssueDetectedAt
+                                                ? @(self.billingIssueDetectedAt.millisecondsSince1970)
+                                                : [NSNull null];
     
     return [NSDictionary dictionaryWithDictionary:jsonDict];
 }

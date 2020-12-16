@@ -47,7 +47,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     let transactionDictionary = nonSubscriptionTransactions?[0] as? Dictionary<String, Any>
                     expect(transactionDictionary?["revenueCatId"] as? String) == transaction.revenueCatId
                     expect(transactionDictionary?["productId"] as? String) == transaction.productId
-                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == transactionDate.timeIntervalSince1970
+                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == (transactionDate as NSDate).millisecondsSince1970()
                     
                     let dateformatter = ISO8601DateFormatter()
                     expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
