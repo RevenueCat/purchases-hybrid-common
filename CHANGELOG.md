@@ -1,3 +1,12 @@
+### 2.0.0
+
+- Bumps iOS to 3.9.1
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/61
+- Fixes a bug where times in millis were actually returned in seconds
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/62
+- Fixes build warnings
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/60
+
 ### 1.4.5
 
 - Bumps iOS to 3.7.5, makes cocoapods compile statically, adds dummy Swift file
