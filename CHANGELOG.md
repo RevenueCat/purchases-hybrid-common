@@ -1,6 +1,6 @@
 ### 2.0.0
 
-- Bumps `purchases-ios` to 3.9.1, `purchases-android` to 4.0.1
+- Bumps `purchases-ios` to 3.9.2, `purchases-android` to 4.0.1
     https://github.com/RevenueCat/purchases-hybrid-common/pull/61
 - Fixes a bug where times in millis were actually returned in seconds
     https://github.com/RevenueCat/purchases-hybrid-common/pull/62
