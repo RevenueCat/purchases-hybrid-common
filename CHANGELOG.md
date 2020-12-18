@@ -1,7 +1,9 @@
-### 2.0.0
+### 1.5.0
 
 - Bumps `purchases-ios` to 3.9.2, `purchases-android` to 4.0.1
     https://github.com/RevenueCat/purchases-hybrid-common/pull/61
+- Adds `syncPurchases` for iOS
+- Adds `presentCodeRedemptionSheet` for iOS
 - Fixes a bug where times in millis were actually returned in seconds
     https://github.com/RevenueCat/purchases-hybrid-common/pull/62
 - Fixes build warnings
