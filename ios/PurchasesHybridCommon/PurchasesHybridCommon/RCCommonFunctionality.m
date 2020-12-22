@@ -319,6 +319,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 }
 
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos) {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases presentCodeRedemptionSheet];
 }
 
