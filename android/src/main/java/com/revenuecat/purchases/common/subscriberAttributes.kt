@@ -11,6 +11,7 @@ fun addAttributionData(
 ) {
     for (attributionNetwork in Purchases.AttributionNetwork.values()) {
         if (attributionNetwork.serverValue == network) {
+            @Suppress("DEPRECATION")
             Purchases.addAttributionData(data, attributionNetwork, networkUserId)
         }
     }
@@ -23,6 +24,7 @@ fun addAttributionData(
 ) {
     for (attributionNetwork in Purchases.AttributionNetwork.values()) {
         if (attributionNetwork.serverValue == network) {
+            @Suppress("DEPRECATION")
             Purchases.addAttributionData(data, attributionNetwork, networkUserId)
         }
     }

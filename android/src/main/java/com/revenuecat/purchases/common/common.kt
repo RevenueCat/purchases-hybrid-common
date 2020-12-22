@@ -20,7 +20,6 @@ import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
-import org.json.JSONObject
 import java.net.URL
 
 fun setAllowSharingAppStoreAccount(
@@ -70,16 +69,16 @@ fun purchaseProduct(
                     Purchases.sharedInstance.purchaseProductWith(
                         activity,
                         productToBuy,
-                        onError = getMakePurchaseErrorFunction(onResult),
-                        onSuccess = getMakePurchaseSuccessFunction(onResult)
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult)
                     )
                 } else {
                     Purchases.sharedInstance.purchaseProductWith(
                         activity,
                         productToBuy,
                         UpgradeInfo(oldSku, prorationMode),
-                        onError = getMakePurchaseErrorFunction(onResult),
-                        onSuccess = getMakePurchaseSuccessFunction(onResult)
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult)
                     )
                 }
             } else {
@@ -137,16 +136,16 @@ fun purchasePackage(
                         Purchases.sharedInstance.purchasePackageWith(
                             activity,
                             packageToBuy,
-                            onError = getMakePurchaseErrorFunction(onResult),
-                            onSuccess = getMakePurchaseSuccessFunction(onResult)
+                            onError = getPurchaseErrorFunction(onResult),
+                            onSuccess = getPurchaseCompletedFunction(onResult)
                         )
                     } else {
                         Purchases.sharedInstance.purchasePackageWith(
                             activity,
                             packageToBuy,
                             UpgradeInfo(oldSku, prorationMode),
-                            onError = getMakePurchaseErrorFunction(onResult),
-                            onSuccess = getMakePurchaseSuccessFunction(onResult)
+                            onError = getPurchaseErrorFunction(onResult),
+                            onSuccess = getPurchaseCompletedFunction(onResult)
                         )
                     }
                 } else {
@@ -276,15 +275,15 @@ fun configure(
 
 // region private functions
 
-private fun getMakePurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
+private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
 
-private fun getMakePurchaseSuccessFunction(onResult: OnResult): (Purchase, PurchaserInfo) -> Unit {
+private fun getPurchaseCompletedFunction(onResult: OnResult): (Purchase?, PurchaserInfo) -> Unit {
     return { purchase, purchaserInfo ->
         onResult.onReceived(
             mapOf(
-                "productIdentifier" to purchase.sku,
+                "productIdentifier" to purchase?.sku,
                 "purchaserInfo" to purchaserInfo.map()
             )
         )

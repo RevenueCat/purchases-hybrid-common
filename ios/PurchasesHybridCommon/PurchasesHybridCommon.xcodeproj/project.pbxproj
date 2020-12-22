@@ -529,7 +529,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -553,7 +553,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;

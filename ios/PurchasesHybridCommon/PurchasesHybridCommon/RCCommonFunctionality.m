@@ -71,6 +71,11 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     [RCPurchases.sharedPurchases restoreTransactionsWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
++ (void)syncPurchasesWithCompletionBlock:(RCHybridResponseBlock)completion {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases syncPurchasesWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+}
+
 + (NSString *)appUserID
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
@@ -311,6 +316,11 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)invalidatePurchaserInfoCache { 
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
+}
+
++ (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos) {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases presentCodeRedemptionSheet];
 }
 
 #pragma mark - Subcriber Attributes
