@@ -1,3 +1,8 @@
+### 1.5.1
+
+- Fixes a bug where times in millis were actually returned in seconds in Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/63
+
 ### 1.5.0
 
 - Bumps `purchases-ios` to 3.9.2, `purchases-android` to 4.0.1
