@@ -1,3 +1,8 @@
+### 1.6.1
+
+- Adds missing availability check for `simulatesAskToBuyInSandbox`
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/66
+
 ### 1.6.0
 
 - [iOS] Adds a new property `simulateAsksToBuyInSandbox`, that allows developers to test deferred purchases easily.
