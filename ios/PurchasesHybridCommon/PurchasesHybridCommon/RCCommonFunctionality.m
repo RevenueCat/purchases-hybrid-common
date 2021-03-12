@@ -123,7 +123,11 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
 }
 
 + (void)setSimulatesAskToBuyInSandbox:(BOOL)simulatesAskToBuyInSandbox {
-    RCPurchases.simulatesAskToBuyInSandbox = simulatesAskToBuyInSandbox;
+    if (@available(iOS 8.0, macos 10.14, tvOS 9.0, watchos 6.2, macCatalyst 13.0, *)) {
+        RCPurchases.simulatesAskToBuyInSandbox = simulatesAskToBuyInSandbox;
+    } else {
+        NSLog(@"called setSimulatesAskToBuyInSandbox, but it's not available on this platform / OS version");
+    }
 }
 
 + (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion
