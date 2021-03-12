@@ -1,3 +1,10 @@
+### 1.6.0
+
+- [iOS] Adds a new property `simulateAsksToBuyInSandbox`, that allows developers to test deferred purchases easily.
+- Bumps `purchases-ios` to `3.10.6`
+- Bumps `purchases-android` to `4.0.4`
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/65
+
 ### 1.5.1
 
 - Fixes a bug where times in millis were actually returned in seconds in Android

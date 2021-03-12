@@ -15,6 +15,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 @property(class, nonatomic, nullable, copy) NSString *proxyURLString;
 
+@property (class, nonatomic, assign) BOOL simulatesAskToBuyInSandbox;
+
 + (void)configure;
 
 + (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;

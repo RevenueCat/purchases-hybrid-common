@@ -118,6 +118,14 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     return RCPurchases.proxyURL.absoluteString;
 }
 
++ (BOOL)simulatesAskToBuyInSandbox {
+    return RCPurchases.simulatesAskToBuyInSandbox;
+}
+
++ (void)setSimulatesAskToBuyInSandbox:(BOOL)simulatesAskToBuyInSandbox {
+    RCPurchases.simulatesAskToBuyInSandbox = simulatesAskToBuyInSandbox;
+}
+
 + (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
