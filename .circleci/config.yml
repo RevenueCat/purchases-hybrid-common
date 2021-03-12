@@ -5,6 +5,7 @@ version: 2.1
 
 orbs:
   android: circleci/android@0.2.1
+  revenuecat: revenuecat/sdks-common-config@1.0.0
 
 executors:
   android-executor:
@@ -45,28 +46,19 @@ jobs:
 
   test-android:
     executor: android-executor
+    working_directory: ~/purchases-hybrid-common/android
     steps:
-      - checkout
-      - android/accept-licenses
-      - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-          working_directory: android
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "android/build.gradle" }}
-      - android/restore-build-cache
+      - checkout:
+          path: ~/purchases-hybrid-common
+      - revenuecat/prepare-android
       - run:
           name: Run Tests
           command: ./gradlew lint test
-          working_directory: android
+      - android/save-build-cache
       - store_artifacts:
-          path: android/build/reports
+          path: build/reports
       - store_test_results:
-          path: android/build/test-results
+          path: build/test-results
 
   deploy-android:
     executor: android-executor
