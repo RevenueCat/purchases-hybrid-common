@@ -1,7 +1,7 @@
 package com.revenuecat.purchases.common
 
-import com.android.billingclient.api.SkuDetails
 import com.revenuecat.purchases.common.mappers.mapIntroPrice
+import com.revenuecat.purchases.models.ProductDetails
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -12,9 +12,9 @@ object SkuDetailsMapperTests : Spek({
 
     describe("when mapping intro price") {
         var received: Map<String, Any?> = emptyMap()
-        val mockSkuDetails by memoized { mockk<SkuDetails>(relaxed = true) }
+        val mockProductDetails by memoized { mockk<ProductDetails>() }
         beforeEachTest {
-            every { mockSkuDetails.priceCurrencyCode } returns "USD"
+            every { mockProductDetails.priceCurrencyCode } returns "USD"
         }
 
         describe("with a free trial") {
@@ -22,8 +22,8 @@ object SkuDetailsMapperTests : Spek({
 
                 beforeEachTest {
                     mockCurrencyFormatter(0, "$0.00")
-                    every { mockSkuDetails.freeTrialPeriod } returns "P7D"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.freeTrialPeriod } returns "P7D"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -43,8 +43,8 @@ object SkuDetailsMapperTests : Spek({
 
                 beforeEachTest {
                     mockCurrencyFormatter(0, "$0.00")
-                    every { mockSkuDetails.freeTrialPeriod } returns "P1M"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.freeTrialPeriod } returns "P1M"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -64,8 +64,8 @@ object SkuDetailsMapperTests : Spek({
 
                 beforeEachTest {
                     mockCurrencyFormatter(0, "$0.00")
-                    every { mockSkuDetails.freeTrialPeriod } returns "P0D"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.freeTrialPeriod } returns "P0D"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -85,8 +85,8 @@ object SkuDetailsMapperTests : Spek({
 
                 beforeEachTest {
                     mockLogError()
-                    every { mockSkuDetails.freeTrialPeriod } returns "365"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.freeTrialPeriod } returns "365"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("returns map with nulls") {
@@ -105,10 +105,10 @@ object SkuDetailsMapperTests : Spek({
 
         describe("with an introductory price") {
             beforeEachTest {
-                every { mockSkuDetails.introductoryPriceAmountMicros } returns 10000000
-                every { mockSkuDetails.introductoryPrice } returns "$10.00"
-                every { mockSkuDetails.introductoryPriceCycles } returns 2
-                received = mockSkuDetails.mapIntroPrice()
+                every { mockProductDetails.freeTrialPeriod } returns null
+                every { mockProductDetails.introductoryPriceAmountMicros } returns 10000000
+                every { mockProductDetails.introductoryPrice } returns "$10.00"
+                every { mockProductDetails.introductoryPriceCycles } returns 2
             }
             val expectedCommon = mapOf(
                 "price" to 10.0,
@@ -118,8 +118,8 @@ object SkuDetailsMapperTests : Spek({
             describe("7 days") {
 
                 beforeEachTest {
-                    every { mockSkuDetails.introductoryPricePeriod } returns "P7D"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.introductoryPricePeriod } returns "P7D"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -135,8 +135,8 @@ object SkuDetailsMapperTests : Spek({
             describe("1 month") {
 
                 beforeEachTest {
-                    every { mockSkuDetails.introductoryPricePeriod } returns "P1M"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.introductoryPricePeriod } returns "P1M"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -152,8 +152,8 @@ object SkuDetailsMapperTests : Spek({
             describe("0 days") {
 
                 beforeEachTest {
-                    every { mockSkuDetails.introductoryPricePeriod } returns "P0D"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.introductoryPricePeriod } returns "P0D"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("maps correctly") {
@@ -170,8 +170,8 @@ object SkuDetailsMapperTests : Spek({
 
                 beforeEachTest {
                     mockLogError()
-                    every { mockSkuDetails.introductoryPricePeriod } returns "365"
-                    received = mockSkuDetails.mapIntroPrice()
+                    every { mockProductDetails.introductoryPricePeriod } returns "365"
+                    received = mockProductDetails.mapIntroPrice()
                 }
 
                 it("returns map with nulls") {
@@ -190,9 +190,9 @@ object SkuDetailsMapperTests : Spek({
 
         describe("with no free trial nor introductory price") {
             beforeEachTest {
-                every { mockSkuDetails.freeTrialPeriod } returns ""
-                every { mockSkuDetails.introductoryPrice } returns ""
-                received = mockSkuDetails.mapIntroPrice()
+                every { mockProductDetails.freeTrialPeriod } returns ""
+                every { mockProductDetails.introductoryPrice } returns ""
+                received = mockProductDetails.mapIntroPrice()
             }
 
             it("maps correctly") {
