@@ -79,7 +79,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "com.revenuecat.purchases:purchases:$purchases_version"
-    
+    api "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
+
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 
