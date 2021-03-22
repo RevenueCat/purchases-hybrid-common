@@ -14,7 +14,7 @@
 API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 @interface RCCommonFunctionality ()
 
-@property(class, readonly, nonatomic, retain) NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
+@property (class, readonly, nonatomic, retain) NSMutableDictionary<NSString *, SKPaymentDiscount *> *discounts;
 
 @end
 
@@ -24,35 +24,33 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
 
-
-+ (NSMutableDictionary<NSString *, SKPaymentDiscount *> *)discounts API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
++ (NSMutableDictionary<NSString *, SKPaymentDiscount *> *)discounts
+API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     return _discounts;
 }
 
-+ (void)configure
-{
++ (void)configure {
     if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
         _discounts = [NSMutableDictionary new];
     }
 }
 
-+ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount
-{
++ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     RCPurchases.sharedPurchases.allowSharingAppStoreAccount = allowSharingStoreAccount;
 }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId
-{
+
++ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId {
     [RCPurchases addAttributionData:data fromNetwork:(RCAttributionNetwork) network forNetworkUserId:networkUserId];
 }
+
 #pragma GCC diagnostic pop
 
 + (void)getProductInfo:(NSArray *)products
-       completionBlock:(void (^)(NSArray<NSDictionary *> *))completion
-{
+       completionBlock:(void (^)(NSArray<NSDictionary *> *))completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
     [RCPurchases.sharedPurchases productsWithIdentifiers:products
@@ -65,8 +63,7 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
                                          }];
 }
 
-+ (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion
-{
++ (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases restoreTransactionsWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
@@ -76,36 +73,37 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     [RCPurchases.sharedPurchases syncPurchasesWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
-+ (NSString *)appUserID
-{
++ (NSString *)appUserID {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     return RCPurchases.sharedPurchases.appUserID;
 }
 
-+ (void)createAlias:(nullable NSString *)newAppUserID completionBlock:(RCHybridResponseBlock)completion
-{
++ (void)createAlias:(nullable NSString *)newAppUserID completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases createAlias:newAppUserID completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+    [RCPurchases.sharedPurchases createAlias:newAppUserID
+                             completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
-+ (void)identify:(NSString *)appUserID completionBlock:(RCHybridResponseBlock)completion
-{
++ (void)identify:(NSString *)appUserID completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases identify:appUserID completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
 + (void)logIn:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases logIn:appUserId completionBlock:^(RCPurchaserInfo * _Nullable purchaserInfo, BOOL created, NSError * _Nullable error) {
-        if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{}]);
-        } else {
-            completion(@{
-                @"purchaserInfo": purchaserInfo.dictionary,
-                @"created": @(created)
-           }, nil);
-        }
-    }];
+    [RCPurchases.sharedPurchases logIn:appUserId
+                       completionBlock:^(RCPurchaserInfo * _Nullable purchaserInfo,
+                                         BOOL created,
+                                         NSError * _Nullable error) {
+                           if (error) {
+                               completion(nil, [self payloadForError:error withExtraPayload:@{}]);
+                           } else {
+                               completion(@{
+                                              @"purchaserInfo": purchaserInfo.dictionary,
+                                              @"created": @(created)
+                                          }, nil);
+                           }
+                       }];
 }
 
 + (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion {
@@ -113,17 +111,14 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     [RCPurchases.sharedPurchases logOutWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
-{
++ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases resetWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
-+ (void)setDebugLogsEnabled:(BOOL)enabled
-{
++ (void)setDebugLogsEnabled:(BOOL)enabled {
     RCPurchases.debugLogsEnabled = enabled;
 }
-
 
 + (void)setProxyURLString:(nullable NSString *)proxyURLString {
     NSURL *proxyURL = [NSURL URLWithString:proxyURLString];
@@ -154,22 +149,19 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     }
 }
 
-+ (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion
-{
++ (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases purchaserInfoWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
-
-+ (void)setAutomaticAppleSearchAdsAttributionCollection:(BOOL)enabled
-{
++ (void)setAutomaticAppleSearchAdsAttributionCollection:(BOOL)enabled {
     RCPurchases.automaticAppleSearchAdsAttributionCollection = enabled;
 }
 
-+ (void)getOfferingsWithCompletionBlock:(RCHybridResponseBlock)completion
-{
++ (void)getOfferingsWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *_Nullable offerings, NSError *_Nullable error) {
+    [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings * _Nullable offerings,
+                                                                NSError * _Nullable error) {
         if (error) {
             completion(nil, [self payloadForError:error withExtraPayload:@{}]);
         } else {
@@ -178,49 +170,57 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     }];
 }
 
-+ (BOOL)isAnonymous
-{
++ (BOOL)isAnonymous {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     return [RCPurchases.sharedPurchases isAnonymous];
 }
 
 + (void)purchaseProduct:(NSString *)productIdentifier
 signedDiscountTimestamp:(nullable NSString *)discountTimestamp
-        completionBlock:(RCHybridResponseBlock)completion
-{
+        completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    
-    void (^completionBlock)(SKPaymentTransaction *_Nullable, RCPurchaserInfo *_Nullable, NSError *_Nullable, BOOL) = ^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error, BOOL userCancelled) {
+
+    void
+    (^completionBlock)(SKPaymentTransaction * _Nullable, RCPurchaserInfo * _Nullable, NSError * _Nullable, BOOL) = ^(
+        SKPaymentTransaction * _Nullable transaction,
+        RCPurchaserInfo * _Nullable purchaserInfo,
+        NSError * _Nullable error,
+        BOOL userCancelled) {
         if (error) {
             completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
         } else {
             completion(@{
-                @"purchaserInfo": purchaserInfo.dictionary,
-                @"productIdentifier": transaction.payment.productIdentifier
-            }, nil);
+                           @"purchaserInfo": purchaserInfo.dictionary,
+                           @"productIdentifier": transaction.payment.productIdentifier
+                       }, nil);
         }
     };
-    
-    
-    [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct *_Nullable aProduct) {
+
+    [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct * _Nullable aProduct) {
         if (aProduct == nil) {
-            [self productNotFoundErrorWithDescription:@"Couldn't find product." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+            [self productNotFoundErrorWithDescription:@"Couldn't find product."
+                                        userCancelled:[NSNumber numberWithBool:NO]
+                                           completion:completion];
             return;
         }
-        
+
         if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
             if (discountTimestamp) {
                 SKPaymentDiscount *discount = self.discounts[discountTimestamp];
                 if (discount == nil) {
-                    [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
+                    [self productNotFoundErrorWithDescription:@"Couldn't find discount."
+                                                userCancelled:[NSNumber numberWithBool:NO]
+                                                   completion:completion];
                     return;
                 }
-                
-                [RCPurchases.sharedPurchases purchaseProduct:aProduct withDiscount:discount completionBlock:completionBlock];
+
+                [RCPurchases.sharedPurchases purchaseProduct:aProduct
+                                                withDiscount:discount
+                                             completionBlock:completionBlock];
                 return;
             }
         }
-        
+
         [RCPurchases.sharedPurchases purchaseProduct:aProduct withCompletionBlock:completionBlock];
     }];
 }
@@ -228,108 +228,133 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)purchasePackage:(NSString *)packageIdentifier
                offering:(NSString *)offeringIdentifier
 signedDiscountTimestamp:(nullable NSString *)discountTimestamp
-        completionBlock:(RCHybridResponseBlock)completion
-{
+        completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
-    void (^completionBlock)(SKPaymentTransaction *_Nullable, RCPurchaserInfo *_Nullable, NSError *_Nullable, BOOL) = ^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error, BOOL userCancelled) {
+    void
+    (^completionBlock)(SKPaymentTransaction * _Nullable, RCPurchaserInfo * _Nullable, NSError * _Nullable, BOOL) = ^(
+        SKPaymentTransaction * _Nullable transaction,
+        RCPurchaserInfo * _Nullable purchaserInfo,
+        NSError * _Nullable error,
+        BOOL userCancelled) {
         if (error) {
             completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
         } else {
             completion(@{
-                    @"purchaserInfo": purchaserInfo.dictionary,
-                    @"productIdentifier": transaction.payment.productIdentifier
-            }, nil);
+                           @"purchaserInfo": purchaserInfo.dictionary,
+                           @"productIdentifier": transaction.payment.productIdentifier
+                       }, nil);
         }
     };
-    
-    [self packageWithIdentifier:packageIdentifier offeringIdentifier:offeringIdentifier completionBlock:^(RCPackage *_Nullable aPackage) {
-        if (aPackage == nil) {
-            [self productNotFoundErrorWithDescription:@"Couldn't find package." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
-            return;
-        }
-        
-        if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
-           if (discountTimestamp) {
-               SKPaymentDiscount *discount = self.discounts[discountTimestamp];
-               if (discount == nil) {
-                   [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:[NSNumber numberWithBool:NO] completion:completion];
-                   return;
-               }
-               
-               [RCPurchases.sharedPurchases purchasePackage:aPackage withDiscount:discount completionBlock:completionBlock];
-               return;
-           }
-        }
-        
-        [RCPurchases.sharedPurchases purchasePackage:aPackage withCompletionBlock:completionBlock];
-    }];
+
+    [self packageWithIdentifier:packageIdentifier
+             offeringIdentifier:offeringIdentifier
+                completionBlock:^(RCPackage * _Nullable aPackage) {
+                    if (aPackage == nil) {
+                        [self productNotFoundErrorWithDescription:@"Couldn't find package."
+                                                    userCancelled:[NSNumber numberWithBool:NO]
+                                                       completion:completion];
+                        return;
+                    }
+
+                    if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
+                        if (discountTimestamp) {
+                            SKPaymentDiscount *discount = self.discounts[discountTimestamp];
+                            if (discount == nil) {
+                                [self productNotFoundErrorWithDescription:@"Couldn't find discount."
+                                                            userCancelled:[NSNumber numberWithBool:NO]
+                                                               completion:completion];
+                                return;
+                            }
+
+                            [RCPurchases.sharedPurchases purchasePackage:aPackage
+                                                            withDiscount:discount
+                                                         completionBlock:completionBlock];
+                            return;
+                        }
+                    }
+
+                    [RCPurchases.sharedPurchases purchasePackage:aPackage withCompletionBlock:completionBlock];
+                }];
 }
 
-+ (void)setFinishTransactions:(BOOL)finishTransactions
-{
++ (void)setFinishTransactions:(BOOL)finishTransactions {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     RCPurchases.sharedPurchases.finishTransactions = finishTransactions;
 }
 
-+ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase completionBlock:(RCHybridResponseBlock)completion
-{
++ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
+             completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
-    deferredPurchase(^(SKPaymentTransaction *_Nullable transaction, RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error, BOOL userCancelled) {
+    deferredPurchase(^(SKPaymentTransaction * _Nullable transaction,
+                       RCPurchaserInfo * _Nullable purchaserInfo,
+                       NSError * _Nullable error,
+                       BOOL userCancelled) {
         if (error) {
             completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
         } else {
             completion(@{
-                    @"purchaserInfo": purchaserInfo.dictionary,
-                    @"productIdentifier": transaction.payment.productIdentifier
-            }, nil);
+                           @"purchaserInfo": purchaserInfo.dictionary,
+                           @"productIdentifier": transaction.payment.productIdentifier
+                       }, nil);
         }
     });
 }
 
 + (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
-                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion
-{
+                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
-    [RCPurchases.sharedPurchases checkTrialOrIntroductoryPriceEligibility:productIdentifiers completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *> * _Nonnull dictionary) {
-        NSMutableDictionary *response = [NSMutableDictionary new];
-        for (NSString *productID in dictionary) {
-            RCIntroEligibility *eligibility = dictionary[productID];
-            response[productID] = @{
-                    @"status": @(eligibility.status),
-                    @"description": eligibility.description
-            };
-        }
-        completion([NSDictionary dictionaryWithDictionary:response]);
-    }];
+    [RCPurchases.sharedPurchases checkTrialOrIntroductoryPriceEligibility:productIdentifiers
+                                                          completionBlock:^(NSDictionary<NSString *, RCIntroEligibility *> *_Nonnull dictionary) {
+                                                              NSMutableDictionary *response = [NSMutableDictionary new];
+                                                              for (NSString *productID in dictionary) {
+                                                                  RCIntroEligibility
+                                                                      *eligibility = dictionary[productID];
+                                                                  response[productID] = @{
+                                                                      @"status": @(eligibility.status),
+                                                                      @"description": eligibility.description
+                                                                  };
+                                                              }
+                                                              completion([NSDictionary dictionaryWithDictionary:response]);
+                                                          }];
 }
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
                                    discount:(nullable NSString *)discountIdentifier
-                            completionBlock:(RCHybridResponseBlock)completion
-{
+                            completionBlock:(RCHybridResponseBlock)completion {
     if (@available(iOS 12.2, macos 10.14.4, tvOS 12.2, *)) {
         NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-        [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct *_Nullable aProduct) {
+        [self productWithIdentifier:productIdentifier completionBlock:^(SKProduct * _Nullable aProduct) {
             if (aProduct) {
                 SKProductDiscount *discountToUse = [self discountWithIdentifier:discountIdentifier forProduct:aProduct];
 
                 if (discountToUse) {
-                    [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:discountToUse product:aProduct completion:^(SKPaymentDiscount *paymentDiscount, NSError *error) {
-                        if (paymentDiscount) {
-                            self.discounts[[paymentDiscount.timestamp stringValue]] = paymentDiscount;
-                            completion(paymentDiscount.dictionary, nil);
-                        } else {
-                            completion(nil, [self payloadForError:error  withExtraPayload:@{}]);
-                        }
-                    }];
+                    [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:discountToUse
+                                                                           product:aProduct
+                                                                        completion:^(SKPaymentDiscount *paymentDiscount,
+                                                                                     NSError *error) {
+                                                                            if (paymentDiscount) {
+                                                                                self.discounts[[paymentDiscount.timestamp stringValue]] =
+                                                                                    paymentDiscount;
+                                                                                completion(paymentDiscount.dictionary,
+                                                                                           nil);
+                                                                            } else {
+                                                                                completion(nil,
+                                                                                           [self payloadForError:error
+                                                                                                withExtraPayload:@{}]);
+                                                                            }
+                                                                        }];
                 } else {
-                    [self productNotFoundErrorWithDescription:@"Couldn't find discount." userCancelled:nil completion:completion];
+                    [self productNotFoundErrorWithDescription:@"Couldn't find discount."
+                                                userCancelled:nil
+                                                   completion:completion];
                 }
             } else {
-                [self productNotFoundErrorWithDescription:@"Couldn't find product." userCancelled:nil completion:completion];
+                [self productNotFoundErrorWithDescription:@"Couldn't find product."
+                                            userCancelled:nil
+                                               completion:completion];
             }
 
         }];
@@ -338,9 +363,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     }
 }
 
-+ (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion
-{
-    return ^(RCPurchaserInfo *_Nullable purchaserInfo, NSError *_Nullable error) {
++ (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion {
+    return ^(RCPurchaserInfo * _Nullable purchaserInfo, NSError * _Nullable error) {
         if (error) {
             completion(nil, [self payloadForError:error withExtraPayload:@{}]);
         } else {
@@ -349,7 +373,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     };
 }
 
-+ (void)invalidatePurchaserInfoCache { 
++ (void)invalidatePurchaserInfoCache {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases invalidatePurchaserInfoCache];
 }
@@ -364,11 +388,11 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     NSMutableDictionary *nonNilAttributes = [[NSMutableDictionary alloc] init];
-    for (NSString * key in attributes.allKeys) {
+    for (NSString *key in attributes.allKeys) {
         id object = attributes[key];
         NSString *nonNilAttribute = ([object isEqual:NSNull.null])
-                                     ? @""
-                                     : object;
+                                    ? @""
+                                    : object;
         nonNilAttributes[key] = nonNilAttribute;
     }
     [RCPurchases.sharedPurchases setAttributes:nonNilAttributes];
@@ -479,8 +503,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 #pragma mark - errors
 
-+ (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload
-{
++ (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:extraPayload];
     dict[@"code"] = @(error.code);
     dict[@"message"] = error.localizedDescription;
@@ -498,15 +521,14 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)productNotFoundErrorWithDescription:(NSString *)errorDescription
                               userCancelled:(nullable NSNumber *)userCancelled
-                                 completion:(RCHybridResponseBlock)completion
-{
+                                 completion:(RCHybridResponseBlock)completion {
     NSDictionary *extraPayload;
     if (userCancelled == nil) {
         extraPayload = @{};
     } else {
         extraPayload = @{@"userCancelled": @([userCancelled boolValue])};
     }
-    
+
     NSError *error = [NSError errorWithDomain:RCPurchasesErrorDomain
                                          code:RCProductNotAvailableForPurchaseError
                                      userInfo:@{
@@ -518,8 +540,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 #pragma mark - helpers
 
 + (void)productWithIdentifier:(NSString *)productIdentifier
-              completionBlock:(void (^)(SKProduct *_Nullable))completion
-{
+              completionBlock:(void (^)(SKProduct * _Nullable))completion {
     [RCPurchases.sharedPurchases productsWithIdentifiers:@[productIdentifier]
                                          completionBlock:^(NSArray<SKProduct *> *_Nonnull products) {
                                              SKProduct *aProduct = nil;
@@ -534,15 +555,16 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)packageWithIdentifier:(NSString *)packageIdentifier
            offeringIdentifier:(NSString *)offeringIdentifier
-              completionBlock:(void (^)(RCPackage *_Nullable))completion
-{
+              completionBlock:(void (^)(RCPackage * _Nullable))completion {
     [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings *offerings, NSError *error) {
         completion([[offerings offeringWithIdentifier:offeringIdentifier] packageWithIdentifier:packageIdentifier]);
     }];
 }
 
 + (nullable SKProductDiscount *)discountWithIdentifier:(NSString *)identifier
-                                            forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
+                                            forProduct:(SKProduct *)aProduct API_AVAILABLE(ios(12.2),
+                                                                                           macos(10.14.4),
+                                                                                           tvos(12.2)) {
     SKProductDiscount *discountToUse = nil;
     NSArray<SKProductDiscount *> *productDiscounts = aProduct.discounts;
     if (identifier == nil && productDiscounts != nil && productDiscounts.count > 0) {
