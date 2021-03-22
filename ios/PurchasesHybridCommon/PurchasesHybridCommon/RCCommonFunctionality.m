@@ -94,6 +94,25 @@ static NSMutableDictionary<NSString *, SKPaymentDiscount *> *_discounts = nil;
     [RCPurchases.sharedPurchases identify:appUserID completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
 }
 
++ (void)logIn:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases logIn:appUserId completionBlock:^(RCPurchaserInfo * _Nullable purchaserInfo, BOOL created, NSError * _Nullable error) {
+        if (error) {
+            completion(nil, [self payloadForError:error withExtraPayload:@{}]);
+        } else {
+            completion(@{
+                @"purchaserInfo": purchaserInfo.dictionary,
+                @"created": @(created)
+           }, nil);
+        }
+    }];
+}
+
++ (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases logOutWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+}
+
 + (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
 {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
