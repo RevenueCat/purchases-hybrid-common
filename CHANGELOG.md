@@ -1,3 +1,9 @@
+### 1.6.2
+
+- Bumps `purchases-ios` to `3.10.7` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.10.7))
+- Bumps `purchases-android` to `4.0.5` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.0.5))
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/69
+
 ### 1.6.1
 
 - Adds missing availability check for `simulatesAskToBuyInSandbox`
