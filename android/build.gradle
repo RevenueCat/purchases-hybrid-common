@@ -4,8 +4,7 @@ buildscript {
     ext.android_tools = '4.0.1'
     ext.kotlin_version = '1.4.10'
     ext.android_junit5_version = '1.5.2.0'
-    ext.junit5_runner = '0.2.2'
-    ext.spek_version = '2.0.11'
+    ext.junit5 = '5.3.2'
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.11.1'
@@ -32,7 +31,7 @@ apply plugin: "com.vanniktech.maven.publish"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 14
@@ -83,14 +82,15 @@ dependencies {
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 
-    // spek2
-    testImplementation "org.spekframework.spek2:spek-dsl-jvm:$spek_version"
-    testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
     testImplementation "org.assertj:assertj-core:$assertj_version"
 
     testImplementation "io.mockk:mockk:$mockk_version"
+
+    // junit 5
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit5"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit5"
 }
 
 repositories {
