@@ -7,20 +7,22 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.verify
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 
-object ConfiguringUnitTests : Spek({
-    describe("when setting up Purchases") {
+internal class ConfiguringUnitTests {
+    @Nested
+    @DisplayName("when setting up Purchases")
+    inner class ParsingInvalidPurchasesPeriod {
+        private val mockPurchases = mockk<Purchases>()
+        private val mockContext = mockk<Context>(relaxed = true)
+        private val mockApplicationContext = mockk<Application>(relaxed = true)
+        private val expectedPlatformInfo = PlatformInfo("flavor", "version")
 
-        val mockPurchases by memoized { mockk<Purchases>() }
-        val mockContext by memoized { mockk<Context>(relaxed = true) }
-        val mockApplicationContext by memoized { mockk<Application>(relaxed = true) }
-        val expectedPlatformInfo by memoized {
-            PlatformInfo("flavor", "version")
-        }
-
-        beforeEachTest {
+        @BeforeEach
+        fun setup() {
             every { mockContext.applicationContext } returns mockApplicationContext
             mockkObject(Purchases)
             every {
@@ -34,103 +36,98 @@ object ConfiguringUnitTests : Spek({
             } returns mockPurchases
         }
 
-        context("with observer mode false") {
-            it("should configure the Android SDK with observer mode false") {
-                configure(
+        @Test
+        fun `with observer mode false should configure the Android SDK with observer mode false`() {
+            configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo
+            )
+            verify(exactly = 1) {
+                Purchases.configure(
                     context = mockContext,
                     apiKey = "api_key",
                     appUserID = "appUserID",
                     observerMode = false,
-                    platformInfo = expectedPlatformInfo
+                    service = any()
                 )
-                verify(exactly = 1) {
-                    Purchases.configure(
-                        context = mockContext,
-                        apiKey = "api_key",
-                        appUserID = "appUserID",
-                        observerMode = false,
-                        service = any()
-                    )
-                }
             }
         }
 
-        context("with observer mode true") {
-            it("should configure the Android SDK with observer mode true") {
-                configure(
+        @Test
+        fun `with observer mode true, should configure the Android SDK with observer mode true`() {
+            configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = true,
+                platformInfo = expectedPlatformInfo
+            )
+            verify(exactly = 1) {
+                Purchases.configure(
                     context = mockContext,
                     apiKey = "api_key",
                     appUserID = "appUserID",
                     observerMode = true,
-                    platformInfo = expectedPlatformInfo
+                    service = any()
                 )
-                verify(exactly = 1) {
-                    Purchases.configure(
-                        context = mockContext,
-                        apiKey = "api_key",
-                        appUserID = "appUserID",
-                        observerMode = true,
-                        service = any()
-                    )
-                }
             }
         }
 
-        context("with a null observer mode") {
-            it("should configure the Android SDK with observer mode false") {
-                configure(
-                    context = mockContext,
-                    apiKey = "api_key",
-                    appUserID = "appUserID",
-                    observerMode = null,
-                    platformInfo = expectedPlatformInfo
-                )
-                verify(exactly = 1) {
-                    Purchases.configure(
-                        context = mockContext,
-                        apiKey = "api_key",
-                        appUserID = "appUserID",
-                        observerMode = false,
-                        service = any()
-                    )
-                }
-            }
-        }
-
-        context("with a null app user ID") {
-            it("should configure the Android SDK with null app user ID") {
-                configure(
-                    context = mockContext,
-                    apiKey = "api_key",
-                    appUserID = null,
-                    observerMode = null,
-                    platformInfo = expectedPlatformInfo
-                )
-                verify(exactly = 1) {
-                    Purchases.configure(
-                        context = mockContext,
-                        apiKey = "api_key",
-                        appUserID = null,
-                        observerMode = false,
-                        service = any()
-                    )
-                }
-            }
-        }
-
-        context("with a platform info") {
-            it("should configure the Android SDK with that platform info") {
-                configure(
+        @Test
+        fun `with a null observer mode should configure the Android SDK with observer mode false`() {
+            configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = null,
+                platformInfo = expectedPlatformInfo
+            )
+            verify(exactly = 1) {
+                Purchases.configure(
                     context = mockContext,
                     apiKey = "api_key",
                     appUserID = "appUserID",
                     observerMode = false,
-                    platformInfo = expectedPlatformInfo
+                    service = any()
                 )
-                verify(exactly = 1) {
-                    Purchases.platformInfo = expectedPlatformInfo
-                }
+            }
+        }
+
+        @Test
+        fun `with a null app user ID, should configure the Android SDK with null app user ID`() {
+            configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = null,
+                observerMode = null,
+                platformInfo = expectedPlatformInfo
+            )
+            verify(exactly = 1) {
+                Purchases.configure(
+                    context = mockContext,
+                    apiKey = "api_key",
+                    appUserID = null,
+                    observerMode = false,
+                    service = any()
+                )
+            }
+        }
+
+        @Test
+        fun `with a platform info, should configure the Android SDK with that platform info`() {
+            configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo
+            )
+            verify(exactly = 1) {
+                Purchases.platformInfo = expectedPlatformInfo
             }
         }
     }
-})
+}
