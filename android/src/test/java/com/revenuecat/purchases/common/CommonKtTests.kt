@@ -10,33 +10,29 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 internal class CommonKtTests {
-    @Nested
-    @DisplayName("Calling setProxyURLString")
-    inner class SetProxyURLString {
-        @Test
-        fun `sets the proxyURL correctly from a valid URL`() {
-            assertEquals(Purchases.proxyURL, null)
+    @Test
+    fun `Calling setProxyURLString, sets the proxyURL correctly from a valid URL`() {
+        assertEquals(Purchases.proxyURL, null)
 
-            val urlString = "https://revenuecat.com"
-            setProxyURLString(urlString)
+        val urlString = "https://revenuecat.com"
+        setProxyURLString(urlString)
 
-            assertEquals(Purchases.proxyURL.toString(), urlString)
-        }
+        assertEquals(Purchases.proxyURL.toString(), urlString)
+    }
 
-        @Test
-        fun `sets the proxyURL to null from a null string`() {
-            Purchases.proxyURL = URL("https://revenuecat.com")
+    @Test
+    fun `Calling setProxyURLString, sets the proxyURL to null from a null string`() {
+        Purchases.proxyURL = URL("https://revenuecat.com")
 
-            setProxyURLString(null)
+        setProxyURLString(null)
 
-            assertEquals(Purchases.proxyURL, null)
-        }
+        assertEquals(Purchases.proxyURL, null)
+    }
 
-        @Test
-        fun `raises exception if url string can't be parsed into a URL`() {
-            assertFailsWith<java.net.MalformedURLException> {
-                setProxyURLString("this is not a url")
-            }
+    @Test
+    fun `Calling setProxyURLString, raises exception if url string can't be parsed into a URL`() {
+        assertFailsWith<java.net.MalformedURLException> {
+            setProxyURLString("this is not a url")
         }
     }
 }

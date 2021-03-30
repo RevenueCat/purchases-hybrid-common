@@ -15,20 +15,17 @@ import org.junit.jupiter.api.Test
 import java.util.Date
 
 internal class PurchaserInfoMappersTests {
-    @Nested
-    @DisplayName("a PurchaserInfo")
-    inner class MappingPurchaserInfo {
         val mockPurchaserInfo = mockk<PurchaserInfo>(relaxed = true)
 
         @Test
-        fun `with a null managementURL, should map to a null managementURL`() {
+        fun `a PurchaserInfo with a null managementURL, should map to a null managementURL`() {
             every { mockPurchaserInfo.managementURL } returns null
             val map = mockPurchaserInfo.map()
             assertThat(map["managementURL"]).isNull()
         }
 
         @Test
-        fun `with a non-null managementURL, should map to a non-null managementURL`() {
+        fun `a PurchaserInfo with a non-null managementURL, should map to a non-null managementURL`() {
             val expected = "https://www.url.com/"
             val mockkUri = mockk<Uri>(relaxed = true)
             every { mockPurchaserInfo.managementURL } returns mockkUri
@@ -38,7 +35,7 @@ internal class PurchaserInfoMappersTests {
         }
 
         @Test
-        fun `with an originalPurchaseDate, should map to an originalPurchaseDate`() {
+        fun `a PurchaserInfo with an originalPurchaseDate, should map to an originalPurchaseDate`() {
             val date = Date()
             every { mockPurchaserInfo.originalPurchaseDate } returns date
 
@@ -48,7 +45,7 @@ internal class PurchaserInfoMappersTests {
         }
 
         @Test
-        fun `with empty non subscriptions, should map to an empty array of non subscriptions`() {
+        fun `a PurchaserInfo with empty non subscriptions, should map to an empty array of non subscriptions`() {
             every { mockPurchaserInfo.nonSubscriptionTransactions } returns emptyList()
             val map = mockPurchaserInfo.map()
             val mappedNonSubscriptionTransactions: List<Any> =
@@ -57,7 +54,7 @@ internal class PurchaserInfoMappersTests {
         }
 
         @Test
-        fun `with non empty non subscriptions, should map to a non empty array of non subscriptions`() {
+        fun `a PurchaserInfo with non empty non subscriptions, should map to a non empty array of non subscriptions`() {
             val transaction = Transaction("revenuecatid", "productid", Date())
             every { mockPurchaserInfo.nonSubscriptionTransactions } returns listOf(transaction)
 
@@ -73,6 +70,4 @@ internal class PurchaserInfoMappersTests {
             assertThat(transactionDictionary["purchaseDate"]).isEqualTo(transaction.purchaseDate.toIso8601())
 
         }
-    }
-
 }
