@@ -467,6 +467,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     dict[@"message"] = error.localizedDescription;
     if (error.userInfo[NSUnderlyingErrorKey]) {
         dict[@"underlyingErrorMessage"] = ((NSError *) error.userInfo[NSUnderlyingErrorKey]).localizedDescription;
+    } else {
+        dict[@"underlyingErrorMessage"] = @"";
     }
 
     if (error.userInfo[RCReadableErrorCodeKey]) {
