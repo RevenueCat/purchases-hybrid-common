@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class PeriodTests {
+internal class PurchasesPeriodTests {
 
     @Test
     fun `when parsing an invalid PurchasesPeriod, there is no exception`() {

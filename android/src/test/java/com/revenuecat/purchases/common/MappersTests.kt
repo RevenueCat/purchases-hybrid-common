@@ -11,7 +11,7 @@ import java.util.*
 internal class MappersHelpersTests {
 
     @Test
-    fun `PurchasesPeriod gets parsed correctly`() {
+    fun `parsing simple date format returns the correct date`() {
         val dateFormat = SimpleDateFormat("dd-MM-yyyy")
         dateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
