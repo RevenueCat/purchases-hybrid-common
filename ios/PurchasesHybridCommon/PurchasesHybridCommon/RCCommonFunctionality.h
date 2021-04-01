@@ -46,7 +46,8 @@ __attribute((deprecated("Use logIn instead.")));
 
 + (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
+__attribute((deprecated("Use logOut instead.")));
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 

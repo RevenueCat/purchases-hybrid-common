@@ -40,14 +40,12 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     RCPurchases.sharedPurchases.allowSharingAppStoreAccount = allowSharingStoreAccount;
 }
 
++ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
-+ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *)networkUserId {
     [RCPurchases addAttributionData:data fromNetwork:(RCAttributionNetwork) network forNetworkUserId:networkUserId];
-}
-
 #pragma GCC diagnostic pop
+}
 
 + (void)getProductInfo:(NSArray *)products
        completionBlock:(void (^)(NSArray<NSDictionary *> *))completion {
@@ -86,7 +84,10 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 
 + (void)identify:(NSString *)appUserID completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     [RCPurchases.sharedPurchases identify:appUserID completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+#pragma GCC diagnostic pop
 }
 
 + (void)logIn:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
@@ -113,7 +114,10 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 
 + (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     [RCPurchases.sharedPurchases resetWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+#pragma GCC diagnostic pop
 }
 
 + (void)setDebugLogsEnabled:(BOOL)enabled {
