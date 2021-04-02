@@ -67,19 +67,7 @@ dependencies {
     // api "com.revenuecat.purchases:purchases:$purchases_version"
     implementation('com.revenuecat.purchases:purchases') {
         version {
-            branch = 'develop'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:common') {
-        version {
-            branch = 'develop'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:utils') {
-        version {
-            branch = 'develop'
+            branch = 'feature/identityv3_public_facing_changes'
         }
     }
 
