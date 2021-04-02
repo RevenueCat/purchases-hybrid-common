@@ -188,11 +188,28 @@ fun reset(
     }
 }
 
+fun logOut(
+    onResult: OnResult
+) {
+    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
 fun identify(
     appUserID: String,
     onResult: OnResult
 ) {
     Purchases.sharedInstance.identifyWith(appUserID, onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
+fun logIn(
+    appUserID: String,
+    onResult: OnResult
+) {
+    Purchases.sharedInstance.logInWith(appUserID, onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
 }
