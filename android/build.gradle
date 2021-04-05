@@ -65,7 +65,6 @@ dependencies {
 
     // TODO: un-comment the api line and remove the implementation once purchases-android is released
     // api "com.revenuecat.purchases:purchases:$purchases_version"
-    // api "com.revenuecat.purchases:purchases:4.0.5"
     implementation('com.revenuecat.purchases:purchases') {
         version {
             branch = 'develop'
