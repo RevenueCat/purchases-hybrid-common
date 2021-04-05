@@ -1,16 +1,13 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import android.net.Uri
 import com.revenuecat.purchases.PurchaserInfo
-import com.revenuecat.purchases.common.mappers.map
-import com.revenuecat.purchases.common.mappers.toIso8601
-import com.revenuecat.purchases.common.mappers.toMillis
+import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
+import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import com.revenuecat.purchases.models.Transaction
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.Date
 

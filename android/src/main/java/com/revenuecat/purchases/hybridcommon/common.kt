@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,7 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.UpgradeInfo
-import com.revenuecat.purchases.common.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -20,6 +20,8 @@ import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
+import com.revenuecat.purchases.common.PlatformInfo
+
 import java.net.URL
 
 fun setAllowSharingAppStoreAccount(

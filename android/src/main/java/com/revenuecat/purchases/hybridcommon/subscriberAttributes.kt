@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import com.revenuecat.purchases.Purchases
 import org.json.JSONObject

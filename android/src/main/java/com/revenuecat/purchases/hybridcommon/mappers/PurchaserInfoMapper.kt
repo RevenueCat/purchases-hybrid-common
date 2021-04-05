@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common.mappers
+package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.PurchaserInfo
 

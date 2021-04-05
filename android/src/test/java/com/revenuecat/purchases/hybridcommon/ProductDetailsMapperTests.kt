@@ -1,6 +1,5 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
-import com.revenuecat.purchases.common.mappers.mapIntroPrice
 import com.revenuecat.purchases.models.ProductDetails
 import io.mockk.every
 import io.mockk.mockk

@@ -1,7 +1,7 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.common.mappers.mapIntroPrice
+import com.revenuecat.purchases.hybridcommon.mappers.mapIntroPrice
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
