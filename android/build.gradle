@@ -9,7 +9,7 @@ buildscript {
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.11.1'
     // TODO: uncomment the following line once purchases-android update is released
-//     ext.purchases_version = '4.0.5'
+    // ext.purchases_version = '4.0.5'
 
     repositories {
         google()
@@ -64,23 +64,23 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
 
     // TODO: un-comment the api line and remove the implementation once purchases-android is released
-//     api "com.revenuecat.purchases:purchases:$purchases_version"
-//     api "com.revenuecat.purchases:purchases:4.0.5"
+    // api "com.revenuecat.purchases:purchases:$purchases_version"
+    // api "com.revenuecat.purchases:purchases:4.0.5"
     implementation('com.revenuecat.purchases:purchases') {
         version {
-            branch = 'feature/identityv3_public_facing_changes'
+            branch = 'develop'
         }
     }
 
     implementation('com.revenuecat.purchases:common') {
         version {
-            branch = 'feature/identityv3_public_facing_changes'
+            branch = 'develop'
         }
     }
 
     implementation('com.revenuecat.purchases:utils') {
         version {
-            branch = 'feature/identityv3_public_facing_changes'
+            branch = 'develop'
         }
     }
 
