@@ -1,6 +1,9 @@
 rootProject.name = 'purchases-hybrid-common'
 sourceControl {
     gitRepository("https://github.com/revenuecat/purchases-android.git") {
+        producesModule("com.revenuecat.purchases:utils")
         producesModule("com.revenuecat.purchases:purchases")
+        producesModule("com.revenuecat.purchases:common")
     }
 }
+//includeBuild ('/Users/andresboedo/repos/purchases-android')
