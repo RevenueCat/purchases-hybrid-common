@@ -2,22 +2,25 @@ PODS:
   - Nimble (9.0.0)
   - Purchases (3.11.0-SNAPSHOT):
     - PurchasesCoreSwift
-  - PurchasesCoreSwift (3.10.7)
+  - PurchasesCoreSwift (3.11.0-SNAPSHOT)
   - Quick (3.1.2)
 
 DEPENDENCIES:
   - Nimble
   - Purchases (from `https://github.com/RevenueCat/purchases-ios.git`, branch `feature/identityV3_public_facing_changes`)
+  - PurchasesCoreSwift (from `https://github.com/RevenueCat/purchases-ios.git`, branch `feature/identityV3_public_facing_changes`)
   - Quick
 
 SPEC REPOS:
   trunk:
     - Nimble
-    - PurchasesCoreSwift
     - Quick
 
 EXTERNAL SOURCES:
   Purchases:
+    :branch: feature/identityV3_public_facing_changes
+    :git: https://github.com/RevenueCat/purchases-ios.git
+  PurchasesCoreSwift:
     :branch: feature/identityV3_public_facing_changes
     :git: https://github.com/RevenueCat/purchases-ios.git
 
@@ -25,13 +28,16 @@ CHECKOUT OPTIONS:
   Purchases:
     :commit: 15d2ff61b4c9e101a22b642662a09f7ee2b90fd7
     :git: https://github.com/RevenueCat/purchases-ios.git
+  PurchasesCoreSwift:
+    :commit: 15d2ff61b4c9e101a22b642662a09f7ee2b90fd7
+    :git: https://github.com/RevenueCat/purchases-ios.git
 
 SPEC CHECKSUMS:
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
   Purchases: 1a9088def9e5c06ea0e0984b62bc6bb2cdb28cd7
-  PurchasesCoreSwift: 8ae0f08e020f0bc97c1befa4e38a0dbc8e9732e0
+  PurchasesCoreSwift: a13fb0bb162ec84b8eac9098f2d0c5fb6fce8be7
   Quick: 60f0ea3b8e0cfc0df3259a5c06a238ad8b3c46e0
 
-PODFILE CHECKSUM: 2ba14b89223331135a78cd78339c3a8d5a4120f7
+PODFILE CHECKSUM: 193dedc24c771d6e62fcd0cd444db1f4ec9a2195
 
 COCOAPODS: 1.10.1

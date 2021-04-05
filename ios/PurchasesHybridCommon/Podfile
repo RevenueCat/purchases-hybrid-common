@@ -7,6 +7,7 @@ target 'PurchasesHybridCommon' do
 
   # Pods for PurchasesHybridCommon
   pod 'Purchases', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => 'feature/identityV3_public_facing_changes'
+  pod 'PurchasesCoreSwift', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => 'feature/identityV3_public_facing_changes'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
