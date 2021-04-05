@@ -64,8 +64,21 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
 
     // TODO: un-comment the api line and remove the implementation once purchases-android is released
-    // api "com.revenuecat.purchases:purchases:$purchases_version"
-    implementation('com.revenuecat.purchases:purchases') {
+//     api "com.revenuecat.purchases:purchases:$purchases_version"
+//     api "com.revenuecat.purchases:purchases:4.0.5"
+    api('com.revenuecat.purchases:purchases') {
+        version {
+            branch = 'feature/identityv3_public_facing_changes'
+        }
+    }
+
+    api('com.revenuecat.purchases:common') {
+        version {
+            branch = 'feature/identityv3_public_facing_changes'
+        }
+    }
+
+    api('com.revenuecat.purchases:utils') {
         version {
             branch = 'feature/identityv3_public_facing_changes'
         }
