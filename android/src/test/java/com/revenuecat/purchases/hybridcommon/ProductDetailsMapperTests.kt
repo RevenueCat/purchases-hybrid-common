@@ -16,7 +16,6 @@ internal class SkuDetailsMapperTests {
 
     var received: Map<String, Any?> = emptyMap()
     val mockProductDetails = mockk<ProductDetails>(relaxed = true)
-//    val mockProductDetails by memoized { mockk<ProductDetails>() }
 
     @BeforeEach
     fun setup() {
