@@ -3,12 +3,17 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Application
 import android.content.Context
+import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.interfaces.LogInCallback
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.URL
+import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -79,6 +84,84 @@ internal class CommonKtTests {
         })
 
         verify(exactly = 1) { mockPurchases.logIn(appUserID, any()) }
+    }
+
+    @Test
+    fun `calling logIn correctly calls onReceived`() {
+        val appUserID = "appUserID"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+
+        val mockInfo = mockk<PurchaserInfo>(relaxed = true)
+        val mockCreated = Random.nextBoolean()
+
+        val logInCallback = slot<LogInCallback>()
+        every {
+            mockPurchases.logIn(
+                newAppUserID = appUserID,
+                capture(logInCallback)
+            )
+        } just runs
+
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        logIn(appUserID = appUserID, onResult = onResult)
+        logInCallback.captured.onReceived(mockInfo, mockCreated)
+
+        val mockInfoMap = mockInfo.map()
+
+        verify(exactly = 1) {
+            onResult.onReceived(mapOf(
+                "created" to mockCreated,
+                "purchaserInfo" to mockInfoMap
+            ))
+        }
+    }
+
+    @Test
+    fun `calling logIn with error calls onError`() {
+        val appUserID = "appUserID"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+        val mockError = mockk<PurchasesError>(relaxed = true)
+
+        val logInCallback = slot<LogInCallback>()
+        every {
+            mockPurchases.logIn(
+                newAppUserID = appUserID,
+                capture(logInCallback)
+            )
+        } just runs
+
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        logIn(appUserID = appUserID, onResult = onResult)
+        logInCallback.captured.onError(mockError)
+
+        val mockErrorMap = mockError.map()
+        verify(exactly = 1) {
+            onResult.onError(mockErrorMap)
+        }
     }
 
     @Test

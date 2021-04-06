@@ -328,7 +328,7 @@ private fun getProductChangeCompletedFunction(onResult: OnResult): (PurchaseDeta
     }
 }
 
-private fun PurchasesError.map(
+fun PurchasesError.map(
     extra: Map<String, Any?> = mapOf()
 ): ErrorContainer =
     ErrorContainer(
