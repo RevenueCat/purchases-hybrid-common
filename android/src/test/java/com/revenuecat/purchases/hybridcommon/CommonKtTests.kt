@@ -9,6 +9,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.LogInCallback
+import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -183,5 +184,59 @@ internal class CommonKtTests {
         })
 
         verify(exactly = 1) { mockPurchases.logOut(any()) }
+    }
+
+    @Test
+    fun `calling logOut correctly calls onReceived`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+        val mockInfo = mockk<PurchaserInfo>(relaxed = true)
+        val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
+
+        every { mockPurchases.logOut(capture(receivePurchaserInfoListener)) } just runs
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        logOut(onResult)
+
+        receivePurchaserInfoListener.captured.onReceived(mockInfo)
+
+        val mockInfoMap = mockInfo.map()
+        verify(exactly = 1) { onResult.onReceived(mockInfoMap) }
+    }
+
+    @Test
+    fun `calling logOut with error calls onError`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+        val mockError = mockk<PurchasesError>(relaxed = true)
+        val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
+
+        every { mockPurchases.logOut(capture(receivePurchaserInfoListener)) } just runs
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        logOut(onResult)
+
+        receivePurchaserInfoListener.captured.onError(mockError)
+
+        val mockErrorMap = mockError.map()
+        verify(exactly = 1) { onResult.onError(mockErrorMap) }
     }
 }
