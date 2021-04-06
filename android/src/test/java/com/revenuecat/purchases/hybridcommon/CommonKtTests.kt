@@ -1,7 +1,12 @@
 package com.revenuecat.purchases.hybridcommon
 
 
+import android.app.Application
+import android.content.Context
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.common.PlatformInfo
+import io.mockk.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.URL
 import kotlin.test.assertEquals
@@ -32,5 +37,52 @@ internal class CommonKtTests {
         assertFailsWith<java.net.MalformedURLException> {
             setProxyURLString("this is not a url")
         }
+    }
+
+    private val mockApplicationContext = mockk<Application>(relaxed = true)
+    private val mockContext = mockk<Context>(relaxed = true)
+    private val mockPurchases = mockk<Purchases>()
+
+    @BeforeEach
+    fun setup() {
+        mockkObject(Purchases)
+        every {
+            Purchases.configure(
+                context = any(),
+                apiKey = any(),
+                appUserID = any(),
+                observerMode = any(),
+                service = any()
+            )
+        } returns mockPurchases
+        every { mockContext.applicationContext } returns mockApplicationContext
+    }
+
+    @Test
+    fun `calling logIn correctly passes call to Purchases`() {
+        val appUserID = "appUserID"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+        every { mockPurchases.logIn(appUserID, any()) } just runs
+
+        logIn(appUserID = appUserID, onResult = object : OnResult {
+            override fun onReceived(map: Map<String?, *>?) {
+
+            }
+
+            override fun onError(errorContainer: ErrorContainer) {
+
+            }
+        })
+
+        verify(exactly = 1) { mockPurchases.logIn(appUserID, any()) }
     }
 }
