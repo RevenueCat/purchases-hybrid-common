@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import android.util.Log
 import io.mockk.Runs

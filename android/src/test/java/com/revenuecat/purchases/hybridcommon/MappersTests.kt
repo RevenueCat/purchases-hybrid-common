@@ -1,9 +1,7 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
-import com.revenuecat.purchases.common.mappers.toMillis
+import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.text.SimpleDateFormat
 import java.util.*

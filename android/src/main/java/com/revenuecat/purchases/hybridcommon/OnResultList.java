@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.common;
+package com.revenuecat.purchases.hybridcommon;
 
 import java.util.List;
 import java.util.Map;

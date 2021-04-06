@@ -1,15 +1,14 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.common.PlatformInfo
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class ConfiguringUnitTests {
