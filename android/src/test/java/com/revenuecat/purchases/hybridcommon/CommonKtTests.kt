@@ -74,15 +74,31 @@ internal class CommonKtTests {
         every { mockPurchases.logIn(appUserID, any()) } just runs
 
         logIn(appUserID = appUserID, onResult = object : OnResult {
-            override fun onReceived(map: Map<String?, *>?) {
-
-            }
-
-            override fun onError(errorContainer: ErrorContainer) {
-
-            }
+            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onError(errorContainer: ErrorContainer) {}
         })
 
         verify(exactly = 1) { mockPurchases.logIn(appUserID, any()) }
+    }
+
+    @Test
+    fun `calling logOut correctly passes call to Purchases`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.sharedInstance } returns mockPurchases
+        every { mockPurchases.logOut(any()) } just runs
+
+        logOut(onResult = object : OnResult {
+            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onError(errorContainer: ErrorContainer) {}
+        })
+
+        verify(exactly = 1) { mockPurchases.logOut(any()) }
     }
 }
