@@ -1,9 +1,7 @@
-package com.revenuecat.purchases.common
+package com.revenuecat.purchases.hybridcommon
 
 
 import com.revenuecat.purchases.Purchases
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.net.URL
 import kotlin.test.assertEquals

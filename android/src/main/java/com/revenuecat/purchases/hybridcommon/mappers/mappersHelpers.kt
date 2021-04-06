@@ -1,8 +1,10 @@
-package com.revenuecat.purchases.common.mappers
+package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.utils.Iso8601Utils
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.NumberFormat
+import java.util.Currency
 import java.util.Date
 
 fun Map<String, *>.convertToJson(): JSONObject {
@@ -42,6 +44,12 @@ fun JSONObject.convertToMap(): Map<String, String?> =
         }
     }
 
-public fun Date.toMillis(): Long = this.time
+internal fun Date.toMillis(): Long = this.time
 
 internal fun Date.toIso8601(): String = Iso8601Utils.format(this)
+
+internal fun formatUsingDeviceLocale(priceCurrencyCode: String, number: Long): String {
+    return NumberFormat.getCurrencyInstance().apply {
+        currency = Currency.getInstance(priceCurrencyCode)
+    }.format(number)
+}
