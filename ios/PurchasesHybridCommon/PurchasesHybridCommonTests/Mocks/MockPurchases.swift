@@ -63,7 +63,7 @@ class MockPurchases: Purchases {
     }
 
     var invokedLogInError = false
-    var invokedLogInErrorCount = 0
+    var invokedLogInCount = 0
     var invokedLogInParameters: (appUserID: String, Void)?
     var invokedLogInParametersList = [(appUserID: String, Void)]()
     var stubbedLogInCompletionResult: (Purchases.PurchaserInfo?, Bool, Error?)?
@@ -71,7 +71,7 @@ class MockPurchases: Purchases {
     override func logIn(_ appUserID: String,
                         _ completion: @escaping (Purchases.PurchaserInfo?, Bool, Error?) -> ()) {
         invokedLogInError = true
-        invokedLogInErrorCount += 1
+        invokedLogInCount += 1
         invokedLogInParameters = (appUserID, ())
         invokedLogInParametersList.append((appUserID, ()))
         if let result = stubbedLogInCompletionResult {
