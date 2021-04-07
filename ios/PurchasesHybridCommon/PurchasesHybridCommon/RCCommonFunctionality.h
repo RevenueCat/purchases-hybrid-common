@@ -9,7 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class RCErrorContainer;
 
-typedef void (^RCHybridResponseBlock)(NSDictionary *_Nullable, RCErrorContainer *_Nullable);
+typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
 
 
 @interface RCCommonFunctionality : NSObject
