@@ -52,13 +52,13 @@ class PurchasesHybridCommonTests: QuickSpec {
                     receivedError = error
                 }
                 
-                expect { mockPurchases.invokedLogInErrorCount } == 1
+                let expectedResult: NSDictionary = [
+                    "purchaserInfo": mockPurchaserInfo.dictionary() as NSDictionary,
+                    "created": mockCreated
+                ]
                 
-                expect { receivedResultDict }.toNot(beNil())
-                expect { receivedResultDict!.allKeys.count } == 2
-                let receivedPurchaserInfoDict = receivedResultDict!["purchaserInfo"] as! NSDictionary
-                expect { receivedPurchaserInfoDict } == mockPurchaserInfo.dictionary() as NSDictionary
-                expect { receivedResultDict!["created"]! as! Bool } == mockCreated
+                expect { mockPurchases.invokedLogInErrorCount } == 1
+                expect { receivedResultDict } == expectedResult
                 expect { receivedError }.to(beNil())
             }
         }
