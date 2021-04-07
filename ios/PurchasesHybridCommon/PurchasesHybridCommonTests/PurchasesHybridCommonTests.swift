@@ -9,7 +9,7 @@
 
 import Quick
 import Nimble
-import PurchasesHybridCommon
+@testable import PurchasesHybridCommon
 
 class PurchasesHybridCommonTests: QuickSpec {
     
@@ -33,6 +33,33 @@ class PurchasesHybridCommonTests: QuickSpec {
             
             it("raises exception if proxy can't be parsed") {
                 expect { RCCommonFunctionality.proxyURLString = "not a valid url" }.to(raiseException())
+            }
+        }
+        
+        context("logIn") {
+            it("passes the call correctly to Purchases") {
+                let mockPurchases = MockPurchases()
+                let mockPurchaserInfo = PartialMockPurchaserInfo()
+                let mockCreated = true
+                mockPurchases.stubbedLogInCompletionResult = (mockPurchaserInfo, mockCreated, nil)
+
+                Purchases.setDefaultInstance(mockPurchases)
+                var receivedResultDict: NSDictionary?
+                var receivedError: RCErrorContainer?
+                
+                RCCommonFunctionality.log(in: "appUserID") { resultDict, error in
+                    receivedResultDict = resultDict! as NSDictionary
+                    receivedError = error
+                }
+                
+                expect { mockPurchases.invokedLogInErrorCount } == 1
+                
+                expect { receivedResultDict }.toNot(beNil())
+                expect { receivedResultDict!.allKeys.count } == 2
+                let receivedPurchaserInfoDict = receivedResultDict!["purchaserInfo"] as! NSDictionary
+                expect { receivedPurchaserInfoDict } == mockPurchaserInfo.dictionary() as NSDictionary
+                expect { receivedResultDict!["created"]! as! Bool } == mockCreated
+                expect { receivedError }.to(beNil())
             }
         }
     }
