@@ -79,16 +79,20 @@ class MockPurchases: Purchases {
         }
     }
 
-    var invokedLogOutRCReceivePurchaserInfoBlock = false
-    var invokedLogOutRCReceivePurchaserInfoBlockCount = 0
-    var invokedLogOutRCReceivePurchaserInfoBlockParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedLogOutRCReceivePurchaserInfoBlockParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
+    var invokedLogOut = false
+    var invokedLogOutCount = 0
+    var invokedLogOutParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
+    var invokedLogOutParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
+    var stubbedLogOutCompletionResult: (Purchases.PurchaserInfo?, Error?)?
 
     override func logOut(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedLogOutRCReceivePurchaserInfoBlock = true
-        invokedLogOutRCReceivePurchaserInfoBlockCount += 1
-        invokedLogOutRCReceivePurchaserInfoBlockParameters = (completion, ())
-        invokedLogOutRCReceivePurchaserInfoBlockParametersList.append((completion, ()))
+        invokedLogOut = true
+        invokedLogOutCount += 1
+        invokedLogOutParameters = (completion, ())
+        invokedLogOutParametersList.append((completion, ()))
+        if let completion = completion, let result = stubbedLogOutCompletionResult {
+            completion(result.0, result.1)
+        }
     }
 
     var invokedPurchaserInfoRCReceivePurchaserInfoBlock = false

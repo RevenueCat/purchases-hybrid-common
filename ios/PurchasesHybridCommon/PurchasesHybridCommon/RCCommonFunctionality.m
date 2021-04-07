@@ -90,7 +90,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 #pragma GCC diagnostic pop
 }
 
-+ (void)logIn:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
++ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases logIn:appUserId
                        completionBlock:^(RCPurchaserInfo * _Nullable purchaserInfo,

@@ -38,7 +38,7 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)logIn:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
++ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)identify:(NSString *)appUserId
  completionBlock:(RCHybridResponseBlock)completion
