@@ -19,6 +19,28 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 internal class CommonKtTests {
+
+    private val mockApplicationContext = mockk<Application>(relaxed = true)
+    private val mockContext = mockk<Context>(relaxed = true)
+    private val mockPurchases = mockk<Purchases>()
+
+    @BeforeEach
+    fun setup() {
+        mockkObject(Purchases)
+        every {
+            Purchases.configure(
+                context = any(),
+                apiKey = any(),
+                appUserID = any(),
+                observerMode = any(),
+                service = any()
+            )
+        } returns mockPurchases
+        every { mockContext.applicationContext } returns mockApplicationContext
+        every { Purchases.sharedInstance } returns mockPurchases
+    }
+
+
     @Test
     fun `Calling setProxyURLString, sets the proxyURL correctly from a valid URL`() {
         assertEquals(Purchases.proxyURL, null)
@@ -45,25 +67,6 @@ internal class CommonKtTests {
         }
     }
 
-    private val mockApplicationContext = mockk<Application>(relaxed = true)
-    private val mockContext = mockk<Context>(relaxed = true)
-    private val mockPurchases = mockk<Purchases>()
-
-    @BeforeEach
-    fun setup() {
-        mockkObject(Purchases)
-        every {
-            Purchases.configure(
-                context = any(),
-                apiKey = any(),
-                appUserID = any(),
-                observerMode = any(),
-                service = any()
-            )
-        } returns mockPurchases
-        every { mockContext.applicationContext } returns mockApplicationContext
-    }
-
     @Test
     fun `calling logIn correctly passes call to Purchases`() {
         val appUserID = "appUserID"
@@ -76,7 +79,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.logIn(appUserID, any()) } just runs
 
         logIn(appUserID = appUserID, onResult = object : OnResult {
@@ -99,8 +101,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
-
         val mockInfo = mockk<PurchaserInfo>(relaxed = true)
         val mockCreated = Random.nextBoolean()
 
@@ -112,10 +112,8 @@ internal class CommonKtTests {
             )
         } just runs
 
-        val onResult = mockk<OnResult>()
-        every { onResult.onReceived(any()) } just runs
-        every { onResult.onError(any()) } just runs
-
+        val onResult = mockk<OnResult>(relaxed = true)
+        
         logIn(appUserID = appUserID, onResult = onResult)
         logInCallback.captured.onReceived(mockInfo, mockCreated)
 
@@ -141,7 +139,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
         val mockError = mockk<PurchasesError>(relaxed = true)
 
         val logInCallback = slot<LogInCallback>()
@@ -175,7 +172,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.logOut(any()) } just runs
 
         logOut(onResult = object : OnResult {
@@ -196,7 +192,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
         val mockInfo = mockk<PurchaserInfo>(relaxed = true)
         val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
 
@@ -223,7 +218,6 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.sharedInstance } returns mockPurchases
         val mockError = mockk<PurchasesError>(relaxed = true)
         val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
 
