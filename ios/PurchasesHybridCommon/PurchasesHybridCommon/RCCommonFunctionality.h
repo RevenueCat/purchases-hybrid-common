@@ -11,19 +11,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
 
+
 @interface RCCommonFunctionality : NSObject
 
-@property(class, nonatomic, nullable, copy) NSString *proxyURLString;
+@property (class, nonatomic, nullable, copy) NSString *proxyURLString;
 
 @property (class, nonatomic, assign) BOOL simulatesAskToBuyInSandbox;
 
 + (void)configure;
 
-+ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
++ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount
+__attribute((deprecated("Configure behavior through the RevenueCat dashboard instead.")));
 
-+ (void)addAttributionData:(NSDictionary *)data network:(NSInteger)network networkUserId:(NSString *) networkUserId __attribute((deprecated("Use the set<NetworkId> functions instead.")));
++ (void)addAttributionData:(NSDictionary *)data
+                   network:(NSInteger)network
+             networkUserId:(NSString *)networkUserId
+__attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
-+ (void)getProductInfo:(NSArray *)products completionBlock:(void(^)(NSArray<NSDictionary *> *))completion;
++ (void)getProductInfo:(NSArray *)products completionBlock:(void (^)(NSArray<NSDictionary *> *))completion;
 
 + (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion;
 
@@ -33,9 +38,16 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)identify:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
++ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)identify:(NSString *)appUserId
+ completionBlock:(RCHybridResponseBlock)completion
+__attribute((deprecated("Use logIn instead.")));
+
++ (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
+
++ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
+__attribute((deprecated("Use logOut instead.")));
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
@@ -47,17 +59,26 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (BOOL)isAnonymous;
 
-+ (void)purchaseProduct:(NSString *)productIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion;
++ (void)purchaseProduct:(NSString *)productIdentifier
+signedDiscountTimestamp:(nullable NSString *)discountTimestamp
+        completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)purchasePackage:(NSString *)packageIdentifier offering:(NSString *)offeringIdentifier signedDiscountTimestamp:(nullable NSString *)discountTimestamp completionBlock:(RCHybridResponseBlock)completion;
++ (void)purchasePackage:(NSString *)packageIdentifier
+               offering:(NSString *)offeringIdentifier
+signedDiscountTimestamp:(nullable NSString *)discountTimestamp
+        completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase completionBlock:(RCHybridResponseBlock)completion;
++ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
+             completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)setFinishTransactions:(BOOL)finishTransactions;
 
-+ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers completionBlock:(RCReceiveIntroEligibilityBlock)completion;
++ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
+                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
-+ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier discount:(nullable NSString *)discountIdentifier completionBlock:(RCHybridResponseBlock)completion;
++ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
+                                   discount:(nullable NSString *)discountIdentifier
+                            completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos);
 
@@ -98,5 +119,6 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 + (void)setCreative:(nullable NSString *)creative;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

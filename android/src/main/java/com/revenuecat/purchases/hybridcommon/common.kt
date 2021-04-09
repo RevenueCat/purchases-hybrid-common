@@ -19,6 +19,8 @@ import com.revenuecat.purchases.models.PurchaseDetails
 import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
+import com.revenuecat.purchases.logInWith
+import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
 
@@ -188,6 +190,12 @@ fun reset(
     }
 }
 
+fun logOut(onResult: OnResult) {
+    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
 fun identify(
     appUserID: String,
     onResult: OnResult
@@ -195,6 +203,21 @@ fun identify(
     Purchases.sharedInstance.identifyWith(appUserID, onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
+}
+
+fun logIn(
+    appUserID: String,
+    onResult: OnResult
+) {
+    Purchases.sharedInstance.logInWith(appUserID,
+        onError = { onResult.onError(it.map()) },
+        onSuccess = { purchaserInfo, created ->
+            val resultMap: Map<String, Any?> = mapOf(
+                "purchaserInfo" to purchaserInfo.map(),
+                "created" to created
+            )
+            onResult.onReceived(resultMap)
+        })
 }
 
 fun createAlias(
@@ -254,7 +277,7 @@ fun checkTrialOrIntroductoryPriceEligibility(
     }.toMap()
 }
 
-fun invalidatePurchaserInfoCache() { 
+fun invalidatePurchaserInfoCache() {
     Purchases.sharedInstance.invalidatePurchaserInfoCache()
 }
 
@@ -303,7 +326,7 @@ private fun getProductChangeCompletedFunction(onResult: OnResult): (PurchaseDeta
     }
 }
 
-private fun PurchasesError.map(
+internal fun PurchasesError.map(
     extra: Map<String, Any?> = mapOf()
 ): ErrorContainer =
     ErrorContainer(

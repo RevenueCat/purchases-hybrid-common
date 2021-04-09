@@ -68,6 +68,8 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     
     var stubbedManagementURL: URL?
     var stubbedNonSubscriptionTransactions: Array = Array<Purchases.Transaction>()
+    let _firstSeen = Date()
+    let _requestDate = Date()
     
     override var managementURL: URL? {
         return stubbedManagementURL
@@ -78,7 +80,7 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     }
     
     override var firstSeen: Date {
-        return Date()
+        return _firstSeen
     }
     
     override var entitlements: Purchases.EntitlementInfos {
@@ -90,7 +92,7 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     }
     
     override var requestDate: Date? {
-        return Date()
+        return _requestDate
     }
     
     override var nonSubscriptionTransactions: [Purchases.Transaction] {

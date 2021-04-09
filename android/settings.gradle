@@ -7,3 +7,8 @@ sourceControl {
         producesModule("com.revenuecat.purchases:common")
     }
 }
+// Run enableLocalBuild task to enable building purchases-android from your local copy
+if (file(".composite-enable").exists()) {
+    String path = new File(".composite-enable").text
+    includeBuild (path)
+}
