@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="21f7cf6b-72a3-46a1-9ef7-bed8b1844e90" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/android/src/main/java/com/revenuecat/purchases/hybridcommon/common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/revenuecat/purchases/hybridcommon/common.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/test/java/com/revenuecat/purchases/hybridcommon/CommonKtTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/com/revenuecat/purchases/hybridcommon/CommonKtTests.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.h" beforeDir="false" afterPath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.m" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qRESlNsu1lXEFixG1a1kgVw7lu" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="flattenPackages" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="21f7cf6b-72a3-46a1-9ef7-bed8b1844e90" name="Default Changelist" comment="" />
+      <created>1617034003612</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617034003612</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2092" y="73" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620063886162">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="129" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.806@0.23.1440.806" timestamp="1619053149769" />
+    <state x="2092" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.980/1920.23.1920.1057@1920.23.1920.1057" timestamp="1617647865914" />
+    <state x="2092" y="73" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1920.975/1920.25.1920.1055@1920.25.1920.1055" timestamp="1620063886162" />
+    <state x="2565" y="173" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1619738529830">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="2565" y="173" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.25.1920.1055/0.25.1920.975@1920.25.1920.1055" timestamp="1619738529830" />
+    <state x="2029" y="125" width="1591" height="684" key="DiffContextDialog" timestamp="1619738845954">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="2029" y="125" width="1591" height="684" key="DiffContextDialog/1920.25.1920.1055/0.25.1920.975@1920.25.1920.1055" timestamp="1619738845954" />
+    <state x="2453" y="25" width="921" height="648" key="find.popup" timestamp="1620063670928">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="1237" y="-1055" width="912" height="648" key="find.popup/-1216.-1055.1920.1055/0.25.1440.795/704.-1055.1920.1055@704.-1055.1920.1055" timestamp="1619818519230" />
+    <state x="400" y="23" width="684" height="490" key="find.popup/0.23.1440.800@0.23.1440.800" timestamp="1617839018724" />
+    <state x="400" y="23" width="684" height="495" key="find.popup/0.23.1440.806@0.23.1440.806" timestamp="1619056158889" />
+    <state x="2320" y="165" width="684" height="490" key="find.popup/0.23.1920.980/1920.23.1920.1057@1920.23.1920.1057" timestamp="1617649981503" />
+    <state x="400" y="25" width="789" height="490" key="find.popup/0.25.1440.795@0.25.1440.795" timestamp="1619642762779" />
+    <state x="2453" y="25" width="921" height="648" key="find.popup/0.25.1920.975/1920.25.1920.1055@1920.25.1920.1055" timestamp="1620063670928" />
+    <state x="2453" y="25" width="912" height="648" key="find.popup/0.25.1920.979/1920.25.1920.1055@1920.25.1920.1055" timestamp="1619199615147" />
+    <state x="2453" y="23" width="912" height="648" key="find.popup/1920.23.1920.1057/0.23.1920.976@1920.23.1920.1057" timestamp="1618425000135" />
+    <state x="2320" y="165" width="684" height="490" key="find.popup/1920.23.1920.1057/0.23.1920.980@1920.23.1920.1057" timestamp="1617392622666" />
+    <state x="2453" y="25" width="912" height="648" key="find.popup/1920.25.1920.1055/0.25.1920.975@1920.25.1920.1055" timestamp="1619801212523" />
+    <state x="1237" y="-1055" width="912" height="599" key="find.popup/704.-1055.1920.975/0.25.1440.875/-1216.-1055.1920.1055@704.-1055.1920.975" timestamp="1619652874133" />
+    <state x="2293" y="189" width="894" height="676" key="search.everywhere.popup" timestamp="1620078620957">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="280" y="147" width="670" height="512" key="search.everywhere.popup/0.23.1440.800@0.23.1440.800" timestamp="1617839059427" />
+    <state x="280" y="148" width="670" height="516" key="search.everywhere.popup/0.23.1440.806@0.23.1440.806" timestamp="1619053161984" />
+    <state x="2293" y="187" width="670" height="676" key="search.everywhere.popup/0.23.1920.980/1920.23.1920.1057@1920.23.1920.1057" timestamp="1617651216351" />
+    <state x="280" y="149" width="671" height="510" key="search.everywhere.popup/0.25.1440.795@0.25.1440.795" timestamp="1619642435495" />
+    <state x="2293" y="189" width="894" height="676" key="search.everywhere.popup/0.25.1920.975/1920.25.1920.1055@1920.25.1920.1055" timestamp="1620078620956" />
+    <state x="2293" y="189" width="894" height="676" key="search.everywhere.popup/0.25.1920.979/1920.25.1920.1055@1920.25.1920.1055" timestamp="1619125063309" />
+    <state x="2293" y="187" width="670" height="676" key="search.everywhere.popup/1920.23.1920.1057/0.23.1920.980@1920.23.1920.1057" timestamp="1617838137395" />
+    <state x="2293" y="189" width="894" height="676" key="search.everywhere.popup/1920.25.1920.1055/0.25.1920.975@1920.25.1920.1055" timestamp="1619743280901" />
+    <state x="1077" y="-890" width="895" height="677" key="search.everywhere.popup/704.-1055.1920.1055/0.25.1440.795/-1216.-1055.1920.1055@704.-1055.1920.1055" timestamp="1619649809775" />
+    <state x="1077" y="-903" width="895" height="626" key="search.everywhere.popup/704.-1055.1920.975/0.25.1440.875/-1216.-1055.1920.1055@704.-1055.1920.975" timestamp="1619650900277" />
+  </component>
+</project>
