@@ -233,4 +233,21 @@ internal class CommonKtTests {
         val mockErrorMap = mockError.map()
         verify(exactly = 1) { onResult.onError(mockErrorMap) }
     }
+
+    @Test
+    fun `calling canMakePayments correctly passes call to Purchases`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = true,
+                platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { mockPurchases.canMakePayments(mockContext, any(), any()) } just runs
+
+        canMakePayments(mockContext, any(), any())
+
+        verify(exactly = 1) { mockPurchases.canMakePayments(mockContext, any(), any()) }
+    }
 }
