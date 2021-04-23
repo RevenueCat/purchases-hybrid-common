@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:fix" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:release" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="21f7cf6b-72a3-46a1-9ef7-bed8b1844e90" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/android/src/main/java/com/revenuecat/purchases/hybridcommon/common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/java/com/revenuecat/purchases/hybridcommon/common.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/test/java/com/revenuecat/purchases/hybridcommon/CommonKtTests.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/test/java/com/revenuecat/purchases/hybridcommon/CommonKtTests.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.h" beforeDir="false" afterPath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.m" beforeDir="false" afterPath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommon/RCCommonFunctionality.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommonTests/PurchasesHybridCommonTests.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/PurchasesHybridCommon/PurchasesHybridCommonTests/PurchasesHybridCommonTests.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,11 +95,12 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="2092" y="73" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620063886162">
-      <screen x="1920" y="25" width="1920" height="1055" />
+    <state x="129" y="61" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620336446951">
+      <screen x="0" y="25" width="1440" height="802" />
     </state>
     <state x="129" y="60" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.806@0.23.1440.806" timestamp="1619053149769" />
     <state x="2092" y="72" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.980/1920.23.1920.1057@1920.23.1920.1057" timestamp="1617647865914" />
+    <state x="129" y="61" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1440.802@0.25.1440.802" timestamp="1620336446951" />
     <state x="2092" y="73" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1920.975/1920.25.1920.1055@1920.25.1920.1055" timestamp="1620063886162" />
     <state x="2565" y="173" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1619738529830">
       <screen x="1920" y="25" width="1920" height="1055" />
@@ -69,6 +110,14 @@
       <screen x="1920" y="25" width="1920" height="1055" />
     </state>
     <state x="2029" y="125" width="1591" height="684" key="DiffContextDialog/1920.25.1920.1055/0.25.1920.975@1920.25.1920.1055" timestamp="1619738845954" />
+    <state x="9" y="25" width="1431" height="801" key="MergeDialog" timestamp="1620336803417">
+      <screen x="0" y="25" width="1440" height="802" />
+    </state>
+    <state x="9" y="25" width="1431" height="801" key="MergeDialog/0.25.1440.802@0.25.1440.802" timestamp="1620336803417" />
+    <state x="356" y="191" key="MultipleFileMergeDialog" timestamp="1620336803477">
+      <screen x="0" y="25" width="1440" height="802" />
+    </state>
+    <state x="356" y="191" key="MultipleFileMergeDialog/0.25.1440.802@0.25.1440.802" timestamp="1620336803477" />
     <state x="2453" y="25" width="921" height="648" key="find.popup" timestamp="1620063670928">
       <screen x="1920" y="25" width="1920" height="1055" />
     </state>
