@@ -263,7 +263,7 @@ fun invalidatePurchaserInfoCache() {
 fun canMakePayments(context: Context,
                     @BillingClient.FeatureType feature: String? = null,
                     callback: Callback<Boolean>) {
-    Purchases.sharedInstance.canMakePayments(context, feature, callback)
+    Purchases.canMakePayments(context, feature, callback)
 }
 
 // region Subscriber Attributes
