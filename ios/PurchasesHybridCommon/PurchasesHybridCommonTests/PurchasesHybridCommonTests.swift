@@ -164,5 +164,17 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect { receivedError!.info as NSDictionary } == expectedErrorDict
             }
         }
+        
+        context("canMakePayments") {
+            it("passes the call correctly to Purchases") {
+                let mockPurchases = MockPurchases()
+
+                Purchases.setDefaultInstance(mockPurchases)
+
+                RCCommonFunctionality.canMakePayments
+
+                expect { mockPurchases.invokedCanMakePaymentsCount } == 1
+            }
+        }
     }
 }

@@ -65,23 +65,26 @@ dependencies {
 
     // TODO: un-comment the api line and remove the implementation once purchases-android is released
     // api "com.revenuecat.purchases:purchases:$purchases_version"
-    implementation('com.revenuecat.purchases:purchases') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
+    implementation('com.revenuecat.purchases:purchases')
+//            {
+//        version {
+//            branch = 'feature/identityv3_public_facing_changes'
+//        }
+//    }
 
-    implementation('com.revenuecat.purchases:common') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
+    implementation('com.revenuecat.purchases:common')
+//            {
+//        version {
+//            branch = 'feature/identityv3_public_facing_changes'
+//        }
+//    }
 
-    implementation('com.revenuecat.purchases:utils') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
+    implementation('com.revenuecat.purchases:utils')
+//            {
+//        version {
+//            branch = 'feature/identityv3_public_facing_changes'
+//        }
+//    }
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
