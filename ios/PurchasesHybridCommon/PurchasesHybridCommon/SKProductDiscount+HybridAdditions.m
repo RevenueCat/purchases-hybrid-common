@@ -17,7 +17,7 @@ API_AVAILABLE(ios(11.2), macos(10.13.2))
     }
 }
 
-- (NSDictionary *)dictionary
+- (NSDictionary *)rc_dictionary
 {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
@@ -26,8 +26,8 @@ API_AVAILABLE(ios(11.2), macos(10.13.2))
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
         @"price": @(self.price.floatValue),
         @"priceString": [formatter stringFromNumber:self.price],
-        @"period": [SKProduct normalizedSubscriptionPeriod:self.subscriptionPeriod],
-        @"periodUnit": [SKProduct normalizedSubscriptionPeriodUnit:self.subscriptionPeriod.unit],
+        @"period": [SKProduct rc_normalizedSubscriptionPeriod:self.subscriptionPeriod],
+        @"periodUnit": [SKProduct rc_normalizedSubscriptionPeriodUnit:self.subscriptionPeriod.unit],
         @"periodNumberOfUnits": @(self.subscriptionPeriod.numberOfUnits),
         @"cycles": @(self.numberOfPeriods)
     }];

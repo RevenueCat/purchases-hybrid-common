@@ -16,8 +16,8 @@
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
         @"revenueCatId": self.revenueCatId,
         @"productId": self.productId,
-        @"purchaseDateMillis": @(self.purchaseDate.millisecondsSince1970),
-        @"purchaseDate": self.purchaseDate.formattedAsISO8601
+        @"purchaseDateMillis": @(self.purchaseDate.rc_millisecondsSince1970AsDouble),
+        @"purchaseDate": self.purchaseDate.rc_formattedAsISO8601
     }];
     
     return d;

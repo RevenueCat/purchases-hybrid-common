@@ -7,6 +7,6 @@
 
 @interface SKPaymentDiscount (HybridAdditions)
 
-- (NSDictionary *)dictionary;
+- (NSDictionary *)rc_dictionary;
 
 @end

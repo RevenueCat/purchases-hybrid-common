@@ -10,8 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSDate (RCExtensions)
 
-- (NSString *)formattedAsISO8601;
-- (double)millisecondsSince1970;
+- (NSString *)rc_formattedAsISO8601;
+- (double)rc_millisecondsSince1970AsDouble;
 
 @end
 

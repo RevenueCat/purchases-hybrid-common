@@ -42,11 +42,11 @@
         @"allPurchasedProductIdentifiers": self.allPurchasedProductIdentifiers.allObjects,
         @"latestExpirationDate": [self formattedAsISO8601OrNull:self.latestExpirationDate],
         @"latestExpirationDateMillis": [self millisecondsSince1970OrNull:self.latestExpirationDate],
-        @"firstSeen": self.firstSeen.formattedAsISO8601,
-        @"firstSeenMillis": @(self.firstSeen.millisecondsSince1970),
+        @"firstSeen": self.firstSeen.rc_formattedAsISO8601,
+        @"firstSeenMillis": @(self.firstSeen.rc_millisecondsSince1970AsDouble),
         @"originalAppUserId": self.originalAppUserId,
-        @"requestDate": self.requestDate.formattedAsISO8601,
-        @"requestDateMillis": @(self.requestDate.millisecondsSince1970),
+        @"requestDate": self.requestDate.rc_formattedAsISO8601,
+        @"requestDateMillis": @(self.requestDate.rc_millisecondsSince1970AsDouble),
         @"allExpirationDates": allExpirations,
         @"allExpirationDatesMillis": allExpirationsMillis,
         @"allPurchaseDates": allPurchases,
@@ -61,7 +61,7 @@
 
 - (NSObject *)millisecondsSince1970OrNull:(nullable NSDate *)date {
     if (date) {
-        return @(date.millisecondsSince1970);
+        return @(date.rc_millisecondsSince1970AsDouble);
     } else {
         return NSNull.null;
     }
@@ -69,7 +69,7 @@
 
 - (NSObject *)formattedAsISO8601OrNull:(nullable NSDate *)date {
     if (date) {
-        return date.formattedAsISO8601;
+        return date.rc_formattedAsISO8601;
     } else {
         return NSNull.null;
     }
