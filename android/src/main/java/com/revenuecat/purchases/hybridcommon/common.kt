@@ -262,8 +262,8 @@ fun invalidatePurchaserInfoCache() {
 
 fun canMakePayments(context: Context,
                     @BillingClient.FeatureType feature: String? = null,
-                    callback: Callback<Boolean>) {
-    Purchases.canMakePayments(context, feature, callback)
+                    onResult: OnResult) {
+    Purchases.canMakePaymentsWith(context, feature) { onResult.onReceived(mapOf("canMakePayments" to it)) }
 }
 
 // region Subscriber Attributes

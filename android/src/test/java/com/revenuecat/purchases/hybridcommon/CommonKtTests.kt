@@ -6,6 +6,7 @@ import android.content.Context
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.canMakePaymentsWith
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener
@@ -243,10 +244,16 @@ internal class CommonKtTests {
                 platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { mockPurchases.canMakePayments(mockContext, any(), any()) } just runs
+        every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
 
-        canMakePayments(mockContext, any(), any())
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
 
-        verify(exactly = 1) { mockPurchases.canMakePayments(mockContext, any(), any()) }
+        canMakePayments(mockContext, "subscriptions", onResult = object : OnResult {
+            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onError(errorContainer: ErrorContainer) {}
+        })
+
+        verify(exactly = 1) { Purchases.Companion.canMakePayments(mockContext, any(), any()) }
     }
 }
