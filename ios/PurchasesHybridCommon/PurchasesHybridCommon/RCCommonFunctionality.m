@@ -555,7 +555,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     return discountToUse;
 }
 
-+ (void)canMakePayments:(nullable NSString *)feature {
-    return RCPurchases.sharedPurchases.canMakePayments;
++ (BOOL)canMakePaymentsWithFeature:(nullable NSString *)feature {
+    return [RCPurchases canMakePayments];
 }
+
 @end

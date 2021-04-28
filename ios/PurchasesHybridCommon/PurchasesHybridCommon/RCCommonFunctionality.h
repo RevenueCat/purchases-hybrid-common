@@ -108,12 +108,10 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)setAd:(nullable NSString *)ad;
 
 + (void)setKeyword:(nullable NSString *)keyword;
-
+ 
 + (void)setCreative:(nullable NSString *)creative;
 
-+ (BOOL)canMakePayments;
-
-@end
-
++ (BOOL)canMakePaymentsWithFeature:(nullable NSString *)feature;
 
 NS_ASSUME_NONNULL_END
+@end
