@@ -22,8 +22,8 @@ import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.canMakePaymentsWith
+import com.revenuecat.purchases.common.BillingFeature
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.interfaces.Callback
 
 import java.net.URL
 
@@ -262,7 +262,7 @@ fun invalidatePurchaserInfoCache() {
 }
 
 fun canMakePayments(context: Context,
-                    @BillingClient.FeatureType feature: String? = null,
+                    feature: BillingFeature?,
                     onResult: OnResult) {
     Purchases.Companion.canMakePaymentsWith(context, feature) { onResult.onReceived(mapOf("canMakePayments" to it)) }
 }
