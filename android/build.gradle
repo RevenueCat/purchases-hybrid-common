@@ -8,8 +8,7 @@ buildscript {
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.11.1'
-    // TODO: uncomment the following line once purchases-android update is released
-    // ext.purchases_version = '4.0.5'
+    ext.purchases_version = '4.1.0'
 
     repositories {
         google()
@@ -63,25 +62,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.2.0'
 
-    // TODO: un-comment the api line and remove the implementation once purchases-android is released
-    // api "com.revenuecat.purchases:purchases:$purchases_version"
-    implementation('com.revenuecat.purchases:purchases') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:common') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:utils') {
-        version {
-            branch = 'feature/identityv3_public_facing_changes'
-        }
-    }
+    implementation('com.revenuecat.purchases:purchases:$purchases_version')
+    implementation('com.revenuecat.purchases:common:$purchases_version')
+    implementation('com.revenuecat.purchases:utils:$purchases_version')
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
