@@ -8,6 +8,6 @@
 API_AVAILABLE(ios(11.2), macos(10.13.2))
 @interface SKProductDiscount (HybridAdditions)
 
-- (NSDictionary *)dictionary;
+- (NSDictionary *)rc_dictionary;
 
 @end

@@ -16,7 +16,7 @@
     }
 }
 
-- (NSDictionary *)dictionary
+- (NSDictionary *)rc_dictionary
 {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
@@ -42,11 +42,13 @@
         if (self.introductoryPrice) {
             d[@"intro_price"] = @(self.introductoryPrice.price.floatValue);
             d[@"intro_price_string"] = [formatter stringFromNumber:self.introductoryPrice.price];
-            d[@"intro_price_period"] = [SKProduct normalizedSubscriptionPeriod:self.introductoryPrice.subscriptionPeriod];
-            d[@"intro_price_period_unit"] = [SKProduct normalizedSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
+            d[@"intro_price_period"] =
+                [SKProduct rc_normalizedSubscriptionPeriod:self.introductoryPrice.subscriptionPeriod];
+            d[@"intro_price_period_unit"] =
+                [SKProduct rc_normalizedSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
             d[@"intro_price_period_number_of_units"] = @(self.introductoryPrice.subscriptionPeriod.numberOfUnits);
             d[@"intro_price_cycles"] = @(self.introductoryPrice.numberOfPeriods);
-            d[@"introPrice"] = self.introductoryPrice.dictionary;
+            d[@"introPrice"] = self.introductoryPrice.rc_dictionary;
         }
     }
     
@@ -55,14 +57,14 @@
     if (@available(iOS 12.2, tvOS 12.2, macos 10.14.4, *)) {
         d[@"discounts"] = [NSMutableArray new];
         for (SKProductDiscount* discount in self.discounts) {
-            [d[@"discounts"] addObject:discount.dictionary];
+            [d[@"discounts"] addObject:discount.rc_dictionary];
         }
     }
     
     return d;
 }
 
-+ (NSString *)normalizedSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
++ (NSString *)rc_normalizedSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
     NSString *unit;
     switch (subscriptionPeriod.unit) {
         case SKProductPeriodUnitDay:
@@ -81,7 +83,7 @@
     return [NSString stringWithFormat:@"%@%@%@", @"P", @(subscriptionPeriod.numberOfUnits), unit];
 }
 
-+ (NSString *)normalizedSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
++ (NSString *)rc_normalizedSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
     switch (subscriptionPeriodUnit) {
         case SKProductPeriodUnitDay:
             return @"DAY";

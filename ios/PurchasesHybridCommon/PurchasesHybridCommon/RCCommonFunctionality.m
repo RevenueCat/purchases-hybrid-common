@@ -55,7 +55,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
                                          completionBlock:^(NSArray<SKProduct *> *_Nonnull products) {
                                              NSMutableArray *productObjects = [NSMutableArray new];
                                              for (SKProduct *p in products) {
-                                                 [productObjects addObject:p.dictionary];
+                                                 [productObjects addObject:p.rc_dictionary];
                                              }
                                              completion(productObjects);
                                          }];
@@ -342,7 +342,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                                                                             if (paymentDiscount) {
                                                                                 self.discounts[[paymentDiscount.timestamp stringValue]] =
                                                                                     paymentDiscount;
-                                                                                completion(paymentDiscount.dictionary,
+                                                                                completion(paymentDiscount.rc_dictionary,
                                                                                            nil);
                                                                             } else {
                                                                                 completion(nil,

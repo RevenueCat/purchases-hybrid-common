@@ -7,7 +7,7 @@
 
 @implementation SKPaymentDiscount (RCPurchases)
 
-- (NSDictionary *)dictionary
+- (NSDictionary *)rc_dictionary
 {
     return @{
         @"identifier": self.identifier,
