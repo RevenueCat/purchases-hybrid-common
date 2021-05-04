@@ -62,9 +62,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.2.0'
 
-    implementation('com.revenuecat.purchases:purchases:$purchases_version')
-    implementation('com.revenuecat.purchases:common:$purchases_version')
-    implementation('com.revenuecat.purchases:utils:$purchases_version')
+    implementation("com.revenuecat.purchases:purchases:$purchases_version")
+    implementation("com.revenuecat.purchases:common:$purchases_version")
+    implementation("com.revenuecat.purchases:utils:$purchases_version")
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
