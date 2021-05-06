@@ -262,9 +262,22 @@ fun invalidatePurchaserInfoCache() {
 }
 
 fun canMakePayments(context: Context,
-                    feature: BillingFeature?,
-                    onResult: OnResult) {
-    Purchases.Companion.canMakePaymentsWith(context, feature) { onResult.onReceived(mapOf("canMakePayments" to it)) }
+                    features: List<String>,
+                    onResult: OnResultAny<Boolean>) {
+    var billingFeatures = mutableListOf<BillingFeature>()
+    try {
+        billingFeatures.addAll(features.map { BillingFeature.valueOf(it) })
+    } catch (e: IllegalArgumentException) {
+        onResult.onError( PurchasesError(
+                // TODO fix this error
+                PurchasesErrorCode.ProductNotAvailableForPurchaseError,
+                "Couldn't find product."
+        ).map())
+        return
+    }
+
+    Purchases.Companion.canMakePaymentsWith(context, billingFeatures)
+        { onResult.onReceived(it) }
 }
 
 // region Subscriber Attributes
