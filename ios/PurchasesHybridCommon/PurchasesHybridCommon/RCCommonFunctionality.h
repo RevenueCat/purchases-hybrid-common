@@ -20,8 +20,7 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)configure;
 
-+ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount
-__attribute((deprecated("Configure behavior through the RevenueCat dashboard instead.")));
++ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
 
 + (void)addAttributionData:(NSDictionary *)data
                    network:(NSInteger)network
@@ -38,16 +37,10 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
-
 + (void)identify:(NSString *)appUserId
- completionBlock:(RCHybridResponseBlock)completion
-__attribute((deprecated("Use logIn instead.")));
+ completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
-
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
-__attribute((deprecated("Use logOut instead.")));
++ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion;
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
