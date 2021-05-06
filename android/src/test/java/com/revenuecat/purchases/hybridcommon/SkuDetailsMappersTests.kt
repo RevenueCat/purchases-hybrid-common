@@ -1,10 +1,7 @@
-package com.revenuecat.purchases.common
-
+package com.revenuecat.purchases.hybridcommon
 
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.common.mappers.mapIntroPrice
-import com.revenuecat.purchases.hybridcommon.mockCurrencyFormatter
-import com.revenuecat.purchases.hybridcommon.mockLogError
+import com.revenuecat.purchases.hybridcommon.mappers.mapIntroPrice
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -167,7 +164,7 @@ internal class SkuDetailsMapperTests {
     }
 
     @Test
-    fun `"when mapping a SkuDetails with no free trial nor introductory price, the map has null intro price values`() {
+    fun `when mapping a SkuDetails with no free trial nor introductory price, the map has null intro price values`() {
         every { mockSkuDetails.freeTrialPeriod } returns ""
         every { mockSkuDetails.introductoryPrice } returns ""
         received = mockSkuDetails.mapIntroPrice()
