@@ -4,8 +4,23 @@ import android.app.Activity
 import android.content.Context
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.*
+import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.UpgradeInfo
+import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.createAliasWith
+import com.revenuecat.purchases.getNonSubscriptionSkusWith
+import com.revenuecat.purchases.getOfferingsWith
+import com.revenuecat.purchases.getPurchaserInfoWith
+import com.revenuecat.purchases.getSubscriptionSkusWith
+import com.revenuecat.purchases.identifyWith
+import com.revenuecat.purchases.purchasePackageWith
+import com.revenuecat.purchases.purchaseProductWith
+import com.revenuecat.purchases.resetWith
+import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.interfaces.Callback
 
@@ -248,14 +263,12 @@ fun invalidatePurchaserInfoCache() {
 fun canMakePayments(context: Context,
                     features: List<String>,
                     onResult: OnResultAny<Boolean>) {
-    var billingFeatures = mutableListOf<BillingFeature>()
+    val billingFeatures = mutableListOf<BillingFeature>()
     try {
         billingFeatures.addAll(features.map { BillingFeature.valueOf(it) })
     } catch (e: IllegalArgumentException) {
-        onResult.onError(PurchasesError(
-                PurchasesErrorCode.UnknownError,
-                "Invalid feature type passed to canMakePayments."
-        ).map())
+        onResult.onError(PurchasesError(PurchasesErrorCode.UnknownError,
+                "Invalid feature type passed to canMakePayments.").map())
         return
     }
 

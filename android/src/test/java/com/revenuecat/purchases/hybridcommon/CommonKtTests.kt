@@ -5,10 +5,13 @@ import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.common.PlatformInfo
 import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.net.URL
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -74,15 +77,12 @@ internal class CommonKtTests {
 
         every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
 
-        val onResult = mockk<OnResult>()
+        val onResult = mockk<OnResultAny<Boolean>>()
         every { onResult.onReceived(any()) } just runs
 
         canMakePayments(mockContext,
                 listOf(BillingFeature.SUBSCRIPTIONS.name),
-                onResult = object : OnResultAny<Boolean> {
-                    override fun onReceived(result: Boolean) {}
-                    override fun onError(errorContainer: ErrorContainer?) {}
-                })
+                onResult)
 
         verify(exactly = 1) {
             Purchases.Companion.canMakePayments(
@@ -104,14 +104,12 @@ internal class CommonKtTests {
 
         every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
 
-        val onResultAny = object : OnResultAny<Boolean> {
-            override fun onReceived(result: Boolean) {}
-            override fun onError(errorContainer: ErrorContainer?) {}
-        }
+        val onResultAny = mockk<OnResultAny<Boolean>>()
+        every { onResultAny.onError(any())} just runs
 
         canMakePayments(mockContext,
                 listOf("a;sdklfja;skdjgh"),
-                onResult = onResultAny)
+                onResultAny)
 
         verify(exactly = 1) {
             onResultAny.onError(any())
