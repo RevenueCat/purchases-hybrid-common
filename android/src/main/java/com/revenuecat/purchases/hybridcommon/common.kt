@@ -252,10 +252,9 @@ fun canMakePayments(context: Context,
     try {
         billingFeatures.addAll(features.map { BillingFeature.valueOf(it) })
     } catch (e: IllegalArgumentException) {
-        onResult.onError( PurchasesError(
-                // TODO fix this error
-                PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                "Couldn't find product."
+        onResult.onError(PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid feature type passed to canMakePayments."
         ).map())
         return
     }

@@ -111,7 +111,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
  
 + (void)setCreative:(nullable NSString *)creative;
 
-+ (BOOL)canMakePaymentsWithFeature:(NSMutableArray *)feature;
++ (BOOL)canMakePaymentsWithFeatures:(NSArray *)features;
 
 NS_ASSUME_NONNULL_END
 @end

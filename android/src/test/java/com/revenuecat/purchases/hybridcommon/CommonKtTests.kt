@@ -3,24 +3,13 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Application
 import android.content.Context
-import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.common.BillingFeature
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.runs
-import io.mockk.slot
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.URL
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -35,11 +24,11 @@ internal class CommonKtTests {
         mockkObject(Purchases)
         every {
             Purchases.configure(
-                context = any(),
-                apiKey = any(),
-                appUserID = any(),
-                observerMode = any(),
-                service = any()
+                    context = any(),
+                    apiKey = any(),
+                    appUserID = any(),
+                    observerMode = any(),
+                    service = any()
             )
         } returns mockPurchases
         every { mockContext.applicationContext } returns mockApplicationContext
@@ -88,11 +77,44 @@ internal class CommonKtTests {
         val onResult = mockk<OnResult>()
         every { onResult.onReceived(any()) } just runs
 
-        canMakePayments(mockContext, BillingFeature.SUBSCRIPTIONS, onResult = object : OnResult {
-            override fun onReceived(map: Map<String?, *>?) {}
-            override fun onError(errorContainer: ErrorContainer) {}
-        })
+        canMakePayments(mockContext,
+                listOf(BillingFeature.SUBSCRIPTIONS.name),
+                onResult = object : OnResultAny<Boolean> {
+                    override fun onReceived(result: Boolean) {}
+                    override fun onError(errorContainer: ErrorContainer?) {}
+                })
 
-        verify(exactly = 1) { Purchases.Companion.canMakePayments(mockContext, BillingFeature.SUBSCRIPTIONS, any()) }
+        verify(exactly = 1) {
+            Purchases.Companion.canMakePayments(
+                    mockContext,
+                    listOf(BillingFeature.SUBSCRIPTIONS),
+                    any())
+        }
+    }
+
+    @Test
+    fun `calling canMakePayments with invalid string results in error`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = true,
+                platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
+
+        val onResultAny = object : OnResultAny<Boolean> {
+            override fun onReceived(result: Boolean) {}
+            override fun onError(errorContainer: ErrorContainer?) {}
+        }
+
+        canMakePayments(mockContext,
+                listOf("a;sdklfja;skdjgh"),
+                onResult = onResultAny)
+
+        verify(exactly = 1) {
+            onResultAny.onError(any())
+        }
     }
 }
