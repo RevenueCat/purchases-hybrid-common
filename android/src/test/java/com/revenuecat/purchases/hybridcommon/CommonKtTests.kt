@@ -5,13 +5,15 @@ import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.common.PlatformInfo
-import io.mockk.*
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.runs
+import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.net.URL
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -75,7 +77,7 @@ internal class CommonKtTests {
                 platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
+        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
 
         val onResult = mockk<OnResultAny<Boolean>>()
         every { onResult.onReceived(any()) } just runs
@@ -85,7 +87,7 @@ internal class CommonKtTests {
                 onResult)
 
         verify(exactly = 1) {
-            Purchases.Companion.canMakePayments(
+            Purchases.canMakePayments(
                     mockContext,
                     listOf(BillingFeature.SUBSCRIPTIONS),
                     any())
@@ -102,7 +104,7 @@ internal class CommonKtTests {
                 platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.Companion.canMakePayments(mockContext, any(), any()) } just runs
+        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
 
         val onResultAny = mockk<OnResultAny<Boolean>>()
         every { onResultAny.onError(any())} just runs

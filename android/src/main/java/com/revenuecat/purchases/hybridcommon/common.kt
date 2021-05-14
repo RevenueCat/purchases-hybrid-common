@@ -272,7 +272,7 @@ fun canMakePayments(context: Context,
         return
     }
 
-    Purchases.Companion.canMakePayments(context, billingFeatures, Callback {
+    Purchases.canMakePayments(context, billingFeatures, Callback {
         onResult.onReceived(it)
     })
 }
