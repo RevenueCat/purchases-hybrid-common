@@ -63,8 +63,8 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
 
     api("com.revenuecat.purchases:purchases:$purchases_version")
-    implementation("com.revenuecat.purchases:purchases-core-common:$purchases_version")
-    implementation("com.revenuecat.purchases:purchases-core-utils:$purchases_version")
+    api("com.revenuecat.purchases:purchases-core-common:$purchases_version")
+    api("com.revenuecat.purchases:purchases-core-utils:$purchases_version")
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
