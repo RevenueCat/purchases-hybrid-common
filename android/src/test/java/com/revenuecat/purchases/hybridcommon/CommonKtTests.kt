@@ -68,7 +68,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `calling canMakePayments correctly passes call to Purchases`() {
+    fun `calling canMakePayments correctly passes through to Purchases`() {
         configure(
                 context = mockContext,
                 apiKey = "api_key",
@@ -83,7 +83,7 @@ internal class CommonKtTests {
         every { onResult.onReceived(any()) } just runs
 
         canMakePayments(mockContext,
-                listOf(BillingFeature.SUBSCRIPTIONS.name),
+                listOf(BillingFeature.SUBSCRIPTIONS.ordinal),
                 onResult)
 
         verify(exactly = 1) {
@@ -95,7 +95,65 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `calling canMakePayments with invalid string results in error`() {
+    fun `calling canMakePayments with empty list correctly passes through to Purchases`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = true,
+                platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
+
+        val onResult = mockk<OnResultAny<Boolean>>()
+        every { onResult.onReceived(any()) } just runs
+
+        canMakePayments(mockContext,
+                listOf(),
+                onResult)
+
+        verify(exactly = 1) {
+            Purchases.canMakePayments(
+                    mockContext,
+                    listOf(),
+                    any())
+        }
+    }
+
+    @Test
+    fun `canMakePayments correctly maps all integer values to BillingFeature enum type`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = true,
+                platformInfo = PlatformInfo("flavor", "version")
+        )
+
+        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
+
+        val onResult = mockk<OnResultAny<Boolean>>()
+        every { onResult.onReceived(any()) } just runs
+
+        val billingFeatureValues = BillingFeature.values()
+
+        billingFeatureValues.forEachIndexed { index, billingFeature ->
+            canMakePayments(mockContext,
+                    listOf(index),
+                    onResult)
+
+            verify(exactly = 1) {
+                Purchases.canMakePayments(
+                        mockContext,
+                        listOf(billingFeature),
+                        any())
+            }
+        }
+    }
+
+    @Test
+    fun `calling canMakePayments with invalid integer results in error`() {
         configure(
                 context = mockContext,
                 apiKey = "api_key",
@@ -110,7 +168,7 @@ internal class CommonKtTests {
         every { onResultAny.onError(any())} just runs
 
         canMakePayments(mockContext,
-                listOf("a;sdklfja;skdjgh"),
+                listOf(8),
                 onResultAny)
 
         verify(exactly = 1) {

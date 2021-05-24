@@ -261,20 +261,21 @@ fun invalidatePurchaserInfoCache() {
 }
 
 fun canMakePayments(context: Context,
-                    features: List<String>,
+                    features: List<Int>,
                     onResult: OnResultAny<Boolean>) {
     val billingFeatures = mutableListOf<BillingFeature>()
     try {
-        billingFeatures.addAll(features.map { BillingFeature.valueOf(it) })
-    } catch (e: IllegalArgumentException) {
+        val billingFeatureEnumValues = BillingFeature.values()
+        billingFeatures.addAll(features.map { billingFeatureEnumValues[it] })
+    } catch (e: IndexOutOfBoundsException) {
         onResult.onError(PurchasesError(PurchasesErrorCode.UnknownError,
                 "Invalid feature type passed to canMakePayments.").map())
         return
     }
 
-    Purchases.canMakePayments(context, billingFeatures, Callback {
+    Purchases.canMakePayments(context, billingFeatures) {
         onResult.onReceived(it)
-    })
+    }
 }
 
 // region Subscriber Attributes
