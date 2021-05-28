@@ -6,15 +6,20 @@ import android.content.Context
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.interfaces.Callback
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.net.URL
+import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -67,31 +72,36 @@ internal class CommonKtTests {
         }
     }
 
-    @Test
-    fun `calling canMakePayments correctly passes through to Purchases`() {
+    @RepeatedTest(5)
+    fun `canMakePayments result successfully passed back`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = true,
-                platformInfo = PlatformInfo("flavor", "version")
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
+        val receivedCanMakePayments = Random.nextBoolean()
+
+        var capturedCallback = slot<Callback<Boolean>>()
+        every {
+            Purchases.canMakePayments(mockContext, listOf(), capture(capturedCallback))
+        } answers {
+            capturedCallback.captured.also {
+                it.onReceived(receivedCanMakePayments)
+            }
+        }
 
         val onResult = mockk<OnResultAny<Boolean>>()
-        every { onResult.onReceived(any()) } just runs
+        val returnedResult = slot<Boolean>()
+        every { onResult.onReceived(capture(returnedResult)) } just runs
 
         canMakePayments(mockContext,
-                listOf(BillingFeature.SUBSCRIPTIONS.ordinal),
-                onResult)
+            listOf(),
+            onResult)
 
-        verify(exactly = 1) {
-            Purchases.canMakePayments(
-                    mockContext,
-                    listOf(BillingFeature.SUBSCRIPTIONS),
-                    any())
-        }
+        assertEquals(receivedCanMakePayments, returnedResult.captured)
     }
 
     @Test
@@ -104,10 +114,12 @@ internal class CommonKtTests {
                 platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
+        every {
+            Purchases.canMakePayments(mockContext, any(), any())
+        } just Runs
 
         val onResult = mockk<OnResultAny<Boolean>>()
-        every { onResult.onReceived(any()) } just runs
+        every { onResult.onReceived(any()) } just Runs
 
         canMakePayments(mockContext,
                 listOf(),
