@@ -8,7 +8,7 @@ buildscript {
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.11.1'
-    ext.purchases_version = '4.1.0'
+    ext.purchases_version = '4.2.1'
 
     repositories {
         google()
@@ -63,7 +63,9 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.2.0'
 
     api("com.revenuecat.purchases:purchases:$purchases_version")
-    
+    api("com.revenuecat.purchases:purchases-core-common:$purchases_version")
+    api("com.revenuecat.purchases:purchases-core-utils:$purchases_version")
+
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 

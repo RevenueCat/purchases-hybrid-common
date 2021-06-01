@@ -9,6 +9,7 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.UpgradeInfo
+import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
@@ -21,6 +22,7 @@ import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.interfaces.Callback
 
 import java.net.URL
 
@@ -256,6 +258,24 @@ fun checkTrialOrIntroductoryPriceEligibility(
 
 fun invalidatePurchaserInfoCache() {
     Purchases.sharedInstance.invalidatePurchaserInfoCache()
+}
+
+fun canMakePayments(context: Context,
+                    features: List<Int>,
+                    onResult: OnResultAny<Boolean>) {
+    val billingFeatures = mutableListOf<BillingFeature>()
+    try {
+        val billingFeatureEnumValues = BillingFeature.values()
+        billingFeatures.addAll(features.map { billingFeatureEnumValues[it] })
+    } catch (e: IndexOutOfBoundsException) {
+        onResult.onError(PurchasesError(PurchasesErrorCode.UnknownError,
+                "Invalid feature type passed to canMakePayments.").map())
+        return
+    }
+
+    Purchases.canMakePayments(context, billingFeatures) {
+        onResult.onReceived(it)
+    }
 }
 
 // region Subscriber Attributes

@@ -5,3 +5,9 @@ CHANGELOG.latest.md
 *.bck
 fastlane/report.xml
 android/.composite-enable
+
+*.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.gradle/
