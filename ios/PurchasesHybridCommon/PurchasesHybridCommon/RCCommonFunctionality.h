@@ -31,7 +31,7 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)syncPurchasesWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)syncPurchasesWithCompletionBlock:(nullable RCHybridResponseBlock)completion;
 
 + (NSString *)appUserID;
 
