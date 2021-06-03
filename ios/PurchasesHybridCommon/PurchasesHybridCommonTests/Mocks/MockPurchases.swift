@@ -62,6 +62,39 @@ class MockPurchases: Purchases {
         invokedResetParametersList.append((completion, ()))
     }
 
+    var invokedLogInError = false
+    var invokedLogInCount = 0
+    var invokedLogInParameters: (appUserID: String, Void)?
+    var invokedLogInParametersList = [(appUserID: String, Void)]()
+    var stubbedLogInCompletionResult: (Purchases.PurchaserInfo?, Bool, Error?)?
+
+    override func logIn(_ appUserID: String,
+                        _ completion: @escaping (Purchases.PurchaserInfo?, Bool, Error?) -> ()) {
+        invokedLogInError = true
+        invokedLogInCount += 1
+        invokedLogInParameters = (appUserID, ())
+        invokedLogInParametersList.append((appUserID, ()))
+        if let result = stubbedLogInCompletionResult {
+            completion(result.0, result.1, result.2)
+        }
+    }
+
+    var invokedLogOut = false
+    var invokedLogOutCount = 0
+    var invokedLogOutParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
+    var invokedLogOutParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
+    var stubbedLogOutCompletionResult: (Purchases.PurchaserInfo?, Error?)?
+
+    override func logOut(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+        invokedLogOut = true
+        invokedLogOutCount += 1
+        invokedLogOutParameters = (completion, ())
+        invokedLogOutParametersList.append((completion, ()))
+        if let completion = completion, let result = stubbedLogOutCompletionResult {
+            completion(result.0, result.1)
+        }
+    }
+
     var invokedPurchaserInfo = false
     var invokedPurchaserInfoCount = 0
     var invokedPurchaserInfoParameters: (completion: Purchases.ReceivePurchaserInfoBlock, Void)?
