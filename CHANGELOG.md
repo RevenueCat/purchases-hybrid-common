@@ -1,3 +1,17 @@
+### 1.7.0
+
+- Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device. 
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/77
+- Fixes a crash when calling `syncPurchases` with no completion block on iOS
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/78
+- Bumps `purchases-android` to `3.11.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1))
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/79
+
+### 1.6.3
+
+- Bumps `purchases-ios` to `3.11.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1))
+     https://github.com/RevenueCat/purchases-hybrid-common/pull/76
+
 ### 1.6.2
 
 - Bumps `purchases-ios` to `3.10.7` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.10.7))
