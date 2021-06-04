@@ -5,7 +5,7 @@
 - Fixes a crash when calling `syncPurchases` with no completion block on iOS
     https://github.com/RevenueCat/purchases-hybrid-common/pull/78
 - Bumps `purchases-android` to `3.11.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1))
-    https://github.com/RevenueCat/purchases-hybrid-common/pull/69
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/79
 
 ### 1.6.2
 
