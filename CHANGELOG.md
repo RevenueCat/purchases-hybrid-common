@@ -7,6 +7,11 @@
 - Bumps `purchases-android` to `3.11.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1))
     https://github.com/RevenueCat/purchases-hybrid-common/pull/79
 
+### 1.6.3
+
+- Bumps `purchases-ios` to `3.11.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.11.1))
+     https://github.com/RevenueCat/purchases-hybrid-common/pull/76
+
 ### 1.6.2
 
 - Bumps `purchases-ios` to `3.10.7` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.10.7))
