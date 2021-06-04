@@ -1,7 +1,7 @@
 ### 1.7.1
 
 - Fixed dependency specificiation in Podspec to purchases-ios@3.11.1
-    https://github.com/RevenueCat/purchases-hybrid-common/pull/80
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/81
 
 ### 1.7.0
 
