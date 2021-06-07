@@ -1,3 +1,8 @@
+### 1.7.1
+
+- Fixed dependency specificiation in Podspec to purchases-ios@3.11.1
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/81
+
 ### 1.7.0
 
 - Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device. 
