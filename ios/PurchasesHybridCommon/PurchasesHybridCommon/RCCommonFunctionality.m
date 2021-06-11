@@ -142,7 +142,8 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     [RCPurchases.sharedPurchases offeringsWithCompletionBlock:^(RCOfferings * _Nullable offerings,
                                                                 NSError * _Nullable error) {
         if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{}]);
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:@{}];
+            completion(nil, errorContainer);
         } else {
             completion(offerings.dictionary, nil);
         }
@@ -166,7 +167,9 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         NSError * _Nullable error,
         BOOL userCancelled) {
         if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
+            NSDictionary *extraPayload = @{@"userCancelled": @(userCancelled)};
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:extraPayload];
+            completion(nil, errorContainer);
         } else {
             completion(@{
                            @"purchaserInfo": purchaserInfo.dictionary,
@@ -217,7 +220,9 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         NSError * _Nullable error,
         BOOL userCancelled) {
         if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
+            NSDictionary *extraPayload = @{@"userCancelled": @(userCancelled)};
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:extraPayload];
+            completion(nil, errorContainer);
         } else {
             completion(@{
                            @"purchaserInfo": purchaserInfo.dictionary,
@@ -271,7 +276,9 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                        NSError * _Nullable error,
                        BOOL userCancelled) {
         if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{@"userCancelled": @(userCancelled)}]);
+            NSDictionary *extraPayload = @{@"userCancelled": @(userCancelled)};
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:extraPayload];
+            completion(nil, errorContainer);
         } else {
             completion(@{
                            @"purchaserInfo": purchaserInfo.dictionary,
@@ -310,21 +317,20 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                 SKProductDiscount *discountToUse = [self discountWithIdentifier:discountIdentifier forProduct:aProduct];
 
                 if (discountToUse) {
+                    void (^paymentDiscountCompletion)(SKPaymentDiscount *, NSError *) =
+                    ^(SKPaymentDiscount *paymentDiscount, NSError *error) {
+                        if (paymentDiscount) {
+                            self.discounts[[paymentDiscount.timestamp stringValue]] = paymentDiscount;
+                            completion(paymentDiscount.rc_dictionary, nil);
+                        } else {
+                            RCErrorContainer *errorContainer = 
+                                    [[RCErrorContainer alloc] initWithError:error extraPayload:@{}];
+                            completion(nil, errorContainer);
+                        }
+                    };
                     [RCPurchases.sharedPurchases paymentDiscountForProductDiscount:discountToUse
                                                                            product:aProduct
-                                                                        completion:^(SKPaymentDiscount *paymentDiscount,
-                                                                                     NSError *error) {
-                                                                            if (paymentDiscount) {
-                                                                                self.discounts[[paymentDiscount.timestamp stringValue]] =
-                                                                                    paymentDiscount;
-                                                                                completion(paymentDiscount.rc_dictionary,
-                                                                                           nil);
-                                                                            } else {
-                                                                                completion(nil,
-                                                                                           [self payloadForError:error
-                                                                                                withExtraPayload:@{}]);
-                                                                            }
-                                                                        }];
+                                                                        completion:paymentDiscountCompletion];
                 } else {
                     [self productNotFoundErrorWithDescription:@"Couldn't find discount."
                                                 userCancelled:nil
@@ -345,7 +351,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void (^)(RCPurchaserInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion {
     return ^(RCPurchaserInfo * _Nullable purchaserInfo, NSError * _Nullable error) {
         if (error) {
-            completion(nil, [self payloadForError:error withExtraPayload:@{}]);
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:@{}];
+            completion(nil, errorContainer);
         } else {
             completion(purchaserInfo.dictionary, nil);
         }
@@ -482,24 +489,6 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 #pragma mark - errors
 
-+ (RCErrorContainer *)payloadForError:(NSError *)error withExtraPayload:(NSDictionary *)extraPayload {
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:extraPayload];
-    dict[@"code"] = @(error.code);
-    dict[@"message"] = error.localizedDescription;
-    if (error.userInfo[NSUnderlyingErrorKey]) {
-        dict[@"underlyingErrorMessage"] = ((NSError *) error.userInfo[NSUnderlyingErrorKey]).localizedDescription;
-    } else {
-        dict[@"underlyingErrorMessage"] = @"";
-    }
-
-    if (error.userInfo[RCReadableErrorCodeKey]) {
-        dict[@"readableErrorCode"] = error.userInfo[RCReadableErrorCodeKey];
-        dict[@"readable_error_code"] = error.userInfo[RCReadableErrorCodeKey];
-    }
-
-    return [[RCErrorContainer alloc] initWithError:error info:dict];
-}
-
 + (void)productNotFoundErrorWithDescription:(NSString *)errorDescription
                               userCancelled:(nullable NSNumber *)userCancelled
                                  completion:(RCHybridResponseBlock)completion {
@@ -515,7 +504,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                                      userInfo:@{
                                          NSLocalizedDescriptionKey: errorDescription
                                      }];
-    completion(nil, [self payloadForError:error withExtraPayload:extraPayload]);
+    RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:extraPayload];
+    completion(nil, errorContainer);
 }
 
 #pragma mark - helpers
