@@ -8,8 +8,7 @@ buildscript {
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.11.1'
-    // TODO: uncomment the following line once purchases-android update is released
-    // ext.purchases_version = '4.0.5'
+    ext.purchases_version = '4.2.1'
 
     repositories {
         google()
@@ -38,7 +37,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
-        versionName "1.6.2"
+        versionName "1.7.1"
 
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -63,25 +62,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.2.0'
 
-    // TODO: un-comment the api line and remove the implementation once purchases-android is released
-    // api "com.revenuecat.purchases:purchases:$purchases_version"
-    implementation('com.revenuecat.purchases:purchases') {
-        version {
-            branch = 'develop'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:common') {
-        version {
-            branch = 'develop'
-        }
-    }
-
-    implementation('com.revenuecat.purchases:utils') {
-        version {
-            branch = 'develop'
-        }
-    }
+    api("com.revenuecat.purchases:purchases:$purchases_version")
+    api("com.revenuecat.purchases:purchases-core-common:$purchases_version")
+    api("com.revenuecat.purchases:purchases-core-utils:$purchases_version")
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
@@ -100,4 +83,24 @@ dependencies {
 repositories {
     google()
     jcenter()
+}
+
+// Call passing parameter -PpurchasesPath="$HOME/Development/repos/purchases-android"
+task enableLocalBuild {
+    group = 'Tools'
+    description = 'Enable composite build'
+    doLast {
+        new File(".composite-enable").text = purchasesPath
+    }
+}
+
+task disableLocalBuild {
+    group = 'Tools'
+    description = 'Disable composite build'
+    doLast {
+        File file = file(".composite-enable")
+        if (file.exists()) {
+            file.delete()
+        }
+    }
 }

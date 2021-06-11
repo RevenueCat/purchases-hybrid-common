@@ -13,7 +13,7 @@ import PurchasesHybridCommon
 class PurchaserInfoHybridAdditionsTests: QuickSpec {
 
     override func spec() {
-        describe("dictionary") {
+        describe("rc_dictionary") {
             context("managementURL") {
                 it("contains the management url when it exists") {
                     let purchaserInfo = PartialMockPurchaserInfo()
@@ -47,7 +47,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     let transactionDictionary = nonSubscriptionTransactions?[0] as? Dictionary<String, Any>
                     expect(transactionDictionary?["revenueCatId"] as? String) == transaction.revenueCatId
                     expect(transactionDictionary?["productId"] as? String) == transaction.productId
-                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == (transactionDate as NSDate).millisecondsSince1970()
+                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == (transactionDate as NSDate).rc_millisecondsSince1970AsDouble()
                     
                     let dateformatter = ISO8601DateFormatter()
                     expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
@@ -68,6 +68,8 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     
     var stubbedManagementURL: URL?
     var stubbedNonSubscriptionTransactions: Array = Array<Purchases.Transaction>()
+    let _firstSeen = Date()
+    let _requestDate = Date()
     
     override var managementURL: URL? {
         return stubbedManagementURL
@@ -78,7 +80,7 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     }
     
     override var firstSeen: Date {
-        return Date()
+        return _firstSeen
     }
     
     override var entitlements: Purchases.EntitlementInfos {
@@ -90,7 +92,7 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     }
     
     override var requestDate: Date? {
-        return Date()
+        return _requestDate
     }
     
     override var nonSubscriptionTransactions: [Purchases.Transaction] {

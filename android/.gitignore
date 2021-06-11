@@ -72,7 +72,7 @@ hs_err_pid*
 *.iml
 *.ipr
 *.iws
-.idea/
+**/.idea/*
 
 
 ###Eclipse###
@@ -110,3 +110,6 @@ annotations/
 .project
 common/.classpath
 app/.classpath
+
+# share settings
+!/.idea/codeStyles/

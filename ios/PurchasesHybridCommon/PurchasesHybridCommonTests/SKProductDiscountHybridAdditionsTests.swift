@@ -14,7 +14,7 @@ import PurchasesHybridCommon
 
 class SkuProductDiscountHybridAdditionsTests: QuickSpec {
     override func spec() {
-        describe("dictionary") {
+        describe("rc_dictionary") {
             it("has the right format") {
                 let subscriptionPeriod = SKProductSubscriptionPeriod(numberOfUnits: 3, unit: .month)
                 let productDiscount = SKProductDiscount(price: 10.99,
@@ -24,8 +24,8 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                guard let receivedDictionary = productDiscount.dictionary() as? [String: NSObject] else {
-                    fatalError("received dictionary is not in the right format")
+                guard let receivedDictionary = productDiscount.rc_dictionary() as? [String: NSObject] else {
+                    fatalError("received rc_dictionary is not in the right format")
                 }
                 
                 expect(receivedDictionary["cycles"] as? NSNumber) == 3

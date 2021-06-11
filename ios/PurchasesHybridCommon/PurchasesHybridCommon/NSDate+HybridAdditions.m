@@ -25,11 +25,11 @@ static NSString *stringFromDate(NSDate *date) {
 
 @implementation NSDate (RCExtensions)
 
-- (NSString *)formattedAsISO8601 {
+- (NSString *)rc_formattedAsISO8601 {
     return stringFromDate(self);
 }
 
-- (double)millisecondsSince1970 {
+- (double)rc_millisecondsSince1970AsDouble {
     return [self timeIntervalSince1970] * 1000.0;
 }
 

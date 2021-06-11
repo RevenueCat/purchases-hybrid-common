@@ -3,3 +3,4 @@
 //
 
 #import <PurchasesHybridCommon/RCPurchases+HybridAdditions.h>
+#import <PurchasesHybridCommon/RCPurchases+ProtectedExtensions.h>
