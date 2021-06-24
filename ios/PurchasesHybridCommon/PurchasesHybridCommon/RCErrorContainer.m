@@ -28,8 +28,14 @@
     }
 
     if (error.userInfo[RCReadableErrorCodeKey]) {
-        dict[@"readableErrorCode"] = error.userInfo[RCReadableErrorCodeKey];
-        dict[@"readable_error_code"] = error.userInfo[RCReadableErrorCodeKey];
+        NSString *readableErrorCode = error.userInfo[RCReadableErrorCodeKey];
+        dict[@"readableErrorCode"] = readableErrorCode;
+        dict[@"readable_error_code"] = readableErrorCode;
+            
+        NSMutableDictionary *fixedUserInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+        fixedUserInfo[@"readableErrorCode"] = readableErrorCode;
+                
+        error = [NSError errorWithDomain:error.domain code:error.code userInfo:fixedUserInfo];
     }
 
     if (self = [super init]) {
