@@ -5,13 +5,17 @@
 
 #import <Purchases/Purchases.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface RCErrorContainer : NSObject
 
 @property (nonatomic, readonly) NSInteger code;
-@property (nonatomic, nonnull, readonly) NSString *message;
-@property (nonatomic, nonnull, readonly) NSDictionary *info;
-@property (nonatomic, nonnull, readonly) NSError *error;
+@property (nonatomic, readonly) NSString *message;
+@property (nonatomic, readonly) NSDictionary *info;
+@property (nonatomic, readonly) NSError *error;
 
-- (nonnull instancetype)initWithError:(nonnull NSError *)error info:(nonnull NSDictionary *)info;
+- (instancetype)initWithError:(NSError *)error extraPayload:(NSDictionary *)extraPayload;
 
 @end
+
+NS_ASSUME_NONNULL_END
