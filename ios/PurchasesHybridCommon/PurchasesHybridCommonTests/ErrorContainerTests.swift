@@ -48,8 +48,14 @@ class ErrorContainerTests: QuickSpec {
             it("contains the error itself") {
                 let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
                 let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let containedError = errorContainer.error as NSError
 
-                expect(errorContainer.error as NSError) == error
+                expect(containedError.code) == error.code
+                expect(containedError.domain) == error.domain
+                expect(containedError.localizedDescription) == error.localizedDescription
+                for (key, value) in error.userInfo {
+                    expect(error.userInfo[key] as? String) == value as? String
+                }
             }
         }
 
@@ -85,6 +91,16 @@ class ErrorContainerTests: QuickSpec {
                 expect(readableErrorKey) != ""
                 expect(errorContainer.info["readableErrorCode"] as? String) == readableErrorKey
                 expect(errorContainer.info["readable_error_code"] as? String) == readableErrorKey
+            }
+            it("user info contains the readable error code in both keys") {
+                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+
+                let readableErrorKey = error.userInfo[Purchases.ReadableErrorCodeKey] as? String
+                expect(readableErrorKey).toNot(beNil())
+                expect(readableErrorKey) != ""
+                expect((errorContainer.error as NSError).userInfo["readableErrorCode"] as? String) == readableErrorKey
+                expect((errorContainer.error as NSError).userInfo["readable_error_code"] as? String) == readableErrorKey
             }
         }
     }
