@@ -128,7 +128,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 }
 
 + (void)setDebugLogsEnabled:(BOOL)enabled {
-    RCPurchases.debugLogsEnabled = enabled;
+    RCPurchases.logLevel = enabled ? RCLogLevelDebug : RCLogLevelInfo;
 }
 
 + (void)setProxyURLString:(nullable NSString *)proxyURLString {
