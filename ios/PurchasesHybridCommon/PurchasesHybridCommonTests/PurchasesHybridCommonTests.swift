@@ -94,7 +94,9 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 let expectedErrorDict: NSDictionary = [
                     "code": mockError.code,
-                    "message": mockError.localizedDescription
+                    "message": mockError.localizedDescription,
+                    "underlyingErrorMessage": ""
+
                 ]
 
                 expect { receivedResultDict }.to(beNil())
@@ -153,7 +155,8 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 let expectedErrorDict: NSDictionary = [
                     "code": mockError.code,
-                    "message": mockError.localizedDescription
+                    "message": mockError.localizedDescription,
+                    "underlyingErrorMessage": ""
                 ]
 
                 expect { receivedResultDict }.to(beNil())
