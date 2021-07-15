@@ -87,7 +87,9 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
                                          BOOL created,
                                          NSError * _Nullable error) {
                            if (error) {
-                               completion(nil, [self payloadForError:error withExtraPayload:@{}]);
+                               RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                                             extraPayload:@{}];
+                               completion(nil, errorContainer);
                            } else {
                                completion(@{
                                               @"purchaserInfo": purchaserInfo.dictionary,
