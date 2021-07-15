@@ -28,6 +28,10 @@ import com.revenuecat.purchases.interfaces.Callback
 
 import java.net.URL
 
+@Deprecated(
+    "Replaced with configuration in the RevenueCat dashboard",
+    ReplaceWith("configure through the RevenueCat dashboard")
+)
 fun setAllowSharingAppStoreAccount(
     allowSharingAppStoreAccount: Boolean
 ) {
@@ -205,6 +209,10 @@ fun logOut(onResult: OnResult) {
     }
 }
 
+@Deprecated(
+    "Use logOut instead",
+    ReplaceWith("CommonKt.logOut(newAppUserID, onResult)")
+)
 fun reset(
     onResult: OnResult
 ) {
@@ -213,6 +221,10 @@ fun reset(
     }
 }
 
+@Deprecated(
+    "Use logIn instead",
+    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
+)
 fun identify(
     appUserID: String,
     onResult: OnResult
@@ -222,6 +234,10 @@ fun identify(
     }
 }
 
+@Deprecated(
+    "Use logIn instead",
+    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
+)
 fun createAlias(
     newAppUserID: String,
     onResult: OnResult
