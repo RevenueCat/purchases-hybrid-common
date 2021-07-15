@@ -5,9 +5,13 @@ import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.LogInCallback
+import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
