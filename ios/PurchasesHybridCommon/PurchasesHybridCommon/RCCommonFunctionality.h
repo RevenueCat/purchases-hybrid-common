@@ -20,7 +20,8 @@ typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer
 
 + (void)configure;
 
-+ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount;
++ (void)setAllowSharingStoreAccount:(BOOL)allowSharingStoreAccount
+__attribute((deprecated("Configure behavior through the RevenueCat dashboard instead.")));
 
 + (void)addAttributionData:(NSDictionary *)data
                    network:(NSInteger)network
@@ -35,12 +36,19 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (NSString *)appUserID;
 
-+ (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion;
++ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion;
+
++ (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
+
++ (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion 
+__attribute((deprecated("Use logIn instead.")));
 
 + (void)identify:(NSString *)appUserId
- completionBlock:(RCHybridResponseBlock)completion;
+ completionBlock:(RCHybridResponseBlock)completion
+__attribute((deprecated("Use logIn instead.")));
 
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
+__attribute((deprecated("Use logOut instead.")));
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
