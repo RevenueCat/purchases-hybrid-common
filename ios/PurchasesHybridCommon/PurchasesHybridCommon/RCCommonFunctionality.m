@@ -79,24 +79,58 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     return RCPurchases.sharedPurchases.appUserID;
 }
 
+
++ (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases logIn:appUserId
+                       completionBlock:^(RCPurchaserInfo * _Nullable purchaserInfo,
+                                         BOOL created,
+                                         NSError * _Nullable error) {
+                           if (error) {
+                               RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                                             extraPayload:@{}];
+                               completion(nil, errorContainer);
+                           } else {
+                               completion(@{
+                                              @"purchaserInfo": purchaserInfo.dictionary,
+                                              @"created": @(created)
+                                          }, nil);
+                           }
+                       }];
+}
+
++ (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    [RCPurchases.sharedPurchases logOutWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+}
+
 + (void)createAlias:(nullable NSString *)newAppUserID completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     [RCPurchases.sharedPurchases createAlias:newAppUserID
                              completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+    #pragma GCC diagnostic pop
 }
 
 + (void)identify:(NSString *)appUserID completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     [RCPurchases.sharedPurchases identify:appUserID completionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+    #pragma GCC diagnostic pop
 }
 
 + (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     [RCPurchases.sharedPurchases resetWithCompletionBlock:[self getPurchaserInfoCompletionBlock:completion]];
+    #pragma GCC diagnostic pop
 }
 
 + (void)setDebugLogsEnabled:(BOOL)enabled {
-    RCPurchases.debugLogsEnabled = enabled;
+    RCPurchases.logLevel = enabled ? RCLogLevelDebug : RCLogLevelInfo;
 }
 
 + (void)setProxyURLString:(nullable NSString *)proxyURLString {

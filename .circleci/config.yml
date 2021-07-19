@@ -19,7 +19,7 @@ executors:
   ios-executor:
     working_directory: ~/ios
     macos:
-      xcode: 12.0
+      xcode: 12.5.1
 
 jobs:
   test-ios:

@@ -20,12 +20,18 @@ import com.revenuecat.purchases.identifyWith
 import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
 import com.revenuecat.purchases.resetWith
+import com.revenuecat.purchases.logInWith
+import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.interfaces.Callback
 
 import java.net.URL
 
+@Deprecated(
+    "Replaced with configuration in the RevenueCat dashboard",
+    ReplaceWith("configure through the RevenueCat dashboard")
+)
 fun setAllowSharingAppStoreAccount(
     allowSharingAppStoreAccount: Boolean
 ) {
@@ -182,6 +188,31 @@ fun restoreTransactions(
     }
 }
 
+fun logIn(
+    appUserID: String,
+    onResult: OnResult
+) {
+    Purchases.sharedInstance.logInWith(appUserID,
+        onError = { onResult.onError(it.map()) },
+        onSuccess = { purchaserInfo, created ->
+            val resultMap: Map<String, Any?> = mapOf(
+                "purchaserInfo" to purchaserInfo.map(),
+                "created" to created
+            )
+            onResult.onReceived(resultMap)
+        })
+}
+
+fun logOut(onResult: OnResult) {
+    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
+@Deprecated(
+    "Use logOut instead",
+    ReplaceWith("CommonKt.logOut(newAppUserID, onResult)")
+)
 fun reset(
     onResult: OnResult
 ) {
@@ -190,6 +221,10 @@ fun reset(
     }
 }
 
+@Deprecated(
+    "Use logIn instead",
+    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
+)
 fun identify(
     appUserID: String,
     onResult: OnResult
@@ -199,6 +234,10 @@ fun identify(
     }
 }
 
+@Deprecated(
+    "Use logIn instead",
+    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
+)
 fun createAlias(
     newAppUserID: String,
     onResult: OnResult
@@ -305,7 +344,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (Purchase?, Purcha
     return { purchase, purchaserInfo ->
         onResult.onReceived(
             mapOf(
-                "productIdentifier" to purchase?.sku,
+                "productIdentifier" to purchase?.skus,
                 "purchaserInfo" to purchaserInfo.map()
             )
         )

@@ -1,3 +1,29 @@
+### 1.8.0
+
+#### Identity V3
+
+##### New methods
+- Introduces `logIn`, a new way of identifying users, which also returns whether a new user has been registered in the system. 
+`logIn` uses a new backend endpoint. 
+- Introduces `logOut`, a replacement for `reset`. 
+
+##### Deprecations
+- deprecates `createAlias` in favor of `logIn`
+- deprecates `identify` in favor of `logIn`
+- deprecates `reset` in favor of `logOut`
+- deprecates `allowSharingStoreAccount` in favor of dashboard-side configuration
+
+#### Dependency updates
+- Bumps `purchases-ios` to `3.12.2` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.2))
+- Bumps `purchases-android` to `4.3.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.3.0))
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/84
+
+#### Bug Fixes
+- Added `readableErrorCode` to `UserInfo` when creating `ErrorContainer`, so all errors have `readableErrorCode`
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/82
+- Made `underlyingErrorMessage` an empty string if it's missing in iOS
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/71
+
 ### 1.7.1
 
 - Fixed dependency specificiation in Podspec to purchases-ios@3.11.1
