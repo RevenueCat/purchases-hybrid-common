@@ -14,7 +14,7 @@
 - deprecates `allowSharingStoreAccount` in favor of dashboard-side configuration
 
 #### Dependency updates
-- Bumps `purchases-ios` to `3.12.1` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.1))
+- Bumps `purchases-ios` to `3.12.2` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.2))
 - Bumps `purchases-android` to `4.3.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.3.0))
     https://github.com/RevenueCat/purchases-hybrid-common/pull/84
 
