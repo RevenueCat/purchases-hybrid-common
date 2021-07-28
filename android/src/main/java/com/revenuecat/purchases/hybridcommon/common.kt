@@ -26,7 +26,6 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.interfaces.Callback
 
 import java.net.URL
 
@@ -327,12 +326,13 @@ fun configure(
     appUserID: String?,
     observerMode: Boolean?,
     platformInfo: PlatformInfo,
-    store: Store
+    store: Store = Store.PLAY_STORE
 ) {
     Purchases.platformInfo = platformInfo
     val builder =
-        PurchasesConfiguration.Builder(context, apiKey, store)
+        PurchasesConfiguration.Builder(context, apiKey)
             .appUserID(appUserID)
+            .store(store)
     if (observerMode != null) {
         builder.observerMode(observerMode)
     }

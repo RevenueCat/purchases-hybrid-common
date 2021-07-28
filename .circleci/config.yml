@@ -128,9 +128,16 @@ workflows:
           filters:
             branches:
               only: amazon
-      - deploy-android:
+      - hold:
+          type: approval
           requires:
             - test-android
+          filters:
+            branches:
+              only: amazon
+      - deploy-android:
+          requires:
+            - hold
           filters:
             branches:
               only: amazon
