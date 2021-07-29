@@ -1,5 +1,7 @@
 package com.revenuecat.purchases.hybridcommon
 
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,6 +23,16 @@ internal class MappersHelpersTests {
 
         val date3: Date? = dateFormat.parse("31-07-1990")
         assertThat(date3?.toMillis()).isEqualTo(649382400000L)
+    }
+
+    @Test
+    fun `purchasesErrors are mapped correctly`() {
+        PurchasesErrorCode.values().forEach { errorCode ->
+            val error = PurchasesError(errorCode, "")
+            val errorContainer = error.map()
+
+            assertThat(errorContainer.code).isEqualTo(errorCode.code)
+        }
     }
 
 }
