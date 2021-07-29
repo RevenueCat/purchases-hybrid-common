@@ -355,10 +355,10 @@ internal fun PurchasesError.map(
     extra: Map<String, Any?> = mapOf()
 ): ErrorContainer =
     ErrorContainer(
-        code.ordinal,
+        code.code,
         message,
         mapOf(
-            "code" to code.ordinal,
+            "code" to code.code,
             "message" to message,
             "readableErrorCode" to code.name,
             "readable_error_code" to code.name,
