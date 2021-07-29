@@ -1,3 +1,8 @@
+### 1.8.1
+
+- Fixed a bug where the wrong error code would be returned when mapping to JSON in Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/85
+
 ### 1.8.0
 
 #### Identity V3
