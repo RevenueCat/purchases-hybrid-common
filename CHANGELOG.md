@@ -3,7 +3,6 @@
 - Bumps `purchases-ios` to `3.12.3` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.3))
      https://github.com/RevenueCat/purchases-hybrid-common/pull/87
 
-
 ### 1.8.1
 
 - Fixed a bug where the wrong error code would be returned when mapping to JSON in Android
