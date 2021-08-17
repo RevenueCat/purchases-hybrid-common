@@ -7,6 +7,7 @@ import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchaserInfo
 import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
@@ -27,6 +28,8 @@ import java.net.URL
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 internal class CommonKtTests {
 
@@ -358,6 +361,14 @@ internal class CommonKtTests {
 
         val mockErrorMap = mockError.map()
         verify(exactly = 1) { onResult.onError(mockErrorMap) }
+    }
+
+    @Test
+    fun `getPaymentDiscount returns an error`() {
+        val error = getPaymentDiscount()
+        assertNotNull(error)
+        assertEquals(PurchasesErrorCode.UnsupportedError.code, error.code)
+        assertTrue(error.message.isNotEmpty())
     }
 
 }
