@@ -1,3 +1,8 @@
+### 1.9.0
+
+- Adds `getPaymentDiscount` in Android, which returns an error
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/88
+
 ### 1.8.2
 
 - Bumps `purchases-ios` to `3.12.3` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.3))
