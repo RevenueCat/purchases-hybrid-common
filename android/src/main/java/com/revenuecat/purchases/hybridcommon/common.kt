@@ -317,8 +317,6 @@ fun canMakePayments(context: Context,
     }
 }
 
-// region Subscriber Attributes
-
 fun configure(
     context: Context,
     apiKey: String,
@@ -332,6 +330,11 @@ fun configure(
     } else {
         Purchases.configure(context, apiKey, appUserID)
     }
+}
+
+fun getPaymentDiscount() : ErrorContainer {
+    return ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
+        "Android platform doesn't support subscription offers", emptyMap())
 }
 
 // region private functions
