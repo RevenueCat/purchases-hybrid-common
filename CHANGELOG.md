@@ -1,3 +1,10 @@
+### 1.9.1
+
+- Fix issue with `productIdentifier` being a list in the `purchaseProduct` and `purchasePackage` functions
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/90
+- Updated `purchases-android` to 4.3.1
+    https://github.com/RevenueCat/purchases-android/releases/tag/4.3.1
+
 ### 1.9.0
 
 - Adds `getPaymentDiscount` in Android, which returns an error
