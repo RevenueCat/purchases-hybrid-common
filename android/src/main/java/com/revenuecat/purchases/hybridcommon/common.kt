@@ -347,7 +347,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (Purchase?, Purcha
     return { purchase, purchaserInfo ->
         onResult.onReceived(
             mapOf(
-                "productIdentifier" to purchase?.skus,
+                "productIdentifier" to purchase?.skus?.get(0),
                 "purchaserInfo" to purchaserInfo.map()
             )
         )
