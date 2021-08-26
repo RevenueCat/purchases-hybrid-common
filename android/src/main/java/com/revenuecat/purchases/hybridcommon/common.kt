@@ -347,7 +347,8 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (Purchase?, Purcha
     return { purchase, purchaserInfo ->
         onResult.onReceived(
             mapOf(
-                "productIdentifier" to purchase?.skus,
+                // Get first productIdentifier until we have full support of multi-line subscriptions
+                "productIdentifier" to purchase?.skus?.get(0),
                 "purchaserInfo" to purchaserInfo.map()
             )
         )
