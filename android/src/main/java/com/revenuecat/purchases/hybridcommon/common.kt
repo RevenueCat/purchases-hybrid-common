@@ -318,8 +318,6 @@ fun canMakePayments(context: Context,
     }
 }
 
-// region Subscriber Attributes
-
 fun configure(
     context: Context,
     apiKey: String,
@@ -338,6 +336,11 @@ fun configure(
     }
 
     Purchases.configure(builder.build())
+}
+
+fun getPaymentDiscount() : ErrorContainer {
+    return ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
+        "Android platform doesn't support subscription offers", emptyMap())
 }
 
 // region private functions
@@ -361,7 +364,8 @@ private fun getProductChangeCompletedFunction(onResult: OnResult): (PurchaseDeta
     return { purchase, purchaserInfo ->
         onResult.onReceived(
             mapOf(
-                "productIdentifier" to purchase?.skus,
+                // Get first productIdentifier until we have full support of multi-line subscriptions
+                "productIdentifier" to purchase?.skus?.get(0),
                 "purchaserInfo" to purchaserInfo.map()
             )
         )
@@ -372,10 +376,10 @@ internal fun PurchasesError.map(
     extra: Map<String, Any?> = mapOf()
 ): ErrorContainer =
     ErrorContainer(
-        code.ordinal,
+        code.code,
         message,
         mapOf(
-            "code" to code.ordinal,
+            "code" to code.code,
             "message" to message,
             "readableErrorCode" to code.name,
             "readable_error_code" to code.name,

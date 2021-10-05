@@ -1,3 +1,25 @@
+### 1.9.1
+
+- Fix issue with `productIdentifier` being a list in the `purchaseProduct` and `purchasePackage` functions
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/90
+- Updated `purchases-android` to 4.3.1
+    https://github.com/RevenueCat/purchases-android/releases/tag/4.3.1
+
+### 1.9.0
+
+- Adds `getPaymentDiscount` in Android, which returns an error
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/88
+
+### 1.8.2
+
+- Bumps `purchases-ios` to `3.12.3` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.12.3))
+     https://github.com/RevenueCat/purchases-hybrid-common/pull/87
+
+### 1.8.1
+
+- Fixed a bug where the wrong error code would be returned when mapping to JSON in Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/85
+
 ### 1.8.0
 
 #### Identity V3
