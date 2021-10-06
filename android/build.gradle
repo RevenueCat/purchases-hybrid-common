@@ -61,10 +61,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.2.0'
 
-    api("com.revenuecat.purchases:purchases:$purchases_version")
-    api("com.revenuecat.purchases:purchases-core-common:$purchases_version")
-    api("com.revenuecat.purchases:purchases-core-utils:$purchases_version")
-    api("com.revenuecat.purchases:purchases-store-amazon:$purchases_version")
+    api "com.revenuecat.purchases:purchases:$purchases_version"
+    api "com.revenuecat.purchases:purchases-core-common:$purchases_version"
+    api "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
+    api "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
@@ -72,6 +72,7 @@ dependencies {
     testImplementation "org.assertj:assertj-core:$assertj_version"
 
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "com.revenuecat.purchases:purchases-store-google:$purchases_version"
 
     // junit 5
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5"
