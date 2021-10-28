@@ -1,3 +1,9 @@
+### 1.9.3
+
+- Bump `purchases-ios` to 3.12.8
+    [3.12.7 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.7)
+    [3.12.8 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.8)
+
 ### 1.9.2
 
 - Bump `purchases-android` to `4.3.3`
