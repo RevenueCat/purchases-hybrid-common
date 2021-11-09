@@ -107,6 +107,8 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)setOnesignalID:(nullable NSString *)onesignalID;
 
++ (void)setAirshipChannelID:(nullable NSString *)airshipChannelID;
+
 + (void)setMediaSource:(nullable NSString *)mediaSource;
 
 + (void)setCampaign:(nullable NSString *)campaign;

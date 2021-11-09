@@ -479,6 +479,12 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [RCPurchases.sharedPurchases setOnesignalID:nonNSNullAttribute];
 }
 
++ (void)setAirshipChannelID:(nullable NSString *)airshipChannelID {
+    NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
+    NSString *nonNSNullAttribute = [self nonNSNullAttribute:airshipChannelID];
+    [RCPurchases.sharedPurchases setAirshipChannelID:nonNSNullAttribute];
+}
+
 #pragma mark Campaign parameters
 
 + (void)setMediaSource:(nullable NSString *)mediaSource {
