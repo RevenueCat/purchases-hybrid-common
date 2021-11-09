@@ -57,6 +57,10 @@ fun setOnesignalID(onesignalID: String?) {
     Purchases.sharedInstance.setOnesignalID(onesignalID)
 }
 
+fun setAirshipChannelID(airshipChannelID: String?) {
+    Purchases.sharedInstance.setAirshipChannelID(airshipChannelID)
+}
+
 // endregion
 // region Campaign parameters
 
