@@ -8,17 +8,17 @@ GEM
     artifactory (3.0.15)
     atomos (0.1.3)
     aws-eventstream (1.2.0)
-    aws-partitions (1.520.1)
-    aws-sdk-core (3.121.4)
+    aws-partitions (1.525.0)
+    aws-sdk-core (3.122.0)
       aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
+      aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-kms (1.50.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-kms (1.51.0)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.104.0)
-      aws-sdk-core (~> 3, >= 3.121.2)
+    aws-sdk-s3 (1.105.1)
+      aws-sdk-core (~> 3, >= 3.122.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.4.0)
@@ -156,7 +156,7 @@ GEM
     nanaimo (0.3.0)
     naturally (2.2.1)
     optparse (0.1.1)
-    os (1.1.1)
+    os (1.1.4)
     plist (3.6.0)
     public_suffix (4.0.6)
     rake (13.0.6)
@@ -181,7 +181,7 @@ GEM
     terminal-notifier (2.0.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
-    trailblazer-option (0.1.1)
+    trailblazer-option (0.1.2)
     tty-cursor (0.7.1)
     tty-screen (0.8.1)
     tty-spinner (0.9.3)
@@ -213,4 +213,4 @@ DEPENDENCIES
   fastlane-plugin-versioning_android
 
 BUNDLED WITH
-   2.2.24
+   2.2.26
