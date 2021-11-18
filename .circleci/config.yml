@@ -84,7 +84,7 @@ jobs:
               echo "Skipping snapshot deployment: wrong JDK. Expected '$JDK' but was '$CIRCLE_JDK_VERSION'."
             else
               echo "Deploying snapshot..."
-              ./gradlew androidSourcesJar androidJavadocsJar uploadArchives \
+              ./gradlew androidSourcesJar androidJavadocsJar publish closeAndReleaseRepository \
               -Psigning.keyId=$GPG_SIGNING_KEY_ID \
               -Psigning.password=$GPG_SIGNING_KEY_PW \
               -Psigning.secretKeyRingFile=./secring.gpg \
