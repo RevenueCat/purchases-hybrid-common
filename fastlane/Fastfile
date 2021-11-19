@@ -20,7 +20,7 @@ lane :bump_and_update_changelog do |options|
   new_version_number = options[:version]
   sh "fastlane ios bump version:#{new_version_number}"
   sh "fastlane android bump version:#{new_version_number}"
-  attach_changelog_to_master
+  attach_changelog_to_main(options)
 end
 
 platform :ios do
@@ -46,20 +46,21 @@ platform :android do
   end
 end
 
-def attach_changelog_to_master
+def attach_changelog_to_main(options)
+  version_number = options[:version]
   current_changelog = File.open("../CHANGELOG.latest.md", 'r')
   master_changelog = File.open("../CHANGELOG.md", 'r')
 
   current_changelog_data = current_changelog.read
   master_changelog_data = master_changelog.read
 
-  current_changelog.close  
+  current_changelog.close
   master_changelog.close
 
   File.open("../CHANGELOG.md", 'w') { |master_changelog_write_mode|
-    whole_file_data = "#{current_changelog_data}\n#{master_changelog_data}"
+    version_header = "## #{version_number}"
+    whole_file_data = "#{version_header}\n\n#{current_changelog_data}\n#{master_changelog_data}"
     puts "going to save. Contents - #{whole_file_data}"
-    
     master_changelog_write_mode.write(whole_file_data)
   }
 end
