@@ -7,13 +7,13 @@ buildscript {
     ext.junit5 = '5.3.2'
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
-    ext.gradle_maven_publish = '0.11.1'
+    ext.gradle_maven_publish = '0.15.1'
     ext.purchases_version = '4.4.0'
 
     repositories {
         google()
+        mavenCentral()
         jcenter()
-
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$android_tools"
