@@ -1,3 +1,7 @@
+## 1.10.1
+
+- Bump `purchases-android` to `4.5.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.5.0))
+
 ### 1.10.0
 
 - Bump `purchases-ios` to `3.13.0` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.13.0))

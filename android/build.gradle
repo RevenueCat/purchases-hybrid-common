@@ -8,7 +8,7 @@ buildscript {
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
     ext.gradle_maven_publish = '0.15.1'
-    ext.purchases_version = '4.4.0'
+    ext.purchases_version = '4.5.0'
 
     repositories {
         google()
@@ -37,7 +37,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
-        versionName "1.10.0"
+        versionName "1.10.1"
 
         consumerProguardFiles 'consumer-rules.pro'
     }
