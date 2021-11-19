@@ -121,10 +121,6 @@ workflows:
             branches:
               ignore: /.*/
       - deploy-android:
-          requires:
-            - test-android
           filters:
-            tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
             branches:
-              ignore: /.*/
+              only: more-fix-on-publish
