@@ -10,23 +10,20 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+before_all do
+  setup_circle_ci
+  update_fastlane
+end
+
+desc "Increment build number and update changelog"
+lane :bump_and_update_changelog do |options|
+  new_version_number = options[:version]
+  sh "fastlane ios bump version:#{new_version_number}"
+  sh "fastlane android bump version:#{new_version_number}"
+  attach_changelog_to_master
+end
 
 platform :ios do
-  before_all do
-    setup_circle_ci
-    update_fastlane
-  end
-
-  desc "Increment build number and update changelog"
-  lane :bump_and_update_changelog do |options|
-    new_version_number = options[:version]
-    sh "fastlane ios bump version:#{new_version_number}"
-    sh "fastlane android bump version:#{new_version_number}"
-    attach_changelog_to_master
-  end
-
   desc "Increment build number"
   lane :bump do |options|
     new_version_number = options[:version]
