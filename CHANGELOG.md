@@ -1,3 +1,7 @@
+## 1.11.0
+
+Add ownershipType to EntitlementInfo
+	- https://github.com/RevenueCat/purchases-hybrid-common/pull/101
 ## 1.10.1
 
 - Bump `purchases-android` to `4.5.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.5.0))
