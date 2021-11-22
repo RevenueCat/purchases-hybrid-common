@@ -20,5 +20,6 @@ fun EntitlementInfo.map(): Map<String, Any?> =
         "unsubscribeDetectedAt" to this.unsubscribeDetectedAt?.toIso8601(),
         "unsubscribeDetectedAtMillis" to this.unsubscribeDetectedAt?.toMillis(),
         "billingIssueDetectedAt" to this.billingIssueDetectedAt?.toIso8601(),
-        "billingIssueDetectedAtMillis" to this.billingIssueDetectedAt?.toMillis()
+        "billingIssueDetectedAtMillis" to this.billingIssueDetectedAt?.toMillis(),
+        "ownershipType" to "UNKNOWN"
     )

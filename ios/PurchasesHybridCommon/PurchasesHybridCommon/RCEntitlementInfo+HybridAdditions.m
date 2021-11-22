@@ -68,6 +68,18 @@
     jsonDict[@"billingIssueDetectedAtMillis"] = self.billingIssueDetectedAt
                                                 ? @(self.billingIssueDetectedAt.rc_millisecondsSince1970AsDouble)
                                                 : [NSNull null];
+
+    switch (self.ownershipType) {
+        case RCPurchaseOwnershipTypeUnknown:
+            jsonDict[@"ownershipType"] = @"UNKNOWN";
+            break;
+        case RCPurchaseOwnershipTypePurchased:
+            jsonDict[@"ownershipType"] = @"PURCHASED";
+            break;
+        case RCPurchaseOwnershipTypeFamilyShared:
+            jsonDict[@"ownershipType"] = @"FAMILY_SHARED";
+            break;
+    }
     
     return [NSDictionary dictionaryWithDictionary:jsonDict];
 }
