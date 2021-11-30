@@ -1,5 +1,3 @@
-- Get the ownershipType from the purchases-android SDK via the API
-
 ## 1.11.0
 
 Add ownershipType to EntitlementInfo
