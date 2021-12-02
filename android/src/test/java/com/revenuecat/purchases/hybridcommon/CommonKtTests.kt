@@ -33,13 +33,7 @@ internal class CommonKtTests {
     fun setup() {
         mockkObject(Purchases)
         every {
-            Purchases.configure(
-                    context = any(),
-                    apiKey = any(),
-                    appUserID = any(),
-                    observerMode = any(),
-                    service = any()
-            )
+            Purchases.configure(configuration = any())
         } returns mockPurchases
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases

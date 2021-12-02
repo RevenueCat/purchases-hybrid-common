@@ -121,3 +121,23 @@ workflows:
               only: /^(\d+\.)(\d+\.)(\d+)$/
             branches:
               ignore: /.*/
+  
+  android-deploy-amazon:
+    jobs:
+      - test-android:
+          filters:
+            branches:
+              only: amazon
+      - hold:
+          type: approval
+          requires:
+            - test-android
+          filters:
+            branches:
+              only: amazon
+      - deploy-android:
+          requires:
+            - hold
+          filters:
+            branches:
+              only: amazon
