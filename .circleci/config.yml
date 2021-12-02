@@ -127,17 +127,17 @@ workflows:
       - test-android:
           filters:
             branches:
-              only: amazon
+              only: amazon-unity-iap-compatible
       - hold:
           type: approval
           requires:
             - test-android
           filters:
             branches:
-              only: amazon
+              only: amazon-unity-iap-compatible
       - deploy-android:
           requires:
             - hold
           filters:
             branches:
-              only: amazon
+              only: amazon-unity-iap-compatible
