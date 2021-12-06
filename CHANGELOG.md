@@ -5,7 +5,6 @@
 - Bump purchases-android to 4.6.0. [Changelog here](https://github.com/RevenueCat/purchases-android/releases/tag/4.6.0)
 - Bump purchases-ios to 3.13.1. [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.13.1)
 
-
 ## 1.11.0
 
 Add ownershipType to EntitlementInfo
