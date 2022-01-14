@@ -52,7 +52,7 @@ private fun SkuDetails.formatUsingDeviceLocale(number: Long): String {
     }.format(number)
 }
 
-internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
+internal fun SkuDetails.mapIntroPrice(): Map<String, Any?>? {
     // isNullOrBlank() gives issues with older Kotlin stdlib versions
     return if (freeTrialPeriod.isNotBlank()) {
         // Check freeTrialPeriod first to give priority to trials
@@ -65,7 +65,7 @@ internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
                 "period" to freeTrialPeriod,
                 "cycles" to 1
             ) + periodFields
-        } ?: mapNullPeriod()
+        } ?: null
     } else if (introductoryPrice.isNotBlank()) {
         introductoryPricePeriod.mapPeriod()?.let { periodFields ->
             mapOf(
@@ -74,9 +74,9 @@ internal fun SkuDetails.mapIntroPrice(): Map<String, Any?> {
                 "period" to introductoryPricePeriod,
                 "cycles" to introductoryPriceCycles
             ) + periodFields
-        } ?: mapNullPeriod()
+        } ?: null
     } else {
-        mapNullPeriod()
+        null
     }
 }
 
@@ -88,17 +88,6 @@ private fun mapNullDeprecatedPeriod(): Map<String, Nothing?> {
         "intro_price_cycles" to null,
         "intro_price_period_unit" to null,
         "intro_price_period_number_of_units" to null
-    )
-}
-
-private fun mapNullPeriod(): Map<String, Nothing?> {
-    return mapOf(
-        "price" to null,
-        "priceString" to null,
-        "period" to null,
-        "cycles" to null,
-        "periodUnit" to null,
-        "periodNumberOfUnits" to null
     )
 }
 
