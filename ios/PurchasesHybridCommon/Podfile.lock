@@ -1,13 +1,13 @@
 PODS:
   - Nimble (9.2.1)
-  - Purchases (3.13.1):
-    - PurchasesCoreSwift (= 3.13.1)
-  - PurchasesCoreSwift (3.13.1)
+  - Purchases (3.13.2):
+    - PurchasesCoreSwift (= 3.13.2)
+  - PurchasesCoreSwift (3.13.2)
   - Quick (4.0.0)
 
 DEPENDENCIES:
   - Nimble
-  - Purchases (= 3.13.1)
+  - Purchases (= 3.13.2)
   - Quick
 
 SPEC REPOS:
@@ -19,10 +19,10 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  Purchases: 2693d6444609de044ab25fcda9561bef038f24da
-  PurchasesCoreSwift: ca55f9ef671f89abed133775dd9e53f55007828d
+  Purchases: 03200de9288724e77de435000d1828601e6b8e00
+  PurchasesCoreSwift: 2ea4b33e5cece5c8a0751594ef7c6cbfcbd747a9
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
 
-PODFILE CHECKSUM: 7f318bbc5e86c15be78e1fc0d8a01ac849ce3d9f
+PODFILE CHECKSUM: 3263c26ccea00d38380cc4b1c0b99f3234d4f273
 
 COCOAPODS: 1.11.2

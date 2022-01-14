@@ -1,3 +1,10 @@
+## 1.11.2
+
+- Fixes an inconsistency between `null` `introPrice` mapping in iOS and Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/106
+- Bump `purchases-android` to `4.6.1` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.6.1))
+- Bump purchases-ios to 3.13.2. [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.13.2)
+
 ## 1.11.1
 
 - Adds compatibility for `ownershipType` for Android

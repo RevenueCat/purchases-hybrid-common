@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 internal class SkuDetailsMapperTests {
 
-    var received: Map<String, Any?> = emptyMap()
+    var received: Map<String, Any?>? = emptyMap()
     val mockSkuDetails = mockk<SkuDetails>(relaxed = true)
 
     @BeforeEach
@@ -77,15 +77,7 @@ internal class SkuDetailsMapperTests {
             mockLogError()
             every { mockSkuDetails.freeTrialPeriod } returns "365"
             received = mockSkuDetails.mapIntroPrice()
-            val expected = mapOf(
-                "price" to null,
-                "priceString" to null,
-                "period" to null,
-                "cycles" to null,
-                "periodUnit" to null,
-                "periodNumberOfUnits" to null
-            )
-            assertThat(expected).isEqualTo(received)
+            assertThat(received).isEqualTo(null)
         }
     }
 
@@ -150,33 +142,15 @@ internal class SkuDetailsMapperTests {
             mockLogError()
             every { mockSkuDetails.introductoryPricePeriod } returns "365"
             received = mockSkuDetails.mapIntroPrice()
-
-            val expected = mapOf(
-                "price" to null,
-                "priceString" to null,
-                "period" to null,
-                "cycles" to null,
-                "periodUnit" to null,
-                "periodNumberOfUnits" to null
-            )
-            assertThat(expected).isEqualTo(received)
+            assertThat(received).isEqualTo(null)
         }
     }
 
     @Test
-    fun `when mapping a SkuDetails with no free trial nor introductory price, the map has null intro price values`() {
+    fun `when mapping a SkuDetails with no free trial nor introductory price, intro price is null`() {
         every { mockSkuDetails.freeTrialPeriod } returns ""
         every { mockSkuDetails.introductoryPrice } returns ""
         received = mockSkuDetails.mapIntroPrice()
-
-        val expected = mapOf(
-            "price" to null,
-            "priceString" to null,
-            "period" to null,
-            "cycles" to null,
-            "periodUnit" to null,
-            "periodNumberOfUnits" to null
-        )
-        assertThat(expected).isEqualTo(received)
+        assertThat(received).isEqualTo(null)
     }
 }
