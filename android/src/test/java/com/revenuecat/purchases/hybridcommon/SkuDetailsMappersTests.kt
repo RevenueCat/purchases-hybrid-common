@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 internal class SkuDetailsMapperTests {
 
-    var received: Map<String, Any?> = emptyMap()
+    var received: Map<String, Any?>? = emptyMap()
     val mockSkuDetails = mockk<SkuDetails>(relaxed = true)
 
     @BeforeEach
