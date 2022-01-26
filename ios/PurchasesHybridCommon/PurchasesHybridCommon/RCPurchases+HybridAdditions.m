@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
                        observerMode:(BOOL)observerMode
               userDefaultsSuiteName:(nullable NSString *)userDefaultsSuiteName
                      platformFlavor:(nullable NSString *)platformFlavor
-              platformFlavorVersion:(nullable NSString *)platformFlavorVersion {
+              platformFlavorVersion:(nullable NSString *)platformFlavorVersion
+                  dangerousSettings:(nullable RCDangerousSettings *)dangerousSettings {
     NSUserDefaults *userDefaults;
     if (userDefaultsSuiteName) {
         userDefaults = [[NSUserDefaults alloc] initWithSuiteName:userDefaultsSuiteName];
@@ -32,7 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
                         observerMode:observerMode
                         userDefaults:userDefaults
                       platformFlavor:platformFlavor
-               platformFlavorVersion:platformFlavorVersion];
+               platformFlavorVersion:platformFlavorVersion
+                   dangerousSettings:dangerousSettings];
 }
 #pragma clang diagnostic pop
 
