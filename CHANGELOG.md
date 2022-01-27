@@ -1,3 +1,11 @@
+## 2.0.0
+
+### Breaking changes
+- Updated `configureWithAPIKey:` method to accept a DangerousSettings object
+
+### Other
+- Bump purchases-ios to 3.14.0 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.14.0)
+
 ## 1.11.2
 
 - Fixes an inconsistency between `null` `introPrice` mapping in iOS and Android
