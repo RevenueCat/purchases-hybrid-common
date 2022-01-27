@@ -51,5 +51,18 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 }.notTo(raiseException())
             }
         }
+        context("configure with dangerous settings") {
+            it("initializes without raising exceptions if dangerous settings is passed") {
+                expect {
+                    Purchases.configure(withAPIKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: DangerousSettings(autoSyncPurchases: false))
+                }.notTo(raiseException())
+            }
+        }
     }
 }
