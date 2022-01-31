@@ -56,6 +56,9 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommonTests
+      - run:
+          name: Run pod lint tests
+          command: pod lib lint
       - store_test_results:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
