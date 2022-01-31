@@ -34,6 +34,42 @@ platform :ios do
     increment_version_number(version_number: new_version_number, xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj")
     version_bump_podspec(path: "PurchasesHybridCommon.podspec", version_number: new_version_number)
   end
+  
+  desc "Release to CocoaPods, create Carthage archive, and create GitHub release"
+  lane :release do |options|
+    version_number = current_version_number
+    push_pods
+    carthage_archive
+    github_release(version: version_number)
+  end
+
+  desc "Make github release"
+  lane :github_release do |options|
+    release_version = options[:version]
+    fail ArgumentError, "missing version" unless release_version
+
+    begin
+      changelog = File.read("../CHANGELOG.latest.md")
+    rescue
+      fail "please add a CHANGELOG.latest.md file before calling this lane"
+    end
+    commit_hash = last_git_commit[:commit_hash]
+    puts commit_hash
+
+    is_prerelease = release_version.include?("-")
+
+    set_github_release(
+      repository_name: "revenuecat/purchases-hybrid-common",
+      api_token: ENV["GITHUB_TOKEN"],
+      name: release_version,
+      tag_name: "#{release_version}",
+      description: changelog,
+      commitish: commit_hash,
+      upload_assets: ["PurchasesHybridCommon.framework.zip"],
+      is_draft: false,
+      is_prerelease: true
+  )
+  end
 end
 
 platform :android do
@@ -75,4 +111,19 @@ end
 
 def current_version_number
   File.read("../.version")
+end
+
+def push_pods
+  pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+end
+
+def carthage_archive
+  Dir.chdir("..") do
+    # As of Carthage 0.38.0, we still can't archive xcframeworks directly. 
+    # there are also some issues which prevent us from archiving frameworks directly, since
+    # carthage can't deal with architectures for simulators and for Apple Silicon correctly.
+    # We use this script as a workaround until this is fixed. 
+    # https://github.com/Carthage/Carthage/releases/0.38.0
+    sh("./carthage.sh", "build", "--archive", "--platform", "iOS")
+  end
 end

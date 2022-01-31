@@ -34,6 +34,22 @@ Increment build number and update changelog
 
 Increment build number
 
+### ios release
+
+```sh
+[bundle exec] fastlane ios release
+```
+
+Release to CocoaPods, create Carthage archive, and create GitHub release
+
+### ios github_release
+
+```sh
+[bundle exec] fastlane ios github_release
+```
+
+Make github release
+
 ----
 
 

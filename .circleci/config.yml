@@ -3,9 +3,17 @@
 
 version: 2.1
 
+release-tags: &release-tags
+  filters:
+    tags:
+      only: /^(\d+\.)(\d+\.)(\d+)$/
+    branches:
+      ignore: /.*/
+
 orbs:
   android: circleci/android@0.2.1
   revenuecat: revenuecat/sdks-common-config@1.0.0
+  macos: circleci/macos@2.0.1
 
 executors:
   android-executor:
@@ -17,9 +25,21 @@ executors:
       CIRCLE_JDK_VERSION: oraclejdk8
 
   ios-executor:
+    resource_class: macos.x86.medium.gen2
     working_directory: ~/ios
     macos:
-      xcode: 12.5.1
+      xcode: 13.2.1
+
+commands:
+  trust-github-key:
+    steps:
+      - run:
+          name: Trust GitHub key
+          command: |
+              for ip in $(dig @8.8.8.8 github.com +short); \
+              do ssh-keyscan github.com,$ip; \
+              ssh-keyscan $ip; \
+              done 2>/dev/null >> ~/.ssh/known_hosts
 
 jobs:
   test-ios:
@@ -43,6 +63,16 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
           destination: scan-output
+  
+  deploy-ios:
+    executor: ios-executor
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - trust-github-key
+      - run:
+          name: Deploy new version
+          command: bundle exec fastlane ios release
 
   test-android:
     executor: android-executor
@@ -107,24 +137,13 @@ workflows:
   ios:
     jobs:
       - test-ios
+      - deploy-ios: *release-tags
+          requires:
+            - test-ios
 
   android:
     jobs:
       - test-android
-  
-  android-deploy-on-tag:
-    jobs:
-      - test-android:
-          filters:
-            tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
-            branches:
-              ignore: /.*/
-      - deploy-android:
+      - deploy-android: *release-tags
           requires:
             - test-android
-          filters:
-            tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
-            branches:
-              ignore: /.*/
