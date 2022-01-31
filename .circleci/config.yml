@@ -141,12 +141,8 @@ workflows:
     jobs:
       - test-ios
       - deploy-ios: *release-tags
-          requires:
-            - test-ios
 
   android:
     jobs:
       - test-android
       - deploy-android: *release-tags
-          requires:
-            - test-android
