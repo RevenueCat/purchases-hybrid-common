@@ -18,9 +18,11 @@ end
 desc "Increment build number and update changelog"
 lane :bump_and_update_changelog do |options|
   new_version_number = options[:version]
+  previous_version_number = current_version_number
   sh "fastlane ios bump version:#{new_version_number}"
   sh "fastlane android bump version:#{new_version_number}"
   attach_changelog_to_main(options)
+  increment_version_in(previous_version_number, new_version_number, "../.version")
 end
 
 platform :ios do
@@ -69,4 +71,8 @@ def increment_version_in(previous_version, new_version, path)
   sed_regex = 's|' + previous_version + '|' + new_version + '|'
   backup_extension = '.bck'
   sh("sed", '-i', backup_extension, sed_regex, path)
+end
+
+def current_version_number
+  File.read("../.version")
 end
