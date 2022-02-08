@@ -1,3 +1,10 @@
+## 2.0.1
+
+- Fixed an issue where checkTrialOrIntroductoryPriceEligibility might refresh the receipt if it's not present on device,
+causing a log in prompt for App Store credentials.
+- Bumped `purchases-ios` to `3.14.1`
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/106
+
 ## 2.0.0
 
 ### Breaking changes
