@@ -79,7 +79,6 @@ jobs:
             - v1-gem-cache-{{ checksum "Gemfile.lock" }}
       - run: 
           name: Bundle install
-          working_directory: << parameters.directory >>
           command: |
               bundle config set --local clean 'true'
               bundle config set --local path 'vendor/bundle'
