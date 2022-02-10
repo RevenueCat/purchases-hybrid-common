@@ -10,6 +10,7 @@ import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
 import com.revenuecat.purchases.BillingFeature
+import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
@@ -287,7 +288,8 @@ fun configure(
     appUserID: String?,
     observerMode: Boolean?,
     platformInfo: PlatformInfo,
-    store: Store = Store.PLAY_STORE
+    store: Store = Store.PLAY_STORE,
+    dangerousSettings: DangerousSettings? = null
 ) {
     Purchases.platformInfo = platformInfo
     val builder =
@@ -296,6 +298,9 @@ fun configure(
             .store(store)
     if (observerMode != null) {
         builder.observerMode(observerMode)
+    }
+    if (dangerousSettings != null) {
+        builder.dangerousSettings(dangerousSettings)
     }
 
     Purchases.configure(builder.build())
