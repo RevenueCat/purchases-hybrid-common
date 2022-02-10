@@ -110,7 +110,7 @@ workflows:
       - test-android:
           filters:
             tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
+              only: /^(\d+\.)(\d+\.)(\d+)(-.*)$/
             branches:
               ignore: /.*/
       - deploy-android:
@@ -118,6 +118,6 @@ workflows:
             - test-android
           filters:
             tags:
-              only: /^(\d+\.)(\d+\.)(\d+)$/
+              only: /^(\d+\.)(\d+\.)(\d+)(-.*)$/
             branches:
               ignore: /.*/
