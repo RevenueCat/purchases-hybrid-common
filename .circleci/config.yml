@@ -121,23 +121,3 @@ workflows:
               only: /^(\d+\.)(\d+\.)(\d+)$/
             branches:
               ignore: /.*/
-  
-  android-deploy-amazon:
-    jobs:
-      - test-android:
-          filters:
-            branches:
-              only: amazon-unity-iap-compatible
-      - hold:
-          type: approval
-          requires:
-            - test-android
-          filters:
-            branches:
-              only: amazon-unity-iap-compatible
-      - deploy-android:
-          requires:
-            - hold
-          filters:
-            branches:
-              only: amazon-unity-iap-compatible
