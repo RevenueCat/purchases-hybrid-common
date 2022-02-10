@@ -3,6 +3,7 @@
 - Adds DangerousSettings option
 - Adds `syncObserverAmazonPurchase`
 - Disables connecting to Amazon PurchasingService in observer mode
+- Bumps purchases-android to 5.0.0-amazon.alpha.5.billing3.iap2
 
 ### 1.7.1
 
