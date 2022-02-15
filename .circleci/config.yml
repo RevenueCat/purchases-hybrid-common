@@ -11,19 +11,11 @@ release-tags: &release-tags
       ignore: /.*/
 
 orbs:
-  android: circleci/android@0.2.1
+  android: circleci/android@1.0.3
   revenuecat: revenuecat/sdks-common-config@1.0.0
   macos: circleci/macos@2.0.1
 
 executors:
-  android-executor:
-    docker:
-      - image: circleci/android:api-28-alpha
-    working_directory: ~/android
-    environment:
-      JVM_OPTS: -Xmx3200m
-      CIRCLE_JDK_VERSION: oraclejdk8
-
   ios-executor:
     resource_class: macos.x86.medium.gen2
     working_directory: ~/ios
@@ -92,7 +84,9 @@ jobs:
           command: bundle exec fastlane ios release
 
   test-android:
-    executor: android-executor
+    executor:
+      name: android/android-machine
+      resource-class: large
     working_directory: ~/purchases-hybrid-common/android
     steps:
       - checkout:
@@ -108,7 +102,9 @@ jobs:
           path: build/test-results
 
   deploy-android:
-    executor: android-executor
+    executor:
+      name: android/android-machine
+      resource-class: large
     steps:
       - checkout
       - android/accept-licenses
