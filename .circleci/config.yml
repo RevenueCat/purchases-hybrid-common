@@ -40,6 +40,19 @@ commands:
               do ssh-keyscan github.com,$ip; \
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
+  install-sdkman:
+    description: Install SDKMAN
+    steps:
+      - run:
+          name: Installing SDKMAN
+          command: |
+            curl -s "https://get.sdkman.io?rcupdate=false" | bash
+            echo -e '\nsource "/home/circleci/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Setup Java environment
+          command: |
+            sdk env install
 
 jobs:
   test-ios:
@@ -97,6 +110,7 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
+      - install-sdkman
       - revenuecat/prepare-android
       - run:
           name: Run Tests
