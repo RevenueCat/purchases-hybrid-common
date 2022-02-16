@@ -9,13 +9,15 @@
 #import "RCTransaction+HybridAdditions.h"
 #import "NSDate+HybridAdditions.h"
 
-@implementation RCTransaction (RCPurchases)
+@implementation RCStoreTransaction (RCPurchases)
 
 - (NSDictionary *)dictionary
 {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
-        @"revenueCatId": self.revenueCatId,
-        @"productId": self.productId,
+        // JOSH: is transactionIdentifier acutaly revenueCatId?????
+        // JOSH: do we need to change these keys?
+        @"revenueCatId": self.transactionIdentifier,
+        @"productId": self.productIdentifier,
         @"purchaseDateMillis": @(self.purchaseDate.rc_millisecondsSince1970AsDouble),
         @"purchaseDate": self.purchaseDate.rc_formattedAsISO8601
     }];

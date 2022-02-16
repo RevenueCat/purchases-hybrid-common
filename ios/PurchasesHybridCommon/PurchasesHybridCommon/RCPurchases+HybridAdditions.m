@@ -4,7 +4,7 @@
 //
 
 #import "RCPurchases+HybridAdditions.h"
-#import <Purchases/Purchases.h>
+@import RevenueCat;
 
 
 NS_ASSUME_NONNULL_BEGIN

@@ -3,7 +3,7 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 
-#import <Purchases/Purchases.h>
+@import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,15 +40,15 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion 
-__attribute((deprecated("Use logIn instead.")));
+//+ (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion 
+//__attribute((deprecated("Use logIn instead.")));
 
-+ (void)identify:(NSString *)appUserId
- completionBlock:(RCHybridResponseBlock)completion
-__attribute((deprecated("Use logIn instead.")));
+//+ (void)identify:(NSString *)appUserId
+// completionBlock:(RCHybridResponseBlock)completion
+//__attribute((deprecated("Use logIn instead.")));
 
-+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
-__attribute((deprecated("Use logOut instead.")));
+//+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
+//__attribute((deprecated("Use logOut instead.")));
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
@@ -69,13 +69,13 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         completionBlock:(RCHybridResponseBlock)completion;
 
-+ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
-             completionBlock:(RCHybridResponseBlock)completion;
+//+ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
+//             completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)setFinishTransactions:(BOOL)finishTransactions;
 
-+ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
-                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion;
+//+ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
+//                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
                                    discount:(nullable NSString *)discountIdentifier
@@ -83,7 +83,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos);
 
-+ (void)invalidatePurchaserInfoCache;
++ (void)invalidateCustomerInfoCache;
 
 + (void)setAttributes:(NSDictionary<NSString *, NSString *> *)attributes;
 

@@ -6,10 +6,9 @@
 //  Copyright © 2020 RevenueCat. All rights reserved.
 //
 
-@import Purchases;
-@import PurchasesCoreSwift;
+@import RevenueCat;
 
-@interface RCTransaction (HybridAdditions)
+@interface RCStoreTransaction (HybridAdditions)
 
 - (NSDictionary *)dictionary;
 

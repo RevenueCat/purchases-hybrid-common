@@ -4,10 +4,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Purchases/Purchases.h>
+@import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
 
+// JOSH: This is here because RCDangerousSettings is not in v4
+@interface RCDangerousSettings: NSObject
+@end
 
 @interface RCPurchases (HybridAdditions)
 

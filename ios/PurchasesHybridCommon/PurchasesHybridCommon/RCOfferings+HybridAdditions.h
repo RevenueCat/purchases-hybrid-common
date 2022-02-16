@@ -3,7 +3,7 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 
-#import <Purchases/Purchases.h>
+@import RevenueCat;
 
 @interface RCOfferings (HybridAdditions)
 

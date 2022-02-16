@@ -3,7 +3,7 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 
-#import <Purchases/Purchases.h>
+@import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
 

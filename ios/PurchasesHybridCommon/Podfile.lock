@@ -1,28 +1,33 @@
 PODS:
   - Nimble (9.2.1)
-  - Purchases (3.14.1):
-    - PurchasesCoreSwift (= 3.14.1)
-  - PurchasesCoreSwift (3.14.1)
   - Quick (4.0.0)
+  - RevenueCat (4.0.0-rc.3)
 
 DEPENDENCIES:
   - Nimble
-  - Purchases (= 3.14.1)
   - Quick
+  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, tag `4.0.0-rc.3`)
 
 SPEC REPOS:
   trunk:
     - Nimble
-    - Purchases
-    - PurchasesCoreSwift
     - Quick
+
+EXTERNAL SOURCES:
+  RevenueCat:
+    :git: https://github.com/RevenueCat/purchases-ios.git
+    :tag: 4.0.0-rc.3
+
+CHECKOUT OPTIONS:
+  RevenueCat:
+    :git: https://github.com/RevenueCat/purchases-ios.git
+    :tag: 4.0.0-rc.3
 
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  Purchases: b714751c386c2204d2d5aafaa903fd424a25cd59
-  PurchasesCoreSwift: 2cf98c52dd4b785177539fbfd1c32f60c89eafe7
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
+  RevenueCat: 229a82289dd8e1e9f707b5cc4835f0b0f0656e71
 
-PODFILE CHECKSUM: 2b7e247b67bd0d3db476341b10491d3d024d0880
+PODFILE CHECKSUM: 2d5562c395ec95907701f7e2bdb6a7c27474c6d8
 
 COCOAPODS: 1.11.2

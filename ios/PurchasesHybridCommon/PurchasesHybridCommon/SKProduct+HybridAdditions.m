@@ -6,13 +6,17 @@
 #import "SKProduct+HybridAdditions.h"
 #import "SKProductDiscount+HybridAdditions.h"
 
-@implementation SKProduct (RCPurchases)
+@import RevenueCat;
+
+@implementation RCStoreProduct (RCPurchases)
 
 - (nullable NSString *)rc_currencyCode {
     if(@available(iOS 10.0, tvOS 10.0, macOS 10.12, *)) {
-        return self.priceLocale.currencyCode;
+        // JOSH: this feels bad to use sk1 product
+        return self.sk1Product.priceLocale.currencyCode;
     } else {
-        return [self.priceLocale objectForKey:NSLocaleCurrencyCode];
+        // JOSH: this feels bad to use sk1 product
+        return [self.sk1Product.priceLocale objectForKey:NSLocaleCurrencyCode];
     }
 }
 
@@ -20,13 +24,15 @@
 {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-    formatter.locale = self.priceLocale;
+    // JOSH: this feels bad to use sk1 product
+    formatter.locale = self.sk1Product.priceLocale;
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:@{
                         @"identifier": self.productIdentifier ?: @"",
                         @"description": self.localizedDescription ?: @"",
                         @"title": self.localizedTitle ?: @"",
-                        @"price": @(self.price.floatValue),
-                        @"price_string": [formatter stringFromNumber:self.price],
+                        // JOSH: sk1 used for now because Decimal is not getting bridged over from swift properly
+                        @"price": @([self.sk1Product.price floatValue]),
+                        @"price_string": self.localizedPriceString,
                         @"currency_code": (self.rc_currencyCode) ? self.rc_currencyCode : [NSNull null]
                         }];
     
@@ -39,16 +45,18 @@
     d[@"introPrice"] = [NSNull null];
     
     if (@available(iOS 11.2, tvOS 11.2, macos 10.13.2, *)) {
-        if (self.introductoryPrice) {
-            d[@"intro_price"] = @(self.introductoryPrice.price.floatValue);
-            d[@"intro_price_string"] = [formatter stringFromNumber:self.introductoryPrice.price];
+        // JOSH: this needs work but has issues because of Decimal being used in swift
+        if (self.introductoryDiscount) {
+            d[@"intro_price"] = @(self.sk1Product.introductoryPrice.price.floatValue);
+            d[@"intro_price_string"] = self.localizedIntroductoryPriceString;
             d[@"intro_price_period"] =
-                [SKProduct rc_normalizedSubscriptionPeriod:self.introductoryPrice.subscriptionPeriod];
+                [RCStoreProduct rc_normalizedSubscriptionPeriod:self.introductoryDiscount.subscriptionPeriod];
             d[@"intro_price_period_unit"] =
-                [SKProduct rc_normalizedSubscriptionPeriodUnit:self.introductoryPrice.subscriptionPeriod.unit];
-            d[@"intro_price_period_number_of_units"] = @(self.introductoryPrice.subscriptionPeriod.numberOfUnits);
-            d[@"intro_price_cycles"] = @(self.introductoryPrice.numberOfPeriods);
-            d[@"introPrice"] = self.introductoryPrice.rc_dictionary;
+                [RCStoreProduct rc_normalizedSubscriptionPeriod:self.introductoryDiscount.subscriptionPeriod];
+            d[@"intro_price_period_number_of_units"] = @(self.introductoryDiscount.subscriptionPeriod.unit);
+            // JOSH: RCStoreProductDiscount missing numberOfPeriods and has higher sk1Discunt requires iOS 12.2???
+            d[@"intro_price_cycles"] = @(self.introductoryDiscount.sk1Discount.numberOfPeriods);
+            d[@"introPrice"] = self.introductoryDiscount.rc_dictionary;
         }
     }
     
@@ -56,7 +64,7 @@
     
     if (@available(iOS 12.2, tvOS 12.2, macos 10.14.4, *)) {
         d[@"discounts"] = [NSMutableArray new];
-        for (SKProductDiscount* discount in self.discounts) {
+        for (RCStoreProductDiscount* discount in self.discounts) {
             [d[@"discounts"] addObject:discount.rc_dictionary];
         }
     }
@@ -64,34 +72,34 @@
     return d;
 }
 
-+ (NSString *)rc_normalizedSubscriptionPeriod:(SKProductSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
++ (NSString *)rc_normalizedSubscriptionPeriod:(RCSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
     NSString *unit;
     switch (subscriptionPeriod.unit) {
-        case SKProductPeriodUnitDay:
+        case RCSubscriptionPeriodUnitDay:
             unit = @"D";
             break;
-        case SKProductPeriodUnitWeek:
+        case RCSubscriptionPeriodUnitWeek:
             unit = @"W";
             break;
-        case SKProductPeriodUnitMonth:
+        case RCSubscriptionPeriodUnitMonth:
             unit = @"M";
             break;
-        case SKProductPeriodUnitYear:
+        case RCSubscriptionPeriodUnitYear:
             unit = @"Y";
             break;
     }
-    return [NSString stringWithFormat:@"%@%@%@", @"P", @(subscriptionPeriod.numberOfUnits), unit];
+    return [NSString stringWithFormat:@"%@%@%@", @"P", @(subscriptionPeriod.value), unit];
 }
 
-+ (NSString *)rc_normalizedSubscriptionPeriodUnit:(SKProductPeriodUnit)subscriptionPeriodUnit API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
-    switch (subscriptionPeriodUnit) {
-        case SKProductPeriodUnitDay:
++ (NSString *)rc_normalizedSubscriptionPeriodUnit:(RCSubscriptionPeriod *)subscriptionPeriod API_AVAILABLE(ios(11.2), macos(10.13.2), tvos(11.2)) {
+    switch (subscriptionPeriod.unit) {
+        case RCSubscriptionPeriodUnitDay:
             return @"DAY";
-        case SKProductPeriodUnitWeek:
+        case RCSubscriptionPeriodUnitWeek:
             return @"WEEK";
-        case SKProductPeriodUnitMonth:
+        case RCSubscriptionPeriodUnitMonth:
             return @"MONTH";
-        case SKProductPeriodUnitYear:
+        case RCSubscriptionPeriodUnitYear:
             return @"YEAR";
     }
 }

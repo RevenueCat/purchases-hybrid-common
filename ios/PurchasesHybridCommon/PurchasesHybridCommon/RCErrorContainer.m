@@ -27,10 +27,11 @@
         dict[@"underlyingErrorMessage"] = @"";
     }
 
-    if (error.userInfo[RCReadableErrorCodeKey]) {
-        NSString *readableErrorCode = error.userInfo[RCReadableErrorCodeKey];
+    // JOSH: does RCReadableErrorCodeKey become RCPurchasesErrorCodeDomain
+    if (error.userInfo[RCPurchasesErrorCodeDomain]) {
+        NSString *readableErrorCode = error.userInfo[RCPurchasesErrorCodeDomain];
         dict[@"readableErrorCode"] = readableErrorCode;
-        dict[RCReadableErrorCodeKey] = readableErrorCode;
+        dict[RCPurchasesErrorCodeDomain] = readableErrorCode;
         
         // Reason behind this is because React Native doens't let reject the promises passing more information
         // besides passing the original error, but it passes the extra userInfo from that error to the JS layer.

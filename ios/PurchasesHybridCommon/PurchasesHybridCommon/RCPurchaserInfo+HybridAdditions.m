@@ -8,7 +8,7 @@
 #import "NSDate+HybridAdditions.h"
 #import "RCTransaction+HybridAdditions.h"
 
-@implementation RCPurchaserInfo (HybridAdditions)
+@implementation RCCustomerInfo (HybridAdditions)
 
 - (NSDictionary *)dictionary {
     NSArray *productIdentifiers = self.allPurchasedProductIdentifiers.allObjects;
@@ -32,7 +32,7 @@
     NSObject *managementURLorNull = self.managementURL.absoluteString ?: NSNull.null;
     
     NSMutableArray *nonSubscriptionTransactionsArray = [NSMutableArray new];
-    for (RCTransaction *transaction in self.nonSubscriptionTransactions) {
+    for (RCStoreTransaction *transaction in self.nonSubscriptionTransactions) {
         [nonSubscriptionTransactionsArray addObject:transaction.dictionary];
     }
 
