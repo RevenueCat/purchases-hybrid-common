@@ -11,6 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
 
+typedef void (^RCPurchaseCompletedBlock)(RCStoreTransaction * _Nullable, RCCustomerInfo * _Nullable, NSError * _Nullable, BOOL);
+typedef void (^RCDeferredPromotionalPurchaseBlock)(RCPurchaseCompletedBlock);
+typedef void (^RCReceiveIntroEligibilityBlock)(NSDictionary<NSString *, RCIntroEligibility *> * _Nonnull);
 
 @interface RCCommonFunctionality : NSObject
 
@@ -40,16 +43,6 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion;
 
-//+ (void)createAlias:(nullable NSString *)newAppUserId completionBlock:(RCHybridResponseBlock)completion 
-//__attribute((deprecated("Use logIn instead.")));
-
-//+ (void)identify:(NSString *)appUserId
-// completionBlock:(RCHybridResponseBlock)completion
-//__attribute((deprecated("Use logIn instead.")));
-
-//+ (void)resetWithCompletionBlock:(RCHybridResponseBlock)completion
-//__attribute((deprecated("Use logOut instead.")));
-
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
 + (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion;
@@ -69,13 +62,13 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         completionBlock:(RCHybridResponseBlock)completion;
 
-//+ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
-//             completionBlock:(RCHybridResponseBlock)completion;
++ (void)makeDeferredPurchase:(RCDeferredPromotionalPurchaseBlock)deferredPurchase
+             completionBlock:(RCHybridResponseBlock)completion;
 
 + (void)setFinishTransactions:(BOOL)finishTransactions;
 
-//+ (void)checkTrialOrIntroductoryPriceEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
-//                                 completionBlock:(RCReceiveIntroEligibilityBlock)completion;
++ (void)checkTrialOrIntroDiscountEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
+                             completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
 + (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
                                    discount:(nullable NSString *)discountIdentifier

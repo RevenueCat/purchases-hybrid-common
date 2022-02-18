@@ -28,12 +28,15 @@ NS_ASSUME_NONNULL_BEGIN
         NSAssert(userDefaults,
                  @"Could not create an instance of NSUserDefaults with suite name %@", userDefaultsSuiteName);
     }
+    
+    RCPlatformInfo *platformInfo = [[RCPlatformInfo alloc] initWithFlavor:platformFlavor version:platformFlavorVersion];
+    [RCPurchases setPlatformInfo:platformInfo];
+    
     return [self configureWithAPIKey:APIKey
                            appUserID:appUserID
                         observerMode:observerMode
                         userDefaults:userDefaults
-                      platformFlavor:platformFlavor
-               platformFlavorVersion:platformFlavorVersion
+             useStoreKit2IfAvailable:NO
                    dangerousSettings:dangerousSettings];
 }
 #pragma clang diagnostic pop
