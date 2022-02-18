@@ -12,40 +12,9 @@ fun StoreProduct.map(): Map<String, Any?> =
         "currency_code" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
         "discounts" to null
-    ) + mapIntroPriceDeprecated()
+    )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
-
-internal fun StoreProduct.mapIntroPriceDeprecated(): Map<String, Any?> {
-    return when {
-        freeTrialPeriod != null -> {
-            // Check freeTrialPeriod first to give priority to trials
-            // Format using device locale. iOS will format using App Store locale, but there's no way
-            // to figure out how the price in the StoreProduct is being formatted.
-            freeTrialPeriod!!.mapPeriodDeprecated()?.let { periodFields ->
-                mapOf(
-                    "intro_price" to 0,
-                    "intro_price_string" to formatUsingDeviceLocale(priceCurrencyCode, 0),
-                    "intro_price_period" to freeTrialPeriod,
-                    "intro_price_cycles" to 1
-                ) + periodFields
-            } ?: mapNullDeprecatedPeriod()
-        }
-        introductoryPrice != null -> {
-            introductoryPricePeriod!!.mapPeriodDeprecated()?.let { periodFields ->
-                mapOf(
-                    "intro_price" to introductoryPriceAmountMicros / 1000000.0,
-                    "intro_price_string" to introductoryPrice,
-                    "intro_price_period" to introductoryPricePeriod,
-                    "intro_price_cycles" to introductoryPriceCycles
-                ) + periodFields
-            } ?: mapNullDeprecatedPeriod()
-        }
-        else -> {
-            mapNullDeprecatedPeriod()
-        }
-    }
-}
 
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
     return when {
@@ -78,17 +47,6 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
     }
 }
 
-private fun mapNullDeprecatedPeriod(): Map<String, Nothing?> {
-    return mapOf(
-        "intro_price" to null,
-        "intro_price_string" to null,
-        "intro_price_period" to null,
-        "intro_price_cycles" to null,
-        "intro_price_period_unit" to null,
-        "intro_price_period_number_of_units" to null
-    )
-}
-
 private fun mapNullPeriod(): Map<String, Nothing?> {
     return mapOf(
         "price" to null,
@@ -98,31 +56,6 @@ private fun mapNullPeriod(): Map<String, Nothing?> {
         "periodUnit" to null,
         "periodNumberOfUnits" to null
     )
-}
-
-private fun String.mapPeriodDeprecated(): Map<String, Any?>? {
-    return this.takeUnless { this.isBlank() }
-        ?.let { PurchasesPeriod.parse(it) }
-        ?.let { period ->
-            when {
-                period.years > 0 -> mapOf(
-                    "intro_price_period_unit" to "YEAR",
-                    "intro_price_period_number_of_units" to period.years
-                )
-                period.months > 0 -> mapOf(
-                    "intro_price_period_unit" to "MONTH",
-                    "intro_price_period_number_of_units" to period.months
-                )
-                period.days > 0 -> mapOf(
-                    "intro_price_period_unit" to "DAY",
-                    "intro_price_period_number_of_units" to period.days
-                )
-                else -> mapOf(
-                    "intro_price_period_unit" to "DAY",
-                    "intro_price_period_number_of_units" to 0
-                )
-            }
-        }
 }
 
 private fun String.mapPeriod(): Map<String, Any?>? {
