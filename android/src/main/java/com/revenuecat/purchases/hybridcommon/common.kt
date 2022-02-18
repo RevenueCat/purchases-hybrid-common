@@ -2,7 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
-import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
@@ -13,7 +13,7 @@ import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
-import com.revenuecat.purchases.getPurchaserInfoWith
+import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getSubscriptionSkusWith
 import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
@@ -21,6 +21,8 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.models.StoreTransaction
 
 import java.net.URL
 
@@ -48,7 +50,7 @@ fun getProductInfo(
     onResult: OnResultList
 ) {
     val onError: (PurchasesError) -> Unit = { onResult.onError(it.map()) }
-    val onReceived: (List<ProductDetails>) -> Unit = { onResult.onReceived(it.map()) }
+    val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
 
     if (type.equals("subs", ignoreCase = true)) {
         Purchases.sharedInstance.getSubscriptionSkusWith(productIDs, onError, onReceived)
@@ -66,7 +68,7 @@ fun purchaseProduct(
     onResult: OnResult
 ) {
     if (activity != null) {
-        val onReceiveSkus: (List<ProductDetails>) -> Unit = { skus ->
+        val onReceiveSkus: (List<StoreProduct>) -> Unit = { skus ->
             val productToBuy = skus.firstOrNull {
                 it.sku == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
@@ -190,9 +192,9 @@ fun logIn(
 ) {
     Purchases.sharedInstance.logInWith(appUserID,
         onError = { onResult.onError(it.map()) },
-        onSuccess = { purchaserInfo, created ->
+        onSuccess = { customerInfo, created ->
             val resultMap: Map<String, Any?> = mapOf(
-                "purchaserInfo" to purchaserInfo.map(),
+                "customerInfo" to customerInfo.map(),
                 "created" to created
             )
             onResult.onReceived(resultMap)
@@ -219,10 +221,10 @@ fun getProxyURLString(): String? {
     return Purchases.proxyURL.toString()
 }
 
-fun getPurchaserInfo(
+fun getCustomerInfo(
     onResult: OnResult
 ) {
-    Purchases.sharedInstance.getPurchaserInfoWith(onError = { onResult.onError(it.map()) }) {
+    Purchases.sharedInstance.getCustomerInfoWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
 }
@@ -251,8 +253,8 @@ fun checkTrialOrIntroductoryPriceEligibility(
     }.toMap()
 }
 
-fun invalidatePurchaserInfoCache() {
-    Purchases.sharedInstance.invalidatePurchaserInfoCache()
+fun invalidateCustomerInfoCache() {
+    Purchases.sharedInstance.invalidateCustomerInfoCache()
 }
 
 fun canMakePayments(context: Context,
@@ -304,24 +306,24 @@ private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boole
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
 
-private fun getPurchaseCompletedFunction(onResult: OnResult): (PurchaseDetails, PurchaserInfo) -> Unit {
-    return { purchase, purchaserInfo ->
+private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction, CustomerInfo) -> Unit {
+    return { purchase, customerInfo ->
         onResult.onReceived(
             mapOf(
                 "productIdentifier" to purchase.skus[0],
-                "purchaserInfo" to purchaserInfo.map()
+                "customerInfo" to customerInfo.map()
             )
         )
     }
 }
 
-private fun getProductChangeCompletedFunction(onResult: OnResult): (PurchaseDetails?, PurchaserInfo) -> Unit {
-    return { purchase, purchaserInfo ->
+private fun getProductChangeCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
+    return { purchase, customerInfo ->
         onResult.onReceived(
             mapOf(
                 // Get first productIdentifier until we have full support of multi-line subscriptions
                 "productIdentifier" to purchase?.skus?.get(0),
-                "purchaserInfo" to purchaserInfo.map()
+                "customerInfo" to customerInfo.map()
             )
         )
     }

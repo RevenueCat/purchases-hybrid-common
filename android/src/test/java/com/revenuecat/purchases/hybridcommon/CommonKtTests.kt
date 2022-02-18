@@ -11,21 +11,21 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
-import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.google.toProductDetails
+import com.revenuecat.purchases.google.toStoreProduct
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
-import com.revenuecat.purchases.interfaces.GetProductDetailsCallback
+import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
-import com.revenuecat.purchases.interfaces.ReceiveOfferingsListener
-import com.revenuecat.purchases.interfaces.ReceivePurchaserInfoListener
-import com.revenuecat.purchases.models.ProductDetails
-import com.revenuecat.purchases.models.PurchaseDetails
+import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.models.StoreTransaction
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -101,7 +101,7 @@ internal class CommonKtTests {
 
         val receivedCanMakePayments = Random.nextBoolean()
 
-        var capturedCallback = slot<Callback<Boolean>>()
+        val capturedCallback = slot<Callback<Boolean>>()
         every {
             Purchases.canMakePayments(mockContext, listOf(), capture(capturedCallback))
         } answers {
@@ -239,7 +239,7 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        val mockInfo = mockk<PurchaserInfo>(relaxed = true)
+        val mockInfo = mockk<CustomerInfo>(relaxed = true)
         val mockCreated = Random.nextBoolean()
 
         val logInCallback = slot<LogInCallback>()
@@ -260,7 +260,7 @@ internal class CommonKtTests {
         verify(exactly = 1) {
             onResult.onReceived(mapOf(
                 "created" to mockCreated,
-                "purchaserInfo" to mockInfoMap
+                "customerInfo" to mockInfoMap
             ))
         }
     }
@@ -310,14 +310,14 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        every { mockPurchases.logOut(any()) } just runs
+        every { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) } just runs
 
         logOut(onResult = object : OnResult {
             override fun onReceived(map: Map<String?, *>?) {}
             override fun onError(errorContainer: ErrorContainer) {}
         })
 
-        verify(exactly = 1) { mockPurchases.logOut(any()) }
+        verify(exactly = 1) { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) }
     }
 
     @Test
@@ -330,17 +330,17 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version")
         )
 
-        val mockInfo = mockk<PurchaserInfo>(relaxed = true)
-        val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
+        val mockInfo = mockk<CustomerInfo>(relaxed = true)
+        val receiveCustomerInfoListener = slot<ReceiveCustomerInfoCallback>()
 
-        every { mockPurchases.logOut(capture(receivePurchaserInfoListener)) } just runs
+        every { mockPurchases.logOut(capture(receiveCustomerInfoListener)) } just runs
         val onResult = mockk<OnResult>()
         every { onResult.onReceived(any()) } just runs
         every { onResult.onError(any()) } just runs
 
         logOut(onResult)
 
-        receivePurchaserInfoListener.captured.onReceived(mockInfo)
+        receiveCustomerInfoListener.captured.onReceived(mockInfo)
 
         val mockInfoMap = mockInfo.map()
         verify(exactly = 1) { onResult.onReceived(mockInfoMap) }
@@ -357,16 +357,16 @@ internal class CommonKtTests {
         )
 
         val mockError = mockk<PurchasesError>(relaxed = true)
-        val receivePurchaserInfoListener = slot<ReceivePurchaserInfoListener>()
+        val receiveCustomerInfoListener = slot<ReceiveCustomerInfoCallback>()
 
-        every { mockPurchases.logOut(capture(receivePurchaserInfoListener)) } just runs
+        every { mockPurchases.logOut(capture(receiveCustomerInfoListener)) } just runs
         val onResult = mockk<OnResult>()
         every { onResult.onReceived(any()) } just runs
         every { onResult.onError(any()) } just runs
 
         logOut(onResult)
 
-        receivePurchaserInfoListener.captured.onError(mockError)
+        receiveCustomerInfoListener.captured.onError(mockError)
 
         val mockErrorMap = mockError.map()
         verify(exactly = 1) { onResult.onError(mockErrorMap) }
@@ -391,22 +391,22 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedGetProductDetailsCallback = slot<GetProductDetailsCallback>()
-        val mockProductDetails = mockSubscriptionProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<PurchaseDetails>()
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
         every {
             mockPurchase.skus
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getSubscriptionSkus(listOf(expectedProductIdentifier), capture(capturedGetProductDetailsCallback))
+            mockPurchases.getSubscriptionSkus(listOf(expectedProductIdentifier), capture(capturedGetStoreProductsCallback))
         } answers {
-            capturedGetProductDetailsCallback.captured.onReceived(listOf(mockProductDetails))
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
         every {
-            mockPurchases.purchaseProduct(mockActivity, mockProductDetails, capture(capturedPurchaseCallback))
+            mockPurchases.purchaseProduct(mockActivity, mockStoreProduct, capture(capturedPurchaseCallback))
         } answers {
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -444,19 +444,19 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsListener = slot<ReceiveOfferingsListener>()
-        val mockProductDetails = mockSubscriptionProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<PurchaseDetails>()
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
         every {
             mockPurchase.skus
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
-        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockProductDetails)
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsListener))
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsListener.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -488,12 +488,12 @@ internal class CommonKtTests {
         assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
     }
 
-    private fun getOfferings(mockProductDetails: ProductDetails): Triple<String, Package, Offerings> {
+    private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
         val offeringIdentifier = "offering"
         val packageToPurchase = Package(
             identifier = "packageIdentifier",
             packageType = PackageType.ANNUAL,
-            product = mockProductDetails,
+            product = mockStoreProduct,
             offering = offeringIdentifier
         )
         val offering = Offering(
@@ -505,12 +505,12 @@ internal class CommonKtTests {
         return Triple(offeringIdentifier, packageToPurchase, offerings)
     }
 
-    private fun mockSubscriptionProduct(expectedProductIdentifier: String): ProductDetails {
+    private fun mockSubscriptionProduct(expectedProductIdentifier: String): StoreProduct {
         val mockSkuDetails = mockSkuDetails(
             productId = expectedProductIdentifier,
             type = BillingClient.SkuType.SUBS
         )
-        return mockSkuDetails.toProductDetails()
+        return mockSkuDetails.toStoreProduct()
     }
 
     private fun mockSkuDetails(

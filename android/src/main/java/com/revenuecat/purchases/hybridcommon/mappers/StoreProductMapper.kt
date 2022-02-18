@@ -1,8 +1,8 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.models.ProductDetails
+import com.revenuecat.purchases.models.StoreProduct
 
-fun ProductDetails.map(): Map<String, Any?> =
+fun StoreProduct.map(): Map<String, Any?> =
     mapOf(
         "identifier" to sku,
         "description" to description,
@@ -14,14 +14,14 @@ fun ProductDetails.map(): Map<String, Any?> =
         "discounts" to null
     ) + mapIntroPriceDeprecated()
 
-fun List<ProductDetails>.map(): List<Map<String, Any?>> = this.map { it.map() }
+fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
-internal fun ProductDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
+internal fun StoreProduct.mapIntroPriceDeprecated(): Map<String, Any?> {
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials
             // Format using device locale. iOS will format using App Store locale, but there's no way
-            // to figure out how the price in the SKUDetails is being formatted.
+            // to figure out how the price in the StoreProduct is being formatted.
             freeTrialPeriod!!.mapPeriodDeprecated()?.let { periodFields ->
                 mapOf(
                     "intro_price" to 0,
@@ -47,7 +47,7 @@ internal fun ProductDetails.mapIntroPriceDeprecated(): Map<String, Any?> {
     }
 }
 
-internal fun ProductDetails.mapIntroPrice(): Map<String, Any?> {
+internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials

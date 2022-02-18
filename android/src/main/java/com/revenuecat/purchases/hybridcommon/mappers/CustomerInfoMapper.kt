@@ -1,8 +1,8 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.CustomerInfo
 
-fun PurchaserInfo.map(): Map<String, Any?> =
+fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
         "entitlements" to entitlements.map(),
         "activeSubscriptions" to activeSubscriptions.toList(),
