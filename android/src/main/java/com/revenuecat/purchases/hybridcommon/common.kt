@@ -11,17 +11,12 @@ import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getPurchaserInfoWith
 import com.revenuecat.purchases.getSubscriptionSkusWith
-import com.revenuecat.purchases.identifyWith
-import com.revenuecat.purchases.models.ProductDetails
-import com.revenuecat.purchases.models.PurchaseDetails
 import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
-import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
@@ -206,46 +201,6 @@ fun logIn(
 
 fun logOut(onResult: OnResult) {
     Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
-@Deprecated(
-    "Use logOut instead",
-    ReplaceWith("CommonKt.logOut(newAppUserID, onResult)")
-)
-fun reset(
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.resetWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
-@Deprecated(
-    "Use logIn instead",
-    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
-)
-fun identify(
-    appUserID: String,
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.identifyWith(appUserID, onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
-@Deprecated(
-    "Use logIn instead",
-    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
-)
-fun createAlias(
-    newAppUserID: String,
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.createAliasWith(
-        newAppUserID,
-        onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
 }
