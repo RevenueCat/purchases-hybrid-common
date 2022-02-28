@@ -1,13 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.android_tools = '4.0.1'
+    ext.android_tools = '7.0.2'
     ext.kotlin_version = '1.4.10'
-    ext.android_junit5_version = '1.7.1.1'
-    ext.junit5 = '5.3.2'
+    ext.android_junit5_version = '1.8.2.0'
+    ext.junit5 = '5.8.2'
     ext.assertj_version = '3.13.2'
     ext.mockk_version = '1.10.0'
-    ext.gradle_maven_publish = '0.11.1'
+    ext.gradle_maven_publish = '0.18.0'
     ext.purchases_version = '5.0.0-rc2'
 
     repositories {
@@ -30,13 +30,13 @@ apply plugin: "com.vanniktech.maven.publish"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
-        versionName "2.0.0-amazon.alpha.4"
+        versionName "2.0.1"
 
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -75,15 +75,13 @@ dependencies {
     testImplementation "com.revenuecat.purchases:purchases-store-google:$purchases_version"
 
     // junit 5
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit5"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$junit5"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junit5"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 // Call passing parameter -PpurchasesPath="$HOME/Development/repos/purchases-android"

@@ -1,3 +1,64 @@
+## 2.0.1
+
+- Fixed an issue where checkTrialOrIntroductoryPriceEligibility might refresh the receipt if it's not present on device,
+causing a log in prompt for App Store credentials.
+- Bumped `purchases-ios` to `3.14.1`
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/109
+
+## 2.0.0
+
+### Breaking changes
+- Updated `configureWithAPIKey:` method to accept a DangerousSettings object
+
+### Other
+- Bump purchases-ios to 3.14.0 [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.14.0)
+
+## 1.11.2
+
+- Fixes an inconsistency between `null` `introPrice` mapping in iOS and Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/106
+- Bump `purchases-android` to `4.6.1` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.6.1))
+- Bump purchases-ios to 3.13.2. [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.13.2)
+
+## 1.11.1
+
+- Adds compatibility for `ownershipType` for Android
+    https://github.com/RevenueCat/purchases-hybrid-common/pull/103
+- Bump purchases-android to 4.6.0. [Changelog here](https://github.com/RevenueCat/purchases-android/releases/tag/4.6.0)
+- Bump purchases-ios to 3.13.1. [Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.13.1)
+
+## 1.11.0
+
+Add ownershipType to EntitlementInfo
+	- https://github.com/RevenueCat/purchases-hybrid-common/pull/101
+
+## 1.10.1
+
+- Bump `purchases-android` to `4.5.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.5.0))
+
+### 1.10.0
+
+- Bump `purchases-ios` to `3.13.0` ([Changelog here](https://github.com/RevenueCat/purchases-ios/releases/3.13.0))
+- Bump `purchases-android` to `4.4.0` ([Changelog here](https://github.com/RevenueCat/purchases-android/releases/4.4.0))
+- Added support for Airship integration via `setAirshipChannelID`
+     https://github.com/RevenueCat/purchases-hybrid-common/pull/96
+
+### 1.9.3
+
+- Bump `purchases-ios` to `3.12.8`
+    [3.12.7 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.7)
+    [3.12.8 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.8)
+
+### 1.9.2
+
+- Bump `purchases-android` to `4.3.3`
+    [4.3.3 Changelog here](https://github.com/RevenueCat/purchases-android/releases/tag/4.3.3)
+    [4.3.2 Changelog here](https://github.com/RevenueCat/purchases-android/releases/tag/4.3.2)
+- Bump `purchases-ios` to `3.12.6`
+    [3.12.6 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.6)
+    [3.12.5 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.5)
+    [3.12.4 Changelog here](https://github.com/RevenueCat/purchases-ios/releases/tag/3.12.4)
+
 ### 1.9.1
 
 - Fix issue with `productIdentifier` being a list in the `purchaseProduct` and `purchasePackage` functions

@@ -3,23 +3,35 @@
 
 version: 2.1
 
+release-tags: &release-tags
+  filters:
+    tags:
+      only: /^(\d+\.)(\d+\.)(\d+)$/
+    branches:
+      ignore: /.*/
+
 orbs:
-  android: circleci/android@0.2.1
+  android: circleci/android@1.0.3
   revenuecat: revenuecat/sdks-common-config@1.0.0
+  macos: circleci/macos@2.0.1
 
 executors:
-  android-executor:
-    docker:
-      - image: circleci/android:api-28-alpha
-    working_directory: ~/android
-    environment:
-      JVM_OPTS: -Xmx3200m
-      CIRCLE_JDK_VERSION: oraclejdk8
-
   ios-executor:
+    resource_class: macos.x86.medium.gen2
     working_directory: ~/ios
     macos:
-      xcode: 12.5.1
+      xcode: 13.2.1
+
+commands:
+  trust-github-key:
+    steps:
+      - run:
+          name: Trust GitHub key
+          command: |
+              for ip in $(dig @8.8.8.8 github.com +short); \
+              do ssh-keyscan github.com,$ip; \
+              ssh-keyscan $ip; \
+              done 2>/dev/null >> ~/.ssh/known_hosts
 
 jobs:
   test-ios:
@@ -36,6 +48,9 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommonTests
+      - run:
+          name: Run pod lint tests
+          command: pod lib lint
       - store_test_results:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
@@ -43,9 +58,35 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
           destination: scan-output
+  
+  deploy-ios:
+    executor: ios-executor
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout
+      - trust-github-key
+      # Bundler
+      - restore_cache:
+          keys: 
+            - v1-gem-cache-{{ checksum "Gemfile.lock" }}
+      - run: 
+          name: Bundle install
+          command: |
+              bundle config set --local clean 'true'
+              bundle config set --local path 'vendor/bundle'
+              bundle install
+      - save_cache:
+          key: v1-gem-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Deploy new version
+          command: bundle exec fastlane ios release
 
   test-android:
-    executor: android-executor
+    executor:
+      name: android/android-machine
+      resource-class: large
     working_directory: ~/purchases-hybrid-common/android
     steps:
       - checkout:
@@ -61,7 +102,9 @@ jobs:
           path: build/test-results
 
   deploy-android:
-    executor: android-executor
+    executor:
+      name: android/android-machine
+      resource-class: large
     steps:
       - checkout
       - android/accept-licenses
@@ -84,12 +127,19 @@ jobs:
               echo "Skipping snapshot deployment: wrong JDK. Expected '$JDK' but was '$CIRCLE_JDK_VERSION'."
             else
               echo "Deploying snapshot..."
-              ./gradlew androidSourcesJar androidJavadocsJar uploadArchives \
+              ./gradlew androidSourcesJar androidJavadocJar publish --no-daemon --no-parallel\
               -Psigning.keyId=$GPG_SIGNING_KEY_ID \
               -Psigning.password=$GPG_SIGNING_KEY_PW \
               -Psigning.secretKeyRingFile=./secring.gpg \
-              -PSONATYPE_NEXUS_USERNAME=$SONATYPE_NEXUS_USERNAME \
-              -PSONATYPE_NEXUS_PASSWORD=$SONATYPE_NEXUS_PASSWORD \
+              -PmavenCentralUsername=$SONATYPE_NEXUS_TOKEN_USERNAME \
+              -PmavenCentralPassword=$SONATYPE_NEXUS_TOKEN_PASSWORD \
+              -PRELEASE_SIGNING_ENABLED=true
+              ./gradlew closeAndReleaseRepository\
+              -Psigning.keyId=$GPG_SIGNING_KEY_ID \
+              -Psigning.password=$GPG_SIGNING_KEY_PW \
+              -Psigning.secretKeyRingFile=./secring.gpg \
+              -PmavenCentralUsername=$SONATYPE_NEXUS_TOKEN_USERNAME \
+              -PmavenCentralPassword=$SONATYPE_NEXUS_TOKEN_PASSWORD \
               -PRELEASE_SIGNING_ENABLED=true
               echo "Snapshot deployed!"
             fi
@@ -100,10 +150,12 @@ workflows:
   ios:
     jobs:
       - test-ios
+      - deploy-ios: *release-tags
 
   android:
     jobs:
       - test-android
+      - deploy-android: *release-tags
   
   android-deploy-on-tag:
     jobs:

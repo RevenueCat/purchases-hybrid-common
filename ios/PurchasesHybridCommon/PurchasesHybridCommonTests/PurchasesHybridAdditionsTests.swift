@@ -22,7 +22,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaults: nil,
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3")
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil)
                 }.notTo(raiseException())
             }
         }
@@ -34,7 +35,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: nil,
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3")
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil)
                 }.notTo(raiseException())
             }
             it("initializes without raising exceptions if a suite name is passed") {
@@ -44,7 +46,21 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3")
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil)
+                }.notTo(raiseException())
+            }
+        }
+        context("configure with dangerous settings") {
+            it("initializes without raising exceptions if dangerous settings is passed") {
+                expect {
+                    Purchases.configure(withAPIKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: DangerousSettings(autoSyncPurchases: false))
                 }.notTo(raiseException())
             }
         }

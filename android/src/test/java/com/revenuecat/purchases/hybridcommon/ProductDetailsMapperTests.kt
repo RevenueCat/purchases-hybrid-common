@@ -164,19 +164,10 @@ internal class StoreProductMapperTests {
     }
 
     @Test
-    fun `"when mapping a StoreProduct with no free trial nor introductory price, the map has null intro price values`() {
-        every { mockStoreProduct.freeTrialPeriod } returns ""
-        every { mockStoreProduct.introductoryPrice } returns ""
-        received = mockStoreProduct.mapIntroPrice()
-
-        val expected = mapOf(
-            "price" to null,
-            "priceString" to null,
-            "period" to null,
-            "cycles" to null,
-            "periodUnit" to null,
-            "periodNumberOfUnits" to null
-        )
-        assertThat(expected).isEqualTo(received)
+    fun `when mapping a SkuDetails with no free trial nor introductory price, intro price is null`() {
+        every { mockSkuDetails.freeTrialPeriod } returns ""
+        every { mockSkuDetails.introductoryPrice } returns ""
+        received = mockSkuDetails.mapIntroPrice()
+        assertThat(received).isEqualTo(null)
     }
 }
