@@ -16,7 +16,7 @@ fun StoreProduct.map(): Map<String, Any?> =
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
-internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
+internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials
@@ -29,7 +29,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
                     "period" to freeTrialPeriod,
                     "cycles" to 1
                 ) + periodFields
-            } ?: mapNullPeriod()
+            } ?: null
         }
         introductoryPrice != null -> {
             introductoryPricePeriod!!.mapPeriod()?.let { periodFields ->
@@ -39,23 +39,12 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?> {
                     "period" to introductoryPricePeriod,
                     "cycles" to introductoryPriceCycles
                 ) + periodFields
-            } ?: mapNullPeriod()
+            } ?: null
         }
         else -> {
-            mapNullPeriod()
+            null
         }
     }
-}
-
-private fun mapNullPeriod(): Map<String, Nothing?> {
-    return mapOf(
-        "price" to null,
-        "priceString" to null,
-        "period" to null,
-        "cycles" to null,
-        "periodUnit" to null,
-        "periodNumberOfUnits" to null
-    )
 }
 
 private fun String.mapPeriod(): Map<String, Any?>? {
