@@ -10,6 +10,7 @@ import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
 import com.revenuecat.purchases.BillingFeature
+import com.revenuecat.purchases.LogHandler
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -211,6 +212,12 @@ fun setDebugLogsEnabled(
     enabled: Boolean
 ) {
     Purchases.debugLogsEnabled = enabled
+}
+
+fun setLogHandler(
+    logHandler: LogHandler
+) {
+    Purchases.logHandler = logHandler
 }
 
 fun setProxyURLString(proxyURLString: String?) {
