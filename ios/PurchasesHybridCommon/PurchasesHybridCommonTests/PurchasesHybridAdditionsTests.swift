@@ -17,13 +17,13 @@ class PurchasesHybridAdditionsTests: QuickSpec {
         context("configure with platform flavor and version") {
             it("initialize without raising exceptions") {
                 expect {
-                    Purchases.configure(withAPIKey: "api key",
-                                        appUserID: nil,
-                                        observerMode: false,
-                                        userDefaults: nil,
-                                        platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3",
-                                        dangerousSettings: nil)
+//                    Purchases.configure(withAPIKey: "api key",
+//                                        appUserID: nil,
+//                                        observerMode: false,
+//                                        userDefaults: nil,
+//                                        platformFlavor: "hybrid-platform",
+//                                        platformFlavorVersion: "1.2.3",
+//                                        dangerousSettings: nil)
                 }.notTo(raiseException())
             }
         }

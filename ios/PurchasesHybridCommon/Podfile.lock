@@ -1,7 +1,7 @@
 PODS:
   - Nimble (9.2.1)
   - Quick (4.0.0)
-  - RevenueCat (4.0.0-rc.3)
+  - RevenueCat (4.0.0)
 
 DEPENDENCIES:
   - Nimble
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
-  RevenueCat: 7519cc6ce996f90be6ea0c7d96ab3fd61b99088b
+  RevenueCat: 6d7111834346bbb387b248c0b4841099af3b9f69
 
 PODFILE CHECKSUM: f43f63925cbb688089433fea78c436bc07f290ac
 

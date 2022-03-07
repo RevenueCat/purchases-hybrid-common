@@ -4,9 +4,82 @@
 //
 
 import Foundation
-import Purchases
+@testable import RevenueCat
 
 class MockPurchases: Purchases {
+    
+    init() {
+        let systemInfo = try! SystemInfo(platformInfo: nil, finishTransactions: true)
+        let deviceCache: DeviceCache = DeviceCache(systemInfo: systemInfo)
+        
+        let operationDispatcher: OperationDispatcher = OperationDispatcher()
+        
+        let requestFetcher: StoreKitRequestFetcher = StoreKitRequestFetcher(operationDispatcher: operationDispatcher)
+        let receiptFetcher: ReceiptFetcher = ReceiptFetcher(requestFetcher: requestFetcher, systemInfo: systemInfo)
+        let attributionFetcher: AttributionFetcher = AttributionFetcher(attributionFactory: AttributionTypeFactory(), systemInfo: systemInfo)
+        
+        let eTagManager = ETagManager(userDefaults: UserDefaults.standard)
+        let backend: Backend = Backend(apiKey: "", systemInfo: systemInfo, eTagManager: eTagManager)
+        
+        let customerInfoManager: CustomerInfoManager = CustomerInfoManager(operationDispatcher: operationDispatcher, deviceCache: deviceCache, backend: backend, systemInfo: systemInfo)
+        
+        let identityManager: IdentityManager = IdentityManager(
+            deviceCache: deviceCache,
+            backend: backend,
+            customerInfoManager: customerInfoManager,
+            appUserID: nil)
+        
+        let attributionDataMigrator = AttributionDataMigrator()
+        let subscriberAttributesManager = SubscriberAttributesManager(backend: backend, deviceCache: deviceCache, attributionFetcher: attributionFetcher, attributionDataMigrator: attributionDataMigrator)
+        
+        let attributionPoster: AttributionPoster = AttributionPoster(
+            deviceCache: deviceCache,
+            identityManager: identityManager,
+            backend: backend,
+            attributionFetcher: attributionFetcher,
+            subscriberAttributesManager: subscriberAttributesManager)
+        
+        let storeKitWrapper: StoreKitWrapper = StoreKitWrapper()
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+        
+        let offeringsFactory: OfferingsFactory = OfferingsFactory()
+        
+        
+        let productsManager: ProductsManager = ProductsManager(systemInfo: systemInfo)
+        let offeringsManager: OfferingsManager = OfferingsManager(deviceCache: deviceCache, operationDispatcher: operationDispatcher, systemInfo: systemInfo, backend: backend, offeringsFactory: offeringsFactory, productsManager: productsManager)
+        
+        let introEligibilityCalculator: IntroEligibilityCalculator = IntroEligibilityCalculator(productsManager: productsManager, receiptParser: ReceiptParser())
+        
+        let manageSubscriptionsHelper = ManageSubscriptionsHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+        
+        let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+        
+        let purchasesOrchestrator: PurchasesOrchestrator = PurchasesOrchestrator(productsManager: productsManager, storeKitWrapper: storeKitWrapper, systemInfo: systemInfo, subscriberAttributesManager: subscriberAttributesManager, operationDispatcher: operationDispatcher, receiptFetcher: receiptFetcher, customerInfoManager: customerInfoManager, backend: backend, identityManager: identityManager, transactionsManager: TransactionsManager(receiptParser: ReceiptParser()), deviceCache: deviceCache, manageSubscriptionsHelper: manageSubscriptionsHelper, beginRefundRequestHelper: beginRefundRequestHelper)
+        
+        let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, identityManager: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
+        
+        super.init(appUserID: nil,
+                   requestFetcher: requestFetcher,
+                   receiptFetcher: receiptFetcher,
+                   attributionFetcher: attributionFetcher,
+                   attributionPoster: attributionPoster,
+                   backend: backend,
+                   storeKitWrapper: storeKitWrapper,
+                   notificationCenter: notificationCenter,
+                   systemInfo: systemInfo,
+                   offeringsFactory: offeringsFactory,
+                   deviceCache: deviceCache,
+                   identityManager: identityManager,
+                   subscriberAttributesManager: subscriberAttributesManager,
+                   operationDispatcher: operationDispatcher,
+                   introEligibilityCalculator: introEligibilityCalculator,
+                   customerInfoManager: customerInfoManager,
+                   productsManager: productsManager,
+                   offeringsManager: offeringsManager,
+                   purchasesOrchestrator: purchasesOrchestrator,
+                   trialOrIntroPriceEligibilityChecker: trialOrIntroPriceEligibilityChecker)
+    }
+    
     var invokedAppUserIDGetter = false
     var invokedAppUserIDGetterCount = 0
     var stubbedAppUserID: String! = ""
@@ -28,10 +101,10 @@ class MockPurchases: Purchases {
     var invokedLogInCount = 0
     var invokedLogInParameters: (appUserID: String, Void)?
     var invokedLogInParametersList = [(appUserID: String, Void)]()
-    var stubbedLogInCompletionResult: (Purchases.PurchaserInfo?, Bool, Error?)?
+    var stubbedLogInCompletionResult: (CustomerInfo?, Bool, Error?)?
 
     override func logIn(_ appUserID: String,
-                        _ completion: @escaping (Purchases.PurchaserInfo?, Bool, Error?) -> ()) {
+               completion: @escaping (CustomerInfo?, Bool, Error?) -> ()) {
         invokedLogInError = true
         invokedLogInCount += 1
         invokedLogInParameters = (appUserID, ())
@@ -40,14 +113,16 @@ class MockPurchases: Purchases {
             completion(result.0, result.1, result.2)
         }
     }
+    
+    typealias ReceiveCustomerInfoBlock = (CustomerInfo?, Error?) -> ()
 
     var invokedLogOut = false
     var invokedLogOutCount = 0
-    var invokedLogOutParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedLogOutParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
-    var stubbedLogOutCompletionResult: (Purchases.PurchaserInfo?, Error?)?
+    var invokedLogOutParameters: (completion: ReceiveCustomerInfoBlock?, Void)?
+    var invokedLogOutParametersList = [(completion: ReceiveCustomerInfoBlock?, Void)]()
+    var stubbedLogOutCompletionResult: (CustomerInfo?, Error?)?
 
-    override func logOut(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+    override func logOut(completion: ReceiveCustomerInfoBlock?) {
         invokedLogOut = true
         invokedLogOutCount += 1
         invokedLogOutParameters = (completion, ())
@@ -57,78 +132,82 @@ class MockPurchases: Purchases {
         }
     }
 
-    var invokedCreateAlias = false
-    var invokedCreateAliasCount = 0
-    var invokedCreateAliasParameters: (alias: String, completion: Purchases.ReceivePurchaserInfoBlock?)?
-    var invokedCreateAliasParametersList = [(alias: String,
-        completion: Purchases.ReceivePurchaserInfoBlock?)]()
-
-    override func createAlias(_ alias: String, _ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedCreateAlias = true
-        invokedCreateAliasCount += 1
-        invokedCreateAliasParameters = (alias, completion)
-        invokedCreateAliasParametersList.append((alias, completion))
-    }
-
-    var invokedIdentify = false
-    var invokedIdentifyCount = 0
-    var invokedIdentifyParameters: (appUserID: String, completion: Purchases.ReceivePurchaserInfoBlock?)?
-    var invokedIdentifyParametersList = [(appUserID: String,
-        completion: Purchases.ReceivePurchaserInfoBlock?)]()
-
-    override func identify(_ appUserID: String,
-                           _ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedIdentify = true
-        invokedIdentifyCount += 1
-        invokedIdentifyParameters = (appUserID, completion)
-        invokedIdentifyParametersList.append((appUserID, completion))
-    }
-
-    var invokedReset = false
-    var invokedResetCount = 0
-    var invokedResetParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedResetParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
-
-    override func reset(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedReset = true
-        invokedResetCount += 1
-        invokedResetParameters = (completion, ())
-        invokedResetParametersList.append((completion, ()))
-    }
+//    var invokedCreateAlias = false
+//    var invokedCreateAliasCount = 0
+//    var invokedCreateAliasParameters: (alias: String, completion: ReceiveCustomerInfoBlock?)?
+//    var invokedCreateAliasParametersList = [(alias: String,
+//        completion: ReceiveCustomerInfoBlock?)]()
+//
+//    override func createAlias(_ alias: String, completion: ReceiveCustomerInfoBlock?) {
+//        invokedCreateAlias = true
+//        invokedCreateAliasCount += 1
+//        invokedCreateAliasParameters = (alias, completion)
+//        invokedCreateAliasParametersList.append((alias, completion))
+//    }
+//
+//    var invokedIdentify = false
+//    var invokedIdentifyCount = 0
+//    var invokedIdentifyParameters: (appUserID: String, completion: ReceiveCustomerInfoBlock?)?
+//    var invokedIdentifyParametersList = [(appUserID: String,
+//        completion: ReceiveCustomerInfoBlock?)]()
+//
+//    func identify(_ appUserID: String,
+//                           _ completion: ReceiveCustomerInfoBlock?) {
+//        invokedIdentify = true
+//        invokedIdentifyCount += 1
+//        invokedIdentifyParameters = (appUserID, completion)
+//        invokedIdentifyParametersList.append((appUserID, completion))
+//    }
+//
+//    var invokedReset = false
+//    var invokedResetCount = 0
+//    var invokedResetParameters: (completion: ReceiveCustomerInfoBlock?, Void)?
+//    var invokedResetParametersList = [(completion: ReceiveCustomerInfoBlock?, Void)]()
+//
+//    func reset(_ completion: ReceiveCustomerInfoBlock?) {
+//        invokedReset = true
+//        invokedResetCount += 1
+//        invokedResetParameters = (completion, ())
+//        invokedResetParametersList.append((completion, ()))
+//    }
 
     var invokedPurchaserInfo = false
     var invokedPurchaserInfoCount = 0
-    var invokedPurchaserInfoParameters: (completion: Purchases.ReceivePurchaserInfoBlock, Void)?
-    var invokedPurchaserInfoParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock,
+    var invokedPurchaserInfoParameters: (completion: ReceiveCustomerInfoBlock, Void)?
+    var invokedPurchaserInfoParametersList = [(completion: ReceiveCustomerInfoBlock,
         Void)]()
-
-    override func purchaserInfo(_ completion: @escaping Purchases.ReceivePurchaserInfoBlock) {
+    
+    override func getCustomerInfo(completion: @escaping ReceiveCustomerInfoBlock) {
         invokedPurchaserInfo = true
         invokedPurchaserInfoCount += 1
         invokedPurchaserInfoParameters = (completion, ())
         invokedPurchaserInfoParametersList.append((completion, ()))
     }
+    
+    typealias ReceiveOfferingsBlock = (Offerings?, Error?) -> ()
 
     var invokedOfferings = false
     var invokedOfferingsCount = 0
-    var invokedOfferingsParameters: (completion: Purchases.ReceiveOfferingsBlock, Void)?
-    var invokedOfferingsParametersList = [(completion: Purchases.ReceiveOfferingsBlock, Void)]()
+    var invokedOfferingsParameters: (completion: ReceiveOfferingsBlock, Void)?
+    var invokedOfferingsParametersList = [(completion: ReceiveOfferingsBlock, Void)]()
 
-    override func offerings(_ completion: @escaping Purchases.ReceiveOfferingsBlock) {
+    override func getOfferings(completion: @escaping ReceiveOfferingsBlock) {
         invokedOfferings = true
         invokedOfferingsCount += 1
         invokedOfferingsParameters = (completion, ())
         invokedOfferingsParametersList.append((completion, ()))
     }
+    
+    typealias ReceiveProductsBlock = ([StoreProduct]) -> ()
 
     var invokedProducts = false
     var invokedProductsCount = 0
-    var invokedProductsParameters: (productIdentifiers: [String], completion: Purchases.ReceiveProductsBlock)?
+    var invokedProductsParameters: (productIdentifiers: [String], completion: ReceiveProductsBlock)?
     var invokedProductsParametersList = [(productIdentifiers: [String],
-        completion: Purchases.ReceiveProductsBlock)]()
-
-    override func products(_ productIdentifiers: [String],
-                           _ completion: @escaping Purchases.ReceiveProductsBlock) {
+        completion: ReceiveProductsBlock)]()
+    
+    override func getProducts(_ productIdentifiers: [String],
+                           completion: @escaping ReceiveProductsBlock) {
         invokedProducts = true
         invokedProductsCount += 1
         invokedProductsParameters = (productIdentifiers, completion)
@@ -137,11 +216,11 @@ class MockPurchases: Purchases {
 
     var invokedPurchaseProduct = false
     var invokedPurchaseProductCount = 0
-    var invokedPurchaseProductParameters: (product: SKProduct, completion: Purchases.PurchaseCompletedBlock)?
-    var invokedPurchaseProductParametersList = [(product: SKProduct,
-        completion: Purchases.PurchaseCompletedBlock)]()
+    var invokedPurchaseProductParameters: (product: StoreProduct, completion: PurchaseCompletedBlock)?
+    var invokedPurchaseProductParametersList = [(product: StoreProduct,
+        completion: PurchaseCompletedBlock)]()
 
-    override func purchaseProduct(_ product: SKProduct, _ completion: @escaping Purchases.PurchaseCompletedBlock) {
+    override func purchase(product: StoreProduct, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProduct = true
         invokedPurchaseProductCount += 1
         invokedPurchaseProductParameters = (product, completion)
@@ -150,124 +229,120 @@ class MockPurchases: Purchases {
 
     var invokedPurchasePackage = false
     var invokedPurchasePackageCount = 0
-    var invokedPurchasePackageParameters: (package: Purchases.Package, completion: Purchases.PurchaseCompletedBlock)?
-    var invokedPurchasePackageParametersList = [(package: Purchases.Package,
-        completion: Purchases.PurchaseCompletedBlock)]()
+    var invokedPurchasePackageParameters: (package: Package, completion: PurchaseCompletedBlock)?
+    var invokedPurchasePackageParametersList = [(package: Package,
+        completion: PurchaseCompletedBlock)]()
 
-    override func purchasePackage(_ package: Purchases.Package,
-                                  _ completion: @escaping Purchases.PurchaseCompletedBlock) {
+    override func purchase(package: Package, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackage = true
         invokedPurchasePackageCount += 1
         invokedPurchasePackageParameters = (package, completion)
         invokedPurchasePackageParametersList.append((package, completion))
     }
-
-    var invokedRestoreTransactions = false
-    var invokedRestoreTransactionsCount = 0
-    var invokedRestoreTransactionsParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedRestoreTransactionsParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?,
+    
+    var invokedRestorePurchases = false
+    var invokedRestorePurchasesCount = 0
+    var invokedRestorePurchasesParameters: (completion: ReceiveCustomerInfoBlock?, Void)?
+    var invokedRestorePurchasesParametersList = [(completion: ReceiveCustomerInfoBlock?,
         Void)]()
-
-    override func restoreTransactions(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedRestoreTransactions = true
-        invokedRestoreTransactionsCount += 1
-        invokedRestoreTransactionsParameters = (completion, ())
-        invokedRestoreTransactionsParametersList.append((completion, ()))
+    
+    override func restorePurchases(completion: ReceiveCustomerInfoBlock? = nil) {
+        invokedRestorePurchases = true
+        invokedRestorePurchasesCount += 1
+        invokedRestorePurchasesParameters = (completion, ())
+        invokedRestorePurchasesParametersList.append((completion, ()))
     }
 
     var invokedSyncPurchases = false
     var invokedSyncPurchasesCount = 0
-    var invokedSyncPurchasesParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedSyncPurchasesParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?,
+    var invokedSyncPurchasesParameters: (completion: ReceiveCustomerInfoBlock?, Void)?
+    var invokedSyncPurchasesParametersList = [(completion: ReceiveCustomerInfoBlock?,
         Void)]()
 
-    override func syncPurchases(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+    override func syncPurchases(completion: ReceiveCustomerInfoBlock?) {
         invokedSyncPurchases = true
         invokedSyncPurchasesCount += 1
         invokedSyncPurchasesParameters = (completion, ())
         invokedSyncPurchasesParametersList.append((completion, ()))
     }
+    
+    typealias ReceiveIntroEligibilityBlock = ([String : IntroEligibility]) -> Void
 
     var invokedCheckTrialOrIntroductoryPriceEligibility = false
     var invokedCheckTrialOrIntroductoryPriceEligibilityCount = 0
-    var invokedCheckTrialOrIntroductoryPriceEligibilityParameters: (productIdentifiers: [String], receiveEligibility: Purchases.ReceiveIntroEligibilityBlock)?
+    var invokedCheckTrialOrIntroductoryPriceEligibilityParameters: (productIdentifiers: [String], receiveEligibility: ReceiveIntroEligibilityBlock)?
     var invokedCheckTrialOrIntroductoryPriceEligibilityParametersList = [(
         productIdentifiers: [String],
-        receiveEligibility: Purchases.ReceiveIntroEligibilityBlock)]()
-
-    override func checkTrialOrIntroductoryPriceEligibility(_ productIdentifiers: [String],
-                                                           completionBlock receiveEligibility: @escaping Purchases.ReceiveIntroEligibilityBlock) {
+        receiveEligibility: ReceiveIntroEligibilityBlock)]()
+    
+    override func checkTrialOrIntroDiscountEligibility(_ productIdentifiers: [String], completion: @escaping ([String : IntroEligibility]) -> Void) {
         invokedCheckTrialOrIntroductoryPriceEligibility = true
         invokedCheckTrialOrIntroductoryPriceEligibilityCount += 1
         invokedCheckTrialOrIntroductoryPriceEligibilityParameters = (
             productIdentifiers,
-            receiveEligibility)
-        invokedCheckTrialOrIntroductoryPriceEligibilityParametersList.append(
-            (productIdentifiers, receiveEligibility))
-    }
-
-    var invokedPaymentDiscount = false
-    var invokedPaymentDiscountCount = 0
-    var invokedPaymentDiscountParameters: (discount: SKProductDiscount, product: SKProduct, completion: Purchases.PaymentDiscountBlock)?
-    var invokedPaymentDiscountParametersList = [(
-        discount: SKProductDiscount,
-        product: SKProduct,
-        completion: Purchases.PaymentDiscountBlock)]()
-
-    override func paymentDiscount(for discount: SKProductDiscount,
-                                  product: SKProduct,
-                                  completion: @escaping Purchases.PaymentDiscountBlock) {
-        invokedPaymentDiscount = true
-        invokedPaymentDiscountCount += 1
-        invokedPaymentDiscountParameters = (discount,
-            product,
             completion)
-        invokedPaymentDiscountParametersList.append(
-            (discount, product, completion))
+        invokedCheckTrialOrIntroductoryPriceEligibilityParametersList.append(
+            (productIdentifiers, completion))
     }
+
+//    var invokedPaymentDiscount = false
+//    var invokedPaymentDiscountCount = 0
+//    var invokedPaymentDiscountParameters: (discount: SKProductDiscount, product: SKProduct, completion: Purchases.PaymentDiscountBlock)?
+//    var invokedPaymentDiscountParametersList = [(
+//        discount: SKProductDiscount,
+//        product: SKProduct,
+//        completion: Purchases.PaymentDiscountBlock)]()
+//
+//    override func paymentDiscount(for discount: SKProductDiscount,
+//                                  product: SKProduct,
+//                                  completion: @escaping Purchases.PaymentDiscountBlock) {
+//        invokedPaymentDiscount = true
+//        invokedPaymentDiscountCount += 1
+//        invokedPaymentDiscountParameters = (discount,
+//            product,
+//            completion)
+//        invokedPaymentDiscountParametersList.append(
+//            (discount, product, completion))
+//    }
 
     var invokedPurchaseProductWithDiscount = false
     var invokedPurchaseProductWithDiscountCount = 0
-    var invokedPurchaseProductWithDiscountParameters: (product: SKProduct, discount: SKPaymentDiscount, completion: Purchases.PurchaseCompletedBlock)?
-    var invokedPurchaseProductWithDiscountParametersList = [(product: SKProduct,
-        discount: SKPaymentDiscount,
-        completion: Purchases.PurchaseCompletedBlock)]()
-
-    override func purchaseProduct(_ product: SKProduct,
-                                  discount: SKPaymentDiscount,
-                                  _ completion: @escaping Purchases.PurchaseCompletedBlock) {
+    var invokedPurchaseProductWithDiscountParameters: (product: StoreProduct, promotionalOffer: PromotionalOffer, completion: PurchaseCompletedBlock)?
+    var invokedPurchaseProductWithDiscountParametersList = [(product: StoreProduct,
+                                                             promotionalOffer: PromotionalOffer,
+                                                             completion: PurchaseCompletedBlock)]()
+    
+    override func purchase(product: StoreProduct, promotionalOffer: PromotionalOffer, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProductWithDiscount = true
         invokedPurchaseProductWithDiscountCount += 1
         invokedPurchaseProductWithDiscountParameters = (product,
-            discount,
+            promotionalOffer,
             completion)
         invokedPurchaseProductWithDiscountParametersList.append((product,
-                                                                    discount,
+                                                                    promotionalOffer,
                                                                     completion))
     }
 
     var invokedPurchasePackageWithDiscount = false
     var invokedPurchasePackageWithDiscountCount = 0
-    var invokedPurchasePackageWithDiscountParameters: (package: Purchases.Package, discount: SKPaymentDiscount, completion: Purchases.PurchaseCompletedBlock)?
-    var invokedPurchasePackageWithDiscountParametersList = [(package: Purchases.Package,
-        discount: SKPaymentDiscount,
-        completion: Purchases.PurchaseCompletedBlock)]()
-
-    override func purchasePackage(_ package: Purchases.Package,
-                                  discount: SKPaymentDiscount,
-                                  _ completion: @escaping Purchases.PurchaseCompletedBlock) {
+    var invokedPurchasePackageWithDiscountParameters: (package: Package, promotionalOffer: PromotionalOffer, completion: PurchaseCompletedBlock)?
+    var invokedPurchasePackageWithDiscountParametersList = [(package: Package,
+                                                             promotionalOffer: PromotionalOffer,
+                                                             completion: PurchaseCompletedBlock)]()
+    
+    override func purchase(package: Package, promotionalOffer: PromotionalOffer, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackageWithDiscount = true
         invokedPurchasePackageWithDiscountCount += 1
-        invokedPurchasePackageWithDiscountParameters = (package, discount, completion)
-        invokedPurchasePackageWithDiscountParametersList.append((package, discount, completion))
+        invokedPurchasePackageWithDiscountParameters = (package, promotionalOffer, completion)
+        invokedPurchasePackageWithDiscountParametersList.append((package, promotionalOffer, completion))
     }
 
-    var invokedInvalidatePurchaserInfoCache = false
-    var invokedInvalidatePurchaserInfoCacheCount = 0
+    var invokedInvalidateCustomerInfoCache = false
+    var invokedInvalidateCustomerInfoCacheCount = 0
 
-    override func invalidatePurchaserInfoCache() {
-        invokedInvalidatePurchaserInfoCache = true
-        invokedInvalidatePurchaserInfoCacheCount += 1
+    override func invalidateCustomerInfoCache() {
+        invokedInvalidateCustomerInfoCache = true
+        invokedInvalidateCustomerInfoCacheCount += 1
     }
 
     var invokedPresentCodeRedemptionSheet = false
