@@ -5,7 +5,7 @@
 
 #import "SKProduct+HybridAdditions.h"
 #import "SKProductDiscount+HybridAdditions.h"
-@import RevenueCat;
+//@import RevenueCat;
 
 API_AVAILABLE(ios(11.2), macos(10.13.2))
 @implementation RCStoreProductDiscount (RCPurchases)

@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 import StoreKit
-import RevenueCat
+@testable import RevenueCat
 import PurchasesHybridCommon
 
 class SkuProductDiscountHybridAdditionsTests: QuickSpec {
@@ -27,10 +27,10 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                 
                 let storeProductDiscount = StoreProductDiscount(sk1Discount: productDiscount)
                 
-//                guard let receivedDictionary = storeProductDiscount?.rc_dictionary() as? [String: NSObject] else {
-//                    fatalError("received rc_dictionary is not in the right format")
-//                }
-//                
+                guard let receivedDictionary = storeProductDiscount?.rc_dictionary() as? [String: NSObject] else {
+                    fatalError("received rc_dictionary is not in the right format")
+                }
+
 //                expect(receivedDictionary["cycles"] as? NSNumber) == 3
 //                expect(receivedDictionary["identifier"] as? NSString) == "product discount"
 //                expect(receivedDictionary["period"] as? NSString) == "P3M"
