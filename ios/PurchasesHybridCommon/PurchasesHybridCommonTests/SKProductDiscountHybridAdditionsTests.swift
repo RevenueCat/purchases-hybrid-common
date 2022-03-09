@@ -27,17 +27,17 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                 
                 let storeProductDiscount = StoreProductDiscount(sk1Discount: productDiscount)
                 
-                guard let receivedDictionary = storeProductDiscount?.rc_dictionary() as? [String: NSObject] else {
+                guard let receivedDictionary = storeProductDiscount?.rc_dictionary as? [String: NSObject] else {
                     fatalError("received rc_dictionary is not in the right format")
                 }
 
-//                expect(receivedDictionary["cycles"] as? NSNumber) == 3
-//                expect(receivedDictionary["identifier"] as? NSString) == "product discount"
-//                expect(receivedDictionary["period"] as? NSString) == "P3M"
-//                expect(receivedDictionary["periodNumberOfUnits"] as? NSNumber) == 3
-//                expect(receivedDictionary["periodUnit"] as? NSString) == "MONTH"
-//                expect(receivedDictionary["price"] as? NSNumber).to(beCloseTo(10.99))
-//                expect(receivedDictionary["priceString"] as? NSString) == "$10.99"
+                expect(receivedDictionary["cycles"] as? NSNumber) == 3
+                expect(receivedDictionary["identifier"] as? NSString) == "product discount"
+                expect(receivedDictionary["period"] as? NSString) == "P3M"
+                expect(receivedDictionary["periodNumberOfUnits"] as? NSNumber) == 3
+                expect(receivedDictionary["periodUnit"] as? NSString) == "MONTH"
+                expect(receivedDictionary["price"] as? NSNumber).to(beCloseTo(10.99))
+                expect(receivedDictionary["priceString"] as? NSString) == "$10.99"
             }
         }
     }

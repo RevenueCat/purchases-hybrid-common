@@ -4,7 +4,6 @@
 //
 
 #import "RCEntitlementInfo+HybridAdditions.h"
-#import "SKProduct+HybridAdditions.h"
 #import "NSDate+HybridAdditions.h"
 
 @implementation RCEntitlementInfo (HybridAdditions)

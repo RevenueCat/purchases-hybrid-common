@@ -6,22 +6,19 @@ PODS:
 DEPENDENCIES:
   - Nimble
   - Quick
-  - RevenueCat (from `~/Developer/purchases-ios`)
+  - RevenueCat (= 4.0.0)
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-
-EXTERNAL SOURCES:
-  RevenueCat:
-    :path: "~/Developer/purchases-ios"
+    - RevenueCat
 
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
   RevenueCat: 6d7111834346bbb387b248c0b4841099af3b9f69
 
-PODFILE CHECKSUM: f43f63925cbb688089433fea78c436bc07f290ac
+PODFILE CHECKSUM: c7062b34bf0599ece3ab56037393a8b5eb38bd6c
 
 COCOAPODS: 1.11.2

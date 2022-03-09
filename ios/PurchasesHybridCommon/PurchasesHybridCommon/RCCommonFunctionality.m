@@ -3,13 +3,13 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 #import "RCCommonFunctionality.h"
-#import "SKProduct+HybridAdditions.h"
 #import "RCErrorContainer.h"
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
 #import "SKPaymentDiscount+HybridAdditions.h"
 #import "RCPurchases+HybridAdditions.h"
 
+#import "PurchasesHybridCommon-Swift.h"
 
 API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))
 @interface RCCommonFunctionality ()

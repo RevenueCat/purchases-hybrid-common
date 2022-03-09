@@ -6,9 +6,7 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  #  pod 'Purchases', '3.14.1'
-  # pod 'RevenueCat', git: 'https://github.com/RevenueCat/purchases-ios.git', tag: '4.0.0-rc.3'
-  pod 'RevenueCat', path: '~/Developer/purchases-ios'
+  pod 'RevenueCat', '4.0.0'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing

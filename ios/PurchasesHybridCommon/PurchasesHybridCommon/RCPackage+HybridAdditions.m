@@ -4,7 +4,8 @@
 //
 
 #import "RCPackage+HybridAdditions.h"
-#import "SKProduct+HybridAdditions.h"
+
+#import "PurchasesHybridCommon-Swift.h"
 
 @implementation RCPackage (HybridAdditions)
 

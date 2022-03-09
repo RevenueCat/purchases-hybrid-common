@@ -4,7 +4,6 @@
 //
 
 #import "RCOffering+HybridAdditions.h"
-#import "SKProduct+HybridAdditions.h"
 #import "RCPackage+HybridAdditions.h"
 
 @implementation RCOffering (HybridAdditions)
