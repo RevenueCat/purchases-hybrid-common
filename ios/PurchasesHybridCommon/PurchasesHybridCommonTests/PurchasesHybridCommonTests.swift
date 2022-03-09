@@ -76,7 +76,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 }
 
                 let expectedResult: NSDictionary = [
-                    "purchaserInfo": self.mockCustomerInfo.dictionary() as NSDictionary,
+                    "customerInfo": self.mockCustomerInfo.dictionary() as NSDictionary,
                     "created": mockCreated
                 ]
 

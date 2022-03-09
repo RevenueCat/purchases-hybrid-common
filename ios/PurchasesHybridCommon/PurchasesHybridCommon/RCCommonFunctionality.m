@@ -92,7 +92,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
                                completion(nil, errorContainer);
                            } else {
                                completion(@{
-                                              @"purchaserInfo": purchaserInfo.dictionary,
+                                              @"customerInfo": purchaserInfo.dictionary,
                                               @"created": @(created)
                                           }, nil);
                            }
@@ -181,7 +181,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             completion(nil, errorContainer);
         } else {
             completion(@{
-                           @"purchaserInfo": purchaserInfo.dictionary,
+                           @"customerInfo": purchaserInfo.dictionary,
                            @"productIdentifier": transaction.productIdentifier
                        }, nil);
         }
@@ -190,7 +190,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     [self productWithIdentifier:productIdentifier completionBlock:^(RCStoreProduct * _Nullable aProduct) {
         if (aProduct == nil) {
             [self productNotFoundErrorWithDescription:@"Couldn't find product."
-                                        userCancelled:[NSNumber numberWithBool:NO]
+                                        userCancelled:@NO
                                            completion:completion];
             return;
         }
@@ -200,7 +200,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                 RCStoreProductDiscount *discount = self.discounts[discountTimestamp];
                 if (discount == nil) {
                     [self productNotFoundErrorWithDescription:@"Couldn't find discount."
-                                                userCancelled:[NSNumber numberWithBool:NO]
+                                                userCancelled:@NO
                                                    completion:completion];
                     return;
                 }
@@ -210,7 +210,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                     
                     if (offer == nil) {
                         [self productNotFoundErrorWithDescription:@"Couldn't find discount."
-                                                    userCancelled:[NSNumber numberWithBool:NO]
+                                                    userCancelled:@NO
                                                        completion:completion];
                         return;
                     }
@@ -248,7 +248,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             completion(nil, errorContainer);
         } else {
             completion(@{
-                           @"purchaserInfo": purchaserInfo.dictionary,
+                           @"customerInfo": purchaserInfo.dictionary,
                            @"productIdentifier": transaction.productIdentifier
                        }, nil);
         }
@@ -259,7 +259,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                 completionBlock:^(RCPackage * _Nullable aPackage) {
                     if (aPackage == nil) {
                         [self productNotFoundErrorWithDescription:@"Couldn't find package."
-                                                    userCancelled:[NSNumber numberWithBool:NO]
+                                                    userCancelled:@NO
                                                        completion:completion];
                         return;
                     }
@@ -269,7 +269,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                             RCStoreProductDiscount *discount = self.discounts[discountTimestamp];
                             if (discount == nil) {
                                 [self productNotFoundErrorWithDescription:@"Couldn't find discount."
-                                                            userCancelled:[NSNumber numberWithBool:NO]
+                                                            userCancelled:@NO
                                                                completion:completion];
                                 return;
                             }
@@ -279,7 +279,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                                 
                                 if (offer == nil) {
                                     [self productNotFoundErrorWithDescription:@"Couldn't find discount."
-                                                                userCancelled:[NSNumber numberWithBool:NO]
+                                                                userCancelled:@NO
                                                                    completion:completion];
                                     return;
                                 }
@@ -318,7 +318,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                 completion(nil, errorContainer);
             } else {
                 completion(@{
-                               @"purchaserInfo": customerInfo.dictionary,
+                               @"customerInfo": customerInfo.dictionary,
                                @"productIdentifier": transaction.productIdentifier
                            }, nil);
             }
