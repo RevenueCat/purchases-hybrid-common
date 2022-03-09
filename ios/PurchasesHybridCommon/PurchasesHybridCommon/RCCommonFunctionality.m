@@ -414,7 +414,10 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos) {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases presentCodeRedemptionSheet];
+// Needed for pod lib lint to pass
+#if TARGET_OS_IOS
+        [RCPurchases.sharedPurchases presentCodeRedemptionSheet];
+#endif
 }
 
 #pragma mark - Subcriber Attributes
@@ -568,13 +571,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
               completionBlock:(void (^)(RCStoreProduct * _Nullable))completion {
     [RCPurchases.sharedPurchases getProductsWithIdentifiers:@[productIdentifier]
                                                  completion:^(NSArray<RCStoreProduct *> *_Nonnull products) {
-                                                     RCStoreProduct *aProduct = nil;
-                                                     for (RCStoreProduct *p in products) {
-                                                         if ([productIdentifier isEqualToString:p.productIdentifier]) {
-                                                             aProduct = p;
-                                                         }
-                                                     }
-                                                     completion(aProduct);
+                                                     completion(products.firstObject);
                                                  }];
 }
 

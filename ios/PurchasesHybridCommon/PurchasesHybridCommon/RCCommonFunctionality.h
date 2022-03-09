@@ -70,10 +70,6 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)checkTrialOrIntroDiscountEligibility:(nonnull NSArray<NSString *> *)productIdentifiers
                              completionBlock:(RCReceiveIntroEligibilityBlock)completion;
 
-+ (void)paymentDiscountForProductIdentifier:(NSString *)productIdentifier
-                                   discount:(nullable NSString *)discountIdentifier
-                            completionBlock:(RCHybridResponseBlock)completion;
-
 + (void)presentCodeRedemptionSheet API_AVAILABLE(ios(14.0)) API_UNAVAILABLE(tvos, macos, watchos);
 
 + (void)invalidateCustomerInfoCache;
