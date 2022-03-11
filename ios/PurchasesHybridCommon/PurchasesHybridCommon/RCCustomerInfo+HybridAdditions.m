@@ -3,7 +3,7 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 
-#import "RCPurchaserInfo+HybridAdditions.h"
+#import "RCCustomerInfo+HybridAdditions.h"
 #import "RCEntitlementInfos+HybridAdditions.h"
 #import "NSDate+HybridAdditions.h"
 #import "RCTransaction+HybridAdditions.h"
