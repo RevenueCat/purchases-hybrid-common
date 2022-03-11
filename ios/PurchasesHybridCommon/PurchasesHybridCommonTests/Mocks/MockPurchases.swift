@@ -171,17 +171,17 @@ class MockPurchases: Purchases {
 //        invokedResetParametersList.append((completion, ()))
 //    }
 
-    var invokedPurchaserInfo = false
-    var invokedPurchaserInfoCount = 0
-    var invokedPurchaserInfoParameters: (completion: ReceiveCustomerInfoBlock, Void)?
-    var invokedPurchaserInfoParametersList = [(completion: ReceiveCustomerInfoBlock,
+    var invokedCustomerInfo = false
+    var invokedCustomerInfoCount = 0
+    var invokedCustomerInfoParameters: (completion: ReceiveCustomerInfoBlock, Void)?
+    var invokedCustomerInfoParametersList = [(completion: ReceiveCustomerInfoBlock,
         Void)]()
     
     override func getCustomerInfo(completion: @escaping ReceiveCustomerInfoBlock) {
-        invokedPurchaserInfo = true
-        invokedPurchaserInfoCount += 1
-        invokedPurchaserInfoParameters = (completion, ())
-        invokedPurchaserInfoParametersList.append((completion, ()))
+        invokedCustomerInfo = true
+        invokedCustomerInfoCount += 1
+        invokedCustomerInfoParameters = (completion, ())
+        invokedCustomerInfoParametersList.append((completion, ()))
     }
     
     typealias ReceiveOfferingsBlock = (Offerings?, Error?) -> ()

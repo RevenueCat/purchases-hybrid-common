@@ -1,5 +1,5 @@
 //
-//  PurchaserInfoHybridAdditionsTests.swift
+//  CustomerInfoHybridAdditionsTests.swift
 //  PurchasesHybridCommonTests
 //
 //  Created by Andrés Boedo on 6/10/20.
@@ -12,7 +12,7 @@ import PurchasesHybridCommon
 
 @testable import RevenueCat
 
-class PurchaserInfoHybridAdditionsTests: QuickSpec {
+class CustomerInfoHybridAdditionsTests: QuickSpec {
 
     override func spec() {
         describe("rc_dictionary") {

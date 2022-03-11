@@ -5,7 +5,7 @@
 #import "RCCommonFunctionality.h"
 #import "RCErrorContainer.h"
 #import "RCOfferings+HybridAdditions.h"
-#import "RCPurchaserInfo+HybridAdditions.h"
+#import "RCCustomerInfo+HybridAdditions.h"
 #import "SKPaymentDiscount+HybridAdditions.h"
 #import "RCPurchases+HybridAdditions.h"
 
@@ -63,15 +63,15 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 
 + (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases restorePurchasesWithCompletion:[self getPurchaserInfoCompletionBlock:completion]];
+    [RCPurchases.sharedPurchases restorePurchasesWithCompletion:[self getCustomerInfoCompletionBlock:completion]];
 }
 
 + (void)syncPurchasesWithCompletionBlock:(nullable RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
 
-    void (^purchaserInfoCompletion)(RCCustomerInfo *, NSError *) = completion ? [self getPurchaserInfoCompletionBlock:completion]
+    void (^customerInfoCompletion)(RCCustomerInfo *, NSError *) = completion ? [self getCustomerInfoCompletionBlock:completion]
                                                                                : nil;
-    [RCPurchases.sharedPurchases syncPurchasesWithCompletion:purchaserInfoCompletion];
+    [RCPurchases.sharedPurchases syncPurchasesWithCompletion:customerInfoCompletion];
 }
 
 + (NSString *)appUserID {
@@ -83,7 +83,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 + (void)logInWithAppUserID:(NSString *)appUserId completionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases logIn:appUserId
-                       completion:^(RCCustomerInfo * _Nullable purchaserInfo,
+                       completion:^(RCCustomerInfo * _Nullable customerInfo,
                                          BOOL created,
                                          NSError * _Nullable error) {
                            if (error) {
@@ -92,7 +92,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
                                completion(nil, errorContainer);
                            } else {
                                completion(@{
-                                              @"customerInfo": purchaserInfo.dictionary,
+                                              @"customerInfo": customerInfo.dictionary,
                                               @"created": @(created)
                                           }, nil);
                            }
@@ -101,7 +101,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
 
 + (void)logOutWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases logOutWithCompletion:[self getPurchaserInfoCompletionBlock:completion]];
+    [RCPurchases.sharedPurchases logOutWithCompletion:[self getCustomerInfoCompletionBlock:completion]];
 }
 
 + (void)setDebugLogsEnabled:(BOOL)enabled {
@@ -137,9 +137,9 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
     }
 }
 
-+ (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion {
++ (void)getCustomerInfoWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
-    [RCPurchases.sharedPurchases getCustomerInfoWithCompletion:[self getPurchaserInfoCompletionBlock:completion]];
+    [RCPurchases.sharedPurchases getCustomerInfoWithCompletion:[self getCustomerInfoCompletionBlock:completion]];
 }
 
 + (void)setAutomaticAppleSearchAdsAttributionCollection:(BOOL)enabled {
@@ -172,7 +172,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     void
     (^completionBlock)(RCStoreTransaction * _Nullable, RCCustomerInfo * _Nullable, NSError * _Nullable, BOOL) = ^(
                                                                                                                   RCStoreTransaction * _Nullable transaction,
-                                                                                                                    RCCustomerInfo * _Nullable purchaserInfo,
+                                                                                                                    RCCustomerInfo * _Nullable customerInfo,
         NSError * _Nullable error,
         BOOL userCancelled) {
         if (error) {
@@ -181,7 +181,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             completion(nil, errorContainer);
         } else {
             completion(@{
-                           @"customerInfo": purchaserInfo.dictionary,
+                           @"customerInfo": customerInfo.dictionary,
                            @"productIdentifier": transaction.productIdentifier
                        }, nil);
         }
@@ -239,7 +239,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     void
     (^completionBlock)(RCStoreTransaction * _Nullable, RCCustomerInfo * _Nullable, NSError * _Nullable, BOOL) = ^(
                                                                                                                   RCStoreTransaction * _Nullable transaction,
-                                                                                                                    RCCustomerInfo * _Nullable purchaserInfo,
+                                                                                                                    RCCustomerInfo * _Nullable customerInfo,
         NSError * _Nullable error,
         BOOL userCancelled) {
         if (error) {
@@ -248,7 +248,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
             completion(nil, errorContainer);
         } else {
             completion(@{
-                           @"customerInfo": purchaserInfo.dictionary,
+                           @"customerInfo": customerInfo.dictionary,
                            @"productIdentifier": transaction.productIdentifier
                        }, nil);
         }
@@ -396,13 +396,13 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 //    }
 //}
 
-+ (void (^)(RCCustomerInfo *, NSError *))getPurchaserInfoCompletionBlock:(RCHybridResponseBlock)completion {
-    return ^(RCCustomerInfo * _Nullable purchaserInfo, NSError * _Nullable error) {
++ (void (^)(RCCustomerInfo *, NSError *))getCustomerInfoCompletionBlock:(RCHybridResponseBlock)completion {
+    return ^(RCCustomerInfo * _Nullable customerInfo, NSError * _Nullable error) {
         if (error) {
             RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:@{}];
             completion(nil, errorContainer);
         } else {
-            completion(purchaserInfo.dictionary, nil);
+            completion(customerInfo.dictionary, nil);
         }
     };
 }

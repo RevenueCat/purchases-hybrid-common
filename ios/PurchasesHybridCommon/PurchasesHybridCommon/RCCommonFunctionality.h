@@ -45,7 +45,7 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)setDebugLogsEnabled:(BOOL)enabled;
 
-+ (void)getPurchaserInfoWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)getCustomerInfoWithCompletionBlock:(RCHybridResponseBlock)completion;
 
 + (void)setAutomaticAppleSearchAdsAttributionCollection:(BOOL)enabled;
 

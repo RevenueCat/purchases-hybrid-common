@@ -60,7 +60,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect { mockPurchases.invokedLogInParameters?.appUserID } == appUserID
             }
 
-            it("returns purchaserInfo and created if successful") {
+            it("returns customerInfo and created if successful") {
                 let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (self.mockCustomerInfo, mockCreated, nil)
@@ -128,7 +128,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect { mockPurchases.invokedLogOutCount } == 1
             }
 
-            it("returns purchaserInfo if successful") {
+            it("returns customerInfo if successful") {
                 let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (self.mockCustomerInfo, nil)
 
