@@ -61,7 +61,7 @@ API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2)) {
                                          }];
 }
 
-+ (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion {
++ (void)restorePurchasesWithCompletionBlock:(RCHybridResponseBlock)completion {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     [RCPurchases.sharedPurchases restorePurchasesWithCompletion:[self getCustomerInfoCompletionBlock:completion]];
 }

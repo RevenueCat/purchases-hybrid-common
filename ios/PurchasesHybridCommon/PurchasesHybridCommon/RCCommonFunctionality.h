@@ -33,7 +33,7 @@ __attribute((deprecated("Use the set<NetworkId> functions instead.")));
 
 + (void)getProductInfo:(NSArray *)products completionBlock:(void (^)(NSArray<NSDictionary *> *))completion;
 
-+ (void)restoreTransactionsWithCompletionBlock:(RCHybridResponseBlock)completion;
++ (void)restorePurchasesWithCompletionBlock:(RCHybridResponseBlock)completion;
 
 + (void)syncPurchasesWithCompletionBlock:(nullable RCHybridResponseBlock)completion;
 
