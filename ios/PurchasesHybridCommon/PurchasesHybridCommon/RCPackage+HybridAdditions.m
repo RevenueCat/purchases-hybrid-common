@@ -15,7 +15,7 @@
 
     jsonDict[@"identifier"] = self.identifier;
     jsonDict[@"packageType"] = [self nameForPackageType:self.packageType];
-    jsonDict[@"product"] = self.storeProduct.rc_dictionary;
+    jsonDict[@"storeProduct"] = self.storeProduct.rc_dictionary;
     jsonDict[@"offeringIdentifier"] = offeringIdentifier;
 
     return [NSDictionary dictionaryWithDictionary:jsonDict];

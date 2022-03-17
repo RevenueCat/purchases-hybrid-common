@@ -1,5 +1,5 @@
 //
-//  RCTransaction+HybridAdditions.h
+//  RCStoreTransaction+HybridAdditions.h
 //  PurchasesHybridCommon
 //
 //  Created by César de la Vega  on 9/11/20.

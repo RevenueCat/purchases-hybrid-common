@@ -6,7 +6,7 @@
 #import "RCCustomerInfo+HybridAdditions.h"
 #import "RCEntitlementInfos+HybridAdditions.h"
 #import "NSDate+HybridAdditions.h"
-#import "RCTransaction+HybridAdditions.h"
+#import "RCStoreTransaction+HybridAdditions.h"
 
 @implementation RCCustomerInfo (HybridAdditions)
 
