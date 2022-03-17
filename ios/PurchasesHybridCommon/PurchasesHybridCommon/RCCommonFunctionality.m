@@ -605,4 +605,36 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     return [RCPurchases canMakePayments];
 }
 
++ (void)showManageSubscriptions:(void (^)(NSError * _Nullable))completion {
+    if (@available(iOS 13.0, *)) {
+        [RCPurchases.sharedPurchases showManageSubscriptionsWithCompletion:completion];
+    } else {
+        NSLog(@"called showManageSubscriptions, but it's not available on this platform / OS version");
+    }
+}
+
++ (void)beginRefundRequestForActiveEntitlementWithCompletionBlock:(RCHybridResponseBlock)completion {
+    if (@available(iOS 15.0, *)) {
+        void(^completionBlock)(enum RCRefundRequestStatus, NSError * _Nullable) = ^(RCRefundRequestStatus status,
+                                                                                    NSError * _Nullable error) {
+            if (error) {
+                RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                              extraPayload:@{}];
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:RCRefundRequestError]
+                }, errorContainer);
+            } else {
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:status]
+                }, nil);
+            }
+
+        };
+
+        [RCPurchases.sharedPurchases beginRefundRequestForActiveEntitlementWithCompletion:completionBlock];
+    } else {
+        NSLog(@"called beginRefundRequestForActiveEntitlement, but it's not available on this platform / OS version");
+    }
+}
+
 @end

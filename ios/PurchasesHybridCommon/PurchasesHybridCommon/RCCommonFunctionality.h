@@ -112,5 +112,9 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (BOOL)canMakePaymentsWithFeatures:(NSArray<NSNumber *> *)features;
 
++ (void)showManageSubscriptions:(void (^)(NSError * _Nullable))completion;
+
++ (void)beginRefundRequestForActiveEntitlementWithCompletionBlock:(RCHybridResponseBlock)completion;
+
 NS_ASSUME_NONNULL_END
 @end
