@@ -313,7 +313,7 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
                            NSError * _Nullable error,
                            BOOL userCancelled) {
             if (error) {
-                NSDictionary *extraPayload = @{@"userCanfcelled": @(userCancelled)};
+                NSDictionary *extraPayload = @{@"userCancelled": @(userCancelled)};
                 RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error extraPayload:extraPayload];
                 completion(nil, errorContainer);
             } else {
