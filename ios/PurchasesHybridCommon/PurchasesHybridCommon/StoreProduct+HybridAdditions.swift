@@ -38,7 +38,7 @@ public extension StoreProduct {
                 dict["intro_price_string"] = self.localizedIntroductoryPriceString
                 dict["intro_price_period"] = StoreProduct.rc_normalizedSubscriptionPeriod(introductoryDiscount.subscriptionPeriod)
                 dict["intro_price_period_unit"] = StoreProduct.rc_normalizedSubscriptionPeriod(introductoryDiscount.subscriptionPeriod)
-                dict["intro_price_period_number_of_units"] = introductoryDiscount.subscriptionPeriod.unit
+                dict["intro_price_period_number_of_units"] = introductoryDiscount.subscriptionPeriod.value
                 dict["intro_price_cycles"] = introductoryDiscount.subscriptionPeriod.value
                 dict["introPrice"] = introductoryDiscount.rc_dictionary
             }

@@ -1,5 +1,5 @@
 //
-//  StoreProductDiscount+HybridAttitions.swift
+//  StoreProductDiscount+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Josh Holtz on 3/7/22.
