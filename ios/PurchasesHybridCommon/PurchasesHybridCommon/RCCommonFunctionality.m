@@ -605,9 +605,13 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
     return [RCPurchases canMakePayments];
 }
 
-+ (void)showManageSubscriptions:(void (^)(NSError * _Nullable))completion {
++ (void)showManageSubscriptions:(void (^)(RCErrorContainer * _Nullable error))completion {
     if (@available(iOS 13.0, *)) {
-        [RCPurchases.sharedPurchases showManageSubscriptionsWithCompletion:completion];
+        [RCPurchases.sharedPurchases showManageSubscriptionsWithCompletion:^(NSError * _Nullable error) {
+            RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                          extraPayload:@{}];
+            completion(errorContainer);
+        }];
     } else {
         NSLog(@"called showManageSubscriptions, but it's not available on this platform / OS version");
     }
@@ -636,5 +640,74 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
         NSLog(@"called beginRefundRequestForActiveEntitlement, but it's not available on this platform / OS version");
     }
 }
+
++ (void)beginRefundRequestForProduct:(NSString *)productIdentifier completionBlock:(RCHybridResponseBlock)completion {
+    if (@available(iOS 15.0, *)) {
+        void(^completionBlock)(enum RCRefundRequestStatus, NSError * _Nullable) = ^(RCRefundRequestStatus status,
+                                                                                    NSError * _Nullable error) {
+            if (error) {
+                RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                              extraPayload:@{}];
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:RCRefundRequestError]
+                }, errorContainer);
+            } else {
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:status]
+                }, nil);
+            }
+
+        };
+
+        [RCPurchases.sharedPurchases beginRefundRequestForProduct:productIdentifier completion:completionBlock];
+    } else {
+        NSLog(@"called beginRefundRequestForProduct, but it's not available on this platform / OS version");
+    }
+}
+
++ (void)beginRefundRequestForEntitlement:(NSString *)entitlementIdentifier completionBlock:(RCHybridResponseBlock)completion {
+    if (@available(iOS 15.0, *)) {
+        void(^completionBlock)(enum RCRefundRequestStatus, NSError * _Nullable) = ^(RCRefundRequestStatus status,
+                                                                                    NSError * _Nullable error) {
+            if (error) {
+                RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                              extraPayload:@{}];
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:RCRefundRequestError]
+                }, errorContainer);
+            } else {
+                completion(@{
+                    @"status": [[NSNumber alloc] initWithInt:status]
+                }, nil);
+            }
+
+        };
+
+        [RCPurchases.sharedPurchases beginRefundRequestForEntitlement:entitlementIdentifier completion:completionBlock];
+    } else {
+        NSLog(@"called beginRefundRequestForEntitlement, but it's not available on this platform / OS version");
+    }
+}
+
++ (void)getPromotionalOfferForProductDiscount:(RCStoreProductDiscount *)discount withProduct:(RCStoreProduct *)product withCompletion:(RCHybridResponseBlock)completion {
+    if (@available(iOS 12.2, *)) {
+        [RCPurchases.sharedPurchases getPromotionalOfferForProductDiscount:discount
+                                                               withProduct:product
+                                                            withCompletion:^(RCPromotionalOffer * _Nullable offer, NSError * _Nullable error) {
+            if (error) {
+                RCErrorContainer *errorContainer = [[RCErrorContainer alloc] initWithError:error
+                                                                              extraPayload:@{}];
+                completion(nil, errorContainer);
+            } else {
+                completion(@{
+                    @"promotionalOffer": promo
+                }, nil);
+            }
+        }];
+    } else {
+        NSLog(@"called getPromotionalOfferForProductDiscount:withProduct:withCompletion, but it's not available on this platform / OS version");
+    }
+}
+
 
 @end

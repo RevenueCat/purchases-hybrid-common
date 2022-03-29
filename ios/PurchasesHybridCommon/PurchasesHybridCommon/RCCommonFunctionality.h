@@ -112,9 +112,15 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 
 + (BOOL)canMakePaymentsWithFeatures:(NSArray<NSNumber *> *)features;
 
-+ (void)showManageSubscriptions:(void (^)(NSError * _Nullable))completion;
++ (void)showManageSubscriptions:(void (^)(RCErrorContainer * _Nullable error))completion;
 
 + (void)beginRefundRequestForActiveEntitlementWithCompletionBlock:(RCHybridResponseBlock)completion;
+
++ (void)beginRefundRequestForProduct:(NSString *)productIdentifier completionBlock:(RCHybridResponseBlock)completion;
+
++ (void)beginRefundRequestForEntitlement:(NSString *)entitlementIdentifier completionBlock:(RCHybridResponseBlock)completion;
+
++ (void)getPromotionalOfferForProductDiscount:(RCStoreProductDiscount *)discount withProduct:(RCStoreProduct *)product withCompletion:(RCHybridResponseBlock)completion;
 
 NS_ASSUME_NONNULL_END
 @end
