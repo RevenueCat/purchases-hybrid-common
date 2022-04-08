@@ -1,3 +1,7 @@
+### 2.0.0-amazon.alpha.6.billing3.iap2
+
+- Bumps purchases-android to 5.0.0-amazon.alpha.6.billing3.iap2 to add currency and price to `syncObserverAmazonPurchase`
+
 ### 2.0.0-amazon.alpha.5.billing3.iap2
 
 - Adds DangerousSettings option
