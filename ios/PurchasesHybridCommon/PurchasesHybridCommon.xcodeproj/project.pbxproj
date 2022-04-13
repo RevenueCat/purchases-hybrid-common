@@ -13,6 +13,8 @@
 		2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */; };
 		2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */; };
 		2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */; };
+		2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */; };
+		2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -104,6 +106,8 @@
 		2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonTests.swift; sourceTree = "<group>"; };
 		2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
+		2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridCommonDictionaryConversionsAPITest.m; sourceTree = "<group>"; };
+		2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainerAPITests.m; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F75280710FA0090FACC /* ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F77280710FA0090FACC /* ObjCAPITester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCAPITester.h; sourceTree = "<group>"; };
@@ -232,6 +236,8 @@
 				2D557F77280710FA0090FACC /* ObjCAPITester.h */,
 				2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */,
 				2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */,
+				2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */,
+				2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */,
 			);
 			path = ObjCAPITester;
 			sourceTree = "<group>";
@@ -759,6 +765,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */,
+				2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */,
 				2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */,
 				2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */,
 			);
