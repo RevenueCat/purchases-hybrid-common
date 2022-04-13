@@ -15,7 +15,14 @@ import Purchases
         return [
             "identifier": identifier,
             "serverDescription": serverDescription,
-//            "availablePackages": availablePackages.map { $0.dictionary(identifier) }
+            "availablePackages": availablePackages.map { $0.dictionary(identifier) },
+            "lifetime": lifetime?.dictionary(identifier) ?? "<null>",
+            "annual": annual?.dictionary(identifier) ?? "<null>",
+            "sixMonth": sixMonth?.dictionary(identifier) ?? "<null>",
+            "threeMonth": threeMonth?.dictionary(identifier) ?? "<null>",
+            "twoMonth":twoMonth?.dictionary(identifier) ?? "<null>",
+            "monthly":monthly?.dictionary(identifier) ?? "<null>",
+            "weekly":weekly?.dictionary(identifier) ?? "<null>"
         ]
     }
 

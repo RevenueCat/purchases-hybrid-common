@@ -20,11 +20,9 @@
 		2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
 		2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */; };
-		2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */; };
 		2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */; };
 		2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */; };
 		2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D557F77280710FA0090FACC /* ObjCAPITester.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -131,8 +129,6 @@
 		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
 		2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchaserInfo+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchaserInfo+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOffering+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOffering+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCommonFunctionality.h; sourceTree = "<group>"; };
 		2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOfferings+HybridAdditions.m"; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
@@ -296,8 +292,6 @@
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */,
 				2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */,
-				2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */,
-				2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */,
 				2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */,
 				2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */,
 				2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */,
@@ -346,7 +340,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */,
-				2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */,
 				2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */,
 				2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */,
 				2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */,
@@ -706,7 +699,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */,
-				2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */,
 				2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */,
 				2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */,
 			);
