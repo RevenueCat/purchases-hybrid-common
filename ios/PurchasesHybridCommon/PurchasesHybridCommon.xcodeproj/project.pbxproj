@@ -21,7 +21,6 @@
 		2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
 		2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -31,7 +30,6 @@
 		2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */; };
-		2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */; };
 		2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */; };
 		2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */; };
 		2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */; };
@@ -144,9 +142,7 @@
 		2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOffering+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPackage+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCommonFunctionality.h; sourceTree = "<group>"; };
-		2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCErrorContainer.h; sourceTree = "<group>"; };
 		2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainer.m; sourceTree = "<group>"; };
 		2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOfferings+HybridAdditions.m"; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
@@ -313,8 +309,6 @@
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */,
 				2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */,
-				2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */,
-				2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */,
 				2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */,
 				2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */,
 				2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */,
@@ -375,7 +369,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */,
-				2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */,
 				2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */,
 				2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */,
 				2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */,
@@ -742,7 +735,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */,
-				2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */,
 				2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */,
 				2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */,
 				2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */,
