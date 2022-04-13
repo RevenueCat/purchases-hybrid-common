@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.android_tools = '7.0.2'
+    ext.android_tools = '7.1.0'
     ext.kotlin_version = '1.6.20'
     ext.android_junit5_version = '1.8.2.0'
     ext.junit5 = '5.8.2'
@@ -24,13 +24,12 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "de.mannodermaus.android-junit5"
 apply plugin: "com.vanniktech.maven.publish"
 
 android {
     compileSdkVersion 32
-    buildToolsVersion "32.1.0-rc1"
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         minSdkVersion 14
