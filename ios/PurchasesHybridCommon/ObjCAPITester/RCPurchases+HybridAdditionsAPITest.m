@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RCPurchasesHybridAdditionsAPITest
 - (void)testAPI {
-    RCPurchases *purchases = [RCPurchases configureWithAPIKey:@""
+    RCPurchases *purchases __unused = [RCPurchases configureWithAPIKey:@""
                                                     appUserID:@""
                                                  observerMode:NO
                                         userDefaultsSuiteName:nil

@@ -17,4 +17,3 @@ FOUNDATION_EXPORT const unsigned char PurchasesHybridCommonVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <PurchasesHybridCommon/PublicHeader.h>
 
 #import <PurchasesHybridCommon/RCCommonFunctionality.h>
-#import <PurchasesHybridCommon/RCPurchaserInfo+HybridAdditions.h>
