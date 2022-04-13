@@ -7,7 +7,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "identifier" to sku,
         "description" to description,
         "title" to title,
-        "price" to priceAmountMicros / 1000000.0,
+        "price" to priceAmountMicros / 1_000_000.0,
         "price_string" to price,
         "currency_code" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
@@ -34,7 +34,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
         introductoryPrice != null -> {
             introductoryPricePeriod!!.mapPeriod()?.let { periodFields ->
                 mapOf(
-                    "price" to introductoryPriceAmountMicros / 1000000.0,
+                    "price" to introductoryPriceAmountMicros / 1_000_000.0,
                     "priceString" to introductoryPrice,
                     "period" to introductoryPricePeriod,
                     "cycles" to introductoryPriceCycles

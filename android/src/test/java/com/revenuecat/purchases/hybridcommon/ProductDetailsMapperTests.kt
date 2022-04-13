@@ -88,7 +88,7 @@ internal class StoreProductMapperTests {
         @BeforeEach
         fun beforeEachTest() {
             every { mockStoreProduct.freeTrialPeriod } returns null
-            every { mockStoreProduct.introductoryPriceAmountMicros } returns 10000000
+            every { mockStoreProduct.introductoryPriceAmountMicros } returns 10_000_000
             every { mockStoreProduct.introductoryPrice } returns "$10.00"
             every { mockStoreProduct.introductoryPriceCycles } returns 2
         }
