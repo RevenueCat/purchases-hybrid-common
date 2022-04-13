@@ -24,7 +24,7 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                guard let receivedDictionary = productDiscount.rc_dictionary() as? [String: NSObject] else {
+                guard let receivedDictionary = productDiscount.rc_dictionary as? [String: NSObject] else {
                     fatalError("received rc_dictionary is not in the right format")
                 }
                 

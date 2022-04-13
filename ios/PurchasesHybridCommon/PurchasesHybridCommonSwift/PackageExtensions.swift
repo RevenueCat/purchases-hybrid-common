@@ -15,7 +15,7 @@ import Purchases
         return [
             "identifier": identifier,
             "packageType": packageType.name,
-//            "product": product.rc_dictionary,
+            "product": product.rc_dictionary,
             "offeringIdentifier": offeringIdentifier
         ]
     }

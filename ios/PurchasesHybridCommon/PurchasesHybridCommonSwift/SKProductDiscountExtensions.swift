@@ -25,12 +25,12 @@ import StoreKit
         var dictionary: [String: Any] = [
             "price": price.floatValue,
             "priceString": formatter.string(from: price) ?? "",
-//            "period": SKProduct.rc_normalizedSubscriptionPeriod(subscriptionPeriod),
-//            "periodUnit": SKProduct.rc_normalizedSubscriptionPeriodUnit(subscriptionPeriod.unit),
+            "period": SKProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod),
+            "periodUnit": SKProduct.rc_normalized(subscriptionPeriodUnit: subscriptionPeriod.unit),
             "periodNumberOfUnits": subscriptionPeriod.numberOfUnits,
             "cycles": numberOfPeriods
         ]
-
+        
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
             if identifier != nil {
                 dictionary["identifier"] = identifier
