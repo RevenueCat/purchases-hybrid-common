@@ -1,6 +1,6 @@
 //
-//  RCHybridCommonAPITest.m
-//  RCHybridCommonAPITest
+//  RCCommonFunctionalityAPITest.m
+//  RCCommonFunctionalityAPITest
 //
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.
@@ -11,11 +11,11 @@
 @import PurchasesHybridCommonSwift;
 
 NS_ASSUME_NONNULL_BEGIN
-@interface RCHybridCommonAPITest: NSObject
+@interface RCCommonFunctionalityAPITest: NSObject
 @end
 
 
-@implementation RCHybridCommonAPITest
+@implementation RCCommonFunctionalityAPITest
 - (void)testAPI {
     NSString *proxyURL = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox = [RCCommonFunctionality simulatesAskToBuyInSandbox];
