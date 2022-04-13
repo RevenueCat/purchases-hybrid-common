@@ -46,6 +46,10 @@
 		2D7749DB2807090700F70FFA /* PurchasesHybridCommonSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D902807574D00676D73 /* OfferingExtensions.swift */; };
+		2D900D952807580000676D73 /* PackageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* PackageExtensions.swift */; };
+		2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */; };
+		2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProductExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */; };
@@ -126,6 +130,10 @@
 		2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommonSwift.h; sourceTree = "<group>"; };
 		2D7749D42807090700F70FFA /* PurchasesHybridCommonSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D7749D92807090700F70FFA /* PurchasesHybridCommonSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonSwiftTests.swift; sourceTree = "<group>"; };
+		2D900D902807574D00676D73 /* OfferingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferingExtensions.swift; sourceTree = "<group>"; };
+		2D900D942807580000676D73 /* PackageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageExtensions.swift; sourceTree = "<group>"; };
+		2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountExtensions.swift; sourceTree = "<group>"; };
+		2D900D9828075B9000676D73 /* SKProductExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductExtensions.swift; sourceTree = "<group>"; };
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOfferings+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+HybridAdditions.h"; sourceTree = "<group>"; };
@@ -263,6 +271,10 @@
 				2D4FDFE62807436200863298 /* TransactionExtensions.swift */,
 				2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */,
 				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
+				2D900D902807574D00676D73 /* OfferingExtensions.swift */,
+				2D900D942807580000676D73 /* PackageExtensions.swift */,
+				2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */,
+				2D900D9828075B9000676D73 /* SKProductExtensions.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -780,7 +792,11 @@
 				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
 				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
 				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
+				2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */,
 				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,
+				2D900D952807580000676D73 /* PackageExtensions.swift in Sources */,
+				2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */,
+				2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
