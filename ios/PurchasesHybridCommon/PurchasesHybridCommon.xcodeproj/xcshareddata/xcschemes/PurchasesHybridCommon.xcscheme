@@ -20,6 +20,20 @@
                ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2D557F74280710FA0090FACC"
+               BuildableName = "ObjCAPITester.framework"
+               BlueprintName = "ObjCAPITester"
+               ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -28,6 +42,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2D6E331E2450F68C0022A971"
+               BuildableName = "PurchasesHybridCommonTests.xctest"
+               BlueprintName = "PurchasesHybridCommonTests"
+               ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
