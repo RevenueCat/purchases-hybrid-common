@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL simulatesAskToBuyInSandbox = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
     [RCCommonFunctionality configure];
-    [RCCommonFunctionality setAllowSharingStoreAccount:@NO];
+    [RCCommonFunctionality setAllowSharingStoreAccount:NO];
     [RCCommonFunctionality addAttributionData:@{} network:@1 networkUserId:@"asdfg"];
     
     [RCCommonFunctionality getProductInfo:@[]
@@ -52,11 +52,11 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
     }];
 
-    [RCCommonFunctionality setDebugLogsEnabled:@NO];
+    [RCCommonFunctionality setDebugLogsEnabled:NO];
     [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
     }];
 
-    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:@YES];
+    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
     }];
     BOOL isAnonymous = RCCommonFunctionality.isAnonymous;
@@ -77,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
     } completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
     }];
 
-    [RCCommonFunctionality setFinishTransactions:@NO];
+    [RCCommonFunctionality setFinishTransactions:NO];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@"" completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *> * _Nonnull) {
     }];
      [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
