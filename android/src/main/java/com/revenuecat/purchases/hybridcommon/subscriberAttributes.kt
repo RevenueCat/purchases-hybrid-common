@@ -3,34 +3,6 @@ package com.revenuecat.purchases.hybridcommon
 import com.revenuecat.purchases.Purchases
 import org.json.JSONObject
 
-// region attribution v1
-fun addAttributionData(
-    data: Map<String, String>,
-    network: Int,
-    networkUserId: String?
-) {
-    for (attributionNetwork in Purchases.AttributionNetwork.values()) {
-        if (attributionNetwork.serverValue == network) {
-            @Suppress("DEPRECATION")
-            Purchases.addAttributionData(data, attributionNetwork, networkUserId)
-        }
-    }
-}
-
-fun addAttributionData(
-    data: JSONObject,
-    network: Int,
-    networkUserId: String?
-) {
-    for (attributionNetwork in Purchases.AttributionNetwork.values()) {
-        if (attributionNetwork.serverValue == network) {
-            @Suppress("DEPRECATION")
-            Purchases.addAttributionData(data, attributionNetwork, networkUserId)
-        }
-    }
-}
-
-// endregion
 // region Attribution IDs
 
 fun collectDeviceIdentifiers() {
