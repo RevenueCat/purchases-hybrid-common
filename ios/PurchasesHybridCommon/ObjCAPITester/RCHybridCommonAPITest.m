@@ -17,74 +17,100 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RCCommonFunctionalityAPITest
 - (void)testAPI {
-    NSString *proxyURL = [RCCommonFunctionality proxyURLString];
-    BOOL simulatesAskToBuyInSandbox = [RCCommonFunctionality simulatesAskToBuyInSandbox];
+    NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
+    BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
     [RCCommonFunctionality configure];
+    // should issue deprecated warning
     [RCCommonFunctionality setAllowSharingStoreAccount:NO];
-    [RCCommonFunctionality addAttributionData:@{} network:@1 networkUserId:@"asdfg"];
+
+    // should issue deprecated warning
+    [RCCommonFunctionality addAttributionData:@{} network:1 networkUserId:@"asdfg"];
     
     [RCCommonFunctionality getProductInfo:@[]
-                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull) {
+                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
 
-    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                    RCErrorContainer * _Nullable error) {
     }];
 
-     [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+     [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                               RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality appUserID];
     [RCCommonFunctionality logInWithAppUserID:@""
-                              completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+                              completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality logOutWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    [RCCommonFunctionality logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                       RCErrorContainer * _Nullable error) {
     }];
 
+    // should issue deprecated warning
     [RCCommonFunctionality createAlias:@""
-                       completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
-    }];
-    [RCCommonFunctionality identify:@""
-                    completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+                       completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                         RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    // should issue deprecated warning
+    [RCCommonFunctionality identify:@""
+                    completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                      RCErrorContainer * _Nullable error) {
+    }];
+
+    // should issue deprecated warning
+    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                      RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality setDebugLogsEnabled:NO];
-    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                 RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
-    [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
+                                                             RCErrorContainer * _Nullable error) {
     }];
-    BOOL isAnonymous = RCCommonFunctionality.isAnonymous;
+    BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
 
 
     [RCCommonFunctionality purchaseProduct:@""
                    signedDiscountTimestamp:@""
-                           completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
     }];
 
      [RCCommonFunctionality purchasePackage:@""
                                    offering:@""
                     signedDiscountTimestamp:@""
-                            completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+                            completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                              RCErrorContainer * _Nullable error) {
      }];
 
-    [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull) {
-    } completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+    [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
+    }
+                                completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                  RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality setFinishTransactions:NO];
-    [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@"" completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *> * _Nonnull) {
+    [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
+                                                    completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *>
+                                                                      * _Nonnull eligibilities) {
     }];
      [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
-                                                       discount:@"" completionBlock:^(NSDictionary * _Nullable, RCErrorContainer * _Nullable) {
+                                                       discount:@""
+                                                completionBlock:^(NSDictionary * _Nullable discount,
+                                                                  RCErrorContainer * _Nullable error) {
      }];
 
-    [RCCommonFunctionality presentCodeRedemptionSheet];
+    if (@available(iOS 14.0, *)) {
+        [RCCommonFunctionality presentCodeRedemptionSheet];
+    }
     [RCCommonFunctionality invalidatePurchaserInfoCache];
     [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
 }
