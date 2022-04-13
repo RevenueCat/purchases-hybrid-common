@@ -9,6 +9,7 @@
 #import "RCPurchaserInfo+HybridAdditions.h"
 #import "SKPaymentDiscount+HybridAdditions.h"
 #import "RCPurchases+HybridAdditions.h"
+@import PurchasesHybridCommonSwift;
 
 
 API_AVAILABLE(ios(12.2), macos(10.14.4), tvos(12.2))

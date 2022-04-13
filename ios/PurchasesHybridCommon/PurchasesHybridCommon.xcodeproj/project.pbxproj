@@ -19,6 +19,7 @@
 		2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */; };
 		2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* TransactionExtensions.swift */; };
 		2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
+		2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -111,6 +112,7 @@
 		2D4FDFE62807436200863298 /* TransactionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionExtensions.swift; sourceTree = "<group>"; };
 		2D4FDFE82807489600863298 /* Purchases.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Purchases.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementInfosExtensions.swift; sourceTree = "<group>"; };
+		2D4FDFEC28074EB900863298 /* ErrorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainer.swift; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F75280710FA0090FACC /* ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F77280710FA0090FACC /* ObjCAPITester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCAPITester.h; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */,
 				2D4FDFE62807436200863298 /* TransactionExtensions.swift */,
 				2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */,
+				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -782,6 +785,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */,
+				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
 				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
 				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
 				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,

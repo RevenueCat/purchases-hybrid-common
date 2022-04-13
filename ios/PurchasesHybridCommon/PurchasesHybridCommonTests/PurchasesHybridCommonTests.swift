@@ -9,6 +9,7 @@
 import Quick
 import Nimble
 @testable import PurchasesHybridCommon
+import PurchasesHybridCommonSwift
 
 class PurchasesHybridCommonTests: QuickSpec {
 
@@ -59,7 +60,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 let appUserID = "appUserID"
                 RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
@@ -84,7 +85,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 let appUserID = "appUserID"
                 RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
@@ -128,7 +129,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 RCCommonFunctionality.logOut { resultDict, error in
                     receivedResultDict = resultDict! as NSDictionary
@@ -146,7 +147,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 RCCommonFunctionality.logOut { resultDict, error in
                     receivedResultDict = resultDict as NSDictionary?
