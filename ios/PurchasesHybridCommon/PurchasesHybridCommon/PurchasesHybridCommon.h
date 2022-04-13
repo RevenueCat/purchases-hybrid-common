@@ -27,4 +27,3 @@ FOUNDATION_EXPORT const unsigned char PurchasesHybridCommonVersionString[];
 #import <PurchasesHybridCommon/SKPaymentDiscount+HybridAdditions.h>
 #import <PurchasesHybridCommon/SKProduct+HybridAdditions.h>
 #import <PurchasesHybridCommon/SKProductDiscount+HybridAdditions.h>
-#import <PurchasesHybridCommon/RCTransaction+HybridAdditions.h>
