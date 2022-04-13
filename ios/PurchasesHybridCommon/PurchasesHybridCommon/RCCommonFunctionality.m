@@ -3,7 +3,6 @@
 //  Copyright © 2019 RevenueCat. All rights reserved.
 //
 #import "RCCommonFunctionality.h"
-#import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
 @import PurchasesHybridCommonSwift;
 
