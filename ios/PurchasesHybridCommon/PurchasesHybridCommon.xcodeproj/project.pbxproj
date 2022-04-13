@@ -39,6 +39,7 @@
 		2D900D9B2807614700676D73 /* SKPaymentDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */; };
 		2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9C2807626100676D73 /* PurchasesExtensions.swift */; };
 		2D900D9F2807696100676D73 /* OfferingsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* OfferingsExtensions.swift */; };
+		2D900DA1280769FC00676D73 /* PurchaserInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
@@ -124,6 +125,7 @@
 		2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPaymentDiscountExtensions.swift; sourceTree = "<group>"; };
 		2D900D9C2807626100676D73 /* PurchasesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesExtensions.swift; sourceTree = "<group>"; };
 		2D900D9E2807696100676D73 /* OfferingsExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferingsExtensions.swift; sourceTree = "<group>"; };
+		2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoExtensions.swift; sourceTree = "<group>"; };
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
 		2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchaserInfo+HybridAdditions.h"; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */,
 				2D900D9C2807626100676D73 /* PurchasesExtensions.swift */,
 				2D900D9E2807696100676D73 /* OfferingsExtensions.swift */,
+				2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
 				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
 				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
+				2D900DA1280769FC00676D73 /* PurchaserInfoExtensions.swift in Sources */,
 				2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */,
 				2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */,
 				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,
