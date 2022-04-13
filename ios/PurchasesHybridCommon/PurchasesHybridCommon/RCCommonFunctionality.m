@@ -5,7 +5,6 @@
 #import "RCCommonFunctionality.h"
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
-#import "SKPaymentDiscount+HybridAdditions.h"
 #import "RCPurchases+HybridAdditions.h"
 @import PurchasesHybridCommonSwift;
 
