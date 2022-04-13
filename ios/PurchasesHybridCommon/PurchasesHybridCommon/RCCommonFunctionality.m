@@ -5,7 +5,6 @@
 #import "RCCommonFunctionality.h"
 #import "RCOfferings+HybridAdditions.h"
 #import "RCPurchaserInfo+HybridAdditions.h"
-#import "RCPurchases+HybridAdditions.h"
 @import PurchasesHybridCommonSwift;
 
 
@@ -437,7 +436,9 @@ signedDiscountTimestamp:(nullable NSString *)discountTimestamp
 + (void)setPushToken:(nullable NSString *)pushToken {
     NSAssert(RCPurchases.sharedPurchases, @"You must call setup first.");
     NSString *nonNSNullAttribute = [self nonNSNullAttribute:pushToken];
-    [RCPurchases.sharedPurchases _setPushTokenString:nonNSNullAttribute];
+    // this method has been temporarily removed and will be re-added
+    // when this code is adapted for v4
+//    [RCPurchases.sharedPurchases setPushTokenString:nonNSNullAttribute];
 }
 
 #pragma mark Attribution IDs

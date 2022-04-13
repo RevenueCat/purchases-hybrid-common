@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		179FD6C01AEA3FA937027EFA /* Pods_PurchasesHybridCommonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69FA3C0F326C65DC3146269B /* Pods_PurchasesHybridCommonSwift.framework */; };
 		2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */; };
-		2D370653261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */; };
 		2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */; };
 		2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */; };
@@ -24,7 +23,6 @@
 		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */; };
 		2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */; };
 		2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */; };
@@ -43,9 +41,9 @@
 		2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */; };
 		2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProductExtensions.swift */; };
 		2D900D9B2807614700676D73 /* SKPaymentDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */; };
+		2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9C2807626100676D73 /* PurchasesExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
-		37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
 		4089AA87E0CC223F0989FA00 /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7242C47A3C4806DEA1CF448A /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework */; };
@@ -96,7 +94,6 @@
 		21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.release.xcconfig"; sourceTree = "<group>"; };
 		27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateHybridAdditionsTests.swift; sourceTree = "<group>"; };
-		2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+ProtectedExtensions.h"; sourceTree = "<group>"; };
 		2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonTests.swift; sourceTree = "<group>"; };
 		2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
@@ -128,9 +125,9 @@
 		2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountExtensions.swift; sourceTree = "<group>"; };
 		2D900D9828075B9000676D73 /* SKProductExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductExtensions.swift; sourceTree = "<group>"; };
 		2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPaymentDiscountExtensions.swift; sourceTree = "<group>"; };
+		2D900D9C2807626100676D73 /* PurchasesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesExtensions.swift; sourceTree = "<group>"; };
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOfferings+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
 		2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchaserInfo+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchaserInfo+HybridAdditions.m"; sourceTree = "<group>"; };
@@ -140,7 +137,6 @@
 		2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOfferings+HybridAdditions.m"; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
-		37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditions.m"; sourceTree = "<group>"; };
 		3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.debug.xcconfig"; sourceTree = "<group>"; };
 		4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -211,14 +207,6 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
-		2D370651261E178A00C1DB72 /* ProtectedExtensions */ = {
-			isa = PBXGroup;
-			children = (
-				2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */,
-			);
-			path = ProtectedExtensions;
-			sourceTree = "<group>";
-		};
 		2D557F76280710FA0090FACC /* ObjCAPITester */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +250,7 @@
 				2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */,
 				2D900D9828075B9000676D73 /* SKProductExtensions.swift */,
 				2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */,
+				2D900D9C2807626100676D73 /* PurchasesExtensions.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -304,7 +293,6 @@
 		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
 			isa = PBXGroup;
 			children = (
-				2D370651261E178A00C1DB72 /* ProtectedExtensions */,
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */,
 				2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */,
@@ -314,8 +302,6 @@
 				2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */,
 				2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */,
 				2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */,
-				2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */,
-				37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -363,8 +349,6 @@
 				2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */,
 				2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */,
 				2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */,
-				2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */,
-				2D370653261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h in Headers */,
 				2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -725,7 +709,6 @@
 				2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */,
 				2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */,
 				2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */,
-				37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -765,6 +748,7 @@
 				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
 				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
 				2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */,
+				2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */,
 				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,
 				2D900D952807580000676D73 /* PackageExtensions.swift in Sources */,
 				2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */,
