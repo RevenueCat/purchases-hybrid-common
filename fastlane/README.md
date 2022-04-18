@@ -63,6 +63,14 @@ Make github release
 
 Increment build number
 
+### android deploy
+
+```sh
+[bundle exec] fastlane android deploy
+```
+
+Upload and close a release
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
