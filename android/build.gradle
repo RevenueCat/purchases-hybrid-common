@@ -90,9 +90,9 @@ dependencies {
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
 
-    unityIAPApi "com.revenuecat.purchases:purchases-unityiap:$purchases_version"
-    unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
-    unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
