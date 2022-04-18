@@ -125,4 +125,5 @@ workflows:
   android:
     jobs:
       - test-android
-      - deploy-android: *release-tags
+      # - deploy-android: *release-tags
+      - deploy-android

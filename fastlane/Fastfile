@@ -114,15 +114,15 @@ platform :android do
       properties: gradleProperties
     )
     
-    unless is_snapshot_version?(version)
-      gradle(
-        tasks: [
-          "closeAndReleaseRepository"
-        ],
-        properties: gradleProperties
-      )
-      github_release(version: version)
-    end
+    # unless is_snapshot_version?(version)
+    #   gradle(
+    #     tasks: [
+    #       "closeAndReleaseRepository"
+    #     ],
+    #     properties: gradleProperties
+    #   )
+    #   github_release(version: version)
+    # end
   end
 end
 
