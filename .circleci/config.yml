@@ -33,6 +33,16 @@ commands:
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
 
+  install-gems:
+    steps:
+      - restore_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run: bundle check || bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
 jobs:
   test-ios:
     executor: ios-executor
@@ -107,6 +117,7 @@ jobs:
       resource-class: large
     steps:
       - checkout
+      - install-gems
       - android/accept-licenses
       - restore_cache:
           key: jars-{{ checksum "android/build.gradle" }}
