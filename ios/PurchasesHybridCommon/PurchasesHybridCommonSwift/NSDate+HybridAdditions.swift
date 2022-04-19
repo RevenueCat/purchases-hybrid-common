@@ -13,7 +13,7 @@ import Foundation
 @objc public extension NSDate {
 
     @objc func rc_formattedAsISO8601() -> String {
-        return stringFromDate(self)
+        return Self.stringFromDate(self)
     }
 
     @objc func rc_millisecondsSince1970AsDouble() -> Double {
@@ -22,12 +22,14 @@ import Foundation
 
 }
 
-@objc public extension NSDate {
-    @objc func stringFromDate(_ date: NSDate) -> String {
+private extension NSDate {
+
+    static func stringFromDate(_ date: NSDate) -> String {
         let formatter = DateFormatter()
         formatter.timeZone = NSTimeZone(abbreviation: "GMT") as TimeZone?
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter.string(from: date as Date)
     }
+
 }
