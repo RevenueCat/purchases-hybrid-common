@@ -28,15 +28,15 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality addAttributionData:@{} network:1 networkUserId:@"asdfg"];
     
     [RCCommonFunctionality getProductInfo:@[]
-                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
+                          completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
 
     [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                     RCErrorContainer * _Nullable error) {
     }];
 
-     [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                               RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                              RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality appUserID];
@@ -77,19 +77,18 @@ NS_ASSUME_NONNULL_BEGIN
     }];
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
 
-
     [RCCommonFunctionality purchaseProduct:@""
                    signedDiscountTimestamp:@""
                            completionBlock:^(NSDictionary * _Nullable customerInfo,
                                              RCErrorContainer * _Nullable error) {
     }];
 
-     [RCCommonFunctionality purchasePackage:@""
-                                   offering:@""
-                    signedDiscountTimestamp:@""
-                            completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                              RCErrorContainer * _Nullable error) {
-     }];
+    [RCCommonFunctionality purchasePackage:@""
+                                  offering:@""
+                   signedDiscountTimestamp:@""
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
+    }];
 
     [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
     }
@@ -102,11 +101,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                     completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *>
                                                                       * _Nonnull eligibilities) {
     }];
-     [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
-                                                       discount:@""
-                                                completionBlock:^(NSDictionary * _Nullable discount,
-                                                                  RCErrorContainer * _Nullable error) {
-     }];
+    [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
+                                                      discount:@""
+                                               completionBlock:^(NSDictionary * _Nullable discount,
+                                                                 RCErrorContainer * _Nullable error) {
+    }];
 
     if (@available(iOS 14.0, *)) {
         [RCCommonFunctionality presentCodeRedemptionSheet];
