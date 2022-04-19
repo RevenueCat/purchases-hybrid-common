@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Purchases/Purchases.h>
+@import Purchases;
 
 NS_ASSUME_NONNULL_BEGIN
 
