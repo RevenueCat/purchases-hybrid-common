@@ -7,7 +7,7 @@
 //
 
 #import "RCTransaction+HybridAdditions.h"
-#import "NSDate+HybridAdditions.h"
+@import PurchasesHybridCommonSwift;
 
 @implementation RCTransaction (RCPurchases)
 

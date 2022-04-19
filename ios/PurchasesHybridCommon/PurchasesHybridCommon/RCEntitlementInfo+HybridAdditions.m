@@ -5,7 +5,7 @@
 
 #import "RCEntitlementInfo+HybridAdditions.h"
 #import "SKProduct+HybridAdditions.h"
-#import "NSDate+HybridAdditions.h"
+@import PurchasesHybridCommonSwift;
 
 @implementation RCEntitlementInfo (HybridAdditions)
 
