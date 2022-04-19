@@ -9,6 +9,7 @@
 import Quick
 import Nimble
 import PurchasesHybridCommon
+import PurchasesHybridCommonSwift
 
 class NSDateHybridAdditionsTests: QuickSpec {
 

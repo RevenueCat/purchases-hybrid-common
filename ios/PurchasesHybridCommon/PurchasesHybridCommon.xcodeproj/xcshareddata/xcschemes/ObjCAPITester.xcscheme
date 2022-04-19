@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1140"
+   LastUpgradeVersion = "1330"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -12,20 +12,6 @@
             buildForProfiling = "YES"
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D54BEFF2437AD5800FF4EE4"
-               BuildableName = "PurchasesHybridCommon.framework"
-               BlueprintName = "PurchasesHybridCommon"
-               ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D557F74280710FA0090FACC"
@@ -42,16 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2D6E331E2450F68C0022A971"
-               BuildableName = "PurchasesHybridCommonTests.xctest"
-               BlueprintName = "PurchasesHybridCommonTests"
-               ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -74,9 +50,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2D54BEFF2437AD5800FF4EE4"
-            BuildableName = "PurchasesHybridCommon.framework"
-            BlueprintName = "PurchasesHybridCommon"
+            BlueprintIdentifier = "2D557F74280710FA0090FACC"
+            BuildableName = "ObjCAPITester.framework"
+            BlueprintName = "ObjCAPITester"
             ReferencedContainer = "container:PurchasesHybridCommon.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
