@@ -117,22 +117,38 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)testSubscriberAttributes {
     [RCCommonFunctionality setAttributes:@{}];
     [RCCommonFunctionality setEmail:@""];
+    [RCCommonFunctionality setEmail:nil];
     [RCCommonFunctionality setPhoneNumber:@""];
+    [RCCommonFunctionality setPhoneNumber:nil];
     [RCCommonFunctionality setDisplayName:@""];
+    [RCCommonFunctionality setDisplayName:nil];
     [RCCommonFunctionality setPushToken:@""];
+    [RCCommonFunctionality setPushToken:nil];
     [RCCommonFunctionality collectDeviceIdentifiers];
     [RCCommonFunctionality setAdjustID:@""];
+    [RCCommonFunctionality setAdjustID:nil];
     [RCCommonFunctionality setAppsflyerID:@""];
+    [RCCommonFunctionality setAppsflyerID:nil];
     [RCCommonFunctionality setFBAnonymousID:@""];
+    [RCCommonFunctionality setFBAnonymousID:nil];
     [RCCommonFunctionality setMparticleID:@""];
+    [RCCommonFunctionality setMparticleID:nil];
     [RCCommonFunctionality setOnesignalID:@""];
+    [RCCommonFunctionality setOnesignalID:nil];
     [RCCommonFunctionality setAirshipChannelID:@""];
+    [RCCommonFunctionality setAirshipChannelID:nil];
     [RCCommonFunctionality setMediaSource:@""];
+    [RCCommonFunctionality setMediaSource:nil];
     [RCCommonFunctionality setCampaign:@""];
+    [RCCommonFunctionality setCampaign:nil];
     [RCCommonFunctionality setAdGroup:@""];
+    [RCCommonFunctionality setAdGroup:nil];
     [RCCommonFunctionality setAd:@""];
+    [RCCommonFunctionality setAd:nil];
     [RCCommonFunctionality setKeyword:@""];
+    [RCCommonFunctionality setKeyword:nil];
     [RCCommonFunctionality setCreative:@""];
+    [RCCommonFunctionality setCreative:nil];
 }
 
 @end
