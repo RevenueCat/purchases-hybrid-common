@@ -1,12 +1,13 @@
 # Uncomment the next line to define a global platform for your project
 
 target 'PurchasesHybridCommon' do
-  platform :ios, '9.0'
+  platform :ios, '11.0'
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
   pod 'Purchases', '3.14.1'
+  pod 'PurchasesHybridCommonSwift', path: '../../'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -14,4 +15,32 @@ target 'PurchasesHybridCommon' do
     pod 'Nimble'
   end
 
+end
+
+target 'PurchasesHybridCommonSwift' do
+  platform :ios, '11.0'
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for PurchasesHybridCommon
+  pod 'Purchases', '3.14.1'
+  pod 'PurchasesHybridCommonSwift', path: '../../'
+  
+  target 'PurchasesHybridCommonSwiftTests' do
+    # Pods for testing
+    pod 'Quick'
+    pod 'Nimble'
+  end
+
+end
+
+target 'ObjCAPITester' do
+  platform :ios, '11.0'
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for PurchasesHybridCommon
+  pod 'PurchasesHybridCommon', path: '../../'
+  pod 'PurchasesHybridCommonSwift', path: '../../'
+  
 end
