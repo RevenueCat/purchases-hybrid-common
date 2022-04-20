@@ -33,7 +33,10 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("raises exception if proxy can't be parsed") {
-                expect { CommonFunctionality.proxyURLString = "not a valid url" }.to(raiseException())
+                let expectedMessage = "could not set the proxyURL, provided value is not a valid URL: not a valid url"
+                self.expectFatalError(expectedMessage: expectedMessage) {
+                    CommonFunctionality.proxyURLString = "not a valid url"
+                }
             }
         }
 

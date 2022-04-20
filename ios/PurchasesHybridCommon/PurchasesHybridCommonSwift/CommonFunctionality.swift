@@ -24,8 +24,7 @@ import Purchases
         set {
             if let value = newValue {
                 guard let proxyURL = URL(string: value) else {
-//                    assert(false, "couldn't parse the proxy URL string \(value) into a valid URL!")
-                    return
+                    fatalError("could not set the proxyURL, provided value is not a valid URL: \(value)")
                 }
                 Purchases.proxyURL = proxyURL
             } else {
