@@ -24,12 +24,6 @@ target 'PurchasesHybridCommonSwift' do
 
   pod 'Purchases', '3.14.1'
   
-  target 'PurchasesHybridCommonSwiftTests' do
-    # Pods for testing
-    pod 'Quick'
-    pod 'Nimble'
-  end
-
 end
 
 target 'ObjCAPITester' do

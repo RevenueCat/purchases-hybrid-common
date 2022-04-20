@@ -477,16 +477,5 @@ class MockPurchases: Purchases {
         invokedCollectDeviceIdentifiers = true
         invokedCollectDeviceIdentifiersCount += 1
     }
-
-    var invoked_setPushTokenString = false
-    var invoked_setPushTokenStringCount = 0
-    var invoked_setPushTokenStringParameters: (pushToken: String?, Void)?
-    var invoked_setPushTokenStringParametersList = [(pushToken: String?, Void)]()
-
-    override func _setPushTokenString(_ pushToken: String?) {
-        invoked_setPushTokenString = true
-        invoked_setPushTokenStringCount += 1
-        invoked_setPushTokenStringParameters = (pushToken, ())
-        invoked_setPushTokenStringParametersList.append((pushToken, ()))
-    }
+    
 }
