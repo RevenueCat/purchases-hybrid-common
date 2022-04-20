@@ -109,7 +109,6 @@
 		2D6E330C2450F5880022A971 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D6E33232450F68C0022A971 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D6E333A2450F7A60022A971 /* PurchasesHybridCommonTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PurchasesHybridCommonTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D7749CB2807090700F70FFA /* PurchasesHybridCommonSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommonSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,7 +217,6 @@
 				2D37064E261DFD1C00C1DB72 /* Mocks */,
 				2D6E33232450F68C0022A971 /* Info.plist */,
 				2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */,
-				2D6E333A2450F7A60022A971 /* PurchasesHybridCommonTests-Bridging-Header.h */,
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
 				2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */,
 				2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */,
@@ -950,7 +948,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "PurchasesHybridCommonTests/PurchasesHybridCommonTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -977,7 +974,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "PurchasesHybridCommonTests/PurchasesHybridCommonTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
