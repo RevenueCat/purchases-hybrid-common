@@ -9,7 +9,7 @@
 import Foundation
 import StoreKit
 
-@available(iOS 11.2, macOS 10.13.2, *)
+@available(iOS 11.2, macOS 10.13.2, tvOS 11.2, *)
 @objc public extension SKProductDiscount {
 
     @objc var rc_currencyCode: String? {
