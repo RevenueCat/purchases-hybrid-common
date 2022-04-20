@@ -12,7 +12,7 @@ import Purchases
 
 
 // todo: rename back to RCCommonFunctionality
-@objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
+@objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 
     // MARK: properties and configuration
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
@@ -24,7 +24,8 @@ import Purchases
         set {
             if let value = newValue {
                 guard let proxyURL = URL(string: value) else {
-                    assert(false, "couldn't parse the proxy URL string \(value) into a valid URL!")
+//                    assert(false, "couldn't parse the proxy URL string \(value) into a valid URL!")
+                    return
                 }
                 Purchases.proxyURL = proxyURL
             } else {

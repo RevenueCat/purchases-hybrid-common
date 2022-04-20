@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
 @import PurchasesHybridCommonSwift;
+@import Purchases;
 
 NS_ASSUME_NONNULL_BEGIN
 @interface RCCommonFunctionalityAPITest: NSObject
@@ -17,138 +18,139 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RCCommonFunctionalityAPITest
 - (void)testAPI {
-    NSString *proxyURL __unused = [RCCommonFunctionality2 proxyURLString];
-    BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality2 simulatesAskToBuyInSandbox];
+    NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
+    BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
-    [RCCommonFunctionality2 configure];
+    [RCCommonFunctionality configure];
     // should issue deprecated warning
-    [RCCommonFunctionality2 setAllowSharingStoreAccount:NO];
+    [RCCommonFunctionality setAllowSharingStoreAccount:NO];
 
     // should issue deprecated warning
-    [RCCommonFunctionality2 addAttributionData:@{} network:1 networkUserId:@"asdfg"];
+    [RCCommonFunctionality addAttributionData:@{} network:1 networkUserId:@"asdfg"];
     
-    [RCCommonFunctionality2 getProductInfo:@[]
-                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
+    [RCCommonFunctionality getProductInfo:@[]
+                          completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
 
-    [RCCommonFunctionality2 restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                     RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                    RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                               RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                              RCErrorContainer * _Nullable error) {
     }];
 
-    NSString *appUserID __unused = [RCCommonFunctionality2 appUserID];
-    [RCCommonFunctionality2 logInWithAppUserID:@""
-                               completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                 RCErrorContainer * _Nullable error) {
+    NSString *appUserID __unused = [RCCommonFunctionality appUserID];
+    [RCCommonFunctionality logInWithAppUserID:@""
+                              completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                        RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality2 createAlias:@""
-                        completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                          RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality2 identify:@""
-                     completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                       RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality2 resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+    [RCCommonFunctionality logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                        RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 setDebugLogsEnabled:NO];
-    [RCCommonFunctionality2 getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                  RCErrorContainer * _Nullable error) {
+    // should issue deprecated warning
+    [RCCommonFunctionality createAlias:@""
+                       completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                         RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 setAutomaticAppleSearchAdsAttributionCollection:YES];
-    [RCCommonFunctionality2 getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
-                                                              RCErrorContainer * _Nullable error) {
-    }];
-    BOOL isAnonymous __unused = RCCommonFunctionality2.isAnonymous;
-
-    [RCCommonFunctionality2 purchaseProduct:@""
-                    signedDiscountTimestamp:@""
-                            completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                              RCErrorContainer * _Nullable error) {
+    // should issue deprecated warning
+    [RCCommonFunctionality identify:@""
+                    completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                      RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 purchasePackage:@""
-                                   offering:@""
-                    signedDiscountTimestamp:@""
-                            completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                              RCErrorContainer * _Nullable error) {
+    // should issue deprecated warning
+    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                      RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
+    [RCCommonFunctionality setDebugLogsEnabled:NO];
+    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                 RCErrorContainer * _Nullable error) {
+    }];
+
+    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
+    [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
+                                                             RCErrorContainer * _Nullable error) {
+    }];
+    BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
+
+    [RCCommonFunctionality purchaseProduct:@""
+                   signedDiscountTimestamp:@""
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
+    }];
+
+    [RCCommonFunctionality purchasePackage:@""
+                                  offering:@""
+                   signedDiscountTimestamp:@""
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
+    }];
+
+
+    [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
     }
-                                 completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                   RCErrorContainer * _Nullable error) {
+                                completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                  RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality2 setFinishTransactions:NO];
-    [RCCommonFunctionality2 checkTrialOrIntroductoryPriceEligibility:@[@""]
-                                                     completionBlock:^(NSDictionary<NSString *, NSObject *>
-                                                                       * _Nonnull eligibilities) {
+    [RCCommonFunctionality setFinishTransactions:NO];
+    [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
+                                                    completionBlock:^(NSDictionary<NSString *, NSObject *>
+                                                                      * _Nonnull eligibilities) {
     }];
-    [RCCommonFunctionality2 paymentDiscountForProductIdentifier:@""
-                                                       discount:@""
-                                                completionBlock:^(NSDictionary * _Nullable discount,
-                                                                  RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
+                                                      discount:@""
+                                               completionBlock:^(NSDictionary * _Nullable discount,
+                                                                 RCErrorContainer * _Nullable error) {
     }];
 
     if (@available(iOS 14.0, *)) {
-        [RCCommonFunctionality2 presentCodeRedemptionSheet];
+        [RCCommonFunctionality presentCodeRedemptionSheet];
     }
-    [RCCommonFunctionality2 invalidatePurchaserInfoCache];
-    BOOL canMakePayments __unused = [RCCommonFunctionality2 canMakePaymentsWithFeatures:@[]];
+    [RCCommonFunctionality invalidatePurchaserInfoCache];
+    BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
 }
 
 - (void)testSubscriberAttributes {
-    [RCCommonFunctionality2 setAttributes:@{}];
-    [RCCommonFunctionality2 setEmail:@""];
-    [RCCommonFunctionality2 setEmail:nil];
-    [RCCommonFunctionality2 setPhoneNumber:@""];
-    [RCCommonFunctionality2 setPhoneNumber:nil];
-    [RCCommonFunctionality2 setDisplayName:@""];
-    [RCCommonFunctionality2 setDisplayName:nil];
-    [RCCommonFunctionality2 setPushToken:@""];
-    [RCCommonFunctionality2 setPushToken:nil];
-    [RCCommonFunctionality2 collectDeviceIdentifiers];
-    [RCCommonFunctionality2 setAdjustID:@""];
-    [RCCommonFunctionality2 setAdjustID:nil];
-    [RCCommonFunctionality2 setAppsflyerID:@""];
-    [RCCommonFunctionality2 setAppsflyerID:nil];
-    [RCCommonFunctionality2 setFBAnonymousID:@""];
-    [RCCommonFunctionality2 setFBAnonymousID:nil];
-    [RCCommonFunctionality2 setMparticleID:@""];
-    [RCCommonFunctionality2 setMparticleID:nil];
-    [RCCommonFunctionality2 setOnesignalID:@""];
-    [RCCommonFunctionality2 setOnesignalID:nil];
-    [RCCommonFunctionality2 setAirshipChannelID:@""];
-    [RCCommonFunctionality2 setAirshipChannelID:nil];
-    [RCCommonFunctionality2 setMediaSource:@""];
-    [RCCommonFunctionality2 setMediaSource:nil];
-    [RCCommonFunctionality2 setCampaign:@""];
-    [RCCommonFunctionality2 setCampaign:nil];
-    [RCCommonFunctionality2 setAdGroup:@""];
-    [RCCommonFunctionality2 setAdGroup:nil];
-    [RCCommonFunctionality2 setAd:@""];
-    [RCCommonFunctionality2 setAd:nil];
-    [RCCommonFunctionality2 setKeyword:@""];
-    [RCCommonFunctionality2 setKeyword:nil];
-    [RCCommonFunctionality2 setCreative:@""];
-    [RCCommonFunctionality2 setCreative:nil];
+    [RCCommonFunctionality setAttributes:@{}];
+    [RCCommonFunctionality setEmail:@""];
+    [RCCommonFunctionality setEmail:nil];
+    [RCCommonFunctionality setPhoneNumber:@""];
+    [RCCommonFunctionality setPhoneNumber:nil];
+    [RCCommonFunctionality setDisplayName:@""];
+    [RCCommonFunctionality setDisplayName:nil];
+    [RCCommonFunctionality setPushToken:@""];
+    [RCCommonFunctionality setPushToken:nil];
+    [RCCommonFunctionality collectDeviceIdentifiers];
+    [RCCommonFunctionality setAdjustID:@""];
+    [RCCommonFunctionality setAdjustID:nil];
+    [RCCommonFunctionality setAppsflyerID:@""];
+    [RCCommonFunctionality setAppsflyerID:nil];
+    [RCCommonFunctionality setFBAnonymousID:@""];
+    [RCCommonFunctionality setFBAnonymousID:nil];
+    [RCCommonFunctionality setMparticleID:@""];
+    [RCCommonFunctionality setMparticleID:nil];
+    [RCCommonFunctionality setOnesignalID:@""];
+    [RCCommonFunctionality setOnesignalID:nil];
+    [RCCommonFunctionality setAirshipChannelID:@""];
+    [RCCommonFunctionality setAirshipChannelID:nil];
+    [RCCommonFunctionality setMediaSource:@""];
+    [RCCommonFunctionality setMediaSource:nil];
+    [RCCommonFunctionality setCampaign:@""];
+    [RCCommonFunctionality setCampaign:nil];
+    [RCCommonFunctionality setAdGroup:@""];
+    [RCCommonFunctionality setAdGroup:nil];
+    [RCCommonFunctionality setAd:@""];
+    [RCCommonFunctionality setAd:nil];
+    [RCCommonFunctionality setKeyword:@""];
+    [RCCommonFunctionality setKeyword:nil];
+    [RCCommonFunctionality setCreative:@""];
+    [RCCommonFunctionality setCreative:nil];
 }
 
 @end
