@@ -25,7 +25,18 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
+
+def artifactId = project.property("POM_ARTIFACT_ID")
+def publishVariant = project.property("PUBLISH_VARIANT")
+if (publishVariant == "unityIAPRelease") {
+    project.ext.POM_ARTIFACT_ID = artifactId + "-unityiap"
+}
+
 apply plugin: "com.vanniktech.maven.publish"
+
+mavenPublish {
+    androidVariantToPublish = project.property("PUBLISH_VARIANT")
+}
 
 android {
     compileSdkVersion 32
@@ -58,6 +69,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    flavorDimensions "dependencyVersions"
+    productFlavors {
+        unityIAP {
+            dimension "dependencyVersions"
+        }
+        latestDependencies {
+            dimension "dependencyVersions"
+        }
+    }
 }
 
 
@@ -66,10 +86,15 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.3.0'
 
-    api "com.revenuecat.purchases:purchases:$purchases_version"
-    api "com.revenuecat.purchases:purchases-core-common:$purchases_version"
-    api "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
-    api "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
+    latestDependenciesApi "com.revenuecat.purchases:purchases:$purchases_version"
+    latestDependenciesApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
+    latestDependenciesApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
+    latestDependenciesApi "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
+
+    unityIAPApi "com.revenuecat.purchases:purchases-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-store-amazon-unityiap:$purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
