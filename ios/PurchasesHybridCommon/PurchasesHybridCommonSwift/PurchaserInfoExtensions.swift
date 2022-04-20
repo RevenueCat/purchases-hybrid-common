@@ -50,7 +50,7 @@ import Purchases
             "originalApplicationVersion": originalApplicationVersion ?? NSNull(),
             "originalPurchaseDate": originalPurchaseDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
             "originalPurchaseDateMillis": originalPurchaseDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
-            "managementURL": managementURL ?? NSNull(),
+            "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
         ]
     }
