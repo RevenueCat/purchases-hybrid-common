@@ -10,8 +10,6 @@ import Foundation
 import StoreKit
 import Purchases
 
-//typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
-typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
 
 // todo: rename back to RCCommonFunctionality
 @objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
@@ -101,30 +99,19 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         return Purchases.canMakePayments()
     }
 
-    // MARK: attribution and subs attributes
-    @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
-        // todo: clean up force cast after migration to v4
-        Purchases.addAttributionData(data,
-                                     from: RCAttributionNetwork(rawValue: network)!,
-                                     forNetworkUserId: networkUserId)
-    }
+}
 
-    // MARK: purchasing and restoring
-    @objc public static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
-        Purchases.shared.products(productIds) { products in
-            let productDictionaries = products.map { $0.rc_dictionary }
-            completionBlock(productDictionaries)
-        }
-    }
+// MARK: purchasing and restoring
+@objc public extension CommonFunctionality {
 
     @objc(restoreTransactionsWithCompletionBlock:)
-    public static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
         Purchases.shared.restoreTransactions(purchaserInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
-    public static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+    static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
             let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
             Purchases.shared.restoreTransactions(purchaserInfoCompletion)
@@ -133,63 +120,10 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         }
     }
 
-    // MARK: identity
-    @objc(logInWithAppUserID:completionBlock:)
-    public static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
-            if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-            } else {
-                completion([
-                    "purchaserInfo": purchaserInfo?.dictionary ?? "<Purchaser Info Empty>",
-                    "created": created
-                ], nil)
-            }
-        }
-    }
-
-    @objc(logOutWithCompletionBlock:)
-    public static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(purchaserInfoCompletionBlock(from: completion))
-    }
-
-    @objc(createAlias:completionBlock:)
-    public static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.createAlias(newAppUserID, purchaserInfoCompletionBlock(from: completion))
-    }
-
-    @objc(identify:completionBlock:)
-    public static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.identify(appUserID, purchaserInfoCompletionBlock(from: completion))
-    }
-
-    @objc(resetWithCompletionBlock:)
-    public static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
-    }
-
-    @objc(getPurchaserInfoWithCompletionBlock:)
-    public static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
-    }
-
-    // MARK: offerings
-    @objc(getOfferingsWithCompletionBlock:)
-    public static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
-            if let error = error {
-                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
-                completion(nil, errorContainer)
-            } else {
-                completion(offerings?.dictionary, nil)
-            }
-        }
-    }
-
     @objc(purchaseProduct:signedDiscountTimestamp:completionBlock:)
-    public static func purchaseProduct(_ productIdentifier: String,
-                                       signedDiscountTimestamp: String?,
-                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func purchaseProduct(_ productIdentifier: String,
+                                signedDiscountTimestamp: String?,
+                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (SKPaymentTransaction?,
                                Purchases.PurchaserInfo?,
                                Error?,
@@ -231,10 +165,10 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
     }
 
     @objc(purchasePackage:offering:signedDiscountTimestamp:completionBlock:)
-    public static func purchasePackage(_ packageIdentifier: String,
-                                       offeringIdentifier: String,
-                                       signedDiscountTimestamp: String?,
-                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func purchasePackage(_ packageIdentifier: String,
+                                offeringIdentifier: String,
+                                signedDiscountTimestamp: String?,
+                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (SKPaymentTransaction?,
                                Purchases.PurchaserInfo?,
                                Error?,
@@ -278,8 +212,8 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
     }
 
     @objc(makeDeferredPurchase:completionBlock:)
-    public static func makeDeferredPurchase(_ startPurchase: RCDeferredPromotionalPurchaseBlock,
-                                            completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func makeDeferredPurchase(_ startPurchase: RCDeferredPromotionalPurchaseBlock,
+                                     completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
@@ -299,8 +233,70 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         }
     }
 
+}
+
+// MARK: identity
+@objc public extension CommonFunctionality {
+
+    @objc(logInWithAppUserID:completionBlock:)
+    static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
+            if let error = error {
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+            } else {
+                completion([
+                    "purchaserInfo": purchaserInfo?.dictionary ?? "<Purchaser Info Empty>",
+                    "created": created
+                ], nil)
+            }
+        }
+    }
+
+    @objc(logOutWithCompletionBlock:)
+    static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.logOut(purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(createAlias:completionBlock:)
+    static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.createAlias(newAppUserID, purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(identify:completionBlock:)
+    static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.identify(appUserID, purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(resetWithCompletionBlock:)
+    static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(getPurchaserInfoWithCompletionBlock:)
+    static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
+    }
+
+}
+
+// MARK: offerings and eligibility
+@objc public extension CommonFunctionality {
+
+    @objc(getOfferingsWithCompletionBlock:)
+    static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.offerings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
+
+
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
-    public static func checkTrialOrIntroductoryPriceEligibility(
+    static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
         completion: @escaping([String: Any]) -> Void) {
             Purchases.shared.checkTrialOrIntroductoryPriceEligibility(products) { eligibilityByProductId in
@@ -312,10 +308,18 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
             }
         }
 
+
+    @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
+        Purchases.shared.products(productIds) { products in
+            let productDictionaries = products.map { $0.rc_dictionary }
+            completionBlock(productDictionaries)
+        }
+    }
+
     @objc(paymentDiscountForProductIdentifier:discount:completionBlock:)
-    public static func paymentDiscount(for productIdentifier: String,
-                                       discountIdentifier: String?,
-                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func paymentDiscount(for productIdentifier: String,
+                                discountIdentifier: String?,
+                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
             completion(nil, nil)
             return
@@ -410,6 +414,13 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
     }
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
         Purchases.shared.setAirshipChannelID(airshipChannelID)
+    }
+
+    @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
+        // todo: clean up force cast after migration to v4
+        Purchases.addAttributionData(data,
+                                     from: RCAttributionNetwork(rawValue: network)!,
+                                     forNetworkUserId: networkUserId)
     }
 
 }
