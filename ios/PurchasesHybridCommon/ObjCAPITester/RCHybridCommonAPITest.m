@@ -91,7 +91,6 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
-
     [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
     }
                                 completionBlock:^(NSDictionary * _Nullable customerInfo,
