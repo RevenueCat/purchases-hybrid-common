@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		179FD6C01AEA3FA937027EFA /* Pods_PurchasesHybridCommonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69FA3C0F326C65DC3146269B /* Pods_PurchasesHybridCommonSwift.framework */; };
 		2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */; };
 		2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */; };
 		2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */; };
@@ -15,33 +14,32 @@
 		2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */; };
 		2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */; };
 		2D4FDFE3280738FB00863298 /* NSDate+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */; };
-		2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */; };
-		2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* TransactionExtensions.swift */; };
-		2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
-		2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
 		2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D557F77280710FA0090FACC /* ObjCAPITester.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */; };
 		2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
 		2D6E333C2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */; };
-		2D7749DB2807090700F70FFA /* PurchasesHybridCommonSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D902807574D00676D73 /* OfferingExtensions.swift */; };
-		2D900D952807580000676D73 /* PackageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* PackageExtensions.swift */; };
-		2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */; };
-		2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProductExtensions.swift */; };
-		2D900D9B2807614700676D73 /* SKPaymentDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */; };
-		2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9C2807626100676D73 /* PurchasesExtensions.swift */; };
-		2D900D9F2807696100676D73 /* OfferingsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* OfferingsExtensions.swift */; };
-		2D900DA1280769FC00676D73 /* PurchaserInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
-		2DD3D1832810A7F400A19EC6 /* FatalErrorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */; };
 		2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
-		2DED033C280F5759009C5D65 /* CommonFunctionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DED033B280F5759009C5D65 /* CommonFunctionality.swift */; };
+		2DD3D1862810AF5A00A19EC6 /* PackageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* PackageExtensions.swift */; };
+		2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
+		2DD3D1882810AF5A00A19EC6 /* SKProductDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */; };
+		2DD3D1892810AF5A00A19EC6 /* OfferingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D902807574D00676D73 /* OfferingExtensions.swift */; };
+		2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DED033B280F5759009C5D65 /* CommonFunctionality.swift */; };
+		2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */; };
+		2DD3D18C2810AF5A00A19EC6 /* PurchasesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9C2807626100676D73 /* PurchasesExtensions.swift */; };
+		2DD3D18D2810AF5A00A19EC6 /* TransactionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* TransactionExtensions.swift */; };
+		2DD3D18E2810AF5A00A19EC6 /* PurchaserInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */; };
+		2DD3D18F2810AF5A00A19EC6 /* EntitlementInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */; };
+		2DD3D1902810AF5A00A19EC6 /* SKProductExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProductExtensions.swift */; };
+		2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
+		2DD3D1922810AF5A00A19EC6 /* SKPaymentDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* SKPaymentDiscountExtensions.swift */; };
+		2DD3D1932810AF5A00A19EC6 /* OfferingsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* OfferingsExtensions.swift */; };
+		2DD3D1942810AF5A00A19EC6 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
-		A1FF1B0B2CFEA5539424D049 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
+		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 		C5335FED2A63D9B5B628774F /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,20 +50,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D54BEFF2437AD5800FF4EE4;
 			remoteInfo = PurchasesHybridCommon;
-		};
-		2D4FDFD628071F8E00863298 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D7749CA2807090700F70FFA;
-			remoteInfo = PurchasesHybridCommonSwift;
-		};
-		2D4FDFD828071F9700863298 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D7749CA2807090700F70FFA;
-			remoteInfo = PurchasesHybridCommonSwift;
 		};
 		2D6E33252450F68C0022A971 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -79,7 +63,6 @@
 /* Begin PBXFileReference section */
 		03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.release.xcconfig"; sourceTree = "<group>"; };
-		27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonTests.swift; sourceTree = "<group>"; };
@@ -102,8 +85,6 @@
 		2D6E33232450F68C0022A971 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+HybridAdditions.swift"; sourceTree = "<group>"; };
-		2D7749CB2807090700F70FFA /* PurchasesHybridCommonSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommonSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommonSwift.h; sourceTree = "<group>"; };
 		2D900D902807574D00676D73 /* OfferingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferingExtensions.swift; sourceTree = "<group>"; };
 		2D900D942807580000676D73 /* PackageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageExtensions.swift; sourceTree = "<group>"; };
 		2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountExtensions.swift; sourceTree = "<group>"; };
@@ -118,7 +99,6 @@
 		2DED033B280F5759009C5D65 /* CommonFunctionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFunctionality.swift; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
-		3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.debug.xcconfig"; sourceTree = "<group>"; };
 		4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,8 +109,10 @@
 		874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.release.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.release.xcconfig"; sourceTree = "<group>"; };
 		8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
-		A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		C48588E24A992EC358A9B0CF /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.debug.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,15 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */,
-				A1FF1B0B2CFEA5539424D049 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D7749C82807090700F70FFA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				179FD6C01AEA3FA937027EFA /* Pods_PurchasesHybridCommonSwift.framework in Frameworks */,
+				B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,11 +182,34 @@
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
 		};
-		2D7749CC2807090700F70FFA /* PurchasesHybridCommonSwift */ = {
+		2DD4B8B024377B470070344F = {
 			isa = PBXGroup;
 			children = (
+				2D6E330C2450F5880022A971 /* Info.plist */,
+				2DD4B8BB24377B470070344F /* PurchasesHybridCommon */,
+				2D6E33202450F68C0022A971 /* PurchasesHybridCommonTests */,
+				2D557F76280710FA0090FACC /* ObjCAPITester */,
+				2DD4B8BA24377B470070344F /* Products */,
+				2DD4B90B243782C30070344F /* Frameworks */,
+				DF227D6163AC4EAD40A6905D /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		2DD4B8BA24377B470070344F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */,
+				2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */,
+				2D557F75280710FA0090FACC /* ObjCAPITester.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
+			isa = PBXGroup;
+			children = (
+				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */,
-				2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */,
 				2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */,
 				2D4FDFE62807436200863298 /* TransactionExtensions.swift */,
 				2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */,
@@ -228,39 +225,6 @@
 				2DED033B280F5759009C5D65 /* CommonFunctionality.swift */,
 				2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */,
 			);
-			path = PurchasesHybridCommonSwift;
-			sourceTree = "<group>";
-		};
-		2DD4B8B024377B470070344F = {
-			isa = PBXGroup;
-			children = (
-				2D6E330C2450F5880022A971 /* Info.plist */,
-				2DD4B8BB24377B470070344F /* PurchasesHybridCommon */,
-				2D6E33202450F68C0022A971 /* PurchasesHybridCommonTests */,
-				2D7749CC2807090700F70FFA /* PurchasesHybridCommonSwift */,
-				2D557F76280710FA0090FACC /* ObjCAPITester */,
-				2DD4B8BA24377B470070344F /* Products */,
-				2DD4B90B243782C30070344F /* Frameworks */,
-				DF227D6163AC4EAD40A6905D /* Pods */,
-			);
-			sourceTree = "<group>";
-		};
-		2DD4B8BA24377B470070344F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */,
-				2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */,
-				2D7749CB2807090700F70FFA /* PurchasesHybridCommonSwift.framework */,
-				2D557F75280710FA0090FACC /* ObjCAPITester.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
-			isa = PBXGroup;
-			children = (
-				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
-			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
 		};
@@ -269,10 +233,10 @@
 			children = (
 				2D4FDFE82807489600863298 /* Purchases.framework */,
 				7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */,
-				27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */,
 				4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */,
 				69FA3C0F326C65DC3146269B /* Pods_PurchasesHybridCommonSwift.framework */,
 				7242C47A3C4806DEA1CF448A /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework */,
+				E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -280,8 +244,6 @@
 		DF227D6163AC4EAD40A6905D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */,
-				3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */,
 				4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */,
 				8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */,
 				460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */,
@@ -292,6 +254,8 @@
 				9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */,
 				E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */,
 				874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */,
+				AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */,
+				C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -315,14 +279,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D7749C62807090700F70FFA /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D7749DB2807090700F70FFA /* PurchasesHybridCommonSwift.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -339,7 +295,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2D4FDFD928071F9700863298 /* PBXTargetDependency */,
 			);
 			name = PurchasesHybridCommon;
 			productName = PurchasesHybridCommonFramework;
@@ -358,7 +313,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2D4FDFD728071F8E00863298 /* PBXTargetDependency */,
 				2D4FDFD528071F7C00863298 /* PBXTargetDependency */,
 			);
 			name = ObjCAPITester;
@@ -370,11 +324,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D6E33272450F68C0022A971 /* Build configuration list for PBXNativeTarget "PurchasesHybridCommonTests" */;
 			buildPhases = (
-				61AA97A164B860C1502E5AEF /* [CP] Check Pods Manifest.lock */,
+				04B57A8F90D20483A73AC37F /* [CP] Check Pods Manifest.lock */,
 				2D6E331B2450F68C0022A971 /* Sources */,
 				2D6E331C2450F68C0022A971 /* Frameworks */,
 				2D6E331D2450F68C0022A971 /* Resources */,
-				0A9DBA39ED8B0B35A0A75152 /* [CP] Embed Pods Frameworks */,
+				A8A1DFF3284AB3935BB3C76B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -385,25 +339,6 @@
 			productName = PurchasesHybridCommonTests;
 			productReference = 2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		2D7749CA2807090700F70FFA /* PurchasesHybridCommonSwift */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2D7749DC2807090700F70FFA /* Build configuration list for PBXNativeTarget "PurchasesHybridCommonSwift" */;
-			buildPhases = (
-				8C68E650288DC9878A7C4831 /* [CP] Check Pods Manifest.lock */,
-				2D7749C62807090700F70FFA /* Headers */,
-				2D7749C72807090700F70FFA /* Sources */,
-				2D7749C82807090700F70FFA /* Frameworks */,
-				2D7749C92807090700F70FFA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = PurchasesHybridCommonSwift;
-			productName = PurchasesHybridCommonSwift;
-			productReference = 2D7749CB2807090700F70FFA /* PurchasesHybridCommonSwift.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -426,9 +361,6 @@
 						CreatedOnToolsVersion = 11.4.1;
 						LastSwiftMigration = 1140;
 					};
-					2D7749CA2807090700F70FFA = {
-						CreatedOnToolsVersion = 13.3;
-					};
 				};
 			};
 			buildConfigurationList = 2DD4B8B424377B470070344F /* Build configuration list for PBXProject "PurchasesHybridCommon" */;
@@ -446,7 +378,6 @@
 			targets = (
 				2D54BEFF2437AD5800FF4EE4 /* PurchasesHybridCommon */,
 				2D6E331E2450F68C0022A971 /* PurchasesHybridCommonTests */,
-				2D7749CA2807090700F70FFA /* PurchasesHybridCommonSwift */,
 				2D557F74280710FA0090FACC /* ObjCAPITester */,
 			);
 		};
@@ -467,56 +398,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D7749C92807090700F70FFA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0A9DBA39ED8B0B35A0A75152 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		1793467B806706DD4D7D846E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ObjCAPITester-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		61AA97A164B860C1502E5AEF /* [CP] Check Pods Manifest.lock */ = {
+		04B57A8F90D20483A73AC37F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -538,7 +423,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C68E650288DC9878A7C4831 /* [CP] Check Pods Manifest.lock */ = {
+		1793467B806706DD4D7D846E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -553,7 +438,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-PurchasesHybridCommonSwift-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ObjCAPITester-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -582,6 +467,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A8A1DFF3284AB3935BB3C76B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -589,6 +491,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD3D18E2810AF5A00A19EC6 /* PurchaserInfoExtensions.swift in Sources */,
+				2DD3D1882810AF5A00A19EC6 /* SKProductDiscountExtensions.swift in Sources */,
+				2DD3D1902810AF5A00A19EC6 /* SKProductExtensions.swift in Sources */,
+				2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */,
+				2DD3D18F2810AF5A00A19EC6 /* EntitlementInfoExtensions.swift in Sources */,
+				2DD3D1922810AF5A00A19EC6 /* SKPaymentDiscountExtensions.swift in Sources */,
+				2DD3D1862810AF5A00A19EC6 /* PackageExtensions.swift in Sources */,
+				2DD3D18C2810AF5A00A19EC6 /* PurchasesExtensions.swift in Sources */,
+				2DD3D18D2810AF5A00A19EC6 /* TransactionExtensions.swift in Sources */,
+				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
+				2DD3D1942810AF5A00A19EC6 /* EntitlementInfosExtensions.swift in Sources */,
+				2DD3D1892810AF5A00A19EC6 /* OfferingExtensions.swift in Sources */,
+				2DD3D1932810AF5A00A19EC6 /* OfferingsExtensions.swift in Sources */,
+				2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */,
+				2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,28 +536,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D7749C72807090700F70FFA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */,
-				2D900D9B2807614700676D73 /* SKPaymentDiscountExtensions.swift in Sources */,
-				2DED033C280F5759009C5D65 /* CommonFunctionality.swift in Sources */,
-				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
-				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
-				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
-				2D900DA1280769FC00676D73 /* PurchaserInfoExtensions.swift in Sources */,
-				2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */,
-				2D900D9D2807626100676D73 /* PurchasesExtensions.swift in Sources */,
-				2DD3D1832810A7F400A19EC6 /* FatalErrorUtil.swift in Sources */,
-				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,
-				2D900D952807580000676D73 /* PackageExtensions.swift in Sources */,
-				2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */,
-				2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */,
-				2D900D9F2807696100676D73 /* OfferingsExtensions.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -648,16 +543,6 @@
 			isa = PBXTargetDependency;
 			target = 2D54BEFF2437AD5800FF4EE4 /* PurchasesHybridCommon */;
 			targetProxy = 2D4FDFD428071F7C00863298 /* PBXContainerItemProxy */;
-		};
-		2D4FDFD728071F8E00863298 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2D7749CA2807090700F70FFA /* PurchasesHybridCommonSwift */;
-			targetProxy = 2D4FDFD628071F8E00863298 /* PBXContainerItemProxy */;
-		};
-		2D4FDFD928071F9700863298 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2D7749CA2807090700F70FFA /* PurchasesHybridCommonSwift */;
-			targetProxy = 2D4FDFD828071F9700863298 /* PBXContainerItemProxy */;
 		};
 		2D6E33262450F68C0022A971 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -822,8 +707,9 @@
 		};
 		2D6E33282450F68C0022A971 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
+			baseConfigurationReference = AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -848,8 +734,9 @@
 		};
 		2D6E33292450F68C0022A971 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
+			baseConfigurationReference = C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -868,90 +755,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.2;
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-			};
-			name = Release;
-		};
-		2D7749DD2807090700F70FFA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8SXR2327BM;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonSwift;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator macosx appletvos appletvsimulator";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-			};
-			name = Debug;
-		};
-		2D7749DE2807090700F70FFA /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 8SXR2327BM;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonSwift;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator macosx appletvos appletvsimulator";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,6";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Release;
@@ -1096,15 +899,6 @@
 			buildConfigurations = (
 				2D6E33282450F68C0022A971 /* Debug */,
 				2D6E33292450F68C0022A971 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2D7749DC2807090700F70FFA /* Build configuration list for PBXNativeTarget "PurchasesHybridCommonSwift" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2D7749DD2807090700F70FFA /* Debug */,
-				2D7749DE2807090700F70FFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -6,7 +6,7 @@
 //  Copyright © 2022 RevenueCat. All rights reserved.
 //
 
-@import PurchasesHybridCommonSwift;
+@import PurchasesHybridCommon;
 
 #import <Foundation/Foundation.h>
 
