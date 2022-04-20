@@ -17,10 +17,17 @@ import PurchasesCoreSwift
         formatter.numberStyle = .currency
         formatter.locale = priceLocale
 
+        // Note: although identifier, description and title are supposed to be non-nil, we've seen instances
+        // where this isn't true in practice (StoreKit bugs).
+        // So we cast to optional and then check if it's actually nil.
+        let nonNilProductIdentifier = productIdentifier as String? ?? ""
+        let nonNilDescription = description as String? ?? ""
+        let nonNilTitle = localizedTitle as String? ?? ""
+
         var dictionary: [String: Any] = [
-            "identifier": productIdentifier,
-            "description": localizedDescription,
-            "title": localizedTitle,
+            "identifier": nonNilProductIdentifier,
+            "description": nonNilDescription,
+            "title": nonNilTitle,
             "price": price.floatValue,
             "price_string": formatter.string(from: price) ?? "",
             "currency_code": priceLocale.currencyCode ?? NSNull(),
