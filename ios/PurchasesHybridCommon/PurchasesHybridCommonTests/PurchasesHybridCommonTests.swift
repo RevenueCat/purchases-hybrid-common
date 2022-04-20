@@ -77,36 +77,36 @@ class PurchasesHybridCommonTests: QuickSpec {
 //                expect { receivedError }.to(beNil())
 //            }
 
-            it("returns error if not successful") {
-                let mockPurchases = MockPurchases()
-                let mockError = NSError(domain: "revenuecat", code: 123)
-
-                mockPurchases.stubbedLogInCompletionResult = (nil, false, mockError)
-
-                Purchases.setDefaultInstance(mockPurchases)
-                var receivedResultDict: NSDictionary?
-                var receivedError: ErrorContainer?
-
-                let appUserID = "appUserID"
-                RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
-                    receivedResultDict = resultDict as NSDictionary?
-                    receivedError = error
-                }
-
-                let expectedErrorDict: NSDictionary = [
-                    "code": mockError.code,
-                    "message": mockError.localizedDescription,
-                    "underlyingErrorMessage": ""
-
-                ]
-
-                expect { receivedResultDict }.to(beNil())
-                expect { receivedError }.toNot(beNil())
-                expect { receivedError!.error as NSError } == mockError
-                expect { receivedError!.code } == mockError.code
-                expect { receivedError!.message } == mockError.localizedDescription
-                expect { receivedError!.info as NSDictionary } == expectedErrorDict
-            }
+//            it("returns error if not successful") {
+//                let mockPurchases = MockPurchases()
+//                let mockError = NSError(domain: "revenuecat", code: 123)
+//
+//                mockPurchases.stubbedLogInCompletionResult = (nil, false, mockError)
+//
+//                Purchases.setDefaultInstance(mockPurchases)
+//                var receivedResultDict: NSDictionary?
+//                var receivedError: ErrorContainer?
+//
+//                let appUserID = "appUserID"
+//                RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
+//                    receivedResultDict = resultDict as NSDictionary?
+//                    receivedError = error
+//                }
+//
+//                let expectedErrorDict: NSDictionary = [
+//                    "code": mockError.code,
+//                    "message": mockError.localizedDescription,
+//                    "underlyingErrorMessage": ""
+//
+//                ]
+//
+//                expect { receivedResultDict }.to(beNil())
+//                expect { receivedError }.toNot(beNil())
+//                expect { receivedError!.error as NSError } == mockError
+//                expect { receivedError!.code } == mockError.code
+//                expect { receivedError!.message } == mockError.localizedDescription
+//                expect { receivedError!.info as NSDictionary } == expectedErrorDict
+//            }
         }
 
         context("logOut") {
