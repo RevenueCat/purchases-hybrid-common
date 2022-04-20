@@ -276,6 +276,41 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         }
 
     }
+
+    @objc(makeDeferredPurchase:completionBlock:)
+    public static func makeDeferredPurchase(_ startPurchase: RCDeferredPromotionalPurchaseBlock,
+                                            completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        startPurchase { transaction, purchaserInfo, error, userCancelled in
+            if let error = error {
+                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+            } else if let purchaserInfo = purchaserInfo,
+                      let transaction = transaction {
+                completion([
+                    "purchaserInfo": purchaserInfo.dictionary,
+                    "productIdentifier": transaction.payment.productIdentifier
+                ], nil)
+            } else {
+                let error = NSError(domain: Purchases.ErrorDomain,
+                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: description])
+
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+            }
+        }
+    }
+
+    @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
+    public static func checkTrialOrIntroductoryPriceEligibility(
+        for products: [String],
+        completion: @escaping([String: Any]) -> Void) {
+            Purchases.shared.checkTrialOrIntroductoryPriceEligibility(products) { eligibilityByProductId in
+                completion(eligibilityByProductId.mapValues { [
+                    "status": $0.status,
+                    "description": $0.description
+                    ]
+                })
+            }
+    }
 }
 
 private extension CommonFunctionality {

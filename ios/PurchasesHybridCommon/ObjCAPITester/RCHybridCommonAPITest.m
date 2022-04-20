@@ -90,16 +90,16 @@ NS_ASSUME_NONNULL_BEGIN
                                               RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
+    [RCCommonFunctionality2 makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
     }
-                                completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                  RCErrorContainer * _Nullable error) {
+                                 completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                   RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality2 setFinishTransactions:NO];
-    [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
-                                                    completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *>
-                                                                      * _Nonnull eligibilities) {
+    [RCCommonFunctionality2 checkTrialOrIntroductoryPriceEligibility:@[@""]
+                                                     completionBlock:^(NSDictionary<NSString *, NSObject *>
+                                                                       * _Nonnull eligibilities) {
     }];
     [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
                                                       discount:@""
