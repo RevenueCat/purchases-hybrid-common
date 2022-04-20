@@ -23,7 +23,7 @@ import Purchases
 
         for identifier in sortedProductIdentifiers {
             let expirationDate = expirationDate(forProductIdentifier:identifier)?.nsDate
-            allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601 ?? NSNull()
+            allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601() ?? NSNull()
             allExpirationsMillis[identifier] = expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
 
             let purchaseDate = purchaseDate(forProductIdentifier: identifier)?.nsDate
@@ -31,7 +31,7 @@ import Purchases
             allPurchasesMillis[identifier] = purchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
         }
 
-        return [
+        let aDictionary: [String: Any] = [
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
             "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
@@ -52,6 +52,7 @@ import Purchases
             "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
         ]
+        return aDictionary
     }
 
 }
