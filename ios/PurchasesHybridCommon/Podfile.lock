@@ -8,7 +8,7 @@ PODS:
     - PurchasesHybridCommonSwift
   - PurchasesHybridCommonSwift (2.0.1):
     - Purchases (= 3.14.1)
-  - Quick (4.0.0)
+  - Quick (5.0.1)
 
 DEPENDENCIES:
   - Nimble
@@ -36,8 +36,8 @@ SPEC CHECKSUMS:
   PurchasesCoreSwift: 2cf98c52dd4b785177539fbfd1c32f60c89eafe7
   PurchasesHybridCommon: 4098de5fafce39675aae715408127d9265da58ed
   PurchasesHybridCommonSwift: 599b4cafaab6ca9dea10f36490bfe1bedfded36e
-  Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
+  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
 
-PODFILE CHECKSUM: 7161b068715118893b9c3b37958fc049f85154cf
+PODFILE CHECKSUM: 664c657f14aaeeb9c8063aa4ea1ad7516725f9dc
 
 COCOAPODS: 1.11.2

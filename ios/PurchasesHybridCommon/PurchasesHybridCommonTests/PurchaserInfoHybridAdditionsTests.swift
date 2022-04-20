@@ -10,6 +10,7 @@ import Quick
 import Nimble
 import PurchasesHybridCommonSwift
 import PurchasesCoreSwift
+import Purchases
 
 class PurchaserInfoHybridAdditionsTests: QuickSpec {
 
@@ -22,15 +23,15 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     let url = URL(string: urlPath)
                     purchaserInfo.stubbedManagementURL = url
                     
-                    let dictionary = purchaserInfo.dictionary()
-                    expect(dictionary?["managementURL"] as? String) == urlPath
+                    let dictionary = purchaserInfo.dictionary
+                    expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
                     let purchaserInfo = PartialMockPurchaserInfo()
                     purchaserInfo.stubbedManagementURL = nil
                     
-                    let dictionary = purchaserInfo.dictionary()
-                    expect(dictionary?["managementURL"] as? NSNull) == NSNull()
+                    let dictionary = purchaserInfo.dictionary
+                    expect(dictionary["managementURL"] as? NSNull) == NSNull()
                 }
             }
             context("nonSubscriptionTransactions") {
@@ -41,8 +42,8 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     let transaction = PurchasesCoreSwift.Transaction(transactionId: "transactionid", productId: "productid", purchaseDate: transactionDate as Date)
                     purchaserInfo.stubbedNonSubscriptionTransactions = [transaction]
                     
-                    let dictionary = purchaserInfo.dictionary()
-                    let nonSubscriptionTransactions = dictionary?["nonSubscriptionTransactions"] as? Array<Any>
+                    let dictionary = purchaserInfo.dictionary
+                    let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
                     expect(nonSubscriptionTransactions?.count) == 1
                     
                     let transactionDictionary = nonSubscriptionTransactions?[0] as? Dictionary<String, Any>
@@ -56,8 +57,8 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                 it ("is empty when there are no non subscription transactions") {
                     let purchaserInfo = PartialMockPurchaserInfo()
                 
-                    let dictionary = purchaserInfo.dictionary()
-                    let nonSubscriptionTransactions = dictionary?["nonSubscriptionTransactions"] as? Array<Any>
+                    let dictionary = purchaserInfo.dictionary
+                    let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
                     expect(nonSubscriptionTransactions?.count) == 0
                 }
             }

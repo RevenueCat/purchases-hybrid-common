@@ -18,22 +18,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RCPurchasesHybridAdditionsAPITest
 - (void)testAPI {
-    RCPurchases *purchases = [RCPurchases configureWithAPIKey:@""
-                                                    appUserID:@""
-                                                 observerMode:NO
-                                        userDefaultsSuiteName:nil
-                                               platformFlavor:nil
-                                        platformFlavorVersion:@""
-                                            dangerousSettings:nil];
-    [purchases _setPushTokenString:@""];
-    
-    [RCPurchases configureWithAPIKey:@""
-                           appUserID:@""
-                        observerMode:NO
-                        userDefaults:NSUserDefaults.standardUserDefaults
-                      platformFlavor:nil
-               platformFlavorVersion:@""
-                   dangerousSettings:nil];
+    RCPurchases *purchases __unused = [RCPurchases configureWithAPIKey:@""
+                                                             appUserID:@""
+                                                          observerMode:NO
+                                                 userDefaultsSuiteName:nil
+                                                        platformFlavor:nil
+                                                 platformFlavorVersion:@""
+                                                     dangerousSettings:nil];
+    // This method will be removed, and instead we'll call `setPushTokenString` directly
+    // on Purchases
+//    [purchases _setPushTokenString:@""];
+
+    // this method will be removed in favor of the one that passes the
+    // userDefaults as String
+//    [RCPurchases configureWithAPIKey:@""
+//                           appUserID:@""
+//                        observerMode:NO
+//                        userDefaults:NSUserDefaults.standardUserDefaults
+//                      platformFlavor:nil
+//               platformFlavorVersion:@""
+//                   dangerousSettings:nil];
 }
 
 @end
