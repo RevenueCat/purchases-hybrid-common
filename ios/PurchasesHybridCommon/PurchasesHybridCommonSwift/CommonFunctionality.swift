@@ -51,6 +51,9 @@ import Purchases
         }
     }
 
+    // Note: we can't have a property that's only available on certain OS versions,
+    // so _discountsByProductIdentifier and discountsByProductIdentifier provide for a way
+    // to have one.
     private static var _discountsByProductIdentifier: Any? = nil
 
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
