@@ -11,7 +11,6 @@ import StoreKit
 import Purchases
 
 
-// todo: rename back to RCCommonFunctionality
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 
     // MARK: properties and configuration
