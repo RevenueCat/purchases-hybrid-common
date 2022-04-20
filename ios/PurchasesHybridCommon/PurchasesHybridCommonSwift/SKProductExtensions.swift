@@ -18,9 +18,9 @@ import PurchasesCoreSwift
         formatter.locale = priceLocale
 
         var dictionary: [String: Any] = [
-            "identifier": productIdentifier ,
-            "description": localizedDescription ,
-            "title": localizedTitle ,
+            "identifier": productIdentifier,
+            "description": localizedDescription,
+            "title": localizedTitle,
             "price": price.floatValue,
             "price_string": formatter.string(from: price) ?? "",
             "currency_code": priceLocale.currencyCode ?? NSNull(),
