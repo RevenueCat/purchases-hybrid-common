@@ -307,10 +307,10 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
                 completion(eligibilityByProductId.mapValues { [
                     "status": $0.status,
                     "description": $0.description
-                    ]
+                ]
                 })
             }
-    }
+        }
 
     @objc(paymentDiscountForProductIdentifier:discount:completionBlock:)
     public static func paymentDiscount(for productIdentifier: String,
@@ -354,6 +354,87 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
                                              completion: paymentDiscountCompletion)
 
         }
+    }
+
+}
+
+// MARK: Subscriber attributes
+@objc public extension CommonFunctionality {
+
+    @objc static func setAttributes(_ attributes: [String: Any]) {
+        Purchases.shared.setAttributes(attributes.mapValues { $0 as? String ?? "" })
+    }
+
+    @objc static func setEmail(_ email: String?) {
+        Purchases.shared.setEmail(email)
+    }
+
+    @objc static func setPhoneNumber(_ phoneNumber: String?) {
+        Purchases.shared.setPhoneNumber(phoneNumber)
+    }
+
+    @objc static func setDisplayName(_ displayName: String?) {
+        Purchases.shared.setDisplayName(displayName)
+    }
+
+    @objc static func setPushToken(_ pushToken: String?) {
+        // todo
+        // this method has been temporarily removed and will be re-added
+        // when this code is adapted for v4
+        // Purchases.shared.setPushToken(pushToken)
+    }
+
+}
+
+// MARK: Attribution IDs
+@objc public extension CommonFunctionality {
+
+    @objc static func collectDeviceIdentifiers() {
+        Purchases.shared.collectDeviceIdentifiers()
+    }
+
+    @objc static func setAdjustID(_ adjustID: String?) {
+        Purchases.shared.setAdjustID(adjustID)
+    }
+    @objc static func setAppsflyerID(_ appsflyerID: String?) {
+        Purchases.shared.setAppsflyerID(appsflyerID)
+    }
+    @objc static func setFBAnonymousID(_ fbAnonymousID: String?) {
+        Purchases.shared.setFBAnonymousID(fbAnonymousID)
+    }
+    @objc static func setMparticleID(_ mParticleID: String?) {
+        Purchases.shared.setMparticleID(mParticleID)
+    }
+    @objc static func setOnesignalID(_ onesignalID: String?) {
+        Purchases.shared.setOnesignalID(onesignalID)
+    }
+    @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
+        Purchases.shared.setAirshipChannelID(airshipChannelID)
+    }
+
+}
+
+// MARK: Campaign parameters
+@objc public extension CommonFunctionality {
+
+
+    @objc static func setMediaSource(_ mediaSource: String?) {
+        Purchases.shared.setMediaSource(mediaSource)
+    }
+    @objc static func setCampaign(_ campaign: String?) {
+        Purchases.shared.setCampaign(campaign)
+    }
+    @objc static func setAdGroup(_ adGroup: String?) {
+        Purchases.shared.setAdGroup(adGroup)
+    }
+    @objc static func setAd(_ ad: String?) {
+        Purchases.shared.setAd(ad)
+    }
+    @objc static func setKeyword(_ keyword: String?) {
+        Purchases.shared.setKeyword(keyword)
+    }
+    @objc static func setCreative(_ creative: String?) {
+        Purchases.shared.setCreative(creative)
     }
 
 }
