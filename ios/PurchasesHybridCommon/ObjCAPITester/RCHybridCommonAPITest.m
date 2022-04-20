@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RCCommonFunctionalityAPITest
 - (void)testAPI {
-    NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
-    BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
+    NSString *proxyURL __unused = [RCCommonFunctionality2 proxyURLString];
+    BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality2 simulatesAskToBuyInSandbox];
 
     [RCCommonFunctionality2 configure];
     // should issue deprecated warning
@@ -101,10 +101,10 @@ NS_ASSUME_NONNULL_BEGIN
                                                      completionBlock:^(NSDictionary<NSString *, NSObject *>
                                                                        * _Nonnull eligibilities) {
     }];
-    [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
-                                                      discount:@""
-                                               completionBlock:^(NSDictionary * _Nullable discount,
-                                                                 RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality2 paymentDiscountForProductIdentifier:@""
+                                                       discount:@""
+                                                completionBlock:^(NSDictionary * _Nullable discount,
+                                                                  RCErrorContainer * _Nullable error) {
     }];
 
     if (@available(iOS 14.0, *)) {
