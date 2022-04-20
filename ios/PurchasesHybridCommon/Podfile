@@ -22,9 +22,7 @@ target 'PurchasesHybridCommonSwift' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for PurchasesHybridCommon
   pod 'Purchases', '3.14.1'
-  pod 'PurchasesHybridCommonSwift', path: '../../'
   
   target 'PurchasesHybridCommonSwiftTests' do
     # Pods for testing

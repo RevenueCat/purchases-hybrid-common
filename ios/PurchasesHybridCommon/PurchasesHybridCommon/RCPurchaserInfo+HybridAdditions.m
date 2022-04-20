@@ -4,9 +4,7 @@
 //
 
 #import "RCPurchaserInfo+HybridAdditions.h"
-#import "RCEntitlementInfos+HybridAdditions.h"
 @import PurchasesHybridCommonSwift;
-#import "RCTransaction+HybridAdditions.h"
 
 @implementation RCPurchaserInfo (HybridAdditions)
 
