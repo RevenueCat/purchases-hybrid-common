@@ -19,12 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation RCPurchasesHybridAdditionsAPITest
 - (void)testAPI {
     RCPurchases *purchases __unused = [RCPurchases configureWithAPIKey:@""
-                                                    appUserID:@""
-                                                 observerMode:NO
-                                        userDefaultsSuiteName:nil
-                                               platformFlavor:nil
-                                        platformFlavorVersion:@""
-                                            dangerousSettings:nil];
+                                                             appUserID:@""
+                                                          observerMode:NO
+                                                 userDefaultsSuiteName:nil
+                                                        platformFlavor:nil
+                                                 platformFlavorVersion:@""
+                                                     dangerousSettings:nil];
     // This method will be removed, and instead we'll call `setPushTokenString` directly
     // on Purchases
 //    [purchases _setPushTokenString:@""];
