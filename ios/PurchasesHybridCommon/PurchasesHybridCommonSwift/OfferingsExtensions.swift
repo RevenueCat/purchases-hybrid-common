@@ -12,9 +12,10 @@ import Purchases
 @objc public extension Purchases.Offerings {
 
     @objc var dictionary: [String: Any] {
-        return [
-            "all": all.mapValues { $0.dictionary },
-            "current": current?.dictionary ?? "<null>"
-        ]
+        var result: [String: Any] = ["all": all.mapValues { $0.dictionary }]
+        if let current = current {
+            result["current"] = current.dictionary
+        }
+        return result
     }
 }
