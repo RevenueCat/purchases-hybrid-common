@@ -221,13 +221,61 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
                         return
                     }
                     Purchases.shared.purchaseProduct(product, discount: discount, hybridCompletion)
+                    return
                 }
+
                 Purchases.shared.purchaseProduct(product, hybridCompletion)
             }
 
         }
     }
 
+    @objc(purchasePackage:offering:signedDiscountTimestamp:completionBlock:)
+    public static func purchasePackage(_ packageIdentifier: String,
+                                       offeringIdentifier: String,
+                                       signedDiscountTimestamp: String?,
+                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion: (SKPaymentTransaction?,
+                               Purchases.PurchaserInfo?,
+                               Error?,
+                               Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
+            if let error = error {
+                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+            } else if let purchaserInfo = purchaserInfo,
+                      let transaction = transaction {
+                completion([
+                    "purchaserInfo": purchaserInfo.dictionary,
+                    "productIdentifier": transaction.payment.productIdentifier
+                ], nil)
+            } else {
+                // todo: maybe set up custom error here?
+                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+            }
+        }
+
+        package(with: packageIdentifier) { package in
+            guard let package = package else {
+                let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
+                completion(nil, error)
+                return
+            }
+
+            if let signedDiscountTimestamp = signedDiscountTimestamp {
+                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
+                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
+                        return
+                    }
+                    Purchases.shared.purchasePackage(package, discount: discount, hybridCompletion)
+                    return
+                }
+
+            }
+
+            Purchases.shared.purchasePackage(package, hybridCompletion)
+        }
+
+    }
 }
 
 private extension CommonFunctionality {
@@ -263,6 +311,14 @@ private extension CommonFunctionality {
                             code: Purchases.ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
         return ErrorContainer(error: error, extraPayload: extraPayload)
+    }
+
+    static func package(with identifier: String, completion: @escaping(Purchases.Package?) -> Void) {
+        Purchases.shared.offerings { offerings, error in
+            let offering = offerings?.offering(identifier: identifier)
+            let package = offering?.package(identifier: identifier)
+            completion(package)
+        }
     }
 
 }

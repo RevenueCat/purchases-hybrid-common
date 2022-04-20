@@ -73,21 +73,21 @@ NS_ASSUME_NONNULL_BEGIN
 
     [RCCommonFunctionality2 setAutomaticAppleSearchAdsAttributionCollection:YES];
     [RCCommonFunctionality2 getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
-                                                             RCErrorContainer * _Nullable error) {
+                                                              RCErrorContainer * _Nullable error) {
     }];
     BOOL isAnonymous __unused = RCCommonFunctionality2.isAnonymous;
 
-    [RCCommonFunctionality purchaseProduct:@""
-                   signedDiscountTimestamp:@""
-                           completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                             RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality2 purchaseProduct:@""
+                    signedDiscountTimestamp:@""
+                            completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                              RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality purchasePackage:@""
-                                  offering:@""
-                   signedDiscountTimestamp:@""
-                           completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                             RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality2 purchasePackage:@""
+                                   offering:@""
+                    signedDiscountTimestamp:@""
+                            completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                              RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
