@@ -16,29 +16,21 @@
 		2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */; };
 		2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */; };
 		2D4FDFE3280738FB00863298 /* NSDate+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */; };
+		2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */; };
+		2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* TransactionExtensions.swift */; };
+		2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */; };
+		2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
 		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF362437AF5200FF4EE4 /* SKPaymentDiscount+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */; };
-		2D54BF3B2437AF6400FF4EE4 /* RCEntitlementInfo+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */; };
-		2D54BF3C2437AF6400FF4EE4 /* RCEntitlementInfos+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */; };
-		2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */; };
 		2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */; };
 		2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */; };
-		2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */; };
 		2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */; };
 		2D54BF422437AF6400FF4EE4 /* SKPaymentDiscount+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */; };
-		2D54BF432437AF6400FF4EE4 /* SKProduct+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */; };
-		2D54BF442437AF6400FF4EE4 /* SKProductDiscount+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */; };
 		2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D557F77280710FA0090FACC /* ObjCAPITester.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */; };
 		2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
@@ -48,9 +40,11 @@
 		2D7749DB2807090700F70FFA /* PurchasesHybridCommonSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D902807574D00676D73 /* OfferingExtensions.swift */; };
+		2D900D952807580000676D73 /* PackageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* PackageExtensions.swift */; };
+		2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */; };
+		2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProductExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
-		35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		35DCB4F8250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
@@ -110,6 +104,11 @@
 		2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridCommonDictionaryConversionsAPITest.m; sourceTree = "<group>"; };
 		2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainerAPITests.m; sourceTree = "<group>"; };
 		2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
+		2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementInfoExtensions.swift; sourceTree = "<group>"; };
+		2D4FDFE62807436200863298 /* TransactionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionExtensions.swift; sourceTree = "<group>"; };
+		2D4FDFE82807489600863298 /* Purchases.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Purchases.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementInfosExtensions.swift; sourceTree = "<group>"; };
+		2D4FDFEC28074EB900863298 /* ErrorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainer.swift; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F75280710FA0090FACC /* ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D557F77280710FA0090FACC /* ObjCAPITester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCAPITester.h; sourceTree = "<group>"; };
@@ -125,32 +124,22 @@
 		2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommonSwift.h; sourceTree = "<group>"; };
 		2D7749D42807090700F70FFA /* PurchasesHybridCommonSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D7749D92807090700F70FFA /* PurchasesHybridCommonSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonSwiftTests.swift; sourceTree = "<group>"; };
+		2D900D902807574D00676D73 /* OfferingExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferingExtensions.swift; sourceTree = "<group>"; };
+		2D900D942807580000676D73 /* PackageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageExtensions.swift; sourceTree = "<group>"; };
+		2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountExtensions.swift; sourceTree = "<group>"; };
+		2D900D9828075B9000676D73 /* SKProductExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductExtensions.swift; sourceTree = "<group>"; };
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOfferings+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfos+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProductDiscount+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
 		2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchaserInfo+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKPaymentDiscount+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProductDiscount+HybridAdditions.m"; sourceTree = "<group>"; };
 		2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchaserInfo+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfo+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOffering+HybridAdditions.m"; sourceTree = "<group>"; };
 		2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKPaymentDiscount+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPackage+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCEntitlementInfos+HybridAdditions.m"; sourceTree = "<group>"; };
 		2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOffering+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCEntitlementInfo+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPackage+HybridAdditions.h"; sourceTree = "<group>"; };
 		2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCommonFunctionality.h; sourceTree = "<group>"; };
-		2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCErrorContainer.h; sourceTree = "<group>"; };
-		2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainer.m; sourceTree = "<group>"; };
 		2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOfferings+HybridAdditions.m"; sourceTree = "<group>"; };
-		35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTransaction+HybridAdditions.h"; sourceTree = "<group>"; };
-		35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTransaction+HybridAdditions.m"; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
 		37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditions.m"; sourceTree = "<group>"; };
@@ -266,6 +255,14 @@
 			children = (
 				2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */,
 				2D7749CD2807090700F70FFA /* PurchasesHybridCommonSwift.h */,
+				2D4FDFE428073A9300863298 /* EntitlementInfoExtensions.swift */,
+				2D4FDFE62807436200863298 /* TransactionExtensions.swift */,
+				2D4FDFEA28074C3800863298 /* EntitlementInfosExtensions.swift */,
+				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
+				2D900D902807574D00676D73 /* OfferingExtensions.swift */,
+				2D900D942807580000676D73 /* PackageExtensions.swift */,
+				2D900D962807593100676D73 /* SKProductDiscountExtensions.swift */,
+				2D900D9828075B9000676D73 /* SKProductExtensions.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -312,30 +309,16 @@
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */,
 				2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */,
-				2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */,
-				2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */,
-				2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */,
-				2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */,
-				2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */,
-				2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */,
 				2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */,
 				2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */,
 				2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */,
 				2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */,
-				2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */,
-				2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */,
 				2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */,
 				2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */,
 				2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */,
 				2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */,
 				2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */,
-				2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */,
-				2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */,
-				2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */,
-				2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */,
 				37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */,
-				35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */,
-				35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -343,6 +326,7 @@
 		2DD4B90B243782C30070344F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2D4FDFE82807489600863298 /* Purchases.framework */,
 				7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */,
 				27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */,
 				4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */,
@@ -379,18 +363,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */,
-				2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */,
-				2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */,
-				2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */,
 				2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */,
 				2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */,
-				2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */,
 				2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */,
 				2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */,
 				2D54BF362437AF5200FF4EE4 /* SKPaymentDiscount+HybridAdditions.h in Headers */,
-				2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */,
-				35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */,
-				2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */,
 				2D370653261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h in Headers */,
 				2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */,
 			);
@@ -749,17 +726,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */,
-				2D54BF3B2437AF6400FF4EE4 /* RCEntitlementInfo+HybridAdditions.m in Sources */,
-				2D54BF3C2437AF6400FF4EE4 /* RCEntitlementInfos+HybridAdditions.m in Sources */,
-				2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */,
 				2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */,
 				2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */,
-				2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */,
 				2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */,
-				35DCB4F8250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m in Sources */,
 				2D54BF422437AF6400FF4EE4 /* SKPaymentDiscount+HybridAdditions.m in Sources */,
-				2D54BF432437AF6400FF4EE4 /* SKProduct+HybridAdditions.m in Sources */,
-				2D54BF442437AF6400FF4EE4 /* SKProductDiscount+HybridAdditions.m in Sources */,
 				37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -795,6 +765,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */,
+				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
+				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
+				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
+				2D900D972807593100676D73 /* SKProductDiscountExtensions.swift in Sources */,
+				2D4FDFE72807436200863298 /* TransactionExtensions.swift in Sources */,
+				2D900D952807580000676D73 /* PackageExtensions.swift in Sources */,
+				2D900D9928075B9000676D73 /* SKProductExtensions.swift in Sources */,
+				2D900D912807574D00676D73 /* OfferingExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,6 +1026,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1088,6 +1068,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;

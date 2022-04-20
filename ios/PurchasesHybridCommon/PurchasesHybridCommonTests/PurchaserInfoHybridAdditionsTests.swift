@@ -8,7 +8,8 @@
 
 import Quick
 import Nimble
-import PurchasesHybridCommon
+import PurchasesHybridCommonSwift
+import PurchasesCoreSwift
 
 class PurchaserInfoHybridAdditionsTests: QuickSpec {
 
@@ -37,7 +38,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     let purchaserInfo = PartialMockPurchaserInfo()
                     
                     let transactionDate = Date()
-                    let transaction = Purchases.Transaction(transactionId: "transactionid", productId: "productid", purchaseDate: transactionDate as Date)
+                    let transaction = PurchasesCoreSwift.Transaction(transactionId: "transactionid", productId: "productid", purchaseDate: transactionDate as Date)
                     purchaserInfo.stubbedNonSubscriptionTransactions = [transaction]
                     
                     let dictionary = purchaserInfo.dictionary()
@@ -67,7 +68,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
 class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
     
     var stubbedManagementURL: URL?
-    var stubbedNonSubscriptionTransactions: Array = Array<Purchases.Transaction>()
+    var stubbedNonSubscriptionTransactions: Array = Array<PurchasesCoreSwift.Transaction>()
     let _firstSeen = Date()
     let _requestDate = Date()
     
@@ -95,7 +96,7 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
         return _requestDate
     }
     
-    override var nonSubscriptionTransactions: [Purchases.Transaction] {
+    override var nonSubscriptionTransactions: [PurchasesCoreSwift.Transaction] {
         return stubbedNonSubscriptionTransactions
     }
 }
