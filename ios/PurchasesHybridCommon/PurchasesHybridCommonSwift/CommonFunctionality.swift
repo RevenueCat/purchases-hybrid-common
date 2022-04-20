@@ -10,14 +10,18 @@ import Foundation
 import StoreKit
 import Purchases
 
-@objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
+//typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
+typealias HybridResponseBlock = ([String: Any], ErrorContainer) -> Void
 
-    @objc public var proxyURLString: String?
-    @objc public var simulatesAskToBuyInSandbox: Bool = false
+// todo: rename back to RCCommonFunctionality
+@objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
 
-    private var _discountsByProductIdentifier: Any? = nil
+    @objc public static var proxyURLString: String?
+    @objc public static var simulatesAskToBuyInSandbox: Bool = false
+
+    private static var _discountsByProductIdentifier: Any? = nil
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    var discountsByProductIdentifier: [String: SKPaymentDiscount]? {
+    static var discountsByProductIdentifier: [String: SKPaymentDiscount]? {
         get {
             return _discountsByProductIdentifier as? [String: SKPaymentDiscount]
         } set {
@@ -25,16 +29,58 @@ import Purchases
         }
     }
 
-    @objc public func configure() {
+    @objc public static func configure() {
         // todo: it seems like this call isn't needed anymore?
     }
 
-    @objc public func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
+    @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
         Purchases.shared.allowSharingAppStoreAccount = allowSharingStoreAccount;
     }
 
-    @objc public func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
+    @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         addAttributionData(data, network: network, networkUserId: networkUserId)
+    }
+
+    @objc public static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
+        Purchases.shared.products(productIds) { products in
+            let productDictionaries = products.map { $0.rc_dictionary }
+            completionBlock(productDictionaries)
+        }
+    }
+
+    @objc(restoreTransactionsWithCompletionBlock:)
+    public static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
+        Purchases.shared.restoreTransactions(purchaserInfoCompletion)
+    }
+
+    @objc(syncPurchasesWithCompletionBlock:)
+    public static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+        if let completion = completion {
+            let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
+            Purchases.shared.restoreTransactions(purchaserInfoCompletion)
+        } else {
+            Purchases.shared.restoreTransactions(nil)
+        }
+    }
+
+}
+
+private extension CommonFunctionality {
+
+    private static func purchaserInfoCompletionBlock(from hybridResponseBlock: @escaping ([String: Any]?, ErrorContainer?) -> Void)
+    -> ((Purchases.PurchaserInfo?, Error?) -> Void) {
+        return { purchaserInfo, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                hybridResponseBlock(nil, errorContainer)
+            } else if let purchaserInfo = purchaserInfo {
+                hybridResponseBlock(purchaserInfo.dictionary, nil)
+            } else {
+                fatalError("got nil error and nil purchaserInfo")
+            }
+        }
+
     }
 
 }

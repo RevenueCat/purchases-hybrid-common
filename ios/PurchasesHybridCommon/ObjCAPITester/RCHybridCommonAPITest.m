@@ -20,23 +20,23 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
-    [RCCommonFunctionality configure];
+    [RCCommonFunctionality2 configure];
     // should issue deprecated warning
-    [RCCommonFunctionality setAllowSharingStoreAccount:NO];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality addAttributionData:@{} network:1 networkUserId:@"asdfg"];
+    [RCCommonFunctionality2 setAllowSharingStoreAccount:NO];
     
-    [RCCommonFunctionality getProductInfo:@[]
-                          completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
+    // should issue deprecated warning
+    [RCCommonFunctionality2 addAttributionData:@{} network:1 networkUserId:@"asdfg"];
+    
+    [RCCommonFunctionality2 getProductInfo:@[]
+                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
-
-    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                    RCErrorContainer * _Nullable error) {
+    
+    [RCCommonFunctionality2 restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                     RCErrorContainer * _Nullable error) {
     }];
-
-    [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                              RCErrorContainer * _Nullable error) {
+    
+    [RCCommonFunctionality2 syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                               RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality appUserID];
