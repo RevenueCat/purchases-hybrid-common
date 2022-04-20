@@ -11,7 +11,7 @@ import Purchases
 
 @objc public extension Purchases.EntitlementInfos {
 
-    var dictionary: [String: Any] {
+    @objc var dictionary: [String: Any] {
         return [
             "all": all.mapValues { $0.dictionary },
             "active": active.mapValues { $0.dictionary }
