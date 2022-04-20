@@ -57,9 +57,9 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
     private static var _discountsByProductIdentifier: Any? = nil
 
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    private static var discountsByProductIdentifier: [String: SKPaymentDiscount]? {
+    private static var discountsByProductIdentifier: [String: SKPaymentDiscount] {
         get {
-            return _discountsByProductIdentifier as? [String: SKPaymentDiscount]
+            return _discountsByProductIdentifier as! [String: SKPaymentDiscount]
         } set {
             _discountsByProductIdentifier = newValue
         }
@@ -186,11 +186,53 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         }
     }
 
+    @objc(purchaseProduct:signedDiscountTimestamp:completionBlock:)
+    public static func purchaseProduct(_ productIdentifier: String,
+                                       signedDiscountTimestamp: String?,
+                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion: (SKPaymentTransaction?,
+                               Purchases.PurchaserInfo?,
+                               Error?,
+                               Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
+            if let error = error {
+                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+            } else if let purchaserInfo = purchaserInfo,
+                      let transaction = transaction {
+                completion([
+                    "purchaserInfo": purchaserInfo.dictionary,
+                    "productIdentifier": transaction.payment.productIdentifier
+                ], nil)
+            } else {
+                // todo: maybe set up custom error here?
+                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+            }
+        }
+
+        product(with: productIdentifier) { product in
+            guard let product = product else {
+                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                return
+            }
+
+            if let signedDiscountTimestamp = signedDiscountTimestamp {
+                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
+                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
+                        return
+                    }
+                    Purchases.shared.purchaseProduct(product, discount: discount, hybridCompletion)
+                }
+                Purchases.shared.purchaseProduct(product, hybridCompletion)
+            }
+
+        }
+    }
+
 }
 
 private extension CommonFunctionality {
 
-    private static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
+    static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
     -> ((Purchases.PurchaserInfo?, Error?) -> Void) {
         return { purchaserInfo, error in
             if let error = error {
@@ -203,6 +245,24 @@ private extension CommonFunctionality {
             }
         }
 
+    }
+
+    static func product(with identifier: String, completion: @escaping (SKProduct?) -> Void) {
+        Purchases.shared.products([identifier]) { products in
+            completion(products.first { $0.productIdentifier == identifier })
+        }
+    }
+
+    static func productNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
+        var extraPayload: [String: Any] = [:]
+        if let userCancelled = userCancelled {
+            extraPayload["userCancelled"] = userCancelled
+        }
+
+        let error = NSError(domain: Purchases.ErrorDomain,
+                            code: Purchases.ErrorCode.productNotAvailableForPurchaseError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
 }
