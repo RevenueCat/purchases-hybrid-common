@@ -35,7 +35,7 @@ import Purchases
         return [
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
-            "allPurchasedProductIdentifiers": allPurchasedProductIdentifiers,
+            "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
             "latestExpirationDate": latestExpirationDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
             "latestExpirationDateMillis": latestExpirationDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "firstSeen": firstSeen.nsDate.rc_formattedAsISO8601(),
