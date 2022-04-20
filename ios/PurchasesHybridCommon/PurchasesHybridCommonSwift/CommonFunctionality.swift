@@ -18,6 +18,7 @@ typealias HybridResponseBlock = ([String: Any], ErrorContainer) -> Void
 
     @objc public static var proxyURLString: String?
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
+    @objc public static var appUserID: String { Purchases.shared.appUserID }
 
     private static var _discountsByProductIdentifier: Any? = nil
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
@@ -38,7 +39,10 @@ typealias HybridResponseBlock = ([String: Any], ErrorContainer) -> Void
     }
 
     @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
-        addAttributionData(data, network: network, networkUserId: networkUserId)
+        // todo: clean up force cast after migration to v4
+        Purchases.addAttributionData(data,
+                                     from: RCAttributionNetwork(rawValue: network)!,
+                                     forNetworkUserId: networkUserId)
     }
 
     @objc public static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
