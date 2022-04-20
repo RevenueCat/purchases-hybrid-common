@@ -73,7 +73,7 @@ import PurchasesCoreSwift
         case .year:
             unitString = "Y"
         @unknown default:
-            unitString = "unknown"
+            unitString = "-"
         }
         return "P\(subscriptionPeriod.numberOfUnits)\(unitString)"
     }
@@ -91,7 +91,7 @@ import PurchasesCoreSwift
         case .year:
             return "YEAR"
         @unknown default:
-            return "UNKNOWN"
+            return "-"
         }
     }
 
