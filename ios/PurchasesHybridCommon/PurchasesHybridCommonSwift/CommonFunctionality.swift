@@ -416,7 +416,7 @@ import Purchases
         Purchases.shared.setAirshipChannelID(airshipChannelID)
     }
 
-    @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
+    @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
                                      from: RCAttributionNetwork(rawValue: network)!,
