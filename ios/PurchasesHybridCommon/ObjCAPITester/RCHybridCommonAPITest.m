@@ -23,46 +23,46 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality2 configure];
     // should issue deprecated warning
     [RCCommonFunctionality2 setAllowSharingStoreAccount:NO];
-    
+
     // should issue deprecated warning
     [RCCommonFunctionality2 addAttributionData:@{} network:1 networkUserId:@"asdfg"];
     
     [RCCommonFunctionality2 getProductInfo:@[]
                            completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
-    
+
     [RCCommonFunctionality2 restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                      RCErrorContainer * _Nullable error) {
     }];
-    
+
     [RCCommonFunctionality2 syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality appUserID];
-    [RCCommonFunctionality logInWithAppUserID:@""
+    NSString *appUserID __unused = [RCCommonFunctionality2 appUserID];
+    [RCCommonFunctionality2 logInWithAppUserID:@""
                               completionBlock:^(NSDictionary * _Nullable customerInfo,
                                                 RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+    [RCCommonFunctionality2 logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                        RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
-    [RCCommonFunctionality createAlias:@""
+    [RCCommonFunctionality2 createAlias:@""
                        completionBlock:^(NSDictionary * _Nullable customerInfo,
                                          RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
-    [RCCommonFunctionality identify:@""
+    [RCCommonFunctionality2 identify:@""
                     completionBlock:^(NSDictionary * _Nullable customerInfo,
                                       RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
-    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+    [RCCommonFunctionality2 resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                       RCErrorContainer * _Nullable error) {
     }];
 

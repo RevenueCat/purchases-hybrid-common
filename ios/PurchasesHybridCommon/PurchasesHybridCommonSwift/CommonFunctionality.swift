@@ -11,7 +11,7 @@ import StoreKit
 import Purchases
 
 //typedef void (^RCHybridResponseBlock)(NSDictionary * _Nullable, RCErrorContainer * _Nullable);
-typealias HybridResponseBlock = ([String: Any], ErrorContainer) -> Void
+typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
 
 // todo: rename back to RCCommonFunctionality
 @objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
@@ -66,6 +66,40 @@ typealias HybridResponseBlock = ([String: Any], ErrorContainer) -> Void
         } else {
             Purchases.shared.restoreTransactions(nil)
         }
+    }
+
+    @objc(logInWithAppUserID:completionBlock:)
+    public static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
+            if let error = error {
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+            } else {
+                completion([
+                    "purchaserInfo": purchaserInfo?.dictionary ?? "<Purchaser Info Empty>",
+                    "created": created
+                ], nil)
+            }
+        }
+    }
+
+    @objc(logOutWithCompletionBlock:)
+    public static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.logOut(purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(createAlias:completionBlock:)
+    public static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.createAlias(newAppUserID, purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(identify:completionBlock:)
+    public static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.identify(appUserID, purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(resetWithCompletionBlock:)
+    public static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
     }
 
 }
