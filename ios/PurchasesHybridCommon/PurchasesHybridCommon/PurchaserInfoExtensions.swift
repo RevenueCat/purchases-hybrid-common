@@ -31,7 +31,6 @@ import Purchases
             allPurchasesMillis[identifier] = purchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
         }
 
-
         return [
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
