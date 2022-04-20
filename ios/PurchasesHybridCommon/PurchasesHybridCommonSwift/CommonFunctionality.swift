@@ -245,11 +245,17 @@ import Purchases
         Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-            } else {
+            } else if let purchaserInfo = purchaserInfo {
                 completion([
-                    "purchaserInfo": purchaserInfo?.dictionary ?? "<Purchaser Info Empty>",
+                    "purchaserInfo": purchaserInfo.dictionary,
                     "created": created
                 ], nil)
+            } else {
+                let error = NSError(domain: Purchases.ErrorDomain,
+                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: description])
+
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
     }
