@@ -311,6 +311,51 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
                 })
             }
     }
+
+    @objc(paymentDiscountForProductIdentifier:discount:completionBlock:)
+    public static func paymentDiscount(for productIdentifier: String,
+                                       discountIdentifier: String?,
+                                       completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
+            completion(nil, nil)
+            return
+        }
+
+        product(with: productIdentifier) { product in
+            guard let product = product else {
+                completion(nil, productNotFoundError(description: "Couldn't find product", userCancelled: false))
+                return
+            }
+
+            guard let discountToUse = discount(with: discountIdentifier, for: product) else {
+                completion(nil, productNotFoundError(description: "Couldn't find discount", userCancelled: false))
+                return
+            }
+
+            let paymentDiscountCompletion: (SKPaymentDiscount?, Error?) -> Void = { discount, error in
+                guard let discount = discount else {
+                    if let error = error {
+                        completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                    } else {
+                        let error = NSError(domain: Purchases.ErrorDomain,
+                                            code: Purchases.ErrorCode.unknownError.rawValue,
+                                            userInfo: [NSLocalizedDescriptionKey: description])
+
+                        completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                    }
+                    return
+                }
+                discountsByProductIdentifier[discount.timestamp.stringValue] = discount
+                completion(discount.rc_dictionary, nil)
+            }
+
+            Purchases.shared.paymentDiscount(for: discountToUse,
+                                             product: product,
+                                             completion: paymentDiscountCompletion)
+
+        }
+    }
+
 }
 
 private extension CommonFunctionality {
@@ -353,6 +398,15 @@ private extension CommonFunctionality {
             let offering = offerings?.offering(identifier: identifier)
             let package = offering?.package(identifier: identifier)
             completion(package)
+        }
+    }
+
+    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
+    static func discount(with identifier: String?, for product: SKProduct) -> SKProductDiscount? {
+        if identifier == nil {
+            return product.discounts.first
+        } else {
+            return product.discounts.first { $0.identifier == identifier }
         }
     }
 
