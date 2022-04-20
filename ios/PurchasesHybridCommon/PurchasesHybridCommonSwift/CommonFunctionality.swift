@@ -136,26 +136,31 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
     }
 
-    @objc public func setDebugLogsEnabled(_ enabled: Bool) {
+    @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
         Purchases.logLevel = enabled ? .debug : .info
     }
 
-    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(enabled: Bool) {
+    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
         Purchases.automaticAppleSearchAdsAttributionCollection = enabled
+    }
+
+    @objc(getPurchaserInfoWithCompletionBlock:)
+    public static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
     }
 
 }
 
 private extension CommonFunctionality {
 
-    private static func purchaserInfoCompletionBlock(from hybridResponseBlock: @escaping ([String: Any]?, ErrorContainer?) -> Void)
+    private static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
     -> ((Purchases.PurchaserInfo?, Error?) -> Void) {
         return { purchaserInfo, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
-                hybridResponseBlock(nil, errorContainer)
+                block(nil, errorContainer)
             } else if let purchaserInfo = purchaserInfo {
-                hybridResponseBlock(purchaserInfo.dictionary, nil)
+                block(purchaserInfo.dictionary, nil)
             } else {
                 fatalError("got nil error and nil purchaserInfo")
             }

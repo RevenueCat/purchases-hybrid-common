@@ -41,41 +41,41 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSString *appUserID __unused = [RCCommonFunctionality2 appUserID];
     [RCCommonFunctionality2 logInWithAppUserID:@""
-                              completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                RCErrorContainer * _Nullable error) {
+                               completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                 RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality2 logOutWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                       RCErrorContainer * _Nullable error) {
+                                                        RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
     [RCCommonFunctionality2 createAlias:@""
-                       completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                         RCErrorContainer * _Nullable error) {
+                        completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                          RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
     [RCCommonFunctionality2 identify:@""
-                    completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                      RCErrorContainer * _Nullable error) {
+                     completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                       RCErrorContainer * _Nullable error) {
     }];
 
     // should issue deprecated warning
     [RCCommonFunctionality2 resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                      RCErrorContainer * _Nullable error) {
+                                                       RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality setDebugLogsEnabled:NO];
-    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                 RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality2 setDebugLogsEnabled:NO];
+    [RCCommonFunctionality2 getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                  RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
+    [RCCommonFunctionality2 setAutomaticAppleSearchAdsAttributionCollection:YES];
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];
-    BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
+    BOOL isAnonymous __unused = RCCommonFunctionality2.isAnonymous;
 
     [RCCommonFunctionality purchaseProduct:@""
                    signedDiscountTimestamp:@""
