@@ -16,13 +16,47 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
 // todo: rename back to RCCommonFunctionality
 @objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
 
-    @objc public static var proxyURLString: String?
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
     @objc public static var appUserID: String { Purchases.shared.appUserID }
+    @objc public static var isAnonymous: Bool { Purchases.shared.isAnonymous }
+
+    @objc public static var proxyURLString: String? {
+        get { Purchases.proxyURL?.absoluteString }
+        set {
+            if let value = newValue {
+                guard let proxyURL = URL(string: value) else {
+                    assert(false, "couldn't parse the proxy URL string \(value) into a valid URL!")
+                }
+                Purchases.proxyURL = proxyURL
+            } else {
+                Purchases.proxyURL = nil
+            }
+        }
+    }
+
+    @objc public var simulatesAskToBuyInSandbox: Bool {
+        get {
+            // all other platforms already support this feature
+            if #available(macOS 10.14, *) {
+                return Purchases.simulatesAskToBuyInSandbox
+            } else {
+                return false
+            }
+        }
+        set {
+            // all other platforms already support this feature
+            if #available(macOS 10.14, *) {
+                Purchases.simulatesAskToBuyInSandbox = newValue
+            } else {
+                NSLog("called setSimulatesAskToBuyInSandbox, but it's not available on this platform / OS version")
+            }
+        }
+    }
 
     private static var _discountsByProductIdentifier: Any? = nil
+
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    static var discountsByProductIdentifier: [String: SKPaymentDiscount]? {
+    private static var discountsByProductIdentifier: [String: SKPaymentDiscount]? {
         get {
             return _discountsByProductIdentifier as? [String: SKPaymentDiscount]
         } set {
@@ -100,6 +134,14 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
     @objc(resetWithCompletionBlock:)
     public static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc public func setDebugLogsEnabled(_ enabled: Bool) {
+        Purchases.logLevel = enabled ? .debug : .info
+    }
+
+    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(enabled: Bool) {
+        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
     }
 
 }
