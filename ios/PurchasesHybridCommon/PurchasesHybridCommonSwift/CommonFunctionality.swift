@@ -72,6 +72,34 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         Purchases.shared.allowSharingAppStoreAccount = allowSharingStoreAccount;
     }
 
+    @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
+        Purchases.logLevel = enabled ? .debug : .info
+    }
+
+    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
+        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
+    }
+
+    @objc public static func setFinishTransactions(_ finishTransactions: Bool) {
+        Purchases.shared.finishTransactions = finishTransactions
+    }
+
+    @objc public static func invalidatePurchaserInfoCache() {
+        Purchases.shared.invalidatePurchaserInfoCache()
+    }
+
+    @available(iOS 14.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc public static func presentCodeRedemptionSheet() {
+        Purchases.shared.presentCodeRedemptionSheet()
+    }
+
+    @objc public static func canMakePaymentsWithFeatures(_ features: [Int]) -> Bool {
+        return Purchases.canMakePayments()
+    }
+
     @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
@@ -136,17 +164,21 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
     }
 
-    @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
-        Purchases.logLevel = enabled ? .debug : .info
-    }
-
-    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
-    }
-
     @objc(getPurchaserInfoWithCompletionBlock:)
     public static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
+    }
+
+    @objc(getOfferingsWithCompletionBlock:)
+    public static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.offerings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
     }
 
 }
