@@ -436,7 +436,6 @@ import Purchases
 // MARK: Campaign parameters
 @objc public extension CommonFunctionality {
 
-
     @objc static func setMediaSource(_ mediaSource: String?) {
         Purchases.shared.setMediaSource(mediaSource)
     }
