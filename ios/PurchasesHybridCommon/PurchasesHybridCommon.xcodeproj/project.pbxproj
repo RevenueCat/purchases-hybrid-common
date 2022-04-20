@@ -37,6 +37,7 @@
 		2D900D9F2807696100676D73 /* OfferingsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* OfferingsExtensions.swift */; };
 		2D900DA1280769FC00676D73 /* PurchaserInfoExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
+		2DED033C280F5759009C5D65 /* CommonFunctionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DED033B280F5759009C5D65 /* CommonFunctionality.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
@@ -115,6 +116,7 @@
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
 		2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCommonFunctionality.h; sourceTree = "<group>"; };
+		2DED033B280F5759009C5D65 /* CommonFunctionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFunctionality.swift; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
 		3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				2D900D9C2807626100676D73 /* PurchasesExtensions.swift */,
 				2D900D9E2807696100676D73 /* OfferingsExtensions.swift */,
 				2D900DA0280769FC00676D73 /* PurchaserInfoExtensions.swift */,
+				2DED033B280F5759009C5D65 /* CommonFunctionality.swift */,
 			);
 			path = PurchasesHybridCommonSwift;
 			sourceTree = "<group>";
@@ -633,6 +636,7 @@
 			files = (
 				2D7749E32807091400F70FFA /* NSDate+HybridAdditions.swift in Sources */,
 				2D900D9B2807614700676D73 /* SKPaymentDiscountExtensions.swift in Sources */,
+				2DED033C280F5759009C5D65 /* CommonFunctionality.swift in Sources */,
 				2D4FDFED28074EB900863298 /* ErrorContainer.swift in Sources */,
 				2D4FDFEB28074C3800863298 /* EntitlementInfosExtensions.swift in Sources */,
 				2D4FDFE528073A9300863298 /* EntitlementInfoExtensions.swift in Sources */,
