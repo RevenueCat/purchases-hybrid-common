@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [RCCommonFunctionality2 setAutomaticAppleSearchAdsAttributionCollection:YES];
-    [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
+    [RCCommonFunctionality2 getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];
     BOOL isAnonymous __unused = RCCommonFunctionality2.isAnonymous;
@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                   RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality setFinishTransactions:NO];
+    [RCCommonFunctionality2 setFinishTransactions:NO];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
                                                     completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *>
                                                                       * _Nonnull eligibilities) {
@@ -108,10 +108,10 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     if (@available(iOS 14.0, *)) {
-        [RCCommonFunctionality presentCodeRedemptionSheet];
+        [RCCommonFunctionality2 presentCodeRedemptionSheet];
     }
-    [RCCommonFunctionality invalidatePurchaserInfoCache];
-    [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
+    [RCCommonFunctionality2 invalidatePurchaserInfoCache];
+    BOOL canMakePayments __unused = [RCCommonFunctionality2 canMakePaymentsWithFeatures:@[]];
 }
 
 - (void)testSubscriberAttributes {

@@ -16,6 +16,7 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
 // todo: rename back to RCCommonFunctionality
 @objc(RCCommonFunctionality2) public class CommonFunctionality: NSObject {
 
+    // MARK: properties and configuration
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
     @objc public static var appUserID: String { Purchases.shared.appUserID }
     @objc public static var isAnonymous: Bool { Purchases.shared.isAnonymous }
@@ -100,6 +101,7 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         return Purchases.canMakePayments()
     }
 
+    // MARK: attribution and subs attributes
     @objc public static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
@@ -107,6 +109,7 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
                                      forNetworkUserId: networkUserId)
     }
 
+    // MARK: purchasing and restoring
     @objc public static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Purchases.shared.products(productIds) { products in
             let productDictionaries = products.map { $0.rc_dictionary }
@@ -130,6 +133,7 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         }
     }
 
+    // MARK: identity
     @objc(logInWithAppUserID:completionBlock:)
     public static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
@@ -169,6 +173,7 @@ typealias HybridResponseBlock = ([String: Any]?, ErrorContainer?) -> Void
         Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
     }
 
+    // MARK: offerings
     @objc(getOfferingsWithCompletionBlock:)
     public static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         Purchases.shared.offerings { offerings, error in
