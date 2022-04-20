@@ -195,7 +195,7 @@ import Purchases
             }
         }
 
-        package(with: packageIdentifier) { package in
+        package(withIdentifier: packageIdentifier, offeringIdentifier: offeringIdentifier) { package in
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -502,10 +502,12 @@ private extension CommonFunctionality {
         return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
-    static func package(with identifier: String, completion: @escaping(Purchases.Package?) -> Void) {
+    static func package(withIdentifier packageIdentifier: String,
+                        offeringIdentifier: String,
+                        completion: @escaping(Purchases.Package?) -> Void) {
         Purchases.shared.offerings { offerings, error in
-            let offering = offerings?.offering(identifier: identifier)
-            let package = offering?.package(identifier: identifier)
+            let offering = offerings?.offering(identifier: offeringIdentifier)
+            let package = offering?.package(identifier: packageIdentifier)
             completion(package)
         }
     }
