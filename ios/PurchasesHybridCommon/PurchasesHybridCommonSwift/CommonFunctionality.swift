@@ -139,8 +139,11 @@ import Purchases
                     "productIdentifier": transaction.payment.productIdentifier
                 ], nil)
             } else {
-                // todo: maybe set up custom error here?
-                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                let error = NSError(domain: Purchases.ErrorDomain,
+                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: description])
+
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
 
@@ -184,8 +187,11 @@ import Purchases
                     "productIdentifier": transaction.payment.productIdentifier
                 ], nil)
             } else {
-                // todo: maybe set up custom error here?
-                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                let error = NSError(domain: Purchases.ErrorDomain,
+                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: description])
+
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
 
@@ -468,7 +474,11 @@ private extension CommonFunctionality {
             } else if let purchaserInfo = purchaserInfo {
                 block(purchaserInfo.dictionary, nil)
             } else {
-                fatalError("got nil error and nil purchaserInfo")
+                let error = NSError(domain: Purchases.ErrorDomain,
+                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: description])
+
+                block(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
 
