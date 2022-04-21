@@ -116,9 +116,9 @@ import Purchases
     static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
             let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-            Purchases.shared.restoreTransactions(purchaserInfoCompletion)
+            Purchases.shared.syncPurchases(purchaserInfoCompletion)
         } else {
-            Purchases.shared.restoreTransactions(nil)
+            Purchases.shared.syncPurchases(nil)
         }
     }
 
