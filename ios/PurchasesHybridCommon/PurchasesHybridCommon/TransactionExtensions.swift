@@ -7,16 +7,15 @@
 //
 
 import Foundation
-import Purchases
-import PurchasesCoreSwift
+import RevenueCat
 
-@objc public extension Purchases.Transaction {
+@objc public extension StoreTransaction {
 
     @objc var dictionary: [String: Any] {
         let purchaseNSDate = purchaseDate as NSDate
         return [
-            "revenueCatId": revenueCatId,
-            "productId": productId,
+            "revenueCatId": transactionIdentifier,
+            "productId": productIdentifier,
             "purchaseDateMillis": purchaseNSDate.rc_millisecondsSince1970AsDouble(),
             "purchaseDate": purchaseNSDate.rc_formattedAsISO8601()
         ]

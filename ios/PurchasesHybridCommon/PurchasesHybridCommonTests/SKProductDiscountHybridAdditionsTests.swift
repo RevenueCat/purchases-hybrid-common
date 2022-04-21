@@ -9,8 +9,7 @@
 import Quick
 import Nimble
 import StoreKit
-import Purchases
-import PurchasesHybridCommon
+import RevenueCat
 
 class SkuProductDiscountHybridAdditionsTests: QuickSpec {
     override func spec() {

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
-@import Purchases;
+@import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
 

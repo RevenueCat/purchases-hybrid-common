@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-import PurchasesCoreSwift
+import RevenueCat
 
 @objc public extension SKProduct {
 

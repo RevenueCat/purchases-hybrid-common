@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 @testable import PurchasesHybridCommon
-import Purchases
+import RevenueCat
 
 class PurchasesHybridCommonTests: QuickSpec {
 

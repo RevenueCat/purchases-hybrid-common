@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import PurchasesHybridCommon
+import RevenueCatHybridCommon
 
 class NSDateHybridAdditionsTests: QuickSpec {
 

@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-import Purchases
+import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -86,7 +86,7 @@ import Purchases
     }
 
     @objc public static func invalidatePurchaserInfoCache() {
-        Purchases.shared.invalidatePurchaserInfoCache()
+        Purchases.shared.invalidateCustomerInfoCache()
     }
 
     @available(iOS 14.0, *)
@@ -109,16 +109,16 @@ import Purchases
     @objc(restoreTransactionsWithCompletionBlock:)
     static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.restoreTransactions(purchaserInfoCompletion)
+        Purchases.shared.restoreTransactions(completion: purchaserInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
     static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
             let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-            Purchases.shared.syncPurchases(purchaserInfoCompletion)
+            Purchases.shared.syncPurchases(completion: purchaserInfoCompletion)
         } else {
-            Purchases.shared.syncPurchases(nil)
+            Purchases.shared.syncPurchases(completion: nil)
         }
     }
 
@@ -127,7 +127,7 @@ import Purchases
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (SKPaymentTransaction?,
-                               Purchases.PurchaserInfo?,
+                               CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -163,7 +163,7 @@ import Purchases
                     return
                 }
 
-                Purchases.shared.purchaseProduct(product, hybridCompletion)
+                Purchases.shared.purchaseProduct(product, discount: hybridCompletion)
             }
 
         }
@@ -175,7 +175,7 @@ import Purchases
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (SKPaymentTransaction?,
-                               Purchases.PurchaserInfo?,
+                               CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -313,7 +313,7 @@ import Purchases
     static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
         completion: @escaping([String: Any]) -> Void) {
-            Purchases.shared.checkTrialOrIntroductoryPriceEligibility(products) { eligibilityByProductId in
+            Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: products) { eligibilityByProductId in
                 completion(eligibilityByProductId.mapValues { [
                     "status": $0.status,
                     "description": $0.description
@@ -324,7 +324,7 @@ import Purchases
 
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
-        Purchases.shared.products(productIds) { products in
+        Purchases.shared.getProducts(productIds) { products in
             let productDictionaries = products.map { $0.rc_dictionary }
             completionBlock(productDictionaries)
         }
@@ -433,7 +433,7 @@ import Purchases
     @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
-                                     from: RCAttributionNetwork(rawValue: network)!,
+                                     from: AttributionNetwork(rawValue: network)!,
                                      forNetworkUserId: networkUserId)
     }
 
@@ -466,7 +466,7 @@ import Purchases
 private extension CommonFunctionality {
 
     static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
-    -> ((Purchases.PurchaserInfo?, Error?) -> Void) {
+    -> ((CustomerInfo?, Error?) -> Void) {
         return { purchaserInfo, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
@@ -485,7 +485,7 @@ private extension CommonFunctionality {
     }
 
     static func product(with identifier: String, completion: @escaping (SKProduct?) -> Void) {
-        Purchases.shared.products([identifier]) { products in
+        Purchases.shared.getProducts([identifier]) { products in
             completion(products.first { $0.productIdentifier == identifier })
         }
     }
@@ -504,8 +504,8 @@ private extension CommonFunctionality {
 
     static func package(withIdentifier packageIdentifier: String,
                         offeringIdentifier: String,
-                        completion: @escaping(Purchases.Package?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
+                        completion: @escaping(Package?) -> Void) {
+        Purchases.shared.getOfferings { offerings, error in
             let offering = offerings?.offering(identifier: offeringIdentifier)
             let package = offering?.package(identifier: packageIdentifier)
             completion(package)

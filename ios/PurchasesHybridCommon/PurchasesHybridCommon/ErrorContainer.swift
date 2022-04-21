@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
 @objc(RCErrorContainer) public class ErrorContainer: NSObject {
 

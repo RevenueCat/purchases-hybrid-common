@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 import PurchasesHybridCommon
-import Purchases
+import RevenueCat
 
 class ErrorContainerTests: QuickSpec {
 

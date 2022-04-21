@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
 class MockPurchases: Purchases {
     var invokedAppUserIDGetter = false

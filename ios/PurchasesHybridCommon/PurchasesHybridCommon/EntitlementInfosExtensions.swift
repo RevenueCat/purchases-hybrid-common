@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.EntitlementInfos {
+@objc public extension EntitlementInfos {
 
     @objc var dictionary: [String: Any] {
         return [

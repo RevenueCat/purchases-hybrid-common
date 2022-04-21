@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.Offerings {
+@objc public extension Offerings {
 
     @objc var dictionary: [String: Any] {
         var result: [String: Any] = ["all": all.mapValues { $0.dictionary }]

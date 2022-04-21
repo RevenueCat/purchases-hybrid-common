@@ -7,22 +7,23 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.Package {
+@objc public extension Package {
 
     @objc func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
         return [
             "identifier": identifier,
             "packageType": packageType.name,
-            "product": product.rc_dictionary,
+            // todo: remove force-unwrap
+            "product": storeProduct.sk1Product!.rc_dictionary,
             "offeringIdentifier": offeringIdentifier
         ]
     }
 
 }
 
-private extension Purchases.PackageType {
+private extension PackageType {
 
     var name: String {
         switch self {

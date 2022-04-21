@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.PurchaserInfo {
+@objc public extension CustomerInfo {
 
     @objc var dictionary: [String: Any] {
 
@@ -22,7 +22,7 @@ import Purchases
         var allPurchasesMillis: [String: Any] = [:]
 
         for identifier in sortedProductIdentifiers {
-            let expirationDate = expirationDate(forProductIdentifier:identifier)?.nsDate
+            let expirationDate = expirationDate(forProductIdentifier:identifier)?
             allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601() ?? NSNull()
             allExpirationsMillis[identifier] = expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
 
@@ -40,15 +40,15 @@ import Purchases
             "firstSeen": firstSeen.nsDate.rc_formattedAsISO8601(),
             "firstSeenMillis": firstSeen.nsDate.rc_millisecondsSince1970AsDouble(),
             "originalAppUserId": originalAppUserId,
-            "requestDate": requestDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
-            "requestDateMillis": requestDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "requestDate": requestDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "requestDateMillis": requestDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "allExpirationDates": allExpirations,
             "allExpirationDatesMillis": allExpirationsMillis,
             "allPurchaseDates": allPurchases,
             "allPurchaseDatesMillis": allPurchasesMillis,
             "originalApplicationVersion": originalApplicationVersion ?? NSNull(),
-            "originalPurchaseDate": originalPurchaseDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
-            "originalPurchaseDateMillis": originalPurchaseDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "originalPurchaseDate": originalPurchaseDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "originalPurchaseDateMillis": originalPurchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
         ]

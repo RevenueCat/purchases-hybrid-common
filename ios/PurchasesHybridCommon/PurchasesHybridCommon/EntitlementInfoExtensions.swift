@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.EntitlementInfo {
+@objc public extension EntitlementInfo {
 
     @objc var dictionary: [String: Any] {
 
@@ -43,7 +43,7 @@ import Purchases
 
 }
 
-private extension Purchases.EntitlementInfo {
+private extension EntitlementInfo {
 
     var periodTypeString: String {
         switch periodType {

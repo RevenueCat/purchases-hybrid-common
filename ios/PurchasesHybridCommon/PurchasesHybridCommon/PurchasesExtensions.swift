@@ -7,9 +7,7 @@
 //
 
 import Foundation
-// todo: remove testable
-@testable import Purchases.Purchases
-import PurchasesCoreSwift
+import RevenueCat
 
 @objc public extension Purchases {
 
@@ -34,13 +32,9 @@ import PurchasesCoreSwift
                               appUserID: appUserID,
                               observerMode: observerMode,
                               userDefaults: userDefaults,
+                              // todo: provide option
+                              useStoreKit2IfAvailable: false,
                               dangerousSettings: dangerousSettings)
-    }
-
-
-    // todo: make internal
-    @objc static func setDefaultInstance(_ instance: Purchases) {
-
     }
 
 }
