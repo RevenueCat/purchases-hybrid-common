@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RevenueCat
+@testable import RevenueCat
 
 @objc(RCErrorContainer) public class ErrorContainer: NSObject {
 
@@ -27,9 +27,10 @@ import RevenueCat
 
         info["underlyingErrorMessage"] = underlyingErrorMessage ?? ""
 
-        if let readableErrorCode = nsError.userInfo[Purchases.ReadableErrorCodeKey] {
+        // todo: see about exposing "readable_error_code" from purchases-ios
+        if let readableErrorCode = nsError.userInfo["readable_error_code"] {
             info["readableErrorCode"] = readableErrorCode
-            info[Purchases.ReadableErrorCodeKey] = readableErrorCode
+            info["readable_error_code"] = readableErrorCode
 
             // Reason behind this is because React Native doesn't let reject the promises passing more information
             // besides passing the original error, but it passes the extra userInfo from that error to the JS layer.
