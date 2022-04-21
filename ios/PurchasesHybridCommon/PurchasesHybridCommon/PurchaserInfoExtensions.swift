@@ -9,9 +9,9 @@
 import Foundation
 import RevenueCat
 
-@objc public extension CustomerInfo {
+public extension CustomerInfo {
 
-    @objc var dictionary: [String: Any] {
+    var dictionary: [String: Any] {
 
         let sortedProductIdentifiers = allPurchasedProductIdentifiers.sorted()
 
@@ -22,11 +22,11 @@ import RevenueCat
         var allPurchasesMillis: [String: Any] = [:]
 
         for identifier in sortedProductIdentifiers {
-            let expirationDate = expirationDate(forProductIdentifier:identifier)?
+            let expirationDate = expirationDate(forProductIdentifier:identifier)
             allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601() ?? NSNull()
             allExpirationsMillis[identifier] = expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
 
-            let purchaseDate = purchaseDate(forProductIdentifier: identifier)?.nsDate
+            let purchaseDate = purchaseDate(forProductIdentifier: identifier)
             allPurchases[identifier] = purchaseDate?.rc_formattedAsISO8601() ?? NSNull()
             allPurchasesMillis[identifier] = purchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
         }
@@ -35,13 +35,13 @@ import RevenueCat
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
             "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
-            "latestExpirationDate": latestExpirationDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
-            "latestExpirationDateMillis": latestExpirationDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
-            "firstSeen": firstSeen.nsDate.rc_formattedAsISO8601(),
-            "firstSeenMillis": firstSeen.nsDate.rc_millisecondsSince1970AsDouble(),
+            "latestExpirationDate": latestExpirationDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "latestExpirationDateMillis": latestExpirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "firstSeen": firstSeen.rc_formattedAsISO8601(),
+            "firstSeenMillis": firstSeen.rc_millisecondsSince1970AsDouble(),
             "originalAppUserId": originalAppUserId,
-            "requestDate": requestDate?.rc_formattedAsISO8601() ?? NSNull(),
-            "requestDateMillis": requestDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "requestDate": requestDate.rc_formattedAsISO8601(),
+            "requestDateMillis": requestDate.rc_millisecondsSince1970AsDouble(),
             "allExpirationDates": allExpirations,
             "allExpirationDatesMillis": allExpirationsMillis,
             "allPurchaseDates": allPurchases,
@@ -53,14 +53,6 @@ import RevenueCat
             "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
         ]
         return aDictionary
-    }
-
-}
-
-private extension Date {
-
-    var nsDate: NSDate {
-        return self as NSDate
     }
 
 }

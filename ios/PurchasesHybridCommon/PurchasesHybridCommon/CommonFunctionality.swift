@@ -278,17 +278,17 @@ import RevenueCat
 
     @objc(identify:completionBlock:)
     static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(appUserID, purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logIn(appUserID, completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(resetWithCompletionBlock:)
     static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.reset(completion: purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(getPurchaserInfoWithCompletionBlock:)
     static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.purchaserInfo(completion: purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.getCustomerInfo(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
 }

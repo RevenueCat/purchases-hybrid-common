@@ -9,9 +9,9 @@
 import Foundation
 import RevenueCat
 
-@objc public extension Package {
+public extension Package {
 
-    @objc func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
+    func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
         return [
             "identifier": identifier,
             "packageType": packageType.name,

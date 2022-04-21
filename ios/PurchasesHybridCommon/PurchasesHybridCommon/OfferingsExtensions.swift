@@ -9,9 +9,9 @@
 import Foundation
 import RevenueCat
 
-@objc public extension Offerings {
+public extension Offerings {
 
-    @objc var dictionary: [String: Any] {
+    var dictionary: [String: Any] {
         var result: [String: Any] = ["all": all.mapValues { $0.dictionary }]
         if let current = current {
             result["current"] = current.dictionary

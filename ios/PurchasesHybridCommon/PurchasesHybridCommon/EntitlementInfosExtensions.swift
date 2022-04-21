@@ -9,9 +9,9 @@
 import Foundation
 import RevenueCat
 
-@objc public extension EntitlementInfos {
+public extension EntitlementInfos {
 
-    @objc var dictionary: [String: Any] {
+    var dictionary: [String: Any] {
         return [
             "all": all.mapValues { $0.dictionary },
             "active": active.mapValues { $0.dictionary }

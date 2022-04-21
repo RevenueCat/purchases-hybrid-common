@@ -9,15 +9,14 @@
 import Foundation
 import RevenueCat
 
-@objc public extension StoreTransaction {
+public extension StoreTransaction {
 
-    @objc var dictionary: [String: Any] {
-        let purchaseNSDate = purchaseDate as NSDate
+    var dictionary: [String: Any] {
         return [
             "revenueCatId": transactionIdentifier,
             "productId": productIdentifier,
-            "purchaseDateMillis": purchaseNSDate.rc_millisecondsSince1970AsDouble(),
-            "purchaseDate": purchaseNSDate.rc_formattedAsISO8601()
+            "purchaseDateMillis": purchaseDate.rc_millisecondsSince1970AsDouble(),
+            "purchaseDate": purchaseDate.rc_formattedAsISO8601()
         ]
     }
 

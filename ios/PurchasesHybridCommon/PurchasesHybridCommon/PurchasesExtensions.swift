@@ -9,17 +9,15 @@
 import Foundation
 import RevenueCat
 
-@objc public extension Purchases {
+public extension Purchases {
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:
-            platformFlavor:platformFlavorVersion:dangerousSettings:)
-        static func configure(apiKey: String,
-                              appUserID: String?,
-                              observerMode: Bool,
-                              userDefaultsSuiteName: String?,
-                              platformFlavor: String?,
-                              platformFlavorVersion: String?,
-                              dangerousSettings: DangerousSettings?) -> Purchases {
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          observerMode: Bool,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          dangerousSettings: DangerousSettings?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
