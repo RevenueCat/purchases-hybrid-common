@@ -13,20 +13,20 @@ import RevenueCat
 
     @objc var dictionary: [String: Any] {
 
-        let latestPurchaseNSDate = latestPurchaseDate as NSDate
-        let originalPurchaseNSDate = originalPurchaseDate as NSDate
+        let latestPurchaseNSDate = latestPurchaseDate
+        let originalPurchaseNSDate = originalPurchaseDate
         let expirationNSDate = expirationDate as? NSDate
-        let unsubscribedDetectedAtNSDate = unsubscribeDetectedAt as? NSDate
-        let billingIssueDetectedAtNSDate = billingIssueDetectedAt as? NSDate
+        let unsubscribedDetectedAtNSDate = unsubscribeDetectedAt
+        let billingIssueDetectedAtNSDate = billingIssueDetectedAt
 
         return [
             "identifier": identifier,
             "isActive": isActive,
             "willRenew": willRenew,
             "periodType": periodTypeString,
-            "latestPurchaseDate": latestPurchaseNSDate.rc_formattedAsISO8601(),
-            "latestPurchaseDateMillis": latestPurchaseNSDate.rc_millisecondsSince1970AsDouble(),
-            "originalPurchaseDate": originalPurchaseNSDate.rc_formattedAsISO8601(),
+            "latestPurchaseDate": latestPurchaseNSDate?.rc_formattedAsISO8601(),
+            "latestPurchaseDateMillis": latestPurchaseNSDate?.rc_millisecondsSince1970AsDouble(),
+            "originalPurchaseDate": originalPurchaseNSDate?.rc_formattedAsISO8601(),
             "originalPurchaseDateMillis": originalPurchaseNSDate.rc_millisecondsSince1970AsDouble(),
             "expirationDate": expirationNSDate?.rc_formattedAsISO8601() ?? NSNull(),
             "expirationDateMillis": expirationNSDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),

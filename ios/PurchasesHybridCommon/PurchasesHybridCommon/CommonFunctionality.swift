@@ -109,7 +109,7 @@ import RevenueCat
     @objc(restoreTransactionsWithCompletionBlock:)
     static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.restoreTransactions(completion: purchaserInfoCompletion)
+        Purchases.shared.restorePurchases(completion: purchaserInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
@@ -268,27 +268,27 @@ import RevenueCat
 
     @objc(logOutWithCompletionBlock:)
     static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(createAlias:completionBlock:)
     static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.createAlias(newAppUserID, purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logIn(newAppUserID, completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(identify:completionBlock:)
     static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.identify(appUserID, purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logIn(appUserID, purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(resetWithCompletionBlock:)
     static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.reset(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(getPurchaserInfoWithCompletionBlock:)
     static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.purchaserInfo(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
 }
@@ -298,7 +298,7 @@ import RevenueCat
 
     @objc(getOfferingsWithCompletionBlock:)
     static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
+        Purchases.shared.getOfferings { offerings, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
                 completion(nil, errorContainer)
