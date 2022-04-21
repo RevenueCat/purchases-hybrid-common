@@ -7,18 +7,18 @@
 //
 
 import Foundation
-import StoreKit
+// todo: expose signedData in promotionalOffer in purchases-ios
+@testable import RevenueCat
 
-@available(iOS 12.2, tvOS 12.2, watchOS 6.2, macOS 10.14.4, *)
-@objc public extension SKPaymentDiscount {
+public extension PromotionalOffer {
 
-    @objc var rc_dictionary: [String: Any] {
+    var rc_dictionary: [String: Any] {
         return [
-            "identifier": identifier,
-            "keyIdentifier": keyIdentifier,
-            "nonce": nonce.uuidString,
-            "signature": signature,
-            "timestamp": timestamp
+            "identifier": signedData.identifier,
+            "keyIdentifier": signedData.keyIdentifier,
+            "nonce": signedData.nonce.uuidString,
+            "signature": signedData.signature,
+            "timestamp": signedData.timestamp
         ]
     }
 

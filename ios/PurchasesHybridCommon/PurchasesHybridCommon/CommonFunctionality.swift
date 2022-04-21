@@ -8,7 +8,8 @@
 
 import Foundation
 import StoreKit
-import RevenueCat
+// todo: remove testable once signedData is exposed on PromotionalOffer in purchases-ios
+@testable import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -51,19 +52,7 @@ import RevenueCat
         }
     }
 
-    // Note: we can't have a property that's only available on certain OS versions,
-    // so _discountsByProductIdentifier and discountsByProductIdentifier provide for a way
-    // to have one.
-    private static var _discountsByProductIdentifier: Any? = nil
-
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    private static var discountsByProductIdentifier: [String: SKPaymentDiscount] {
-        get {
-            return _discountsByProductIdentifier as! [String: SKPaymentDiscount]
-        } set {
-            _discountsByProductIdentifier = newValue
-        }
-    }
+    private static var discountsByProductIdentifier: [String: PromotionalOffer] = [:]
 
     @objc public static func configure() {
         // todo: it seems like this call isn't needed anymore?
@@ -229,7 +218,7 @@ import RevenueCat
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -273,12 +262,18 @@ import RevenueCat
 
     @objc(createAlias:completionBlock:)
     static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(newAppUserID, completion: purchaserInfoCompletionBlock(from: completion))
+        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
+        Purchases.shared.logIn(newAppUserID) { customerInfo, created, error in
+            hybridCompletion(customerInfo, error)
+        }
     }
 
     @objc(identify:completionBlock:)
     static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(appUserID, completion: purchaserInfoCompletionBlock(from: completion))
+        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
+        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
+            hybridCompletion(customerInfo, error)
+        }
     }
 
     @objc(resetWithCompletionBlock:)
@@ -325,7 +320,9 @@ import RevenueCat
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Purchases.shared.getProducts(productIds) { products in
-            let productDictionaries = products.map { $0.rc_dictionary }
+            let productDictionaries = products
+                .map { $0.sk1Product! }
+                .map { $0.rc_dictionary }
             completionBlock(productDictionaries)
         }
     }
@@ -350,8 +347,8 @@ import RevenueCat
                 return
             }
 
-            let paymentDiscountCompletion: (SKPaymentDiscount?, Error?) -> Void = { discount, error in
-                guard let discount = discount else {
+            let paymentDiscountCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
+                guard let promotionalOffer = promotionalOffer else {
                     if let error = error {
                         completion(nil, ErrorContainer(error: error, extraPayload: [:]))
                     } else {
@@ -363,14 +360,13 @@ import RevenueCat
                     }
                     return
                 }
-                discountsByProductIdentifier[discount.timestamp.stringValue] = discount
-                completion(discount.rc_dictionary, nil)
+                discountsByProductIdentifier["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
+                completion(promotionalOffer.rc_dictionary, nil)
             }
-
-            Purchases.shared.paymentDiscount(for: discountToUse,
-                                             product: product,
-                                             completion: paymentDiscountCompletion)
-
+            let storeProduct = StoreProduct(sk1Product: product)
+            Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
+                                                 product: storeProduct,
+                                                 completion: paymentDiscountCompletion)
         }
     }
 
@@ -486,7 +482,7 @@ private extension CommonFunctionality {
 
     static func product(with identifier: String, completion: @escaping (SKProduct?) -> Void) {
         Purchases.shared.getProducts([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier })
+            completion(products.first { $0.productIdentifier == identifier }?.sk1Product)
         }
     }
 
@@ -513,11 +509,12 @@ private extension CommonFunctionality {
     }
 
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    static func discount(with identifier: String?, for product: SKProduct) -> SKProductDiscount? {
+    static func discount(with identifier: String?, for product: SKProduct) -> StoreProductDiscount? {
+        let storeProduct = StoreProduct(sk1Product: product)
         if identifier == nil {
-            return product.discounts.first
+            return storeProduct.discounts.first
         } else {
-            return product.discounts.first { $0.identifier == identifier }
+            return storeProduct.discounts.first { $0.offerIdentifier == identifier }
         }
     }
 
