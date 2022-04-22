@@ -497,7 +497,7 @@ private extension CommonFunctionality {
             extraPayload["userCancelled"] = userCancelled
         }
 
-                    let error = NSError(domain: RCPurchasesErrorCodeDomain,
+        let error = NSError(domain: RCPurchasesErrorCodeDomain,
                             code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
         return ErrorContainer(error: error, extraPayload: extraPayload)

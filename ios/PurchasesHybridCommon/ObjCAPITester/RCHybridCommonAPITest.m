@@ -90,9 +90,15 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality makeDeferredPurchase:^(void (^ _Nonnull startDeferredPurchase)(RCStoreTransaction * _Nullable storeTransaction, RCCustomerInfo * _Nullable customerInfo, NSError * _Nullable error, BOOL userCancelled)) {
+    [RCCommonFunctionality makeDeferredPurchase:^(void (^ _Nonnull startDeferredPurchase)
+                                                  (RCStoreTransaction * _Nullable storeTransaction,
+                                                   RCCustomerInfo * _Nullable customerInfo,
+                                                   NSError * _Nullable error,
+                                                   BOOL userCancelled)) {
 
-    } completionBlock:^(NSDictionary<NSString *,id> * _Nullable customerInfo, RCErrorContainer * _Nullable error) {
+    }
+                                completionBlock:^(NSDictionary<NSString *,id> * _Nullable customerInfo,
+                                                  RCErrorContainer * _Nullable error) {
 
     }];
 
