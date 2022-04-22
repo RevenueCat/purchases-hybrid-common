@@ -53,10 +53,7 @@ import RevenueCat
 
     private static var discountsByProductIdentifier: [String: PromotionalOffer] = [:]
 
-    @objc public static func configure() {
-        // todo: it seems like this call isn't needed anymore?
-    }
-
+    @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
         Purchases.shared.allowSharingAppStoreAccount = allowSharingStoreAccount;
     }
@@ -429,6 +426,7 @@ import RevenueCat
         Purchases.shared.setAirshipChannelID(airshipChannelID)
     }
 
+    @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,

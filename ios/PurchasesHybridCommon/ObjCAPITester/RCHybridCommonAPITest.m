@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
-    [RCCommonFunctionality configure];
     // should issue deprecated warning
     [RCCommonFunctionality setAllowSharingStoreAccount:NO];
 
