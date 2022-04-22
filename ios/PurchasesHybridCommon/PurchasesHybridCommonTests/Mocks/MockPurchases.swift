@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import RevenueCat
+@testable import RevenueCat
 
 class MockPurchases: Purchases {
     var invokedAppUserIDGetter = false
@@ -28,10 +28,10 @@ class MockPurchases: Purchases {
     var invokedLogInCount = 0
     var invokedLogInParameters: (appUserID: String, Void)?
     var invokedLogInParametersList = [(appUserID: String, Void)]()
-    var stubbedLogInCompletionResult: (Purchases.PurchaserInfo?, Bool, Error?)?
+    var stubbedLogInCompletionResult: (CustomerInfo?, Bool, Error?)?
 
     override func logIn(_ appUserID: String,
-                        _ completion: @escaping (Purchases.PurchaserInfo?, Bool, Error?) -> ()) {
+                        completion: @escaping (CustomerInfo?, Bool, Error?) -> ()) {
         invokedLogInError = true
         invokedLogInCount += 1
         invokedLogInParameters = (appUserID, ())
@@ -45,7 +45,7 @@ class MockPurchases: Purchases {
     var invokedLogOutCount = 0
     var invokedLogOutParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
     var invokedLogOutParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
-    var stubbedLogOutCompletionResult: (Purchases.PurchaserInfo?, Error?)?
+    var stubbedLogOutCompletionResult: (CustomerInfo?, Error?)?
 
     override func logOut(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
         invokedLogOut = true
