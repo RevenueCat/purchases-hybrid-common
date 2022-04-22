@@ -308,10 +308,10 @@ import RevenueCat
         }
     }
 
-    @objc(paymentDiscountForProductIdentifier:discount:completionBlock:)
-    static func paymentDiscount(for productIdentifier: String,
-                                discountIdentifier: String?,
-                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    @objc(promotionalOfferForProductIdentifier:discount:completionBlock:)
+    static func promotionalOffer(for productIdentifier: String,
+                                 discountIdentifier: String?,
+                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
             completion(nil, nil)
             return
