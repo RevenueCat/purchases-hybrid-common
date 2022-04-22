@@ -1,5 +1,5 @@
 //
-//  OfferingsExtensions.swift
+//  Offerings+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.

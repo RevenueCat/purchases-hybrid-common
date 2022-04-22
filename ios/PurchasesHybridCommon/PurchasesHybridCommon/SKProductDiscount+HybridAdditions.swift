@@ -1,5 +1,5 @@
 //
-//  SKProductDiscountExtensions.swift
+//  SKProductDiscount+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
