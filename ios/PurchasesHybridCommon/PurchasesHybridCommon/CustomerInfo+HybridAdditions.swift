@@ -1,5 +1,5 @@
 //
-//  PurchaserInfo+HybridAdditions.swift
+//  CustomerInfo+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
