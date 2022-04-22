@@ -8,7 +8,7 @@
 
 import Foundation
 import XCTest
-@testable import PurchasesHybridCommonSwift
+@testable import PurchasesHybridCommon
 
 extension XCTestCase {
 

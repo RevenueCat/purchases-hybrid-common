@@ -1,6 +1,6 @@
 //
 //  TransactionExtensions.swift
-//  PurchasesHybridCommonSwift
+//  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.

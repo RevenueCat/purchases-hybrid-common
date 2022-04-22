@@ -9,7 +9,6 @@
 import Quick
 import Nimble
 import PurchasesHybridCommon
-import PurchasesHybridCommonSwift
 import Purchases
 
 class ErrorContainerTests: QuickSpec {

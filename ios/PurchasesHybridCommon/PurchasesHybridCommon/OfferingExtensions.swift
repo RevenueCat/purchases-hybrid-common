@@ -1,6 +1,6 @@
 //
 //  OfferingExtensions.swift
-//  PurchasesHybridCommonSwift
+//  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.
@@ -22,22 +22,22 @@ import Purchases
             result["lifetime"] = lifetime.dictionary(identifier)
         }
         if let annual = annual {
-            result["lifetime"] = annual.dictionary(identifier)
+            result["annual"] = annual.dictionary(identifier)
         }
         if let sixMonth = sixMonth {
-            result["lifetime"] = sixMonth.dictionary(identifier)
+            result["sixMonth"] = sixMonth.dictionary(identifier)
         }
         if let threeMonth = threeMonth {
-            result["lifetime"] = threeMonth.dictionary(identifier)
+            result["threeMonth"] = threeMonth.dictionary(identifier)
         }
         if let twoMonth = twoMonth {
-            result["lifetime"] = twoMonth.dictionary(identifier)
+            result["twoMonth"] = twoMonth.dictionary(identifier)
         }
         if let monthly = monthly {
-            result["lifetime"] = monthly.dictionary(identifier)
+            result["monthly"] = monthly.dictionary(identifier)
         }
         if let weekly = weekly {
-            result["lifetime"] = weekly.dictionary(identifier)
+            result["weekly"] = weekly.dictionary(identifier)
         }
 
         return result

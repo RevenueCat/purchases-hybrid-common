@@ -7,7 +7,6 @@ target 'PurchasesHybridCommon' do
 
   # Pods for PurchasesHybridCommon
   pod 'Purchases', '3.14.1'
-  pod 'PurchasesHybridCommonSwift', path: '../../'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -17,15 +16,6 @@ target 'PurchasesHybridCommon' do
 
 end
 
-target 'PurchasesHybridCommonSwift' do
-  platform :ios, '11.0'
-  # Comment the next line if you don't want to use dynamic frameworks
-  use_frameworks!
-
-  pod 'Purchases', '3.14.1'
-  
-end
-
 target 'ObjCAPITester' do
   platform :ios, '11.0'
   # Comment the next line if you don't want to use dynamic frameworks
@@ -33,6 +23,5 @@ target 'ObjCAPITester' do
 
   # Pods for PurchasesHybridCommon
   pod 'PurchasesHybridCommon', path: '../../'
-  pod 'PurchasesHybridCommonSwift', path: '../../'
   
 end

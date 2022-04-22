@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
-@import PurchasesHybridCommonSwift;
 
 NS_ASSUME_NONNULL_BEGIN
 

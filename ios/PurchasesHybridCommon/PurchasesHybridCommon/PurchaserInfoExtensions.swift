@@ -1,6 +1,6 @@
 //
 //  PurchaserInfoExtensions.swift
-//  PurchasesHybridCommonSwift
+//  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.
@@ -23,7 +23,7 @@ import Purchases
 
         for identifier in sortedProductIdentifiers {
             let expirationDate = expirationDate(forProductIdentifier:identifier)?.nsDate
-            allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601 ?? NSNull()
+            allExpirations[identifier] = expirationDate?.rc_formattedAsISO8601() ?? NSNull()
             allExpirationsMillis[identifier] = expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
 
             let purchaseDate = purchaseDate(forProductIdentifier: identifier)?.nsDate
@@ -31,11 +31,10 @@ import Purchases
             allPurchasesMillis[identifier] = purchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
         }
 
-
-        return [
+        let aDictionary: [String: Any] = [
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
-            "allPurchasedProductIdentifiers": allPurchasedProductIdentifiers,
+            "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
             "latestExpirationDate": latestExpirationDate?.nsDate.rc_formattedAsISO8601() ?? NSNull(),
             "latestExpirationDateMillis": latestExpirationDate?.nsDate.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "firstSeen": firstSeen.nsDate.rc_formattedAsISO8601(),
@@ -53,6 +52,7 @@ import Purchases
             "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
         ]
+        return aDictionary
     }
 
 }
