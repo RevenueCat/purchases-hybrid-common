@@ -1,5 +1,5 @@
 //
-//  SKProductDiscountHybridAdditionsTests.swift
+//  StoreProductDiscount+HybridAdditionsTests.swift
 //  PurchasesHybridCommonTests
 //
 //  Created by Andrés Boedo on 4/22/20.
@@ -11,7 +11,7 @@ import Nimble
 import StoreKit
 @testable import RevenueCat
 
-class SkuProductDiscountHybridAdditionsTests: QuickSpec {
+class StoreProductDiscountHybridAdditionsTests: QuickSpec {
     override func spec() {
         describe("rc_dictionary") {
             it("has the right format") {

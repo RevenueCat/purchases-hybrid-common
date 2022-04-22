@@ -1,5 +1,5 @@
 //
-//  NSDateHybridAdditionsTests.swift
+//  Date+HybridAdditionsTests.swift
 //  PurchasesHybridCommonTests
 //
 //  Created by Andrés Boedo on 4/27/20.
