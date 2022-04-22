@@ -49,8 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [RCCommonFunctionality setDebugLogsEnabled:NO];
-    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                 RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality getCustomerInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
@@ -98,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (@available(iOS 14.0, *)) {
         [RCCommonFunctionality presentCodeRedemptionSheet];
     }
-    [RCCommonFunctionality invalidatePurchaserInfoCache];
+    [RCCommonFunctionality invalidateCustomerInfoCache];
     BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
 }
 

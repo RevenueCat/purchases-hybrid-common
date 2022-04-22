@@ -146,19 +146,19 @@ class MockPurchases: Purchases {
     var invokedCreateAliasCount = 0
     var invokedCreateAliasParameters: (alias: String, completion: ((CustomerInfo?, Error?) -> ())?)?
     var invokedCreateAliasParametersList = [(alias: String,
-        completion: ((CustomerInfo?, Error?) -> ())?)]()
+                                             completion: ((CustomerInfo?, Error?) -> ())?)]()
 
-    var invokedPurchaserInfo = false
-    var invokedPurchaserInfoCount = 0
-    var invokedPurchaserInfoParameters: (completion: ((CustomerInfo?, Error?) -> ()), Void)?
-    var invokedPurchaserInfoParametersList = [(completion: ((CustomerInfo?, Error?) -> ()),
-        Void)]()
+    var invokedCustomerInfo = false
+    var invokedCustomerInfoCount = 0
+    var invokedCustomerInfoParameters: (completion: ((CustomerInfo?, Error?) -> ()), Void)?
+    var invokedCustomerInfoParametersList = [(completion: ((CustomerInfo?, Error?) -> ()),
+                                              Void)]()
 
     override func getCustomerInfo(completion: @escaping ((CustomerInfo?, Error?) -> ())) {
-        invokedPurchaserInfo = true
-        invokedPurchaserInfoCount += 1
-        invokedPurchaserInfoParameters = (completion, ())
-        invokedPurchaserInfoParametersList.append((completion, ()))
+        invokedCustomerInfo = true
+        invokedCustomerInfoCount += 1
+        invokedCustomerInfoParameters = (completion, ())
+        invokedCustomerInfoParametersList.append((completion, ()))
     }
 
     var invokedOfferings = false
@@ -190,7 +190,7 @@ class MockPurchases: Purchases {
     var invokedPurchaseProductCount = 0
     var invokedPurchaseProductParameters: (product: StoreProduct, completion: PurchaseCompletedBlock)?
     var invokedPurchaseProductParametersList = [(product: StoreProduct,
-        completion: PurchaseCompletedBlock)]()
+                                                 completion: PurchaseCompletedBlock)]()
 
     override func purchase(product: StoreProduct, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProduct = true
@@ -203,7 +203,7 @@ class MockPurchases: Purchases {
     var invokedPurchasePackageCount = 0
     var invokedPurchasePackageParameters: (package: Package, completion: PurchaseCompletedBlock)?
     var invokedPurchasePackageParametersList = [(package: Package,
-        completion: PurchaseCompletedBlock)]()
+                                                 completion: PurchaseCompletedBlock)]()
 
     override func purchase(package: Package,
                            completion: @escaping PurchaseCompletedBlock) {
@@ -217,7 +217,7 @@ class MockPurchases: Purchases {
     var invokedRestoreTransactionsCount = 0
     var invokedRestoreTransactionsParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
     var invokedRestoreTransactionsParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
-        Void)]()
+                                                     Void)]()
 
     override func restorePurchases(completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedRestoreTransactions = true
@@ -230,7 +230,7 @@ class MockPurchases: Purchases {
     var invokedSyncPurchasesCount = 0
     var invokedSyncPurchasesParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
     var invokedSyncPurchasesParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
-        Void)]()
+                                               Void)]()
 
     override func syncPurchases(completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedSyncPurchases = true
@@ -302,27 +302,27 @@ class MockPurchases: Purchases {
     var invokedPurchasePackageWithPromotionalOffer = false
     var invokedPurchasePackageWithPromotionalOfferCount = 0
     var invokedPurchasePackageWithPromotionalOfferParameters: (package: Package,
-                                                       promotionalOffer: PromotionalOffer,
-                                                       completion: PurchaseCompletedBlock)?
+                                                               promotionalOffer: PromotionalOffer,
+                                                               completion: PurchaseCompletedBlock)?
     var invokedPurchasePackageWithPromotionalOfferParametersList = [(package: Package,
-        promotionalOffer: PromotionalOffer,
-        completion: PurchaseCompletedBlock)]()
+                                                                     promotionalOffer: PromotionalOffer,
+                                                                     completion: PurchaseCompletedBlock)]()
 
     override func purchase(package: Package,
-                                  promotionalOffer: PromotionalOffer,
-                                  completion: @escaping PurchaseCompletedBlock) {
+                           promotionalOffer: PromotionalOffer,
+                           completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackageWithPromotionalOffer = true
         invokedPurchasePackageWithPromotionalOfferCount += 1
         invokedPurchasePackageWithPromotionalOfferParameters = (package, promotionalOffer, completion)
         invokedPurchasePackageWithPromotionalOfferParametersList.append((package, promotionalOffer, completion))
     }
 
-    var invokedInvalidatePurchaserInfoCache = false
-    var invokedInvalidatePurchaserInfoCacheCount = 0
+    var invokedInvalidateCustomerInfoCache = false
+    var invokedInvalidateCustomerInfoCacheCount = 0
 
     override func invalidateCustomerInfoCache() {
-        invokedInvalidatePurchaserInfoCache = true
-        invokedInvalidatePurchaserInfoCacheCount += 1
+        invokedInvalidateCustomerInfoCache = true
+        invokedInvalidateCustomerInfoCacheCount += 1
     }
 
     var invokedPresentCodeRedemptionSheet = false
