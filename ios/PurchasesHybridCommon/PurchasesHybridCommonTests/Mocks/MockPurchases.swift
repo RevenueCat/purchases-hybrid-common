@@ -8,6 +8,90 @@ import Foundation
 import StoreKit
 
 class MockPurchases: Purchases {
+
+    init() {
+        let systemInfo = try! SystemInfo(platformInfo: nil, finishTransactions: true)
+        let deviceCache: DeviceCache = DeviceCache(systemInfo: systemInfo)
+
+        let operationDispatcher: OperationDispatcher = OperationDispatcher()
+
+        let requestFetcher: StoreKitRequestFetcher = StoreKitRequestFetcher(operationDispatcher: operationDispatcher)
+        let receiptFetcher: ReceiptFetcher = ReceiptFetcher(requestFetcher: requestFetcher, systemInfo: systemInfo)
+        let attributionFetcher: AttributionFetcher = AttributionFetcher(attributionFactory: AttributionTypeFactory(),
+                                                                        systemInfo: systemInfo)
+
+        let eTagManager = ETagManager(userDefaults: UserDefaults.standard)
+        let backend: Backend = Backend(apiKey: "",
+                                       systemInfo: systemInfo,
+                                       eTagManager: eTagManager,
+                                       attributionFetcher:
+                                        attributionFetcher)
+
+        let customerInfoManager: CustomerInfoManager = CustomerInfoManager(operationDispatcher: operationDispatcher,
+                                                                           deviceCache: deviceCache,
+                                                                           backend: backend,
+                                                                           systemInfo: systemInfo)
+
+        let identityManager: IdentityManager = IdentityManager(
+            deviceCache: deviceCache,
+            backend: backend,
+            customerInfoManager: customerInfoManager,
+            appUserID: nil)
+
+        let attributionDataMigrator = AttributionDataMigrator()
+        let subscriberAttributesManager = SubscriberAttributesManager(backend: backend,
+                                                                      deviceCache: deviceCache,
+                                                                      operationDispatcher: operationDispatcher,
+                                                                      attributionFetcher: attributionFetcher,
+                                                                      attributionDataMigrator: attributionDataMigrator)
+
+        let attributionPoster: AttributionPoster = AttributionPoster(
+            deviceCache: deviceCache,
+            identityManager: identityManager,
+            backend: backend,
+            attributionFetcher: attributionFetcher,
+            subscriberAttributesManager: subscriberAttributesManager)
+
+        let storeKitWrapper: StoreKitWrapper = StoreKitWrapper()
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+
+        let offeringsFactory: OfferingsFactory = OfferingsFactory()
+
+
+        let productsManager: ProductsManager = ProductsManager(systemInfo: systemInfo)
+        let offeringsManager: OfferingsManager = OfferingsManager(deviceCache: deviceCache, operationDispatcher: operationDispatcher, systemInfo: systemInfo, backend: backend, offeringsFactory: offeringsFactory, productsManager: productsManager)
+
+        let introEligibilityCalculator: IntroEligibilityCalculator = IntroEligibilityCalculator(productsManager: productsManager, receiptParser: ReceiptParser())
+
+        let manageSubscriptionsHelper = ManageSubscriptionsHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+
+        let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+
+        let purchasesOrchestrator: PurchasesOrchestrator = PurchasesOrchestrator(productsManager: productsManager, storeKitWrapper: storeKitWrapper, systemInfo: systemInfo, subscriberAttributesManager: subscriberAttributesManager, operationDispatcher: operationDispatcher, receiptFetcher: receiptFetcher, customerInfoManager: customerInfoManager, backend: backend, identityManager: identityManager, transactionsManager: TransactionsManager(receiptParser: ReceiptParser()), deviceCache: deviceCache, manageSubscriptionsHelper: manageSubscriptionsHelper, beginRefundRequestHelper: beginRefundRequestHelper)
+
+        let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, identityManager: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
+
+        super.init(appUserID: nil,
+                   requestFetcher: requestFetcher,
+                   receiptFetcher: receiptFetcher,
+                   attributionFetcher: attributionFetcher,
+                   attributionPoster: attributionPoster,
+                   backend: backend,
+                   storeKitWrapper: storeKitWrapper,
+                   notificationCenter: notificationCenter,
+                   systemInfo: systemInfo,
+                   offeringsFactory: offeringsFactory,
+                   deviceCache: deviceCache,
+                   identityManager: identityManager,
+                   subscriberAttributesManager: subscriberAttributesManager,
+                   operationDispatcher: operationDispatcher,
+                   customerInfoManager: customerInfoManager,
+                   productsManager: productsManager,
+                   offeringsManager: offeringsManager,
+                   purchasesOrchestrator: purchasesOrchestrator,
+                   trialOrIntroPriceEligibilityChecker: trialOrIntroPriceEligibilityChecker)
+    }
+
     var invokedAppUserIDGetter = false
     var invokedAppUserIDGetterCount = 0
     var stubbedAppUserID: String! = ""
