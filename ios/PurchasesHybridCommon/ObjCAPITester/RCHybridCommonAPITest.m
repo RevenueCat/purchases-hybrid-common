@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
 @import PurchasesHybridCommonSwift;
+@import Purchases;
 
 NS_ASSUME_NONNULL_BEGIN
 @interface RCCommonFunctionalityAPITest: NSObject
@@ -39,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                               RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality appUserID];
+    NSString *appUserID __unused = [RCCommonFunctionality appUserID];
     [RCCommonFunctionality logInWithAppUserID:@""
                               completionBlock:^(NSDictionary * _Nullable customerInfo,
                                                 RCErrorContainer * _Nullable error) {
@@ -98,7 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [RCCommonFunctionality setFinishTransactions:NO];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
-                                                    completionBlock:^(NSDictionary<NSString *,RCIntroEligibility *>
+                                                    completionBlock:^(NSDictionary<NSString *, NSObject *>
                                                                       * _Nonnull eligibilities) {
     }];
     [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
@@ -111,7 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality presentCodeRedemptionSheet];
     }
     [RCCommonFunctionality invalidatePurchaserInfoCache];
-    [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
+    BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
 }
 
 - (void)testSubscriberAttributes {
