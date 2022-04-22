@@ -90,12 +90,11 @@ class MockPurchases: Purchases {
 
     var invokedProducts = false
     var invokedProductsCount = 0
-    var invokedProductsParameters: (productIdentifiers: [String], completion: ((StoreProduct?, Error?) -> ()))?
-    var invokedProductsParametersList = [(productIdentifiers: [String],
-        completion: ((StoreProduct?, Error?) -> ()))]()
+    var invokedProductsParameters: (productIdentifiers: [String], completion: ([StoreProduct]) -> ())?
+    var invokedProductsParametersList: [(productIdentifiers: [String], completion: ([StoreProduct]) -> ())] = []
 
-    override func products(_ productIdentifiers: [String],
-                           completion: @escaping ((StoreProduct?, Error?) -> ())) {
+    override func getProducts(_ productIdentifiers: [String],
+                              completion: @escaping ([StoreProduct]) -> ()) {
         invokedProducts = true
         invokedProductsCount += 1
         invokedProductsParameters = (productIdentifiers, completion)

@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import RevenueCat
+@testable import RevenueCat
 
 class PurchaserInfoHybridAdditionsTests: QuickSpec {
 
@@ -16,7 +16,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
         describe("rc_dictionary") {
             context("managementURL") {
                 it("contains the management url when it exists") {
-                    let purchaserInfo = PartialMockPurchaserInfo()
+                    let purchaserInfo = PartialMockCustomerInfo()
                     let urlPath = "https://revenuecat.com"
                     let url = URL(string: urlPath)
                     purchaserInfo.stubbedManagementURL = url
@@ -25,7 +25,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
-                    let purchaserInfo = PartialMockPurchaserInfo()
+                    let purchaserInfo = PartialMockCustomerInfo()
                     purchaserInfo.stubbedManagementURL = nil
                     
                     let dictionary = purchaserInfo.dictionary
@@ -34,7 +34,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
             }
             context("nonSubscriptionTransactions") {
                 it("contains all the non subscription transactions") {
-                    let purchaserInfo = PartialMockPurchaserInfo()
+                    let purchaserInfo = PartialMockCustomerInfo()
                     
                     let transactionDate = Date()
                     let transaction = StoreTransaction(transactionId: "transactionid", productId: "productid", purchaseDate: transactionDate as Date)
@@ -53,7 +53,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
                     expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it ("is empty when there are no non subscription transactions") {
-                    let purchaserInfo = PartialMockPurchaserInfo()
+                    let purchaserInfo = PartialMockCustomerInfo()
                 
                     let dictionary = purchaserInfo.dictionary
                     let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
@@ -64,7 +64,7 @@ class PurchaserInfoHybridAdditionsTests: QuickSpec {
     }
 }
 
-class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
+class PartialMockCustomerInfo: CustomerInfo {
     
     var stubbedManagementURL: URL?
     var stubbedNonSubscriptionTransactions: Array = Array<StoreTransaction>()
@@ -83,8 +83,8 @@ class PartialMockPurchaserInfo: Purchases.PurchaserInfo {
         return _firstSeen
     }
     
-    override var entitlements: Purchases.EntitlementInfos {
-        return Purchases.EntitlementInfos()
+    override var entitlements: EntitlementInfos {
+        return EntitlementInfos()
     }
 
     override var originalAppUserId: String {
