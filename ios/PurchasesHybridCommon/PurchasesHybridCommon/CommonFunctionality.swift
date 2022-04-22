@@ -115,7 +115,7 @@ import StoreKit
     static func purchaseProduct(_ productIdentifier: String,
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (SKPaymentTransaction?,
+        let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
@@ -125,7 +125,7 @@ import StoreKit
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -143,16 +143,19 @@ import StoreKit
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
+                let storeProduct = StoreProduct(sk1Product: product)
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchaseProduct(product, discount: discount, hybridCompletion)
+                    Purchases.shared.purchase(product: storeProduct,
+                                              promotionalOffer: discount,
+                                              completion: hybridCompletion)
                     return
                 }
 
-                Purchases.shared.purchaseProduct(product, discount: hybridCompletion)
+                Purchases.shared.purchase(product: storeProduct, completion: hybridCompletion)
             }
 
         }
@@ -163,7 +166,7 @@ import StoreKit
                                 offeringIdentifier: String,
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (SKPaymentTransaction?,
+        let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
@@ -173,7 +176,7 @@ import StoreKit
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -197,13 +200,15 @@ import StoreKit
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchasePackage(package, discount: discount, hybridCompletion)
+                    Purchases.shared.purchase(package: package,
+                                              promotionalOffer: discount,
+                                              completion: hybridCompletion)
                     return
                 }
 
             }
 
-            Purchases.shared.purchasePackage(package, hybridCompletion)
+            Purchases.shared.purchase(package: package, completion: hybridCompletion)
         }
 
     }
