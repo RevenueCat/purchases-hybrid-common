@@ -10,6 +10,7 @@ import Quick
 import Nimble
 import PurchasesHybridCommon
 @testable import RevenueCat
+import StoreKit
 
 class ErrorContainerTests: QuickSpec {
 
@@ -86,7 +87,7 @@ class ErrorContainerTests: QuickSpec {
                 let error = ErrorUtils.missingAppUserIDError() as NSError
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo[ReadableErrorCodeKey] as? String
+                let readableErrorKey = error.userInfo["readable_error_code"] as? String
                 expect(readableErrorKey).toNot(beNil())
                 expect(readableErrorKey) != ""
                 expect(errorContainer.info["readableErrorCode"] as? String) == readableErrorKey
@@ -96,7 +97,7 @@ class ErrorContainerTests: QuickSpec {
                 let error = ErrorUtils.missingAppUserIDError() as NSError
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo[ReadableErrorCodeKey] as? String
+                let readableErrorKey = error.userInfo["readable_error_code"] as? String
                 expect(readableErrorKey).toNot(beNil())
                 expect(readableErrorKey) != ""
                 expect((errorContainer.error as NSError).userInfo["readableErrorCode"] as? String) == readableErrorKey
