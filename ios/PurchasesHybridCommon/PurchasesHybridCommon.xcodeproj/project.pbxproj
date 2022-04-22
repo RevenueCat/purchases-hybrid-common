@@ -13,7 +13,6 @@
 		2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */; };
 		2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */; };
 		2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */; };
-		2D4FDFE3280738FB00863298 /* NSDate+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */; };
 		2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D557F77280710FA0090FACC /* ObjCAPITester.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */; };
 		2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
@@ -69,7 +68,6 @@
 		2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
 		2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridCommonDictionaryConversionsAPITest.m; sourceTree = "<group>"; };
 		2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainerAPITests.m; sourceTree = "<group>"; };
-		2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
 		2D4FDFE428073A9300863298 /* EntitlementInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D4FDFE62807436200863298 /* Transaction+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D4FDFE82807489600863298 /* Purchases.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Purchases.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,7 +159,6 @@
 				2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */,
 				2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */,
 				2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */,
-				2D4FDFE2280738FB00863298 /* NSDate+HybridAdditionsAPITest.m */,
 			);
 			path = ObjCAPITester;
 			sourceTree = "<group>";
@@ -516,7 +513,6 @@
 				2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */,
 				2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */,
 				2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */,
-				2D4FDFE3280738FB00863298 /* NSDate+HybridAdditionsAPITest.m in Sources */,
 				2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
