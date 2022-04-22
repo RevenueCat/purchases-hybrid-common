@@ -30,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
 
-    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                    RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality restorePurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                 RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,

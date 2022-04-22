@@ -93,8 +93,8 @@ import RevenueCat
 // MARK: purchasing and restoring
 @objc public extension CommonFunctionality {
 
-    @objc(restoreTransactionsWithCompletionBlock:)
-    static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    @objc(restorePurchasesWithCompletionBlock:)
+    static func restorePurchases(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
         Purchases.shared.restorePurchases(completion: purchaserInfoCompletion)
     }
