@@ -110,9 +110,9 @@ import RevenueCat
     }
 
     @objc(purchaseProduct:signedDiscountTimestamp:completionBlock:)
-    static func purchaseProduct(_ productIdentifier: String,
-                                signedDiscountTimestamp: String?,
-                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func purchase(product productIdentifier: String,
+                         signedDiscountTimestamp: String?,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
@@ -123,7 +123,7 @@ import RevenueCat
                       let transaction = transaction {
                 completion([
                     "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
+                    "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -160,10 +160,10 @@ import RevenueCat
     }
 
     @objc(purchasePackage:offering:signedDiscountTimestamp:completionBlock:)
-    static func purchasePackage(_ packageIdentifier: String,
-                                offeringIdentifier: String,
-                                signedDiscountTimestamp: String?,
-                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    static func purchase(package packageIdentifier: String,
+                         offeringIdentifier: String,
+                         signedDiscountTimestamp: String?,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
@@ -174,7 +174,7 @@ import RevenueCat
                       let transaction = transaction {
                 completion([
                     "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
+                    "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -221,7 +221,7 @@ import RevenueCat
                       let transaction = transaction {
                 completion([
                     "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
+                    "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
@@ -303,7 +303,6 @@ import RevenueCat
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Purchases.shared.getProducts(productIds) { products in
             let productDictionaries = products
-                .map { $0.sk1Product! }
                 .map { $0.rc_dictionary }
             completionBlock(productDictionaries)
         }

@@ -37,13 +37,16 @@ NS_ASSUME_NONNULL_BEGIN
     if (@available(iOS 12.2, *)) {
         [promotionalOffer rc_dictionary];
     }
-    SKProduct *product = [[SKProduct alloc] init];
+    RCStoreProduct *product;
+    RCStoreProductDiscount *discount;
+    RCSubscriptionPeriod *period;
+    RCSubscriptionPeriodUnit unit = RCSubscriptionPeriodUnitDay;
     dict = [product rc_dictionary];
     NSString *string;
     if (@available(iOS 11.2, *)) {
-        string = [SKProduct rc_normalizedSubscriptionPeriod:[[SKProductSubscriptionPeriod alloc] init]];
-        string = [SKProduct rc_normalizedSubscriptionPeriodUnit:SKProductPeriodUnitDay];
-        dict = [[[SKProductDiscount alloc] init] rc_dictionary];
+        string = [RCStoreProduct rc_normalizedSubscriptionPeriod:period];
+        string = [RCStoreProduct rc_normalizedSubscriptionPeriodUnit:unit];
+        dict = [discount rc_dictionary];
     }
 
     RCStoreTransaction *transaction;

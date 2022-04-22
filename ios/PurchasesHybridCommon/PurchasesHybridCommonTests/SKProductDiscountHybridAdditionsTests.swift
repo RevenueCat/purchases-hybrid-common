@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 import StoreKit
-import RevenueCat
+@testable import RevenueCat
 
 class SkuProductDiscountHybridAdditionsTests: QuickSpec {
     override func spec() {
@@ -23,7 +23,8 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                guard let receivedDictionary = productDiscount.rc_dictionary as? [String: NSObject] else {
+                let storeProductDiscount = StoreProductDiscount(sk1Discount: productDiscount)!
+                guard let receivedDictionary = storeProductDiscount.rc_dictionary as? [String: NSObject] else {
                     fatalError("received rc_dictionary is not in the right format")
                 }
                 
