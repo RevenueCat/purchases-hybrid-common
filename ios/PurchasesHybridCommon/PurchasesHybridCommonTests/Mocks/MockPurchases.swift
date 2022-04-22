@@ -162,7 +162,7 @@ class MockPurchases: Purchases {
         productIdentifiers: [String],
         receiveEligibility: ([String : IntroEligibility]) -> Void)]()
 
-    override func checkTrialOrIntroDiscountEligibility(_ productIdentifiers: [String],
+    override func checkTrialOrIntroDiscountEligibility(productIdentifiers: [String],
                                                        completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
         invokedCheckTrialOrIntroductoryPriceEligibility = true
         invokedCheckTrialOrIntroductoryPriceEligibilityCount += 1
@@ -173,23 +173,23 @@ class MockPurchases: Purchases {
             (productIdentifiers, receiveEligibility))
     }
 
-    var invokedPaymentDiscount = false
-    var invokedPaymentDiscountCount = 0
-    var invokedPaymentDiscountParameters: (discount: SKProductDiscount, product: SKProduct, completion: Purchases.PaymentDiscountBlock)?
-    var invokedPaymentDiscountParametersList = [(
-        discount: SKProductDiscount,
-        product: SKProduct,
-        completion: Purchases.PaymentDiscountBlock)]()
+    var invokedGetPromotionalOffer = false
+    var invokedGetPromotionalOfferCount = 0
+    var invokedGetPromotionalOfferParameters: (discount: StoreProductDiscount,
+                                               product: StoreProduct,
+                                               completion: (PromotionalOffer?, Error?) -> Void)?
+    var invokedGetPromotionalOfferParametersList = [(
+        discount: StoreProductDiscount,
+        product: StoreProduct,
+        completion: (PromotionalOffer?, Error?) -> Void)]()
 
-    override func paymentDiscount(for discount: SKProductDiscount,
-                                  product: SKProduct,
-                                  completion: @escaping Purchases.PaymentDiscountBlock) {
-        invokedPaymentDiscount = true
-        invokedPaymentDiscountCount += 1
-        invokedPaymentDiscountParameters = (discount,
-            product,
-            completion)
-        invokedPaymentDiscountParametersList.append(
+    override func getPromotionalOffer(forProductDiscount discount: StoreProductDiscount,
+                                      product: StoreProduct,
+                                      completion: @escaping ((PromotionalOffer?, Error?) -> Void)) {
+        invokedGetPromotionalOffer = true
+        invokedGetPromotionalOfferCount += 1
+        invokedGetPromotionalOfferParameters = (discount, product, completion)
+        invokedGetPromotionalOfferParametersList.append(
             (discount, product, completion))
     }
 
