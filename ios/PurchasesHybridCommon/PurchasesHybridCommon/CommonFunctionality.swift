@@ -245,7 +245,7 @@ import RevenueCat
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             } else if let purchaserInfo = purchaserInfo {
                 completion([
-                    "purchaserInfo": purchaserInfo.dictionary,
+                    "customerInfo": purchaserInfo.dictionary,
                     "created": created
                 ], nil)
             } else {
