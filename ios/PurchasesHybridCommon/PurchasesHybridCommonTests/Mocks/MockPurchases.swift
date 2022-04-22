@@ -135,7 +135,7 @@ class MockPurchases: Purchases {
     var invokedRestoreTransactionsParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
         Void)]()
 
-    override func restoreTransactions(completion: ((CustomerInfo?, Error?) -> ())?) {
+    override func restorePurchases(completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedRestoreTransactions = true
         invokedRestoreTransactionsCount += 1
         invokedRestoreTransactionsParameters = (completion, ())
@@ -157,13 +157,13 @@ class MockPurchases: Purchases {
 
     var invokedCheckTrialOrIntroductoryPriceEligibility = false
     var invokedCheckTrialOrIntroductoryPriceEligibilityCount = 0
-    var invokedCheckTrialOrIntroductoryPriceEligibilityParameters: (productIdentifiers: [String], receiveEligibility: Purchases.ReceiveIntroEligibilityBlock)?
+    var invokedCheckTrialOrIntroductoryPriceEligibilityParameters: (productIdentifiers: [String], receiveEligibility: ([String : IntroEligibility]) -> Void)?
     var invokedCheckTrialOrIntroductoryPriceEligibilityParametersList = [(
         productIdentifiers: [String],
-        receiveEligibility: Purchases.ReceiveIntroEligibilityBlock)]()
+        receiveEligibility: ([String : IntroEligibility]) -> Void)]()
 
-    override func checkTrialOrIntroductoryPriceEligibility(_ productIdentifiers: [String],
-                                                           completionBlock receiveEligibility: @escaping Purchases.ReceiveIntroEligibilityBlock) {
+    override func checkTrialOrIntroDiscountEligibility(_ productIdentifiers: [String],
+                                                       completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
         invokedCheckTrialOrIntroductoryPriceEligibility = true
         invokedCheckTrialOrIntroductoryPriceEligibilityCount += 1
         invokedCheckTrialOrIntroductoryPriceEligibilityParameters = (
@@ -193,40 +193,44 @@ class MockPurchases: Purchases {
             (discount, product, completion))
     }
 
-    var invokedPurchaseProductWithDiscount = false
-    var invokedPurchaseProductWithDiscountCount = 0
-    var invokedPurchaseProductWithDiscountParameters: (product: SKProduct, discount: SKPaymentDiscount, completion: PurchaseCompletedBlock)?
-    var invokedPurchaseProductWithDiscountParametersList = [(product: SKProduct,
-        discount: SKPaymentDiscount,
-        completion: PurchaseCompletedBlock)]()
+    var invokedPurchaseProductWithPromotionalOffer = false
+    var invokedPurchaseProductWithPromotionalOfferCount = 0
+    var invokedPurchaseProductWithPromotionalOfferParameters: (product: StoreProduct,
+                                                               promotionalOffer: PromotionalOffer,
+                                                               completion: PurchaseCompletedBlock)?
+    var invokedPurchaseProductWithPromotionalOfferParametersList = [(product: StoreProduct,
+                                                                     promotionalOffer: PromotionalOffer,
+                                                                     completion: PurchaseCompletedBlock)]()
 
-    override func purchaseProduct(_ product: SKProduct,
-                                  discount: SKPaymentDiscount,
-                                  _ completion: @escaping PurchaseCompletedBlock) {
-        invokedPurchaseProductWithDiscount = true
-        invokedPurchaseProductWithDiscountCount += 1
-        invokedPurchaseProductWithDiscountParameters = (product,
-            discount,
-            completion)
-        invokedPurchaseProductWithDiscountParametersList.append((product,
-                                                                    discount,
-                                                                    completion))
+    override func purchase(product: StoreProduct,
+                           promotionalOffer: PromotionalOffer,
+                           completion: @escaping PurchaseCompletedBlock) {
+        invokedPurchaseProductWithPromotionalOffer = true
+        invokedPurchaseProductWithPromotionalOfferCount += 1
+        invokedPurchaseProductWithPromotionalOfferParameters = (product,
+                                                                promotionalOffer,
+                                                                completion)
+        invokedPurchaseProductWithPromotionalOfferParametersList.append((product,
+                                                                         promotionalOffer,
+                                                                         completion))
     }
 
-    var invokedPurchasePackageWithDiscount = false
-    var invokedPurchasePackageWithDiscountCount = 0
-    var invokedPurchasePackageWithDiscountParameters: (package: Package, discount: SKPaymentDiscount, completion: PurchaseCompletedBlock)?
-    var invokedPurchasePackageWithDiscountParametersList = [(package: Package,
-        discount: SKPaymentDiscount,
+    var invokedPurchasePackageWithPromotionalOffer = false
+    var invokedPurchasePackageWithPromotionalOfferCount = 0
+    var invokedPurchasePackageWithPromotionalOfferParameters: (package: Package,
+                                                       promotionalOffer: PromotionalOffer,
+                                                       completion: PurchaseCompletedBlock)?
+    var invokedPurchasePackageWithPromotionalOfferParametersList = [(package: Package,
+        promotionalOffer: PromotionalOffer,
         completion: PurchaseCompletedBlock)]()
 
-    override func purchasePackage(_ package: Package,
-                                  discount: SKPaymentDiscount,
-                                  _ completion: @escaping PurchaseCompletedBlock) {
-        invokedPurchasePackageWithDiscount = true
-        invokedPurchasePackageWithDiscountCount += 1
-        invokedPurchasePackageWithDiscountParameters = (package, discount, completion)
-        invokedPurchasePackageWithDiscountParametersList.append((package, discount, completion))
+    override func purchase(package: Package,
+                                  promotionalOffer: PromotionalOffer,
+                                  completion: @escaping PurchaseCompletedBlock) {
+        invokedPurchasePackageWithPromotionalOffer = true
+        invokedPurchasePackageWithPromotionalOfferCount += 1
+        invokedPurchasePackageWithPromotionalOfferParameters = (package, promotionalOffer, completion)
+        invokedPurchasePackageWithPromotionalOfferParametersList.append((package, promotionalOffer, completion))
     }
 
     var invokedInvalidatePurchaserInfoCache = false
