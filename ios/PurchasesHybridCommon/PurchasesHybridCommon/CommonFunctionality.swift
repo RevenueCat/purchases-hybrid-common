@@ -263,27 +263,6 @@ import RevenueCat
         Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
-    @objc(createAlias:completionBlock:)
-    static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.logIn(newAppUserID) { customerInfo, created, error in
-            hybridCompletion(customerInfo, error)
-        }
-    }
-
-    @objc(identify:completionBlock:)
-    static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
-            hybridCompletion(customerInfo, error)
-        }
-    }
-
-    @objc(resetWithCompletionBlock:)
-    static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
-    }
-
     @objc(getPurchaserInfoWithCompletionBlock:)
     static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         Purchases.shared.getCustomerInfo(completion: purchaserInfoCompletionBlock(from: completion))

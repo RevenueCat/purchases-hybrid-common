@@ -48,23 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
                                                        RCErrorContainer * _Nullable error) {
     }];
 
-    // should issue deprecated warning
-    [RCCommonFunctionality createAlias:@""
-                       completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                         RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality identify:@""
-                    completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                      RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                      RCErrorContainer * _Nullable error) {
-    }];
-
     [RCCommonFunctionality setDebugLogsEnabled:NO];
     [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                  RCErrorContainer * _Nullable error) {
