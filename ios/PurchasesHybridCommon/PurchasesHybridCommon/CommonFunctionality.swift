@@ -8,8 +8,7 @@
 
 import Foundation
 import StoreKit
-// todo: remove testable once signedData is exposed on PromotionalOffer in purchases-ios
-@testable import RevenueCat
+import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -214,7 +213,7 @@ import StoreKit
     }
 
     @objc(makeDeferredPurchase:completionBlock:)
-    static func makeDeferredPurchase(_ startPurchase: DeferredPromotionalPurchaseBlock,
+    static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, purchaserInfo, error, userCancelled in
             if let error = error {

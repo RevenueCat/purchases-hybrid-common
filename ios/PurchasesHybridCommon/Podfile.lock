@@ -1,32 +1,39 @@
 PODS:
   - Nimble (9.2.1)
   - PurchasesHybridCommon (2.0.1):
-    - RevenueCat (= 4.2.1)
+    - RevenueCat
   - Quick (5.0.1)
-  - RevenueCat (4.2.1)
+  - RevenueCat (4.3.0-SNAPSHOT)
 
 DEPENDENCIES:
   - Nimble
   - PurchasesHybridCommon (from `../../`)
   - Quick
-  - RevenueCat (= 4.2.1)
+  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `feature/expose_signed_data_in_promo_offers`)
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-    - RevenueCat
 
 EXTERNAL SOURCES:
   PurchasesHybridCommon:
     :path: "../../"
+  RevenueCat:
+    :branch: feature/expose_signed_data_in_promo_offers
+    :git: https://github.com/RevenueCat/purchases-ios.git
+
+CHECKOUT OPTIONS:
+  RevenueCat:
+    :commit: 295a4945e388a4741ce5fda2720dc80085376e49
+    :git: https://github.com/RevenueCat/purchases-ios.git
 
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  PurchasesHybridCommon: cc398a5b4e1c5309323aba2bdb767a440e0a257d
+  PurchasesHybridCommon: b8cfb95accea41ceeb038c20cf32e52ac1f3500d
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 6b08a19976f599a0ced21e2c98cf64e2318ac53e
+  RevenueCat: 08216e75afa83e3600476cc0665a765e3c511b74
 
-PODFILE CHECKSUM: a22742e12afef7c0ec7072af469dda80e069dc1c
+PODFILE CHECKSUM: 4bf14f3e06810d6d8a4a6e77432ee6060c39cdce
 
 COCOAPODS: 1.11.2

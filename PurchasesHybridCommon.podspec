@@ -15,7 +15,9 @@ Pod::Spec.new do |s|
 
   s.framework      = 'StoreKit'
 
-  s.dependency 'RevenueCat', '4.2.1'
+  # todo: re-add specfic version once a version that exposes PromotionalOffer.SignedData is released
+  # s.dependency 'RevenueCat', '4.2.1'
+  s.dependency 'RevenueCat'
   s.swift_version = '5.0'
 
   s.ios.deployment_target = '11.0'
