@@ -9,7 +9,6 @@
 import Quick
 import Nimble
 @testable import PurchasesHybridCommon
-import PurchasesHybridCommonSwift
 import Purchases
 
 class PurchasesHybridCommonTests: QuickSpec {

@@ -8,7 +8,6 @@
 
 import Quick
 import Nimble
-import PurchasesHybridCommonSwift
 import PurchasesCoreSwift
 import Purchases
 

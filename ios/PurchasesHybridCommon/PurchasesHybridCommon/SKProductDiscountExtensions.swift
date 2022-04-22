@@ -1,6 +1,6 @@
 //
 //  SKProductDiscountExtensions.swift
-//  PurchasesHybridCommonSwift
+//  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.
@@ -9,7 +9,7 @@
 import Foundation
 import StoreKit
 
-@available(iOS 11.2, macOS 10.13.2, *)
+@available(iOS 11.2, macOS 10.13.2, tvOS 11.2, *)
 @objc public extension SKProductDiscount {
 
     @objc var rc_currencyCode: String? {
