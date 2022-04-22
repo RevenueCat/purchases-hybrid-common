@@ -43,11 +43,11 @@ class MockPurchases: Purchases {
 
     var invokedLogOut = false
     var invokedLogOutCount = 0
-    var invokedLogOutParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedLogOutParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
+    var invokedLogOutParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
+    var invokedLogOutParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?, Void)]()
     var stubbedLogOutCompletionResult: (CustomerInfo?, Error?)?
 
-    override func logOut(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+    override func logOut(completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedLogOut = true
         invokedLogOutCount += 1
         invokedLogOutParameters = (completion, ())
@@ -59,50 +59,17 @@ class MockPurchases: Purchases {
 
     var invokedCreateAlias = false
     var invokedCreateAliasCount = 0
-    var invokedCreateAliasParameters: (alias: String, completion: Purchases.ReceivePurchaserInfoBlock?)?
+    var invokedCreateAliasParameters: (alias: String, completion: ((CustomerInfo?, Error?) -> ())?)?
     var invokedCreateAliasParametersList = [(alias: String,
-        completion: Purchases.ReceivePurchaserInfoBlock?)]()
-
-    override func createAlias(_ alias: String, _ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedCreateAlias = true
-        invokedCreateAliasCount += 1
-        invokedCreateAliasParameters = (alias, completion)
-        invokedCreateAliasParametersList.append((alias, completion))
-    }
-
-    var invokedIdentify = false
-    var invokedIdentifyCount = 0
-    var invokedIdentifyParameters: (appUserID: String, completion: Purchases.ReceivePurchaserInfoBlock?)?
-    var invokedIdentifyParametersList = [(appUserID: String,
-        completion: Purchases.ReceivePurchaserInfoBlock?)]()
-
-    override func identify(_ appUserID: String,
-                           _ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedIdentify = true
-        invokedIdentifyCount += 1
-        invokedIdentifyParameters = (appUserID, completion)
-        invokedIdentifyParametersList.append((appUserID, completion))
-    }
-
-    var invokedReset = false
-    var invokedResetCount = 0
-    var invokedResetParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedResetParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?, Void)]()
-
-    override func reset(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
-        invokedReset = true
-        invokedResetCount += 1
-        invokedResetParameters = (completion, ())
-        invokedResetParametersList.append((completion, ()))
-    }
+        completion: ((CustomerInfo?, Error?) -> ())?)]()
 
     var invokedPurchaserInfo = false
     var invokedPurchaserInfoCount = 0
-    var invokedPurchaserInfoParameters: (completion: Purchases.ReceivePurchaserInfoBlock, Void)?
-    var invokedPurchaserInfoParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock,
+    var invokedPurchaserInfoParameters: (completion: ((CustomerInfo?, Error?) -> ()), Void)?
+    var invokedPurchaserInfoParametersList = [(completion: ((CustomerInfo?, Error?) -> ()),
         Void)]()
 
-    override func purchaserInfo(_ completion: @escaping Purchases.ReceivePurchaserInfoBlock) {
+    override func getCustomerInfo(completion: @escaping ((CustomerInfo?, Error?) -> ())) {
         invokedPurchaserInfo = true
         invokedPurchaserInfoCount += 1
         invokedPurchaserInfoParameters = (completion, ())
@@ -111,10 +78,10 @@ class MockPurchases: Purchases {
 
     var invokedOfferings = false
     var invokedOfferingsCount = 0
-    var invokedOfferingsParameters: (completion: Purchases.ReceiveOfferingsBlock, Void)?
-    var invokedOfferingsParametersList = [(completion: Purchases.ReceiveOfferingsBlock, Void)]()
+    var invokedOfferingsParameters: (completion: ((Offerings?, Error?) -> ()), Void)?
+    var invokedOfferingsParametersList = [(completion: ((Offerings?, Error?) -> ()), Void)]()
 
-    override func offerings(_ completion: @escaping Purchases.ReceiveOfferingsBlock) {
+    override func getOfferings(completion: @escaping ((Offerings?, Error?) -> ())) {
         invokedOfferings = true
         invokedOfferingsCount += 1
         invokedOfferingsParameters = (completion, ())
@@ -123,12 +90,12 @@ class MockPurchases: Purchases {
 
     var invokedProducts = false
     var invokedProductsCount = 0
-    var invokedProductsParameters: (productIdentifiers: [String], completion: Purchases.ReceiveProductsBlock)?
+    var invokedProductsParameters: (productIdentifiers: [String], completion: ((StoreProduct?, Error?) -> ()))?
     var invokedProductsParametersList = [(productIdentifiers: [String],
-        completion: Purchases.ReceiveProductsBlock)]()
+        completion: ((StoreProduct?, Error?) -> ()))]()
 
     override func products(_ productIdentifiers: [String],
-                           _ completion: @escaping Purchases.ReceiveProductsBlock) {
+                           completion: @escaping ((StoreProduct?, Error?) -> ())) {
         invokedProducts = true
         invokedProductsCount += 1
         invokedProductsParameters = (productIdentifiers, completion)
@@ -164,11 +131,11 @@ class MockPurchases: Purchases {
 
     var invokedRestoreTransactions = false
     var invokedRestoreTransactionsCount = 0
-    var invokedRestoreTransactionsParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedRestoreTransactionsParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?,
+    var invokedRestoreTransactionsParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
+    var invokedRestoreTransactionsParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
         Void)]()
 
-    override func restoreTransactions(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+    override func restoreTransactions(_ completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedRestoreTransactions = true
         invokedRestoreTransactionsCount += 1
         invokedRestoreTransactionsParameters = (completion, ())
@@ -177,11 +144,11 @@ class MockPurchases: Purchases {
 
     var invokedSyncPurchases = false
     var invokedSyncPurchasesCount = 0
-    var invokedSyncPurchasesParameters: (completion: Purchases.ReceivePurchaserInfoBlock?, Void)?
-    var invokedSyncPurchasesParametersList = [(completion: Purchases.ReceivePurchaserInfoBlock?,
+    var invokedSyncPurchasesParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
+    var invokedSyncPurchasesParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
         Void)]()
 
-    override func syncPurchases(_ completion: Purchases.ReceivePurchaserInfoBlock?) {
+    override func syncPurchases(_ completion: ((CustomerInfo?, Error?) -> ())?) {
         invokedSyncPurchases = true
         invokedSyncPurchasesCount += 1
         invokedSyncPurchasesParameters = (completion, ())
