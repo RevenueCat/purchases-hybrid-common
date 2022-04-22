@@ -9,9 +9,9 @@
 import Foundation
 import RevenueCat
 
-public extension Offering {
+@objc public extension Offering {
 
-    var dictionary: [String: Any] {
+    @objc var dictionary: [String: Any] {
         var result: [String: Any] = [
             "identifier": identifier,
             "serverDescription": serverDescription,

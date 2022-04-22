@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-public extension CustomerInfo {
+@objc public extension CustomerInfo {
 
     var dictionary: [String: Any] {
 

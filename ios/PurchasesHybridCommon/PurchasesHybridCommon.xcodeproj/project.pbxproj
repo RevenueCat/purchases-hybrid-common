@@ -556,7 +556,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -594,7 +593,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 711DF19865BA5A0D096991CE /* Pods-PurchasesHybridCommon.release.xcconfig */;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

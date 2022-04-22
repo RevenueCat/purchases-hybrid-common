@@ -10,7 +10,7 @@ import Foundation
 // todo: expose signedData in promotionalOffer in purchases-ios
 @testable import RevenueCat
 
-public extension PromotionalOffer {
+@objc public extension PromotionalOffer {
 
     var rc_dictionary: [String: Any] {
         return [

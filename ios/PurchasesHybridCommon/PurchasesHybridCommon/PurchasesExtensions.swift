@@ -9,8 +9,10 @@
 import Foundation
 import RevenueCat
 
-public extension Purchases {
+@objc public extension Purchases {
 
+    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
+            dangerousSettings:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
