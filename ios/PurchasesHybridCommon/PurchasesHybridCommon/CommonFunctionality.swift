@@ -51,7 +51,7 @@ import RevenueCat
         }
     }
 
-    private static var discountsByProductIdentifier: [String: PromotionalOffer] = [:]
+    private static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
@@ -143,12 +143,12 @@ import RevenueCat
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 let storeProduct = StoreProduct(sk1Product: product)
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
                     Purchases.shared.purchase(product: storeProduct,
-                                              promotionalOffer: discount,
+                                              promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
                 }
@@ -194,12 +194,12 @@ import RevenueCat
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
                     Purchases.shared.purchase(package: package,
-                                              promotionalOffer: discount,
+                                              promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
                 }
@@ -342,7 +342,7 @@ import RevenueCat
                     }
                     return
                 }
-                discountsByProductIdentifier["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
+                promoOffersByTimestamp["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
                 completion(promotionalOffer.rc_dictionary, nil)
             }
             let storeProduct = StoreProduct(sk1Product: product)
