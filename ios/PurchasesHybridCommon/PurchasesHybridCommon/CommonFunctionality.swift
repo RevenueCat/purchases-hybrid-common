@@ -77,6 +77,7 @@ import RevenueCat
         Purchases.shared.invalidateCustomerInfoCache()
     }
 
+#if os(iOS)
     @available(iOS 14.0, *)
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
@@ -84,6 +85,7 @@ import RevenueCat
     @objc public static func presentCodeRedemptionSheet() {
         Purchases.shared.presentCodeRedemptionSheet()
     }
+#endif
 
     @objc public static func canMakePaymentsWithFeatures(_ features: [Int]) -> Bool {
         return Purchases.canMakePayments()
@@ -396,10 +398,7 @@ import RevenueCat
     }
 
     @objc static func setPushToken(_ pushToken: String?) {
-        // todo
-        // this method has been temporarily removed and will be re-added
-        // when this code is adapted for v4
-        // Purchases.shared.setPushToken(pushToken)
+         Purchases.shared.setPushTokenString(pushToken)
     }
 
 }
