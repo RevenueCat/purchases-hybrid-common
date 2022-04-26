@@ -6,8 +6,7 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  # todo: remove the branch once the feature has been released
-  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => 'feature/expose_signed_data_in_promo_offers'
+  pod 'RevenueCat', '4.3.0'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
