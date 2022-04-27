@@ -13,10 +13,10 @@ import RevenueCat
 
     var dictionary: [String: Any] {
         return [
-            "revenueCatId": transactionIdentifier,
-            "productId": productIdentifier,
-            "purchaseDateMillis": purchaseDate.rc_millisecondsSince1970AsDouble(),
-            "purchaseDate": purchaseDate.rc_formattedAsISO8601()
+            "revenueCatId": self.transactionIdentifier,
+            "productId": self.productIdentifier,
+            "purchaseDateMillis": self.purchaseDate.rc_millisecondsSince1970AsDouble(),
+            "purchaseDate": self.purchaseDate.rc_formattedAsISO8601()
         ]
     }
 
