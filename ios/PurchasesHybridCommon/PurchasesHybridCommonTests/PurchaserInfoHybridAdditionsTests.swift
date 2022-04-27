@@ -17,7 +17,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
         describe("rc_dictionary") {
             context("managementURL") {
                 it("contains the management url when it exists") {
-                    let mockCustomerInfo = try! CustomerInfo(data: [
+                    let mockCustomerInfo = try CustomerInfo(data: [
                         "request_date": "2019-08-16T10:30:42Z",
                         "subscriber": [
                             "first_seen": "2019-07-17T00:05:54Z",
@@ -33,7 +33,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
-                    let mockCustomerInfo = try! CustomerInfo(data: [
+                    let mockCustomerInfo = try CustomerInfo(data: [
                         "request_date": "2019-08-16T10:30:42Z",
                         "subscriber": [
                             "first_seen": "2019-07-17T00:05:54Z",
@@ -50,7 +50,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                 it("contains all the non subscription transactions") {
                     let transactionDateString = "1990-08-30T02:40:36Z"
 
-                    let mockCustomerInfo = try! CustomerInfo(data: [
+                    let mockCustomerInfo = try CustomerInfo(data: [
                         "request_date": "2019-08-16T10:30:42Z",
                         "subscriber": [
                             "original_app_user_id": "app_user_id",
@@ -85,7 +85,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it ("is empty when there are no non subscription transactions") {
-                    let mockCustomerInfo = try! CustomerInfo(data: [
+                    let mockCustomerInfo = try CustomerInfo(data: [
                         "request_date": "2019-08-16T10:30:42Z",
                         "subscriber": [
                             "first_seen": "2019-07-17T00:05:54Z",
