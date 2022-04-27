@@ -14,11 +14,11 @@ import Foundation
 
     var rc_dictionary: [String: Any] {
         return [
-            "identifier": signedData.identifier,
-            "keyIdentifier": signedData.keyIdentifier,
-            "nonce": signedData.nonce.uuidString,
-            "signature": signedData.signature,
-            "timestamp": signedData.timestamp
+            "identifier": self.signedData.identifier,
+            "keyIdentifier": self.signedData.keyIdentifier,
+            "nonce": self.signedData.nonce.uuidString,
+            "signature": self.signedData.signature,
+            "timestamp": self.signedData.timestamp
         ]
     }
 
