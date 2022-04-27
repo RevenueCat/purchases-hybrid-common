@@ -27,7 +27,8 @@ import Foundation
 
         info["underlyingErrorMessage"] = underlyingErrorMessage ?? ""
 
-        // todo: see about exposing "readable_error_code" from purchases-ios
+        // todo: remove "readable_error_code" and instead send whole user info instead
+        // also: code name is already exposed as error.code
         if let readableErrorCode = nsError.userInfo["readable_error_code"] {
             info["readableErrorCode"] = readableErrorCode
             info["readable_error_code"] = readableErrorCode
