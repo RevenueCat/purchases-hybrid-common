@@ -59,8 +59,8 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let appUserID = "appUserID"
                 CommonFunctionality.logIn(appUserID: appUserID) { _, _ in }
 
-                expect { mockPurchases.invokedLogInCount } == 1
-                expect { mockPurchases.invokedLogInParameters?.appUserID } == appUserID
+                expect(mockPurchases.invokedLogInCount) == 1
+                expect(mockPurchases.invokedLogInParameters?.appUserID) == appUserID
             }
 
             it("returns customerInfo and created if successful") {
@@ -84,8 +84,8 @@ class PurchasesHybridCommonTests: QuickSpec {
                     "created": mockCreated
                 ]
 
-                expect { receivedResultDict } == expectedResult
-                expect { receivedError }.to(beNil())
+                expect(receivedResultDict) == expectedResult
+                expect(receivedError).to(beNil())
             }
 
             it("returns error if not successful") {
@@ -111,12 +111,12 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 ]
 
-                expect { receivedResultDict }.to(beNil())
-                expect { receivedError }.toNot(beNil())
-                expect { receivedError!.error as NSError } == mockError
-                expect { receivedError!.code } == mockError.code
-                expect { receivedError!.message } == mockError.localizedDescription
-                expect { receivedError!.info as NSDictionary } == expectedErrorDict
+                expect(receivedResultDict).to(beNil())
+                expect(receivedError).toNot(beNil())
+                expect(receivedError!.error as NSError) == mockError
+                expect(receivedError!.code) == mockError.code
+                expect(receivedError!.message) == mockError.localizedDescription
+                expect(receivedError!.info as NSDictionary) == expectedErrorDict
             }
         }
 
@@ -129,7 +129,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 CommonFunctionality.logOut { _, _ in }
 
-                expect { mockPurchases.invokedLogOutCount } == 1
+                expect(mockPurchases.invokedLogOutCount) == 1
             }
 
             it("returns customerInfo if successful") {
@@ -171,12 +171,12 @@ class PurchasesHybridCommonTests: QuickSpec {
                     "underlyingErrorMessage": ""
                 ]
 
-                expect { receivedResultDict }.to(beNil())
-                expect { receivedError }.toNot(beNil())
-                expect { receivedError!.error as NSError } == mockError
-                expect { receivedError!.code } == mockError.code
-                expect { receivedError!.message } == mockError.localizedDescription
-                expect { receivedError!.info as NSDictionary } == expectedErrorDict
+                expect(receivedResultDict).to(beNil())
+                expect(receivedError).toNot(beNil())
+                expect(receivedError!.error as NSError) == mockError
+                expect(receivedError!.code) == mockError.code
+                expect(receivedError!.message) == mockError.localizedDescription
+                expect(receivedError!.info as NSDictionary) == expectedErrorDict
             }
         }
 
