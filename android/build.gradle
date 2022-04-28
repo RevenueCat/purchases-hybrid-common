@@ -8,7 +8,7 @@ buildscript {
     ext.assertj_version = '3.22.0'
     ext.mockk_version = '1.12.3'
     ext.gradle_maven_publish = '0.19.0'
-    ext.purchases_version = '4.6.1'
+    ext.purchases_version = '5.0.0'
 
     repositories {
         google()
@@ -89,14 +89,12 @@ dependencies {
     latestDependenciesApi "com.revenuecat.purchases:purchases:$purchases_version"
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
-    
-    // Uncomment once we upgrade to 5.0.0
-//    unityIAPApi "com.revenuecat.purchases:purchases-unityiap:$purchases_version"
-//    unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
-//    unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
-    unityIAPApi "com.revenuecat.purchases:purchases:$purchases_version"
-    unityIAPApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
-    unityIAPApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
+    latestDependenciesApi "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
+
+    unityIAPApi "com.revenuecat.purchases:purchases-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
+    unityIAPApi "com.revenuecat.purchases:purchases-store-amazon-unityiap:$purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
@@ -104,6 +102,7 @@ dependencies {
     testImplementation "org.assertj:assertj-core:$assertj_version"
 
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "com.revenuecat.purchases:purchases-store-google:$purchases_version"
 
     // junit 5
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")

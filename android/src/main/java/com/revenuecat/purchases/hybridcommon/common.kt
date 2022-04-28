@@ -2,29 +2,29 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.PurchaserInfo
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
 import com.revenuecat.purchases.BillingFeature
+import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.LogHandler
 import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.createAliasWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
-import com.revenuecat.purchases.getPurchaserInfoWith
+import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getSubscriptionSkusWith
-import com.revenuecat.purchases.identifyWith
 import com.revenuecat.purchases.purchasePackageWith
 import com.revenuecat.purchases.purchaseProductWith
-import com.revenuecat.purchases.resetWith
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.interfaces.Callback
+import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.models.StoreTransaction
 
 import java.net.URL
 
@@ -52,7 +52,7 @@ fun getProductInfo(
     onResult: OnResultList
 ) {
     val onError: (PurchasesError) -> Unit = { onResult.onError(it.map()) }
-    val onReceived: (List<SkuDetails>) -> Unit = { onResult.onReceived(it.map()) }
+    val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
 
     if (type.equals("subs", ignoreCase = true)) {
         Purchases.sharedInstance.getSubscriptionSkusWith(productIDs, onError, onReceived)
@@ -70,9 +70,9 @@ fun purchaseProduct(
     onResult: OnResult
 ) {
     if (activity != null) {
-        val onReceiveSkus: (List<SkuDetails>) -> Unit = { skus ->
+        val onReceiveSkus: (List<StoreProduct>) -> Unit = { skus ->
             val productToBuy = skus.firstOrNull {
-                it.sku == productIdentifier && it.type.equals(type, ignoreCase = true)
+                it.sku == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
             if (productToBuy != null) {
                 if (oldSku == null || oldSku.isBlank()) {
@@ -88,7 +88,7 @@ fun purchaseProduct(
                         productToBuy,
                         UpgradeInfo(oldSku, prorationMode),
                         onError = getPurchaseErrorFunction(onResult),
-                        onSuccess = getPurchaseCompletedFunction(onResult)
+                        onSuccess = getProductChangeCompletedFunction(onResult)
                     )
                 }
             } else {
@@ -155,7 +155,7 @@ fun purchasePackage(
                             packageToBuy,
                             UpgradeInfo(oldSku, prorationMode),
                             onError = getPurchaseErrorFunction(onResult),
-                            onSuccess = getPurchaseCompletedFunction(onResult)
+                            onSuccess = getProductChangeCompletedFunction(onResult)
                         )
                     }
                 } else {
@@ -194,9 +194,9 @@ fun logIn(
 ) {
     Purchases.sharedInstance.logInWith(appUserID,
         onError = { onResult.onError(it.map()) },
-        onSuccess = { purchaserInfo, created ->
+        onSuccess = { customerInfo, created ->
             val resultMap: Map<String, Any?> = mapOf(
-                "purchaserInfo" to purchaserInfo.map(),
+                "customerInfo" to customerInfo.map(),
                 "created" to created
             )
             onResult.onReceived(resultMap)
@@ -209,50 +209,16 @@ fun logOut(onResult: OnResult) {
     }
 }
 
-@Deprecated(
-    "Use logOut instead",
-    ReplaceWith("CommonKt.logOut(newAppUserID, onResult)")
-)
-fun reset(
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.resetWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
-@Deprecated(
-    "Use logIn instead",
-    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
-)
-fun identify(
-    appUserID: String,
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.identifyWith(appUserID, onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
-@Deprecated(
-    "Use logIn instead",
-    ReplaceWith("CommonKt.logIn(newAppUserID, onResult)")
-)
-fun createAlias(
-    newAppUserID: String,
-    onResult: OnResult
-) {
-    Purchases.sharedInstance.createAliasWith(
-        newAppUserID,
-        onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
-    }
-}
-
 fun setDebugLogsEnabled(
     enabled: Boolean
 ) {
     Purchases.debugLogsEnabled = enabled
+}
+
+fun setLogHandler(
+    logHandler: LogHandler
+) {
+    Purchases.logHandler = logHandler
 }
 
 fun setProxyURLString(proxyURLString: String?) {
@@ -263,10 +229,10 @@ fun getProxyURLString(): String? {
     return Purchases.proxyURL.toString()
 }
 
-fun getPurchaserInfo(
+fun getCustomerInfo(
     onResult: OnResult
 ) {
-    Purchases.sharedInstance.getPurchaserInfoWith(onError = { onResult.onError(it.map()) }) {
+    Purchases.sharedInstance.getCustomerInfoWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
 }
@@ -295,8 +261,8 @@ fun checkTrialOrIntroductoryPriceEligibility(
     }.toMap()
 }
 
-fun invalidatePurchaserInfoCache() {
-    Purchases.sharedInstance.invalidatePurchaserInfoCache()
+fun invalidateCustomerInfoCache() {
+    Purchases.sharedInstance.invalidateCustomerInfoCache()
 }
 
 fun canMakePayments(context: Context,
@@ -322,14 +288,21 @@ fun configure(
     apiKey: String,
     appUserID: String?,
     observerMode: Boolean?,
-    platformInfo: PlatformInfo
+    platformInfo: PlatformInfo,
+    store: Store = Store.PLAY_STORE,
+    dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true)
 ) {
     Purchases.platformInfo = platformInfo
+    val builder =
+        PurchasesConfiguration.Builder(context, apiKey)
+            .appUserID(appUserID)
+            .store(store)
+            .dangerousSettings(dangerousSettings)
     if (observerMode != null) {
-        Purchases.configure(context, apiKey, appUserID, observerMode)
-    } else {
-        Purchases.configure(context, apiKey, appUserID)
+        builder.observerMode(observerMode)
     }
+
+    Purchases.configure(builder.build())
 }
 
 fun getPaymentDiscount() : ErrorContainer {
@@ -343,13 +316,24 @@ private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boole
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
 
-private fun getPurchaseCompletedFunction(onResult: OnResult): (Purchase?, PurchaserInfo) -> Unit {
-    return { purchase, purchaserInfo ->
+private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction, CustomerInfo) -> Unit {
+    return { purchase, customerInfo ->
+        onResult.onReceived(
+            mapOf(
+                "productIdentifier" to purchase.skus[0],
+                "customerInfo" to customerInfo.map()
+            )
+        )
+    }
+}
+
+private fun getProductChangeCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
+    return { purchase, customerInfo ->
         onResult.onReceived(
             mapOf(
                 // Get first productIdentifier until we have full support of multi-line subscriptions
                 "productIdentifier" to purchase?.skus?.get(0),
-                "purchaserInfo" to purchaserInfo.map()
+                "customerInfo" to customerInfo.map()
             )
         )
     }
