@@ -283,6 +283,7 @@ fun canMakePayments(context: Context,
     }
 }
 
+@JvmOverloads
 fun configure(
     context: Context,
     apiKey: String,
