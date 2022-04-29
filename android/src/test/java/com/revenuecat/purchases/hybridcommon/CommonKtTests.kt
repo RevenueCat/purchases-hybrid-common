@@ -374,7 +374,7 @@ internal class CommonKtTests {
 
     @Test
     fun `getPaymentDiscount returns an error`() {
-        val error = getPaymentDiscount()
+        val error = getPromotionalOffer()
         assertEquals(PurchasesErrorCode.UnsupportedError.code, error.code)
         assertTrue(error.message.isNotEmpty())
     }
