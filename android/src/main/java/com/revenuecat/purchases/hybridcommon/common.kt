@@ -180,7 +180,7 @@ fun purchasePackage(
 
 fun getAppUserID() = Purchases.sharedInstance.appUserID
 
-fun restoreTransactions(
+fun restorePurchases(
     onResult: OnResult
 ) {
     Purchases.sharedInstance.restorePurchasesWith(onError = { onResult.onError(it.map()) }) {
@@ -306,9 +306,9 @@ fun configure(
     Purchases.configure(builder.build())
 }
 
-fun getPaymentDiscount() : ErrorContainer {
+fun getPromotionalOffer() : ErrorContainer {
     return ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
-        "Android platform doesn't support subscription offers", emptyMap())
+        "Android platform doesn't support promotional offers", emptyMap())
 }
 
 // region private functions
