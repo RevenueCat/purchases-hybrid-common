@@ -180,7 +180,7 @@ fun purchasePackage(
 
 fun getAppUserID() = Purchases.sharedInstance.appUserID
 
-fun restoreTransactions(
+fun restorePurchases(
     onResult: OnResult
 ) {
     Purchases.sharedInstance.restorePurchasesWith(onError = { onResult.onError(it.map()) }) {
