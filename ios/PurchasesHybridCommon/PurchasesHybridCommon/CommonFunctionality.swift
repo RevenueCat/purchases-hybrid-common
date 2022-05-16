@@ -328,7 +328,7 @@ import RevenueCat
                 return
             }
 
-            let paymentDiscountCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
+            let promotionalOfferCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
                 guard let promotionalOffer = promotionalOffer else {
                     if let error = error {
                         completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -347,7 +347,7 @@ import RevenueCat
             let storeProduct = StoreProduct(sk1Product: product)
             Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
                                                  product: storeProduct,
-                                                 completion: paymentDiscountCompletion)
+                                                 completion: promotionalOfferCompletion)
         }
     }
 
