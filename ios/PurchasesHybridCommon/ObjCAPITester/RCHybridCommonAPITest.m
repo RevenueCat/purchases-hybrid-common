@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
-    [RCCommonFunctionality configure];
     // should issue deprecated warning
     [RCCommonFunctionality setAllowSharingStoreAccount:NO];
 
@@ -31,8 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
 
-    [RCCommonFunctionality restoreTransactionsWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                    RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality restorePurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                 RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality syncPurchasesWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
@@ -49,26 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
                                                        RCErrorContainer * _Nullable error) {
     }];
 
-    // should issue deprecated warning
-    [RCCommonFunctionality createAlias:@""
-                       completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                         RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality identify:@""
-                    completionBlock:^(NSDictionary * _Nullable customerInfo,
-                                      RCErrorContainer * _Nullable error) {
-    }];
-
-    // should issue deprecated warning
-    [RCCommonFunctionality resetWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                      RCErrorContainer * _Nullable error) {
-    }];
-
     [RCCommonFunctionality setDebugLogsEnabled:NO];
-    [RCCommonFunctionality getPurchaserInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
-                                                                 RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality getCustomerInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                                RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
@@ -116,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (@available(iOS 14.0, *)) {
         [RCCommonFunctionality presentCodeRedemptionSheet];
     }
-    [RCCommonFunctionality invalidatePurchaserInfoCache];
+    [RCCommonFunctionality invalidateCustomerInfoCache];
     BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
 }
 
