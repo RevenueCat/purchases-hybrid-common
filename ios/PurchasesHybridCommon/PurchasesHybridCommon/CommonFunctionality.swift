@@ -8,8 +8,7 @@
 
 import Foundation
 import StoreKit
-// todo: remove testable once signedData is exposed on PromotionalOffer in purchases-ios
-@testable import RevenueCat
+import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -78,6 +77,7 @@ import StoreKit
         Purchases.shared.invalidateCustomerInfoCache()
     }
 
+#if os(iOS)
     @available(iOS 14.0, *)
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
@@ -85,6 +85,7 @@ import StoreKit
     @objc public static func presentCodeRedemptionSheet() {
         Purchases.shared.presentCodeRedemptionSheet()
     }
+#endif
 
     @objc public static func canMakePaymentsWithFeatures(_ features: [Int]) -> Bool {
         return Purchases.canMakePayments()
@@ -214,7 +215,7 @@ import StoreKit
     }
 
     @objc(makeDeferredPurchase:completionBlock:)
-    static func makeDeferredPurchase(_ startPurchase: DeferredPromotionalPurchaseBlock,
+    static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -397,10 +398,7 @@ import StoreKit
     }
 
     @objc static func setPushToken(_ pushToken: String?) {
-        // todo
-        // this method has been temporarily removed and will be re-added
-        // when this code is adapted for v4
-        // Purchases.shared.setPushToken(pushToken)
+         Purchases.shared.setPushTokenString(pushToken)
     }
 
 }

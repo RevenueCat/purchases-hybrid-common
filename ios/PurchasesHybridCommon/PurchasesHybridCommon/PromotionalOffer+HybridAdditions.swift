@@ -7,8 +7,7 @@
 //
 
 import Foundation
-// todo: expose signedData in promotionalOffer in purchases-ios
-@testable import RevenueCat
+import RevenueCat
 
 @objc public extension PromotionalOffer {
 
