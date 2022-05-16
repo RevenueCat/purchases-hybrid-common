@@ -51,12 +51,9 @@ import RevenueCat
         }
     }
 
-    private static var discountsByProductIdentifier: [String: PromotionalOffer] = [:]
+    private static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
 
-    @objc public static func configure() {
-        // todo: it seems like this call isn't needed anymore?
-    }
-
+    @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
         Purchases.shared.allowSharingAppStoreAccount = allowSharingStoreAccount;
     }
@@ -73,7 +70,7 @@ import RevenueCat
         Purchases.shared.finishTransactions = finishTransactions
     }
 
-    @objc public static func invalidatePurchaserInfoCache() {
+    @objc public static func invalidateCustomerInfoCache() {
         Purchases.shared.invalidateCustomerInfoCache()
     }
 
@@ -96,17 +93,17 @@ import RevenueCat
 // MARK: purchasing and restoring
 @objc public extension CommonFunctionality {
 
-    @objc(restoreTransactionsWithCompletionBlock:)
-    static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.restorePurchases(completion: purchaserInfoCompletion)
+    @objc(restorePurchasesWithCompletionBlock:)
+    static func restorePurchases(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let customerInfoCompletion = customerInfoCompletionBlock(from: completion)
+        Purchases.shared.restorePurchases(completion: customerInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
     static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
-            let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-            Purchases.shared.syncPurchases(completion: purchaserInfoCompletion)
+            let customerInfoCompletion = customerInfoCompletionBlock(from: completion)
+            Purchases.shared.syncPurchases(completion: customerInfoCompletion)
         } else {
             Purchases.shared.syncPurchases(completion: nil)
         }
@@ -119,13 +116,13 @@ import RevenueCat
         let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
-                               Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
+                               Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
-            } else if let purchaserInfo = purchaserInfo,
+            } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
-                    "purchaserInfo": purchaserInfo.dictionary,
+                    "customerInfo": customerInfo.dictionary,
                     "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
@@ -146,12 +143,12 @@ import RevenueCat
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 let storeProduct = StoreProduct(sk1Product: product)
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
                     Purchases.shared.purchase(product: storeProduct,
-                                              promotionalOffer: discount,
+                                              promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
                 }
@@ -170,13 +167,13 @@ import RevenueCat
         let hybridCompletion: (StoreTransaction?,
                                CustomerInfo?,
                                Error?,
-                               Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
+                               Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
-            } else if let purchaserInfo = purchaserInfo,
+            } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
-                    "purchaserInfo": purchaserInfo.dictionary,
+                    "customerInfo": customerInfo.dictionary,
                     "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
@@ -197,12 +194,12 @@ import RevenueCat
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
+                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
                     Purchases.shared.purchase(package: package,
-                                              promotionalOffer: discount,
+                                              promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
                 }
@@ -217,13 +214,13 @@ import RevenueCat
     @objc(makeDeferredPurchase:completionBlock:)
     static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        startPurchase { transaction, purchaserInfo, error, userCancelled in
+        startPurchase { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
-            } else if let purchaserInfo = purchaserInfo,
+            } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
-                    "purchaserInfo": purchaserInfo.dictionary,
+                    "customerInfo": customerInfo.dictionary,
                     "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
@@ -243,12 +240,12 @@ import RevenueCat
 
     @objc(logInWithAppUserID:completionBlock:)
     static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(appUserID) { purchaserInfo, created, error in
+        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-            } else if let purchaserInfo = purchaserInfo {
+            } else if let customerInfo = customerInfo {
                 completion([
-                    "purchaserInfo": purchaserInfo.dictionary,
+                    "customerInfo": customerInfo.dictionary,
                     "created": created
                 ], nil)
             } else {
@@ -263,33 +260,12 @@ import RevenueCat
 
     @objc(logOutWithCompletionBlock:)
     static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logOut(completion: customerInfoCompletionBlock(from: completion))
     }
 
-    @objc(createAlias:completionBlock:)
-    static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.logIn(newAppUserID) { customerInfo, created, error in
-            hybridCompletion(customerInfo, error)
-        }
-    }
-
-    @objc(identify:completionBlock:)
-    static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
-            hybridCompletion(customerInfo, error)
-        }
-    }
-
-    @objc(resetWithCompletionBlock:)
-    static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
-    }
-
-    @objc(getPurchaserInfoWithCompletionBlock:)
-    static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.getCustomerInfo(completion: purchaserInfoCompletionBlock(from: completion))
+    @objc(getCustomerInfoWithCompletionBlock:)
+    static func customerInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Purchases.shared.getCustomerInfo(completion: customerInfoCompletionBlock(from: completion))
     }
 
 }
@@ -366,7 +342,7 @@ import RevenueCat
                     }
                     return
                 }
-                discountsByProductIdentifier["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
+                promoOffersByTimestamp["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
                 completion(promotionalOffer.rc_dictionary, nil)
             }
             let storeProduct = StoreProduct(sk1Product: product)
@@ -429,6 +405,7 @@ import RevenueCat
         Purchases.shared.setAirshipChannelID(airshipChannelID)
     }
 
+    @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
@@ -464,14 +441,14 @@ import RevenueCat
 
 private extension CommonFunctionality {
 
-    static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
+    static func customerInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
     -> ((CustomerInfo?, Error?) -> Void) {
-        return { purchaserInfo, error in
+        return { customerInfo, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
                 block(nil, errorContainer)
-            } else if let purchaserInfo = purchaserInfo {
-                block(purchaserInfo.dictionary, nil)
+            } else if let customerInfo = customerInfo {
+                block(customerInfo.dictionary, nil)
             } else {
                 let error = NSError(domain: RCPurchasesErrorCodeDomain,
                                     code: ErrorCode.unknownError.rawValue,

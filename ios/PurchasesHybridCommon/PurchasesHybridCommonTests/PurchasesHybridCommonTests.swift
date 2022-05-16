@@ -80,7 +80,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 // todo: update this once APIs get updated to v4
                 let expectedResult: NSDictionary = [
-                    "purchaserInfo": self.mockCustomerInfo.dictionary,
+                    "customerInfo": self.mockCustomerInfo.dictionary,
                     "created": mockCreated
                 ]
 
