@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@testable import RevenueCat
+import RevenueCat
 
 @objc(RCErrorContainer) public class ErrorContainer: NSObject {
 

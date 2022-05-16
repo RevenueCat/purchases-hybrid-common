@@ -47,7 +47,7 @@ class MockPurchases: Purchases {
 
         let attributionPoster: AttributionPoster = AttributionPoster(
             deviceCache: deviceCache,
-            identityManager: identityManager,
+            currentUserProvider: identityManager,
             backend: backend,
             attributionFetcher: attributionFetcher,
             subscriberAttributesManager: subscriberAttributesManager)
@@ -63,13 +63,13 @@ class MockPurchases: Purchases {
 
         let introEligibilityCalculator: IntroEligibilityCalculator = IntroEligibilityCalculator(productsManager: productsManager, receiptParser: ReceiptParser())
 
-        let manageSubscriptionsHelper = ManageSubscriptionsHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+        let manageSubscriptionsHelper = ManageSubscriptionsHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, currentUserProvider: identityManager)
 
-        let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, identityManager: identityManager)
+        let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, currentUserProvider: identityManager)
 
-        let purchasesOrchestrator: PurchasesOrchestrator = PurchasesOrchestrator(productsManager: productsManager, storeKitWrapper: storeKitWrapper, systemInfo: systemInfo, subscriberAttributesManager: subscriberAttributesManager, operationDispatcher: operationDispatcher, receiptFetcher: receiptFetcher, customerInfoManager: customerInfoManager, backend: backend, identityManager: identityManager, transactionsManager: TransactionsManager(receiptParser: ReceiptParser()), deviceCache: deviceCache, manageSubscriptionsHelper: manageSubscriptionsHelper, beginRefundRequestHelper: beginRefundRequestHelper)
+        let purchasesOrchestrator: PurchasesOrchestrator = PurchasesOrchestrator(productsManager: productsManager, storeKitWrapper: storeKitWrapper, systemInfo: systemInfo, subscriberAttributesManager: subscriberAttributesManager, operationDispatcher: operationDispatcher, receiptFetcher: receiptFetcher, customerInfoManager: customerInfoManager, backend: backend, currentUserProvider: identityManager, transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations, receiptParser: ReceiptParser()), deviceCache: deviceCache, manageSubscriptionsHelper: manageSubscriptionsHelper, beginRefundRequestHelper: beginRefundRequestHelper)
 
-        let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, identityManager: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
+        let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(systemInfo: systemInfo, receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, currentUserProvider: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
 
         super.init(appUserID: nil,
                    requestFetcher: requestFetcher,
