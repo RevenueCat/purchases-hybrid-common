@@ -6,7 +6,7 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  pod 'Purchases', '3.14.1'
+  pod 'RevenueCat', '4.2.1'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing

@@ -8,9 +8,8 @@
 
 import Quick
 import Nimble
-import Purchases
+import RevenueCat
 import PurchasesHybridCommon
-import PurchasesCoreSwift
 
 
 class PurchasesHybridAdditionsTests: QuickSpec {

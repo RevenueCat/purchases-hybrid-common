@@ -8,7 +8,8 @@
 
 import Foundation
 import StoreKit
-import Purchases
+// todo: remove testable once signedData is exposed on PromotionalOffer in purchases-ios
+@testable import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -51,19 +52,7 @@ import Purchases
         }
     }
 
-    // Note: we can't have a property that's only available on certain OS versions,
-    // so _discountsByProductIdentifier and discountsByProductIdentifier provide for a way
-    // to have one.
-    private static var _discountsByProductIdentifier: Any? = nil
-
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    private static var discountsByProductIdentifier: [String: SKPaymentDiscount] {
-        get {
-            return _discountsByProductIdentifier as! [String: SKPaymentDiscount]
-        } set {
-            _discountsByProductIdentifier = newValue
-        }
-    }
+    private static var discountsByProductIdentifier: [String: PromotionalOffer] = [:]
 
     @objc public static func configure() {
         // todo: it seems like this call isn't needed anymore?
@@ -86,7 +75,7 @@ import Purchases
     }
 
     @objc public static func invalidatePurchaserInfoCache() {
-        Purchases.shared.invalidatePurchaserInfoCache()
+        Purchases.shared.invalidateCustomerInfoCache()
     }
 
     @available(iOS 14.0, *)
@@ -109,16 +98,16 @@ import Purchases
     @objc(restoreTransactionsWithCompletionBlock:)
     static func restoreTransactions(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-        Purchases.shared.restoreTransactions(purchaserInfoCompletion)
+        Purchases.shared.restorePurchases(completion: purchaserInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
     static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
             let purchaserInfoCompletion = purchaserInfoCompletionBlock(from: completion)
-            Purchases.shared.syncPurchases(purchaserInfoCompletion)
+            Purchases.shared.syncPurchases(completion: purchaserInfoCompletion)
         } else {
-            Purchases.shared.syncPurchases(nil)
+            Purchases.shared.syncPurchases(completion: nil)
         }
     }
 
@@ -126,8 +115,8 @@ import Purchases
     static func purchaseProduct(_ productIdentifier: String,
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (SKPaymentTransaction?,
-                               Purchases.PurchaserInfo?,
+        let hybridCompletion: (StoreTransaction?,
+                               CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -136,11 +125,11 @@ import Purchases
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: Purchases.ErrorDomain,
-                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                    code: ErrorCode.unknownError.rawValue,
                                     userInfo: [NSLocalizedDescriptionKey: description])
 
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -154,16 +143,19 @@ import Purchases
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
+                let storeProduct = StoreProduct(sk1Product: product)
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let discount = self.discountsByProductIdentifier[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchaseProduct(product, discount: discount, hybridCompletion)
+                    Purchases.shared.purchase(product: storeProduct,
+                                              promotionalOffer: discount,
+                                              completion: hybridCompletion)
                     return
                 }
 
-                Purchases.shared.purchaseProduct(product, hybridCompletion)
+                Purchases.shared.purchase(product: storeProduct, completion: hybridCompletion)
             }
 
         }
@@ -174,8 +166,8 @@ import Purchases
                                 offeringIdentifier: String,
                                 signedDiscountTimestamp: String?,
                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (SKPaymentTransaction?,
-                               Purchases.PurchaserInfo?,
+        let hybridCompletion: (StoreTransaction?,
+                               CustomerInfo?,
                                Error?,
                                Bool) -> Void = { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -184,11 +176,11 @@ import Purchases
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: Purchases.ErrorDomain,
-                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                    code: ErrorCode.unknownError.rawValue,
                                     userInfo: [NSLocalizedDescriptionKey: description])
 
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -208,19 +200,21 @@ import Purchases
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchasePackage(package, discount: discount, hybridCompletion)
+                    Purchases.shared.purchase(package: package,
+                                              promotionalOffer: discount,
+                                              completion: hybridCompletion)
                     return
                 }
 
             }
 
-            Purchases.shared.purchasePackage(package, hybridCompletion)
+            Purchases.shared.purchase(package: package, completion: hybridCompletion)
         }
 
     }
 
     @objc(makeDeferredPurchase:completionBlock:)
-    static func makeDeferredPurchase(_ startPurchase: RCDeferredPromotionalPurchaseBlock,
+    static func makeDeferredPurchase(_ startPurchase: DeferredPromotionalPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, purchaserInfo, error, userCancelled in
             if let error = error {
@@ -229,11 +223,11 @@ import Purchases
                       let transaction = transaction {
                 completion([
                     "purchaserInfo": purchaserInfo.dictionary,
-                    "productIdentifier": transaction.payment.productIdentifier
+                    "productIdentifier": transaction.sk1Transaction!.payment.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: Purchases.ErrorDomain,
-                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                    code: ErrorCode.unknownError.rawValue,
                                     userInfo: [NSLocalizedDescriptionKey: description])
 
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -257,8 +251,8 @@ import Purchases
                     "created": created
                 ], nil)
             } else {
-                let error = NSError(domain: Purchases.ErrorDomain,
-                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                    code: ErrorCode.unknownError.rawValue,
                                     userInfo: [NSLocalizedDescriptionKey: description])
 
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -268,27 +262,33 @@ import Purchases
 
     @objc(logOutWithCompletionBlock:)
     static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(createAlias:completionBlock:)
     static func createAlias(newAppUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.createAlias(newAppUserID, purchaserInfoCompletionBlock(from: completion))
+        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
+        Purchases.shared.logIn(newAppUserID) { customerInfo, created, error in
+            hybridCompletion(customerInfo, error)
+        }
     }
 
     @objc(identify:completionBlock:)
     static func identify(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.identify(appUserID, purchaserInfoCompletionBlock(from: completion))
+        let hybridCompletion = purchaserInfoCompletionBlock(from: completion)
+        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
+            hybridCompletion(customerInfo, error)
+        }
     }
 
     @objc(resetWithCompletionBlock:)
     static func reset(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.reset(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.logOut(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
     @objc(getPurchaserInfoWithCompletionBlock:)
     static func purchaserInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.purchaserInfo(purchaserInfoCompletionBlock(from: completion))
+        Purchases.shared.getCustomerInfo(completion: purchaserInfoCompletionBlock(from: completion))
     }
 
 }
@@ -298,7 +298,7 @@ import Purchases
 
     @objc(getOfferingsWithCompletionBlock:)
     static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
+        Purchases.shared.getOfferings { offerings, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
                 completion(nil, errorContainer)
@@ -313,7 +313,7 @@ import Purchases
     static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
         completion: @escaping([String: Any]) -> Void) {
-            Purchases.shared.checkTrialOrIntroductoryPriceEligibility(products) { eligibilityByProductId in
+            Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: products) { eligibilityByProductId in
                 completion(eligibilityByProductId.mapValues { [
                     "status": $0.status,
                     "description": $0.description
@@ -324,8 +324,10 @@ import Purchases
 
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
-        Purchases.shared.products(productIds) { products in
-            let productDictionaries = products.map { $0.rc_dictionary }
+        Purchases.shared.getProducts(productIds) { products in
+            let productDictionaries = products
+                .map { $0.sk1Product! }
+                .map { $0.rc_dictionary }
             completionBlock(productDictionaries)
         }
     }
@@ -350,27 +352,26 @@ import Purchases
                 return
             }
 
-            let paymentDiscountCompletion: (SKPaymentDiscount?, Error?) -> Void = { discount, error in
-                guard let discount = discount else {
+            let paymentDiscountCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
+                guard let promotionalOffer = promotionalOffer else {
                     if let error = error {
                         completion(nil, ErrorContainer(error: error, extraPayload: [:]))
                     } else {
-                        let error = NSError(domain: Purchases.ErrorDomain,
-                                            code: Purchases.ErrorCode.unknownError.rawValue,
+                        let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                            code: ErrorCode.unknownError.rawValue,
                                             userInfo: [NSLocalizedDescriptionKey: description])
 
                         completion(nil, ErrorContainer(error: error, extraPayload: [:]))
                     }
                     return
                 }
-                discountsByProductIdentifier[discount.timestamp.stringValue] = discount
-                completion(discount.rc_dictionary, nil)
+                discountsByProductIdentifier["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
+                completion(promotionalOffer.rc_dictionary, nil)
             }
-
-            Purchases.shared.paymentDiscount(for: discountToUse,
-                                             product: product,
-                                             completion: paymentDiscountCompletion)
-
+            let storeProduct = StoreProduct(sk1Product: product)
+            Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
+                                                 product: storeProduct,
+                                                 completion: paymentDiscountCompletion)
         }
     }
 
@@ -433,7 +434,7 @@ import Purchases
     @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
         // todo: clean up force cast after migration to v4
         Purchases.addAttributionData(data,
-                                     from: RCAttributionNetwork(rawValue: network)!,
+                                     from: AttributionNetwork(rawValue: network)!,
                                      forNetworkUserId: networkUserId)
     }
 
@@ -466,7 +467,7 @@ import Purchases
 private extension CommonFunctionality {
 
     static func purchaserInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
-    -> ((Purchases.PurchaserInfo?, Error?) -> Void) {
+    -> ((CustomerInfo?, Error?) -> Void) {
         return { purchaserInfo, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
@@ -474,8 +475,8 @@ private extension CommonFunctionality {
             } else if let purchaserInfo = purchaserInfo {
                 block(purchaserInfo.dictionary, nil)
             } else {
-                let error = NSError(domain: Purchases.ErrorDomain,
-                                    code: Purchases.ErrorCode.unknownError.rawValue,
+                let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                                    code: ErrorCode.unknownError.rawValue,
                                     userInfo: [NSLocalizedDescriptionKey: description])
 
                 block(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -485,8 +486,8 @@ private extension CommonFunctionality {
     }
 
     static func product(with identifier: String, completion: @escaping (SKProduct?) -> Void) {
-        Purchases.shared.products([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier })
+        Purchases.shared.getProducts([identifier]) { products in
+            completion(products.first { $0.productIdentifier == identifier }?.sk1Product)
         }
     }
 
@@ -496,16 +497,16 @@ private extension CommonFunctionality {
             extraPayload["userCancelled"] = userCancelled
         }
 
-        let error = NSError(domain: Purchases.ErrorDomain,
-                            code: Purchases.ErrorCode.productNotAvailableForPurchaseError.rawValue,
+        let error = NSError(domain: RCPurchasesErrorCodeDomain,
+                            code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
         return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
     static func package(withIdentifier packageIdentifier: String,
                         offeringIdentifier: String,
-                        completion: @escaping(Purchases.Package?) -> Void) {
-        Purchases.shared.offerings { offerings, error in
+                        completion: @escaping(Package?) -> Void) {
+        Purchases.shared.getOfferings { offerings, error in
             let offering = offerings?.offering(identifier: offeringIdentifier)
             let package = offering?.package(identifier: packageIdentifier)
             completion(package)
@@ -513,11 +514,12 @@ private extension CommonFunctionality {
     }
 
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    static func discount(with identifier: String?, for product: SKProduct) -> SKProductDiscount? {
+    static func discount(with identifier: String?, for product: SKProduct) -> StoreProductDiscount? {
+        let storeProduct = StoreProduct(sk1Product: product)
         if identifier == nil {
-            return product.discounts.first
+            return storeProduct.discounts.first
         } else {
-            return product.discounts.first { $0.identifier == identifier }
+            return storeProduct.discounts.first { $0.offerIdentifier == identifier }
         }
     }
 
