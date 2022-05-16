@@ -1,5 +1,5 @@
 //
-//  CustomerInfoHybridAdditionsTests.swift
+//  CustomerInfo+HybridAdditionsTests.swift
 //  PurchasesHybridCommonTests
 //
 //  Created by Andrés Boedo on 6/10/20.

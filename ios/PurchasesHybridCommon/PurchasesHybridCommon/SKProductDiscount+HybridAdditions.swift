@@ -8,32 +8,28 @@
 
 import Foundation
 import StoreKit
+import RevenueCat
 
-@available(iOS 11.2, macOS 10.13.2, tvOS 11.2, *)
-@objc public extension SKProductDiscount {
+@objc public extension StoreProductDiscount {
 
     @objc var rc_currencyCode: String? {
-        return priceLocale.currencyCode
+        return currencyCode
     }
 
     @objc var rc_dictionary: [String: Any] {
 
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = priceLocale
-
         var dictionary: [String: Any] = [
-            "price": price.floatValue,
-            "priceString": formatter.string(from: price) ?? "",
-            "period": SKProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod),
-            "periodUnit": SKProduct.rc_normalized(subscriptionPeriodUnit: subscriptionPeriod.unit),
-            "periodNumberOfUnits": subscriptionPeriod.numberOfUnits,
+            "price": price,
+            "priceString": localizedPriceString,
+            "period": StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod),
+            "periodUnit": StoreProduct.rc_normalized(subscriptionPeriodUnit: subscriptionPeriod.unit),
+            "periodNumberOfUnits": subscriptionPeriod.value,
             "cycles": numberOfPeriods
         ]
         
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
-            if identifier != nil {
-                dictionary["identifier"] = identifier
+            if offerIdentifier != nil {
+                dictionary["identifier"] = offerIdentifier
             }
         }
         return dictionary
