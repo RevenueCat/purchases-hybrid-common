@@ -50,6 +50,8 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                 it("contains all the non subscription transactions") {
                     let transactionDateString = "1990-08-30T02:40:36Z"
 
+                    let expectedTransactionID = "expectedTransactionID"
+                    let expectedProductID = "expectedProductID"
                     let mockCustomerInfo = try CustomerInfo(data: [
                         "request_date": "2019-08-16T10:30:42Z",
                         "subscriber": [
@@ -57,9 +59,9 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             "first_seen": "2019-06-17T16:05:33Z",
                             "subscriptions": [:],
                             "non_subscriptions": [
-                                "productid": [
+                                expectedProductID: [
                                     [
-                                        "id": "transactionid",
+                                        "id": expectedTransactionID,
                                         "is_sandbox": true,
                                         "original_purchase_date": "1990-08-30T02:40:36Z",
                                         "purchase_date": transactionDateString,
@@ -73,16 +75,16 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let transactionDate = dateformatter.date(from: transactionDateString)!
 
                     let dictionary = mockCustomerInfo.dictionary
-                    let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
-                    expect(nonSubscriptionTransactions?.count) == 1
+                    let nonSubscriptionTransactions = try XCTUnwrap(dictionary["nonSubscriptionTransactions"] as? [Any])
+                    expect(nonSubscriptionTransactions.count) == 1
 
-                    let transactionDictionary = nonSubscriptionTransactions?[0] as? Dictionary<String, Any>
-                    expect(transactionDictionary?["revenueCatId"] as? String) == "transactionid"
-                    expect(transactionDictionary?["productId"] as? String) == "productid"
-                    expect(transactionDictionary?["purchaseDateMillis"] as? Double) == transactionDate.rc_millisecondsSince1970AsDouble()
+                    let transactionDictionary = try XCTUnwrap(nonSubscriptionTransactions[0] as? [String: Any])
+                    expect(transactionDictionary["revenueCatId"] as? String) == expectedTransactionID
+                    expect(transactionDictionary["productId"] as? String) == expectedProductID
+                    expect(transactionDictionary["purchaseDateMillis"] as? Double) == transactionDate.rc_millisecondsSince1970AsDouble()
 
 
-                    expect(transactionDictionary?["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
+                    expect(transactionDictionary["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it ("is empty when there are no non subscription transactions") {
                     let mockCustomerInfo = try CustomerInfo(data: [
