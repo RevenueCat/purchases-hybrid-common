@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
-@import Purchases;
+@import RevenueCat;
+@import StoreKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,14 +21,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testAPI {
     NSDictionary *dict;
-    dict = [[[RCEntitlementInfo alloc] init] dictionary];
-    dict = [[[RCEntitlementInfos alloc] init] dictionary];
-    dict = [[[RCOffering alloc] init] dictionary];
-    dict = [[[RCOfferings alloc] init] dictionary];
-    dict = [[[RCPackage alloc] init] dictionary:@""];
-    dict = [[[RCPurchaserInfo alloc] init] dictionary];
+    RCEntitlementInfo *entitlementInfo;
+    RCEntitlementInfos *entitlementInfos;
+    RCOffering *offering;
+    RCOfferings *offerings;
+    RCPackage *package;
+    RCCustomerInfo *customerInfo;
+    RCPromotionalOffer *promotionalOffer;
+    dict = [entitlementInfo dictionary];
+    dict = [entitlementInfos dictionary];
+    dict = [offering dictionary];
+    dict = [offerings dictionary];
+    dict = [package dictionary:@""];
+    dict = [customerInfo dictionary];
     if (@available(iOS 12.2, *)) {
-        [[[SKPaymentDiscount alloc] init] rc_dictionary];
+        [promotionalOffer rc_dictionary];
     }
     SKProduct *product = [[SKProduct alloc] init];
     dict = [product rc_dictionary];
@@ -38,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
         dict = [[[SKProductDiscount alloc] init] rc_dictionary];
     }
 
-    RCTransaction *transaction;
+    RCStoreTransaction *transaction;
     dict = [transaction dictionary];
 
 }

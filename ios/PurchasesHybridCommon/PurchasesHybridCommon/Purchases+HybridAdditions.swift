@@ -1,5 +1,5 @@
 //
-//  PurchasesExtensions.swift
+//  Purchases+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
@@ -7,21 +7,19 @@
 //
 
 import Foundation
-// todo: remove testable
-@testable import Purchases.Purchases
-import PurchasesCoreSwift
+import RevenueCat
 
 @objc public extension Purchases {
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:
-            platformFlavor:platformFlavorVersion:dangerousSettings:)
-        static func configure(apiKey: String,
-                              appUserID: String?,
-                              observerMode: Bool,
-                              userDefaultsSuiteName: String?,
-                              platformFlavor: String?,
-                              platformFlavorVersion: String?,
-                              dangerousSettings: DangerousSettings?) -> Purchases {
+    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
+            dangerousSettings:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          observerMode: Bool,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          dangerousSettings: DangerousSettings?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -34,13 +32,9 @@ import PurchasesCoreSwift
                               appUserID: appUserID,
                               observerMode: observerMode,
                               userDefaults: userDefaults,
+                              // todo: provide option
+                              useStoreKit2IfAvailable: false,
                               dangerousSettings: dangerousSettings)
-    }
-
-
-    // todo: make internal
-    @objc static func setDefaultInstance(_ instance: Purchases) {
-
     }
 
 }

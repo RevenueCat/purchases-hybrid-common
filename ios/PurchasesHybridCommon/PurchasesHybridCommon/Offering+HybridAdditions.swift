@@ -1,5 +1,5 @@
 //
-//  OfferingExtensions.swift
+//  Offering+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.Offering {
+@objc public extension Offering {
 
     @objc var dictionary: [String: Any] {
         var result: [String: Any] = [

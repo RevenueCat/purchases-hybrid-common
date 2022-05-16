@@ -1,5 +1,5 @@
 //
-//  EntitlementInfoExtensions.swift
+//  EntitlementInfo+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
@@ -7,43 +7,36 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.EntitlementInfo {
+@objc public extension EntitlementInfo {
 
-    @objc var dictionary: [String: Any] {
-
-        let latestPurchaseNSDate = latestPurchaseDate as NSDate
-        let originalPurchaseNSDate = originalPurchaseDate as NSDate
-        let expirationNSDate = expirationDate as? NSDate
-        let unsubscribedDetectedAtNSDate = unsubscribeDetectedAt as? NSDate
-        let billingIssueDetectedAtNSDate = billingIssueDetectedAt as? NSDate
-
+    var dictionary: [String: Any] {
         return [
             "identifier": identifier,
             "isActive": isActive,
             "willRenew": willRenew,
             "periodType": periodTypeString,
-            "latestPurchaseDate": latestPurchaseNSDate.rc_formattedAsISO8601(),
-            "latestPurchaseDateMillis": latestPurchaseNSDate.rc_millisecondsSince1970AsDouble(),
-            "originalPurchaseDate": originalPurchaseNSDate.rc_formattedAsISO8601(),
-            "originalPurchaseDateMillis": originalPurchaseNSDate.rc_millisecondsSince1970AsDouble(),
-            "expirationDate": expirationNSDate?.rc_formattedAsISO8601() ?? NSNull(),
-            "expirationDateMillis": expirationNSDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "latestPurchaseDate": latestPurchaseDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "latestPurchaseDateMillis": latestPurchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "originalPurchaseDate": originalPurchaseDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "originalPurchaseDateMillis": originalPurchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "expirationDate": expirationDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "expirationDateMillis": expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "store": storeString,
             "productIdentifier": productIdentifier,
             "isSandbox": isSandbox,
-            "unsubscribedDetectedAt": unsubscribedDetectedAtNSDate?.rc_formattedAsISO8601() ?? NSNull(),
-            "unsubscribedDetectedAtMillis": unsubscribedDetectedAtNSDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
-            "billingIssueDetectedAt": billingIssueDetectedAtNSDate?.rc_formattedAsISO8601() ?? NSNull(),
-            "billingIssueDetectedAtMillis": billingIssueDetectedAtNSDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "unsubscribedDetectedAt": unsubscribeDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
+            "unsubscribedDetectedAtMillis": unsubscribeDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "billingIssueDetectedAt": billingIssueDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
+            "billingIssueDetectedAtMillis": billingIssueDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "ownershipType": ownershipTypeString
         ]
     }
 
 }
 
-private extension Purchases.EntitlementInfo {
+private extension EntitlementInfo {
 
     var periodTypeString: String {
         switch periodType {

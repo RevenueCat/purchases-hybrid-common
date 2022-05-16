@@ -1,5 +1,5 @@
 //
-//  EntitlementInfosExtensions.swift
+//  EntitlementInfos+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
 //  Created by Andrés Boedo on 4/13/22.
@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import Purchases
+import RevenueCat
 
-@objc public extension Purchases.EntitlementInfos {
+@objc public extension EntitlementInfos {
 
-    @objc var dictionary: [String: Any] {
+    var dictionary: [String: Any] {
         return [
             "all": all.mapValues { $0.dictionary },
             "active": active.mapValues { $0.dictionary }

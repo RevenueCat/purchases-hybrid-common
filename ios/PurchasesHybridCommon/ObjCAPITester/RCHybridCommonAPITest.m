@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
-@import Purchases;
+@import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
 @interface RCCommonFunctionalityAPITest: NSObject
@@ -90,10 +90,16 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality makeDeferredPurchase:^(RCPurchaseCompletedBlock _Nonnull purchaseCompleted) {
+    [RCCommonFunctionality makeDeferredPurchase:^(void (^ _Nonnull startDeferredPurchase)
+                                                  (RCStoreTransaction * _Nullable storeTransaction,
+                                                   RCCustomerInfo * _Nullable customerInfo,
+                                                   NSError * _Nullable error,
+                                                   BOOL userCancelled)) {
+
     }
-                                completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                completionBlock:^(NSDictionary<NSString *,id> * _Nullable customerInfo,
                                                   RCErrorContainer * _Nullable error) {
+
     }];
 
     [RCCommonFunctionality setFinishTransactions:NO];
