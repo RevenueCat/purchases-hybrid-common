@@ -15,8 +15,7 @@ import RevenueCat
         return [
             "identifier": identifier,
             "packageType": packageType.name,
-            // todo: remove force-unwrap
-            "product": storeProduct.sk1Product!.rc_dictionary,
+            "product": storeProduct.rc_dictionary,
             "offeringIdentifier": offeringIdentifier
         ]
     }

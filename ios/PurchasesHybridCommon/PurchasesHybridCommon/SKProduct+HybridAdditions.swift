@@ -10,27 +10,16 @@ import Foundation
 import StoreKit
 import RevenueCat
 
-@objc public extension SKProduct {
+@objc public extension StoreProduct {
 
     @objc var rc_dictionary: [String: Any] {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.locale = priceLocale
-
-        // Note: although identifier, description and title are supposed to be non-nil, we've seen instances
-        // where this isn't true in practice (StoreKit bugs).
-        // So we cast to optional and then check if it's actually nil.
-        let nonNilProductIdentifier = productIdentifier as String? ?? ""
-        let nonNilDescription = description as String? ?? ""
-        let nonNilTitle = localizedTitle as String? ?? ""
-
         var dictionary: [String: Any] = [
-            "identifier": nonNilProductIdentifier,
-            "description": nonNilDescription,
-            "title": nonNilTitle,
-            "price": price.floatValue,
-            "price_string": formatter.string(from: price) ?? "",
-            "currency_code": priceLocale.currencyCode ?? NSNull(),
+            "identifier": productIdentifier,
+            "description": localizedDescription,
+            "title": localizedTitle,
+            "price": price,
+            "price_string": localizedPriceString,
+            "currency_code": currencyCode ?? NSNull(),
             "intro_price": NSNull(),
             "intro_price_string": NSNull(),
             "intro_price_period": NSNull(),
@@ -42,14 +31,14 @@ import RevenueCat
         ]
 
         if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
-           let introductoryPrice = introductoryPrice {
-            dictionary["intro_price"] = introductoryPrice.price.floatValue
-            dictionary["intro_price_string"] = formatter.string(from: introductoryPrice.price)
-            dictionary["intro_price_period"] = SKProduct.rc_normalized(subscriptionPeriod: introductoryPrice.subscriptionPeriod)
-            dictionary["intro_price_period_unit"] = SKProduct.rc_normalized(subscriptionPeriodUnit: introductoryPrice.subscriptionPeriod.unit)
-            dictionary["intro_price_period_number_of_units"] = introductoryPrice.subscriptionPeriod.numberOfUnits
-            dictionary["intro_price_cycles"] = introductoryPrice.numberOfPeriods
-            dictionary["introPrice"] = introductoryPrice.rc_dictionary
+           let introductoryDiscount = introductoryDiscount {
+            dictionary["intro_price"] = introductoryDiscount.price
+            dictionary["intro_price_string"] = introductoryDiscount.localizedPriceString
+            dictionary["intro_price_period"] = StoreProduct.rc_normalized(subscriptionPeriod: introductoryDiscount.subscriptionPeriod)
+            dictionary["intro_price_period_unit"] = StoreProduct.rc_normalized(subscriptionPeriodUnit: introductoryDiscount.subscriptionPeriod.unit)
+            dictionary["intro_price_period_number_of_units"] = introductoryDiscount.subscriptionPeriod.value
+            dictionary["intro_price_cycles"] = introductoryDiscount.numberOfPeriods
+            dictionary["introPrice"] = introductoryDiscount.rc_dictionary
         }
 
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
@@ -59,9 +48,8 @@ import RevenueCat
         return dictionary
     }
 
-    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, *)
     @objc(rc_normalizedSubscriptionPeriod:)
-    static func rc_normalized(subscriptionPeriod: SKProductSubscriptionPeriod) -> String {
+    static func rc_normalized(subscriptionPeriod: SubscriptionPeriod) -> String {
         let unitString: String
         switch subscriptionPeriod.unit {
         case .day:
@@ -75,12 +63,11 @@ import RevenueCat
         @unknown default:
             unitString = "-"
         }
-        return "P\(subscriptionPeriod.numberOfUnits)\(unitString)"
+        return "P\(subscriptionPeriod.value)\(unitString)"
     }
 
-    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, *)
     @objc(rc_normalizedSubscriptionPeriodUnit:)
-    static func rc_normalized(subscriptionPeriodUnit: SKProduct.PeriodUnit) -> String {
+    static func rc_normalized(subscriptionPeriodUnit: SubscriptionPeriod.Unit) -> String {
         switch subscriptionPeriodUnit {
         case .day:
             return "DAY"
