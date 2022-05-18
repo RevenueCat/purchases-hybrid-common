@@ -89,10 +89,10 @@ NS_ASSUME_NONNULL_BEGIN
                                                     completionBlock:^(NSDictionary<NSString *, NSObject *>
                                                                       * _Nonnull eligibilities) {
     }];
-    [RCCommonFunctionality paymentDiscountForProductIdentifier:@""
-                                                      discount:@""
-                                               completionBlock:^(NSDictionary * _Nullable discount,
-                                                                 RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality promotionalOfferForProductIdentifier:@""
+                                                       discount:@""
+                                                completionBlock:^(NSDictionary * _Nullable discount,
+                                                                  RCErrorContainer * _Nullable error) {
     }];
 
     if (@available(iOS 14.0, *)) {

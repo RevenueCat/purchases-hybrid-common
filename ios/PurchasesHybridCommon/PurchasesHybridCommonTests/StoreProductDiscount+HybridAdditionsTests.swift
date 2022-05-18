@@ -23,7 +23,7 @@ class StoreProductDiscountHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                let storeProductDiscount = StoreProductDiscount(sk1Discount: productDiscount)!
+                let storeProductDiscount = try XCTUnwrap(StoreProductDiscount(sk1Discount: productDiscount))
                 guard let receivedDictionary = storeProductDiscount.rc_dictionary as? [String: NSObject] else {
                     fatalError("received rc_dictionary is not in the right format")
                 }

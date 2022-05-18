@@ -308,10 +308,10 @@ import RevenueCat
         }
     }
 
-    @objc(paymentDiscountForProductIdentifier:discount:completionBlock:)
-    static func paymentDiscount(for productIdentifier: String,
-                                discountIdentifier: String?,
-                                completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    @objc(promotionalOfferForProductIdentifier:discount:completionBlock:)
+    static func promotionalOffer(for productIdentifier: String,
+                                 discountIdentifier: String?,
+                                 completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
             completion(nil, nil)
             return
@@ -328,7 +328,7 @@ import RevenueCat
                 return
             }
 
-            let paymentDiscountCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
+            let promotionalOfferCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
                 guard let promotionalOffer = promotionalOffer else {
                     if let error = error {
                         completion(nil, ErrorContainer(error: error, extraPayload: [:]))
@@ -347,7 +347,7 @@ import RevenueCat
             let storeProduct = StoreProduct(sk1Product: product)
             Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
                                                  product: storeProduct,
-                                                 completion: paymentDiscountCompletion)
+                                                 completion: promotionalOfferCompletion)
         }
     }
 
