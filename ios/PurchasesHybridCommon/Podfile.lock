@@ -1,28 +1,32 @@
 PODS:
   - Nimble (9.2.1)
-  - Purchases (3.14.1):
-    - PurchasesCoreSwift (= 3.14.1)
-  - PurchasesCoreSwift (3.14.1)
-  - Quick (4.0.0)
+  - PurchasesHybridCommon (2.0.1):
+    - RevenueCat (= 4.3.0)
+  - Quick (5.0.1)
+  - RevenueCat (4.3.0)
 
 DEPENDENCIES:
   - Nimble
-  - Purchases (= 3.14.1)
+  - PurchasesHybridCommon (from `../../`)
   - Quick
+  - RevenueCat (= 4.3.0)
 
 SPEC REPOS:
   trunk:
     - Nimble
-    - Purchases
-    - PurchasesCoreSwift
     - Quick
+    - RevenueCat
+
+EXTERNAL SOURCES:
+  PurchasesHybridCommon:
+    :path: "../../"
 
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  Purchases: b714751c386c2204d2d5aafaa903fd424a25cd59
-  PurchasesCoreSwift: 2cf98c52dd4b785177539fbfd1c32f60c89eafe7
-  Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
+  PurchasesHybridCommon: 2326871bfa7b6e15520dbfd55acd62faf0c49a6e
+  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
+  RevenueCat: bcbf0d68e546f947e00b7ea68d4f2d1c913e7767
 
-PODFILE CHECKSUM: 2b7e247b67bd0d3db476341b10491d3d024d0880
+PODFILE CHECKSUM: 700fdd89fd1c909be56700137b3e058e145f6b32
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

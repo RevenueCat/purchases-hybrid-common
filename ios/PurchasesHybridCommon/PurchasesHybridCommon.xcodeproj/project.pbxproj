@@ -7,50 +7,49 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */; };
-		2D36920D2540C08600647826 /* PurchasesHybridCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D36920C2540C08600647826 /* PurchasesHybridCommon.swift */; };
-		2D370653261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */; };
+		2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */; };
+		2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */; };
 		2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */; };
-		2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF362437AF5200FF4EE4 /* SKPaymentDiscount+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */; };
-		2D54BF3B2437AF6400FF4EE4 /* RCEntitlementInfo+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */; };
-		2D54BF3C2437AF6400FF4EE4 /* RCEntitlementInfos+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */; };
-		2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */; };
-		2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */; };
-		2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */; };
-		2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */; };
-		2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */; };
-		2D54BF422437AF6400FF4EE4 /* SKPaymentDiscount+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */; };
-		2D54BF432437AF6400FF4EE4 /* SKProduct+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */; };
-		2D54BF442437AF6400FF4EE4 /* SKProductDiscount+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */; };
+		2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */; };
+		2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */; };
+		2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */; };
+		2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D557F77280710FA0090FACC /* ObjCAPITester.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */; };
 		2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
-		2D6E333C2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */; };
-		2D6E335524521B450022A971 /* NSDate+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E335324521B440022A971 /* NSDate+HybridAdditions.m */; };
+		2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E333B2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
-		2DDE0B4F24734E9300899E7B /* NSDate+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E334F24521B440022A971 /* NSDate+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		35DCB4F8250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */; };
+		2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
+		2DD3D1862810AF5A00A19EC6 /* Package+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* Package+HybridAdditions.swift */; };
+		2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
+		2DD3D1882810AF5A00A19EC6 /* SKProductDiscount+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D962807593100676D73 /* SKProductDiscount+HybridAdditions.swift */; };
+		2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */; };
+		2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DED033B280F5759009C5D65 /* CommonFunctionality.swift */; };
+		2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */; };
+		2DD3D18C2810AF5A00A19EC6 /* Purchases+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9C2807626100676D73 /* Purchases+HybridAdditions.swift */; };
+		2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* StoreTransaction+HybridAdditions.swift */; };
+		2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */; };
+		2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfo+HybridAdditions.swift */; };
+		2DD3D1902810AF5A00A19EC6 /* SKProduct+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */; };
+		2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
+		2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */; };
+		2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */; };
+		2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfos+HybridAdditions.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
-		37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
-		A1FF1B0B2CFEA5539424D049 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
+		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
+		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 		C5335FED2A63D9B5B628774F /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2D4FDFD428071F7C00863298 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D54BEFF2437AD5800FF4EE4;
+			remoteInfo = PurchasesHybridCommon;
+		};
 		2D6E33252450F68C0022A971 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
@@ -61,57 +60,58 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSDateHybridAdditionsTests.swift; sourceTree = "<group>"; };
-		2D36920C2540C08600647826 /* PurchasesHybridCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommon.swift; sourceTree = "<group>"; };
-		2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+ProtectedExtensions.h"; sourceTree = "<group>"; };
-		2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaserInfoHybridAdditionsTests.swift; sourceTree = "<group>"; };
+		03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.release.xcconfig"; sourceTree = "<group>"; };
+		2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridCommonTests.swift; sourceTree = "<group>"; };
+		2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditionsAPITest.m"; sourceTree = "<group>"; };
+		2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridCommonDictionaryConversionsAPITest.m; sourceTree = "<group>"; };
+		2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainerAPITests.m; sourceTree = "<group>"; };
+		2D4FDFE428073A9300863298 /* EntitlementInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D4FDFE62807436200863298 /* StoreTransaction+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreTransaction+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D4FDFE82807489600863298 /* Purchases.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Purchases.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D4FDFEA28074C3800863298 /* EntitlementInfos+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfos+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D4FDFEC28074EB900863298 /* ErrorContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainer.swift; sourceTree = "<group>"; };
 		2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D557F75280710FA0090FACC /* ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D557F77280710FA0090FACC /* ObjCAPITester.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCAPITester.h; sourceTree = "<group>"; };
+		2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridCommonAPITest.m; sourceTree = "<group>"; };
 		2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommon.h; sourceTree = "<group>"; };
 		2D6E330C2450F5880022A971 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D6E33232450F68C0022A971 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D6E333A2450F7A60022A971 /* PurchasesHybridCommonTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PurchasesHybridCommonTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKProductDiscountHybridAdditionsTests.swift; sourceTree = "<group>"; };
-		2D6E334F24521B440022A971 /* NSDate+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+HybridAdditions.h"; sourceTree = "<group>"; };
-		2D6E335324521B440022A971 /* NSDate+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+HybridAdditions.m"; sourceTree = "<group>"; };
+		2D6E333B2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreProductDiscount+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offering+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D942807580000676D73 /* Package+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D962807593100676D73 /* SKProductDiscount+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProductDiscount+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProduct+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromotionalOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D9C2807626100676D73 /* Purchases+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchases+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offerings+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesHybridAdditionsTests.swift; sourceTree = "<group>"; };
-		2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOfferings+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchases+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfos+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProductDiscount+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCCommonFunctionality.m; sourceTree = "<group>"; };
-		2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPurchaserInfo+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKPaymentDiscount+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProductDiscount+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchaserInfo+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCEntitlementInfo+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOffering+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKPaymentDiscount+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPackage+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCEntitlementInfos+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCOffering+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCEntitlementInfo+HybridAdditions.m"; sourceTree = "<group>"; };
-		2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCPackage+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCCommonFunctionality.h; sourceTree = "<group>"; };
-		2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCErrorContainer.h; sourceTree = "<group>"; };
-		2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+HybridAdditions.h"; sourceTree = "<group>"; };
-		2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCErrorContainer.m; sourceTree = "<group>"; };
-		2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCOfferings+HybridAdditions.m"; sourceTree = "<group>"; };
-		35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTransaction+HybridAdditions.h"; sourceTree = "<group>"; };
-		35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTransaction+HybridAdditions.m"; sourceTree = "<group>"; };
+		2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatalErrorUtil.swift; sourceTree = "<group>"; };
+		2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Expectations.swift"; sourceTree = "<group>"; };
+		2DED033B280F5759009C5D65 /* CommonFunctionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFunctionality.swift; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
-		37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCPurchases+HybridAdditions.m"; sourceTree = "<group>"; };
-		3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.debug.xcconfig"; sourceTree = "<group>"; };
 		4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		69FA3C0F326C65DC3146269B /* Pods_PurchasesHybridCommonSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommonSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		711DF19865BA5A0D096991CE /* Pods-PurchasesHybridCommon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.release.xcconfig"; sourceTree = "<group>"; };
+		7242C47A3C4806DEA1CF448A /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.release.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.release.xcconfig"; sourceTree = "<group>"; };
 		8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
-		A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
+		AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
+		C48588E24A992EC358A9B0CF /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.debug.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,12 +123,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2D557F72280710FA0090FACC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2D6E331C2450F68C0022A971 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */,
-				A1FF1B0B2CFEA5539424D049 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */,
+				B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,12 +151,16 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
-		2D370651261E178A00C1DB72 /* ProtectedExtensions */ = {
+		2D557F76280710FA0090FACC /* ObjCAPITester */ = {
 			isa = PBXGroup;
 			children = (
-				2D370652261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h */,
+				2D557F77280710FA0090FACC /* ObjCAPITester.h */,
+				2D557F8C280711970090FACC /* RCHybridCommonAPITest.m */,
+				2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */,
+				2D4FDFDE2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m */,
+				2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */,
 			);
-			path = ProtectedExtensions;
+			path = ObjCAPITester;
 			sourceTree = "<group>";
 		};
 		2D6E33202450F68C0022A971 /* PurchasesHybridCommonTests */ = {
@@ -156,13 +168,13 @@
 			children = (
 				2D37064E261DFD1C00C1DB72 /* Mocks */,
 				2D6E33232450F68C0022A971 /* Info.plist */,
-				2D6E333B2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift */,
-				2D6E333A2450F7A60022A971 /* PurchasesHybridCommonTests-Bridging-Header.h */,
+				2D6E333B2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift */,
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
-				2D0D207F245797B900614E47 /* NSDateHybridAdditionsTests.swift */,
-				2D44523D2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift */,
+				2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */,
+				2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */,
 				2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */,
 				35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */,
+				2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -173,6 +185,7 @@
 				2D6E330C2450F5880022A971 /* Info.plist */,
 				2DD4B8BB24377B470070344F /* PurchasesHybridCommon */,
 				2D6E33202450F68C0022A971 /* PurchasesHybridCommonTests */,
+				2D557F76280710FA0090FACC /* ObjCAPITester */,
 				2DD4B8BA24377B470070344F /* Products */,
 				2DD4B90B243782C30070344F /* Frameworks */,
 				DF227D6163AC4EAD40A6905D /* Pods */,
@@ -184,6 +197,7 @@
 			children = (
 				2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */,
 				2D6E331F2450F68C0022A971 /* PurchasesHybridCommonTests.xctest */,
+				2D557F75280710FA0090FACC /* ObjCAPITester.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,37 +205,22 @@
 		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
 			isa = PBXGroup;
 			children = (
-				2D370651261E178A00C1DB72 /* ProtectedExtensions */,
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
-				2D6E334F24521B440022A971 /* NSDate+HybridAdditions.h */,
-				2D6E335324521B440022A971 /* NSDate+HybridAdditions.m */,
-				2DD4B8D924377B6B0070344F /* RCCommonFunctionality.h */,
-				2DD4B8CA24377B6B0070344F /* RCCommonFunctionality.m */,
-				2DD4B8D124377B6B0070344F /* RCEntitlementInfo+HybridAdditions.h */,
-				2DD4B8D724377B6B0070344F /* RCEntitlementInfo+HybridAdditions.m */,
-				2DD4B8C824377B6A0070344F /* RCEntitlementInfos+HybridAdditions.h */,
-				2DD4B8D524377B6B0070344F /* RCEntitlementInfos+HybridAdditions.m */,
-				2DD4B8DA24377B6B0070344F /* RCErrorContainer.h */,
-				2DD4B8DC24377B6B0070344F /* RCErrorContainer.m */,
-				2DD4B8D624377B6B0070344F /* RCOffering+HybridAdditions.h */,
-				2DD4B8D224377B6B0070344F /* RCOffering+HybridAdditions.m */,
-				2DD4B8C524377B6A0070344F /* RCOfferings+HybridAdditions.h */,
-				2DD4B8DD24377B6B0070344F /* RCOfferings+HybridAdditions.m */,
-				2DD4B8D824377B6B0070344F /* RCPackage+HybridAdditions.h */,
-				2DD4B8D424377B6B0070344F /* RCPackage+HybridAdditions.m */,
-				2DD4B8CB24377B6B0070344F /* RCPurchaserInfo+HybridAdditions.h */,
-				2DD4B8D024377B6B0070344F /* RCPurchaserInfo+HybridAdditions.m */,
-				2DD4B8C624377B6A0070344F /* RCPurchases+HybridAdditions.h */,
-				2DD4B8CE24377B6B0070344F /* SKPaymentDiscount+HybridAdditions.h */,
-				2DD4B8D324377B6B0070344F /* SKPaymentDiscount+HybridAdditions.m */,
-				2DD4B8DB24377B6B0070344F /* SKProduct+HybridAdditions.h */,
-				2DD4B8C724377B6A0070344F /* SKProduct+HybridAdditions.m */,
-				2DD4B8C924377B6B0070344F /* SKProductDiscount+HybridAdditions.h */,
-				2DD4B8CF24377B6B0070344F /* SKProductDiscount+HybridAdditions.m */,
-				37E35B6C44D53371F5E019D7 /* RCPurchases+HybridAdditions.m */,
-				35DCB4F5250C29D500C57D14 /* RCTransaction+HybridAdditions.h */,
-				35DCB4F7250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m */,
-				2D36920C2540C08600647826 /* PurchasesHybridCommon.swift */,
+				2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */,
+				2D4FDFE428073A9300863298 /* EntitlementInfo+HybridAdditions.swift */,
+				2D4FDFE62807436200863298 /* StoreTransaction+HybridAdditions.swift */,
+				2D4FDFEA28074C3800863298 /* EntitlementInfos+HybridAdditions.swift */,
+				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
+				2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */,
+				2D900D942807580000676D73 /* Package+HybridAdditions.swift */,
+				2D900D962807593100676D73 /* SKProductDiscount+HybridAdditions.swift */,
+				2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */,
+				2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */,
+				2D900D9C2807626100676D73 /* Purchases+HybridAdditions.swift */,
+				2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */,
+				2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */,
+				2DED033B280F5759009C5D65 /* CommonFunctionality.swift */,
+				2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -229,8 +228,12 @@
 		2DD4B90B243782C30070344F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2D4FDFE82807489600863298 /* Purchases.framework */,
 				7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */,
-				27D50DA933E3B3B6043C3BA4 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */,
+				4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */,
+				69FA3C0F326C65DC3146269B /* Pods_PurchasesHybridCommonSwift.framework */,
+				7242C47A3C4806DEA1CF448A /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework */,
+				E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -238,12 +241,18 @@
 		DF227D6163AC4EAD40A6905D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */,
-				3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */,
 				4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */,
 				8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */,
 				460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */,
 				711DF19865BA5A0D096991CE /* Pods-PurchasesHybridCommon.release.xcconfig */,
+				03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */,
+				21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */,
+				C48588E24A992EC358A9B0CF /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig */,
+				9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */,
+				E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */,
+				874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */,
+				AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */,
+				C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -255,22 +264,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D54BF2D2437AF5200FF4EE4 /* RCCommonFunctionality.h in Headers */,
-				2D54BF2E2437AF5200FF4EE4 /* RCEntitlementInfo+HybridAdditions.h in Headers */,
-				2D54BF2F2437AF5200FF4EE4 /* RCEntitlementInfos+HybridAdditions.h in Headers */,
-				2D54BF302437AF5200FF4EE4 /* RCErrorContainer.h in Headers */,
-				2D54BF312437AF5200FF4EE4 /* RCOffering+HybridAdditions.h in Headers */,
-				2D54BF322437AF5200FF4EE4 /* RCOfferings+HybridAdditions.h in Headers */,
-				2D54BF332437AF5200FF4EE4 /* RCPackage+HybridAdditions.h in Headers */,
-				2D54BF342437AF5200FF4EE4 /* RCPurchaserInfo+HybridAdditions.h in Headers */,
-				2D54BF352437AF5200FF4EE4 /* RCPurchases+HybridAdditions.h in Headers */,
-				2D54BF362437AF5200FF4EE4 /* SKPaymentDiscount+HybridAdditions.h in Headers */,
-				2D54BF372437AF5200FF4EE4 /* SKProduct+HybridAdditions.h in Headers */,
-				35DCB4F6250C29DE00C57D14 /* RCTransaction+HybridAdditions.h in Headers */,
-				2D54BF382437AF5200FF4EE4 /* SKProductDiscount+HybridAdditions.h in Headers */,
-				2D370653261E17A400C1DB72 /* RCPurchases+ProtectedExtensions.h in Headers */,
 				2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */,
-				2DDE0B4F24734E9300899E7B /* NSDate+HybridAdditions.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D557F70280710FA0090FACC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D557F85280710FA0090FACC /* ObjCAPITester.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,15 +298,34 @@
 			productReference = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		2D557F74280710FA0090FACC /* ObjCAPITester */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D557F8A280710FA0090FACC /* Build configuration list for PBXNativeTarget "ObjCAPITester" */;
+			buildPhases = (
+				1793467B806706DD4D7D846E /* [CP] Check Pods Manifest.lock */,
+				2D557F70280710FA0090FACC /* Headers */,
+				2D557F71280710FA0090FACC /* Sources */,
+				2D557F72280710FA0090FACC /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2D4FDFD528071F7C00863298 /* PBXTargetDependency */,
+			);
+			name = ObjCAPITester;
+			productName = ObjCAPITester;
+			productReference = 2D557F75280710FA0090FACC /* ObjCAPITester.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		2D6E331E2450F68C0022A971 /* PurchasesHybridCommonTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D6E33272450F68C0022A971 /* Build configuration list for PBXNativeTarget "PurchasesHybridCommonTests" */;
 			buildPhases = (
-				61AA97A164B860C1502E5AEF /* [CP] Check Pods Manifest.lock */,
+				04B57A8F90D20483A73AC37F /* [CP] Check Pods Manifest.lock */,
 				2D6E331B2450F68C0022A971 /* Sources */,
 				2D6E331C2450F68C0022A971 /* Frameworks */,
 				2D6E331D2450F68C0022A971 /* Resources */,
-				0A9DBA39ED8B0B35A0A75152 /* [CP] Embed Pods Frameworks */,
+				A8A1DFF3284AB3935BB3C76B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -322,13 +343,16 @@
 		2DD4B8B124377B470070344F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1140;
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = RevenueCat;
 				TargetAttributes = {
 					2D54BEFF2437AD5800FF4EE4 = {
 						CreatedOnToolsVersion = 11.4;
 						LastSwiftMigration = 1200;
+					};
+					2D557F74280710FA0090FACC = {
+						CreatedOnToolsVersion = 13.3;
 					};
 					2D6E331E2450F68C0022A971 = {
 						CreatedOnToolsVersion = 11.4.1;
@@ -351,6 +375,7 @@
 			targets = (
 				2D54BEFF2437AD5800FF4EE4 /* PurchasesHybridCommon */,
 				2D6E331E2450F68C0022A971 /* PurchasesHybridCommonTests */,
+				2D557F74280710FA0090FACC /* ObjCAPITester */,
 			);
 		};
 /* End PBXProject section */
@@ -373,24 +398,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0A9DBA39ED8B0B35A0A75152 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		61AA97A164B860C1502E5AEF /* [CP] Check Pods Manifest.lock */ = {
+		04B57A8F90D20483A73AC37F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -406,6 +414,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1793467B806706DD4D7D846E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ObjCAPITester-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -434,6 +464,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A8A1DFF3284AB3935BB3C76B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -441,21 +488,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D54BF3A2437AF6400FF4EE4 /* RCCommonFunctionality.m in Sources */,
-				2D54BF3B2437AF6400FF4EE4 /* RCEntitlementInfo+HybridAdditions.m in Sources */,
-				2D54BF3C2437AF6400FF4EE4 /* RCEntitlementInfos+HybridAdditions.m in Sources */,
-				2D54BF3D2437AF6400FF4EE4 /* RCErrorContainer.m in Sources */,
-				2D54BF3E2437AF6400FF4EE4 /* RCOffering+HybridAdditions.m in Sources */,
-				2D54BF3F2437AF6400FF4EE4 /* RCOfferings+HybridAdditions.m in Sources */,
-				2D6E335524521B450022A971 /* NSDate+HybridAdditions.m in Sources */,
-				2D54BF402437AF6400FF4EE4 /* RCPackage+HybridAdditions.m in Sources */,
-				2D54BF412437AF6400FF4EE4 /* RCPurchaserInfo+HybridAdditions.m in Sources */,
-				35DCB4F8250C2A1F00C57D14 /* RCTransaction+HybridAdditions.m in Sources */,
-				2D54BF422437AF6400FF4EE4 /* SKPaymentDiscount+HybridAdditions.m in Sources */,
-				2D54BF432437AF6400FF4EE4 /* SKProduct+HybridAdditions.m in Sources */,
-				2D54BF442437AF6400FF4EE4 /* SKProductDiscount+HybridAdditions.m in Sources */,
-				37E3527F13EEC1A242A41ECB /* RCPurchases+HybridAdditions.m in Sources */,
-				2D36920D2540C08600647826 /* PurchasesHybridCommon.swift in Sources */,
+				2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */,
+				2DD3D1882810AF5A00A19EC6 /* SKProductDiscount+HybridAdditions.swift in Sources */,
+				2DD3D1902810AF5A00A19EC6 /* SKProduct+HybridAdditions.swift in Sources */,
+				2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */,
+				2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */,
+				2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */,
+				2DD3D1862810AF5A00A19EC6 /* Package+HybridAdditions.swift in Sources */,
+				2DD3D18C2810AF5A00A19EC6 /* Purchases+HybridAdditions.swift in Sources */,
+				2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */,
+				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
+				2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */,
+				2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */,
+				2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */,
+				2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */,
+				2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D557F71280710FA0090FACC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */,
+				2D4FDFDF2807341B00863298 /* RCHybridCommonDictionaryConversionsAPITest.m in Sources */,
+				2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */,
+				2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,11 +521,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D0D2080245797B900614E47 /* NSDateHybridAdditionsTests.swift in Sources */,
+				2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */,
+				2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */,
 				2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */,
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
-				2D6E333C2450F7A60022A971 /* SKProductDiscountHybridAdditionsTests.swift in Sources */,
-				2D44523E2491198A006AA26F /* PurchaserInfoHybridAdditionsTests.swift in Sources */,
+				2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */,
+				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
 			);
@@ -476,6 +535,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2D4FDFD528071F7C00863298 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D54BEFF2437AD5800FF4EE4 /* PurchasesHybridCommon */;
+			targetProxy = 2D4FDFD428071F7C00863298 /* PBXContainerItemProxy */;
+		};
 		2D6E33262450F68C0022A971 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 2D54BEFF2437AD5800FF4EE4 /* PurchasesHybridCommon */;
@@ -498,13 +562,13 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommon;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -513,9 +577,11 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Debug;
 		};
@@ -533,13 +599,13 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommon;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -547,57 +613,143 @@
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos watchsimulator watchos appletvsimulator appletvos";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Release;
+		};
+		2D557F86280710FA0090FACC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8SXR2327BM;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.ObjCAPITester;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
+			};
+			name = Debug;
+		};
+		2D557F87280710FA0090FACC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */;
+			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8SXR2327BM;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.ObjCAPITester;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+				TVOS_DEPLOYMENT_TARGET = 11.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Release;
 		};
 		2D6E33282450F68C0022A971 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7ED3A67A7FCB75F4706E21D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
+			baseConfigurationReference = AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "PurchasesHybridCommonTests/PurchasesHybridCommonTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.2;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Debug;
 		};
 		2D6E33292450F68C0022A971 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3A8575F56F2F388A97BA04D3 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
+			baseConfigurationReference = C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "PurchasesHybridCommonTests/PurchasesHybridCommonTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 11.2;
+				WATCHOS_DEPLOYMENT_TARGET = 6.2;
 			};
 			name = Release;
 		};
@@ -723,6 +875,15 @@
 			buildConfigurations = (
 				2D54BF062437AD5800FF4EE4 /* Debug */,
 				2D54BF072437AD5800FF4EE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D557F8A280710FA0090FACC /* Build configuration list for PBXNativeTarget "ObjCAPITester" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D557F86280710FA0090FACC /* Debug */,
+				2D557F87280710FA0090FACC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

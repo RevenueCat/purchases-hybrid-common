@@ -9,21 +9,22 @@
 import Quick
 import Nimble
 import PurchasesHybridCommon
-import Purchases
+@testable import RevenueCat
+import StoreKit
 
 class ErrorContainerTests: QuickSpec {
 
     override func spec() {
         context("error code") {
             it("contains the error code") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.code) == error.code
             }
             it("info dictionary contains the error code") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.info["code"] as? Int) == error.code
             }
@@ -31,14 +32,14 @@ class ErrorContainerTests: QuickSpec {
 
         context("error message") {
             it("contains the error message") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError()
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError()
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.message) == error.localizedDescription
             }
             it("info dictionary contains the error message") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError()
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError()
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.info["message"] as? String) == error.localizedDescription
             }
@@ -46,8 +47,8 @@ class ErrorContainerTests: QuickSpec {
 
         context("error") {
             it("contains the error itself") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
                 let containedError = errorContainer.error as NSError
 
                 expect(containedError.code) == error.code
@@ -68,14 +69,14 @@ class ErrorContainerTests: QuickSpec {
                             NSLocalizedDescriptionKey: "underlying error message",
                         ]
                 )
-                let error = Purchases.ErrorUtils.purchasesError(withSKError: skError)
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.purchasesError(withSKError: skError)
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.info["underlyingErrorMessage"] as? String) == skError.localizedDescription
             }
             it("info dictionary contains empty underlying error message if no underlying error") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError()
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError()
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
                 expect(errorContainer.info["underlyingErrorMessage"] as? String) == ""
             }
@@ -83,20 +84,20 @@ class ErrorContainerTests: QuickSpec {
 
         context("readable error code") {
             it("info dictionary contains the readable error code in both keys") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo[Purchases.ReadableErrorCodeKey] as? String
+                let readableErrorKey = error.userInfo["readable_error_code"] as? String
                 expect(readableErrorKey).toNot(beNil())
                 expect(readableErrorKey) != ""
                 expect(errorContainer.info["readableErrorCode"] as? String) == readableErrorKey
                 expect(errorContainer.info["readable_error_code"] as? String) == readableErrorKey
             }
             it("user info contains the readable error code in both keys") {
-                let error = Purchases.ErrorUtils.missingAppUserIDError() as NSError
-                let errorContainer = RCErrorContainer(error: error, extraPayload: [:])
+                let error = ErrorUtils.missingAppUserIDError() as NSError
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo[Purchases.ReadableErrorCodeKey] as? String
+                let readableErrorKey = error.userInfo["readable_error_code"] as? String
                 expect(readableErrorKey).toNot(beNil())
                 expect(readableErrorKey) != ""
                 expect((errorContainer.error as NSError).userInfo["readableErrorCode"] as? String) == readableErrorKey

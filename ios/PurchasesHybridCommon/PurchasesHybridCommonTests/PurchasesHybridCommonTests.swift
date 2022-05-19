@@ -9,71 +9,83 @@
 import Quick
 import Nimble
 @testable import PurchasesHybridCommon
+@testable import RevenueCat
 
 class PurchasesHybridCommonTests: QuickSpec {
+
+    private let mockCustomerInfo = try! CustomerInfo(data: [
+        "request_date": "2019-08-16T10:30:42Z",
+        "subscriber": [
+            "first_seen": "2019-07-17T00:05:54Z",
+            "original_app_user_id": "",
+            "subscriptions": [:],
+            "other_purchases": [:]
+        ]])
 
     override func spec() {
 
         context("proxy url string") {
             it("parses the string and sets the url if valid") {
                 let urlString = "https://revenuecat.com"
-                RCCommonFunctionality.proxyURLString = urlString
+                CommonFunctionality.proxyURLString = urlString
                 expect(Purchases.proxyURL?.absoluteString) == urlString
             }
 
             it("sets the proxy to nil if null passed in") {
                 let urlString = "https://revenuecat.com"
-                RCCommonFunctionality.proxyURLString = urlString
+                CommonFunctionality.proxyURLString = urlString
                 expect(Purchases.proxyURL).toNot(beNil())
 
-                RCCommonFunctionality.proxyURLString = nil
+                CommonFunctionality.proxyURLString = nil
                 expect(Purchases.proxyURL).to(beNil())
             }
 
             it("raises exception if proxy can't be parsed") {
-                expect { RCCommonFunctionality.proxyURLString = "not a valid url" }.to(raiseException())
+                let expectedMessage = "could not set the proxyURL, provided value is not a valid URL: not a valid url"
+                self.expectFatalError(expectedMessage: expectedMessage) {
+                    CommonFunctionality.proxyURLString = "not a valid url"
+                }
             }
         }
 
         context("logIn") {
             it("passes the call correctly to Purchases") {
                 let mockPurchases = MockPurchases()
-                let mockPurchaserInfo = PartialMockPurchaserInfo()
                 let mockCreated = Bool.random()
-                mockPurchases.stubbedLogInCompletionResult = (mockPurchaserInfo, mockCreated, nil)
+                mockPurchases.stubbedLogInCompletionResult = (self.mockCustomerInfo, mockCreated, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
 
                 let appUserID = "appUserID"
-                RCCommonFunctionality.logIn(withAppUserID: appUserID) { _, _ in }
+                CommonFunctionality.logIn(appUserID: appUserID) { _, _ in }
 
-                expect { mockPurchases.invokedLogInCount } == 1
-                expect { mockPurchases.invokedLogInParameters?.appUserID } == appUserID
+                expect(mockPurchases.invokedLogInCount) == 1
+                expect(mockPurchases.invokedLogInParameters?.appUserID) == appUserID
             }
 
-            it("returns purchaserInfo and created if successful") {
+            it("returns customerInfo and created if successful") {
                 let mockPurchases = MockPurchases()
-                let mockPurchaserInfo = PartialMockPurchaserInfo()
                 let mockCreated = Bool.random()
-                mockPurchases.stubbedLogInCompletionResult = (mockPurchaserInfo, mockCreated, nil)
+                mockPurchases.stubbedLogInCompletionResult = (self.mockCustomerInfo, mockCreated, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 let appUserID = "appUserID"
-                RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
+                CommonFunctionality.logIn(appUserID: appUserID) { resultDict, error in
                     receivedResultDict = resultDict! as NSDictionary
                     receivedError = error
                 }
 
+                // todo: update this once APIs get updated to v4
                 let expectedResult: NSDictionary = [
-                    "purchaserInfo": mockPurchaserInfo.dictionary() as NSDictionary,
+                    "customerInfo": self.mockCustomerInfo.dictionary,
                     "created": mockCreated
                 ]
 
-                expect { receivedResultDict } == expectedResult
-                expect { receivedError }.to(beNil())
+                expect(receivedResultDict) == expectedResult
+                expect(receivedError).to(beNil())
             }
 
             it("returns error if not successful") {
@@ -84,10 +96,10 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
                 let appUserID = "appUserID"
-                RCCommonFunctionality.logIn(withAppUserID: appUserID) { resultDict, error in
+                CommonFunctionality.logIn(appUserID: appUserID) { resultDict, error in
                     receivedResultDict = resultDict as NSDictionary?
                     receivedError = error
                 }
@@ -99,43 +111,43 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 ]
 
-                expect { receivedResultDict }.to(beNil())
-                expect { receivedError }.toNot(beNil())
-                expect { receivedError!.error as NSError } == mockError
-                expect { receivedError!.code } == mockError.code
-                expect { receivedError!.message } == mockError.localizedDescription
-                expect { receivedError!.info as NSDictionary } == expectedErrorDict
+                expect(receivedResultDict).to(beNil())
+                let unwrappedReceivedError = try XCTUnwrap(receivedError)
+                expect(unwrappedReceivedError.error as NSError) == mockError
+                expect(unwrappedReceivedError.code) == mockError.code
+                expect(unwrappedReceivedError.message) == mockError.localizedDescription
+                expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
             }
         }
 
         context("logOut") {
             it("passes the call correctly to Purchases") {
                 let mockPurchases = MockPurchases()
-                let mockPurchaserInfo = PartialMockPurchaserInfo()
-                mockPurchases.stubbedLogOutCompletionResult = (mockPurchaserInfo, nil)
+                mockPurchases.stubbedLogOutCompletionResult = (self.mockCustomerInfo, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
 
-                RCCommonFunctionality.logOut { _, _ in }
+                CommonFunctionality.logOut { _, _ in }
 
-                expect { mockPurchases.invokedLogOutCount } == 1
+                expect(mockPurchases.invokedLogOutCount) == 1
             }
 
-            it("returns purchaserInfo if successful") {
+            it("returns customerInfo if successful") {
                 let mockPurchases = MockPurchases()
-                let mockPurchaserInfo = PartialMockPurchaserInfo()
-                mockPurchases.stubbedLogOutCompletionResult = (mockPurchaserInfo, nil)
+                mockPurchases.stubbedLogOutCompletionResult = (self.mockCustomerInfo, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
-                var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedResultDict: [String: Any]?
+                var receivedError: ErrorContainer?
 
-                RCCommonFunctionality.logOut { resultDict, error in
-                    receivedResultDict = resultDict! as NSDictionary
+                CommonFunctionality.logOut { resultDict, error in
+                    receivedResultDict = resultDict
                     receivedError = error
                 }
-                expect { receivedResultDict } == mockPurchaserInfo.dictionary() as NSDictionary
-                expect { receivedError }.to(beNil())
+                let expectedResultDict: [String: Any] =  self.mockCustomerInfo.dictionary
+                let unwrappedReceivedResultDict = try! XCTUnwrap(receivedResultDict)
+                expect(unwrappedReceivedResultDict as NSDictionary).to(equal(expectedResultDict as NSDictionary))
+                expect(receivedError).to(beNil())
             }
 
             it("returns error if not successful") {
@@ -146,9 +158,9 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
-                var receivedError: RCErrorContainer?
+                var receivedError: ErrorContainer?
 
-                RCCommonFunctionality.logOut { resultDict, error in
+                CommonFunctionality.logOut { resultDict, error in
                     receivedResultDict = resultDict as NSDictionary?
                     receivedError = error
                 }
@@ -159,14 +171,14 @@ class PurchasesHybridCommonTests: QuickSpec {
                     "underlyingErrorMessage": ""
                 ]
 
-                expect { receivedResultDict }.to(beNil())
-                expect { receivedError }.toNot(beNil())
-                expect { receivedError!.error as NSError } == mockError
-                expect { receivedError!.code } == mockError.code
-                expect { receivedError!.message } == mockError.localizedDescription
-                expect { receivedError!.info as NSDictionary } == expectedErrorDict
+                expect(receivedResultDict).to(beNil())
+                let unwrappedReceivedError = try XCTUnwrap(receivedError)
+                expect(unwrappedReceivedError.error as NSError) == mockError
+                expect(unwrappedReceivedError.code) == mockError.code
+                expect(unwrappedReceivedError.message) == mockError.localizedDescription
+                expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
             }
         }
-        
+
     }
 }

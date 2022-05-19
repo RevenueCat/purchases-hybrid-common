@@ -1,5 +1,5 @@
 //
-//  SKProductDiscountHybridAdditionsTests.swift
+//  StoreProductDiscount+HybridAdditionsTests.swift
 //  PurchasesHybridCommonTests
 //
 //  Created by Andrés Boedo on 4/22/20.
@@ -9,10 +9,9 @@
 import Quick
 import Nimble
 import StoreKit
-import Purchases
-import PurchasesHybridCommon
+@testable import RevenueCat
 
-class SkuProductDiscountHybridAdditionsTests: QuickSpec {
+class StoreProductDiscountHybridAdditionsTests: QuickSpec {
     override func spec() {
         describe("rc_dictionary") {
             it("has the right format") {
@@ -24,7 +23,8 @@ class SkuProductDiscountHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                guard let receivedDictionary = productDiscount.rc_dictionary() as? [String: NSObject] else {
+                let storeProductDiscount = try XCTUnwrap(StoreProductDiscount(sk1Discount: productDiscount))
+                guard let receivedDictionary = storeProductDiscount.rc_dictionary as? [String: NSObject] else {
                     fatalError("received rc_dictionary is not in the right format")
                 }
                 

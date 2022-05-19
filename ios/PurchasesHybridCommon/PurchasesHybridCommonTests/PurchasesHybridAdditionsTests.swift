@@ -8,29 +8,17 @@
 
 import Quick
 import Nimble
+import RevenueCat
 import PurchasesHybridCommon
 
 
 class PurchasesHybridAdditionsTests: QuickSpec {
     override func spec() {
-        
-        context("configure with platform flavor and version") {
-            it("initialize without raising exceptions") {
-                expect {
-                    Purchases.configure(withAPIKey: "api key",
-                                        appUserID: nil,
-                                        observerMode: false,
-                                        userDefaults: nil,
-                                        platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3",
-                                        dangerousSettings: nil)
-                }.notTo(raiseException())
-            }
-        }
+
         context("configure with user defaults suite name") {
             it("initializes without raising exceptions if no suite name is passed") {
                 expect {
-                    Purchases.configure(withAPIKey: "api key",
+                    Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
                                         observerMode: false,
                                         userDefaultsSuiteName: nil,
@@ -41,7 +29,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
             }
             it("initializes without raising exceptions if a suite name is passed") {
                 expect {
-                    Purchases.configure(withAPIKey: "api key",
+                    Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
@@ -54,7 +42,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
         context("configure with dangerous settings") {
             it("initializes without raising exceptions if dangerous settings is passed") {
                 expect {
-                    Purchases.configure(withAPIKey: "api key",
+                    Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
