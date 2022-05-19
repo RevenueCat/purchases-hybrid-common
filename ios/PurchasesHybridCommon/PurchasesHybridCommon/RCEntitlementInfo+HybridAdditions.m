@@ -53,6 +53,8 @@
         case RCPromotional:
             jsonDict[@"store"] = @"PROMOTIONAL";
             break;
+        case RCAmazon:
+            jsonDict[@"store"] = @"AMAZON";
         case RCUnknownStore:
             jsonDict[@"store"] = @"UNKNOWN_STORE";
             break;
