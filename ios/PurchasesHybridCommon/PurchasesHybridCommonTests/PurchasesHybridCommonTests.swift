@@ -112,11 +112,11 @@ class PurchasesHybridCommonTests: QuickSpec {
                 ]
 
                 expect(receivedResultDict).to(beNil())
-                expect(receivedError).toNot(beNil())
-                expect(receivedError!.error as NSError) == mockError
-                expect(receivedError!.code) == mockError.code
-                expect(receivedError!.message) == mockError.localizedDescription
-                expect(receivedError!.info as NSDictionary) == expectedErrorDict
+                let unwrappedReceivedError = try XCTUnwrap(receivedError)
+                expect(unwrappedReceivedError.error as NSError) == mockError
+                expect(unwrappedReceivedError.code) == mockError.code
+                expect(unwrappedReceivedError.message) == mockError.localizedDescription
+                expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
             }
         }
 
@@ -172,11 +172,11 @@ class PurchasesHybridCommonTests: QuickSpec {
                 ]
 
                 expect(receivedResultDict).to(beNil())
-                expect(receivedError).toNot(beNil())
-                expect(receivedError!.error as NSError) == mockError
-                expect(receivedError!.code) == mockError.code
-                expect(receivedError!.message) == mockError.localizedDescription
-                expect(receivedError!.info as NSDictionary) == expectedErrorDict
+                let unwrappedReceivedError = try XCTUnwrap(receivedError)
+                expect(unwrappedReceivedError.error as NSError) == mockError
+                expect(unwrappedReceivedError.code) == mockError.code
+                expect(unwrappedReceivedError.message) == mockError.localizedDescription
+                expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
             }
         }
 

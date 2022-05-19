@@ -25,19 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
                                                         platformFlavor:nil
                                                  platformFlavorVersion:@""
                                                      dangerousSettings:nil];
-    // This method will be removed, and instead we'll call `setPushTokenString` directly
-    // on Purchases
-//    [purchases _setPushTokenString:@""];
-
-    // this method will be removed in favor of the one that passes the
-    // userDefaults as String
-//    [RCPurchases configureWithAPIKey:@""
-//                           appUserID:@""
-//                        observerMode:NO
-//                        userDefaults:NSUserDefaults.standardUserDefaults
-//                      platformFlavor:nil
-//               platformFlavorVersion:@""
-//                   dangerousSettings:nil];
 }
 
 @end
