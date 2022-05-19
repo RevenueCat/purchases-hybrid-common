@@ -1,7 +1,7 @@
 ## 3.0.0
 
 - Bumped `purchases-ios` to `4.3.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/137
-- Bumped `purchases-android` to `5.0.0` 
+- Bumped `purchases-android` to `5.1.0` 
 - Removed `createAlias`, `identify`, `logOut`
 - Renamed `PurchaserInfo` to `CustomerInfo`
 - Renamed `restoreTransactions` -> `restorePurchases`
