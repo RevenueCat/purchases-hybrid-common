@@ -1,13 +1,10 @@
 PODS:
   - Nimble (9.2.1)
-  - PurchasesHybridCommon (2.0.1):
-    - RevenueCat (= 4.3.0)
   - Quick (5.0.1)
   - RevenueCat (4.3.0)
 
 DEPENDENCIES:
   - Nimble
-  - PurchasesHybridCommon (from `../../`)
   - Quick
   - RevenueCat (= 4.3.0)
 
@@ -17,16 +14,11 @@ SPEC REPOS:
     - Quick
     - RevenueCat
 
-EXTERNAL SOURCES:
-  PurchasesHybridCommon:
-    :path: "../../"
-
 SPEC CHECKSUMS:
   Nimble: e7e615c0335ee4bf5b0d786685451e62746117d5
-  PurchasesHybridCommon: 2326871bfa7b6e15520dbfd55acd62faf0c49a6e
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
   RevenueCat: bcbf0d68e546f947e00b7ea68d4f2d1c913e7767
 
-PODFILE CHECKSUM: 700fdd89fd1c909be56700137b3e058e145f6b32
+PODFILE CHECKSUM: 9a092068cde23cf11b58e6081cc5bdb93f6cf1cb
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.11.2

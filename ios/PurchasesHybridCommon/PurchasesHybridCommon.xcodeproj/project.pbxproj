@@ -19,6 +19,7 @@
 		2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6E333B2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift */; };
 		2D81AEDD246F6A4800403492 /* PurchasesHybridCommon.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */; };
+		2DD166D928383366009C20AD /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
 		2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
 		2DD3D1862810AF5A00A19EC6 /* Package+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D942807580000676D73 /* Package+HybridAdditions.swift */; };
 		2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEC28074EB900863298 /* ErrorContainer.swift */; };
@@ -127,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DD166D928383366009C20AD /* PurchasesHybridCommon.framework in Frameworks */,
 				3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
