@@ -179,6 +179,8 @@ def archive
     destination: 'generic/platform=iOS'
   )
 
+  # fastlane gym doesn't fully support .frameworks, so we need to look for the output
+  # in derived data manually. 
   Dir.chdir("..") do
     output_framework_path = Dir["derived_data/**/#{framework_filename}"].first
     UI.error("framework not found!") if output_framework_path.nil?
