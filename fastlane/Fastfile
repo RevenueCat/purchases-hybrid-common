@@ -41,8 +41,8 @@ platform :ios do
   lane :release do |options|
     version_number = current_version_number
     push_pods
-    carthage_archive
     github_release(version: version_number)
+    archive
   end
 
   desc "Make github release"
@@ -166,18 +166,31 @@ def push_pods
   pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
 end
 
-def carthage_archive
+def archive
+  framework_filename = "PurchasesHybridCommon.framework"
+  build_app(
+    workspace: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcworkspace",
+    configuration: "Release",
+    scheme: "PurchasesHybridCommon",
+    silent: true,
+    clean: true,
+    derived_data_path: "derived_data/",
+    output_name: framework_filename,
+    destination: 'generic/platform=iOS'
+  )
+
   Dir.chdir("..") do
-    # As of Carthage 0.38.0, we still can't archive xcframeworks directly. 
-    # there are also some issues which prevent us from archiving frameworks directly, since
-    # carthage can't deal with architectures for simulators and for Apple Silicon correctly.
-    # We use this script as a workaround until this is fixed. 
-    # https://github.com/Carthage/Carthage/releases/0.38.0
-    sh("./carthage.sh", "build", "--archive", "--platform", "iOS")
+    output_framework_path = Dir["derived_data/**/#{framework_filename}"].first
+    UI.error("framework not found!") if output_framework_path.nil?
+
+    # compress using ditto because zip can cause issues with symlinks
+    sh("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", 
+      output_framework_path, 
+      "#{framework_filename}.zip")
   end
 
-  def is_snapshot_version?(version_name)
-    version_name.end_with?("-SNAPSHOT")
-  end
+end
 
+def is_snapshot_version?(version_name)
+  version_name.end_with?("-SNAPSHOT")
 end
