@@ -41,8 +41,8 @@ platform :ios do
   lane :release do |options|
     version_number = current_version_number
     push_pods
-    github_release(version: version_number)
     archive
+    github_release(version: version_number)
   end
 
   desc "Make github release"
