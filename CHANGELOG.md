@@ -1,3 +1,17 @@
+## 3.0.0
+
+- Bumped `purchases-ios` to `4.3.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/137
+- Bumped `purchases-android` to `5.1.0` 
+- Removed `createAlias`, `identify`, `logOut`
+- Renamed `PurchaserInfo` to `CustomerInfo`
+- Renamed `restoreTransactions` -> `restorePurchases`
+- Renamed `paymentDiscountForProductIdentifier` ->  `promotionalOffer(for:)`
+- Replaced extensions of StoreKit types with extensions of RevenueCat types
+- Added Objective-C API testers
+- Updated Java requirement to Java 8 https://github.com/RevenueCat/purchases-hybrid-common/pull/118
+- Added Unity IAP flavor https://github.com/RevenueCat/purchases-hybrid-common/pull/126
+- Updated min iOS deployment target to 11.0
+
 ## 2.0.1
 
 - Fixed an issue where checkTrialOrIntroductoryPriceEligibility might refresh the receipt if it's not present on device,

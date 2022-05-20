@@ -26,11 +26,13 @@ lane :bump_and_update_changelog do |options|
 end
 
 platform :ios do
+
   desc "Increment build number"
   lane :bump do |options|
     new_version_number = options[:version]
     fail ArgumentError, "missing version" unless new_version_number
-    previous_version_number = get_version_number(xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj")
+    previous_version_number = get_version_number(xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj",
+                                                 target:"PurchasesHybridCommon")
     increment_version_number(version_number: new_version_number, xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj")
     version_bump_podspec(path: "PurchasesHybridCommon.podspec", version_number: new_version_number)
   end
