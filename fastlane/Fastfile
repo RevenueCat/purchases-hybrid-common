@@ -175,4 +175,9 @@ def carthage_archive
     # https://github.com/Carthage/Carthage/releases/0.38.0
     sh("./carthage.sh", "build", "--archive", "--platform", "iOS")
   end
+
+  def is_snapshot_version?(version_name)
+    version_name.end_with?("-SNAPSHOT")
+  end
+
 end
