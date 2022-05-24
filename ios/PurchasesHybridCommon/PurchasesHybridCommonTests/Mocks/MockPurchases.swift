@@ -58,7 +58,7 @@ class MockPurchases: Purchases {
         let offeringsFactory: OfferingsFactory = OfferingsFactory()
 
 
-        let productsManager: ProductsManager = ProductsManager(systemInfo: systemInfo)
+        let productsManager: ProductsManager = ProductsManager(systemInfo: systemInfo, requestTimeout: 1)
         let offeringsManager: OfferingsManager = OfferingsManager(deviceCache: deviceCache, operationDispatcher: operationDispatcher, systemInfo: systemInfo, backend: backend, offeringsFactory: offeringsFactory, productsManager: productsManager)
 
         let introEligibilityCalculator: IntroEligibilityCalculator = IntroEligibilityCalculator(productsManager: productsManager, receiptParser: ReceiptParser())

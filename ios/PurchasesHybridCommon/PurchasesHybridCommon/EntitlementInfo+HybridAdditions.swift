@@ -1,7 +1,7 @@
 //
 //  EntitlementInfo+HybridAdditions.swift
 //  PurchasesHybridCommon
-//
+// 
 //  Created by Andrés Boedo on 4/13/22.
 //  Copyright © 2022 RevenueCat. All rights reserved.
 //
@@ -76,6 +76,8 @@ private extension EntitlementInfo {
             return "PROMOTIONAL"
         case .unknownStore:
             return "UNKNOWN_STORE"
+        case .amazon:
+            return "AMAZON"
         case .stripe:
             return "STRIPE"
         @unknown default:
