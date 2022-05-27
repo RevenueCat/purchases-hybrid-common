@@ -37,11 +37,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
 
                     for expectation in expectations {
                         let (store, expectedDictionaryValue) = expectation
-
-                        guard let mockEntitlementInfo = self.mockEntitlementInfo(store: store) else {
-                            fail("Could not create mock EntitlementInfo object.")
-                            return
-                        }
+                        let mockEntitlementInfo = self.mockEntitlementInfo(store: store)
 
                         let dictionary = mockEntitlementInfo.dictionary
                         expect(dictionary["store"] as? String).to(
@@ -54,7 +50,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
         }
     }
 
-    private func mockEntitlementInfo(store: Store) -> EntitlementInfo? {
+    private func mockEntitlementInfo(store: Store) -> EntitlementInfo {
         return EntitlementInfo(
             identifier: "",
             entitlement: .init(productIdentifier: "productId", rawData: self.mockEntitlementData),

@@ -18,7 +18,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
         describe("rc_dictionary") {
             context("managementURL") {
                 it("contains the management url when it exists") {
-                    guard let mockCustomerInfo = CustomerInfo.fromJSON(
+                    let mockCustomerInfo = CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
@@ -31,10 +31,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             }
                         }
                         """
-                    ) else {
-                        fail("Could not generate mock customer info")
-                        return
-                    }
+                    )
 
                     let urlPath = "https://revenuecat.com"
 
@@ -42,7 +39,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
-                    guard let mockCustomerInfo = CustomerInfo.fromJSON(
+                    let mockCustomerInfo = CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
@@ -54,10 +51,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             }
                         }
                         """
-                    ) else {
-                        fail("Could not generate mock customer info")
-                        return
-                    }
+                    )
 
                     let dictionary = mockCustomerInfo.dictionary
                     expect(dictionary["managementURL"] as? NSNull) == NSNull()
@@ -70,7 +64,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let expectedTransactionID = "expectedTransactionID"
                     let expectedProductID = "expectedProductID"
 
-                    guard let mockCustomerInfo = CustomerInfo.fromJSON(
+                    let mockCustomerInfo = CustomerInfo.fromJSON(
                         """
                         {
                             "request_date": "2019-08-16T10:30:42Z",
@@ -91,10 +85,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             }
                         }
                         """
-                    ) else {
-                        fail("Could not generate mock customer info")
-                        return
-                    }
+                    )
 
                     let dateformatter = ISO8601DateFormatter()
                     let transactionDate = dateformatter.date(from: transactionDateString)!
@@ -112,7 +103,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(transactionDictionary["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it ("is empty when there are no non subscription transactions") {
-                    guard let mockCustomerInfo = CustomerInfo.fromJSON(
+                    let mockCustomerInfo = CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
@@ -124,10 +115,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             }
                         }
                         """
-                    ) else {
-                        fail("Could not generate mock customer info")
-                        return
-                    }
+                    )
 
                     let dictionary = mockCustomerInfo.dictionary
                     let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>

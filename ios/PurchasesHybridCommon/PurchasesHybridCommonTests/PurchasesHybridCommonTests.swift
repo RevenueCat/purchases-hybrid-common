@@ -26,7 +26,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 }
             }
             """
-    )!
+    )
 
     override func spec() {
 
