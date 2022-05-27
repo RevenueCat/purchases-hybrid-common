@@ -24,134 +24,53 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
     override func spec() {
         describe("rc_dictionary") {
             context("store") {
-                it("equals APP_STORE when the store is app store") {
-                    let expectedDictionaryValue = "APP_STORE"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "app_store"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
+                it("is properly set") {
+                    let expectations: [(Store, String)] = [
+                        (.appStore, "APP_STORE"),
+                        (.macAppStore, "MAC_APP_STORE"),
+                        (.playStore, "PLAY_STORE"),
+                        (.stripe, "STRIPE"),
+                        (.promotional, "PROMOTIONAL"),
+                        (.amazon, "AMAZON"),
+                        (.unknownStore, "UNKNOWN_STORE")
+                    ]
 
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals MAC APP STORE when the store is mac app store") {
-                    let expectedDictionaryValue = "MAC_APP_STORE"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "mac_app_store"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
+                    for expectation in expectations {
+                        let (store, expectedDictionaryValue) = expectation
 
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals PLAY STORE when the store is play store") {
-                    let expectedDictionaryValue = "PLAY_STORE"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "play_store"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
+                        guard let mockEntitlementInfo = self.mockEntitlementInfo(store: store) else {
+                            fail("Could not create mock EntitlementInfo object.")
+                            return
+                        }
 
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals STRIPE when the store is Stripe") {
-                    let expectedDictionaryValue = "STRIPE"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "stripe"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
+                        let dictionary = mockEntitlementInfo.dictionary
+                        expect(dictionary["store"] as? String).to(
+                            equal(expectedDictionaryValue),
+                            description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
+                        )
                     }
-
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals PROMOTIONAL when the store is promotional") {
-                    let expectedDictionaryValue = "PROMOTIONAL"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "promotional"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
-
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals AMAZON when the store is amazon") {
-                    let expectedDictionaryValue = "AMAZON"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "amazon"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
-
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
-                }
-                it("equals UNKNOWN when the store is unknown") {
-                    let expectedDictionaryValue = "UNKNOWN_STORE"
-                    guard let mockEntitlementInfo = EntitlementInfo(
-                        entitlementId: "pro",
-                        entitlementData: self.mockEntitlementData,
-                        productData: self.mockProductData(withStore: "unknown"),
-                        requestDate: nil
-                    ) else {
-                        fail("Could not create mock EntitlementInfo object.")
-                        return
-                    }
-
-                    let dictionary = mockEntitlementInfo.dictionary
-                    expect(dictionary["store"] as? String).to(
-                        equal(expectedDictionaryValue),
-                        description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
-                    )
                 }
             }
         }
+    }
+
+    private func mockEntitlementInfo(store: Store) -> EntitlementInfo? {
+        return EntitlementInfo(
+            identifier: "",
+            entitlement: .init(productIdentifier: "productId", rawData: self.mockEntitlementData),
+            subscription: .init(
+                periodType: .normal,
+                purchaseDate: nil,
+                originalPurchaseDate: nil,
+                expiresDate: nil,
+                store: store,
+                isSandbox: false,
+                unsubscribeDetectedAt: nil,
+                billingIssuesDetectedAt: nil,
+                ownershipType: .purchased
+            ),
+            requestDate: nil
+        )
     }
 
     private func mockProductData(withStore store: String) -> [String: Any] {
