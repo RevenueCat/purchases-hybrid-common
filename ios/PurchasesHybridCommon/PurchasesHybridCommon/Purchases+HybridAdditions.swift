@@ -28,13 +28,23 @@ import RevenueCat
             }
         }
 
-        return self.configure(withAPIKey: apiKey,
-                              appUserID: appUserID,
-                              observerMode: observerMode,
-                              userDefaults: userDefaults,
-                              // todo: provide option
-                              useStoreKit2IfAvailable: false,
-                              dangerousSettings: dangerousSettings)
+        var configurationBuilder: Configuration.Builder = Configuration.builder(withAPIKey: apiKey)
+        if let appUserID = appUserID {
+            configurationBuilder = configurationBuilder.with(appUserID: appUserID)
+        }
+        if observerMode {
+            configurationBuilder = configurationBuilder.with(observerMode: observerMode)
+        }
+        if let userDefaults = userDefaults {
+            configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
+        }
+        // todo: provide option
+        configurationBuilder = configurationBuilder.with(usesStoreKit2IfAvailable: false)
+        if let dangerousSettings = dangerousSettings {
+            configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
+        }
+
+        return self.configure(with: configurationBuilder.build())
     }
 
 }
