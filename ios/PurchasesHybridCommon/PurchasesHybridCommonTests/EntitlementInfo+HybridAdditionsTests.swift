@@ -42,7 +42,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                         let dictionary = mockEntitlementInfo.dictionary
                         expect(dictionary["store"] as? String).to(
                             equal(expectedDictionaryValue),
-                            description: "Expected \(String(describing: dictionary["store"] as? String)) to become \(expectedDictionaryValue)."
+                            description: "Expected \(store) to be encoded as \(expectedDictionaryValue)."
                         )
                     }
                 }

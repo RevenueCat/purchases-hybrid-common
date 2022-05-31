@@ -28,13 +28,11 @@ import RevenueCat
             }
         }
 
-        var configurationBuilder: Configuration.Builder = Configuration.builder(withAPIKey: apiKey)
+        var configurationBuilder: Configuration.Builder = .init(withAPIKey: apiKey)
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        if observerMode {
-            configurationBuilder = configurationBuilder.with(observerMode: observerMode)
-        }
+        configurationBuilder = configurationBuilder.with(observerMode: observerMode)
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }

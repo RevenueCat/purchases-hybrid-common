@@ -10,12 +10,12 @@ import Foundation
 import RevenueCat
 
 extension CustomerInfo {
-    static func fromJSON(_ jsonString: String) -> CustomerInfo {
+    static func fromJSON(_ jsonString: String) throws -> CustomerInfo {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         decoder.dateDecodingStrategy = .iso8601
 
         let data = Data(jsonString.utf8)
-        return try! decoder.decode(CustomerInfo.self, from: data)
+        return try decoder.decode(CustomerInfo.self, from: data)
     }
 }
