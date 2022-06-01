@@ -18,7 +18,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
         describe("rc_dictionary") {
             context("managementURL") {
                 it("contains the management url when it exists") {
-                    let mockCustomerInfo = try! CustomerInfo.fromJSON(
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
@@ -39,7 +39,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
-                    let mockCustomerInfo = try! CustomerInfo.fromJSON(
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
@@ -64,7 +64,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let expectedTransactionID = "expectedTransactionID"
                     let expectedProductID = "expectedProductID"
 
-                    let mockCustomerInfo = try! CustomerInfo.fromJSON(
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
                             "request_date": "2019-08-16T10:30:42Z",
@@ -103,7 +103,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(transactionDictionary["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it ("is empty when there are no non subscription transactions") {
-                    let mockCustomerInfo = try! CustomerInfo.fromJSON(
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
                             \"request_date\": \"2019-08-16T10:30:42Z\",
