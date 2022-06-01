@@ -1,3 +1,8 @@
+## 3.0.1
+
+- Added Amazon case to the store value in the EntitlementInfo map in both the iOS and Android https://github.com/RevenueCat/purchases-hybrid-common/pull/142/
+- Bumped `purchases-ios` to `4.4.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/142
+
 ## 3.0.0
 
 - Bumped `purchases-ios` to `4.3.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/137
