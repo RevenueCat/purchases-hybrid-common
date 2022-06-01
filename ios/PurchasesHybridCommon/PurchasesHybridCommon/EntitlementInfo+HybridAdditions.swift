@@ -76,6 +76,8 @@ private extension EntitlementInfo {
             return "PROMOTIONAL"
         case .unknownStore:
             return "UNKNOWN_STORE"
+        case .amazon:
+            return "AMAZON"
         case .stripe:
             return "STRIPE"
         @unknown default:

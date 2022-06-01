@@ -10,17 +10,23 @@ import Quick
 import Nimble
 @testable import PurchasesHybridCommon
 @testable import RevenueCat
+import Foundation
 
 class PurchasesHybridCommonTests: QuickSpec {
 
-    private let mockCustomerInfo = try! CustomerInfo(data: [
-        "request_date": "2019-08-16T10:30:42Z",
-        "subscriber": [
-            "first_seen": "2019-07-17T00:05:54Z",
-            "original_app_user_id": "",
-            "subscriptions": [:],
-            "other_purchases": [:]
-        ]])
+    private static let mockCustomerInfo = try! CustomerInfo.fromJSON(
+            """
+            {
+                \"request_date\": \"2019-08-16T10:30:42Z\",
+                \"subscriber\": {
+                    \"first_seen\": \"2019-07-17T00:05:54Z\",
+                    \"original_app_user_id\": \"\",
+                    \"subscriptions\": [],
+                    \"other_purchases\": []
+                }
+            }
+            """
+    )
 
     override func spec() {
 
@@ -52,7 +58,7 @@ class PurchasesHybridCommonTests: QuickSpec {
             it("passes the call correctly to Purchases") {
                 let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
-                mockPurchases.stubbedLogInCompletionResult = (self.mockCustomerInfo, mockCreated, nil)
+                mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
 
@@ -66,7 +72,7 @@ class PurchasesHybridCommonTests: QuickSpec {
             it("returns customerInfo and created if successful") {
                 let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
-                mockPurchases.stubbedLogInCompletionResult = (self.mockCustomerInfo, mockCreated, nil)
+                mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: NSDictionary?
@@ -80,7 +86,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 // todo: update this once APIs get updated to v4
                 let expectedResult: NSDictionary = [
-                    "customerInfo": self.mockCustomerInfo.dictionary,
+                    "customerInfo": Self.mockCustomerInfo.dictionary,
                     "created": mockCreated
                 ]
 
@@ -123,7 +129,7 @@ class PurchasesHybridCommonTests: QuickSpec {
         context("logOut") {
             it("passes the call correctly to Purchases") {
                 let mockPurchases = MockPurchases()
-                mockPurchases.stubbedLogOutCompletionResult = (self.mockCustomerInfo, nil)
+                mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
 
@@ -134,7 +140,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
             it("returns customerInfo if successful") {
                 let mockPurchases = MockPurchases()
-                mockPurchases.stubbedLogOutCompletionResult = (self.mockCustomerInfo, nil)
+                mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
 
                 Purchases.setDefaultInstance(mockPurchases)
                 var receivedResultDict: [String: Any]?
@@ -144,7 +150,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                     receivedResultDict = resultDict
                     receivedError = error
                 }
-                let expectedResultDict: [String: Any] =  self.mockCustomerInfo.dictionary
+                let expectedResultDict: [String: Any] =  Self.mockCustomerInfo.dictionary
                 let unwrappedReceivedResultDict = try! XCTUnwrap(receivedResultDict)
                 expect(unwrappedReceivedResultDict as NSDictionary).to(equal(expectedResultDict as NSDictionary))
                 expect(receivedError).to(beNil())
