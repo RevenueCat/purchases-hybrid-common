@@ -11,8 +11,7 @@ In `ios/PurchasesHybridCommon/Podfile` replace:
 with:
 
 ```
-  pod 'Purchases', :path => '~/Development/repos/ios/purchases-ios'
-  pod 'PurchasesCoreSwift', :path => '~/Development/repos/ios/purchases-ios'
+  pod 'RevenueCat', :path => '~/Development/repos/ios/purchases-ios'
 ```
 
 Remember to change `'~/Development/repos/ios/purchases-ios'` with your local purchases-ios path.
