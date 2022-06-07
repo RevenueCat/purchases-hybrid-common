@@ -1,5 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
+import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.models.StoreProduct
 
 fun StoreProduct.map(): Map<String, Any?> =
@@ -11,10 +12,28 @@ fun StoreProduct.map(): Map<String, Any?> =
         "price_string" to price,
         "currency_code" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
-        "discounts" to null
+        "discounts" to null,
+        "product_category" to mapProductCategory(),
+        "product_type" to mapProductType()
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
+
+internal fun StoreProduct.mapProductCategory(): String {
+    return when (type) {
+        ProductType.INAPP -> "NON_SUBSCRIPTION"
+        ProductType.SUBS -> "SUBSCRIPTION"
+        ProductType.UNKNOWN -> "UNKNOWN"
+    }
+}
+
+internal fun StoreProduct.mapProductType(): String {
+    return when (type) {
+        ProductType.INAPP -> "CONSUMABLE"
+        ProductType.SUBS -> "AUTO_RENEWABLE_SUBSCRIPTION"
+        ProductType.UNKNOWN -> "UNKNOWN"
+    }
+}
 
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
     return when {
