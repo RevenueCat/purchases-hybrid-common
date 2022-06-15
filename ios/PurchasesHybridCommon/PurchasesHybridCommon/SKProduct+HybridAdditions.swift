@@ -18,7 +18,7 @@ import StoreKit
             "description": self.localizedDescription,
             "discounts": NSNull(),
             "identifier": self.productIdentifier,
-            "introPrice": NSNull(),
+            "intro_price": NSNull(),
             "price": self.price,
             "price_string": self.localizedPriceString,
             "product_category": self.productCategoryString,
@@ -28,7 +28,7 @@ import StoreKit
 
         if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
            let introductoryDiscount = self.introductoryDiscount {
-            dictionary["introPrice"] = introductoryDiscount.rc_dictionary
+            dictionary["intro_price"] = introductoryDiscount.rc_dictionary
         }
 
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
