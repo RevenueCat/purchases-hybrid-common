@@ -140,8 +140,8 @@ import RevenueCat
                 return
             }
 
+            let storeProduct = StoreProduct(sk1Product: product)
             if let signedDiscountTimestamp = signedDiscountTimestamp {
-                let storeProduct = StoreProduct(sk1Product: product)
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
@@ -153,9 +153,9 @@ import RevenueCat
                     return
                 }
 
-                Purchases.shared.purchase(product: storeProduct, completion: hybridCompletion)
             }
 
+            Purchases.shared.purchase(product: storeProduct, completion: hybridCompletion)
         }
     }
 
