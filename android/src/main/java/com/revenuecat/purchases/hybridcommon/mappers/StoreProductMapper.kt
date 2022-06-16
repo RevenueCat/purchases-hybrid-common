@@ -11,7 +11,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "price" to priceAmountMicros / 1_000_000.0,
         "price_string" to price,
         "currency_code" to priceCurrencyCode,
-        "introPrice" to mapIntroPrice(),
+        "intro_price" to mapIntroPrice(),
         "discounts" to null,
         "product_category" to mapProductCategory(),
         "product_type" to mapProductType()

@@ -19,12 +19,6 @@ import StoreKit
             "discounts": NSNull(),
             "identifier": self.productIdentifier,
             "intro_price": NSNull(),
-            "intro_price_cycles": NSNull(),
-            "intro_price_period": NSNull(),
-            "intro_price_period_number_of_units": NSNull(),
-            "intro_price_period_unit": NSNull(),
-            "intro_price_string": NSNull(),
-            "introPrice": NSNull(),
             "price": self.price,
             "price_string": self.localizedPriceString,
             "product_category": self.productCategoryString,
@@ -34,13 +28,7 @@ import StoreKit
 
         if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
            let introductoryDiscount = self.introductoryDiscount {
-            dictionary["intro_price"] = introductoryDiscount.price
-            dictionary["intro_price_string"] = introductoryDiscount.localizedPriceString
-            dictionary["intro_price_period"] = StoreProduct.rc_normalized(subscriptionPeriod: introductoryDiscount.subscriptionPeriod)
-            dictionary["intro_price_period_unit"] = StoreProduct.rc_normalized(subscriptionPeriodUnit: introductoryDiscount.subscriptionPeriod.unit)
-            dictionary["intro_price_period_number_of_units"] = introductoryDiscount.subscriptionPeriod.value
-            dictionary["intro_price_cycles"] = introductoryDiscount.numberOfPeriods
-            dictionary["introPrice"] = introductoryDiscount.rc_dictionary
+            dictionary["intro_price"] = introductoryDiscount.rc_dictionary
         }
 
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
