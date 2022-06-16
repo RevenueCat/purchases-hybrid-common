@@ -90,6 +90,10 @@ jobs:
           paths:
             - vendor/bundle
       - run:
+          name: Install pods
+          command: pod install
+          working_directory: ios/PurchasesHybridCommon
+      - run:
           name: Deploy new version
           command: bundle exec fastlane ios release
 

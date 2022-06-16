@@ -167,6 +167,7 @@ def push_pods
 end
 
 def archive
+  match(type: "appstore")
   framework_filename = "PurchasesHybridCommon.framework"
   build_app(
     workspace: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcworkspace",
@@ -176,7 +177,8 @@ def archive
     clean: true,
     derived_data_path: "derived_data/",
     output_name: framework_filename,
-    destination: 'generic/platform=iOS'
+    destination: 'generic/platform=iOS',
+    export_method: "app-store"
   )
 
   # fastlane gym doesn't fully support .frameworks, so we need to look for the output
