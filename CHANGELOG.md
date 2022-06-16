@@ -1,3 +1,8 @@
+## 3.2.0
+
+- Fix purchasing of a product not initiating the purchase in iOS (https://github.com/RevenueCat/purchases-hybrid-common/pull/146/)
+- Changed `intro_price` field in the StoreProduct map to contain the Introductory Price JSON object. `introPrice` has been removed. Removal of `intro_price_cycles`, `intro_price_period`, `intro_price_period_number_of_units`, `intro_price_period_unit`, `intro_price_string` in the iOS map. (https://github.com/RevenueCat/purchases-hybrid-common/pull/147/)
+
 ## 3.1.0
 
 - Added Amazon case to the store value in the EntitlementInfo map in both the iOS and Android https://github.com/RevenueCat/purchases-hybrid-common/pull/142/
