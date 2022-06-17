@@ -21,6 +21,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Increment build number and update changelog
 
+### github_release_current
+
+```sh
+[bundle exec] fastlane github_release_current
+```
+
+Make GitHub release for current version
+
+### github_release
+
+```sh
+[bundle exec] fastlane github_release
+```
+
+Make GitHub release
+
 ----
 
 
@@ -41,14 +57,6 @@ Increment build number
 ```
 
 Release to CocoaPods, create Carthage archive, and create GitHub release
-
-### ios github_release
-
-```sh
-[bundle exec] fastlane ios github_release
-```
-
-Make github release
 
 ----
 
