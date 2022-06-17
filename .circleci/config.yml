@@ -3,12 +3,13 @@
 
 version: 2.1
 
-release-tags: &release-tags
-  filters:
-    tags:
-      only: /^(\d+\.)(\d+\.)(\d+)$/
-    branches:
-      ignore: /.*/
+aliases:
+  release-tags: &release-tags
+    filters:
+      tags:
+        only: /^(\d+\.)(\d+\.)(\d+)$/
+      branches:
+        ignore: /.*/
 
 orbs:
   android: circleci/android@1.0.3
@@ -155,9 +156,12 @@ workflows:
 
   deploy:
     jobs:
-      - deploy-ios: *release-tags
-      - deploy-android: *release-tags
-      - make-github-release: *release-tags
+      - deploy-ios:
+          <<: *release-tags
+      - deploy-android:
+          <<: *release-tags
+      - make-github-release:
+          <<: *release-tags
           requires:
             - deploy-ios
             - deploy-android
