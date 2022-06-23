@@ -8,8 +8,8 @@
 
 import Foundation
 import StoreKit
-import RevenueCat
 
+@testable import RevenueCat
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 

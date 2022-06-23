@@ -8,7 +8,9 @@
 
 import Foundation
 import XCTest
+
 @testable import PurchasesHybridCommon
+@testable import RevenueCat
 
 extension XCTestCase {
 
