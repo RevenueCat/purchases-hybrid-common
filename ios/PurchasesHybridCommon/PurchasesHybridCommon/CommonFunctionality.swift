@@ -359,23 +359,23 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func setAttributes(_ attributes: [String: Any]) {
-        Purchases.shared.setAttributes(attributes.mapValues { $0 as? String ?? "" })
+        Purchases.shared.attribution.setAttributes(attributes.mapValues { $0 as? String ?? "" })
     }
 
     @objc static func setEmail(_ email: String?) {
-        Purchases.shared.setEmail(email)
+        Purchases.shared.attribution.setEmail(email)
     }
 
     @objc static func setPhoneNumber(_ phoneNumber: String?) {
-        Purchases.shared.setPhoneNumber(phoneNumber)
+        Purchases.shared.attribution.setPhoneNumber(phoneNumber)
     }
 
     @objc static func setDisplayName(_ displayName: String?) {
-        Purchases.shared.setDisplayName(displayName)
+        Purchases.shared.attribution.setDisplayName(displayName)
     }
 
     @objc static func setPushToken(_ pushToken: String?) {
-         Purchases.shared.setPushTokenString(pushToken)
+         Purchases.shared.attribution.setPushTokenString(pushToken)
     }
 
 }
@@ -384,26 +384,26 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func collectDeviceIdentifiers() {
-        Purchases.shared.collectDeviceIdentifiers()
+        Purchases.shared.attribution.collectDeviceIdentifiers()
     }
 
     @objc static func setAdjustID(_ adjustID: String?) {
-        Purchases.shared.setAdjustID(adjustID)
+        Purchases.shared.attribution.setAdjustID(adjustID)
     }
     @objc static func setAppsflyerID(_ appsflyerID: String?) {
-        Purchases.shared.setAppsflyerID(appsflyerID)
+        Purchases.shared.attribution.setAppsflyerID(appsflyerID)
     }
     @objc static func setFBAnonymousID(_ fbAnonymousID: String?) {
-        Purchases.shared.setFBAnonymousID(fbAnonymousID)
+        Purchases.shared.attribution.setFBAnonymousID(fbAnonymousID)
     }
     @objc static func setMparticleID(_ mParticleID: String?) {
-        Purchases.shared.setMparticleID(mParticleID)
+        Purchases.shared.attribution.setMparticleID(mParticleID)
     }
     @objc static func setOnesignalID(_ onesignalID: String?) {
-        Purchases.shared.setOnesignalID(onesignalID)
+        Purchases.shared.attribution.setOnesignalID(onesignalID)
     }
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
-        Purchases.shared.setAirshipChannelID(airshipChannelID)
+        Purchases.shared.attribution.setAirshipChannelID(airshipChannelID)
     }
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
@@ -420,22 +420,22 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func setMediaSource(_ mediaSource: String?) {
-        Purchases.shared.setMediaSource(mediaSource)
+        Purchases.shared.attribution.setMediaSource(mediaSource)
     }
     @objc static func setCampaign(_ campaign: String?) {
-        Purchases.shared.setCampaign(campaign)
+        Purchases.shared.attribution.setCampaign(campaign)
     }
     @objc static func setAdGroup(_ adGroup: String?) {
-        Purchases.shared.setAdGroup(adGroup)
+        Purchases.shared.attribution.setAdGroup(adGroup)
     }
     @objc static func setAd(_ ad: String?) {
-        Purchases.shared.setAd(ad)
+        Purchases.shared.attribution.setAd(ad)
     }
     @objc static func setKeyword(_ keyword: String?) {
-        Purchases.shared.setKeyword(keyword)
+        Purchases.shared.attribution.setKeyword(keyword)
     }
     @objc static func setCreative(_ creative: String?) {
-        Purchases.shared.setCreative(creative)
+        Purchases.shared.attribution.setCreative(creative)
     }
 
 }
