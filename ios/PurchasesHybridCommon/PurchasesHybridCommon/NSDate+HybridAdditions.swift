@@ -25,11 +25,11 @@ extension Date {
 private extension Date {
 
     static func stringFromDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.timeZone = NSTimeZone(abbreviation: "GMT") as TimeZone?
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        return formatter.string(from: date as Date)
+        return Self.formatter.string(from: date)
     }
+
+    private static let formatter: ISO8601DateFormatter = {
+        return ISO8601DateFormatter()
+    }()
 
 }
