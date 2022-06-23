@@ -11,7 +11,7 @@ class MockPurchases: Purchases {
 
     init() {
         let systemInfo = try! SystemInfo(platformInfo: nil, finishTransactions: true)
-        let deviceCache: DeviceCache = DeviceCache(systemInfo: systemInfo)
+        let deviceCache = DeviceCache(sandboxEnvironmentDetector: systemInfo)
 
         let operationDispatcher: OperationDispatcher = OperationDispatcher()
 
@@ -32,18 +32,24 @@ class MockPurchases: Purchases {
                                                                            backend: backend,
                                                                            systemInfo: systemInfo)
 
-        let identityManager: IdentityManager = IdentityManager(
-            deviceCache: deviceCache,
-            backend: backend,
-            customerInfoManager: customerInfoManager,
-            appUserID: nil)
-
         let attributionDataMigrator = AttributionDataMigrator()
+
         let subscriberAttributesManager = SubscriberAttributesManager(backend: backend,
                                                                       deviceCache: deviceCache,
                                                                       operationDispatcher: operationDispatcher,
                                                                       attributionFetcher: attributionFetcher,
                                                                       attributionDataMigrator: attributionDataMigrator)
+
+        let identityManager = IdentityManager(
+            deviceCache: deviceCache,
+            backend: backend,
+            customerInfoManager: customerInfoManager,
+            attributeSyncing: subscriberAttributesManager,
+            appUserID: nil
+        )
+
+        let subscriberAttributes = Attribution(subscriberAttributesManager: subscriberAttributesManager,
+                                               currentUserProvider: identityManager)
 
         let attributionPoster: AttributionPoster = AttributionPoster(
             deviceCache: deviceCache,
@@ -67,7 +73,22 @@ class MockPurchases: Purchases {
 
         let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, currentUserProvider: identityManager)
 
-        let purchasesOrchestrator: PurchasesOrchestrator = PurchasesOrchestrator(productsManager: productsManager, storeKitWrapper: storeKitWrapper, systemInfo: systemInfo, subscriberAttributesManager: subscriberAttributesManager, operationDispatcher: operationDispatcher, receiptFetcher: receiptFetcher, customerInfoManager: customerInfoManager, backend: backend, currentUserProvider: identityManager, transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations, receiptParser: ReceiptParser()), deviceCache: deviceCache, manageSubscriptionsHelper: manageSubscriptionsHelper, beginRefundRequestHelper: beginRefundRequestHelper)
+        let purchasesOrchestrator = PurchasesOrchestrator(
+            productsManager: productsManager,
+            storeKitWrapper: storeKitWrapper,
+            systemInfo: systemInfo,
+            subscriberAttributes: subscriberAttributes,
+            operationDispatcher: operationDispatcher,
+            receiptFetcher: receiptFetcher,
+            customerInfoManager: customerInfoManager,
+            backend: backend,
+            currentUserProvider: identityManager,
+            transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations,
+                                                     receiptParser: ReceiptParser()),
+            deviceCache: deviceCache,
+            manageSubscriptionsHelper: manageSubscriptionsHelper,
+            beginRefundRequestHelper: beginRefundRequestHelper
+        )
 
         let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(systemInfo: systemInfo, receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, currentUserProvider: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
 
@@ -83,7 +104,7 @@ class MockPurchases: Purchases {
                    offeringsFactory: offeringsFactory,
                    deviceCache: deviceCache,
                    identityManager: identityManager,
-                   subscriberAttributesManager: subscriberAttributesManager,
+                   subscriberAttributes: subscriberAttributes,
                    operationDispatcher: operationDispatcher,
                    customerInfoManager: customerInfoManager,
                    productsManager: productsManager,
