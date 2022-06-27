@@ -21,13 +21,13 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
-                            \"request_date\": \"2019-08-16T10:30:42Z\",
-                            \"subscriber\": {
-                                \"first_seen\": \"2019-07-17T00:05:54Z\",
-                                \"management_url\": \"https://revenuecat.com\",
-                                \"original_app_user_id\": \"\",
-                                \"subscriptions\": [],
-                                \"other_purchases\": []
+                            "request_date": "2019-08-16T10:30:42Z",
+                            "subscriber": {
+                                "first_seen": "2019-07-17T00:05:54Z",
+                                "management_url": "https://revenuecat.com",
+                                "original_app_user_id": "",
+                                "subscriptions": {},
+                                "other_purchases": {}
                             }
                         }
                         """
@@ -42,12 +42,12 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
-                            \"request_date\": \"2019-08-16T10:30:42Z\",
-                            \"subscriber\": {
-                                \"first_seen\": \"2019-07-17T00:05:54Z\",
-                                \"original_app_user_id\": \"\",
-                                \"subscriptions\": [],
-                                \"other_purchases\": []
+                            "request_date": "2019-08-16T10:30:42Z",
+                            "subscriber": {
+                                "first_seen": "2019-07-17T00:05:54Z",
+                                "original_app_user_id": "",
+                                "subscriptions": {},
+                                "other_purchases": {}
                             }
                         }
                         """
@@ -71,7 +71,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                             "subscriber": {
                                 "original_app_user_id": "app_user_id",
                                 "first_seen": "2019-07-17T00:05:54Z",
-                                "subscriptions": [],
+                                "subscriptions": {},
                                 "non_subscriptions":
                                    {
                                     "\(expectedProductID)": [{
@@ -102,16 +102,16 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
 
                     expect(transactionDictionary["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
-                it ("is empty when there are no non subscription transactions") {
+                it("is empty when there are no non subscription transactions") {
                     let mockCustomerInfo = try CustomerInfo.fromJSON(
                         """
                         {
-                            \"request_date\": \"2019-08-16T10:30:42Z\",
-                            \"subscriber\": {
-                                \"original_app_user_id\": \"\",
-                                \"first_seen\": \"2019-07-17T00:05:54Z\",
-                                \"subscriptions\": [],
-                                \"other_purchases\": []
+                            "request_date": \"2019-08-16T10:30:42Z",
+                            "subscriber": {
+                                "original_app_user_id": "",
+                                "first_seen": \"2019-07-17T00:05:54Z",
+                                "subscriptions": {},
+                                "other_purchases": {}
                             }
                         }
                         """
