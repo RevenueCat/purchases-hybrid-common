@@ -11,7 +11,7 @@ class MockPurchases: Purchases {
 
     init() {
         let systemInfo = try! SystemInfo(platformInfo: nil, finishTransactions: true)
-        let deviceCache: DeviceCache = DeviceCache(systemInfo: systemInfo)
+        let deviceCache = DeviceCache(sandboxEnvironmentDetector: systemInfo)
 
         let operationDispatcher: OperationDispatcher = OperationDispatcher()
 

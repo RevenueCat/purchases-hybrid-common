@@ -6,7 +6,7 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  pod 'RevenueCat', '4.4.1'
+  pod 'RevenueCat', '4.6.1'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -20,4 +20,6 @@ target 'ObjCAPITester' do
   platform :ios, '11.0'
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
+
+  pod 'RevenueCat'
 end
