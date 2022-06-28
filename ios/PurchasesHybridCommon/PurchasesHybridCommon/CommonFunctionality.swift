@@ -267,7 +267,15 @@ import RevenueCat
 
     @objc(getCustomerInfoWithCompletionBlock:)
     static func customerInfo(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.getCustomerInfo(completion: customerInfoCompletionBlock(from: completion))
+        Self.customerInfo(fetchPolicy: .default, completion: completion)
+    }
+
+    internal static func customerInfo(
+        fetchPolicy: CacheFetchPolicy,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Purchases.shared.getCustomerInfo(fetchPolicy: fetchPolicy,
+                                         completion: customerInfoCompletionBlock(from: completion))
     }
 
 }

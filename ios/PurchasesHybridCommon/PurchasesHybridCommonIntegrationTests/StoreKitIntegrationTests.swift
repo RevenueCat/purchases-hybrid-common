@@ -25,6 +25,11 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
 
     private var testSession: SKTestSession!
 
+    override class func setUp() {
+        // Uncomment this to re-record snapshots if necessary:
+        // isRecording = true
+    }
+
     override func setUp() async throws {
         try await super.setUp()
 
@@ -49,10 +54,48 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         return .disabled
     }
 
+    func testCanGetOfferings() async throws {
+        let offerings = try await CommonFunctionality.offerings()
+
+        await self.assertSnapshot(offerings)
+    }
+
+    func testCanMakePurchase() async throws {
+        var data = try await self.purchaseMonthlyOffering()
+        removeDates(&data)
+
+        await self.assertSnapshot(data)
+    }
+
+    func testPurchaseFailuresAreReportedCorrectly() async throws {
+        self.testSession.failTransactionsEnabled = true
+        self.testSession.failureError = .invalidSignature
+
+        do {
+            try await self.purchaseMonthlyOffering()
+            fail("Expected error")
+        } catch {
+            expect(error).to(matchError(ErrorCode.invalidPromotionalOfferError))
+        }
+    }
+
+    func testLogInAndLogOut() async throws {
+        var customerInfo = try await CommonFunctionality.logIn(appUserID: UUID().uuidString)
+        removeDates(&customerInfo)
+        await self.assertSnapshot(customerInfo)
+
+        try await self.purchaseMonthlyOffering()
+
+        var loggedOutCustomerInfo = try await CommonFunctionality.logOut()
+        removeDates(&loggedOutCustomerInfo)
+        await self.assertSnapshot(loggedOutCustomerInfo)
+    }
+
 }
 
 private extension StoreKit1IntegrationTests {
 
+    @MainActor
     func assertSnapshot(
         _ value: Any,
         testName: String = #function,
@@ -69,6 +112,39 @@ private extension StoreKit1IntegrationTests {
 
 }
 
+private extension StoreKit1IntegrationTests {
+
+    static let entitlementIdentifier = "premium"
+
+    private var currentOffering: Offering {
+        get async throws {
+            return try await XCTAsyncUnwrap(try await Purchases.shared.offerings().current)
+        }
+    }
+
+    var monthlyPackage: Package {
+        get async throws {
+            return try await XCTAsyncUnwrap(try await self.currentOffering.monthly)
+        }
+    }
+
+
+    @discardableResult
+    func purchaseMonthlyOffering(
+        file: FileString = #file,
+        line: UInt = #line
+    ) async throws -> [String: Any] {
+        let package = try await self.monthlyPackage
+
+        return try await CommonFunctionality.purchase(
+            package: package.identifier,
+            offeringIdentifier: package.offeringIdentifier,
+            signedDiscountTimestamp: nil
+        )
+    }
+
+}
+
 private extension StoreKit2Setting {
 
     var testSuffix: String {
@@ -78,4 +154,38 @@ private extension StoreKit2Setting {
         }
     }
 
+}
+
+/// Remove dates from the given dictionary so they can be ignored from snapshot tests.
+private func removeDates(_ data: inout [String: Any]) {
+    func removeDatesFromAny(_ data: inout Any) {
+        guard var dictionary = data as? [String: Any] else {
+            return
+        }
+
+        removeDates(&dictionary)
+        data = dictionary
+    }
+
+    func shouldRemove(key: String, withValue value: Any?) -> Bool {
+        let keysToRemove: Set<String> = [
+            "millis",
+            "date",
+            "firstSeen",
+            "originalAppUserId"
+        ]
+
+        return (!keysToRemove.allSatisfy { !key.localizedCaseInsensitiveContains($0) } &&
+                value != nil &&
+                !(value is NSNull))
+    }
+
+    for var entry in data {
+        if shouldRemove(key: entry.key, withValue: entry.value) {
+            data.removeValue(forKey: entry.key)
+        } else {
+            removeDatesFromAny(&entry.value)
+            data[entry.key] = entry.value
+        }
+    }
 }

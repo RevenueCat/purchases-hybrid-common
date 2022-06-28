@@ -1,0 +1,25 @@
+{
+  "activeSubscriptions" : [
+
+  ],
+  "allPurchasedProductIdentifiers" : [
+
+  ],
+  "entitlements" : {
+    "active" : {
+
+    },
+    "all" : {
+
+    }
+  },
+  "latestExpirationDate" : null,
+  "latestExpirationDateMillis" : null,
+  "managementURL" : null,
+  "nonSubscriptionTransactions" : [
+
+  ],
+  "originalApplicationVersion" : null,
+  "originalPurchaseDate" : null,
+  "originalPurchaseDateMillis" : null
+}

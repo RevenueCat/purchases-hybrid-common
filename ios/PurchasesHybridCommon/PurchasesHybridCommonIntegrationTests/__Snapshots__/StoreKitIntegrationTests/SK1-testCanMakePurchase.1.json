@@ -1,0 +1,50 @@
+{
+  "customerInfo" : {
+    "activeSubscriptions" : [
+      "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+    ],
+    "allPurchasedProductIdentifiers" : [
+      "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+    ],
+    "entitlements" : {
+      "active" : {
+        "premium" : {
+          "billingIssueDetectedAt" : null,
+          "billingIssueDetectedAtMillis" : null,
+          "identifier" : "premium",
+          "isActive" : true,
+          "isSandbox" : true,
+          "ownershipType" : "PURCHASED",
+          "periodType" : "INTRO",
+          "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "store" : "APP_STORE",
+          "unsubscribedDetectedAt" : null,
+          "unsubscribedDetectedAtMillis" : null,
+          "willRenew" : true
+        }
+      },
+      "all" : {
+        "premium" : {
+          "billingIssueDetectedAt" : null,
+          "billingIssueDetectedAtMillis" : null,
+          "identifier" : "premium",
+          "isActive" : true,
+          "isSandbox" : true,
+          "ownershipType" : "PURCHASED",
+          "periodType" : "INTRO",
+          "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "store" : "APP_STORE",
+          "unsubscribedDetectedAt" : null,
+          "unsubscribedDetectedAtMillis" : null,
+          "willRenew" : true
+        }
+      }
+    },
+    "managementURL" : "https:\/\/apps.apple.com\/account\/subscriptions",
+    "nonSubscriptionTransactions" : [
+
+    ],
+    "originalApplicationVersion" : "1.0"
+  },
+  "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+}

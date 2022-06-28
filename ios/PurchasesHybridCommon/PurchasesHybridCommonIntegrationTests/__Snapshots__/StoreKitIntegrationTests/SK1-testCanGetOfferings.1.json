@@ -1,0 +1,224 @@
+{
+  "all" : {
+    "default" : {
+      "annual" : {
+        "identifier" : "$rc_annual",
+        "offeringIdentifier" : "default",
+        "packageType" : "ANNUAL",
+        "product" : {
+          "currency_code" : "USD",
+          "description" : "Annual Subscription with 1 week trial",
+          "discounts" : [
+
+          ],
+          "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+          "intro_price" : {
+            "cycles" : 1,
+            "period" : "P1W",
+            "periodNumberOfUnits" : 1,
+            "periodUnit" : "WEEK",
+            "price" : 0,
+            "priceString" : "$0.00"
+          },
+          "price" : 39.99,
+          "price_string" : "$39.99",
+          "product_category" : "SUBSCRIPTION",
+          "product_type" : "NON_CONSUMABLE",
+          "title" : "Annual Subscription"
+        }
+      },
+      "availablePackages" : [
+        {
+          "identifier" : "$rc_annual",
+          "offeringIdentifier" : "default",
+          "packageType" : "ANNUAL",
+          "product" : {
+            "currency_code" : "USD",
+            "description" : "Annual Subscription with 1 week trial",
+            "discounts" : [
+
+            ],
+            "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+            "intro_price" : {
+              "cycles" : 1,
+              "period" : "P1W",
+              "periodNumberOfUnits" : 1,
+              "periodUnit" : "WEEK",
+              "price" : 0,
+              "priceString" : "$0.00"
+            },
+            "price" : 39.99,
+            "price_string" : "$39.99",
+            "product_category" : "SUBSCRIPTION",
+            "product_type" : "NON_CONSUMABLE",
+            "title" : "Annual Subscription"
+          }
+        },
+        {
+          "identifier" : "$rc_monthly",
+          "offeringIdentifier" : "default",
+          "packageType" : "MONTHLY",
+          "product" : {
+            "currency_code" : "USD",
+            "description" : "Monthly Subscription with 1 week trial",
+            "discounts" : [
+
+            ],
+            "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+            "intro_price" : {
+              "cycles" : 1,
+              "period" : "P1W",
+              "periodNumberOfUnits" : 1,
+              "periodUnit" : "WEEK",
+              "price" : 0,
+              "priceString" : "$0.00"
+            },
+            "price" : 19.99,
+            "price_string" : "$19.99",
+            "product_category" : "SUBSCRIPTION",
+            "product_type" : "NON_CONSUMABLE",
+            "title" : "Monthly Subscription"
+          }
+        }
+      ],
+      "identifier" : "default",
+      "monthly" : {
+        "identifier" : "$rc_monthly",
+        "offeringIdentifier" : "default",
+        "packageType" : "MONTHLY",
+        "product" : {
+          "currency_code" : "USD",
+          "description" : "Monthly Subscription with 1 week trial",
+          "discounts" : [
+
+          ],
+          "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "intro_price" : {
+            "cycles" : 1,
+            "period" : "P1W",
+            "periodNumberOfUnits" : 1,
+            "periodUnit" : "WEEK",
+            "price" : 0,
+            "priceString" : "$0.00"
+          },
+          "price" : 19.99,
+          "price_string" : "$19.99",
+          "product_category" : "SUBSCRIPTION",
+          "product_type" : "NON_CONSUMABLE",
+          "title" : "Monthly Subscription"
+        }
+      },
+      "serverDescription" : "standard set of packages"
+    }
+  },
+  "current" : {
+    "annual" : {
+      "identifier" : "$rc_annual",
+      "offeringIdentifier" : "default",
+      "packageType" : "ANNUAL",
+      "product" : {
+        "currency_code" : "USD",
+        "description" : "Annual Subscription with 1 week trial",
+        "discounts" : [
+
+        ],
+        "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+        "intro_price" : {
+          "cycles" : 1,
+          "period" : "P1W",
+          "periodNumberOfUnits" : 1,
+          "periodUnit" : "WEEK",
+          "price" : 0,
+          "priceString" : "$0.00"
+        },
+        "price" : 39.99,
+        "price_string" : "$39.99",
+        "product_category" : "SUBSCRIPTION",
+        "product_type" : "NON_CONSUMABLE",
+        "title" : "Annual Subscription"
+      }
+    },
+    "availablePackages" : [
+      {
+        "identifier" : "$rc_annual",
+        "offeringIdentifier" : "default",
+        "packageType" : "ANNUAL",
+        "product" : {
+          "currency_code" : "USD",
+          "description" : "Annual Subscription with 1 week trial",
+          "discounts" : [
+
+          ],
+          "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+          "intro_price" : {
+            "cycles" : 1,
+            "period" : "P1W",
+            "periodNumberOfUnits" : 1,
+            "periodUnit" : "WEEK",
+            "price" : 0,
+            "priceString" : "$0.00"
+          },
+          "price" : 39.99,
+          "price_string" : "$39.99",
+          "product_category" : "SUBSCRIPTION",
+          "product_type" : "NON_CONSUMABLE",
+          "title" : "Annual Subscription"
+        }
+      },
+      {
+        "identifier" : "$rc_monthly",
+        "offeringIdentifier" : "default",
+        "packageType" : "MONTHLY",
+        "product" : {
+          "currency_code" : "USD",
+          "description" : "Monthly Subscription with 1 week trial",
+          "discounts" : [
+
+          ],
+          "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "intro_price" : {
+            "cycles" : 1,
+            "period" : "P1W",
+            "periodNumberOfUnits" : 1,
+            "periodUnit" : "WEEK",
+            "price" : 0,
+            "priceString" : "$0.00"
+          },
+          "price" : 19.99,
+          "price_string" : "$19.99",
+          "product_category" : "SUBSCRIPTION",
+          "product_type" : "NON_CONSUMABLE",
+          "title" : "Monthly Subscription"
+        }
+      }
+    ],
+    "identifier" : "default",
+    "monthly" : {
+      "identifier" : "$rc_monthly",
+      "offeringIdentifier" : "default",
+      "packageType" : "MONTHLY",
+      "product" : {
+        "currency_code" : "USD",
+        "description" : "Monthly Subscription with 1 week trial",
+        "discounts" : [
+
+        ],
+        "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+        "intro_price" : {
+          "cycles" : 1,
+          "period" : "P1W",
+          "periodNumberOfUnits" : 1,
+          "periodUnit" : "WEEK",
+          "price" : 0,
+          "priceString" : "$0.00"
+        },
+        "price" : 19.99,
+        "price_string" : "$19.99",
+        "product_category" : "SUBSCRIPTION",
+        "product_type" : "NON_CONSUMABLE",
+        "title" : "Monthly Subscription"
+      }
+    },
+    "serverDescription" : "standard set of packages"
+  }
+}
