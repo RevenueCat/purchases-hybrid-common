@@ -1,0 +1,89 @@
+{
+  "identifier" : "C88CE384",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1632064283",
+    "_developerTeamID" : "8SXR2327BM",
+    "_lastSynchronizedDate" : 678131611.26373899
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20972196",
+      "localizations" : [
+
+      ],
+      "name" : "premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1632066498",
+          "introductoryOffer" : {
+            "internalID" : "5B51C0D1",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Annual Subscription with 1 week trial",
+              "displayName" : "Annual Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual $39.99, 1-week free",
+          "subscriptionGroupID" : "20972196",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1632068374",
+          "introductoryOffer" : {
+            "internalID" : "E2B0BB92",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Monthly Subscription with 1 week trial",
+              "displayName" : "Monthly Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly $19.99, 1-week free",
+          "subscriptionGroupID" : "20972196",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
