@@ -57,7 +57,7 @@ jobs:
           command: fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
-            SCAN_SCHEME: PurchasesHybridCommonTests
+            SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
           command: pod lib lint
