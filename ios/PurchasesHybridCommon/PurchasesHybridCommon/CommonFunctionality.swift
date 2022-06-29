@@ -294,7 +294,7 @@ import RevenueCat
         completion: @escaping([String: Any]) -> Void) {
             Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: products) { eligibilityByProductId in
                 completion(eligibilityByProductId.mapValues { [
-                    "status": $0.status,
+                    "status": $0.status.rawValue,
                     "description": $0.description
                 ]
                 })
