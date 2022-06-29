@@ -85,6 +85,8 @@ import RevenueCat
 #endif
 
     @objc public static func canMakePaymentsWithFeatures(_ features: [Int]) -> Bool {
+        // Features are for Google Play only, so we ignore them for iOS.
+        // See https://sdk.revenuecat.com/android/5.1.1/purchases/com.revenuecat.purchases/-purchases/-companion/can-make-payments.html
         return Purchases.canMakePayments()
     }
 
