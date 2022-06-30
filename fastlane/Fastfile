@@ -31,7 +31,7 @@ lane :github_release_current do |options|
   github_release(version: version_number)
 end
 
-desc "Make GitHub release"
+desc "Make GitHub release for specific version"
 lane :github_release do |options|
   release_version = options[:version]
   fail ArgumentError, "missing version" unless release_version
