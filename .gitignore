@@ -1,7 +1,6 @@
 .DS_Store
 ios/purchases-common-build
 ios/PurchasesHybridCommon/Pods/
-CHANGELOG.latest.md
 *.bck
 fastlane/report.xml
 android/.composite-enable

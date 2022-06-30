@@ -25,6 +25,40 @@ lane :bump_and_update_changelog do |options|
   increment_version_in(previous_version_number, new_version_number, "../.version")
 end
 
+desc "Make GitHub release for current version"
+lane :github_release_current do |options|
+  version_number = current_version_number
+  github_release(version: version_number)
+end
+
+desc "Make GitHub release for specific version"
+lane :github_release do |options|
+  release_version = options[:version]
+  fail ArgumentError, "missing version" unless release_version
+
+  begin
+    changelog = File.read("../CHANGELOG.latest.md")
+  rescue
+    fail "please add a CHANGELOG.latest.md file before calling this lane"
+  end
+  commit_hash = last_git_commit[:commit_hash]
+  puts commit_hash
+
+  is_prerelease = release_version.include?("-")
+
+  set_github_release(
+    repository_name: "revenuecat/purchases-hybrid-common",
+    api_token: ENV["GITHUB_TOKEN"],
+    name: release_version,
+    tag_name: "#{release_version}",
+    description: changelog,
+    commitish: commit_hash,
+    upload_assets: ["PurchasesHybridCommon.framework.zip"],
+    is_draft: false,
+    is_prerelease: is_prerelease
+  )
+end
+
 platform :ios do
 
   desc "Increment build number"
@@ -42,36 +76,8 @@ platform :ios do
     version_number = current_version_number
     push_pods
     archive
-    github_release(version: version_number)
   end
 
-  desc "Make github release"
-  lane :github_release do |options|
-    release_version = options[:version]
-    fail ArgumentError, "missing version" unless release_version
-
-    begin
-      changelog = File.read("../CHANGELOG.latest.md")
-    rescue
-      fail "please add a CHANGELOG.latest.md file before calling this lane"
-    end
-    commit_hash = last_git_commit[:commit_hash]
-    puts commit_hash
-
-    is_prerelease = release_version.include?("-")
-
-    set_github_release(
-      repository_name: "revenuecat/purchases-hybrid-common",
-      api_token: ENV["GITHUB_TOKEN"],
-      name: release_version,
-      tag_name: "#{release_version}",
-      description: changelog,
-      commitish: commit_hash,
-      upload_assets: ["PurchasesHybridCommon.framework.zip"],
-      is_draft: false,
-      is_prerelease: true
-  )
-  end
 end
 
 platform :android do
@@ -128,7 +134,6 @@ platform :android do
         properties: gradleProperties,
         project_dir: 'android'
       )
-      github_release(version: version)
     end
   end
 end
@@ -167,6 +172,7 @@ def push_pods
 end
 
 def archive
+  match(type: "appstore")
   framework_filename = "PurchasesHybridCommon.framework"
   build_app(
     workspace: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcworkspace",
@@ -176,7 +182,8 @@ def archive
     clean: true,
     derived_data_path: "derived_data/",
     output_name: framework_filename,
-    destination: 'generic/platform=iOS'
+    destination: 'generic/platform=iOS',
+    export_method: "app-store"
   )
 
   # fastlane gym doesn't fully support .frameworks, so we need to look for the output

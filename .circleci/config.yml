@@ -3,12 +3,13 @@
 
 version: 2.1
 
-release-tags: &release-tags
-  filters:
-    tags:
-      only: /^(\d+\.)(\d+\.)(\d+)$/
-    branches:
-      ignore: /.*/
+aliases:
+  release-tags: &release-tags
+    filters:
+      tags:
+        only: /^(\d+\.)(\d+\.)(\d+)$/
+      branches:
+        ignore: /.*/
 
 orbs:
   android: circleci/android@1.0.3
@@ -90,8 +91,16 @@ jobs:
           paths:
             - vendor/bundle
       - run:
+          name: Install pods
+          command: pod install
+          working_directory: ios/PurchasesHybridCommon
+      - run:
           name: Deploy new version
           command: bundle exec fastlane ios release
+      - persist_to_workspace:
+          root: .
+          paths:
+            - PurchasesHybridCommon.framework.zip
 
   test-android:
     executor:
@@ -126,14 +135,33 @@ jobs:
           name: Deployment
           command: bundle exec fastlane android deploy
 
+  make-github-release:
+    docker:
+      - image: cimg/ruby:2.7.2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - install-gems
+      - run:
+          name: Make GitHub release for current version
+          command: bundle exec fastlane github_release_current
+
 workflows:
   version: 2
-  ios:
+  test:
     jobs:
       - test-ios
-      - deploy-ios: *release-tags
-
-  android:
-    jobs:
       - test-android
-      - deploy-android: *release-tags
+
+  deploy:
+    jobs:
+      - deploy-ios:
+          <<: *release-tags
+      - deploy-android:
+          <<: *release-tags
+      - make-github-release:
+          <<: *release-tags
+          requires:
+            - deploy-ios
+            - deploy-android

@@ -1,0 +1,8 @@
+git_url(ENV["CERTS_REPO_URL"])
+
+storage_mode("git")
+
+type("appstore")
+
+app_identifier(["com.revenuecat.PurchasesHybridCommon"])
+username(ENV["FASTLANE_USER"])
