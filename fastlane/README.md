@@ -35,7 +35,7 @@ Make GitHub release for current version
 [bundle exec] fastlane github_release
 ```
 
-Make GitHub release
+Make GitHub release for specific version
 
 ----
 
