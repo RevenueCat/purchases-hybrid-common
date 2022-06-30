@@ -95,6 +95,20 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(loggedOutCustomerInfo)
     }
 
+    func testTrialOrIntroductoryPriceEligibility() async throws {
+        if Self.storeKit2Setting == .disabled {
+            // SK1 implementation relies on the receipt being loaded already.
+            // See `TrialOrIntroPriceEligibilityChecker.sk1CheckEligibility`
+            _ = try await CommonFunctionality.restorePurchases()
+        }
+
+        let product = try await self.monthlyPackage.storeProduct
+
+        let result = await CommonFunctionality.checkTrialOrIntroductoryPriceEligibility(for: [product.productIdentifier])
+
+        await self.assertSnapshot(result)
+    }
+
 }
 
 private extension StoreKit1IntegrationTests {

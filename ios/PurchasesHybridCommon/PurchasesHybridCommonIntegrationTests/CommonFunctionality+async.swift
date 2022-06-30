@@ -72,4 +72,20 @@ extension CommonFunctionality {
         }
     }
 
+    static func syncPurchases() async throws -> [String: Any] {
+        return try await withCheckedThrowingContinuation { continuation in
+            Self.syncPurchases { dictionary, error in
+                continuation.resume(with: Result(dictionary, error?.error))
+            }
+        }
+    }
+
+    static func checkTrialOrIntroductoryPriceEligibility(for products: [String]) async -> [String: Any] {
+        return await withCheckedContinuation { continuation in
+            Self.checkTrialOrIntroductoryPriceEligibility(for: products) { dictionary in
+                continuation.resume(returning: dictionary)
+            }
+        }
+    }
+
 }
