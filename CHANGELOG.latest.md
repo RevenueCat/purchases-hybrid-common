@@ -1,2 +1,2 @@
-- Bump RevenueCat dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
+- Bump RevenueCat purchases-ios dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
 - Fix checkTrialOrIntroDiscountEligibility returning the incorrect eligibility status (https://github.com/RevenueCat/purchases-hybrid-common/pull/159)
