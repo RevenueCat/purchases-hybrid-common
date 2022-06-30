@@ -1,6 +1,6 @@
 ## 3.2.1
 
-- Bump RevenueCat dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
+- Bump RevenueCat dependency dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
 - Fix checkTrialOrIntroDiscountEligibility returning the incorrect eligibility status (https://github.com/RevenueCat/purchases-hybrid-common/pull/159)
 
 ## 3.2.0
