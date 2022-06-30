@@ -18,7 +18,7 @@ import java.util.Map;
 
 @SuppressWarnings({"unused", "deprecation"})
 class CommonApiTests {
-    private void checkCheckSetAllowSharingAppStoreAccount(Boolean enabled) {
+    private void checkCheckSetAllowSharingAppStoreAccount(boolean enabled) {
         CommonKt.setAllowSharingAppStoreAccount(enabled);
     }
 
@@ -80,7 +80,7 @@ class CommonApiTests {
         CommonKt.logOut(onResult);
     }
 
-    private void checkSetDebugLogsEnabled(Boolean enabled) {
+    private void checkSetDebugLogsEnabled(boolean enabled) {
         CommonKt.setDebugLogsEnabled(enabled);
     }
 
@@ -105,10 +105,10 @@ class CommonApiTests {
     }
 
     private void checkIsAnonymous() {
-        Boolean isAnonymous = CommonKt.isAnonymous();
+        boolean isAnonymous = CommonKt.isAnonymous();
     }
 
-    private void checkSetFinishTransactions(Boolean enabled) {
+    private void checkSetFinishTransactions(boolean enabled) {
         CommonKt.setFinishTransactions(enabled);
     }
 
