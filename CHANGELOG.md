@@ -1,3 +1,8 @@
+## 3.2.1
+
+- Bump RevenueCat dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
+- Fix checkTrialOrIntroDiscountEligibility returning the incorrect eligibility status (https://github.com/RevenueCat/purchases-hybrid-common/pull/159)
+
 ## 3.2.0
 
 - Fix purchasing of a product not initiating the purchase in iOS (https://github.com/RevenueCat/purchases-hybrid-common/pull/146/)
