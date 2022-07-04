@@ -33,7 +33,7 @@ class BaseIntegrationTests: XCTestCase {
         }
 
         self.userDefaults = UserDefaults(suiteName: Constants.userDefaultsSuiteName)
-        self.userDefaults?.removePersistentDomain(forName: Constants.userDefaultsSuiteName)
+        self.userDefaults.removePersistentDomain(forName: Constants.userDefaultsSuiteName)
         if !Constants.proxyURL.isEmpty {
             Purchases.proxyURL = URL(string: Constants.proxyURL)
         }
