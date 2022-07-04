@@ -80,7 +80,8 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     }
 
     func testLogInAndLogOut() async throws {
-        // Fetch receipt to make sure there aren't race conditions
+        // Since the receipt might not be available on device on the first run,
+        // Fetch receipt to make sure there aren't race conditions dependent on the order of test runs.
         _ = try await CommonFunctionality.restorePurchases()
 
         var customerInfo = try await CommonFunctionality.logIn(appUserID: UUID().uuidString)
