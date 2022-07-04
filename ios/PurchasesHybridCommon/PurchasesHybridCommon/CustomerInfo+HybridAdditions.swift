@@ -31,7 +31,7 @@ import RevenueCat
             allPurchasesMillis[identifier] = purchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull()
         }
 
-        let aDictionary: [String: Any] = [
+        return [
             "entitlements": entitlements.dictionary,
             "activeSubscriptions": Array(activeSubscriptions),
             "allPurchasedProductIdentifiers": Array(allPurchasedProductIdentifiers),
@@ -52,7 +52,6 @@ import RevenueCat
             "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptions.map { $0.dictionary },
         ]
-        return aDictionary
     }
 
 }
