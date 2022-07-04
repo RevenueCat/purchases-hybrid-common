@@ -18,8 +18,7 @@ class BaseIntegrationTests: XCTestCase {
     }
 
     override class func setUp() {
-        // TODO: uncomment this when RevenueCat is updated (see https://github.com/RevenueCat/purchases-ios/pull/1730)
-        // BundleSandboxEnvironmentDetector.default = MockSandboxEnvironmentDetector()
+         BundleSandboxEnvironmentDetector.default = MockSandboxEnvironmentDetector()
     }
 
     override func setUp() async throws {
