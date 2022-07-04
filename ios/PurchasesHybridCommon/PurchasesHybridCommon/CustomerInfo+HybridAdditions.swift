@@ -50,7 +50,7 @@ import RevenueCat
             "originalPurchaseDate": originalPurchaseDate?.rc_formattedAsISO8601() ?? NSNull(),
             "originalPurchaseDateMillis": originalPurchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "managementURL": managementURL?.absoluteString ?? NSNull(),
-            "nonSubscriptionTransactions": nonSubscriptionTransactions.map { $0.dictionary },
+            "nonSubscriptionTransactions": nonSubscriptions.map { $0.dictionary },
         ]
         return aDictionary
     }
