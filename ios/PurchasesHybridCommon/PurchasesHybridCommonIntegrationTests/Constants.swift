@@ -15,7 +15,6 @@ enum Constants {
     static let proxyURL = "REVENUECAT_PROXY_URL"
 
     static let userDefaultsSuiteName = "IntegrationTests"
-    // TODO: don't copy!
     static let storeKitConfigFileName = "PurchasesHybridCommon"
 
 }
