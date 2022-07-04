@@ -69,6 +69,31 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           path: test_output
           destination: scan-output
+
+  integration-test-ios:
+    executor: ios-executor
+    steps:
+      - checkout
+      - run:
+          name: Install pods
+          command: pod install
+          working_directory: ios/PurchasesHybridCommon
+      - run:
+          name: Update API key
+          command: fastlane ios replace_api_key_integration_tests
+      - run:
+          name: Run ios tests
+          command: fastlane scan --result_bundle=true
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
+      - store_test_results:
+          working_directory: ios/PurchasesHybridCommon
+          path: test_output
+      - store_artifacts:
+          working_directory: ios/PurchasesHybridCommon
+          path: test_output
+          destination: scan-output
   
   deploy-ios:
     executor: ios-executor
@@ -153,6 +178,7 @@ workflows:
   test:
     jobs:
       - test-ios
+      - integration-test-ios
       - test-android
 
   deploy:

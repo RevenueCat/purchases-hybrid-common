@@ -2,7 +2,6 @@
 
 target 'PurchasesHybridCommon' do
   platform :ios, '11.0'
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
@@ -14,11 +13,19 @@ target 'PurchasesHybridCommon' do
     pod 'Nimble'
   end
 
+  target 'PurchasesHybridCommonIntegrationTests' do
+    # Pods for testing
+    pod 'Quick'
+    pod 'Nimble'
+
+    # Needs https://github.com/pointfreeco/swift-snapshot-testing/pull/552 which isn't released as of 1.9.0
+    pod 'SnapshotTesting', :git => 'git@github.com:pointfreeco/swift-snapshot-testing.git', :branch => 'main'
+  end
+
 end
 
 target 'ObjCAPITester' do
   platform :ios, '11.0'
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   pod 'RevenueCat', '4.7.0'
