@@ -64,4 +64,12 @@ extension CommonFunctionality {
         }
     }
 
+    static func restorePurchases() async throws -> [String: Any] {
+        return try await withCheckedThrowingContinuation { continuation in
+            Self.restorePurchases { dictionary, error in
+                continuation.resume(with: Result(dictionary, error?.error))
+            }
+        }
+    }
+
 }

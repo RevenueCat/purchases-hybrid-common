@@ -21,8 +21,6 @@
     "nonSubscriptionTransactions" : [
 
     ],
-    "originalApplicationVersion" : null,
-    "originalPurchaseDate" : null,
-    "originalPurchaseDateMillis" : null
+    "originalApplicationVersion" : "1.0"
   }
 }
