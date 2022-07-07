@@ -58,6 +58,14 @@ Increment build number
 
 Release to CocoaPods, create Carthage archive, and create GitHub release
 
+### ios replace_api_key_integration_tests
+
+```sh
+[bundle exec] fastlane ios replace_api_key_integration_tests
+```
+
+replace API KEY for integration tests
+
 ----
 
 

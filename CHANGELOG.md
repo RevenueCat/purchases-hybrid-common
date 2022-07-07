@@ -1,3 +1,7 @@
+## 3.2.2
+
+- Bump RevenueCat purchases-ios dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/166)
+
 ## 3.2.1
 
 - Bump RevenueCat purchases-ios dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/163)
