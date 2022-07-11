@@ -12,13 +12,14 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            dangerousSettings:)
+            usesStoreKit2IfAvailable:dangerousSettings:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
+                          usesStoreKit2IfAvailable: Bool = false,
                           dangerousSettings: DangerousSettings?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
@@ -36,8 +37,7 @@ import RevenueCat
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
-        // todo: provide option
-        configurationBuilder = configurationBuilder.with(usesStoreKit2IfAvailable: false)
+        configurationBuilder = configurationBuilder.with(usesStoreKit2IfAvailable: usesStoreKit2IfAvailable)
         if let dangerousSettings = dangerousSettings {
             configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
         }
