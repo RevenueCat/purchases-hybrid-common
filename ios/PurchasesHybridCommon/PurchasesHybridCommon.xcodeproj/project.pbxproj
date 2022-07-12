@@ -39,8 +39,8 @@
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
-		57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */; };
 		579EF61C286B761C002263AD /* PurchasesHybridCommon.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 57FFDE47286B72750089A57B /* PurchasesHybridCommon.storekit */; };
+		57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */; };
 		57FFDE19286A566D0089A57B /* BaseIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */; };
 		57FFDE1A286A566D0089A57B /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
 		57FFDE2B286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE2A286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift */; };
@@ -51,6 +51,7 @@
 		57FFDE41286A77E30089A57B /* CommonFunctionality+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE40286A77E30089A57B /* CommonFunctionality+async.swift */; };
 		57FFDE46286B606A0089A57B /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
 		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
+		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
 		C5335FED2A63D9B5B628774F /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A3E4FAC475FE1D7EA890501 /* Pods_PurchasesHybridCommon.framework */; };
 		E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */; };
 		FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */; };
@@ -129,9 +130,9 @@
 		460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.debug.xcconfig"; sourceTree = "<group>"; };
 		4E8CDB8D703EA998D72761BB /* Pods-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NonSubscriptionTransaction+HybridAdditions.swift"; sourceTree = "<group>"; };
 		517430C4E8FC91A379B7BFE0 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		57920F7A286B9B78000461A9 /* __Snapshots__ */ = {isa = PBXFileReference; lastKnownFileType = folder; path = __Snapshots__; sourceTree = "<group>"; };
+		57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NonSubscriptionTransaction+HybridAdditions.swift"; sourceTree = "<group>"; };
 		57FFDE16286A566D0089A57B /* PurchasesHybridCommonIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseIntegrationTests.swift; sourceTree = "<group>"; };
 		57FFDE28286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PurchasesHybridCommonIntegrationTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,6 +152,7 @@
 		8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSandboxEnvironmentDetector.swift; sourceTree = "<group>"; };
 		C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		C48588E24A992EC358A9B0CF /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */,
+				B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 			);
 			dependencies = (
 				2D6E33262450F68C0022A971 /* PBXTargetDependency */,
+				B3105D7C287E3D6800CA935B /* PBXTargetDependency */,
 			);
 			name = PurchasesHybridCommonTests;
 			productName = PurchasesHybridCommonTests;
@@ -739,6 +743,7 @@
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
+				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

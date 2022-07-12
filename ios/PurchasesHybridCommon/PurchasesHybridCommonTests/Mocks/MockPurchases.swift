@@ -86,6 +86,7 @@ class MockPurchases: Purchases {
             transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations,
                                                      receiptParser: ReceiptParser()),
             deviceCache: deviceCache,
+            offeringsManager: offeringsManager,
             manageSubscriptionsHelper: manageSubscriptionsHelper,
             beginRefundRequestHelper: beginRefundRequestHelper
         )
