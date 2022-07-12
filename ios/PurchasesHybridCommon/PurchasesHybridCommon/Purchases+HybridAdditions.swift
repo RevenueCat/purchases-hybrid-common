@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RevenueCat
+@testable import RevenueCat
 
 @objc public extension Purchases {
 
@@ -40,6 +40,10 @@ import RevenueCat
         configurationBuilder = configurationBuilder.with(usesStoreKit2IfAvailable: usesStoreKit2IfAvailable)
         if let dangerousSettings = dangerousSettings {
             configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
+        }
+        if let platformFlavor = platformFlavor, let platformFlavorVersion = platformFlavorVersion {
+            let platformInfo = Purchases.PlatformInfo(flavor: platformFlavor, version: platformFlavorVersion)
+            configurationBuilder = configurationBuilder.with(platformInfo: platformInfo)
         }
 
         return self.configure(with: configurationBuilder.build())
