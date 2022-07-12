@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                  userDefaultsSuiteName:nil
                                                         platformFlavor:nil
                                                  platformFlavorVersion:@""
+                                              usesStoreKit2IfAvailable:YES
                                                      dangerousSettings:nil];
 }
 

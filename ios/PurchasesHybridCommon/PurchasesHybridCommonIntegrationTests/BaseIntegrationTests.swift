@@ -12,8 +12,6 @@ import XCTest
 
 class BaseIntegrationTests: XCTestCase {
 
-    private var userDefaults: UserDefaults!
-
     class var storeKit2Setting: StoreKit2Setting {
         return .default
     }
@@ -35,8 +33,9 @@ class BaseIntegrationTests: XCTestCase {
             throw ErrorCode.configurationError
         }
 
-        self.userDefaults = UserDefaults(suiteName: Constants.userDefaultsSuiteName)
-        self.userDefaults.removePersistentDomain(forName: Constants.userDefaultsSuiteName)
+        UserDefaults(suiteName: Constants.userDefaultsSuiteName)!
+            .removePersistentDomain(forName: Constants.userDefaultsSuiteName)
+
         if !Constants.proxyURL.isEmpty {
             Purchases.proxyURL = URL(string: Constants.proxyURL)
         }
@@ -68,13 +67,13 @@ private extension BaseIntegrationTests {
     }
 
     func configurePurchases() {
-        Purchases.configure(withAPIKey: Constants.apiKey,
+        _ = Purchases.configure(apiKey: Constants.apiKey,
                             appUserID: nil,
                             observerMode: false,
-                            userDefaults: self.userDefaults,
-                            storeKit2Setting: Self.storeKit2Setting,
-                            storeKitTimeout: Configuration.storeKitRequestTimeoutDefault,
-                            networkTimeout: Configuration.networkTimeoutDefault,
+                            userDefaultsSuiteName: Constants.userDefaultsSuiteName,
+                            platformFlavor: nil,
+                            platformFlavorVersion: nil,
+                            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
                             dangerousSettings: nil)
         Purchases.logLevel = .debug
     }
