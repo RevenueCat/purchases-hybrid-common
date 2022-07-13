@@ -86,7 +86,12 @@ class MockPurchases: Purchases {
             transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations,
                                                      receiptParser: ReceiptParser()),
             deviceCache: deviceCache,
-            offeringsManager: offeringsManager,
+            offeringsManager: OfferingsManager(deviceCache: deviceCache,
+                                               operationDispatcher: operationDispatcher,
+                                               systemInfo: systemInfo,
+                                               backend: backend,
+                                               offeringsFactory: offeringsFactory,
+                                               productsManager: productsManager),
             manageSubscriptionsHelper: manageSubscriptionsHelper,
             beginRefundRequestHelper: beginRefundRequestHelper
         )
