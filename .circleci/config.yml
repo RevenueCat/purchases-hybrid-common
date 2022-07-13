@@ -51,7 +51,7 @@ jobs:
       - checkout
       - run:
           name: Install pods
-          command: pod install
+          command: pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Run ios tests
