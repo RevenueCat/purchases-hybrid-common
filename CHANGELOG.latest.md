@@ -1,2 +1,1 @@
-- Bump RevenueCat `purchases-ios` to 4.9.0
-- Bump RevenueCat `purchases-android` to 5.2.1 (https://github.com/RevenueCat/purchases-hybrid-common/pull/172)
+- Update Podspec version

@@ -1,3 +1,6 @@
+## 3.2.4
+
+- Update Podspec version
 ## 3.2.3
 
 - Bump RevenueCat `purchases-ios` to 4.9.0
