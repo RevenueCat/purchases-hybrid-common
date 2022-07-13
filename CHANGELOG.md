@@ -1,3 +1,8 @@
+## 3.2.3
+
+- Bump RevenueCat `purchases-ios` to 4.8.0
+- Bump RevenueCat `purchases-android` to 5.2.1 (https://github.com/RevenueCat/purchases-hybrid-common/pull/172)
+
 ## 3.2.2
 
 - Bump RevenueCat purchases-ios dependency (https://github.com/RevenueCat/purchases-hybrid-common/pull/166)
