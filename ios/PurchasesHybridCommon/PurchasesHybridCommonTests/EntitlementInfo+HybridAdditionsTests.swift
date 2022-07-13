@@ -65,6 +65,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                 billingIssuesDetectedAt: nil,
                 ownershipType: .purchased
             ),
+            sandboxEnvironmentDetector: MockSandboxEnvironmentDetector(),
             requestDate: nil
         )
     }
