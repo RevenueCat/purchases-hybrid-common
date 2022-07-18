@@ -1,6 +1,11 @@
+## 3.3.0
+
+- Update purchases-android to 5.3.0 (https://github.com/RevenueCat/purchases-android/releases/tag/5.3.0)
+
 ## 3.2.4
 
 - Update Podspec version
+
 ## 3.2.3
 
 - Bump RevenueCat `purchases-ios` to 4.9.0
