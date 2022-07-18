@@ -9,6 +9,7 @@ buildscript {
     ext.mockk_version = '1.12.3'
     ext.gradle_maven_publish = '0.19.0'
     ext.purchases_version = '5.3.0'
+    ext.billing_unityiap_purchases_version = '3.0.3'
 
     repositories {
         google()
@@ -95,6 +96,7 @@ dependencies {
     unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
     unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
     unityIAPApi "com.revenuecat.purchases:purchases-store-amazon-unityiap:$purchases_version"
+    testUnityIAPImplementation "com.android.billingclient:billing:$billing_unityiap_purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
