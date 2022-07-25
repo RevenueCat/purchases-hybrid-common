@@ -85,6 +85,12 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
+      - run:
+          name: Compress result bundle
+          command: |
+             tar -czf test_output/xcresult.tar.gz test_output/PurchasesHybridCommonIntegrationTests.xcresult && \
+             rm -r test_output/PurchasesHybridCommonIntegrationTests.xcresult
+          working_directory: ios/PurchasesHybridCommon
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
