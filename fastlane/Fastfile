@@ -64,9 +64,11 @@ lane :open_pr_upgrading_dependencies do |options|
   if options[:dry_run]
     dry_run = true
   end
+  
+  update_native_dependencies_to_latest()
 
-  new_ios_version = options[:latest_ios_release_name]
-  new_android_version = options[:latest_android_release_name]
+  new_ios_version = options[:new_ios_version]
+  new_android_version = options[:new_android_version]
 
   branch = "update-#{new_ios_version}-#{new_android_version}"
   
@@ -80,7 +82,6 @@ lane :open_pr_upgrading_dependencies do |options|
   if dry_run
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
-    
     create_pull_request(
       repo: "RevenueCat/purchases-hybrid-common",
       title: "Update native dependencies",
@@ -101,8 +102,8 @@ lane :update_native_dependencies_to_latest do |options|
   latest_android_release_name = latest_android_release_info["name"]
   
   # Add to options so if we're chaining lanes together, the other lanes get it
-  options[:latest_ios_release_name] = latest_ios_release_name
-  options[:latest_android_release_name] = latest_android_release_name
+  options[:new_ios_version] = latest_ios_release_name
+  options[:new_android_version] = latest_android_release_name
 
   UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release_name}")
   UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release_name}")

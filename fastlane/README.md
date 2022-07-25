@@ -37,6 +37,14 @@ Make GitHub release for current version
 
 Make GitHub release for specific version
 
+### open_pr_upgrading_dependencies
+
+```sh
+[bundle exec] fastlane open_pr_upgrading_dependencies
+```
+
+Update dependencies to latest GitHub releases and opens a PR
+
 ### update_native_dependencies_to_latest
 
 ```sh
