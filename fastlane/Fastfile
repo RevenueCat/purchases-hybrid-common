@@ -314,7 +314,6 @@ end
 
 def parse_previous_android_native_version
   Dir.chdir(get_root_folder) do
-    puts Dir.pwd
     return (sh 'cat android/build.gradle | grep "ext.purchases_version = " | awk \'{print($3)}\' | sed "s/\'//g"').strip
   end
 end
@@ -322,7 +321,6 @@ end
 
 def parse_previous_ios_native_version
   Dir.chdir(get_root_folder) do
-    puts Dir.pwd
     return (sh 'cat PurchasesHybridCommon.podspec | grep "\'RevenueCat\', " | awk \'{print($3)}\' | sed "s/\'//g"').strip
   end
 end
