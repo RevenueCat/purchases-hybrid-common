@@ -91,6 +91,7 @@ jobs:
              tar -czf test_output/xcresult.tar.gz test_output/PurchasesHybridCommonIntegrationTests.xcresult && \
              rm -r test_output/PurchasesHybridCommonIntegrationTests.xcresult
           working_directory: ios/PurchasesHybridCommon
+          when: always
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
