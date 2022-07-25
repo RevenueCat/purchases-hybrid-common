@@ -93,7 +93,7 @@ lane :open_pr_upgrading_dependencies do |options|
     )
     create_pull_request(
       repo: "RevenueCat/purchases-hybrid-common",
-      title: "Update native dependencies",
+      title: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
       head: "#{branch}",
       base: "main",
       body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
