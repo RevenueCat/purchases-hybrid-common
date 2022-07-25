@@ -59,6 +59,98 @@ lane :github_release do |options|
   )
 end
 
+desc "Update dependencies to latest GitHub releases"
+lane :update_native_dependencies_to_latest do |options|
+  latest_ios_release_info = get_latest_github_release(url: "RevenueCat/purchases-ios")
+  latest_android_release_info = get_latest_github_release(url: "RevenueCat/purchases-android")
+
+  latest_ios_release_name = latest_ios_release_info["name"]
+  latest_android_release_name = latest_android_release_info["name"]
+
+  UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release_name}")
+  UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release_name}")
+
+  update_ios_native_versions(version: latest_ios_release_name)
+  update_android_native_versions(version: latest_android_release_name)
+
+  run_pod_install
+end
+
+desc "Update purchases-ios dependency version"
+lane :update_ios_native_versions do |options|
+  if options[:dry_run]
+    dry_run = true
+  end
+  if options[:version]
+    new_version_number = options[:version]
+  else
+    UI.user_error!("Missing `version` argument")
+  end
+
+  previous_version_number = parse_previous_ios_native_version
+
+  # Add to options so if we're chaining lanes together, the other lanes get it
+  options[:previous_ios_version] = previous_version_number
+
+  UI.message("ℹ️  Current RevenueCat iOS version: #{previous_version_number}")
+  UI.message("ℹ️  Setting RevenueCat iOS version: #{new_version_number}")
+  files_to_update = [
+    'PurchasesHybridCommon.podspec',
+    'ios/PurchasesHybridCommon/Podfile',
+    'DEVELOPMENT.md',
+  ]
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do, dry_run: true")
+  else
+    Dir.chdir(get_root_folder) do
+      for file_to_update in files_to_update
+        increment_build_number(previous_version_number, new_version_number, file_to_update)
+      end
+    end
+  end
+end
+
+desc "Update purchases-android dependency version"
+lane :update_android_native_versions do |options|
+  if options[:dry_run]
+    dry_run = true
+  end
+  if options[:version]
+    new_version_number = options[:version]
+  else
+    UI.user_error!("Missing `version` argument")
+  end
+
+  previous_version_number = parse_previous_android_native_version
+
+  # Add to options so if we're chaining lanes together, the other lanes get it
+  options[:previous_ios_version] = previous_version_number
+
+  UI.message("ℹ️  Current RevenueCat Android version: #{previous_version_number}")
+  UI.message("ℹ️  Setting RevenueCat Android version: #{new_version_number}")
+  files_to_update = [
+    'android/build.gradle',
+  ]
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do, dry_run: true")
+  else
+    Dir.chdir(get_root_folder) do
+      for file_to_update in files_to_update
+        increment_build_number(previous_version_number, new_version_number, file_to_update)
+      end
+    end
+  end
+end
+
+desc "Run pod install"
+lane :run_pod_install do |options|
+  Dir.chdir(File.expand_path('ios/PurchasesHybridCommon', get_root_folder)) do
+    sh("pod install")
+  end
+end
+
 platform :ios do
 
   desc "Increment build number"
@@ -216,6 +308,38 @@ def replace_in(previous_text, new_text, path, allow_empty=false)
     UI.user_error!("Missing `new_text` in call to `replace_in`, looking for replacement for #{previous_text} 😵.")
   end
   sed_regex = 's|' + previous_text.sub(".", "\\.") + '|' + new_text + '|'
+  backup_extension = '.bck'
+  sh("sed", '-i', backup_extension, sed_regex, path)
+end
+
+def parse_previous_android_native_version
+  Dir.chdir(get_root_folder) do
+    puts Dir.pwd
+    return (sh 'cat android/build.gradle | grep "ext.purchases_version = " | awk \'{print($3)}\' | sed "s/\'//g"').strip
+  end
+end
+
+
+def parse_previous_ios_native_version
+  Dir.chdir(get_root_folder) do
+    puts Dir.pwd
+    return (sh 'cat PurchasesHybridCommon.podspec | grep "\'RevenueCat\', " | awk \'{print($3)}\' | sed "s/\'//g"').strip
+  end
+end
+
+def get_root_folder
+  return File.expand_path('../../', __FILE__)
+end
+
+def increment_build_number(previous_version_number, new_version_number, file_path)
+  replace_in(previous_version_number, new_version_number, file_path)
+end
+
+def replace_in(previous_text, new_text, path)
+  if new_text.to_s.strip.empty?
+    fail "Missing `new_text` in call to `replace_in`, looking for replacement for #{previous_text} 😵."
+  end
+  sed_regex = 's|' + previous_text + '|' + new_text + '|'
   backup_extension = '.bck'
   sh("sed", '-i', backup_extension, sed_regex, path)
 end
