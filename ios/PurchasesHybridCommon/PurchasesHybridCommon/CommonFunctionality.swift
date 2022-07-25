@@ -414,14 +414,6 @@ import RevenueCat
         Purchases.shared.attribution.setAirshipChannelID(airshipChannelID)
     }
 
-    @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
-    @objc static func addAttributionData(_ data: [String: Any], network: Int, networkUserId: String) {
-        // todo: clean up force cast after migration to v4
-        Purchases.addAttributionData(data,
-                                     from: AttributionNetwork(rawValue: network)!,
-                                     forNetworkUserId: networkUserId)
-    }
-
 }
 
 // MARK: Campaign parameters
