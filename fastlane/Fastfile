@@ -59,6 +59,39 @@ lane :github_release do |options|
   )
 end
 
+desc "Update dependencies to latest GitHub releases and opens a PR"
+lane :open_pr_upgrading_dependencies do |options|
+  if options[:dry_run]
+    dry_run = true
+  end
+
+  new_ios_version = options[:latest_ios_release_name]
+  new_android_version = options[:latest_android_release_name]
+
+  branch = "update-#{new_ios_version}-#{new_android_version}"
+  
+  result = Actions.sh("git checkout -b #{branch}")
+  if result =~ /error:(.)/
+    UI.error("Git couldn't change to `#{branch}`. Reason: #{result}.")
+  else
+    UI.success("Git switched to branch `#{branch}, all good! 💪")
+  end
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do, dry_run: true")
+  else
+    
+    create_pull_request(
+      repo: "RevenueCat/purchases-hybrid-common",
+      title: "Update native dependencies",
+      head: "my-feature",
+      base: "main",
+      body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+    )
+  end
+end
+
+
 desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
   latest_ios_release_info = get_latest_github_release(url: "RevenueCat/purchases-ios")
@@ -66,6 +99,10 @@ lane :update_native_dependencies_to_latest do |options|
 
   latest_ios_release_name = latest_ios_release_info["name"]
   latest_android_release_name = latest_android_release_info["name"]
+  
+  # Add to options so if we're chaining lanes together, the other lanes get it
+  options[:latest_ios_release_name] = latest_ios_release_name
+  options[:latest_android_release_name] = latest_android_release_name
 
   UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release_name}")
   UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release_name}")
