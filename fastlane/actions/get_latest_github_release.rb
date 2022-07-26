@@ -30,10 +30,16 @@ module Fastlane
           }
         ) do |result|
           json = result[:json]
-          latest_release = json.first
-          Actions.lane_context[SharedValues::GET_GITHUB_RELEASE_INFO] = latest_release
-          UI.message("Version #{latest_release['tag_name']} is latest release live on GitHub.com 🚁")
-          return latest_release['tag_name']
+          highest = json.last
+          json.each do |current|
+            next if current["prerelease"]
+            if (Gem::Version.new(highest['tag_name']) < Gem::Version.new(current['tag_name']))
+              highest = current
+            end
+          end
+          Actions.lane_context[SharedValues::GET_LATEST_GITHUB_RELEASE_INFO] = highest
+          UI.message("Version #{highest['tag_name']} is latest release live on GitHub.com 🚁")
+          return highest['tag_name']
         end
 
         UI.important("Couldn't find latest GitHub release")
