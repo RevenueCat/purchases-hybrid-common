@@ -144,7 +144,7 @@ end
 desc "Run pod install"
 lane :run_pod_install do |options|
   Dir.chdir(File.expand_path('ios/PurchasesHybridCommon', get_root_folder)) do
-    sh("pod install")
+    sh("pod install --repo-update")
   end
 end
 
