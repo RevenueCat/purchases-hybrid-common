@@ -78,9 +78,7 @@ end
 
 desc "Update purchases-ios dependency version"
 lane :update_ios_native_versions do |options|
-  if options[:dry_run]
-    dry_run = true
-  end
+  dry_run = options[:dry_run]
   if options[:version]
     new_version_number = options[:version]
   else
@@ -113,9 +111,7 @@ end
 
 desc "Update purchases-android dependency version"
 lane :update_android_native_versions do |options|
-  if options[:dry_run]
-    dry_run = true
-  end
+  dry_run = options[:dry_run]
   if options[:version]
     new_version_number = options[:version]
   else
