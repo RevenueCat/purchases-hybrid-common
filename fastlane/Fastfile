@@ -61,8 +61,8 @@ end
 
 desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
-  latest_ios_release_info = get_latest_github_release(url: "RevenueCat/purchases-ios")
-  latest_android_release_info = get_latest_github_release(url: "RevenueCat/purchases-android")
+  latest_ios_release_info = get_latest_github_release(repo_name: "RevenueCat/purchases-ios")
+  latest_android_release_info = get_latest_github_release(repo_name: "RevenueCat/purchases-android")
 
   latest_ios_release_name = latest_ios_release_info["name"]
   latest_android_release_name = latest_android_release_info["name"]

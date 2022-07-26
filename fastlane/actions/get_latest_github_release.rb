@@ -1,26 +1,26 @@
 module Fastlane
   module Actions
     module SharedValues
-      GET_LATEST_GITHUB_RELEASE_CUSTOM_VALUE = :GET_LATEST_GITHUB_RELEASE_CUSTOM_VALUE
+      GET_LATEST_GITHUB_RELEASE_INFO = :GET_LATEST_GITHUB_RELEASE_INFO
     end
 
     class GetLatestGithubReleaseAction < Action
       def self.run(params)
-        UI.message("Getting latest release on GitHub (#{params[:server_url]}/#{params[:url]})")
+        UI.message("Getting latest release on GitHub (https://api.github.com/#{params[:repo_name]})")
 
         GithubApiAction.run(
-          server_url: params[:server_url],
-          api_token: params[:api_token],
-          api_bearer: params[:api_bearer],
+          server_url: "https://api.github.com",
+          api_token: ENV["GITHUB_API_TOKEN"],
+          api_bearer: nil,
           http_method: 'GET',
-          path: "repos/#{params[:url]}/releases",
+          path: "repos/#{params[:repo_name]}/releases",
           error_handlers: {
             404 => proc do |result|
-              UI.error("Repository #{params[:url]} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
+              UI.error("Repository #{params[:repo_name]} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
               return nil
             end,
             401 => proc do |result|
-              UI.error("You are not authorized to access #{params[:url]}, please make sure you provided a valid API token.")
+              UI.error("You are not authorized to access #{params[:repo_name]}, please make sure you provided a valid API token.")
               return nil
             end,
             '*' => proc do |result|
@@ -30,6 +30,7 @@ module Fastlane
           }
         ) do |result|
           json = result[:json]
+          puts json
           json.each do |current|
             Actions.lane_context[SharedValues::GET_GITHUB_RELEASE_INFO] = current
             UI.message("Version #{current['tag_name']} is latest release live on GitHub.com 🚁")
@@ -50,52 +51,7 @@ module Fastlane
       end
 
       def self.details
-        sample = <<-SAMPLE.markdown_sample
-          ```no-highlight
-          {
-            "url"=>"https://api.github.com/repos/KrauseFx/fastlane/releases/1537713",
-             "assets_url"=>"https://api.github.com/repos/KrauseFx/fastlane/releases/1537713/assets",
-             "upload_url"=>"https://uploads.github.com/repos/KrauseFx/fastlane/releases/1537713/assets{?name}",
-             "html_url"=>"https://github.com/fastlane/fastlane/releases/tag/1.8.0",
-             "id"=>1537713,
-             "tag_name"=>"1.8.0",
-             "target_commitish"=>"master",
-             "name"=>"1.8.0 Switch Lanes & Pass Parameters",
-             "draft"=>false,
-             "author"=>
-              {"login"=>"KrauseFx",
-               "id"=>869950,
-               "avatar_url"=>"https://avatars.githubusercontent.com/u/869950?v=3",
-               "gravatar_id"=>"",
-               "url"=>"https://api.github.com/users/KrauseFx",
-               "html_url"=>"https://github.com/fastlane",
-               "followers_url"=>"https://api.github.com/users/KrauseFx/followers",
-               "following_url"=>"https://api.github.com/users/KrauseFx/following{/other_user}",
-               "gists_url"=>"https://api.github.com/users/KrauseFx/gists{/gist_id}",
-               "starred_url"=>"https://api.github.com/users/KrauseFx/starred{/owner}{/repo}",
-               "subscriptions_url"=>"https://api.github.com/users/KrauseFx/subscriptions",
-               "organizations_url"=>"https://api.github.com/users/KrauseFx/orgs",
-               "repos_url"=>"https://api.github.com/users/KrauseFx/repos",
-               "events_url"=>"https://api.github.com/users/KrauseFx/events{/privacy}",
-               "received_events_url"=>"https://api.github.com/users/KrauseFx/received_events",
-               "type"=>"User",
-               "site_admin"=>false},
-             "prerelease"=>false,
-             "created_at"=>"2015-07-14T23:33:01Z",
-             "published_at"=>"2015-07-14T23:44:10Z",
-             "assets"=>[],
-             "tarball_url"=>"https://api.github.com/repos/KrauseFx/fastlane/tarball/1.8.0",
-             "zipball_url"=>"https://api.github.com/repos/KrauseFx/fastlane/zipball/1.8.0",
-             "body"=> ...Markdown...
-            "This is one of the biggest updates of _fastlane_ yet"
-          }
-          ```
-        SAMPLE
-
-        [
-          "This will return all information about latest GitHub release. For example:".markdown_preserve_newlines,
-          sample
-        ].join("\n")
+        sample = "1.8.0"
       end
 
       def self.output
@@ -106,38 +62,13 @@ module Fastlane
 
       def self.available_options
         [
-          FastlaneCore::ConfigItem.new(key: :url,
+          FastlaneCore::ConfigItem.new(key: :repo_name,
                                        env_name: "FL_GET_GITHUB_RELEASE_URL",
-                                       description: "The path to your repo, e.g. 'KrauseFx/fastlane'",
+                                       description: "The path to your repo, e.g. 'RevenueCat/purchases-ios'",
                                        verify_block: proc do |value|
-                                         UI.user_error!("Please only pass the path, e.g. 'KrauseFx/fastlane'") if value.include?("github.com")
-                                         UI.user_error!("Please only pass the path, e.g. 'KrauseFx/fastlane'") if value.split('/').count != 2
+                                         UI.user_error!("Please only pass the path, e.g. 'RevenueCat/purchases-ios'") if value.include?("github.com")
+                                         UI.user_error!("Please only pass the path, e.g. 'RevenueCat/purchases-ios'") if value.split('/').count != 2
                                        end),
-          FastlaneCore::ConfigItem.new(key: :server_url,
-                                       env_name: "FL_GITHUB_RELEASE_SERVER_URL",
-                                       description: "The server url. e.g. 'https://your.github.server/api/v3' (Default: 'https://api.github.com')",
-                                       default_value: "https://api.github.com",
-                                       optional: true,
-                                       verify_block: proc do |value|
-                                         UI.user_error!("Please include the protocol in the server url, e.g. https://your.github.server") unless value.include?("//")
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :api_token,
-                                       env_name: "FL_GITHUB_RELEASE_API_TOKEN",
-                                       sensitive: true,
-                                       code_gen_sensitive: true,
-                                       default_value: ENV["GITHUB_API_TOKEN"],
-                                       default_value_dynamic: true,
-                                       description: "GitHub Personal Token (required for private repositories)",
-                                       conflicting_options: [:api_bearer],
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :api_bearer,
-                                       env_name: "FL_GITHUB_RELEASE_API_BEARER",
-                                       sensitive: true,
-                                       code_gen_sensitive: true,
-                                       description: "Use a Bearer authorization token. Usually generated by Github Apps, e.g. GitHub Actions GITHUB_TOKEN environment variable",
-                                       conflicting_options: [:api_token],
-                                       optional: true,
-                                       default_value: nil)
         ]
       end
 
@@ -151,8 +82,8 @@ module Fastlane
 
       def self.example_code
         [
-          'release = get_latest_github_release(url: "fastlane/fastlane")
-          puts release["name"]'
+          'release_name = get_latest_github_release(url: "fastlane/fastlane")
+          puts release_name'
         ]
       end
 
