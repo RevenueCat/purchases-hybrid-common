@@ -87,9 +87,6 @@ lane :update_ios_native_versions do |options|
 
   previous_version_number = parse_previous_ios_native_version
 
-  # Add to options so if we're chaining lanes together, the other lanes get it
-  options[:previous_ios_version] = previous_version_number
-
   UI.message("ℹ️  Current RevenueCat iOS version: #{previous_version_number}")
   UI.message("ℹ️  Setting RevenueCat iOS version: #{new_version_number}")
   files_to_update = [
@@ -119,9 +116,6 @@ lane :update_android_native_versions do |options|
   end
 
   previous_version_number = parse_previous_android_native_version
-
-  # Add to options so if we're chaining lanes together, the other lanes get it
-  options[:previous_ios_version] = previous_version_number
 
   UI.message("ℹ️  Current RevenueCat Android version: #{previous_version_number}")
   UI.message("ℹ️  Setting RevenueCat Android version: #{new_version_number}")
