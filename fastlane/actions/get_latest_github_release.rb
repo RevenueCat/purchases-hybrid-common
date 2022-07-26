@@ -30,15 +30,13 @@ module Fastlane
           }
         ) do |result|
           json = result[:json]
-          puts json
-          json.each do |current|
-            Actions.lane_context[SharedValues::GET_GITHUB_RELEASE_INFO] = current
-            UI.message("Version #{current['tag_name']} is latest release live on GitHub.com 🚁")
-            return current
-          end
+          latest_release = json.first
+          Actions.lane_context[SharedValues::GET_GITHUB_RELEASE_INFO] = latest_release
+          UI.message("Version #{latest_release['tag_name']} is latest release live on GitHub.com 🚁")
+          return latest_release['tag_name']
         end
 
-        UI.important("Couldn't find GitHub release #{params[:version]}")
+        UI.important("Couldn't find latest GitHub release")
         return nil
       end
 

@@ -61,17 +61,14 @@ end
 
 desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
-  latest_ios_release_info = get_latest_github_release(repo_name: "RevenueCat/purchases-ios")
-  latest_android_release_info = get_latest_github_release(repo_name: "RevenueCat/purchases-android")
+  latest_ios_release = get_latest_github_release(repo_name: "RevenueCat/purchases-ios")
+  latest_android_release = get_latest_github_release(repo_name: "RevenueCat/purchases-android")
 
-  latest_ios_release_name = latest_ios_release_info["name"]
-  latest_android_release_name = latest_android_release_info["name"]
+  UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release}")
+  UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release}")
 
-  UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release_name}")
-  UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release_name}")
-
-  update_ios_native_versions(version: latest_ios_release_name)
-  update_android_native_versions(version: latest_android_release_name)
+  update_ios_native_versions(version: latest_ios_release)
+  update_android_native_versions(version: latest_android_release)
 
   run_pod_install
 end
