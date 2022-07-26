@@ -67,14 +67,14 @@ lane :update_native_dependencies_to_latest do |options|
   UI.message("ℹ️  Latest RevenueCat iOS version: #{latest_ios_release}")
   UI.message("ℹ️  Latest RevenueCat Android version: #{latest_android_release}")
 
-  update_ios_native_versions(version: latest_ios_release)
-  update_android_native_versions(version: latest_android_release)
+  update_ios_native_version(version: latest_ios_release)
+  update_android_native_version(version: latest_android_release)
 
   run_pod_install
 end
 
 desc "Update purchases-ios dependency version"
-lane :update_ios_native_versions do |options|
+lane :update_ios_native_version do |options|
   dry_run = options[:dry_run]
   if options[:version]
     new_version_number = options[:version]
@@ -109,7 +109,7 @@ lane :update_ios_native_versions do |options|
 end
 
 desc "Update purchases-android dependency version"
-lane :update_android_native_versions do |options|
+lane :update_android_native_version do |options|
   dry_run = options[:dry_run]
   if options[:version]
     new_version_number = options[:version]
