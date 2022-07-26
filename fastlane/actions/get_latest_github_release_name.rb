@@ -4,7 +4,7 @@ module Fastlane
       GET_LATEST_GITHUB_RELEASE_INFO = :GET_LATEST_GITHUB_RELEASE_INFO
     end
 
-    class GetLatestGithubReleaseAction < Action
+    class GetLatestGithubReleaseNameAction < Action
       def self.run(params)
         UI.message("Getting latest release on GitHub (https://api.github.com/#{params[:repo_name]})")
 
@@ -60,7 +60,7 @@ module Fastlane
 
       def self.output
         [
-          ['GET_LATEST_GITHUB_RELEASE_CUSTOM_VALUE', 'Contains all the information about this release']
+          ['GET_LATEST_GITHUB_RELEASE_INFO', 'Contains all the information about this release']
         ]
       end
 
@@ -86,7 +86,7 @@ module Fastlane
 
       def self.example_code
         [
-          'release_name = get_latest_github_release(url: "fastlane/fastlane")
+          'release_name = get_latest_github_release_name(repo_name: "fastlane/fastlane")
           puts release_name'
         ]
       end
