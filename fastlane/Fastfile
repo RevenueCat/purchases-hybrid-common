@@ -310,16 +310,24 @@ def replace_in(previous_text, new_text, path, allow_empty=false)
 end
 
 def parse_previous_android_native_version
-  Dir.chdir(get_root_folder) do
-    return (sh 'cat android/build.gradle | grep "ext.purchases_version = " | awk \'{print($3)}\' | sed "s/\'//g"').strip
-  end
+  parse_version_in_file(/(?<=ext\.purchases_version = ["'])(.*)(?=["'])/, "android/build.gradle")
 end
 
-
 def parse_previous_ios_native_version
+  parse_version_in_file(/(?<=s\.dependency ["']RevenueCat["'], ["'])(.*)(?=["'])/, "PurchasesHybridCommon.podspec")
+end
+
+def parse_version_in_file(pattern, path)
   Dir.chdir(get_root_folder) do
-    return (sh 'cat PurchasesHybridCommon.podspec | grep "\'RevenueCat\', " | awk \'{print($3)}\' | sed "s/\'//g"').strip
+    File.open path do |file|
+      line = file.find { |line| line =~ pattern }
+      unless line == nil
+        match = line.match(pattern)
+        return match[1]
+      end
+    end
   end
+  UI.user_error!("Couldn't extract version from #{path}")
 end
 
 def get_root_folder
