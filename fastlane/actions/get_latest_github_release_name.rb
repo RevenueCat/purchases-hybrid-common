@@ -13,7 +13,7 @@ module Fastlane
           api_token: ENV["GITHUB_API_TOKEN"],
           api_bearer: nil,
           http_method: 'GET',
-          path: "reos/RevenueCat/#{params[:repo_name]}/releases",
+          path: "repos/RevenueCat/#{params[:repo_name]}/releases",
           error_handlers: {
             404 => proc do |result|
               UI.error("Repository #{params[:repo_name]} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
@@ -31,19 +31,23 @@ module Fastlane
         ) do |result|
           json = result[:json]
           highest = json.last
-          highest_tag_name = highest['tag_name']
-          json.each do |current|
-            next if current["prerelease"]
-            if (Gem::Version.new(highest_tag_name) < Gem::Version.new(current['tag_name']))
-              highest = current
+          unless highest == nil
+            highest_tag_name = highest['tag_name']
+            json.each do |current|
+              next if current["prerelease"]
+              current_tag_name = current['tag_name']
+              if (Gem::Version.new(highest_tag_name) < Gem::Version.new(current_tag_name))
+                highest = current
+                highest_tag_name = current_tag_name
+              end
             end
+            Actions.lane_context[SharedValues::GET_LATEST_GITHUB_RELEASE_INFO] = highest
+            UI.message("Version #{highest_tag_name} is latest release live on GitHub.com 🚁")
+            return highest_tag_name
           end
-          Actions.lane_context[SharedValues::GET_LATEST_GITHUB_RELEASE_INFO] = highest
-          UI.message("Version #{highest_tag_name} is latest release live on GitHub.com 🚁")
-          return highest_tag_name
         end
 
-        UI.user_error!("Couldn't find latest GitHub release")
+        UI.user_error!("Couldn't find latest GitHub release for #{params[:repo_name]}")
         return nil
       end
 
