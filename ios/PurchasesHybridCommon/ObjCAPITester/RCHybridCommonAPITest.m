@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
     // should issue deprecated warning
     [RCCommonFunctionality setAllowSharingStoreAccount:NO];
 
-    // should issue deprecated warning
-    [RCCommonFunctionality addAttributionData:@{} network:1 networkUserId:@"asdfg"];
-    
     [RCCommonFunctionality getProductInfo:@[]
                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
     }];
