@@ -6,14 +6,14 @@ module Fastlane
 
     class GetLatestGithubReleaseNameAction < Action
       def self.run(params)
-        UI.message("Getting latest release on GitHub (https://api.github.com/#{params[:repo_name]})")
+        UI.message("Getting latest release on GitHub (https://api.github.com/RevenueCat/#{params[:repo_name]})")
 
         GithubApiAction.run(
           server_url: "https://api.github.com",
           api_token: ENV["GITHUB_API_TOKEN"],
           api_bearer: nil,
           http_method: 'GET',
-          path: "repos/#{params[:repo_name]}/releases",
+          path: "reos/RevenueCat/#{params[:repo_name]}/releases",
           error_handlers: {
             404 => proc do |result|
               UI.error("Repository #{params[:repo_name]} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
@@ -42,7 +42,7 @@ module Fastlane
           return highest['tag_name']
         end
 
-        UI.important("Couldn't find latest GitHub release")
+        UI.user_error!("Couldn't find latest GitHub release")
         return nil
       end
 
@@ -68,10 +68,10 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(key: :repo_name,
                                        env_name: "FL_GET_GITHUB_RELEASE_URL",
-                                       description: "The path to your repo, e.g. 'RevenueCat/purchases-ios'",
+                                       description: "The path to your RevenueCat repository name, e.g. 'purchases-ios'",
                                        verify_block: proc do |value|
-                                         UI.user_error!("Please only pass the path, e.g. 'RevenueCat/purchases-ios'") if value.include?("github.com")
-                                         UI.user_error!("Please only pass the path, e.g. 'RevenueCat/purchases-ios'") if value.split('/').count != 2
+                                         UI.user_error!("Please only pass the repository name, e.g. 'purchases-ios'") if value.include?("github.com")
+                                         UI.user_error!("Please only pass the repository name, e.g. 'purchases-ios'") if value.split('/').count != 1
                                        end),
         ]
       end
