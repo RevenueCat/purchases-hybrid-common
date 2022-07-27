@@ -133,6 +133,8 @@
 		517430C4E8FC91A379B7BFE0 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		57920F7A286B9B78000461A9 /* __Snapshots__ */ = {isa = PBXFileReference; lastKnownFileType = folder; path = __Snapshots__; sourceTree = "<group>"; };
 		57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NonSubscriptionTransaction+HybridAdditions.swift"; sourceTree = "<group>"; };
+		57E56F45288F103A00A4381B /* CI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CI.xctestplan; sourceTree = "<group>"; };
+		57E56F4B288F10CF00A4381B /* Integration.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Integration.xctestplan; sourceTree = "<group>"; };
 		57FFDE16286A566D0089A57B /* PurchasesHybridCommonIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseIntegrationTests.swift; sourceTree = "<group>"; };
 		57FFDE28286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PurchasesHybridCommonIntegrationTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -312,10 +314,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		57E56F46288F104600A4381B /* Test Plans */ = {
+			isa = PBXGroup;
+			children = (
+				57E56F4B288F10CF00A4381B /* Integration.xctestplan */,
+				57E56F45288F103A00A4381B /* CI.xctestplan */,
+			);
+			path = "Test Plans";
+			sourceTree = "<group>";
+		};
 		57FFDE17286A566D0089A57B /* PurchasesHybridCommonIntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
 				57920F7A286B9B78000461A9 /* __Snapshots__ */,
+				57E56F46288F104600A4381B /* Test Plans */,
 				57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */,
 				57FFDE3E286A777D0089A57B /* StoreKitIntegrationTests.swift */,
 				57FFDE40286A77E30089A57B /* CommonFunctionality+async.swift */,
@@ -438,7 +450,6 @@
 			);
 			dependencies = (
 				2D6E33262450F68C0022A971 /* PBXTargetDependency */,
-				B3105D7C287E3D6800CA935B /* PBXTargetDependency */,
 			);
 			name = PurchasesHybridCommonTests;
 			productName = PurchasesHybridCommonTests;
