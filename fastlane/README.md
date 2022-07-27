@@ -61,6 +61,14 @@ Update purchases-ios dependency version
 
 Update purchases-android dependency version
 
+### update_native_version
+
+```sh
+[bundle exec] fastlane update_native_version
+```
+
+Update purchases-android dependency version
+
 ### run_pod_install
 
 ```sh

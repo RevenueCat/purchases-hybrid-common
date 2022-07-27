@@ -75,61 +75,59 @@ end
 
 desc "Update purchases-ios dependency version"
 lane :update_ios_native_version do |options|
-  dry_run = options[:dry_run]
-  if options[:version]
-    new_version_number = options[:version]
-  else
-    UI.user_error!("Missing `version` argument")
-  end
-
+  new_version_number = options[:version]
   previous_version_number = parse_previous_ios_native_version
-
-  if previous_version_number == new_version_number
-    UI.message("ℹ️  RevenueCat iOS is already in its latest version: #{previous_version_number}")
-    next previous_version_number
-  end
-
-  UI.message("ℹ️  Current RevenueCat iOS version: #{previous_version_number}")
-  UI.message("ℹ️  Setting RevenueCat iOS version: #{new_version_number}")
   files_to_update = [
     'PurchasesHybridCommon.podspec',
     'ios/PurchasesHybridCommon/Podfile',
     'DEVELOPMENT.md',
   ]
 
-  if dry_run
-    UI.message("ℹ️  Nothing more to do, dry_run: true")
-  else
-    Dir.chdir(get_root_folder) do
-      for file_to_update in files_to_update
-        increment_build_number(previous_version_number, new_version_number, file_to_update)
-      end
-    end
-  end
-  new_version_number
+  update_native_version(
+    platform_name: "iOS", 
+    new_version_number: new_version_number, 
+    previous_version_number: previous_version_number,
+    files_to_update: files_to_update
+  )
 end
 
 desc "Update purchases-android dependency version"
 lane :update_android_native_version do |options|
+  new_version_number = options[:version]
+  previous_version_number = parse_previous_android_native_version
+  files_to_update = [
+    'android/build.gradle',
+  ]
+
+  update_native_version(
+    platform_name: "Android", 
+    new_version_number: new_version_number, 
+    previous_version_number: previous_version_number,
+    files_to_update: files_to_update
+  )
+end
+
+desc "Update purchases-android dependency version"
+lane :update_native_version do |options|
+  platform_name = options[:platform_name]
+
   dry_run = options[:dry_run]
-  if options[:version]
-    new_version_number = options[:version]
+  if options[:new_version_number]
+    new_version_number = options[:new_version_number]
   else
     UI.user_error!("Missing `version` argument")
   end
 
-  previous_version_number = parse_previous_android_native_version
+  previous_version_number = options[:previous_version_number]
   
   if previous_version_number == new_version_number
-    UI.message("ℹ️  RevenueCat Android is already in its latest version: #{previous_version_number}")
+    UI.message("ℹ️  RevenueCat #{platform_name} is already in its latest version: #{previous_version_number}")
     next previous_version_number
   end
 
-  UI.message("ℹ️  Current RevenueCat Android version: #{previous_version_number}")
-  UI.message("ℹ️  Setting RevenueCat Android version: #{new_version_number}")
-  files_to_update = [
-    'android/build.gradle',
-  ]
+  UI.message("ℹ️  Current RevenueCat #{platform_name} version: #{previous_version_number}")
+  UI.message("ℹ️  Setting RevenueCat #{platform_name} version: #{new_version_number}")
+  files_to_update = options[:files_to_update]
 
   if dry_run
     UI.message("ℹ️  Nothing more to do, dry_run: true")
