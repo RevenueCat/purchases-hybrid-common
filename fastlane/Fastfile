@@ -86,7 +86,7 @@ lane :update_ios_native_version do |options|
 
   if previous_version_number == new_version_number
     UI.message("ℹ️  RevenueCat iOS is already in its latest version: #{previous_version_number}")
-    next
+    return previous_version_number
   end
 
   UI.message("ℹ️  Current RevenueCat iOS version: #{previous_version_number}")
@@ -106,6 +106,7 @@ lane :update_ios_native_version do |options|
       end
     end
   end
+  new_version_number
 end
 
 desc "Update purchases-android dependency version"
@@ -121,7 +122,7 @@ lane :update_android_native_version do |options|
   
   if previous_version_number == new_version_number
     UI.message("ℹ️  RevenueCat Android is already in its latest version: #{previous_version_number}")
-    next
+    return previous_version_number
   end
 
   UI.message("ℹ️  Current RevenueCat Android version: #{previous_version_number}")
@@ -139,6 +140,7 @@ lane :update_android_native_version do |options|
       end
     end
   end
+  new_version_number
 end
 
 desc "Run pod install"
