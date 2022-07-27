@@ -45,18 +45,18 @@ Make GitHub release for specific version
 
 Update dependencies to latest GitHub releases
 
-### update_ios_native_versions
+### update_ios_native_version
 
 ```sh
-[bundle exec] fastlane update_ios_native_versions
+[bundle exec] fastlane update_ios_native_version
 ```
 
 Update purchases-ios dependency version
 
-### update_android_native_versions
+### update_android_native_version
 
 ```sh
-[bundle exec] fastlane update_android_native_versions
+[bundle exec] fastlane update_android_native_version
 ```
 
 Update purchases-android dependency version
