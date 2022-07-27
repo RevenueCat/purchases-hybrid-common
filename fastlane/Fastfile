@@ -320,7 +320,7 @@ def parse_version_in_file(pattern, path)
   Dir.chdir(get_root_folder) do
     File.open path do |file|
       line = file.find { |line| line =~ pattern }
-      unless line == nil
+      unless line.nil?
         match = line.match(pattern)
         return match[1]
       end
@@ -330,7 +330,7 @@ def parse_version_in_file(pattern, path)
 end
 
 def get_root_folder
-  return File.expand_path('../../', __FILE__)
+  File.expand_path('../../', __FILE__)
 end
 
 def increment_build_number(previous_version_number, new_version_number, file_path)

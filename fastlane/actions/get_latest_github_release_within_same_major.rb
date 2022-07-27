@@ -15,38 +15,34 @@ module Fastlane
           error_handlers: {
             404 => proc do |result|
               UI.error("Repository #{repo_name} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
-              return nil
             end,
             401 => proc do |result|
               UI.error("You are not authorized to access #{repo_name}, please make sure you provided a valid API token.")
-              return nil
             end,
             '*' => proc do |result|
               UI.error("GitHub responded with #{result[:status]}:#{result[:body]}")
-              return nil
             end
           }
         ) do |result|
           current_version = Gem::Version.new(params[:current_version])
           json = result[:json]
-          unless json.count == 0
-            highest_version = current_version
-            json.each do |item|
-              next if item["prerelease"]
-              item_version = Gem::Version.new(item['tag_name'])
-              # Skip if it's not in the same major range. Ex. 3.0.0 vs 4.2.0 
-              next if item_version.canonical_segments[0] != current_version.canonical_segments[0]
-              if (highest_version < item_version)
-                highest_version = item_version
-              end
-            end
-            UI.message("Version #{highest_version.version} is latest release live on GitHub.com 🚁")
-            return highest_version.version
+          if json.count == 0
+            UI.user_error!("Couldn't find latest GitHub release for #{params[:repo_name]}")
+            return
           end
+          highest_version = current_version
+          json.each do |item|
+            next if item["prerelease"]
+            item_version = Gem::Version.new(item['tag_name'])
+            # Skip if it's not in the same major range. Ex. 3.0.0 vs 4.2.0 
+            next if item_version.canonical_segments[0] != current_version.canonical_segments[0]
+            if (highest_version < item_version)
+              highest_version = item_version
+            end
+          end
+          UI.message("Version #{highest_version.version} is latest release live on GitHub.com 🚁")
+          return highest_version.version
         end
-
-        UI.user_error!("Couldn't find latest GitHub release for #{params[:repo_name]}")
-        return nil
       end
 
       #####################################################
