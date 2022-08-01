@@ -1,3 +1,9 @@
+## 3.3.1
+TEST (please ignore)
+* iOS Integration Tests: retry on failure (#180) via NachoSoto (@NachoSoto)
+* Removed deprecated `CommonFunctionality.addAttributionData` (#169) via NachoSoto (@NachoSoto)
+* iOS Integration Tests: compress `xcresult` so it can be downloaded (#181) via NachoSoto (@NachoSoto)
+
 ## 3.3.0
 
 - Update purchases-android to 5.3.0 (https://github.com/RevenueCat/purchases-android/releases/tag/5.3.0)
