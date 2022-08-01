@@ -10,19 +10,38 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
+files_with_version_number = [
+  './.version',
+  './PurchasesHybridCommon.podspec',
+  './android/build.gradle',
+  './android/gradle.properties'
+]
+files_with_version_number_without_prerelease_modifiers = [
+  './ios/PurchasesHybridCommon/Info.plist',
+  './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist'
+]
+repo_name = 'purchases-hybrid-common'
+changelog_latest_path = './CHANGELOG.latest.md'
+changelog_path = './CHANGELOG.md'
+
 before_all do
   setup_circle_ci
   update_fastlane
 end
 
-desc "Increment build number and update changelog"
-lane :bump_and_update_changelog do |options|
-  new_version_number = options[:version]
-  previous_version_number = current_version_number
-  sh "fastlane ios bump version:#{new_version_number}"
-  sh "fastlane android bump version:#{new_version_number}"
-  attach_changelog_to_main(options)
-  increment_version_in(previous_version_number, new_version_number, "../.version")
+desc "Bump version, update swift header, edit changelog, and create pull request"
+lane :bump do |options|
+  bump_version_update_changelog_create_pr(
+    current_version: current_version_number,
+    changelog_latest_path: changelog_latest_path,
+    changelog_path: changelog_path,
+    files_to_update: files_with_version_number,
+    files_to_update_without_prerelease_modifiers: files_with_version_number_without_prerelease_modifiers,
+    repo_name: repo_name,
+    github_rate_limit: options[:github_rate_limit],
+    branch: options[:branch],
+    editor: options[:editor]
+  )
 end
 
 desc "Make GitHub release for current version"
@@ -33,29 +52,12 @@ end
 
 desc "Make GitHub release for specific version"
 lane :github_release do |options|
-  release_version = options[:version]
-  fail ArgumentError, "missing version" unless release_version
-
-  begin
-    changelog = File.read("../CHANGELOG.latest.md")
-  rescue
-    fail "please add a CHANGELOG.latest.md file before calling this lane"
-  end
-  commit_hash = last_git_commit[:commit_hash]
-  puts commit_hash
-
-  is_prerelease = release_version.include?("-")
-
-  set_github_release(
-    repository_name: "revenuecat/purchases-hybrid-common",
-    api_token: ENV["GITHUB_TOKEN"],
-    name: release_version,
-    tag_name: "#{release_version}",
-    description: changelog,
-    commitish: commit_hash,
-    upload_assets: ["PurchasesHybridCommon.framework.zip"],
-    is_draft: false,
-    is_prerelease: is_prerelease
+  create_github_release(
+    version: options[:version],
+    repo_name: repo_name,
+    github_api_token: ENV["GITHUB_TOKEN"],
+    changelog_latest_path: changelog_latest_path,
+    upload_assets: ["PurchasesHybridCommon.framework.zip"]
   )
 end
 
@@ -74,7 +76,7 @@ lane :update_native_dependencies_to_latest do |options|
 end
 
 desc "Update purchases-ios dependency version"
-lane :update_ios_native_version do |options|
+private_lane :update_ios_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
@@ -92,7 +94,7 @@ lane :update_ios_native_version do |options|
 end
 
 desc "Update purchases-android dependency version"
-lane :update_android_native_version do |options|
+private_lane :update_android_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
@@ -108,7 +110,7 @@ lane :update_android_native_version do |options|
 end
 
 desc "Update purchases-android dependency version"
-lane :update_native_version do |options|
+private_lane :update_native_version do |options|
   platform_name = options[:platform_name]
 
   dry_run = options[:dry_run]
@@ -132,9 +134,11 @@ lane :update_native_version do |options|
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
     Dir.chdir(get_root_folder) do
-      for file_to_update in files_to_update
-        increment_build_number(previous_version_number, new_version_number, file_to_update)
-      end
+      replace_text_in_files(
+        previous_text: previous_version_number, 
+        new_text: new_version_number,
+        paths_of_files_to_update: files_to_update
+      )
     end
   end
   new_version_number
@@ -148,17 +152,6 @@ lane :run_pod_install do |options|
 end
 
 platform :ios do
-
-  desc "Increment build number"
-  lane :bump do |options|
-    new_version_number = options[:version]
-    fail ArgumentError, "missing version" unless new_version_number
-    previous_version_number = get_version_number(xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj",
-                                                 target:"PurchasesHybridCommon")
-    increment_version_number(version_number: new_version_number, xcodeproj: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj")
-    version_bump_podspec(path: "PurchasesHybridCommon.podspec", version_number: new_version_number)
-  end
-  
   desc "Release to CocoaPods, create Carthage archive, and create GitHub release"
   lane :release do |options|
     version_number = current_version_number
@@ -168,28 +161,27 @@ platform :ios do
 
   desc "replace API KEY for integration tests"
   lane :replace_api_key_integration_tests do
-    folder = '../ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
+    folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
 
-    replace_in("REVENUECAT_API_KEY", ENV["REVENUECAT_API_KEY"], "#{folder}/Constants.swift")
-    replace_in("REVENUECAT_PROXY_URL", ENV["REVENUECAT_PROXY_URL"].to_s, "#{folder}/Constants.swift", allow_empty: true)
+    replace_text_in_files(
+      previous_text: "REVENUECAT_API_KEY", 
+      new_text: ENV["REVENUECAT_API_KEY"],
+      paths_of_files_to_update: ["#{folder}/Constants.swift"]
+    )
+    replace_text_in_files(
+      previous_text: "REVENUECAT_PROXY_URL", 
+      new_text: ENV["REVENUECAT_PROXY_URL"].to_s,
+      paths_of_files_to_update: ["#{folder}/Constants.swift"],
+      allow_empty: true
+    )
   end
 end
 
 platform :android do
-  desc "Increment build number"
-  lane :bump do |options|
-    new_version = options[:version]
-    fail ArgumentError, "missing version" unless new_version
-    gradle_file_path = "android/build.gradle"
-    previous_version = android_get_version_name(gradle_file: gradle_file_path)
-    android_set_version_name(version_name: new_version, gradle_file: gradle_file_path)
-    increment_version_in(previous_version, new_version, '../android/gradle.properties')
-  end
-
   desc "Upload and close a release"
   lane :deploy do |options|
     gradle_file_path = "android/build.gradle"
-    version = android_get_version_name(gradle_file: gradle_file_path)
+    version = current_version_number
     gradleProperties = {
       "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
       "signing.password" => ENV['GPG_SIGNING_KEY_PW'],
@@ -233,31 +225,6 @@ platform :android do
   end
 end
 
-def attach_changelog_to_main(options)
-  version_number = options[:version]
-  current_changelog = File.open("../CHANGELOG.latest.md", 'r')
-  master_changelog = File.open("../CHANGELOG.md", 'r')
-
-  current_changelog_data = current_changelog.read
-  master_changelog_data = master_changelog.read
-
-  current_changelog.close
-  master_changelog.close
-
-  File.open("../CHANGELOG.md", 'w') { |master_changelog_write_mode|
-    version_header = "## #{version_number}"
-    whole_file_data = "#{version_header}\n\n#{current_changelog_data}\n#{master_changelog_data}"
-    puts "going to save. Contents - #{whole_file_data}"
-    master_changelog_write_mode.write(whole_file_data)
-  }
-end
-
-def increment_version_in(previous_version, new_version, path)
-  sed_regex = 's|' + previous_version + '|' + new_version + '|'
-  backup_extension = '.bck'
-  sh("sed", '-i', backup_extension, sed_regex, path)
-end
-
 def current_version_number
   File.read("../.version")
 end
@@ -299,15 +266,6 @@ def is_snapshot_version?(version_name)
   version_name.end_with?("-SNAPSHOT")
 end
 
-def replace_in(previous_text, new_text, path, allow_empty=false)
-  if new_text.to_s.strip.empty? and not allow_empty
-    UI.user_error!("Missing `new_text` in call to `replace_in`, looking for replacement for #{previous_text} 😵.")
-  end
-  sed_regex = 's|' + previous_text.sub(".", "\\.") + '|' + new_text + '|'
-  backup_extension = '.bck'
-  sh("sed", '-i', backup_extension, sed_regex, path)
-end
-
 def parse_previous_android_native_version
   parse_version_in_file(/(?<=ext\.purchases_version = ["'])(.*)(?=["'])/, "android/build.gradle")
 end
@@ -328,8 +286,4 @@ end
 
 def get_root_folder
   File.expand_path('../../', __FILE__)
-end
-
-def increment_build_number(previous_version_number, new_version_number, file_path)
-  replace_in(previous_version_number, new_version_number, file_path)
 end
