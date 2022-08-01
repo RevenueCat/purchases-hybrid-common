@@ -13,13 +13,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### bump_and_update_changelog
+### bump
 
 ```sh
-[bundle exec] fastlane bump_and_update_changelog
+[bundle exec] fastlane bump
 ```
 
-Increment build number and update changelog
+Bump version, update swift header, edit changelog, and create pull request
 
 ### github_release_current
 
@@ -82,14 +82,6 @@ Run pod install
 
 ## iOS
 
-### ios bump
-
-```sh
-[bundle exec] fastlane ios bump
-```
-
-Increment build number
-
 ### ios release
 
 ```sh
@@ -110,14 +102,6 @@ replace API KEY for integration tests
 
 
 ## Android
-
-### android bump
-
-```sh
-[bundle exec] fastlane android bump
-```
-
-Increment build number
 
 ### android deploy
 
