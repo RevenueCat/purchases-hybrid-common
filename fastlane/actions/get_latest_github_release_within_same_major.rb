@@ -31,7 +31,7 @@ module Fastlane
             return
           end
           highest_version = current_version
-          json.reject { |item| item.key?("prerelease") }.each do |item|
+          json.reject { |item| item["prerelease"] }.each do |item|
             item_version = Gem::Version.new(item['tag_name'])
             # Skip if it's not in the same major range. Ex. 3.0.0 vs 4.2.0 
             next if item_version.canonical_segments[0] != current_version.canonical_segments[0]
