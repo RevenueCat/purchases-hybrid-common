@@ -39,7 +39,7 @@ module Fastlane
               highest_version = item_version
             end
           end
-          UI.message("Version #{highest_version.version} is latest release live on GitHub.com 🚁")
+          UI.message("Version #{highest_version.version} is latest release in the same major live on GitHub.com 🚁")
           return highest_version.version
         end
       end
