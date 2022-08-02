@@ -1,6 +1,7 @@
 ## 4.0.0
 
 - Fixed snake_case and camelCase serialization inconsistency in `StoreProduct` (https://github.com/RevenueCat/purchases-hybrid-common/pull/187)
+- Updated `purchases-ios` to [4.9.1](https://github.com/RevenueCat/purchases-ios/releases/tag/4.9.1)
 
 ## 3.3.0
 
