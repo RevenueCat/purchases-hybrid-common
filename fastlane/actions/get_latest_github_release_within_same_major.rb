@@ -14,13 +14,13 @@ module Fastlane
           path: "repos/RevenueCat/#{repo_name}/releases",
           error_handlers: {
             404 => proc do |result|
-              UI.error("Repository #{repo_name} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
+              UI.user_error!("Repository #{repo_name} cannot be found, please double check its name and that you provided a valid API token (if it's a private repository).")
             end,
             401 => proc do |result|
-              UI.error("You are not authorized to access #{repo_name}, please make sure you provided a valid API token.")
+              UI.user_error!("You are not authorized to access #{repo_name}, please make sure you provided a valid API token.")
             end,
             '*' => proc do |result|
-              UI.error("GitHub responded with #{result[:status]}:#{result[:body]}")
+              UI.user_error!("GitHub responded with #{result[:status]}:#{result[:body]}")
             end
           }
         ) do |result|
