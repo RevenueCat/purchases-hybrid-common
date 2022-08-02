@@ -86,12 +86,6 @@ module Fastlane
         ]
       end
 
-      def self.sample_return_value
-        {
-          "name" => "name"
-        }
-      end
-
       def self.category
         :source_control
       end
