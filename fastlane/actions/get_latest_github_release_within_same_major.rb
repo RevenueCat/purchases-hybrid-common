@@ -4,8 +4,8 @@ module Fastlane
     class GetLatestGithubReleaseWithinSameMajorAction < Action
       def self.run(params)
         repo_name = params[:repo_name]
-        UI.message("Getting latest release for #{repo_name} on GitHub within same major as the current version")
-
+        current_version = Gem::Version.new(params[:current_version])
+        UI.message("Getting latest release for #{repo_name} on GitHub within same major as #{current_version}")
         GithubApiAction.run(
           server_url: "https://api.github.com",
           api_token: ENV["GITHUB_API_TOKEN"],
@@ -24,7 +24,6 @@ module Fastlane
             end
           }
         ) do |result|
-          current_version = Gem::Version.new(params[:current_version])
           json = result[:json]
           if json.count == 0
             UI.user_error!("Couldn't find latest GitHub release for #{params[:repo_name]}")
