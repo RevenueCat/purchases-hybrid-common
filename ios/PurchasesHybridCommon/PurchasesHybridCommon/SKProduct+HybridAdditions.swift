@@ -14,21 +14,21 @@ import StoreKit
 
     @objc var rc_dictionary: [String: Any] {
         var dictionary: [String: Any] = [
-            "currency_code": self.currencyCode ?? NSNull(),
+            "currencyCode": self.currencyCode ?? NSNull(),
             "description": self.localizedDescription,
             "discounts": NSNull(),
             "identifier": self.productIdentifier,
-            "intro_price": NSNull(),
+            "introPrice": NSNull(),
             "price": self.price,
-            "price_string": self.localizedPriceString,
-            "product_category": self.productCategoryString,
-            "product_type": self.productTypeString,
+            "priceString": self.localizedPriceString,
+            "productCategory": self.productCategoryString,
+            "productType": self.productTypeString,
             "title": self.localizedTitle,
         ]
 
         if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
            let introductoryDiscount = self.introductoryDiscount {
-            dictionary["intro_price"] = introductoryDiscount.rc_dictionary
+            dictionary["introPrice"] = introductoryDiscount.rc_dictionary
         }
 
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
