@@ -320,10 +320,7 @@ def parse_version_in_file(pattern, path)
   Dir.chdir(get_root_folder) do
     File.open path do |file|
       line = file.find { |line| line =~ pattern }
-      unless line.nil?
-        match = line.match(pattern)
-        return match[1]
-      end
+      return line.match(pattern)[1] unless line.nil?
     end
   end
   UI.user_error!("Couldn't extract version from #{path}")
