@@ -30,18 +30,23 @@ module Fastlane
             UI.user_error!("Couldn't find latest GitHub release for #{params[:repo_name]}")
             return
           end
-          highest_version = current_version
-          json.reject { |item| item["prerelease"] }.each do |item|
-            item_version = Gem::Version.new(item['tag_name'])
-            # Skip if it's not in the same major range. Ex. 3.0.0 vs 4.2.0 
-            next if item_version.canonical_segments[0] != current_version.canonical_segments[0]
-            if (highest_version < item_version)
-              highest_version = item_version
-            end
-          end
+
+          highest_version = json.reject { |item| item["prerelease"] }
+            .map { |item| item_version(item) }
+            .select { |item_version| same_major_range?(item_version, current_version) }
+            .max
+
           UI.message("Version #{highest_version.version} is latest release in the same major live on GitHub.com 🚁")
           return highest_version.version
         end
+      end
+
+      private_class_method def self.item_version(item)
+        Gem::Version.new(item['tag_name'])
+      end
+      
+      private_class_method def self.same_major_range?(version_a, version_b)
+        version_a.canonical_segments[0] == version_b.canonical_segments[0]
       end
 
       #####################################################
