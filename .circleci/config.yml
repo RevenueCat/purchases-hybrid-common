@@ -191,8 +191,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      # - setup-git-credentials
-      # - trust-github-key
+      - setup-git-credentials
+      - trust-github-key
       - install-gems
       - run:
           name: Update dependencies to latest versions
@@ -200,29 +200,29 @@ jobs:
 
 workflows:
   version: 2
-  test:
-    when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-    jobs:
-      - test-ios
-      - integration-test-ios
-      - test-android
+  # test:
+  #   when:
+  #     not:
+  #       equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+  #   jobs:
+  #     - test-ios
+  #     - integration-test-ios
+  #     - test-android
 
-  deploy:
-    when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-    jobs:
-      - deploy-ios:
-          <<: *release-tags
-      - deploy-android:
-          <<: *release-tags
-      - make-github-release:
-          <<: *release-tags
-          requires:
-            - deploy-ios
-            - deploy-android
+  # deploy:
+  #   when:
+  #     not:
+  #       equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+  #   jobs:
+  #     - deploy-ios:
+  #         <<: *release-tags
+  #     - deploy-android:
+  #         <<: *release-tags
+  #     - make-github-release:
+  #         <<: *release-tags
+  #         requires:
+  #           - deploy-ios
+  #           - deploy-android
   weekly-run-workflow:
     # when:
     #   and:
