@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "B7BDBD8A-9E95-4DFB-9CB2-924985986220",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "maximumTestExecutionTimeAllowance" : 180,
+    "testExecutionOrdering" : "random",
+    "testRepetitionMode" : "retryOnFailure",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:PurchasesHybridCommon.xcodeproj",
+        "identifier" : "57FFDE15286A566D0089A57B",
+        "name" : "PurchasesHybridCommonIntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}
