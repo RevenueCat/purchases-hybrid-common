@@ -37,6 +37,46 @@ Make GitHub release for current version
 
 Make GitHub release for specific version
 
+### update_native_dependencies_to_latest
+
+```sh
+[bundle exec] fastlane update_native_dependencies_to_latest
+```
+
+Update dependencies to latest GitHub releases
+
+### update_ios_native_version
+
+```sh
+[bundle exec] fastlane update_ios_native_version
+```
+
+Update purchases-ios dependency version
+
+### update_android_native_version
+
+```sh
+[bundle exec] fastlane update_android_native_version
+```
+
+Update purchases-android dependency version
+
+### update_native_version
+
+```sh
+[bundle exec] fastlane update_native_version
+```
+
+Update purchases-android dependency version
+
+### run_pod_install
+
+```sh
+[bundle exec] fastlane run_pod_install
+```
+
+Run pod install
+
 ----
 
 
