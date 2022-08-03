@@ -72,6 +72,7 @@ jobs:
     executor: ios-executor
     steps:
       - checkout
+      - install-gems
       - run:
           name: Install pods
           command: pod install
