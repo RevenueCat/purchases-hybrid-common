@@ -186,7 +186,7 @@ jobs:
       - install-gems
       - run:
           name: Update dependencies to latest versions
-          command: bundle exec fastlane update_native_dependencies_to_latest dry_run:true
+          command: bundle exec fastlane update_native_dependencies_to_latest
 
 workflows:
   version: 2
