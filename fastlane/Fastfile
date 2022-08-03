@@ -66,6 +66,15 @@ lane :open_pr_upgrading_dependencies do |options|
   end
   
   new_versions = update_native_dependencies_to_latest()
+  
+  repo_status = Actions.sh("git status --porcelain")
+
+  repo_clean = repo_status.empty?
+
+  if repo_clean
+    UI.success('Git status is clean, nothing to update! 💪')
+    next
+  end
 
   new_ios_version = new_versions[:new_ios_version]
   new_android_version = new_versions[:new_android_version]
