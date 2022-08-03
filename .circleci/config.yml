@@ -24,6 +24,14 @@ executors:
       xcode: 13.2.1
 
 commands:
+  setup-git-credentials:
+    steps:
+      - run:
+          name: Setup Git config
+          command: |
+            git config user.email $GIT_EMAIL
+            git config user.name $GIT_USERNAME
+
   trust-github-key:
     steps:
       - run:
@@ -183,6 +191,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - setup-git-credentials
+      - trust-github-key
       - install-gems
       - run:
           name: Update dependencies to latest versions
