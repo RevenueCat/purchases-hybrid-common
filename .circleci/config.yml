@@ -191,8 +191,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - setup-git-credentials
-      - trust-github-key
+      # - setup-git-credentials
+      # - trust-github-key
       - install-gems
       - run:
           name: Update dependencies to latest versions
