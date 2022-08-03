@@ -8,8 +8,6 @@ module Fastlane
         UI.message("Getting latest release for #{repo_name} on GitHub within same major as #{current_version}")
         GithubApiAction.run(
           server_url: "https://api.github.com",
-          api_token: ENV["GITHUB_API_TOKEN"],
-          api_bearer: nil,
           http_method: 'GET',
           path: "repos/RevenueCat/#{repo_name}/releases",
           error_handlers: {
