@@ -101,6 +101,7 @@ lane :open_pr_upgrading_dependencies do |options|
       set_upstream: true
     )
     create_pull_request(
+      api_token: ENV["GITHUB_TOKEN"],
       repo: "RevenueCat/purchases-hybrid-common",
       title: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
       head: "#{branch}",
