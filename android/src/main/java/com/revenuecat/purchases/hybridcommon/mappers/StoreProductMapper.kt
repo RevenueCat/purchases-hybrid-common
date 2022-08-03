@@ -9,12 +9,12 @@ fun StoreProduct.map(): Map<String, Any?> =
         "description" to description,
         "title" to title,
         "price" to priceAmountMicros / 1_000_000.0,
-        "price_string" to price,
-        "currency_code" to priceCurrencyCode,
-        "intro_price" to mapIntroPrice(),
+        "priceString" to price,
+        "currencyCode" to priceCurrencyCode,
+        "introPrice" to mapIntroPrice(),
         "discounts" to null,
-        "product_category" to mapProductCategory(),
-        "product_type" to mapProductType()
+        "productCategory" to mapProductCategory(),
+        "productType" to mapProductType()
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }

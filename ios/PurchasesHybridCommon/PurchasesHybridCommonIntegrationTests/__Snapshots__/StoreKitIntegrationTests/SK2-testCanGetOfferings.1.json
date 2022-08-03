@@ -6,13 +6,13 @@
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
         "product" : {
-          "currency_code" : "USD",
+          "currencyCode" : "USD",
           "description" : "Annual Subscription with 1 week trial",
           "discounts" : [
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
-          "intro_price" : {
+          "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
             "periodNumberOfUnits" : 1,
@@ -21,9 +21,9 @@
             "priceString" : "$0.00"
           },
           "price" : 39.99,
-          "price_string" : "$39.99",
-          "product_category" : "SUBSCRIPTION",
-          "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+          "priceString" : "$39.99",
+          "productCategory" : "SUBSCRIPTION",
+          "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
           "title" : "Annual Subscription"
         }
       },
@@ -33,13 +33,13 @@
           "offeringIdentifier" : "default",
           "packageType" : "ANNUAL",
           "product" : {
-            "currency_code" : "USD",
+            "currencyCode" : "USD",
             "description" : "Annual Subscription with 1 week trial",
             "discounts" : [
 
             ],
             "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
-            "intro_price" : {
+            "introPrice" : {
               "cycles" : 1,
               "period" : "P1W",
               "periodNumberOfUnits" : 1,
@@ -48,9 +48,9 @@
               "priceString" : "$0.00"
             },
             "price" : 39.99,
-            "price_string" : "$39.99",
-            "product_category" : "SUBSCRIPTION",
-            "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+            "priceString" : "$39.99",
+            "productCategory" : "SUBSCRIPTION",
+            "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
             "title" : "Annual Subscription"
           }
         },
@@ -59,13 +59,13 @@
           "offeringIdentifier" : "default",
           "packageType" : "MONTHLY",
           "product" : {
-            "currency_code" : "USD",
+            "currencyCode" : "USD",
             "description" : "Monthly Subscription with 1 week trial",
             "discounts" : [
 
             ],
             "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
-            "intro_price" : {
+            "introPrice" : {
               "cycles" : 1,
               "period" : "P1W",
               "periodNumberOfUnits" : 1,
@@ -74,9 +74,9 @@
               "priceString" : "$0.00"
             },
             "price" : 19.99,
-            "price_string" : "$19.99",
-            "product_category" : "SUBSCRIPTION",
-            "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+            "priceString" : "$19.99",
+            "productCategory" : "SUBSCRIPTION",
+            "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
             "title" : "Monthly Subscription"
           }
         }
@@ -87,13 +87,13 @@
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
         "product" : {
-          "currency_code" : "USD",
+          "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
           "discounts" : [
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
-          "intro_price" : {
+          "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
             "periodNumberOfUnits" : 1,
@@ -102,9 +102,9 @@
             "priceString" : "$0.00"
           },
           "price" : 19.99,
-          "price_string" : "$19.99",
-          "product_category" : "SUBSCRIPTION",
-          "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+          "priceString" : "$19.99",
+          "productCategory" : "SUBSCRIPTION",
+          "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
           "title" : "Monthly Subscription"
         }
       },
@@ -117,13 +117,13 @@
       "offeringIdentifier" : "default",
       "packageType" : "ANNUAL",
       "product" : {
-        "currency_code" : "USD",
+        "currencyCode" : "USD",
         "description" : "Annual Subscription with 1 week trial",
         "discounts" : [
 
         ],
         "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
-        "intro_price" : {
+        "introPrice" : {
           "cycles" : 1,
           "period" : "P1W",
           "periodNumberOfUnits" : 1,
@@ -132,9 +132,9 @@
           "priceString" : "$0.00"
         },
         "price" : 39.99,
-        "price_string" : "$39.99",
-        "product_category" : "SUBSCRIPTION",
-        "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+        "priceString" : "$39.99",
+        "productCategory" : "SUBSCRIPTION",
+        "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
         "title" : "Annual Subscription"
       }
     },
@@ -144,13 +144,13 @@
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
         "product" : {
-          "currency_code" : "USD",
+          "currencyCode" : "USD",
           "description" : "Annual Subscription with 1 week trial",
           "discounts" : [
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
-          "intro_price" : {
+          "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
             "periodNumberOfUnits" : 1,
@@ -159,9 +159,9 @@
             "priceString" : "$0.00"
           },
           "price" : 39.99,
-          "price_string" : "$39.99",
-          "product_category" : "SUBSCRIPTION",
-          "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+          "priceString" : "$39.99",
+          "productCategory" : "SUBSCRIPTION",
+          "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
           "title" : "Annual Subscription"
         }
       },
@@ -170,13 +170,13 @@
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
         "product" : {
-          "currency_code" : "USD",
+          "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
           "discounts" : [
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
-          "intro_price" : {
+          "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
             "periodNumberOfUnits" : 1,
@@ -185,9 +185,9 @@
             "priceString" : "$0.00"
           },
           "price" : 19.99,
-          "price_string" : "$19.99",
-          "product_category" : "SUBSCRIPTION",
-          "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+          "priceString" : "$19.99",
+          "productCategory" : "SUBSCRIPTION",
+          "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
           "title" : "Monthly Subscription"
         }
       }
@@ -198,13 +198,13 @@
       "offeringIdentifier" : "default",
       "packageType" : "MONTHLY",
       "product" : {
-        "currency_code" : "USD",
+        "currencyCode" : "USD",
         "description" : "Monthly Subscription with 1 week trial",
         "discounts" : [
 
         ],
         "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
-        "intro_price" : {
+        "introPrice" : {
           "cycles" : 1,
           "period" : "P1W",
           "periodNumberOfUnits" : 1,
@@ -213,9 +213,9 @@
           "priceString" : "$0.00"
         },
         "price" : 19.99,
-        "price_string" : "$19.99",
-        "product_category" : "SUBSCRIPTION",
-        "product_type" : "AUTO_RENEWABLE_SUBSCRIPTION",
+        "priceString" : "$19.99",
+        "productCategory" : "SUBSCRIPTION",
+        "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
         "title" : "Monthly Subscription"
       }
     },
