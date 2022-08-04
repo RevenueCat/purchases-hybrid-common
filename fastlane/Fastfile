@@ -80,9 +80,9 @@ private_lane :update_ios_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
-    'PurchasesHybridCommon.podspec',
-    'ios/PurchasesHybridCommon/Podfile',
-    'DEVELOPMENT.md',
+    File.join(get_root_folder, 'PurchasesHybridCommon.podspec'),
+    File.join(get_root_folder, 'ios/PurchasesHybridCommon/Podfile'),
+    File.join(get_root_folder, 'DEVELOPMENT.md')
   ]
 
   update_native_version(
@@ -98,7 +98,7 @@ private_lane :update_android_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
-    'android/build.gradle',
+    File.join(get_root_folder, 'android/build.gradle'),
   ]
 
   update_native_version(
@@ -133,13 +133,11 @@ private_lane :update_native_version do |options|
   if dry_run
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
-    Dir.chdir(get_root_folder) do
-      replace_text_in_files(
-        previous_text: previous_version_number, 
-        new_text: new_version_number,
-        paths_of_files_to_update: files_to_update
-      )
-    end
+    replace_text_in_files(
+      previous_text: previous_version_number, 
+      new_text: new_version_number,
+      paths_of_files_to_update: files_to_update
+    )
   end
   new_version_number
 end
