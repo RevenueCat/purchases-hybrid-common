@@ -61,6 +61,58 @@ lane :github_release do |options|
   )
 end
 
+desc "Update dependencies to latest GitHub releases and opens a PR"
+lane :open_pr_upgrading_dependencies do |options|
+  if options[:dry_run]
+    dry_run = true
+  end
+  
+  new_versions = update_native_dependencies_to_latest()
+  
+  repo_status = Actions.sh("git status --porcelain")
+
+  repo_clean = repo_status.empty?
+
+  if repo_clean
+    UI.success('Git status is clean, nothing to update! 💪')
+    next
+  end
+
+  new_ios_version = new_versions[:new_ios_version]
+  new_android_version = new_versions[:new_android_version]
+
+  branch = "update-#{new_ios_version}-#{new_android_version}"
+  
+  result = Actions.sh("git checkout -b #{branch}")
+  if result =~ /error:(.)/
+    UI.error("Git couldn't change to `#{branch}`. Reason: #{result}.")
+  else
+    UI.success("Git switched to branch `#{branch}, all good! 💪")
+  end
+  
+  result = Actions.sh("git commit -am \"Upgrades versions\"")
+  if result =~ /error:(.)/
+    UI.error("Git couldn't create commit. Reason: #{result}.")
+  end
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do, dry_run: true")
+  else
+    push_to_git_remote(
+      remote: "origin",
+      set_upstream: true
+    )
+    create_pull_request(
+      api_token: ENV["GITHUB_TOKEN"],
+      repo: "RevenueCat/purchases-hybrid-common",
+      title: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+      head: "#{branch}",
+      base: "main",
+      body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+    )
+  end
+end
+
 desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
   current_ios_version = parse_previous_ios_native_version
@@ -73,6 +125,12 @@ lane :update_native_dependencies_to_latest do |options|
   update_android_native_version(new_version: latest_android_release, current_version: current_android_version)
 
   run_pod_install
+
+  new_versions = {
+    new_ios_version: latest_ios_release,
+    new_android_version: latest_android_release
+  }
+  new_versions
 end
 
 desc "Update purchases-ios dependency version"

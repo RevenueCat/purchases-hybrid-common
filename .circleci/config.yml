@@ -24,6 +24,14 @@ executors:
       xcode: 13.2.1
 
 commands:
+  setup-git-credentials:
+     steps:
+       - run:
+           name: Setup Git config
+           command: |
+             git config user.email $GIT_EMAIL
+             git config user.name $GIT_USERNAME
+
   trust-github-key:
     steps:
       - run:
@@ -176,16 +184,36 @@ jobs:
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
+  
+  automatic-dependency-update:
+    docker:
+      - image: cimg/ruby:2.7.2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - setup-git-credentials
+      - trust-github-key
+      - install-gems
+      - run:
+          name: Update dependencies to latest versions
+          command: bundle exec fastlane open_pr_upgrading_dependencies
 
 workflows:
   version: 2
   test:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - test-ios
       - integration-test-ios
       - test-android
 
   deploy:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - deploy-ios:
           <<: *release-tags
@@ -196,3 +224,11 @@ workflows:
           requires:
             - deploy-ios
             - deploy-android
+  
+  weekly-run-workflow:
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
+    jobs:
+      - automatic-dependency-update 
