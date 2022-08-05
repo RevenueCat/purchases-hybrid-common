@@ -138,9 +138,9 @@ private_lane :update_ios_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
-    File.join(get_root_folder, 'PurchasesHybridCommon.podspec'),
-    File.join(get_root_folder, 'ios/PurchasesHybridCommon/Podfile'),
-    File.join(get_root_folder, 'DEVELOPMENT.md')
+    'PurchasesHybridCommon.podspec',
+    'ios/PurchasesHybridCommon/Podfile',
+    'DEVELOPMENT.md'
   ]
 
   update_native_version(
