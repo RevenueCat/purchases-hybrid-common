@@ -10,3 +10,5 @@ android/.composite-enable
 .idea/vcs.xml
 .idea/workspace.xml
 .gradle/
+
+fastlane/.env

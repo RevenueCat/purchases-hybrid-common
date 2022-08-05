@@ -72,16 +72,17 @@ jobs:
     executor: ios-executor
     steps:
       - checkout
+      - install-gems
       - run:
           name: Install pods
           command: pod install
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Update API key
-          command: fastlane ios replace_api_key_integration_tests
+          command: bundle exec fastlane ios replace_api_key_integration_tests
       - run:
           name: Run ios tests
-          command: fastlane scan --result_bundle=true --testplan=CI
+          command: bundle exec fastlane scan --result_bundle=true --testplan=CI
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommonIntegrationTests

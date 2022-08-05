@@ -13,13 +13,13 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### bump_and_update_changelog
+### bump
 
 ```sh
-[bundle exec] fastlane bump_and_update_changelog
+[bundle exec] fastlane bump
 ```
 
-Increment build number and update changelog
+Bump version, edit changelog, and create pull request
 
 ### github_release_current
 
@@ -45,30 +45,6 @@ Make GitHub release for specific version
 
 Update dependencies to latest GitHub releases
 
-### update_ios_native_version
-
-```sh
-[bundle exec] fastlane update_ios_native_version
-```
-
-Update purchases-ios dependency version
-
-### update_android_native_version
-
-```sh
-[bundle exec] fastlane update_android_native_version
-```
-
-Update purchases-android dependency version
-
-### update_native_version
-
-```sh
-[bundle exec] fastlane update_native_version
-```
-
-Update purchases-android dependency version
-
 ### run_pod_install
 
 ```sh
@@ -81,14 +57,6 @@ Run pod install
 
 
 ## iOS
-
-### ios bump
-
-```sh
-[bundle exec] fastlane ios bump
-```
-
-Increment build number
 
 ### ios release
 
@@ -110,14 +78,6 @@ replace API KEY for integration tests
 
 
 ## Android
-
-### android bump
-
-```sh
-[bundle exec] fastlane android bump
-```
-
-Increment build number
 
 ### android deploy
 
