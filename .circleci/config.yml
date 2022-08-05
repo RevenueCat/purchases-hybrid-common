@@ -226,9 +226,9 @@ workflows:
             - deploy-android
   
   weekly-run-workflow:
-    when:
-      and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
+    # when:
+    #   and:
+    #     - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    #     - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
     jobs:
       - automatic-dependency-update 
