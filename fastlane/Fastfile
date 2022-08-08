@@ -83,13 +83,13 @@ lane :open_pr_upgrading_dependencies do |options|
 
   branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
   
-  result = Actions.sh("git checkout -b #{branch}")
+  result = sh("git checkout -b #{branch}")
   
   UI.user_error!("Git couldn't change to `#{branch}`. Reason: #{result}.") if result =~ /error:(.)/
   
   UI.success("Git switched to branch `#{branch}, all good! 💪")
   
-  result = Actions.sh("git commit -am \"Upgrades versions\"")
+  result = sh("git commit -am \"Upgrades versions\"")
   
   UI.user_error!("Git couldn't create commit. Reason: #{result}.") if result =~ /error:(.)/
 
