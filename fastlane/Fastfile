@@ -81,7 +81,7 @@ lane :open_pr_upgrading_dependencies do |options|
   new_ios_version = new_versions[:new_ios_version]
   new_android_version = new_versions[:new_android_version]
 
-  branch = "update-#{new_ios_version}-#{new_android_version}"
+  branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
   
   result = Actions.sh("git checkout -b #{branch}")
   if result =~ /error:(.)/
