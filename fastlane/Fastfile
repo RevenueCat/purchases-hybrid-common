@@ -83,7 +83,7 @@ lane :open_pr_upgrading_dependencies do |options|
 
   branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
   
-  result = sh("git checkout -b #{branch}")
+  result = sh("git checkout -b #{branch} origin/main")
   
   UI.user_error!("Git couldn't change to `#{branch}`. Reason: #{result}.") if result =~ /error:(.)/
   
@@ -97,8 +97,8 @@ lane :open_pr_upgrading_dependencies do |options|
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
     push_to_git_remote(
-      remote: "origin",
-      set_upstream: true
+      set_upstream: true,
+      remote_branch: branch
     )
     create_pull_request(
       api_token: ENV["GITHUB_TOKEN"],
