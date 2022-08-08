@@ -67,7 +67,7 @@ lane :open_pr_upgrading_dependencies do |options|
     dry_run = true
   end
   
-  new_versions = update_native_dependencies_to_latest()
+  new_versions = update_native_dependencies_to_latest
   
   repo_status = Actions.sh("git status --porcelain")
 
