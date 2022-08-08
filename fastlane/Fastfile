@@ -69,7 +69,7 @@ lane :open_pr_upgrading_dependencies do |options|
   
   new_versions = update_native_dependencies_to_latest
   
-  repo_status = Actions.sh("git status --porcelain")
+  repo_status = sh("git status --porcelain")
 
   repo_clean = repo_status.empty?
 
