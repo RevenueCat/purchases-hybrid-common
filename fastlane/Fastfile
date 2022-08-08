@@ -63,9 +63,7 @@ end
 
 desc "Update dependencies to latest GitHub releases and opens a PR"
 lane :open_pr_upgrading_dependencies do |options|
-  if options[:dry_run]
-    dry_run = true
-  end
+  dry_run = options[:dry_run]
   
   new_versions = update_native_dependencies_to_latest
   
@@ -81,21 +79,23 @@ lane :open_pr_upgrading_dependencies do |options|
   new_ios_version = new_versions[:new_ios_version]
   new_android_version = new_versions[:new_android_version]
 
-  branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
-  
-  result = sh("git checkout -b #{branch} origin/main")
-  
-  UI.user_error!("Git couldn't change to `#{branch}`. Reason: #{result}.") if result =~ /error:(.)/
-  
-  UI.success("Git switched to branch `#{branch}, all good! 💪")
-  
-  result = sh("git commit -am \"Upgrades versions\"")
-  
-  UI.user_error!("Git couldn't create commit. Reason: #{result}.") if result =~ /error:(.)/
-
   if dry_run
-    UI.message("ℹ️  Nothing more to do, dry_run: true")
+    UI.message("ℹ️  Nothing more to do since dry_run: true.")
+    UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
+    UI.message("ℹ️  New Android dependency version is #{new_android_version}")
   else
+    branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
+
+    result = sh("git checkout -b #{branch} origin/main")
+  
+    UI.user_error!("Git couldn't change to `#{branch}`. Reason: #{result}.") if result =~ /error:(.)/
+  
+    UI.success("Git switched to branch `#{branch}, all good! 💪")
+  
+    result = sh("git commit -am \"Upgrades versions\"")
+  
+    UI.user_error!("Git couldn't create commit. Reason: #{result}.") if result =~ /error:(.)/
+
     push_to_git_remote(
       set_upstream: true,
       remote_branch: branch
