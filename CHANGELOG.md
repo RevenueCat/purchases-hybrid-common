@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Updated `purchases-android` to [5.4.1](https://github.com/RevenueCat/purchases-android/releases/tag/5.4.1)
+
 ## 4.0.0
 
 - Fixed snake_case and camelCase serialization inconsistency in `StoreProduct` (https://github.com/RevenueCat/purchases-hybrid-common/pull/187):
