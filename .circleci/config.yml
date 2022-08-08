@@ -61,7 +61,7 @@ jobs:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          command: pod lib lint --allow-warnings # --allow-warnings needed for deprecated `automaticAppleSearchAdsAttributionCollection`
+          command: pod lib lint
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
