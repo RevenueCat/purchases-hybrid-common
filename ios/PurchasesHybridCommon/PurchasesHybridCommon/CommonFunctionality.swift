@@ -66,10 +66,11 @@ import RevenueCat
         Purchases.automaticAppleSearchAdsAttributionCollection = enabled
     }
 
+    @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
+    @available(tvOS, unavailable)
+    @available(watchOS, unavailable)
     @objc public static func enableAdServicesAttributionTokenCollection() {
-        if #available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *) {
-            Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
-        }
+        Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
     }
 
     @objc public static func setFinishTransactions(_ finishTransactions: Bool) {
