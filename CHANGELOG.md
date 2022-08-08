@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Redeploy updates from 4.0.1 - bad deploy.
+
 ## 4.0.1
 
 - Updated `purchases-android` to [5.4.1](https://github.com/RevenueCat/purchases-android/releases/tag/5.4.1)
