@@ -154,7 +154,7 @@ private_lane :update_android_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
-    File.join(get_root_folder, 'android/build.gradle'),
+    'android/build.gradle'
   ]
 
   update_native_version(
