@@ -63,6 +63,8 @@ end
 
 desc "Update dependencies to latest GitHub releases and opens a PR"
 lane :open_pr_upgrading_dependencies do |options|
+  ensure_git_status_clean
+  
   dry_run = options[:dry_run]
   
   new_versions = update_native_dependencies_to_latest
