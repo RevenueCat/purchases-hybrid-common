@@ -48,15 +48,17 @@ class MockPurchases: Purchases {
             appUserID: nil
         )
 
-        let subscriberAttributes = Attribution(subscriberAttributesManager: subscriberAttributesManager,
-                                               currentUserProvider: identityManager)
-
         let attributionPoster: AttributionPoster = AttributionPoster(
             deviceCache: deviceCache,
             currentUserProvider: identityManager,
             backend: backend,
             attributionFetcher: attributionFetcher,
             subscriberAttributesManager: subscriberAttributesManager)
+
+        let subscriberAttributes = Attribution(
+            subscriberAttributesManager: subscriberAttributesManager,
+            currentUserProvider: identityManager,
+            attributionPoster: attributionPoster)
 
         let storeKitWrapper: StoreKitWrapper = StoreKitWrapper()
         let notificationCenter: NotificationCenter = NotificationCenter.default
