@@ -88,8 +88,11 @@ lane :open_pr_upgrading_dependencies do |options|
     reset_git_repo
   else
     branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
+
+    sh("git stash")
     sh("git checkout -b #{branch} origin/main")
-  
+    sh("git stash pop")
+
     UI.success("Git switched to branch `#{branch}, all good! 💪")
   
     sh("git commit -am \"Upgrades versions\"")
