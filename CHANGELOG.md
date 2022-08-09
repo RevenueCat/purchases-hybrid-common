@@ -1,3 +1,6 @@
+## 4.1.0
+* Update iOS 4.10.0 (and add AdServices) (#194) via Josh Holtz (@joshdholtz)
+
 ## 4.0.2
 
 - Redeploy updates from 4.0.1 - bad deploy.

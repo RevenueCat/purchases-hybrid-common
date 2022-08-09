@@ -1,1 +1,1 @@
-- Updated `purchases-android` to [5.4.1](https://github.com/RevenueCat/purchases-android/releases/tag/5.4.1)
+* Update iOS 4.10.0 (and add AdServices) (#194) via Josh Holtz (@joshdholtz)
