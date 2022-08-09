@@ -60,7 +60,7 @@ import RevenueCat
 
     @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
         Purchases.logLevel = enabled ? .debug : .info
-    }gi
+    }
 
     @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
         // Using `setValue` because `automaticAppleSearchAdsAttributionCollection` is now deprecated and we get a warning
