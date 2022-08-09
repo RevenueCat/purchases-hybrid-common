@@ -83,6 +83,7 @@ lane :open_pr_upgrading_dependencies do |options|
     UI.message("ℹ️  Nothing more to do since dry_run: true.")
     UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
     UI.message("ℹ️  New Android dependency version is #{new_android_version}")
+    reset_git_repo
   else
     branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
 
