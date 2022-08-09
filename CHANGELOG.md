@@ -1,3 +1,14 @@
+## 4.1.0
+* Update iOS 4.10.0 (and add AdServices) (#194) via Josh Holtz (@joshdholtz)
+
+## 4.0.2
+
+- Redeploy updates from 4.0.1 - bad deploy.
+
+## 4.0.1
+
+- Updated `purchases-android` to [5.4.1](https://github.com/RevenueCat/purchases-android/releases/tag/5.4.1)
+
 ## 4.0.0
 
 - Fixed snake_case and camelCase serialization inconsistency in `StoreProduct` (https://github.com/RevenueCat/purchases-hybrid-common/pull/187):

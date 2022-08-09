@@ -63,7 +63,15 @@ import RevenueCat
     }
 
     @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
+        // Using `setValue` because `automaticAppleSearchAdsAttributionCollection` is now deprecated and we get a warning
+        Purchases.setValue(enabled, forKey: "automaticAppleSearchAdsAttributionCollection")
+    }
+
+    @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
+    @available(tvOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc public static func enableAdServicesAttributionTokenCollection() {
+        Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
     }
 
     @objc public static func setFinishTransactions(_ finishTransactions: Bool) {

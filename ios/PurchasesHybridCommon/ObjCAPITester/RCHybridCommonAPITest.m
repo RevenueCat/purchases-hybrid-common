@@ -51,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
+    [RCCommonFunctionality enableAdServicesAttributionTokenCollection];
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];

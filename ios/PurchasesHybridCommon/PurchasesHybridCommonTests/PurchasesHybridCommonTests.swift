@@ -30,6 +30,16 @@ class PurchasesHybridCommonTests: QuickSpec {
 
     override func spec() {
 
+        context("automaticAppleSearchAdsAttributionCollection") {
+            it("sets automaticAppleSearchAdsAttributionCollection using setValue") {
+                // sets Purchases.automaticAppleSearchAdsAttributionCollection dynamically
+                // through setValue
+                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
+                CommonFunctionality.setAutomaticAppleSearchAdsAttributionCollection(true)
+                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == true
+            }
+        }
+
         context("proxy url string") {
             it("parses the string and sets the url if valid") {
                 let urlString = "https://revenuecat.com"
