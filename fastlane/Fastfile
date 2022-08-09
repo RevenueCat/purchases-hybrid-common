@@ -86,17 +86,12 @@ lane :open_pr_upgrading_dependencies do |options|
     reset_git_repo
   else
     branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
-
-    result = sh("git checkout -b #{branch} origin/main")
-  
-    UI.user_error!("Git couldn't change to `#{branch}`. Reason: #{result}.") if result =~ /error:(.)/
+    sh("git checkout -b #{branch} origin/main")
   
     UI.success("Git switched to branch `#{branch}, all good! 💪")
   
-    result = sh("git commit -am \"Upgrades versions\"")
+    sh("git commit -am \"Upgrades versions\"")
   
-    UI.user_error!("Git couldn't create commit. Reason: #{result}.") if result =~ /error:(.)/
-
     push_to_git_remote(
       set_upstream: true,
       remote_branch: branch
