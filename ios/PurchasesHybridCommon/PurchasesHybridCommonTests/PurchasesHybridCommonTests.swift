@@ -36,7 +36,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 // through setValue
                 expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
                 CommonFunctionality.setAutomaticAppleSearchAdsAttributionCollection(true)
-                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
+                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == true
             }
         }
 
