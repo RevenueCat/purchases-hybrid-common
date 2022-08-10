@@ -12,3 +12,5 @@ android/.composite-enable
 .gradle/
 
 fastlane/.env
+.bundle/
+vendor/
