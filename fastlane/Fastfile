@@ -61,6 +61,57 @@ lane :github_release do |options|
   )
 end
 
+desc "Update dependencies to latest GitHub releases and opens a PR"
+lane :open_pr_upgrading_dependencies do |options|
+  ensure_git_status_clean
+  
+  dry_run = options[:dry_run]
+  
+  new_versions = update_native_dependencies_to_latest
+  
+  repo_status = sh("git status --porcelain")
+
+  repo_clean = repo_status.empty?
+
+  if repo_clean
+    UI.success('Git status is clean, nothing to update! 💪')
+    next
+  end
+
+  new_ios_version = new_versions[:new_ios_version]
+  new_android_version = new_versions[:new_android_version]
+
+  if dry_run
+    UI.message("ℹ️  Nothing more to do since dry_run: true.")
+    UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
+    UI.message("ℹ️  New Android dependency version is #{new_android_version}")
+    reset_git_repo
+  else
+    branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
+
+    sh("git stash")
+    sh("git checkout -b #{branch} origin/main")
+    sh("git stash pop")
+
+    UI.success("Git switched to branch `#{branch}, all good! 💪")
+  
+    sh("git commit -am \"Upgrades versions\"")
+  
+    push_to_git_remote(
+      set_upstream: true,
+      remote_branch: branch
+    )
+    create_pull_request(
+      api_token: ENV["GITHUB_TOKEN"],
+      repo: "RevenueCat/purchases-hybrid-common",
+      title: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+      head: "#{branch}",
+      base: "main",
+      body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+    )
+  end
+end
+
 desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
   current_ios_version = parse_previous_ios_native_version
@@ -73,6 +124,12 @@ lane :update_native_dependencies_to_latest do |options|
   update_android_native_version(new_version: latest_android_release, current_version: current_android_version)
 
   run_pod_install
+
+  new_versions = {
+    new_ios_version: latest_ios_release,
+    new_android_version: latest_android_release
+  }
+  new_versions
 end
 
 desc "Update purchases-ios dependency version"
@@ -98,7 +155,7 @@ private_lane :update_android_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
   files_to_update = [
-    'android/build.gradle',
+    'android/build.gradle'
   ]
 
   update_native_version(
