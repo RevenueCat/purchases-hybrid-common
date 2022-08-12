@@ -87,6 +87,7 @@ import RevenueCat
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
+    @available(macCatalyst, unavailable)
     @objc public static func presentCodeRedemptionSheet() {
         Purchases.shared.presentCodeRedemptionSheet()
     }
