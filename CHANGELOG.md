@@ -1,3 +1,8 @@
+## 4.1.1
+* Added missing availability check for catalyst (#197) via aboedo (@aboedo)
+* Adds .bundle and vendor to gitignore (#196) via Cesar de la Vega (@vegaro)
+* Schedule automatic PR to update native dependencies (#179) via Cesar de la Vega (@vegaro)
+
 ## 4.1.0
 * Update iOS 4.10.0 (and add AdServices) (#194) via Josh Holtz (@joshdholtz)
 
