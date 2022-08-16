@@ -39,7 +39,6 @@ lane :bump do |options|
     files_to_update_without_prerelease_modifiers: files_with_version_number_without_prerelease_modifiers,
     repo_name: repo_name,
     github_rate_limit: options[:github_rate_limit],
-    branch: options[:branch],
     editor: options[:editor]
   )
 end
@@ -64,11 +63,11 @@ end
 desc "Update dependencies to latest GitHub releases and opens a PR"
 lane :open_pr_upgrading_dependencies do |options|
   ensure_git_status_clean
-  
+
   dry_run = options[:dry_run]
-  
+
   new_versions = update_native_dependencies_to_latest
-  
+
   repo_status = sh("git status --porcelain")
 
   repo_clean = repo_status.empty?
@@ -94,9 +93,9 @@ lane :open_pr_upgrading_dependencies do |options|
     sh("git stash pop")
 
     UI.success("Git switched to branch `#{branch}, all good! 💪")
-  
+
     sh("git commit -am \"Upgrades versions\"")
-  
+
     push_to_git_remote(
       set_upstream: true,
       remote_branch: branch
@@ -116,7 +115,7 @@ desc "Update dependencies to latest GitHub releases"
 lane :update_native_dependencies_to_latest do |options|
   current_ios_version = parse_previous_ios_native_version
   latest_ios_release = get_latest_github_release_within_same_major(repo_name: "purchases-ios", current_version: current_ios_version)
-  
+
   current_android_version = parse_previous_android_native_version
   latest_android_release = get_latest_github_release_within_same_major(repo_name: "purchases-android", current_version: current_android_version)
 
@@ -143,8 +142,8 @@ private_lane :update_ios_native_version do |options|
   ]
 
   update_native_version(
-    platform_name: "iOS", 
-    new_version_number: new_version_number, 
+    platform_name: "iOS",
+    new_version_number: new_version_number,
     previous_version_number: previous_version_number,
     files_to_update: files_to_update
   )
@@ -159,8 +158,8 @@ private_lane :update_android_native_version do |options|
   ]
 
   update_native_version(
-    platform_name: "Android", 
-    new_version_number: new_version_number, 
+    platform_name: "Android",
+    new_version_number: new_version_number,
     previous_version_number: previous_version_number,
     files_to_update: files_to_update
   )
@@ -178,7 +177,7 @@ private_lane :update_native_version do |options|
   end
 
   previous_version_number = options[:previous_version_number]
-  
+
   if previous_version_number == new_version_number
     UI.message("ℹ️  #{platform_name} is already in its latest version: #{previous_version_number}")
     next previous_version_number
@@ -191,7 +190,7 @@ private_lane :update_native_version do |options|
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
     replace_text_in_files(
-      previous_text: previous_version_number, 
+      previous_text: previous_version_number,
       new_text: new_version_number,
       paths_of_files_to_update: files_to_update
     )
@@ -219,12 +218,12 @@ platform :ios do
     folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
 
     replace_text_in_files(
-      previous_text: "REVENUECAT_API_KEY", 
+      previous_text: "REVENUECAT_API_KEY",
       new_text: ENV["REVENUECAT_API_KEY"],
       paths_of_files_to_update: ["#{folder}/Constants.swift"]
     )
     replace_text_in_files(
-      previous_text: "REVENUECAT_PROXY_URL", 
+      previous_text: "REVENUECAT_PROXY_URL",
       new_text: ENV["REVENUECAT_PROXY_URL"].to_s,
       paths_of_files_to_update: ["#{folder}/Constants.swift"],
       allow_empty: true
@@ -246,7 +245,7 @@ platform :android do
       "RELEASE_SIGNING_ENABLED" => true
     }
     UI.verbose("Deploying #{version}")
-    
+
     gradle(
       tasks: [
         "androidSourcesJar", "androidJavadocJar", "publish --no-daemon --no-parallel"
@@ -257,7 +256,7 @@ platform :android do
 
     UI.verbose("Creating special version for Unity IAP with BillingClient 3 and Amazon 2 for version: #{version}")
     gradleProperties["PUBLISH_VARIANT"] = "unityIAPRelease"
-    
+
     UI.verbose("Adding -unityiap to artifact ids")
 
     gradle(
@@ -267,7 +266,7 @@ platform :android do
       properties: gradleProperties,
       project_dir: 'android'
     )
-    
+
     unless is_snapshot_version?(version)
       gradle(
         tasks: [
@@ -304,14 +303,14 @@ def archive
   )
 
   # fastlane gym doesn't fully support .frameworks, so we need to look for the output
-  # in derived data manually. 
+  # in derived data manually.
   Dir.chdir("..") do
     output_framework_path = Dir["derived_data/**/#{framework_filename}"].first
     UI.error("framework not found!") if output_framework_path.nil?
 
     # compress using ditto because zip can cause issues with symlinks
-    sh("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent", 
-      output_framework_path, 
+    sh("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent",
+      output_framework_path,
       "#{framework_filename}.zip")
   end
 
