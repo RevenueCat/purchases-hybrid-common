@@ -199,6 +199,20 @@ jobs:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
 
+  automatic-release:
+    docker:
+      - image: cimg/ruby:2.7.2
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - setup-git-credentials
+      - trust-github-key
+      - install-gems
+      - run:
+          name: Update dependencies to latest versions
+          command: bundle exec fastlane automatic_bump
+
 workflows:
   version: 2
   test:
@@ -236,3 +250,15 @@ workflows:
   danger:
     jobs:
       - revenuecat/danger
+
+  automatic-release:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - automatic-release:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: main
