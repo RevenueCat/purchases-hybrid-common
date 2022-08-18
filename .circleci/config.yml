@@ -284,7 +284,7 @@ workflows:
   automatic-release:
     when:
       not:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - automatic-release:
           filters:
