@@ -60,19 +60,6 @@ commands:
           paths:
             - vendor/bundle
 
-  install-rubydocker-dependencies:
-    steps:
-      - restore_cache:
-          keys: 
-            - v1-rubydocker-gem-cache-{{ checksum "Gemfile.lock" }}
-      - run: 
-          name: Bundle install
-          command: bundle install --clean --path vendor/bundle
-      - save_cache:
-          key: v1-rubydocker-gem-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
 jobs:
   test-ios:
     executor: ios-executor
@@ -229,7 +216,7 @@ jobs:
       - checkout
       - setup-git-credentials
       - trust-github-key
-      - install-rubydocker-dependencies
+      - revenuecat/install-rubydocker-dependencies
       - run: 
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
