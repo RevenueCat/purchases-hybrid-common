@@ -13,7 +13,7 @@ aliases:
 
 orbs:
   android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@1.0.0
+  revenuecat: revenuecat/sdks-common-config@1.1.0
   macos: circleci/macos@2.0.1
 
 executors:
@@ -232,3 +232,7 @@ workflows:
         - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
     jobs:
       - automatic-dependency-update 
+
+  danger:
+    jobs:
+      - revenuecat/danger
