@@ -232,7 +232,7 @@ jobs:
       - trust-github-key
       - install-gems
       - run:
-          name: Update dependencies to latest versions
+          name: Automatically bump release and create release PR
           command: bundle exec fastlane automatic_bump
 
 workflows:
