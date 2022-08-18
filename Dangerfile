@@ -9,4 +9,3 @@ def fail_if_no_supported_label_found
 end
 
 fail_if_no_supported_label_found
-  
