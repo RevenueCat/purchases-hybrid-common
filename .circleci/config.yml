@@ -277,13 +277,17 @@ workflows:
       - automatic-dependency-update 
 
   danger:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - revenuecat/danger
 
   automatic-release:
     when:
       not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ "force-test", << pipeline.schedule.name >> ]
     jobs:
       - automatic-release:
           filters:
