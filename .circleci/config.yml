@@ -231,7 +231,7 @@ jobs:
       - revenuecat/install-rubydocker-dependencies
       - run:
           name: Automatically bump release and create release PR
-          command: bundle exec fastlane automatic_bump
+          command: bundle exec fastlane automatic_bump github_rate_limit:10
 
 workflows:
   version: 2
@@ -282,13 +282,13 @@ workflows:
       - revenuecat/danger
 
   automatic-release:
-    # when:
-      # not:
-        # - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    when:
+      not:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - automatic-release:
           filters:
             tags:
               ignore: /.*/
-          #   branches:
-          #     only: main
+            branches:
+              only: main
