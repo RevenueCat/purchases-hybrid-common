@@ -296,5 +296,5 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-            branches:
-              only: main
+            # branches:
+              # only: main
