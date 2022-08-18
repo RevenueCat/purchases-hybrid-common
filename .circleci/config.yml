@@ -223,14 +223,12 @@ jobs:
 
   automatic-release:
     docker:
-      - image: cimg/ruby:2.7.2
+      - image: cimg/ruby:3.1.2
     steps:
       - checkout
-      - attach_workspace:
-          at: .
       - setup-git-credentials
       - trust-github-key
-      - install-gems
+      - revenuecat/install-rubydocker-dependencies
       - run:
           name: Automatically bump release and create release PR
           command: bundle exec fastlane automatic_bump
