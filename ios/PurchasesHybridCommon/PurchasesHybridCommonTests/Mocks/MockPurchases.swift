@@ -24,6 +24,7 @@ class MockPurchases: Purchases {
         let backend: Backend = Backend(apiKey: "",
                                        systemInfo: systemInfo,
                                        eTagManager: eTagManager,
+                                       operationDispatcher: operationDispatcher,
                                        attributionFetcher:
                                         attributionFetcher)
 
