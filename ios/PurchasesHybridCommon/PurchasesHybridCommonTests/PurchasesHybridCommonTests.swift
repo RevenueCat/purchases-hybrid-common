@@ -29,11 +29,8 @@ class PurchasesHybridCommonTests: QuickSpec {
     )
 
     override func spec() {
-
         context("automaticAppleSearchAdsAttributionCollection") {
-            it("sets automaticAppleSearchAdsAttributionCollection using setValue") {
-                // sets Purchases.automaticAppleSearchAdsAttributionCollection dynamically
-                // through setValue
+            it("sets value") {
                 expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
                 CommonFunctionality.setAutomaticAppleSearchAdsAttributionCollection(true)
                 expect(Purchases.automaticAppleSearchAdsAttributionCollection) == true
