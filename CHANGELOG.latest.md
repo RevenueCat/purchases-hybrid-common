@@ -1,2 +1,4 @@
 ### Other Changes
-* Upgrade iOS to 4.10.1 (#201) via RevenueCat Git Bot (@RCGitBot)
+* `automaticAppleSearchAdsAttributionCollection`: changed implementation to call method directly (#199) via NachoSoto (@NachoSoto)
+* Release train (#202) via Cesar de la Vega (@vegaro)
+* Adds Danger (#204) via Cesar de la Vega (@vegaro)
