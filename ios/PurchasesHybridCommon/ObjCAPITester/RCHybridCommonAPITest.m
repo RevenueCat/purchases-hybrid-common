@@ -14,14 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RCCommonFunctionalityAPITest: NSObject
 @end
 
-
 @implementation RCCommonFunctionalityAPITest
 - (void)testAPI {
     NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];
 
-    // should issue deprecated warning
-    [RCCommonFunctionality setAllowSharingStoreAccount:NO];
 
     [RCCommonFunctionality getProductInfo:@[]
                           completionBlock:^(NSArray<NSDictionary *> * _Nonnull products) {
@@ -50,8 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
                                                                 RCErrorContainer * _Nullable error) {
     }];
 
-    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
-    [RCCommonFunctionality enableAdServicesAttributionTokenCollection];
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];
@@ -98,6 +93,15 @@ NS_ASSUME_NONNULL_BEGIN
     }
     [RCCommonFunctionality invalidateCustomerInfoCache];
     BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
+}
+
+- (void)testDeprecatedAPI {
+    [RCCommonFunctionality setAllowSharingStoreAccount:NO];
+    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
+    
+    if (@available(iOS 14.3, *)) {
+        [RCCommonFunctionality enableAdServicesAttributionTokenCollection];
+    }
 }
 
 - (void)testSubscriberAttributes {
