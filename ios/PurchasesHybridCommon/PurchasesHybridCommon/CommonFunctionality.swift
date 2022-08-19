@@ -62,9 +62,9 @@ import RevenueCat
         Purchases.logLevel = enabled ? .debug : .info
     }
 
+    @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")
     @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        // Using `setValue` because `automaticAppleSearchAdsAttributionCollection` is now deprecated and we get a warning
-        Purchases.setValue(enabled, forKey: "automaticAppleSearchAdsAttributionCollection")
+        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
     }
 
     @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
