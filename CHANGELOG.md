@@ -1,3 +1,7 @@
+## 4.1.2
+### Other Changes
+* Upgrade iOS to 4.10.1 (#201) via RevenueCat Git Bot (@RCGitBot)
+
 ## 4.1.1
 * Added missing availability check for catalyst (#197) via aboedo (@aboedo)
 * Adds .bundle and vendor to gitignore (#196) via Cesar de la Vega (@vegaro)
