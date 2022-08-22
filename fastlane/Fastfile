@@ -52,7 +52,7 @@ lane :automatic_bump do |options|
   )
   options[:next_version] = next_version
   if type_of_bump == :skip
-    UI.error('Skipping automatic bump since the next version doesn\'t include public facing changes')
+    UI.message('Skipping automatic bump since the next version doesn\'t include public facing changes')
     next
   end
   if type_of_bump == :major
