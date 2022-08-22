@@ -51,8 +51,14 @@ lane :automatic_bump do |options|
     github_rate_limit: options[:github_rate_limit]
   )
   options[:next_version] = next_version
-  UI.user_error!('Skipping automatic bump since the next version doesn\'t include public facing changes') if type_of_bump == :skip
-  UI.user_error!('Skipping automatic bump since the next version is a major release') if type_of_bump == :major
+  if type_of_bump == :skip
+    UI.error('Skipping automatic bump since the next version doesn\'t include public facing changes')
+    next
+  end
+  if type_of_bump == :major
+    UI.error('Skipping automatic bump since the next version is a major release')
+    next
+  end
   bump(options)
 end
 
