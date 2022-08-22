@@ -51,12 +51,12 @@ commands:
   install-gems:
     steps:
       - restore_cache:
-          key: v2-gem-cache-{{ checksum "Gemfile.lock" }}
+          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
       - run: 
           name: Bundle install
           command: bundle install --clean --path vendor/bundle
       - save_cache:
-          key: v2-gem-cache-{{ checksum "Gemfile.lock" }}
+          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
