@@ -1,5 +1,7 @@
+### API Changes
+* Rename revenueCatId and productId to transactionIdentifier and productIdentifier. Old values still exist but are deprecated (#211) via Toni Rico (@tonidero)
+
 ### Other Changes
-* `automaticAppleSearchAdsAttributionCollection`: changed implementation to call method directly (#199) via NachoSoto (@NachoSoto)
-* Release train (#202) via Cesar de la Vega (@vegaro)
-* Adds Danger (#204) via Cesar de la Vega (@vegaro)
-* Upgrade iOS to 4.10.2 (#207) (@NachoSoto)
+* Update common fastlane plugin (#215) via Cesar de la Vega (@vegaro)
+* Replace build with dependencies on automatic upgrade PRs (#213) via Cesar de la Vega (@vegaro)
+* `IntegrationTests`: actually fail test if tests aren't configured (#210) via NachoSoto (@NachoSoto)
