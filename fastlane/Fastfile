@@ -56,7 +56,7 @@ lane :automatic_bump do |options|
     next
   end
   if type_of_bump == :major
-    UI.error('Skipping automatic bump since the next version is a major release')
+    UI.message('Skipping automatic bump since the next version is a major release')
     next
   end
   bump(options)
