@@ -1,4 +1,7 @@
 ## 4.1.4
+### API Changes
+* Deprecate `Transaction` map properties `revenueCatId` and `productId`. They will be substituted with `transactionIdentifier` and `productIdentifier` respectively (#211)
+
 ### Other Changes
 * `automaticAppleSearchAdsAttributionCollection`: changed implementation to call method directly (#199) via NachoSoto (@NachoSoto)
 * Release train (#202) via Cesar de la Vega (@vegaro)
