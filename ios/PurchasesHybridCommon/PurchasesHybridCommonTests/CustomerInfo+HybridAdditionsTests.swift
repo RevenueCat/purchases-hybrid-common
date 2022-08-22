@@ -95,7 +95,9 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(nonSubscriptionTransactions.count) == 1
 
                     let transactionDictionary = try XCTUnwrap(nonSubscriptionTransactions[0] as? [String: Any])
+                    expect(transactionDictionary["transactionIdentifier"] as? String) == expectedTransactionID
                     expect(transactionDictionary["revenueCatId"] as? String) == expectedTransactionID
+                    expect(transactionDictionary["productIdentifier"] as? String) == expectedProductID
                     expect(transactionDictionary["productId"] as? String) == expectedProductID
                     expect(transactionDictionary["purchaseDateMillis"] as? Double) == transactionDate.rc_millisecondsSince1970AsDouble()
 
