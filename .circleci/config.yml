@@ -51,12 +51,12 @@ commands:
   install-gems:
     steps:
       - restore_cache:
-          key: v2-gem-cache-{{ checksum "Gemfile.lock" }}
+          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
       - run: 
           name: Bundle install
           command: bundle install --clean --path vendor/bundle
       - save_cache:
-          key: v2-gem-cache-{{ checksum "Gemfile.lock" }}
+          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -172,7 +172,7 @@ jobs:
       resource-class: large
     steps:
       - checkout
-      - install-gems
+      - revenuecat/install-rubydocker-dependencies
       - android/accept-licenses
       - restore_cache:
           key: jars-{{ checksum "android/build.gradle" }}
@@ -188,7 +188,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - install-gems
+      - revenuecat/install-rubydocker-dependencies
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
@@ -202,7 +202,7 @@ jobs:
           at: .
       - setup-git-credentials
       - trust-github-key
-      - install-gems
+      - revenuecat/install-rubydocker-dependencies
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
