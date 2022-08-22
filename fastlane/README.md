@@ -21,6 +21,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Bump version, edit changelog, and create pull request
 
+### automatic_bump
+
+```sh
+[bundle exec] fastlane automatic_bump
+```
+
+Automatically bumps version, edit changelog, and create pull request
+
 ### github_release_current
 
 ```sh
@@ -52,6 +60,14 @@ Update dependencies to latest GitHub releases and opens a PR
 ```
 
 Update dependencies to latest GitHub releases
+
+### tag_current_branch
+
+```sh
+[bundle exec] fastlane tag_current_branch
+```
+
+Tag current branch with current version number
 
 ### run_pod_install
 
