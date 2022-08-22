@@ -172,7 +172,7 @@ jobs:
       resource-class: large
     steps:
       - checkout
-      - install-gems
+      - revenuecat/install-rubydocker-dependencies
       - android/accept-licenses
       - restore_cache:
           key: jars-{{ checksum "android/build.gradle" }}
