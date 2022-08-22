@@ -363,3 +363,9 @@ end
 def get_root_folder
   File.expand_path('../../', __FILE__)
 end
+
+def check_no_git_tag_exists(version_number)
+  if git_tag_exists(tag: version_number, remote: true, remote_name: 'origin')
+    raise "git tag with version #{version_number} already exists!"
+  end
+end
