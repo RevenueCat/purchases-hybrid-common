@@ -119,7 +119,7 @@ lane :open_pr_upgrading_dependencies do |options|
       head: "#{branch}",
       base: "main",
       body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
-      labels: ["build"]
+      labels: ["dependencies"]
     )
   end
 end
