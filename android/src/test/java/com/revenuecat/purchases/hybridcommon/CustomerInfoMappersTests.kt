@@ -53,7 +53,7 @@ internal class CustomerInfoMappersTests {
 
         @Test
         fun `a CustomerInfo with non empty non subscriptions, should map to a non empty array of non subscriptions`() {
-            val transaction = Transaction("transactionIdentifier", "productid", Date())
+            val transaction = Transaction("transactionIdentifier", "transactionIdentifier", "productid", "productid", Date())
             every { mockCustomerInfo.nonSubscriptionTransactions } returns listOf(transaction)
 
             val map = mockCustomerInfo.map()
@@ -62,10 +62,10 @@ internal class CustomerInfoMappersTests {
             assertThat(mappedNonSubscriptionTransactions).isNotEmpty
 
             val transactionDictionary = mappedNonSubscriptionTransactions[0] as Map<*, *>
-            assertThat(transactionDictionary["transactionIdentifier"]).isEqualTo(transaction.revenuecatId)
-            assertThat(transactionDictionary["revenueCatId"]).isEqualTo(transaction.revenuecatId)
-            assertThat(transactionDictionary["productIdentifier"]).isEqualTo(transaction.productId)
-            assertThat(transactionDictionary["productId"]).isEqualTo(transaction.productId)
+            assertThat(transactionDictionary["transactionIdentifier"]).isEqualTo(transaction.transactionIdentifier)
+            assertThat(transactionDictionary["revenueCatId"]).isEqualTo(transaction.transactionIdentifier)
+            assertThat(transactionDictionary["productIdentifier"]).isEqualTo(transaction.productIdentifier)
+            assertThat(transactionDictionary["productId"]).isEqualTo(transaction.productIdentifier)
             assertThat(transactionDictionary["purchaseDateMillis"]).isEqualTo(transaction.purchaseDate.toMillis())
             assertThat(transactionDictionary["purchaseDate"]).isEqualTo(transaction.purchaseDate.toIso8601())
 
