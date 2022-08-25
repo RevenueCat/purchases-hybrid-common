@@ -1,7 +1,4 @@
-### API Changes
-* Rename revenueCatId and productId to transactionIdentifier and productIdentifier. Old values still exist but are deprecated (#211) via Toni Rico (@tonidero)
-
 ### Other Changes
-* Update common fastlane plugin (#215) via Cesar de la Vega (@vegaro)
-* Replace build with dependencies on automatic upgrade PRs (#213) via Cesar de la Vega (@vegaro)
-* `IntegrationTests`: actually fail test if tests aren't configured (#210) via NachoSoto (@NachoSoto)
+* Upgrade iOS to 4.10.2 and Android to 5.5.0 (#220) via RevenueCat Git Bot (@RCGitBot)
+* Fix CircleCI caches (#217) via Cesar de la Vega (@vegaro)
+* Skip next version if there are no public changes (#218) via Cesar de la Vega (@vegaro)
