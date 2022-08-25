@@ -1,3 +1,7 @@
+## 4.2.0
+### New Features
+* Add in missing attribution functions (#219) via Joshua Liebowitz (@taquitos)
+
 ## 4.1.5
 ### Other Changes
 * Upgrade iOS to 4.10.2 and Android to 5.5.0 (#220) via RevenueCat Git Bot (@RCGitBot)
