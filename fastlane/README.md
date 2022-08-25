@@ -90,14 +90,6 @@ Run pod install
 
 Release to CocoaPods, create Carthage archive, and create GitHub release
 
-### ios archive_ios
-
-```sh
-[bundle exec] fastlane ios archive_ios
-```
-
-Create Carthage archive
-
 ### ios replace_api_key_integration_tests
 
 ```sh
