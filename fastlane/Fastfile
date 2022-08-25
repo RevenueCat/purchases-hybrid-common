@@ -242,11 +242,6 @@ platform :ios do
     archive
   end
 
-  desc "Create Carthage archive"
-  lane :archive_ios do
-    archive
-  end
-
   desc "replace API KEY for integration tests"
   lane :replace_api_key_integration_tests do
     folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
