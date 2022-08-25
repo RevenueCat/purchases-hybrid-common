@@ -403,9 +403,11 @@ import RevenueCat
     @objc static func collectDeviceIdentifiers() {
         Purchases.shared.attribution.collectDeviceIdentifiers()
     }
-
     @objc static func setAdjustID(_ adjustID: String?) {
         Purchases.shared.attribution.setAdjustID(adjustID)
+    }
+    @objc static func setCleverTapID(_ cleverTapID: String?) {
+        Purchases.shared.attribution.setCleverTapID(cleverTapID)
     }
     @objc static func setAppsflyerID(_ appsflyerID: String?) {
         Purchases.shared.attribution.setAppsflyerID(appsflyerID)
@@ -415,6 +417,12 @@ import RevenueCat
     }
     @objc static func setMparticleID(_ mParticleID: String?) {
         Purchases.shared.attribution.setMparticleID(mParticleID)
+    }
+    @objc static func setMixpanelDistinctID(_ mixpanelDistinctID: String?) {
+        Purchases.shared.attribution.setMixpanelDistinctID(mixpanelDistinctID)
+    }
+    @objc static func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
+        Purchases.shared.attribution.setFirebaseAppInstanceID(firebaseAppInstanceID)
     }
     @objc static func setOnesignalID(_ onesignalID: String?) {
         Purchases.shared.attribution.setOnesignalID(onesignalID)

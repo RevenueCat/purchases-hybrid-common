@@ -25,6 +25,18 @@ fun setMparticleID(mparticleID: String?) {
     Purchases.sharedInstance.setMparticleID(mparticleID)
 }
 
+fun setCleverTapID(cleverTapID: String?) {
+    Purchases.sharedInstance.setCleverTapID(cleverTapID)
+}
+
+fun setMixpanelDistinctID(mixpanelDistinctID: String?) {
+    Purchases.sharedInstance.setMixpanelDistinctID(mixpanelDistinctID)
+}
+
+fun setFirebaseAppInstanceID(firebaseAppInstanceID: String?) {
+    Purchases.sharedInstance.setFirebaseAppInstanceID(firebaseAppInstanceID)
+}
+
 fun setOnesignalID(onesignalID: String?) {
     Purchases.sharedInstance.setOnesignalID(onesignalID)
 }
