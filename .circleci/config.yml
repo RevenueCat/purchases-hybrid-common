@@ -274,6 +274,22 @@ workflows:
     jobs:
       - automatic-dependency-update 
 
+  manual-trigger-automatic-dependency-update:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - trigger-automatic-dependency-update:
+          type: approval
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: main
+      - automatic-dependency-update:
+          requires:
+            - trigger-automatic-dependency-update
+
   danger:
     when:
       not:
@@ -292,3 +308,19 @@ workflows:
               ignore: /.*/
             branches:
               only: main
+
+  manual-trigger-release:
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+    jobs:
+      - trigger-automatic-release:
+          type: approval
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: main
+      - automatic-release:
+          requires:
+            - trigger-automatic-release
