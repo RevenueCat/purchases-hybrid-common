@@ -60,8 +60,15 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(offerings)
     }
 
-    func testCanMakePurchase() async throws {
+    func testCanPurchasePackage() async throws {
         var data = try await self.purchaseMonthlyOffering()
+        removeDates(&data)
+
+        await self.assertSnapshot(data)
+    }
+
+    func testCanPurchaseProduct() async throws {
+        var data = try await self.purchase(productIdentifier: Self.productIdentifier)
         removeDates(&data)
 
         await self.assertSnapshot(data)
@@ -133,6 +140,7 @@ private extension StoreKit1IntegrationTests {
 private extension StoreKit1IntegrationTests {
 
     static let entitlementIdentifier = "premium"
+    static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
 
     private var currentOffering: Offering {
         get async throws {
@@ -157,6 +165,18 @@ private extension StoreKit1IntegrationTests {
         return try await CommonFunctionality.purchase(
             package: package.identifier,
             offeringIdentifier: package.offeringIdentifier,
+            signedDiscountTimestamp: nil
+        )
+    }
+
+    @discardableResult
+    func purchase(
+        productIdentifier: String,
+        file: FileString = #file,
+        line: UInt = #line
+    ) async throws -> [String: Any] {
+        return try await CommonFunctionality.purchase(
+            product: productIdentifier,
             signedDiscountTimestamp: nil
         )
     }
