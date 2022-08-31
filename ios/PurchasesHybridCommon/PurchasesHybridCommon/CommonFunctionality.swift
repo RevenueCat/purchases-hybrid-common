@@ -145,13 +145,12 @@ import RevenueCat
             }
         }
 
-        product(with: productIdentifier) { product in
-            guard let product = product else {
+        self.product(with: productIdentifier) { storeProduct in
+            guard let storeProduct = storeProduct else {
                 completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
                 return
             }
 
-            let storeProduct = StoreProduct(sk1Product: product)
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
@@ -336,13 +335,13 @@ import RevenueCat
             return
         }
 
-        product(with: productIdentifier) { product in
-            guard let product = product else {
+        product(with: productIdentifier) { storeProduct in
+            guard let storeProduct = storeProduct else {
                 completion(nil, productNotFoundError(description: "Couldn't find product", userCancelled: false))
                 return
             }
 
-            guard let discountToUse = discount(with: discountIdentifier, for: product) else {
+            guard let discountToUse = self.discount(with: discountIdentifier, for: storeProduct) else {
                 completion(nil, productNotFoundError(description: "Couldn't find discount", userCancelled: false))
                 return
             }
@@ -363,7 +362,7 @@ import RevenueCat
                 promoOffersByTimestamp["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
                 completion(promotionalOffer.rc_dictionary, nil)
             }
-            let storeProduct = StoreProduct(sk1Product: product)
+
             Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
                                                  product: storeProduct,
                                                  completion: promotionalOfferCompletion)
@@ -478,9 +477,9 @@ private extension CommonFunctionality {
 
     }
 
-    static func product(with identifier: String, completion: @escaping (SKProduct?) -> Void) {
+    static func product(with identifier: String, completion: @escaping (StoreProduct?) -> Void) {
         Purchases.shared.getProducts([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier }?.sk1Product)
+            completion(products.first { $0.productIdentifier == identifier })
         }
     }
 
@@ -507,12 +506,11 @@ private extension CommonFunctionality {
     }
 
     @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
-    static func discount(with identifier: String?, for product: SKProduct) -> StoreProductDiscount? {
-        let storeProduct = StoreProduct(sk1Product: product)
+    static func discount(with identifier: String?, for product: StoreProduct) -> StoreProductDiscount? {
         if identifier == nil {
-            return storeProduct.discounts.first
+            return product.discounts.first
         } else {
-            return storeProduct.discounts.first { $0.offerIdentifier == identifier }
+            return product.discounts.first { $0.offerIdentifier == identifier }
         }
     }
 
