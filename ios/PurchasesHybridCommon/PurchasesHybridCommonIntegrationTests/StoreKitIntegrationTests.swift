@@ -116,6 +116,34 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(result)
     }
 
+    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
+    func testIneligibleForPromotionalOfferByDefault() async {
+        do {
+            _ = try await CommonFunctionality.promotionalOffer(
+                for: Self.productIdentifier,
+                discountIdentifier: Self.discountIdentifier
+            )
+
+            fail("Expected error")
+        } catch {
+            expect(error).to(matchError(ErrorCode.ineligibleError))
+        }
+    }
+
+    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
+    func testPromotionalOffer() async throws {
+        try await self.purchaseMonthlyOffering()
+        try self.testSession.expireSubscription(productIdentifier: Self.productIdentifier)
+
+        var result = try await CommonFunctionality.promotionalOffer(
+            for: Self.productIdentifier,
+            discountIdentifier: Self.discountIdentifier
+        )
+
+        removeVaryingPromotionalOfferData(from: &result)
+        await self.assertSnapshot(result)
+    }
+
 }
 
 private extension StoreKit1IntegrationTests {
@@ -141,6 +169,8 @@ private extension StoreKit1IntegrationTests {
 
     static let entitlementIdentifier = "premium"
     static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+
+    static let discountIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount"
 
     private var currentOffering: Offering {
         get async throws {
@@ -196,23 +226,40 @@ private extension StoreKit2Setting {
 
 /// Remove dates from the given dictionary so they can be ignored from snapshot tests.
 private func removeDates(_ data: inout [String: Any]) {
-    func removeDatesFromAny(_ data: inout Any) {
-        guard var dictionary = data as? [String: Any] else {
-            return
-        }
-
-        removeDates(&dictionary)
-        data = dictionary
-    }
-
-    func shouldRemove(key: String, withValue value: Any?) -> Bool {
-        let keysToRemove: Set<String> = [
+    removeNonConstantData(
+        from: &data,
+        keysToRemove: [
             "millis",
             "date",
             "firstSeen",
             "originalAppUserId"
         ]
+    )
+}
 
+private func removeVaryingPromotionalOfferData(from data: inout [String: Any]) {
+    removeNonConstantData(
+        from: &data,
+        keysToRemove: [
+            "nonce",
+            "signature",
+            "timestamp"
+        ]
+    )
+}
+
+/// Remove changing data from the given dictionary so they can be ignored from snapshot tests.
+private func removeNonConstantData(from data: inout [String: Any], keysToRemove: Set<String>) {
+    func removeFromAny(_ data: inout Any) {
+        guard var dictionary = data as? [String: Any] else {
+            return
+        }
+
+        removeNonConstantData(from: &dictionary, keysToRemove: keysToRemove)
+        data = dictionary
+    }
+
+    func shouldRemove(key: String, withValue value: Any?) -> Bool {
         return (!keysToRemove.allSatisfy { !key.localizedCaseInsensitiveContains($0) } &&
                 value != nil &&
                 !(value is NSNull))
@@ -222,8 +269,9 @@ private func removeDates(_ data: inout [String: Any]) {
         if shouldRemove(key: entry.key, withValue: entry.value) {
             data.removeValue(forKey: entry.key)
         } else {
-            removeDatesFromAny(&entry.value)
+            removeFromAny(&entry.value)
             data[entry.key] = entry.value
         }
     }
 }
+
