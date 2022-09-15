@@ -144,6 +144,19 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(result)
     }
 
+    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
+    func testIneligibleForPromotionalError() async throws {
+        do {
+            _ = try await CommonFunctionality.promotionalOffer(
+                for: Self.productIdentifier,
+                discountIdentifier: Self.discountIdentifier
+            )
+            fail("Expected error")
+        } catch {
+            expect(error).to(matchError(ErrorCode.ineligibleError))
+        }
+    }
+
 }
 
 private extension StoreKit1IntegrationTests {
