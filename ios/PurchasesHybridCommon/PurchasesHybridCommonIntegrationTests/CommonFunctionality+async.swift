@@ -88,4 +88,16 @@ extension CommonFunctionality {
         }
     }
 
+    static func promotionalOffer(
+        for productIdentifier: String,
+        discountIdentifier: String?
+    ) async throws -> [String: Any] {
+        return try await withCheckedThrowingContinuation { continuation in
+            Self.promotionalOffer(for: productIdentifier,
+                                  discountIdentifier: discountIdentifier) { dictionary, error in
+                continuation.resume(with: Result(dictionary, error?.error))
+            }
+        }
+    }
+
 }

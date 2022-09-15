@@ -62,7 +62,15 @@
             "currencyCode" : "USD",
             "description" : "Monthly Subscription with 1 week trial",
             "discounts" : [
-
+              {
+                "cycles" : 1,
+                "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+                "period" : "P1M",
+                "periodNumberOfUnits" : 1,
+                "periodUnit" : "MONTH",
+                "price" : 1.99,
+                "priceString" : "$1.99"
+              }
             ],
             "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
             "introPrice" : {
@@ -90,7 +98,15 @@
           "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
           "discounts" : [
-
+            {
+              "cycles" : 1,
+              "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+              "period" : "P1M",
+              "periodNumberOfUnits" : 1,
+              "periodUnit" : "MONTH",
+              "price" : 1.99,
+              "priceString" : "$1.99"
+            }
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "introPrice" : {
@@ -173,7 +189,15 @@
           "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
           "discounts" : [
-
+            {
+              "cycles" : 1,
+              "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+              "period" : "P1M",
+              "periodNumberOfUnits" : 1,
+              "periodUnit" : "MONTH",
+              "price" : 1.99,
+              "priceString" : "$1.99"
+            }
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "introPrice" : {
@@ -201,7 +225,15 @@
         "currencyCode" : "USD",
         "description" : "Monthly Subscription with 1 week trial",
         "discounts" : [
-
+          {
+            "cycles" : 1,
+            "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+            "period" : "P1M",
+            "periodNumberOfUnits" : 1,
+            "periodUnit" : "MONTH",
+            "price" : 1.99,
+            "priceString" : "$1.99"
+          }
         ],
         "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
         "introPrice" : {

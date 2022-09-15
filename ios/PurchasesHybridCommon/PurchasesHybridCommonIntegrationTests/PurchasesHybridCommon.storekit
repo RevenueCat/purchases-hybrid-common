@@ -9,7 +9,7 @@
   "settings" : {
     "_applicationInternalID" : "1632064283",
     "_developerTeamID" : "8SXR2327BM",
-    "_lastSynchronizedDate" : 678131611.26373899
+    "_lastSynchronizedDate" : 684021672.86978495
   },
   "subscriptionGroups" : [
     {
@@ -31,7 +31,7 @@
           "groupNumber" : 1,
           "internalID" : "1632066498",
           "introductoryOffer" : {
-            "internalID" : "5B51C0D1",
+            "internalID" : "6FFCA5C6",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
@@ -51,7 +51,15 @@
         },
         {
           "adHocOffers" : [
-
+            {
+              "displayPrice" : "1.99",
+              "internalID" : "103F6591",
+              "numberOfPeriods" : 1,
+              "offerID" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+              "paymentMode" : "payUpFront",
+              "referenceName" : "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount",
+              "subscriptionPeriod" : "P1M"
+            }
           ],
           "codeOffers" : [
 
@@ -61,7 +69,7 @@
           "groupNumber" : 1,
           "internalID" : "1632068374",
           "introductoryOffer" : {
-            "internalID" : "E2B0BB92",
+            "internalID" : "BEA4D847",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
