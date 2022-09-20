@@ -4,7 +4,7 @@
 //
 
 import Foundation
-@testable import RevenueCat
+import RevenueCat
 import StoreKit
 
 final class MockPurchases: PurchasesType {
