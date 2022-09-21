@@ -108,7 +108,7 @@ final class MockPurchases: PurchasesType {
     var invokedProductsParametersList: [(productIdentifiers: [String], completion: ([StoreProduct]) -> ())] = []
 
     func getProducts(_ productIdentifiers: [String],
-                              completion: @escaping ([StoreProduct]) -> ()) {
+                     completion: @escaping ([StoreProduct]) -> ()) {
         invokedProducts = true
         invokedProductsCount += 1
         invokedProductsParameters = (productIdentifiers, completion)
@@ -135,7 +135,7 @@ final class MockPurchases: PurchasesType {
                                                  completion: PurchaseCompletedBlock)]()
 
     func purchase(package: Package,
-                           completion: @escaping PurchaseCompletedBlock) {
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackage = true
         invokedPurchasePackageCount += 1
         invokedPurchasePackageParameters = (package, completion)
@@ -176,7 +176,7 @@ final class MockPurchases: PurchasesType {
         receiveEligibility: ([String : IntroEligibility]) -> Void)]()
 
     func checkTrialOrIntroDiscountEligibility(productIdentifiers: [String],
-                                                       completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
+                                              completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
         invokedCheckTrialOrIntroductoryPriceEligibility = true
         invokedCheckTrialOrIntroductoryPriceEligibilityCount += 1
         invokedCheckTrialOrIntroductoryPriceEligibilityParameters = (
@@ -197,8 +197,8 @@ final class MockPurchases: PurchasesType {
         completion: (PromotionalOffer?, PublicError?) -> Void)]()
 
     func getPromotionalOffer(forProductDiscount discount: StoreProductDiscount,
-                                      product: StoreProduct,
-                                      completion: @escaping ((PromotionalOffer?, PublicError?) -> Void)) {
+                             product: StoreProduct,
+                             completion: @escaping ((PromotionalOffer?, PublicError?) -> Void)) {
         invokedGetPromotionalOffer = true
         invokedGetPromotionalOfferCount += 1
         invokedGetPromotionalOfferParameters = (discount, product, completion)
@@ -216,8 +216,8 @@ final class MockPurchases: PurchasesType {
                                                                      completion: PurchaseCompletedBlock)]()
 
     func purchase(product: StoreProduct,
-                           promotionalOffer: PromotionalOffer,
-                           completion: @escaping PurchaseCompletedBlock) {
+                  promotionalOffer: PromotionalOffer,
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProductWithPromotionalOffer = true
         invokedPurchaseProductWithPromotionalOfferCount += 1
         invokedPurchaseProductWithPromotionalOfferParameters = (product,
@@ -238,8 +238,8 @@ final class MockPurchases: PurchasesType {
                                                                      completion: PurchaseCompletedBlock)]()
 
     func purchase(package: Package,
-                           promotionalOffer: PromotionalOffer,
-                           completion: @escaping PurchaseCompletedBlock) {
+                  promotionalOffer: PromotionalOffer,
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackageWithPromotionalOffer = true
         invokedPurchasePackageWithPromotionalOfferCount += 1
         invokedPurchasePackageWithPromotionalOfferParameters = (package, promotionalOffer, completion)
