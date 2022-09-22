@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -41,6 +41,7 @@
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
 		579EF61C286B761C002263AD /* PurchasesHybridCommon.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 57FFDE47286B72750089A57B /* PurchasesHybridCommon.storekit */; };
 		57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */; };
+		57D6691E28DD19D900622DE6 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 57D6691D28DD19D900622DE6 /* SnapshotTesting */; };
 		57FFDE19286A566D0089A57B /* BaseIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */; };
 		57FFDE1A286A566D0089A57B /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
 		57FFDE2B286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE2A286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift */; };
@@ -195,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57D6691E28DD19D900622DE6 /* SnapshotTesting in Frameworks */,
 				57FFDE1A286A566D0089A57B /* PurchasesHybridCommon.framework in Frameworks */,
 				E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */,
 			);
@@ -473,6 +475,9 @@
 				57FFDE37286A57940089A57B /* PBXTargetDependency */,
 			);
 			name = PurchasesHybridCommonIntegrationTests;
+			packageProductDependencies = (
+				57D6691D28DD19D900622DE6 /* SnapshotTesting */,
+			);
 			productName = PurchasesHybridCommonIntegrationTests;
 			productReference = 57FFDE16286A566D0089A57B /* PurchasesHybridCommonIntegrationTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -533,6 +538,9 @@
 				Base,
 			);
 			mainGroup = 2DD4B8B024377B470070344F;
+			packageReferences = (
+				57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = 2DD4B8BA24377B470070344F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1299,6 +1307,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57D6691D28DD19D900622DE6 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2DD4B8B124377B470070344F /* Project object */;
 }
