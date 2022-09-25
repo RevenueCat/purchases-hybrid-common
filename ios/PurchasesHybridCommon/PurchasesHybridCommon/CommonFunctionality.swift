@@ -137,11 +137,7 @@ import RevenueCat
                     "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                    code: ErrorCode.unknownError.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: description])
-
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                completion(nil, ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:]))
             }
         }
 
@@ -187,10 +183,7 @@ import RevenueCat
                     "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                    code: ErrorCode.unknownError.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: description])
-
+                let error = ErrorCode.unknownError as NSError
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
@@ -234,10 +227,7 @@ import RevenueCat
                     "productIdentifier": transaction.productIdentifier
                 ], nil)
             } else {
-                let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                    code: ErrorCode.unknownError.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: description])
-
+                let error = ErrorCode.unknownError as NSError
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
@@ -259,10 +249,7 @@ import RevenueCat
                     "created": created
                 ], nil)
             } else {
-                let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                    code: ErrorCode.unknownError.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: description])
-
+                let error = ErrorCode.unknownError as NSError
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             }
         }
@@ -348,15 +335,11 @@ import RevenueCat
 
             let promotionalOfferCompletion: (PromotionalOffer?, Error?) -> Void = { promotionalOffer, error in
                 guard let promotionalOffer = promotionalOffer else {
-                    if let error = error {
-                        completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-                    } else {
-                        let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                            code: ErrorCode.unknownError.rawValue,
-                                            userInfo: [NSLocalizedDescriptionKey: description])
-
-                        completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-                    }
+                    completion(
+                        nil,
+                        ErrorContainer(error: error ?? ErrorCode.unknownError as NSError,
+                                       extraPayload: [:])
+                    )
                     return
                 }
                 promoOffersByTimestamp["\(promotionalOffer.signedData.timestamp)"] = promotionalOffer
@@ -467,11 +450,7 @@ private extension CommonFunctionality {
             } else if let customerInfo = customerInfo {
                 block(customerInfo.dictionary, nil)
             } else {
-                let error = NSError(domain: RCPurchasesErrorCodeDomain,
-                                    code: ErrorCode.unknownError.rawValue,
-                                    userInfo: [NSLocalizedDescriptionKey: description])
-
-                block(nil, ErrorContainer(error: error, extraPayload: [:]))
+                block(nil, ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:]))
             }
         }
 
@@ -489,7 +468,7 @@ private extension CommonFunctionality {
             extraPayload["userCancelled"] = userCancelled
         }
 
-        let error = NSError(domain: RCPurchasesErrorCodeDomain,
+        let error = NSError(domain: ErrorCode.errorDomain,
                             code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
         return ErrorContainer(error: error, extraPayload: extraPayload)
