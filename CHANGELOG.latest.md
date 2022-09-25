@@ -1,5 +1,4 @@
 ### Bugfixes
-* `purchase(productIdentifier:)` fixed SK2 implementation (#226) via NachoSoto (@NachoSoto)
+* `CommonFunctionality`: fixed unknown error creation (#233) via NachoSoto (@NachoSoto)
 ### Other Changes
-* Upgrade iOS to 4.11.0 (#224) via RevenueCat Git Bot (@RCGitBot)
-* Adds hold jobs to manual trigger automatic dependency updates (#223) via Cesar de la Vega (@vegaro)
+* `Integration Tests`: added test for `promotionalOffer` (#228) via NachoSoto (@NachoSoto)

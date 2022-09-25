@@ -1,3 +1,9 @@
+## 4.2.2
+### Bugfixes
+* `CommonFunctionality`: fixed unknown error creation (#233) via NachoSoto (@NachoSoto)
+### Other Changes
+* `Integration Tests`: added test for `promotionalOffer` (#228) via NachoSoto (@NachoSoto)
+
 ## 4.2.1
 ### Bugfixes
 * `purchase(productIdentifier:)` fixed SK2 implementation (#226) via NachoSoto (@NachoSoto)
