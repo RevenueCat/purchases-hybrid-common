@@ -147,6 +147,8 @@ jobs:
           root: .
           paths:
             - PurchasesHybridCommon.framework.zip
+      - store_artifacts:
+          path: PurchasesHybridCommon.framework.zip
 
   test-android:
     executor:
