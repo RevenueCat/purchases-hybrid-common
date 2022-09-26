@@ -250,7 +250,7 @@ lane :bump_hybrid_dependencies do |options|
   request.basic_auth(ENV['CIRCLECI_TOKEN'], "")
   request.content_type = "application/json"
   request.body = JSON.dump({
-    "branch" => "pipeline-improvements",
+    "branch" => "main",
     "parameters" => {
       "action" => "upgrade-hybrid-common",
       "hybrid-common-version" => "#{bump}",
