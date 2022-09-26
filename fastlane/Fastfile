@@ -238,7 +238,7 @@ platform :ios do
   desc "Release to CocoaPods, create Carthage archive, and create GitHub release"
   lane :release do |options|
     version_number = current_version_number
-    push_pods
+    # push_pods
     archive
   end
 

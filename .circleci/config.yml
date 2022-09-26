@@ -258,8 +258,7 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - deploy-ios:
-          <<: *release-tags
+      - deploy-ios
       - deploy-android:
           <<: *release-tags
       - make-github-release:
