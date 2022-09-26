@@ -238,6 +238,18 @@ jobs:
           name: Kick off Flutter automatic dependency update
           command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
 
+  trigger-dependent-updates:
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - setup-git-credentials
+      - trust-github-key
+      - revenuecat/install-rubydocker-dependencies
+      - run:
+          name: Kick off Flutter automatic dependency update
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
+
 workflows:
   version: 2
   test:
@@ -248,6 +260,7 @@ workflows:
       - test-ios
       - integration-test-ios
       - test-android
+      - trigger-dependent-updates
 
   deploy:
     when:
