@@ -46,7 +46,10 @@ import RevenueCat
             configurationBuilder = configurationBuilder.with(platformInfo: platformInfo)
         }
 
-        return self.configure(with: configurationBuilder.build())
+        let purchases = self.configure(with: configurationBuilder.build())
+        CommonFunctionality.sharedInstance = purchases
+
+        return purchases
     }
 
 }

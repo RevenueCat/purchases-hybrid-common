@@ -4,128 +4,19 @@
 //
 
 import Foundation
-@testable import RevenueCat
+import RevenueCat
 import StoreKit
 
-class MockPurchases: Purchases {
+final class MockPurchases: PurchasesType {
+    
+    var delegate: RevenueCat.PurchasesDelegate?
 
-    init() {
-        let systemInfo = try! SystemInfo(platformInfo: nil, finishTransactions: true)
-        let deviceCache = DeviceCache(sandboxEnvironmentDetector: systemInfo)
-
-        let operationDispatcher: OperationDispatcher = OperationDispatcher()
-
-        let requestFetcher: StoreKitRequestFetcher = StoreKitRequestFetcher(operationDispatcher: operationDispatcher)
-        let receiptFetcher: ReceiptFetcher = ReceiptFetcher(requestFetcher: requestFetcher, systemInfo: systemInfo)
-        let attributionFetcher: AttributionFetcher = AttributionFetcher(attributionFactory: AttributionTypeFactory(),
-                                                                        systemInfo: systemInfo)
-
-        let eTagManager = ETagManager(userDefaults: UserDefaults.standard)
-        let backend: Backend = Backend(apiKey: "",
-                                       systemInfo: systemInfo,
-                                       eTagManager: eTagManager,
-                                       operationDispatcher: operationDispatcher,
-                                       attributionFetcher:
-                                        attributionFetcher)
-
-        let customerInfoManager: CustomerInfoManager = CustomerInfoManager(operationDispatcher: operationDispatcher,
-                                                                           deviceCache: deviceCache,
-                                                                           backend: backend,
-                                                                           systemInfo: systemInfo)
-
-        let attributionDataMigrator = AttributionDataMigrator()
-
-        let subscriberAttributesManager = SubscriberAttributesManager(backend: backend,
-                                                                      deviceCache: deviceCache,
-                                                                      operationDispatcher: operationDispatcher,
-                                                                      attributionFetcher: attributionFetcher,
-                                                                      attributionDataMigrator: attributionDataMigrator)
-
-        let identityManager = IdentityManager(
-            deviceCache: deviceCache,
-            backend: backend,
-            customerInfoManager: customerInfoManager,
-            attributeSyncing: subscriberAttributesManager,
-            appUserID: nil
-        )
-
-        let attributionPoster: AttributionPoster = AttributionPoster(
-            deviceCache: deviceCache,
-            currentUserProvider: identityManager,
-            backend: backend,
-            attributionFetcher: attributionFetcher,
-            subscriberAttributesManager: subscriberAttributesManager)
-
-        let subscriberAttributes = Attribution(
-            subscriberAttributesManager: subscriberAttributesManager,
-            currentUserProvider: identityManager,
-            attributionPoster: attributionPoster)
-
-        let storeKitWrapper: StoreKitWrapper = StoreKitWrapper()
-        let notificationCenter: NotificationCenter = NotificationCenter.default
-
-        let offeringsFactory: OfferingsFactory = OfferingsFactory()
-
-
-        let productsManager: ProductsManager = ProductsManager(systemInfo: systemInfo, requestTimeout: 1)
-        let offeringsManager: OfferingsManager = OfferingsManager(deviceCache: deviceCache, operationDispatcher: operationDispatcher, systemInfo: systemInfo, backend: backend, offeringsFactory: offeringsFactory, productsManager: productsManager)
-
-        let introEligibilityCalculator: IntroEligibilityCalculator = IntroEligibilityCalculator(productsManager: productsManager, receiptParser: ReceiptParser())
-
-        let manageSubscriptionsHelper = ManageSubscriptionsHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, currentUserProvider: identityManager)
-
-        let beginRefundRequestHelper = BeginRefundRequestHelper(systemInfo: systemInfo, customerInfoManager: customerInfoManager, currentUserProvider: identityManager)
-
-        let purchasesOrchestrator = PurchasesOrchestrator(
-            productsManager: productsManager,
-            storeKitWrapper: storeKitWrapper,
-            systemInfo: systemInfo,
-            subscriberAttributes: subscriberAttributes,
-            operationDispatcher: operationDispatcher,
-            receiptFetcher: receiptFetcher,
-            customerInfoManager: customerInfoManager,
-            backend: backend,
-            currentUserProvider: identityManager,
-            transactionsManager: TransactionsManager(storeKit2Setting: .enabledOnlyForOptimizations,
-                                                     receiptParser: ReceiptParser()),
-            deviceCache: deviceCache,
-            offeringsManager: OfferingsManager(deviceCache: deviceCache,
-                                               operationDispatcher: operationDispatcher,
-                                               systemInfo: systemInfo,
-                                               backend: backend,
-                                               offeringsFactory: offeringsFactory,
-                                               productsManager: productsManager),
-            manageSubscriptionsHelper: manageSubscriptionsHelper,
-            beginRefundRequestHelper: beginRefundRequestHelper
-        )
-
-        let trialOrIntroPriceEligibilityChecker: TrialOrIntroPriceEligibilityChecker = TrialOrIntroPriceEligibilityChecker(systemInfo: systemInfo, receiptFetcher: receiptFetcher, introEligibilityCalculator: introEligibilityCalculator, backend: backend, currentUserProvider: identityManager, operationDispatcher: operationDispatcher, productsManager: productsManager)
-
-        super.init(appUserID: nil,
-                   requestFetcher: requestFetcher,
-                   receiptFetcher: receiptFetcher,
-                   attributionFetcher: attributionFetcher,
-                   attributionPoster: attributionPoster,
-                   backend: backend,
-                   storeKitWrapper: storeKitWrapper,
-                   notificationCenter: notificationCenter,
-                   systemInfo: systemInfo,
-                   offeringsFactory: offeringsFactory,
-                   deviceCache: deviceCache,
-                   identityManager: identityManager,
-                   subscriberAttributes: subscriberAttributes,
-                   operationDispatcher: operationDispatcher,
-                   customerInfoManager: customerInfoManager,
-                   productsManager: productsManager,
-                   offeringsManager: offeringsManager,
-                   purchasesOrchestrator: purchasesOrchestrator,
-                   trialOrIntroPriceEligibilityChecker: trialOrIntroPriceEligibilityChecker)
-    }
+    init() {}
 
     var invokedAppUserIDGetter = false
     var invokedAppUserIDGetterCount = 0
     var stubbedAppUserID: String! = ""
-    override var appUserID: String {
+    var appUserID: String {
         invokedAppUserIDGetter = true
         invokedAppUserIDGetterCount += 1
         return stubbedAppUserID
@@ -133,21 +24,21 @@ class MockPurchases: Purchases {
     var invokedIsAnonymousGetter = false
     var invokedIsAnonymousGetterCount = 0
     var stubbedIsAnonymous: Bool! = false
-    override var isAnonymous: Bool {
+    var isAnonymous: Bool {
         invokedIsAnonymousGetter = true
         invokedIsAnonymousGetterCount += 1
         return stubbedIsAnonymous
     }
 
-    var invokedLogInError = false
+    var invokedLogInPublicError = false
     var invokedLogInCount = 0
     var invokedLogInParameters: (appUserID: String, Void)?
     var invokedLogInParametersList = [(appUserID: String, Void)]()
-    var stubbedLogInCompletionResult: (CustomerInfo?, Bool, Error?)?
+    var stubbedLogInCompletionResult: (CustomerInfo?, Bool, PublicError?)?
 
-    override func logIn(_ appUserID: String,
-                        completion: @escaping (CustomerInfo?, Bool, Error?) -> ()) {
-        invokedLogInError = true
+    func logIn(_ appUserID: String,
+               completion: @escaping (CustomerInfo?, Bool, PublicError?) -> ()) {
+        invokedLogInPublicError = true
         invokedLogInCount += 1
         invokedLogInParameters = (appUserID, ())
         invokedLogInParametersList.append((appUserID, ()))
@@ -158,11 +49,11 @@ class MockPurchases: Purchases {
 
     var invokedLogOut = false
     var invokedLogOutCount = 0
-    var invokedLogOutParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
-    var invokedLogOutParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?, Void)]()
-    var stubbedLogOutCompletionResult: (CustomerInfo?, Error?)?
+    var invokedLogOutParameters: (completion: ((CustomerInfo?, PublicError?) -> ())?, Void)?
+    var invokedLogOutParametersList = [(completion: ((CustomerInfo?, PublicError?) -> ())?, Void)]()
+    var stubbedLogOutCompletionResult: (CustomerInfo?, PublicError?)?
 
-    override func logOut(completion: ((CustomerInfo?, Error?) -> ())?) {
+    func logOut(completion: ((CustomerInfo?, PublicError?) -> ())?) {
         invokedLogOut = true
         invokedLogOutCount += 1
         invokedLogOutParameters = (completion, ())
@@ -174,17 +65,25 @@ class MockPurchases: Purchases {
 
     var invokedCreateAlias = false
     var invokedCreateAliasCount = 0
-    var invokedCreateAliasParameters: (alias: String, completion: ((CustomerInfo?, Error?) -> ())?)?
+    var invokedCreateAliasParameters: (alias: String, completion: ((CustomerInfo?, PublicError?) -> ())?)?
     var invokedCreateAliasParametersList = [(alias: String,
-                                             completion: ((CustomerInfo?, Error?) -> ())?)]()
+                                             completion: ((CustomerInfo?, PublicError?) -> ())?)]()
 
     var invokedCustomerInfo = false
     var invokedCustomerInfoCount = 0
-    var invokedCustomerInfoParameters: (completion: ((CustomerInfo?, Error?) -> ()), Void)?
-    var invokedCustomerInfoParametersList = [(completion: ((CustomerInfo?, Error?) -> ()),
+    var invokedCustomerInfoParameters: (completion: ((CustomerInfo?, PublicError?) -> ()), Void)?
+    var invokedCustomerInfoParametersList = [(completion: ((CustomerInfo?, PublicError?) -> ()),
                                               Void)]()
 
-    override func getCustomerInfo(completion: @escaping ((CustomerInfo?, Error?) -> ())) {
+    func getCustomerInfo(completion: @escaping ((CustomerInfo?, PublicError?) -> ())) {
+        invokedCustomerInfo = true
+        invokedCustomerInfoCount += 1
+        invokedCustomerInfoParameters = (completion, ())
+        invokedCustomerInfoParametersList.append((completion, ()))
+    }
+
+
+    func getCustomerInfo(fetchPolicy: CacheFetchPolicy, completion: @escaping (CustomerInfo?, PublicError?) -> Void) {
         invokedCustomerInfo = true
         invokedCustomerInfoCount += 1
         invokedCustomerInfoParameters = (completion, ())
@@ -193,10 +92,10 @@ class MockPurchases: Purchases {
 
     var invokedOfferings = false
     var invokedOfferingsCount = 0
-    var invokedOfferingsParameters: (completion: ((Offerings?, Error?) -> ()), Void)?
-    var invokedOfferingsParametersList = [(completion: ((Offerings?, Error?) -> ()), Void)]()
+    var invokedOfferingsParameters: (completion: ((Offerings?, PublicError?) -> ()), Void)?
+    var invokedOfferingsParametersList = [(completion: ((Offerings?, PublicError?) -> ()), Void)]()
 
-    override func getOfferings(completion: @escaping ((Offerings?, Error?) -> ())) {
+    func getOfferings(completion: @escaping ((Offerings?, PublicError?) -> ())) {
         invokedOfferings = true
         invokedOfferingsCount += 1
         invokedOfferingsParameters = (completion, ())
@@ -208,8 +107,8 @@ class MockPurchases: Purchases {
     var invokedProductsParameters: (productIdentifiers: [String], completion: ([StoreProduct]) -> ())?
     var invokedProductsParametersList: [(productIdentifiers: [String], completion: ([StoreProduct]) -> ())] = []
 
-    override func getProducts(_ productIdentifiers: [String],
-                              completion: @escaping ([StoreProduct]) -> ()) {
+    func getProducts(_ productIdentifiers: [String],
+                     completion: @escaping ([StoreProduct]) -> ()) {
         invokedProducts = true
         invokedProductsCount += 1
         invokedProductsParameters = (productIdentifiers, completion)
@@ -222,7 +121,7 @@ class MockPurchases: Purchases {
     var invokedPurchaseProductParametersList = [(product: StoreProduct,
                                                  completion: PurchaseCompletedBlock)]()
 
-    override func purchase(product: StoreProduct, completion: @escaping PurchaseCompletedBlock) {
+    func purchase(product: StoreProduct, completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProduct = true
         invokedPurchaseProductCount += 1
         invokedPurchaseProductParameters = (product, completion)
@@ -235,8 +134,8 @@ class MockPurchases: Purchases {
     var invokedPurchasePackageParametersList = [(package: Package,
                                                  completion: PurchaseCompletedBlock)]()
 
-    override func purchase(package: Package,
-                           completion: @escaping PurchaseCompletedBlock) {
+    func purchase(package: Package,
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackage = true
         invokedPurchasePackageCount += 1
         invokedPurchasePackageParameters = (package, completion)
@@ -245,11 +144,11 @@ class MockPurchases: Purchases {
 
     var invokedRestoreTransactions = false
     var invokedRestoreTransactionsCount = 0
-    var invokedRestoreTransactionsParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
-    var invokedRestoreTransactionsParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
+    var invokedRestoreTransactionsParameters: (completion: ((CustomerInfo?, PublicError?) -> ())?, Void)?
+    var invokedRestoreTransactionsParametersList = [(completion: ((CustomerInfo?, PublicError?) -> ())?,
                                                      Void)]()
 
-    override func restorePurchases(completion: ((CustomerInfo?, Error?) -> ())?) {
+    func restorePurchases(completion: ((CustomerInfo?, PublicError?) -> ())?) {
         invokedRestoreTransactions = true
         invokedRestoreTransactionsCount += 1
         invokedRestoreTransactionsParameters = (completion, ())
@@ -258,11 +157,11 @@ class MockPurchases: Purchases {
 
     var invokedSyncPurchases = false
     var invokedSyncPurchasesCount = 0
-    var invokedSyncPurchasesParameters: (completion: ((CustomerInfo?, Error?) -> ())?, Void)?
-    var invokedSyncPurchasesParametersList = [(completion: ((CustomerInfo?, Error?) -> ())?,
+    var invokedSyncPurchasesParameters: (completion: ((CustomerInfo?, PublicError?) -> ())?, Void)?
+    var invokedSyncPurchasesParametersList = [(completion: ((CustomerInfo?, PublicError?) -> ())?,
                                                Void)]()
 
-    override func syncPurchases(completion: ((CustomerInfo?, Error?) -> ())?) {
+    func syncPurchases(completion: ((CustomerInfo?, PublicError?) -> ())?) {
         invokedSyncPurchases = true
         invokedSyncPurchasesCount += 1
         invokedSyncPurchasesParameters = (completion, ())
@@ -276,8 +175,8 @@ class MockPurchases: Purchases {
         productIdentifiers: [String],
         receiveEligibility: ([String : IntroEligibility]) -> Void)]()
 
-    override func checkTrialOrIntroDiscountEligibility(productIdentifiers: [String],
-                                                       completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
+    func checkTrialOrIntroDiscountEligibility(productIdentifiers: [String],
+                                              completion receiveEligibility: @escaping ([String : IntroEligibility]) -> Void) {
         invokedCheckTrialOrIntroductoryPriceEligibility = true
         invokedCheckTrialOrIntroductoryPriceEligibilityCount += 1
         invokedCheckTrialOrIntroductoryPriceEligibilityParameters = (
@@ -291,15 +190,15 @@ class MockPurchases: Purchases {
     var invokedGetPromotionalOfferCount = 0
     var invokedGetPromotionalOfferParameters: (discount: StoreProductDiscount,
                                                product: StoreProduct,
-                                               completion: (PromotionalOffer?, Error?) -> Void)?
+                                               completion: (PromotionalOffer?, PublicError?) -> Void)?
     var invokedGetPromotionalOfferParametersList = [(
         discount: StoreProductDiscount,
         product: StoreProduct,
-        completion: (PromotionalOffer?, Error?) -> Void)]()
+        completion: (PromotionalOffer?, PublicError?) -> Void)]()
 
-    override func getPromotionalOffer(forProductDiscount discount: StoreProductDiscount,
-                                      product: StoreProduct,
-                                      completion: @escaping ((PromotionalOffer?, Error?) -> Void)) {
+    func getPromotionalOffer(forProductDiscount discount: StoreProductDiscount,
+                             product: StoreProduct,
+                             completion: @escaping ((PromotionalOffer?, PublicError?) -> Void)) {
         invokedGetPromotionalOffer = true
         invokedGetPromotionalOfferCount += 1
         invokedGetPromotionalOfferParameters = (discount, product, completion)
@@ -316,9 +215,9 @@ class MockPurchases: Purchases {
                                                                      promotionalOffer: PromotionalOffer,
                                                                      completion: PurchaseCompletedBlock)]()
 
-    override func purchase(product: StoreProduct,
-                           promotionalOffer: PromotionalOffer,
-                           completion: @escaping PurchaseCompletedBlock) {
+    func purchase(product: StoreProduct,
+                  promotionalOffer: PromotionalOffer,
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchaseProductWithPromotionalOffer = true
         invokedPurchaseProductWithPromotionalOfferCount += 1
         invokedPurchaseProductWithPromotionalOfferParameters = (product,
@@ -338,9 +237,9 @@ class MockPurchases: Purchases {
                                                                      promotionalOffer: PromotionalOffer,
                                                                      completion: PurchaseCompletedBlock)]()
 
-    override func purchase(package: Package,
-                           promotionalOffer: PromotionalOffer,
-                           completion: @escaping PurchaseCompletedBlock) {
+    func purchase(package: Package,
+                  promotionalOffer: PromotionalOffer,
+                  completion: @escaping PurchaseCompletedBlock) {
         invokedPurchasePackageWithPromotionalOffer = true
         invokedPurchasePackageWithPromotionalOfferCount += 1
         invokedPurchasePackageWithPromotionalOfferParameters = (package, promotionalOffer, completion)
@@ -350,7 +249,7 @@ class MockPurchases: Purchases {
     var invokedInvalidateCustomerInfoCache = false
     var invokedInvalidateCustomerInfoCacheCount = 0
 
-    override func invalidateCustomerInfoCache() {
+    func invalidateCustomerInfoCache() {
         invokedInvalidateCustomerInfoCache = true
         invokedInvalidateCustomerInfoCacheCount += 1
     }
@@ -358,7 +257,12 @@ class MockPurchases: Purchases {
     var invokedPresentCodeRedemptionSheet = false
     var invokedPresentCodeRedemptionSheetCount = 0
 
-    override func presentCodeRedemptionSheet() {
+    @available(iOS 14.0, *)
+    @available(watchOS, unavailable)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(macCatalyst, unavailable)
+    func presentCodeRedemptionSheet() {
         invokedPresentCodeRedemptionSheet = true
         invokedPresentCodeRedemptionSheetCount += 1
     }
@@ -368,7 +272,7 @@ class MockPurchases: Purchases {
     var invokedSetAttributesParameters: (attributes: [String: String], Void)?
     var invokedSetAttributesParametersList = [(attributes: [String: String], Void)]()
 
-    override func setAttributes(_ attributes: [String: String]) {
+    func setAttributes(_ attributes: [String: String]) {
         invokedSetAttributes = true
         invokedSetAttributesCount += 1
         invokedSetAttributesParameters = (attributes, ())
@@ -380,7 +284,7 @@ class MockPurchases: Purchases {
     var invokedSetEmailParameters: (email: String?, Void)?
     var invokedSetEmailParametersList = [(email: String?, Void)]()
 
-    override func setEmail(_ email: String?) {
+    func setEmail(_ email: String?) {
         invokedSetEmail = true
         invokedSetEmailCount += 1
         invokedSetEmailParameters = (email, ())
@@ -392,7 +296,7 @@ class MockPurchases: Purchases {
     var invokedSetPhoneNumberParameters: (phoneNumber: String?, Void)?
     var invokedSetPhoneNumberParametersList = [(phoneNumber: String?, Void)]()
 
-    override func setPhoneNumber(_ phoneNumber: String?) {
+    func setPhoneNumber(_ phoneNumber: String?) {
         invokedSetPhoneNumber = true
         invokedSetPhoneNumberCount += 1
         invokedSetPhoneNumberParameters = (phoneNumber, ())
@@ -404,7 +308,7 @@ class MockPurchases: Purchases {
     var invokedSetDisplayNameParameters: (displayName: String?, Void)?
     var invokedSetDisplayNameParametersList = [(displayName: String?, Void)]()
 
-    override func setDisplayName(_ displayName: String?) {
+    func setDisplayName(_ displayName: String?) {
         invokedSetDisplayName = true
         invokedSetDisplayNameCount += 1
         invokedSetDisplayNameParameters = (displayName, ())
@@ -416,7 +320,7 @@ class MockPurchases: Purchases {
     var invokedSetPushTokenParameters: (pushToken: Data?, Void)?
     var invokedSetPushTokenParametersList = [(pushToken: Data?, Void)]()
 
-    override func setPushToken(_ pushToken: Data?) {
+    func setPushToken(_ pushToken: Data?) {
         invokedSetPushToken = true
         invokedSetPushTokenCount += 1
         invokedSetPushTokenParameters = (pushToken, ())
@@ -428,7 +332,7 @@ class MockPurchases: Purchases {
     var invokedSetAdjustIDParameters: (adjustID: String?, Void)?
     var invokedSetAdjustIDParametersList = [(adjustID: String?, Void)]()
 
-    override func setAdjustID(_ adjustID: String?) {
+    func setAdjustID(_ adjustID: String?) {
         invokedSetAdjustID = true
         invokedSetAdjustIDCount += 1
         invokedSetAdjustIDParameters = (adjustID, ())
@@ -440,7 +344,7 @@ class MockPurchases: Purchases {
     var invokedSetAppsflyerIDParameters: (appsflyerID: String?, Void)?
     var invokedSetAppsflyerIDParametersList = [(appsflyerID: String?, Void)]()
 
-    override func setAppsflyerID(_ appsflyerID: String?) {
+    func setAppsflyerID(_ appsflyerID: String?) {
         invokedSetAppsflyerID = true
         invokedSetAppsflyerIDCount += 1
         invokedSetAppsflyerIDParameters = (appsflyerID, ())
@@ -452,7 +356,7 @@ class MockPurchases: Purchases {
     var invokedSetFBAnonymousIDParameters: (fbAnonymousID: String?, Void)?
     var invokedSetFBAnonymousIDParametersList = [(fbAnonymousID: String?, Void)]()
 
-    override func setFBAnonymousID(_ fbAnonymousID: String?) {
+    func setFBAnonymousID(_ fbAnonymousID: String?) {
         invokedSetFBAnonymousID = true
         invokedSetFBAnonymousIDCount += 1
         invokedSetFBAnonymousIDParameters = (fbAnonymousID, ())
@@ -464,7 +368,7 @@ class MockPurchases: Purchases {
     var invokedSetMparticleIDParameters: (mparticleID: String?, Void)?
     var invokedSetMparticleIDParametersList = [(mparticleID: String?, Void)]()
 
-    override func setMparticleID(_ mparticleID: String?) {
+    func setMparticleID(_ mparticleID: String?) {
         invokedSetMparticleID = true
         invokedSetMparticleIDCount += 1
         invokedSetMparticleIDParameters = (mparticleID, ())
@@ -476,7 +380,7 @@ class MockPurchases: Purchases {
     var invokedSetOnesignalIDParameters: (onesignalID: String?, Void)?
     var invokedSetOnesignalIDParametersList = [(onesignalID: String?, Void)]()
 
-    override func setOnesignalID(_ onesignalID: String?) {
+    func setOnesignalID(_ onesignalID: String?) {
         invokedSetOnesignalID = true
         invokedSetOnesignalIDCount += 1
         invokedSetOnesignalIDParameters = (onesignalID, ())
@@ -488,7 +392,7 @@ class MockPurchases: Purchases {
     var invokedSetMediaSourceParameters: (mediaSource: String?, Void)?
     var invokedSetMediaSourceParametersList = [(mediaSource: String?, Void)]()
 
-    override func setMediaSource(_ mediaSource: String?) {
+    func setMediaSource(_ mediaSource: String?) {
         invokedSetMediaSource = true
         invokedSetMediaSourceCount += 1
         invokedSetMediaSourceParameters = (mediaSource, ())
@@ -500,7 +404,7 @@ class MockPurchases: Purchases {
     var invokedSetCampaignParameters: (campaign: String?, Void)?
     var invokedSetCampaignParametersList = [(campaign: String?, Void)]()
 
-    override func setCampaign(_ campaign: String?) {
+    func setCampaign(_ campaign: String?) {
         invokedSetCampaign = true
         invokedSetCampaignCount += 1
         invokedSetCampaignParameters = (campaign, ())
@@ -512,7 +416,7 @@ class MockPurchases: Purchases {
     var invokedSetAdGroupParameters: (adGroup: String?, Void)?
     var invokedSetAdGroupParametersList = [(adGroup: String?, Void)]()
 
-    override func setAdGroup(_ adGroup: String?) {
+    func setAdGroup(_ adGroup: String?) {
         invokedSetAdGroup = true
         invokedSetAdGroupCount += 1
         invokedSetAdGroupParameters = (adGroup, ())
@@ -524,7 +428,7 @@ class MockPurchases: Purchases {
     var invokedSetAdParameters: (ad: String?, Void)?
     var invokedSetAdParametersList = [(ad: String?, Void)]()
 
-    override func setAd(_ ad: String?) {
+    func setAd(_ ad: String?) {
         invokedSetAd = true
         invokedSetAdCount += 1
         invokedSetAdParameters = (ad, ())
@@ -536,7 +440,7 @@ class MockPurchases: Purchases {
     var invokedSetKeywordParameters: (keyword: String?, Void)?
     var invokedSetKeywordParametersList = [(keyword: String?, Void)]()
 
-    override func setKeyword(_ keyword: String?) {
+    func setKeyword(_ keyword: String?) {
         invokedSetKeyword = true
         invokedSetKeywordCount += 1
         invokedSetKeywordParameters = (keyword, ())
@@ -548,7 +452,7 @@ class MockPurchases: Purchases {
     var invokedSetCreativeParameters: (creative: String?, Void)?
     var invokedSetCreativeParametersList = [(creative: String?, Void)]()
 
-    override func setCreative(_ creative: String?) {
+    func setCreative(_ creative: String?) {
         invokedSetCreative = true
         invokedSetCreativeCount += 1
         invokedSetCreativeParameters = (creative, ())
@@ -558,9 +462,135 @@ class MockPurchases: Purchases {
     var invokedCollectDeviceIdentifiers = false
     var invokedCollectDeviceIdentifiersCount = 0
 
-    override func collectDeviceIdentifiers() {
+    func collectDeviceIdentifiers() {
         invokedCollectDeviceIdentifiers = true
         invokedCollectDeviceIdentifiersCount += 1
     }
     
+}
+
+extension MockPurchases {
+
+    func logIn(_ appUserID: String) async throws -> (customerInfo: RevenueCat.CustomerInfo, created: Bool) {
+        fatalError("Not mocked")
+    }
+
+    func logOut() async throws -> RevenueCat.CustomerInfo {
+        fatalError("Not mocked")
+    }
+
+    func customerInfo() async throws -> RevenueCat.CustomerInfo {
+        fatalError("Not mocked")
+    }
+
+    func customerInfo(fetchPolicy: RevenueCat.CacheFetchPolicy) async throws -> RevenueCat.CustomerInfo {
+        fatalError("Not mocked")
+    }
+
+    func offerings() async throws -> RevenueCat.Offerings {
+        fatalError("Not mocked")
+    }
+
+    func products(_ productIdentifiers: [String]) async -> [RevenueCat.StoreProduct] {
+        fatalError("Not mocked")
+    }
+
+    func purchase(product: RevenueCat.StoreProduct) async throws -> RevenueCat.PurchaseResultData {
+        fatalError("Not mocked")
+    }
+
+    func purchase(package: RevenueCat.Package) async throws -> RevenueCat.PurchaseResultData {
+        fatalError("Not mocked")
+    }
+
+    func purchase(product: RevenueCat.StoreProduct, promotionalOffer: RevenueCat.PromotionalOffer) async throws -> RevenueCat.PurchaseResultData {
+        fatalError("Not mocked")
+    }
+
+    func purchase(package: RevenueCat.Package, promotionalOffer: RevenueCat.PromotionalOffer) async throws -> RevenueCat.PurchaseResultData {
+        fatalError("Not mocked")
+    }
+
+    func restorePurchases() async throws -> RevenueCat.CustomerInfo {
+        fatalError("Not mocked")
+    }
+
+    func syncPurchases() async throws -> RevenueCat.CustomerInfo {
+        fatalError("Not mocked")
+    }
+
+    func checkTrialOrIntroDiscountEligibility(productIdentifiers: [String]) async -> [String : RevenueCat.IntroEligibility] {
+        fatalError("Not mocked")
+    }
+
+    func checkTrialOrIntroDiscountEligibility(product: RevenueCat.StoreProduct, completion: @escaping (RevenueCat.IntroEligibilityStatus) -> Void) {
+        fatalError("Not mocked")
+    }
+
+    func checkTrialOrIntroDiscountEligibility(product: RevenueCat.StoreProduct) async -> RevenueCat.IntroEligibilityStatus {
+        fatalError("Not mocked")
+    }
+
+    func promotionalOffer(forProductDiscount discount: RevenueCat.StoreProductDiscount, product: RevenueCat.StoreProduct) async throws -> RevenueCat.PromotionalOffer {
+        fatalError("Not mocked")
+    }
+
+    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
+    func eligiblePromotionalOffers(forProduct product: StoreProduct) async -> [PromotionalOffer] {
+        fatalError("This method is not mocked")
+    }
+
+    func beginRefundRequest(forProduct productID: String) async throws -> RevenueCat.RefundRequestStatus {
+        fatalError("Not mocked")
+    }
+
+    func beginRefundRequest(forEntitlement entitlementID: String) async throws -> RevenueCat.RefundRequestStatus {
+        fatalError("Not mocked")
+    }
+
+    func beginRefundRequestForActiveEntitlement() async throws -> RevenueCat.RefundRequestStatus {
+        fatalError("Not mocked")
+    }
+
+    func showPriceConsentIfNeeded() {
+        fatalError("Not mocked")
+    }
+
+    func showManageSubscriptions(completion: @escaping (RevenueCat.PublicError?) -> Void) {
+        fatalError("Not mocked")
+    }
+
+    func showManageSubscriptions() async throws {
+        fatalError("Not mocked")
+    }
+
+    func setPushTokenString(_ pushToken: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setCleverTapID(_ cleverTapID: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setMixpanelDistinctID(_ mixpanelDistinctID: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
+        fatalError("Not mocked")
+    }
+
+    var finishTransactions: Bool {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+    var attribution: Attribution {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+    var allowSharingAppStoreAccount: Bool {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
 }

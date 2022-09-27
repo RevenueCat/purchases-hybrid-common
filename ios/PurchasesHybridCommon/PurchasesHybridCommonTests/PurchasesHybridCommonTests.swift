@@ -67,7 +67,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
 
                 let appUserID = "appUserID"
                 CommonFunctionality.logIn(appUserID: appUserID) { _, _ in }
@@ -81,7 +81,8 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
+
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
 
@@ -107,7 +108,8 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 mockPurchases.stubbedLogInCompletionResult = (nil, false, mockError)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
+
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
 
@@ -138,7 +140,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
 
                 CommonFunctionality.logOut { _, _ in }
 
@@ -149,7 +151,8 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
+
                 var receivedResultDict: [String: Any]?
                 var receivedError: ErrorContainer?
 
@@ -169,7 +172,8 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 mockPurchases.stubbedLogOutCompletionResult = (nil, mockError)
 
-                Purchases.setDefaultInstance(mockPurchases)
+                CommonFunctionality.sharedInstance = mockPurchases
+
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
 

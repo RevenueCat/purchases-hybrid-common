@@ -13,10 +13,13 @@ import RevenueCat
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 
+    static var sharedInstance: PurchasesType!
+
     // MARK: properties and configuration
+
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
-    @objc public static var appUserID: String { Purchases.shared.appUserID }
-    @objc public static var isAnonymous: Bool { Purchases.shared.isAnonymous }
+    @objc public static var appUserID: String { Self.sharedInstance.appUserID }
+    @objc public static var isAnonymous: Bool { Self.sharedInstance.isAnonymous }
 
     @objc public static var proxyURLString: String? {
         get { Purchases.proxyURL?.absoluteString }
@@ -55,7 +58,7 @@ import RevenueCat
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
-        Purchases.shared.allowSharingAppStoreAccount = allowSharingStoreAccount;
+        Self.sharedInstance.allowSharingAppStoreAccount = allowSharingStoreAccount
     }
 
     @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
@@ -71,15 +74,15 @@ import RevenueCat
     @available(tvOS, unavailable)
     @available(watchOS, unavailable)
     @objc public static func enableAdServicesAttributionTokenCollection() {
-        Purchases.shared.attribution.enableAdServicesAttributionTokenCollection()
+        Self.sharedInstance.attribution.enableAdServicesAttributionTokenCollection()
     }
 
     @objc public static func setFinishTransactions(_ finishTransactions: Bool) {
-        Purchases.shared.finishTransactions = finishTransactions
+        Self.sharedInstance.finishTransactions = finishTransactions
     }
 
     @objc public static func invalidateCustomerInfoCache() {
-        Purchases.shared.invalidateCustomerInfoCache()
+        Self.sharedInstance.invalidateCustomerInfoCache()
     }
 
 #if os(iOS)
@@ -89,7 +92,7 @@ import RevenueCat
     @available(watchOS, unavailable)
     @available(macCatalyst, unavailable)
     @objc public static func presentCodeRedemptionSheet() {
-        Purchases.shared.presentCodeRedemptionSheet()
+        Self.sharedInstance.presentCodeRedemptionSheet()
     }
 #endif
 
@@ -107,16 +110,16 @@ import RevenueCat
     @objc(restorePurchasesWithCompletionBlock:)
     static func restorePurchases(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let customerInfoCompletion = customerInfoCompletionBlock(from: completion)
-        Purchases.shared.restorePurchases(completion: customerInfoCompletion)
+        Self.sharedInstance.restorePurchases(completion: customerInfoCompletion)
     }
 
     @objc(syncPurchasesWithCompletionBlock:)
     static func syncPurchases(completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         if let completion = completion {
             let customerInfoCompletion = customerInfoCompletionBlock(from: completion)
-            Purchases.shared.syncPurchases(completion: customerInfoCompletion)
+            Self.sharedInstance.syncPurchases(completion: customerInfoCompletion)
         } else {
-            Purchases.shared.syncPurchases(completion: nil)
+            Self.sharedInstance.syncPurchases(completion: nil)
         }
     }
 
@@ -153,7 +156,7 @@ import RevenueCat
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchase(product: storeProduct,
+                    Self.sharedInstance.purchase(product: storeProduct,
                                               promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
@@ -161,7 +164,7 @@ import RevenueCat
 
             }
 
-            Purchases.shared.purchase(product: storeProduct, completion: hybridCompletion)
+            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
         }
     }
 
@@ -201,7 +204,7 @@ import RevenueCat
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Purchases.shared.purchase(package: package,
+                    Self.sharedInstance.purchase(package: package,
                                               promotionalOffer: promotionalOffer,
                                               completion: hybridCompletion)
                     return
@@ -209,7 +212,7 @@ import RevenueCat
 
             }
 
-            Purchases.shared.purchase(package: package, completion: hybridCompletion)
+            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
         }
 
     }
@@ -240,7 +243,7 @@ import RevenueCat
 
     @objc(logInWithAppUserID:completionBlock:)
     static func logIn(appUserID: String, completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logIn(appUserID) { customerInfo, created, error in
+        Self.sharedInstance.logIn(appUserID) { customerInfo, created, error in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
             } else if let customerInfo = customerInfo {
@@ -257,7 +260,7 @@ import RevenueCat
 
     @objc(logOutWithCompletionBlock:)
     static func logOut(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.logOut(completion: customerInfoCompletionBlock(from: completion))
+        Self.sharedInstance.logOut(completion: customerInfoCompletionBlock(from: completion))
     }
 
     @objc(getCustomerInfoWithCompletionBlock:)
@@ -269,7 +272,7 @@ import RevenueCat
         fetchPolicy: CacheFetchPolicy,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
-        Purchases.shared.getCustomerInfo(fetchPolicy: fetchPolicy,
+        Self.sharedInstance.getCustomerInfo(fetchPolicy: fetchPolicy,
                                          completion: customerInfoCompletionBlock(from: completion))
     }
 
@@ -280,7 +283,7 @@ import RevenueCat
 
     @objc(getOfferingsWithCompletionBlock:)
     static func getOfferings(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        Purchases.shared.getOfferings { offerings, error in
+        Self.sharedInstance.getOfferings { offerings, error in
             if let error = error {
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
                 completion(nil, errorContainer)
@@ -295,7 +298,7 @@ import RevenueCat
     static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
         completion: @escaping([String: Any]) -> Void) {
-            Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: products) { eligibilityByProductId in
+            Self.sharedInstance.checkTrialOrIntroDiscountEligibility(productIdentifiers: products) { eligibilityByProductId in
                 completion(eligibilityByProductId.mapValues { [
                     "status": $0.status.rawValue,
                     "description": $0.description
@@ -306,7 +309,7 @@ import RevenueCat
 
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
-        Purchases.shared.getProducts(productIds) { products in
+        Self.sharedInstance.getProducts(productIds) { products in
             let productDictionaries = products
                 .map { $0.rc_dictionary }
             completionBlock(productDictionaries)
@@ -346,7 +349,7 @@ import RevenueCat
                 completion(promotionalOffer.rc_dictionary, nil)
             }
 
-            Purchases.shared.getPromotionalOffer(forProductDiscount: discountToUse,
+            Self.sharedInstance.getPromotionalOffer(forProductDiscount: discountToUse,
                                                  product: storeProduct,
                                                  completion: promotionalOfferCompletion)
         }
@@ -358,23 +361,23 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func setAttributes(_ attributes: [String: Any]) {
-        Purchases.shared.attribution.setAttributes(attributes.mapValues { $0 as? String ?? "" })
+        Self.sharedInstance.attribution.setAttributes(attributes.mapValues { $0 as? String ?? "" })
     }
 
     @objc static func setEmail(_ email: String?) {
-        Purchases.shared.attribution.setEmail(email)
+        Self.sharedInstance.attribution.setEmail(email)
     }
 
     @objc static func setPhoneNumber(_ phoneNumber: String?) {
-        Purchases.shared.attribution.setPhoneNumber(phoneNumber)
+        Self.sharedInstance.attribution.setPhoneNumber(phoneNumber)
     }
 
     @objc static func setDisplayName(_ displayName: String?) {
-        Purchases.shared.attribution.setDisplayName(displayName)
+        Self.sharedInstance.attribution.setDisplayName(displayName)
     }
 
     @objc static func setPushToken(_ pushToken: String?) {
-         Purchases.shared.attribution.setPushTokenString(pushToken)
+         Self.sharedInstance.attribution.setPushTokenString(pushToken)
     }
 
 }
@@ -383,34 +386,34 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func collectDeviceIdentifiers() {
-        Purchases.shared.attribution.collectDeviceIdentifiers()
+        Self.sharedInstance.attribution.collectDeviceIdentifiers()
     }
     @objc static func setAdjustID(_ adjustID: String?) {
-        Purchases.shared.attribution.setAdjustID(adjustID)
+        Self.sharedInstance.attribution.setAdjustID(adjustID)
     }
     @objc static func setCleverTapID(_ cleverTapID: String?) {
-        Purchases.shared.attribution.setCleverTapID(cleverTapID)
+        Self.sharedInstance.attribution.setCleverTapID(cleverTapID)
     }
     @objc static func setAppsflyerID(_ appsflyerID: String?) {
-        Purchases.shared.attribution.setAppsflyerID(appsflyerID)
+        Self.sharedInstance.attribution.setAppsflyerID(appsflyerID)
     }
     @objc static func setFBAnonymousID(_ fbAnonymousID: String?) {
-        Purchases.shared.attribution.setFBAnonymousID(fbAnonymousID)
+        Self.sharedInstance.attribution.setFBAnonymousID(fbAnonymousID)
     }
     @objc static func setMparticleID(_ mParticleID: String?) {
-        Purchases.shared.attribution.setMparticleID(mParticleID)
+        Self.sharedInstance.attribution.setMparticleID(mParticleID)
     }
     @objc static func setMixpanelDistinctID(_ mixpanelDistinctID: String?) {
-        Purchases.shared.attribution.setMixpanelDistinctID(mixpanelDistinctID)
+        Self.sharedInstance.attribution.setMixpanelDistinctID(mixpanelDistinctID)
     }
     @objc static func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
-        Purchases.shared.attribution.setFirebaseAppInstanceID(firebaseAppInstanceID)
+        Self.sharedInstance.attribution.setFirebaseAppInstanceID(firebaseAppInstanceID)
     }
     @objc static func setOnesignalID(_ onesignalID: String?) {
-        Purchases.shared.attribution.setOnesignalID(onesignalID)
+        Self.sharedInstance.attribution.setOnesignalID(onesignalID)
     }
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
-        Purchases.shared.attribution.setAirshipChannelID(airshipChannelID)
+        Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }
 
 }
@@ -419,22 +422,22 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @objc static func setMediaSource(_ mediaSource: String?) {
-        Purchases.shared.attribution.setMediaSource(mediaSource)
+        Self.sharedInstance.attribution.setMediaSource(mediaSource)
     }
     @objc static func setCampaign(_ campaign: String?) {
-        Purchases.shared.attribution.setCampaign(campaign)
+        Self.sharedInstance.attribution.setCampaign(campaign)
     }
     @objc static func setAdGroup(_ adGroup: String?) {
-        Purchases.shared.attribution.setAdGroup(adGroup)
+        Self.sharedInstance.attribution.setAdGroup(adGroup)
     }
     @objc static func setAd(_ ad: String?) {
-        Purchases.shared.attribution.setAd(ad)
+        Self.sharedInstance.attribution.setAd(ad)
     }
     @objc static func setKeyword(_ keyword: String?) {
-        Purchases.shared.attribution.setKeyword(keyword)
+        Self.sharedInstance.attribution.setKeyword(keyword)
     }
     @objc static func setCreative(_ creative: String?) {
-        Purchases.shared.attribution.setCreative(creative)
+        Self.sharedInstance.attribution.setCreative(creative)
     }
 
 }
@@ -457,7 +460,7 @@ private extension CommonFunctionality {
     }
 
     static func product(with identifier: String, completion: @escaping (StoreProduct?) -> Void) {
-        Purchases.shared.getProducts([identifier]) { products in
+        Self.sharedInstance.getProducts([identifier]) { products in
             completion(products.first { $0.productIdentifier == identifier })
         }
     }
@@ -477,7 +480,7 @@ private extension CommonFunctionality {
     static func package(withIdentifier packageIdentifier: String,
                         offeringIdentifier: String,
                         completion: @escaping(Package?) -> Void) {
-        Purchases.shared.getOfferings { offerings, error in
+        Self.sharedInstance.getOfferings { offerings, error in
             let offering = offerings?.offering(identifier: offeringIdentifier)
             let package = offering?.package(identifier: packageIdentifier)
             completion(package)
