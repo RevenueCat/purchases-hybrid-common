@@ -96,7 +96,7 @@ Run automatic bump in other repos
 [bundle exec] fastlane ios release
 ```
 
-Release to CocoaPods, create Carthage archive, and create GitHub release
+Release to CocoaPods, and create GitHub release
 
 ### ios replace_api_key_integration_tests
 
