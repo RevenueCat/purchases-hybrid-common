@@ -236,10 +236,10 @@ end
 
 desc "Run automatic bump in other repos"
 lane :bump_hybrid_dependencies do |options|
-  bump = current_version_number
+  version_number_for_bump = current_version_number
   repo_name = options[:repo_name],
 
-  UI.message("Triggering pipeline to bump #{repo_name} dependency to #{bump}")
+  UI.message("Triggering pipeline to bump #{repo_name} dependency to #{version_number_for_bump}")
 
   require 'net/http'
   require 'uri'
@@ -253,7 +253,7 @@ lane :bump_hybrid_dependencies do |options|
     "branch" => "main",
     "parameters" => {
       "action" => "upgrade-hybrid-common",
-      "hybrid-common-version" => "#{bump}",
+      "hybrid-common-version" => "#{version_number_for_bump}",
     }
   })
 
