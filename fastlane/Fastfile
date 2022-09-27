@@ -245,7 +245,7 @@ lane :bump_hybrid_dependencies do |options|
   require 'uri'
   require 'json'
 
-  uri = URI.parse("https://circleci.com/api/v2/project/github/RevenueCat/purchases-flutter/pipeline")
+  uri = URI.parse("https://circleci.com/api/v2/project/github/RevenueCat/#{repo_name}/pipeline")
   request = Net::HTTP::Post.new(uri)
   request.basic_auth(ENV['CIRCLECI_TOKEN'], "")
   request.content_type = "application/json"
