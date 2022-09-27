@@ -282,6 +282,10 @@ workflows:
           requires:
             - deploy-ios
             - deploy-android
+      - trigger-dependent-updates:
+          <<: *release-tags
+          requires:
+            - make-github-release
   
   weekly-run-workflow:
     when:
