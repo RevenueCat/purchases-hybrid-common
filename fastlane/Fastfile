@@ -265,10 +265,9 @@ lane :bump_hybrid_dependencies do |options|
     http.request(request)
   end
 
-  puts response.code
   puts response.body
 
-  UI.error("Error triggering the pipeline") unless response.code == "201"
+  UI.error("Error triggering the pipeline. Response code is #{response.code}") unless response.code == "201"
 end
 
 platform :ios do
