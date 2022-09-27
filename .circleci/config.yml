@@ -260,7 +260,6 @@ workflows:
       - test-ios
       - integration-test-ios
       - test-android
-      - trigger-dependent-updates
 
   deploy:
     when:
