@@ -471,6 +471,50 @@ final class MockPurchases: PurchasesType {
 
 extension MockPurchases {
 
+    func checkTrialOrIntroDiscountEligibility(product: RevenueCat.StoreProduct, completion: @escaping (RevenueCat.IntroEligibilityStatus) -> Void) {
+        fatalError("Not mocked")
+    }
+
+    func setPushTokenString(_ pushToken: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setCleverTapID(_ cleverTapID: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setMixpanelDistinctID(_ mixpanelDistinctID: String?) {
+        fatalError("Not mocked")
+    }
+
+    func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
+        fatalError("Not mocked")
+    }
+
+    var finishTransactions: Bool {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
+    var attribution: Attribution {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
+    var allowSharingAppStoreAccount: Bool {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
+extension MockPurchases: PurchasesSwiftType {
+    
+    var customerInfoStream: AsyncStream<CustomerInfo> {
+        fatalError("This method is not mocked")
+    }
+
     func logIn(_ appUserID: String) async throws -> (customerInfo: RevenueCat.CustomerInfo, created: Bool) {
         fatalError("Not mocked")
     }
@@ -523,10 +567,6 @@ extension MockPurchases {
         fatalError("Not mocked")
     }
 
-    func checkTrialOrIntroDiscountEligibility(product: RevenueCat.StoreProduct, completion: @escaping (RevenueCat.IntroEligibilityStatus) -> Void) {
-        fatalError("Not mocked")
-    }
-
     func checkTrialOrIntroDiscountEligibility(product: RevenueCat.StoreProduct) async -> RevenueCat.IntroEligibilityStatus {
         fatalError("Not mocked")
     }
@@ -537,6 +577,18 @@ extension MockPurchases {
 
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
     func eligiblePromotionalOffers(forProduct product: StoreProduct) async -> [PromotionalOffer] {
+        fatalError("This method is not mocked")
+    }
+
+    func beginRefundRequest(forProduct productID: String, completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
+        fatalError("This method is not mocked")
+    }
+
+    func beginRefundRequest(forEntitlement entitlementID: String, completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
+        fatalError("This method is not mocked")
+    }
+
+    func beginRefundRequestForActiveEntitlement(completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
         fatalError("This method is not mocked")
     }
 
@@ -564,33 +616,5 @@ extension MockPurchases {
         fatalError("Not mocked")
     }
 
-    func setPushTokenString(_ pushToken: String?) {
-        fatalError("Not mocked")
-    }
-
-    func setCleverTapID(_ cleverTapID: String?) {
-        fatalError("Not mocked")
-    }
-
-    func setMixpanelDistinctID(_ mixpanelDistinctID: String?) {
-        fatalError("Not mocked")
-    }
-
-    func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
-        fatalError("Not mocked")
-    }
-
-    var finishTransactions: Bool {
-        get { fatalError("Not mocked") }
-        set { fatalError("Not mocked") }
-    }
-    var attribution: Attribution {
-        get { fatalError("Not mocked") }
-        set { fatalError("Not mocked") }
-    }
-    var allowSharingAppStoreAccount: Bool {
-        get { fatalError("Not mocked") }
-        set { fatalError("Not mocked") }
-    }
 
 }
