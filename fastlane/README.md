@@ -77,6 +77,14 @@ Tag current branch with current version number
 
 Run pod install
 
+### bump_hybrid_dependencies
+
+```sh
+[bundle exec] fastlane bump_hybrid_dependencies
+```
+
+Run automatic bump in other repos
+
 ----
 
 

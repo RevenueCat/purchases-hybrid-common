@@ -233,6 +233,46 @@ lane :run_pod_install do |options|
   end
 end
 
+desc "Run automatic bump in other repos"
+lane :bump_hybrid_dependencies do |options|
+  version_number_for_bump = current_version_number
+  repo_name = options[:repo_name]
+
+  UI.message("Triggering pipeline to bump #{repo_name} dependency to #{version_number_for_bump}")
+
+  require 'net/http'
+  require 'uri'
+  require 'json'
+
+  uri = URI.parse("https://circleci.com/api/v2/project/github/RevenueCat/#{repo_name}/pipeline")
+  request = Net::HTTP::Post.new(uri)
+  request.basic_auth(ENV['CIRCLECI_TOKEN'], "")
+  request.content_type = "application/json"
+  request.body = JSON.dump({
+    "branch" => "main",
+    "parameters" => {
+      "action" => "upgrade-hybrid-common",
+      "hybrid-common-version" => "#{version_number_for_bump}",
+    }
+  })
+
+  req_options = {
+    use_ssl: uri.scheme == "https",
+  }
+
+  response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+    http.request(request)
+  end
+
+  if response.code != "201"
+    error_body = JSON.parse(response.body)
+    error_message = error_body["message"]
+    UI.error("Error triggering the pipeline.")
+    UI.error("Response code: #{response.code}")
+    UI.error("Error message: #{error_message}")
+  end
+end
+
 platform :ios do
   desc "Release to CocoaPods, and create GitHub release"
   lane :release do |options|

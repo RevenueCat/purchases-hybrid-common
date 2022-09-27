@@ -228,6 +228,21 @@ jobs:
       - run:
           name: Automatically bump release and create release PR
           command: bundle exec fastlane automatic_bump github_rate_limit:10
+      - run:
+          name: Kick off Flutter automatic dependency update
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
+
+  trigger-dependent-updates:
+    docker:
+      - image: cimg/ruby:3.1.2
+    steps:
+      - checkout
+      - setup-git-credentials
+      - trust-github-key
+      - revenuecat/install-rubydocker-dependencies
+      - run:
+          name: Kick off Flutter automatic dependency update
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
 
 workflows:
   version: 2
@@ -261,6 +276,10 @@ workflows:
           requires:
             - deploy-ios
             - deploy-android
+      - trigger-dependent-updates:
+          <<: *release-tags
+          requires:
+            - make-github-release
   
   weekly-run-workflow:
     when:
