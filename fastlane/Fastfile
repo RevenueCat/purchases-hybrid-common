@@ -237,7 +237,7 @@ end
 desc "Run automatic bump in other repos"
 lane :bump_hybrid_dependencies do |options|
   version_number_for_bump = current_version_number
-  repo_name = options[:repo_name],
+  repo_name = options[:repo_name]
 
   UI.message("Triggering pipeline to bump #{repo_name} dependency to #{version_number_for_bump}")
 
