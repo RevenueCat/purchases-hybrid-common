@@ -19,7 +19,7 @@ target 'PurchasesHybridCommon' do
     pod 'Nimble'
 
     # Needs https://github.com/pointfreeco/swift-snapshot-testing/pull/552 which isn't released as of 1.9.0
-    pod 'SnapshotTesting', :git => 'git@github.com:pointfreeco/swift-snapshot-testing.git', :branch => 'main'
+    pod 'SnapshotTesting', :git => 'git@github.com:pointfreeco/swift-snapshot-testing.git', :commit => 'a443288'
   end
 
 end

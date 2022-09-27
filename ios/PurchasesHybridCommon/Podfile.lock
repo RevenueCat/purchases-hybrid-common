@@ -8,7 +8,7 @@ DEPENDENCIES:
   - Nimble
   - Quick
   - RevenueCat (= 4.12.1)
-  - "SnapshotTesting (from `git@github.com:pointfreeco/swift-snapshot-testing.git`, branch `main`)"
+  - "SnapshotTesting (from `git@github.com:pointfreeco/swift-snapshot-testing.git`, commit `a443288`)"
 
 SPEC REPOS:
   trunk:
@@ -18,12 +18,12 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   SnapshotTesting:
-    :branch: main
+    :commit: a443288
     :git: "git@github.com:pointfreeco/swift-snapshot-testing.git"
 
 CHECKOUT OPTIONS:
   SnapshotTesting:
-    :commit: 567c66adf318612f9482fdaf62c09df1aa57ee87
+    :commit: a443288
     :git: "git@github.com:pointfreeco/swift-snapshot-testing.git"
 
 SPEC CHECKSUMS:
@@ -32,6 +32,6 @@ SPEC CHECKSUMS:
   RevenueCat: 69bed7c0281ab620e7ec1ff3976dc7ac3c990146
   SnapshotTesting: 6141c48b6aa76ead61431ca665c14ab9a066c53b
 
-PODFILE CHECKSUM: c6a5b2619f189b17179116de112d505c7eed4711
+PODFILE CHECKSUM: a34b5c36c795770e86fc7e08f5a04696f8052c02
 
 COCOAPODS: 1.11.3
