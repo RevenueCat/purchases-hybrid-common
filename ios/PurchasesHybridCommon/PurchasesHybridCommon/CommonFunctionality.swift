@@ -124,10 +124,10 @@ import RevenueCat
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (StoreTransaction?,
-                               CustomerInfo?,
-                               Error?,
-                               Bool) -> Void = { transaction, customerInfo, error, userCancelled in
+        let hybridCompletion: @Sendable (StoreTransaction?,
+                                         CustomerInfo?,
+                                         Error?,
+                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
             } else if let customerInfo = customerInfo,
@@ -170,10 +170,10 @@ import RevenueCat
                          offeringIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: (StoreTransaction?,
-                               CustomerInfo?,
-                               Error?,
-                               Bool) -> Void = { transaction, customerInfo, error, userCancelled in
+        let hybridCompletion: @Sendable (StoreTransaction?,
+                                         CustomerInfo?,
+                                         Error?,
+                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
             } else if let customerInfo = customerInfo,
