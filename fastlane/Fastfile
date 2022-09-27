@@ -74,8 +74,7 @@ lane :github_release do |options|
     version: options[:version],
     repo_name: repo_name,
     github_api_token: ENV["GITHUB_TOKEN"],
-    changelog_latest_path: changelog_latest_path,
-    upload_assets: ["PurchasesHybridCommon.framework.zip"]
+    changelog_latest_path: changelog_latest_path
   )
 end
 
@@ -235,11 +234,10 @@ lane :run_pod_install do |options|
 end
 
 platform :ios do
-  desc "Release to CocoaPods, create Carthage archive, and create GitHub release"
+  desc "Release to CocoaPods, and create GitHub release"
   lane :release do |options|
     version_number = current_version_number
     push_pods
-    archive
   end
 
   desc "replace API KEY for integration tests"
@@ -314,35 +312,6 @@ end
 
 def push_pods
   pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
-end
-
-def archive
-  match(type: "appstore")
-  framework_filename = "PurchasesHybridCommon.framework"
-  build_app(
-    workspace: "ios/PurchasesHybridCommon/PurchasesHybridCommon.xcworkspace",
-    configuration: "Release",
-    scheme: "PurchasesHybridCommon",
-    silent: true,
-    clean: true,
-    derived_data_path: "derived_data/",
-    output_name: framework_filename,
-    destination: 'generic/platform=iOS',
-    export_method: "app-store"
-  )
-
-  # fastlane gym doesn't fully support .frameworks, so we need to look for the output
-  # in derived data manually.
-  Dir.chdir("..") do
-    output_framework_path = Dir["derived_data/**/#{framework_filename}"].first
-    UI.error("framework not found!") if output_framework_path.nil?
-
-    # compress using ditto because zip can cause issues with symlinks
-    sh("ditto", "-c", "-k", "--sequesterRsrc", "--keepParent",
-      output_framework_path,
-      "#{framework_filename}.zip")
-  end
-
 end
 
 def is_snapshot_version?(version_name)

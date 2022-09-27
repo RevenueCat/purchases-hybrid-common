@@ -143,12 +143,6 @@ jobs:
           name: Deploy new version
           command: bundle exec fastlane ios release
           no_output_timeout: 30m
-      - persist_to_workspace:
-          root: .
-          paths:
-            - PurchasesHybridCommon.framework.zip
-      - store_artifacts:
-          path: PurchasesHybridCommon.framework.zip
 
   test-android:
     executor:
