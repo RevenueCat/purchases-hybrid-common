@@ -22,6 +22,12 @@ orbs:
   revenuecat: revenuecat/sdks-common-config@1.1.0
   macos: circleci/macos@2.0.1
 
+parameters:
+  action:
+    type: enum
+    enum: [ build, dependency-update, bump ]
+    default: build
+
 executors:
   ios-executor:
     resource_class: macos.x86.medium.gen2
@@ -286,21 +292,11 @@ workflows:
     jobs:
       - automatic-dependency-update 
 
-  manual-trigger-automatic-dependency-update:
+  manual-trigger-dependency-update:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - trigger-automatic-dependency-update:
-          type: approval
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: main
-      - automatic-dependency-update:
-          requires:
-            - trigger-automatic-dependency-update
+      - automatic-dependency-update
 
   danger:
     when:
@@ -321,18 +317,8 @@ workflows:
             branches:
               only: main
 
-  manual-trigger-release:
+  manual-trigger-bump:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - trigger-automatic-release:
-          type: approval
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: main
-      - automatic-release:
-          requires:
-            - trigger-automatic-release
+      - revenuecat/automatic-bump
