@@ -1,4 +1,4 @@
-## 4.2.3
+## 4.3.0
 ### Other Changes
 * Upgrade iOS to 4.13.0 and Android to 5.6.1 (#235) via RevenueCat Git Bot (@RCGitBot)
 * Remove step from automatic-release to trigger Flutter update. Use its own job instead (#240) via Cesar de la Vega (@vegaro)
