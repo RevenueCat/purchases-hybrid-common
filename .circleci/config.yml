@@ -321,4 +321,4 @@ workflows:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - revenuecat/automatic-bump
+      - automatic-release
