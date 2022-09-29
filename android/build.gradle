@@ -36,6 +36,7 @@ if (publishVariant == "unityIAPRelease") {
 apply plugin: "com.vanniktech.maven.publish"
 
 android {
+    namespace 'com.revenuecat.purchases.hybridcommon'
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
 
