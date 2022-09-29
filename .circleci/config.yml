@@ -266,7 +266,8 @@ workflows:
           <<: *release-branches
       - deploy-ios:
           <<: *release-tags
-      - deploy-android
+      - deploy-android:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:

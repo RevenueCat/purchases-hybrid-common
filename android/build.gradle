@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.android_tools = '7.1.0'
+    ext.android_tools = '7.1.2'
     ext.kotlin_version = '1.6.20'
     ext.android_junit5_version = '1.8.2.0'
     ext.junit5 = '5.8.2'
@@ -28,16 +28,12 @@ apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
 
 def artifactId = project.property("POM_ARTIFACT_ID")
-def publishVariant = project.property("PUBLISH_VARIANT")
+def publishVariant = project.property("ANDROID_VARIANT_TO_PUBLISH")
 if (publishVariant == "unityIAPRelease") {
     project.ext.POM_ARTIFACT_ID = artifactId + "-unityiap"
 }
 
 apply plugin: "com.vanniktech.maven.publish"
-
-mavenPublish {
-    androidVariantToPublish = project.property("PUBLISH_VARIANT")
-}
 
 android {
     compileSdkVersion 32
