@@ -195,7 +195,7 @@ jobs:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
   
-  automatic-dependency-update:
+  dependency-update:
     docker:
       - image: cimg/ruby:2.7.2
     steps:
@@ -223,7 +223,7 @@ jobs:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
 
-  automatic-release:
+  release:
     docker:
       - image: cimg/ruby:3.1.2
     steps:
@@ -290,13 +290,13 @@ workflows:
         - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
     jobs:
-      - automatic-dependency-update 
+      - dependency-update 
 
-  manual-trigger-dependency-update:
+  trigger-dependency-update:
     when:
       equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - automatic-dependency-update
+      - dependency-update
 
   danger:
     when:
@@ -310,15 +310,15 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - automatic-release:
+      - release:
           filters:
             tags:
               ignore: /.*/
             branches:
               only: main
 
-  manual-trigger-bump:
+  trigger-bump:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - automatic-release
+      - release
