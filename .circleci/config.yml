@@ -22,6 +22,12 @@ orbs:
   revenuecat: revenuecat/sdks-common-config@1.1.0
   macos: circleci/macos@2.0.1
 
+parameters:
+  action:
+    type: enum
+    enum: [ build, dependency-update, bump ]
+    default: build
+
 executors:
   ios-executor:
     resource_class: macos.x86.medium.gen2
@@ -189,7 +195,7 @@ jobs:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
   
-  automatic-dependency-update:
+  dependency-update:
     docker:
       - image: cimg/ruby:2.7.2
     steps:
@@ -217,7 +223,7 @@ jobs:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
 
-  automatic-release:
+  release:
     docker:
       - image: cimg/ruby:3.1.2
     steps:
@@ -284,23 +290,13 @@ workflows:
         - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
     jobs:
-      - automatic-dependency-update 
+      - dependency-update 
 
-  manual-trigger-automatic-dependency-update:
+  trigger-dependency-update:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - trigger-automatic-dependency-update:
-          type: approval
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: main
-      - automatic-dependency-update:
-          requires:
-            - trigger-automatic-dependency-update
+      - dependency-update
 
   danger:
     when:
@@ -314,25 +310,15 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - automatic-release:
+      - release:
           filters:
             tags:
               ignore: /.*/
             branches:
               only: main
 
-  manual-trigger-release:
+  trigger-bump:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - trigger-automatic-release:
-          type: approval
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: main
-      - automatic-release:
-          requires:
-            - trigger-automatic-release
+      - release
