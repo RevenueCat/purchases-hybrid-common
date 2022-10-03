@@ -1,13 +1,13 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (4.12.1)
+  - RevenueCat (4.13.1)
   - SnapshotTesting (1.9.0)
 
 DEPENDENCIES:
   - Nimble
   - Quick
-  - RevenueCat (= 4.12.1)
+  - RevenueCat (= 4.13.1)
   - "SnapshotTesting (from `git@github.com:pointfreeco/swift-snapshot-testing.git`, commit `a443288`)"
 
 SPEC REPOS:
@@ -29,9 +29,9 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 69bed7c0281ab620e7ec1ff3976dc7ac3c990146
+  RevenueCat: f713337182aeda810fe6602f817f0909285cc1d4
   SnapshotTesting: 6141c48b6aa76ead61431ca665c14ab9a066c53b
 
-PODFILE CHECKSUM: a34b5c36c795770e86fc7e08f5a04696f8052c02
+PODFILE CHECKSUM: cc406b678a8e93d4336d65182b359bbb84b8af9a
 
 COCOAPODS: 1.11.3
