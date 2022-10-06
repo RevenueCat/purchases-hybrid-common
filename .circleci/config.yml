@@ -263,7 +263,9 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - trigger-dependent-updates
+      - test-ios
+      - integration-test-ios
+      - test-android
 
   deploy:
     when:
