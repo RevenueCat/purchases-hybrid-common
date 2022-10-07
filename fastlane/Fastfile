@@ -96,9 +96,6 @@ lane :open_pr_upgrading_dependencies do |options|
   type_of_bump_ios = detect_bump_type(current_ios_version, new_ios_version)
   type_of_bump_android = detect_bump_type(current_android_version, new_android_version)
 
-  ios_version_changed = current_ios_version != new_ios_version
-  android_version_changed = current_android_version != new_android_version
-
   repo_status = sh("git status --porcelain")
 
   repo_clean = repo_status.empty?
