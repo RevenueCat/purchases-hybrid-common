@@ -86,7 +86,15 @@ lane :open_pr_upgrading_dependencies do |options|
 
   dry_run = options[:dry_run]
 
+  current_ios_version = parse_previous_ios_native_version
+  current_android_version = parse_previous_android_native_version
+
   new_versions = update_native_dependencies_to_latest
+  new_ios_version = new_versions[:new_ios_version]
+  new_android_version = new_versions[:new_android_version]
+
+  type_of_bump_ios = detect_bump_type(current_ios_version, new_ios_version)
+  type_of_bump_android = detect_bump_type(current_android_version, new_android_version)
 
   repo_status = sh("git status --porcelain")
 
@@ -97,16 +105,32 @@ lane :open_pr_upgrading_dependencies do |options|
     next
   end
 
-  new_ios_version = new_versions[:new_ios_version]
-  new_android_version = new_versions[:new_android_version]
 
   if dry_run
     UI.message("ℹ️  Nothing more to do since dry_run: true.")
-    UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
-    UI.message("ℹ️  New Android dependency version is #{new_android_version}")
+    if type_of_bump_ios != :none
+      UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
+     end
+    if type_of_bump_android != :none
+      UI.message("ℹ️  New Android dependency version is #{new_android_version}")
+     end
     reset_git_repo
   else
-    branch = "update-ios-#{new_ios_version}-android-#{new_android_version}"
+    branch_ios = ""
+    branch_android = ""
+    message_ios = ""
+    message_android = ""
+
+    if type_of_bump_ios != :none
+      branch_ios = "-ios-#{new_ios_version}"
+      message_ios = "iOS #{current_ios_version} => #{new_ios_version} "
+    end
+    if type_of_bump_android != :none
+      branch_android = "-android-#{new_android_version}"
+      message_android = "Android #{current_android_version} => #{new_android_version} "
+    end
+
+    branch = "update#{branch_ios}#{branch_android}"
 
     sh("git stash")
     sh("git checkout -b #{branch} origin/main")
@@ -120,14 +144,22 @@ lane :open_pr_upgrading_dependencies do |options|
       set_upstream: true,
       remote_branch: branch
     )
+
+    message = "[AUTOMATIC] #{message_ios}#{message_android}".strip
+
+    labels = ["dependencies"]
+    if type_of_bump_ios == :minor || type_of_bump_android == :minor
+      labels << "minor"
+    end
+
     create_pull_request(
       api_token: ENV["GITHUB_TOKEN"],
-      repo: "RevenueCat/purchases-hybrid-common",
-      title: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
+      repo: "RevenueCat/#{repo_name}",
+      title: message,
       head: "#{branch}",
       base: "main",
-      body: "Upgrade iOS to #{new_ios_version} and Android to #{new_android_version}",
-      labels: ["dependencies"]
+      body: message,
+      labels: labels
     )
   end
 end
@@ -376,5 +408,24 @@ end
 def check_no_git_tag_exists(version_number)
   if git_tag_exists(tag: version_number, remote: true, remote_name: 'origin')
     raise "git tag with version #{version_number} already exists!"
+  end
+end
+
+def detect_bump_type(a, b)
+  if a == b
+    return :none
+  end
+
+  version_a = Gem::Version.new(a)
+  version_b = Gem::Version.new(b)
+
+  same_major = version_a.canonical_segments[0] == version_b.canonical_segments[0]
+  same_minor = version_a.canonical_segments[1] == version_b.canonical_segments[1]
+  if same_major && same_minor
+    return :patch
+  elsif same_major
+    return :minor
+  else
+    return :major
   end
 end
