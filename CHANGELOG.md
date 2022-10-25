@@ -1,3 +1,7 @@
+## 4.3.4
+### Other Changes
+* [AUTOMATIC] Android 5.6.2 => 5.6.3 (#254) via RevenueCat Git Bot (@RCGitBot)
+
 ## 4.3.2
 ### Other Changes
 * [AUTOMATIC] iOS 4.13.1 => 4.13.2 Android 5.6.1 => 5.6.2 (#250) via RevenueCat Git Bot (@RCGitBot)
