@@ -1,3 +1,7 @@
+## 4.3.4
+### Other Changes
+* [AUTOMATIC] Android 5.6.2 => 5.6.3 (#254) via RevenueCat Git Bot (@RCGitBot)
+
 ## 4.3.3
 ### Bugfixes
 * re-add error message if SDK hasn't been configured (#253) via Andy Boedo (@aboedo)
