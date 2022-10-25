@@ -33,7 +33,7 @@ executors:
     resource_class: macos.x86.medium.gen2
     working_directory: ~/ios
     macos:
-      xcode: 13.4.1
+      xcode: 14.1.0
 
 commands:
   setup-git-credentials:
@@ -83,7 +83,8 @@ jobs:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          command: pod lib lint
+          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
+          command: pod lib lint --fail-fast --platforms=ios,osx,tvos
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
