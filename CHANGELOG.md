@@ -1,3 +1,8 @@
+## 4.3.5
+### Other Changes
+* Updated `SnapshotTesting` to `1.10.0` (#231) via NachoSoto (@NachoSoto)
+* CI: using `Xcode 14.1` (#232) via NachoSoto (@NachoSoto)
+
 ## 4.3.4
 ### Other Changes
 * [AUTOMATIC] Android 5.6.2 => 5.6.3 (#254) via RevenueCat Git Bot (@RCGitBot)

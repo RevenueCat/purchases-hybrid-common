@@ -34,6 +34,11 @@ executors:
     working_directory: ~/ios
     macos:
       xcode: 14.1.0
+  ios-executor-xcode-13:
+    resource_class: macos.x86.medium.gen2
+    working_directory: ~/ios
+    macos:
+      xcode: 13.4.1
 
 commands:
   setup-git-credentials:
@@ -123,7 +128,8 @@ jobs:
           destination: scan-output
   
   deploy-ios:
-    executor: ios-executor
+    # Xcode 14 not supported until https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed.
+    executor: ios-executor-xcode-13
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
