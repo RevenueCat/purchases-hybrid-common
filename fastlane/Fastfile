@@ -286,7 +286,8 @@ lane :bump_hybrid_dependencies do |options|
     "branch" => "main",
     "parameters" => {
       "action" => "upgrade-hybrid-common",
-      "hybrid-common-version" => "#{version_number_for_bump}",
+      "version" => "#{version_number_for_bump}",
+      "automatic" => true
     }
   })
 
