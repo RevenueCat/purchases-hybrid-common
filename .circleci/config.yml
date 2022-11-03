@@ -76,9 +76,10 @@ commands:
           paths:
             - vendor/bundle
 
-jobs:
-  test-ios:
-    executor: ios-executor
+  run-ios-tests:
+    parameters:
+      platforms:
+        type: string
     steps:
       - checkout
       - run:
@@ -93,36 +94,26 @@ jobs:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
-          command: pod lib lint --fail-fast --platforms=ios,osx,tvos
+          command: pod lib lint --fail-fast --platforms='<< parameters.platforms >>'
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
+jobs:
+  test-ios:
+    executor: ios-executor
+    steps:
+      - run-ios-tests:
+          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
+          platforms: "ios,osx,tvos"
+
   test-xcode-13-2:
     executor: ios-executor-xcode-13-2
     steps:
-      - checkout
-      - run:
-          name: Install pods
-          command: pod install --repo-update
-          working_directory: ios/PurchasesHybridCommon
-      - run:
-          name: Run ios tests
-          command: fastlane scan
-          working_directory: ios/PurchasesHybridCommon
-          environment:
-            SCAN_SCHEME: PurchasesHybridCommon
-      - run:
-          name: Run pod lint tests
-          command: pod lib lint --fail-fast
-      - store_test_results:
-          path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
+      - run-ios-tests:
+          platforms: "ios,osx,tvos,watchos"
 
   integration-test-ios:
     executor: ios-executor
