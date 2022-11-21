@@ -1,3 +1,7 @@
+## 4.4.2
+### Other Changes
+* [AUTOMATIC] iOS 4.14.1 => 4.14.2 (#266) via RevenueCat Git Bot (@RCGitBot)
+
 ## 4.4.1
 ### Other Changes
 * [AUTOMATIC] iOS 4.14.0 => 4.14.1 Android 5.6.3 => 5.6.4 (#264) via RevenueCat Git Bot (@RCGitBot)
