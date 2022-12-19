@@ -66,15 +66,22 @@ private extension BaseIntegrationTests {
     }
 
     func configurePurchases() {
-        _ = Purchases.configure(apiKey: Constants.apiKey,
-                            appUserID: nil,
-                            observerMode: false,
-                            userDefaultsSuiteName: Constants.userDefaultsSuiteName,
-                            platformFlavor: nil,
-                            platformFlavorVersion: nil,
-                            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
-                            dangerousSettings: nil)
+        _ = Purchases.configure(
+            apiKey: Constants.apiKey,
+            appUserID: nil,
+            observerMode: false,
+            userDefaultsSuiteName: Constants.userDefaultsSuiteName,
+            platformFlavor: nil,
+            platformFlavorVersion: nil,
+            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
+            dangerousSettings: self.dangerousSettings
+        )
         Purchases.logLevel = .debug
+    }
+
+    private var dangerousSettings: DangerousSettings {
+        return .init(autoSyncPurchases: true,
+                     internalSettings: .init(enableReceiptFetchRetry: true))
     }
 
 }
