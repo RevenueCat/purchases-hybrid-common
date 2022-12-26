@@ -1,3 +1,7 @@
+## 4.5.4
+### Other Changes
+* [AUTOMATIC] iOS 4.15.4 => 4.15.5 (#281) via RevenueCat Git Bot (@RCGitBot)
+
 ## 4.5.3
 ### Other Changes
 * [AUTOMATIC] iOS 4.15.3 => 4.15.4 (#278) via RevenueCat Git Bot (@RCGitBot)
