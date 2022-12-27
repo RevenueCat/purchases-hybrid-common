@@ -31,7 +31,7 @@
 		2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE62807436200863298 /* StoreTransaction+HybridAdditions.swift */; };
 		2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */; };
 		2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFE428073A9300863298 /* EntitlementInfo+HybridAdditions.swift */; };
-		2DD3D1902810AF5A00A19EC6 /* SKProduct+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */; };
+		2DD3D1902810AF5A00A19EC6 /* StoreProduct+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9828075B9000676D73 /* StoreProduct+HybridAdditions.swift */; };
 		2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */; };
 		2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */; };
 		2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */; };
@@ -117,7 +117,7 @@
 		2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offering+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D900D942807580000676D73 /* Package+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D900D962807593100676D73 /* SKProductDiscount+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProductDiscount+HybridAdditions.swift"; sourceTree = "<group>"; };
-		2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProduct+HybridAdditions.swift"; sourceTree = "<group>"; };
+		2D900D9828075B9000676D73 /* StoreProduct+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreProduct+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PromotionalOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D900D9C2807626100676D73 /* Purchases+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Purchases+HybridAdditions.swift"; sourceTree = "<group>"; };
 		2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offerings+HybridAdditions.swift"; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 				2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */,
 				2D900D942807580000676D73 /* Package+HybridAdditions.swift */,
 				2D900D962807593100676D73 /* SKProductDiscount+HybridAdditions.swift */,
-				2D900D9828075B9000676D73 /* SKProduct+HybridAdditions.swift */,
+				2D900D9828075B9000676D73 /* StoreProduct+HybridAdditions.swift */,
 				2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */,
 				2D900D9C2807626100676D73 /* Purchases+HybridAdditions.swift */,
 				2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */,
@@ -720,7 +720,7 @@
 			files = (
 				2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */,
 				2DD3D1882810AF5A00A19EC6 /* SKProductDiscount+HybridAdditions.swift in Sources */,
-				2DD3D1902810AF5A00A19EC6 /* SKProduct+HybridAdditions.swift in Sources */,
+				2DD3D1902810AF5A00A19EC6 /* StoreProduct+HybridAdditions.swift in Sources */,
 				2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */,
 				2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */,
 				2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */,
