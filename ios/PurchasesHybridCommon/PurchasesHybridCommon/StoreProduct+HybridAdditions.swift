@@ -24,6 +24,7 @@ import StoreKit
             "productCategory": self.productCategoryString,
             "productType": self.productTypeString,
             "title": self.localizedTitle,
+            "subscriptionPeriod": NSNull(),
         ]
 
         if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
@@ -33,6 +34,12 @@ import StoreKit
 
         if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
             dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
+        }
+
+        if #available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *) {
+            let subscriptionPeriod = self.subscriptionPeriod {
+                dictionary["subscriptionPeriod"] = rc_normalized(subscriptionPeriod)
+            }
         }
 
         return dictionary
