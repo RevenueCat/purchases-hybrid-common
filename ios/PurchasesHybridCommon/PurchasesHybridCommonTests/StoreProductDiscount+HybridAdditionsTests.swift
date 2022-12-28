@@ -59,7 +59,7 @@ public extension SKProductDiscount {
     }
 }
 
-private extension SKProductSubscriptionPeriod {
+public extension SKProductSubscriptionPeriod {
     convenience init(numberOfUnits: Int,
                      unit: SKProduct.PeriodUnit) {
         self.init()
