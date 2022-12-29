@@ -57,7 +57,7 @@ internal class StoreProductMapperTest {
     }
 
     @Test
-    fun `maps discounts correctly`() {
+    fun `maps null discounts correctly`() {
         stubStoreProduct().map().let {
             assertThat(it["discounts"]).isEqualTo(null)
         }
