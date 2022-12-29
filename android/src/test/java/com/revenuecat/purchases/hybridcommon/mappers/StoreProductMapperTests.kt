@@ -57,9 +57,26 @@ internal class StoreProductMapperTest {
     }
 
     @Test
+    fun `maps introPrice correctly`() {
+        stubStoreProduct(freeTrialPeriod = "P7D").map().let {
+            @Suppress("UNCHECKED_CAST")
+            val introPriceMap: Map<String, Any> = it["introPrice"] as Map<String, Any>
+            assertThat(introPriceMap["period"]).isNotNull
+        }
+        // Testing for the intro price mapping is performed in StoreProductIntroPriceMapperTest
+    }
+
+    @Test
+    fun `maps null introPrice correctly`() {
+        stubStoreProduct(freeTrialPeriod = null, introductoryPrice = null).map().let {
+            assertThat(it["introPrice"]).isNull()
+        }
+    }
+
+    @Test
     fun `maps null discounts correctly`() {
         stubStoreProduct().map().let {
-            assertThat(it["discounts"]).isEqualTo(null)
+            assertThat(it["discounts"]).isNull()
         }
     }
 
