@@ -31,7 +31,6 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                                         productType: .autoRenewableSubscription,
                                         localizedTitle: title,
                                         subscriptionPeriod: subscriptionPeriod,
-                                        isFamilyShareable: true,
                                         subscriptionGroupIdentifier: "sub_group",
                                         introductoryPrice: introductoryPrice
         )
@@ -136,20 +135,14 @@ public extension StoreProduct {
                      productType: ProductType,
                      localizedTitle: String,
                      subscriptionPeriod: SKProductSubscriptionPeriod?,
-                     isFamilyShareable: Bool,
                      subscriptionGroupIdentifier: String,
                      introductoryPrice: SKProductDiscount?
     ) {
         let skProduct = SKProduct(localizedDescription: localizedDescription,
                                   localizedTitle: localizedTitle,
-                                  price: price, // Might need to convert to NSDecimalNumber
+                                  price: price,
                                   priceLocale: priceLocale,
                                   productIdentifier: productIdentifier,
-                                  isDownloadable: true,
-                                  isFamilyShareable: isFamilyShareable,
-                                  downloadContentLengths: [1],
-                                  contentVersion: "1",
-                                  downloadContentVersion: "1",
                                   subscriptionPeriod: subscriptionPeriod,
                                   introductoryPrice: introductoryPrice,
                                   subscriptionGroupIdentifier: subscriptionGroupIdentifier,
@@ -165,11 +158,6 @@ public extension SKProduct {
                      price: Decimal,
                      priceLocale: Locale,
                      productIdentifier: String,
-                     isDownloadable: Bool,
-                     isFamilyShareable: Bool,
-                     downloadContentLengths: [NSNumber],
-                     contentVersion: String,
-                     downloadContentVersion: String,
                      subscriptionPeriod: SKProductSubscriptionPeriod?,
                      introductoryPrice: SKProductDiscount?,
                      subscriptionGroupIdentifier: String?,
@@ -181,7 +169,6 @@ public extension SKProduct {
         self.setValue(price, forKey: "price")
         self.setValue(priceLocale, forKey: "priceLocale")
         self.setValue(productIdentifier, forKey: "productIdentifier")
-        self.setValue(isFamilyShareable, forKey: "isFamilyShareable")
         self.setValue(subscriptionPeriod, forKey: "subscriptionPeriod")
         self.setValue(introductoryPrice, forKey: "introductoryPrice")
         self.setValue(subscriptionGroupIdentifier, forKey: "subscriptionGroupIdentifier")
