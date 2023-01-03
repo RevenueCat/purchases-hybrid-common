@@ -13,7 +13,7 @@ import StoreKit
 
 class StoreProductHybridAdditionsTests: QuickSpec {
 
-    private func storeProductDictionaryWith(locale: Locale = Locale(identifier: "en_US"),
+    private func storeProductDictionary(with locale: Locale = Locale(identifier: "en_US"),
                                             description: String = "A product description",
                                             productIdentifier: String = "monthly",
                                             price: Decimal = Decimal(1.0),
@@ -43,52 +43,52 @@ class StoreProductHybridAdditionsTests: QuickSpec {
     override func spec() {
         describe("rc_dictionary") {
             it("maps currency code correctly") {
-                let receivedDictionary = self.storeProductDictionaryWith(locale: Locale(identifier: "en_CA"))
+                let receivedDictionary = self.storeProductDictionary(with: Locale(identifier: "en_CA"))
 
                 expect(receivedDictionary["currencyCode"] as? NSString) == "CAD"
             }
             it("maps description correctly") {
                 let expected = "Testing description"
-                let receivedDictionary = self.storeProductDictionaryWith(description: expected)
+                let receivedDictionary = self.storeProductDictionary(description: expected)
 
                 expect(receivedDictionary["description"] as? NSString) == expected as NSString
             }
             it("maps identifier correctly") {
                 let expected = "annual"
-                let receivedDictionary = self.storeProductDictionaryWith(productIdentifier: expected)
+                let receivedDictionary = self.storeProductDictionary(productIdentifier: expected)
 
                 expect(receivedDictionary["identifier"] as? NSString) == expected as NSString
             }
             it("maps price correctly") {
                 let expected = Decimal(2.00)
 
-                let receivedDictionary = self.storeProductDictionaryWith(price: expected)
+                let receivedDictionary = self.storeProductDictionary(price: expected)
 
                 expect(receivedDictionary["price"] as? Decimal) == expected
                 expect(receivedDictionary["priceString"] as? NSString) == "$2.00"
             }
             it("maps productCategory correctly") {
-                var receivedDictionary = self.storeProductDictionaryWith(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+                var receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
 
                 expect(receivedDictionary["productCategory"] as? NSString) == "SUBSCRIPTION"
 
-                receivedDictionary = self.storeProductDictionaryWith(subscriptionPeriod: nil)
+                receivedDictionary = self.storeProductDictionary(subscriptionPeriod: nil)
 
                 expect(receivedDictionary["productCategory"] as? NSString) == "NON_SUBSCRIPTION"
             }
             it("maps productType to NON_CONSUMABLE for SK1Products") {
-                let receivedDictionary = self.storeProductDictionaryWith()
+                let receivedDictionary = self.storeProductDictionary()
 
                 expect(receivedDictionary["productType"] as? NSString) == "NON_CONSUMABLE"
             }
             it("maps title correctly") {
                 let expected = "Testing product title"
-                let receivedDictionary = self.storeProductDictionaryWith(title: expected)
+                let receivedDictionary = self.storeProductDictionary(title: expected)
 
                 expect(receivedDictionary["title"] as? NSString) == expected as NSString
             }
             it("maps discounts correctly") {
-                var receivedDictionary = self.storeProductDictionaryWith()
+                var receivedDictionary = self.storeProductDictionary()
 
                 expect(receivedDictionary["discounts"] as? [SKProductDiscount]) == []
 
@@ -100,13 +100,13 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                receivedDictionary = self.storeProductDictionaryWith(discounts: [productDiscount])
+                receivedDictionary = self.storeProductDictionary(discounts: [productDiscount])
 
                 let receivedDiscounts = try XCTUnwrap(receivedDictionary["discounts"] as? NSArray)
                 expect(receivedDiscounts.count) == 1
             }
             it("maps intro price correctly") {
-                var receivedDictionary = self.storeProductDictionaryWith()
+                var receivedDictionary = self.storeProductDictionary()
 
                 expect(receivedDictionary["introPrice"] as? SKProductDiscount?) == nil
                 let subscriptionPeriod = SKProductSubscriptionPeriod(numberOfUnits: 3, unit: .month)
@@ -117,7 +117,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                                                         numberOfPeriods: 3,
                                                         paymentMode: SKProductDiscount.PaymentMode.payAsYouGo,
                                                         type: .introductory)
-                receivedDictionary = self.storeProductDictionaryWith(introductoryPrice: productDiscount)
+                receivedDictionary = self.storeProductDictionary(introductoryPrice: productDiscount)
                 let receivedIntroPrice = try XCTUnwrap(receivedDictionary["introPrice"] as? [String:Any])
                 expect(receivedIntroPrice["price"] as? Decimal) == 10.99
             }
