@@ -1,6 +1,7 @@
-package com.revenuecat.purchases.hybridcommon
+package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.hybridcommon.mappers.mapIntroPrice
+import com.revenuecat.purchases.hybridcommon.mockCurrencyFormatter
+import com.revenuecat.purchases.hybridcommon.mockLogError
 import com.revenuecat.purchases.models.StoreProduct
 import io.mockk.every
 import io.mockk.mockk
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class StoreProductMapperTests {
+internal class StoreProductIntroPriceMapperTests {
 
     var received: Map<String, Any?>? = emptyMap()
     val mockStoreProduct = mockk<StoreProduct>(relaxed = true)
