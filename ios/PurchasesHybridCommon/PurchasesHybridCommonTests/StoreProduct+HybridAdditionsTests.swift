@@ -21,7 +21,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                                             introductoryPrice: SKProductDiscount? = nil,
                                             discounts: [SKProductDiscount] = [],
                                             subscriptionPeriod: SKProductSubscriptionPeriod? = nil
-    ) -> [String:NSObject] {
+    ) -> [String: NSObject] {
         let storeProduct = StoreProduct(priceLocale: locale,
                                         localizedDescription: description,
                                         discounts: discounts,
