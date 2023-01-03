@@ -40,7 +40,7 @@ class StoreProductDiscountHybridAdditionsTests: QuickSpec {
     }
 }
 
-public extension SKProductDiscount {
+extension SKProductDiscount {
     convenience init(price: NSDecimalNumber,
                      priceLocale: Locale,
                      identifier: String,
@@ -59,7 +59,7 @@ public extension SKProductDiscount {
     }
 }
 
-public extension SKProductSubscriptionPeriod {
+extension SKProductSubscriptionPeriod {
     convenience init(numberOfUnits: Int,
                      unit: SKProduct.PeriodUnit) {
         self.init()

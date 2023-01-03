@@ -125,7 +125,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
     }
 }
 
-public extension StoreProduct {
+extension StoreProduct {
     convenience init(priceLocale: Locale,
                      localizedDescription: String,
                      discounts: [SKProductDiscount],
@@ -152,7 +152,7 @@ public extension StoreProduct {
     }
 }
 
-public extension SKProduct {
+extension SKProduct {
     convenience init(localizedDescription: String,
                      localizedTitle: String,
                      price: Decimal,
