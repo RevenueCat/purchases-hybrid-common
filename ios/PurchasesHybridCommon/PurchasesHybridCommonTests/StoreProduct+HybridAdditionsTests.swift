@@ -121,6 +121,22 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 let receivedIntroPrice = try XCTUnwrap(receivedDictionary["introPrice"] as? [String:Any])
                 expect(receivedIntroPrice["price"] as? Decimal) == 10.99
             }
+            it("maps subscription period correctly") {
+                var receivedDictionary = self.storeProductDictionary()
+
+                expect(receivedDictionary["subscriptionPeriod"] as? NSString) == nil
+
+                receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
+                expect(receivedDictionary["subscriptionPeriod"] as? NSString) == "P1M"
+
+                receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
+                expect(receivedDictionary["subscriptionPeriod"] as? NSString) == "P1Y"
+            }
+            it("rc_dictionary has correct size") {
+                let receivedDictionary = self.storeProductDictionary()
+
+                expect(receivedDictionary.count) == 11
+            }
         }
     }
 }

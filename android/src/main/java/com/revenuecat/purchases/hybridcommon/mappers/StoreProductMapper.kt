@@ -14,7 +14,8 @@ fun StoreProduct.map(): Map<String, Any?> =
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
         "productCategory" to mapProductCategory(),
-        "productType" to mapProductType()
+        "productType" to mapProductType(),
+        "subscriptionPeriod" to subscriptionPeriod
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
