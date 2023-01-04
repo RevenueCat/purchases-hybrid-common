@@ -24,7 +24,7 @@
           "priceString" : "$39.99",
           "productCategory" : "SUBSCRIPTION",
           "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-          "subscriptionPeriod": "P1Y",
+          "subscriptionPeriod" : "P1Y",
           "title" : "Annual Subscription"
         }
       },
@@ -52,7 +52,7 @@
             "priceString" : "$39.99",
             "productCategory" : "SUBSCRIPTION",
             "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-            "subscriptionPeriod": "P1Y",
+            "subscriptionPeriod" : "P1Y",
             "title" : "Annual Subscription"
           }
         },
@@ -87,7 +87,7 @@
             "priceString" : "$19.99",
             "productCategory" : "SUBSCRIPTION",
             "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-            "subscriptionPeriod": "P1M",
+            "subscriptionPeriod" : "P1M",
             "title" : "Monthly Subscription"
           }
         }
@@ -124,7 +124,7 @@
           "priceString" : "$19.99",
           "productCategory" : "SUBSCRIPTION",
           "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-          "subscriptionPeriod": "P1M",
+          "subscriptionPeriod" : "P1M",
           "title" : "Monthly Subscription"
         }
       },
@@ -155,7 +155,7 @@
         "priceString" : "$39.99",
         "productCategory" : "SUBSCRIPTION",
         "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-        "subscriptionPeriod": "P1Y",
+        "subscriptionPeriod" : "P1Y",
         "title" : "Annual Subscription"
       }
     },
@@ -183,7 +183,7 @@
           "priceString" : "$39.99",
           "productCategory" : "SUBSCRIPTION",
           "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-          "subscriptionPeriod": "P1Y",
+          "subscriptionPeriod" : "P1Y",
           "title" : "Annual Subscription"
         }
       },
@@ -218,7 +218,7 @@
           "priceString" : "$19.99",
           "productCategory" : "SUBSCRIPTION",
           "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-          "subscriptionPeriod": "P1M",
+          "subscriptionPeriod" : "P1M",
           "title" : "Monthly Subscription"
         }
       }
@@ -255,7 +255,7 @@
         "priceString" : "$19.99",
         "productCategory" : "SUBSCRIPTION",
         "productType" : "AUTO_RENEWABLE_SUBSCRIPTION",
-        "subscriptionPeriod": "P1M",
+        "subscriptionPeriod" : "P1M",
         "title" : "Monthly Subscription"
       }
     },
