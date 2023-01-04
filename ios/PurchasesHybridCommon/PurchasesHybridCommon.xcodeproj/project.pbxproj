@@ -36,6 +36,7 @@
 		2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9A2807614700676D73 /* PromotionalOffer+HybridAdditions.swift */; };
 		2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D900D9E2807696100676D73 /* Offerings+HybridAdditions.swift */; };
 		2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4FDFEA28074C3800863298 /* EntitlementInfos+HybridAdditions.swift */; };
+		35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
@@ -126,6 +127,7 @@
 		2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FatalErrorUtil.swift; sourceTree = "<group>"; };
 		2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Expectations.swift"; sourceTree = "<group>"; };
 		2DED033B280F5759009C5D65 /* CommonFunctionality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonFunctionality.swift; sourceTree = "<group>"; };
+		35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreProduct+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorContainerTests.swift; sourceTree = "<group>"; };
 		37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockPurchases.swift; sourceTree = "<group>"; };
 		460EB988CBB68111D4CF19A2 /* Pods-PurchasesHybridCommon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.debug.xcconfig"; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */,
 				FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */,
 				FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */,
+				35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -755,6 +758,7 @@
 				FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */,
 				2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */,
 				2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */,
+				35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */,
 				2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */,
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
 				FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */,
@@ -897,7 +901,7 @@
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -937,7 +941,7 @@
 			buildSettings = {
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -975,7 +979,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -1001,7 +1005,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -1144,7 +1148,7 @@
 			baseConfigurationReference = EC917227AAA9D46865C0C01D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
@@ -1166,7 +1170,7 @@
 			baseConfigurationReference = 517430C4E8FC91A379B7BFE0 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = "$(inherited)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
