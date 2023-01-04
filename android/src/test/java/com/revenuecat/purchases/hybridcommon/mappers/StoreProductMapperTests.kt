@@ -105,6 +105,19 @@ internal class StoreProductMapperTest {
             assertThat(it["productType"]).isEqualTo("UNKNOWN")
         }
     }
+
+    @Test
+    fun `maps subscription period correctly`() {
+        stubStoreProduct().map().let {
+            assertThat(it["subscriptionPeriod"]).isNull()
+        }
+        stubStoreProduct(subscriptionPeriod = "P1M").map().let {
+            assertThat(it["subscriptionPeriod"]).isEqualTo("P1M")
+        }
+        stubStoreProduct(subscriptionPeriod = "P1Y").map().let {
+            assertThat(it["subscriptionPeriod"]).isEqualTo("P1Y")
+        }
+    }
 }
 
 fun stubStoreProduct(
@@ -117,7 +130,7 @@ fun stubStoreProduct(
     originalPriceAmountMicros: Long = 0,
     title: String = "A product title",
     description: String = "A product description",
-    subscriptionPeriod: String? = "P1M",
+    subscriptionPeriod: String? = null,
     freeTrialPeriod: String? = "P7D",
     introductoryPrice: String? = null,
     introductoryPriceAmountMicros: Long = 0,
