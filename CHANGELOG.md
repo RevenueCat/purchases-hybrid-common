@@ -1,3 +1,9 @@
+## 4.7.0
+### New Features
+* Adds subscriptionPeriod (#286) via Cesar de la Vega (@vegaro)
+### Other Changes
+* Add StoreProduct mapper iOS tests (#285) via Cesar de la Vega (@vegaro)
+
 ## 4.6.0
 ### Other Changes
 * [AUTOMATIC] iOS 4.15.5 => 4.16.0 (#289) via RevenueCat Git Bot (@RCGitBot)
