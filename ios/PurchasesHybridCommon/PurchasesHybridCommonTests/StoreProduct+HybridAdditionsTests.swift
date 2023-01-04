@@ -132,6 +132,11 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
                 expect(receivedDictionary["subscriptionPeriod"] as? NSString) == "P1Y"
             }
+            it("rc_dictionary has correct size") {
+                let receivedDictionary = self.storeProductDictionary()
+
+                expect(receivedDictionary.count) == 11
+            }
         }
     }
 }

@@ -118,6 +118,13 @@ internal class StoreProductMapperTest {
             assertThat(it["subscriptionPeriod"]).isEqualTo("P1Y")
         }
     }
+
+    @Test
+    fun `map has correct size`() {
+        stubStoreProduct().map().let {
+            assertThat(it.size).isEqualTo(11)
+        }
+    }
 }
 
 fun stubStoreProduct(
