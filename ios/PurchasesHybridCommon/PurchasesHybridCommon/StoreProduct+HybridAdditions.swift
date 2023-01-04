@@ -37,8 +37,8 @@ import StoreKit
         }
 
         if #available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *) {
-            let subscriptionPeriod = self.subscriptionPeriod {
-                dictionary["subscriptionPeriod"] = rc_normalized(subscriptionPeriod)
+            if let subscriptionPeriod = self.subscriptionPeriod {
+                dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
             }
         }
 
