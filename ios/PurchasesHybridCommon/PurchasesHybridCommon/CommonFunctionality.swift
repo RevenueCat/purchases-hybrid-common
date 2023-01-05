@@ -13,7 +13,9 @@ import RevenueCat
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 
-    static var sharedInstance: PurchasesType {
+    typealias InstanceType = PurchasesType & PurchasesSwiftType
+
+    static var sharedInstance: InstanceType {
         get {
             guard let purchases = Self._sharedInstance else {
                 fatalError("Purchases has not been configured. Please configure the SDK before calling this method")
@@ -26,7 +28,7 @@ import RevenueCat
         }
     }
 
-    private static var _sharedInstance: PurchasesType?
+    private static var _sharedInstance: InstanceType?
 
     // MARK: properties and configuration
 
