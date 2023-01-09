@@ -208,8 +208,8 @@ class PurchasesHybridCommonTests: QuickSpec {
                         CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { _ in }
 
                         expect(mockPurchases.invokedBeginRefundRequestForProductCount) == 1
-                        expect(mockPurchases.invokedBeginRefundRequestForProductParameters?
-                            .productId) == "mock-product-id"
+                        expect(mockPurchases.invokedBeginRefundRequestForProductParameters?.productId)
+                        == "mock-product-id"
                     }
 
                     it("does not return an error if successful") {
