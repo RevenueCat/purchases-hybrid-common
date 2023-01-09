@@ -116,6 +116,50 @@ import RevenueCat
         // See https://sdk.revenuecat.com/android/5.1.1/purchases/com.revenuecat.purchases/-purchases/-companion/can-make-payments.html
         return Purchases.canMakePayments()
     }
+}
+
+// MARK: Refund request
+@objc public extension CommonFunctionality {
+
+#if os(iOS)
+    @available(iOS 15.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @available(macCatalyst, unavailable)
+    @objc(beginRefundRequestProductId:completionBlock:)
+    static func beginRefundRequest(productId: String,
+                                   completion: @escaping (ErrorContainer?) -> Void) {
+        Self.sharedInstance.beginRefundRequest(forProduct: productId) { result in
+            Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
+        }
+    }
+
+    @available(iOS 15.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @available(macCatalyst, unavailable)
+    @objc(beginRefundRequestEntitlementId:completionBlock:)
+    static func beginRefundRequest(entitlementId: String,
+                                   completion: @escaping (ErrorContainer?) -> Void) {
+        Self.sharedInstance.beginRefundRequest(forEntitlement: entitlementId) { result in
+            Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
+        }
+    }
+
+    @available(iOS 15.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @available(macCatalyst, unavailable)
+    @objc(beginRefundRequestForActiveEntitlementCompletion:)
+    static func beginRefundRequestForActiveEntitlement(completion: @escaping (ErrorContainer?) -> Void) {
+        Self.sharedInstance.beginRefundRequestForActiveEntitlement { result in
+            Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
+        }
+    }
+#endif
 
 }
 
@@ -147,7 +191,7 @@ import RevenueCat
                                          Error?,
                                          Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -193,7 +237,7 @@ import RevenueCat
                                          Error?,
                                          Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -237,7 +281,7 @@ import RevenueCat
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -481,15 +525,10 @@ private extension CommonFunctionality {
     }
 
     static func productNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
-        var extraPayload: [String: Any] = [:]
-        if let userCancelled = userCancelled {
-            extraPayload["userCancelled"] = userCancelled
-        }
-
         let error = NSError(domain: ErrorCode.errorDomain,
                             code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
-        return ErrorContainer(error: error, extraPayload: extraPayload)
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
     static func package(withIdentifier packageIdentifier: String,
@@ -509,6 +548,41 @@ private extension CommonFunctionality {
         } else {
             return product.discounts.first { $0.offerIdentifier == identifier }
         }
+    }
+
+    static func processRefundRequestResultWithCompletion(
+        refundRequestResult: Result<RefundRequestStatus, PublicError>,
+        completion: @escaping (ErrorContainer?) -> Void
+    ) {
+        switch refundRequestResult {
+        case let .success(refundRequestStatus):
+            switch refundRequestStatus {
+            case .success:
+                completion(nil)
+            case .userCancelled:
+                completion(Self.refundRequestError(description: "User cancelled refund request.", userCancelled: true))
+            case .error:
+                completion(Self.refundRequestError(description: "Error during refund request."))
+            }
+        case let .failure(error):
+            completion(ErrorContainer(error: error, extraPayload: [:]))
+        }
+    }
+
+    static func refundRequestError(description: String, userCancelled: Bool? = nil) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.beginRefundRequestError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
+    }
+
+    static func createErrorContainer(error: Error, userCancelled: Bool? = nil) -> ErrorContainer {
+        var extraPayload: [String: Any] = [:]
+        if let userCancelled = userCancelled {
+            extraPayload["userCancelled"] = userCancelled
+        }
+
+        return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
 }

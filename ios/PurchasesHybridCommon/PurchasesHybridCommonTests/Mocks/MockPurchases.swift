@@ -466,7 +466,50 @@ final class MockPurchases: PurchasesType {
         invokedCollectDeviceIdentifiers = true
         invokedCollectDeviceIdentifiersCount += 1
     }
-    
+
+
+    var invokedBeginRefundRequestForProduct = false
+    var invokedBeginRefundRequestForProductCount = 0
+    var invokedBeginRefundRequestForProductParameters: (productId: String,
+                                                        (Result<RefundRequestStatus, PublicError>) -> Void)?
+    var invokedBeginRefundRequestForProductParametersList = [(productId: String,
+                                                              (Result<RefundRequestStatus, PublicError>) -> Void)]()
+
+    func beginRefundRequest(forProduct productID: String,
+                            completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
+        invokedBeginRefundRequestForProduct = true
+        invokedBeginRefundRequestForProductCount += 1
+        invokedBeginRefundRequestForProductParameters = (productID, completion)
+        invokedBeginRefundRequestForProductParametersList.append((productID, completion))
+    }
+
+    var invokedBeginRefundRequestForEntitlement = false
+    var invokedBeginRefundRequestForEntitlementCount = 0
+    var invokedBeginRefundRequestForEntitlementParameters: (entitlementId: String,
+                                                            (Result<RefundRequestStatus, PublicError>) -> Void)?
+    var invokedBeginRefundRequestForEntitlementParametersList = [(entitlementId: String,
+                                                                  (Result<RefundRequestStatus, PublicError>) -> Void)]()
+
+    func beginRefundRequest(forEntitlement entitlementID: String,
+                            completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
+        invokedBeginRefundRequestForEntitlement = true
+        invokedBeginRefundRequestForEntitlementCount += 1
+        invokedBeginRefundRequestForEntitlementParameters = (entitlementID, completion)
+        invokedBeginRefundRequestForEntitlementParametersList.append((entitlementID, completion))
+    }
+
+    var invokedBeginRefundRequestForActiveEntitlement = false
+    var invokedBeginRefundRequestForActiveEntitlementCount = 0
+    var invokedBeginRefundRequestForActiveEntitlementParameter: ((Result<RefundRequestStatus, PublicError>) -> Void)?
+    var invokedBeginRefundRequestForActiveEntitlementParameterList =
+        [(Result<RefundRequestStatus, PublicError>) -> Void]()
+
+    func beginRefundRequestForActiveEntitlement(completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
+        invokedBeginRefundRequestForActiveEntitlement = true
+        invokedBeginRefundRequestForActiveEntitlementCount += 1
+        invokedBeginRefundRequestForActiveEntitlementParameter = completion
+        invokedBeginRefundRequestForActiveEntitlementParameterList.append(completion)
+    }
 }
 
 extension MockPurchases {
@@ -577,18 +620,6 @@ extension MockPurchases: PurchasesSwiftType {
 
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
     func eligiblePromotionalOffers(forProduct product: StoreProduct) async -> [PromotionalOffer] {
-        fatalError("This method is not mocked")
-    }
-
-    func beginRefundRequest(forProduct productID: String, completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
-        fatalError("This method is not mocked")
-    }
-
-    func beginRefundRequest(forEntitlement entitlementID: String, completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
-        fatalError("This method is not mocked")
-    }
-
-    func beginRefundRequestForActiveEntitlement(completion: @escaping (Result<RefundRequestStatus, PublicError>) -> Void) {
         fatalError("This method is not mocked")
     }
 

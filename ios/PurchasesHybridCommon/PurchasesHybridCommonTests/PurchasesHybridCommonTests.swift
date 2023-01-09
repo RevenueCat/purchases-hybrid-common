@@ -29,6 +29,13 @@ class PurchasesHybridCommonTests: QuickSpec {
     )
 
     override func spec() {
+        var mockPurchases: MockPurchases!
+
+        beforeEach {
+            mockPurchases = .init()
+            CommonFunctionality.sharedInstance = mockPurchases
+        }
+
         context("automaticAppleSearchAdsAttributionCollection") {
             it("sets value") {
                 expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
@@ -63,11 +70,8 @@ class PurchasesHybridCommonTests: QuickSpec {
 
         context("logIn") {
             it("passes the call correctly to Purchases") {
-                let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 let appUserID = "appUserID"
                 CommonFunctionality.logIn(appUserID: appUserID) { _, _ in }
@@ -77,11 +81,8 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns customerInfo and created if successful") {
-                let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -103,12 +104,9 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns error if not successful") {
-                let mockPurchases = MockPurchases()
                 let mockError = NSError(domain: "revenuecat", code: 123)
 
                 mockPurchases.stubbedLogInCompletionResult = (nil, false, mockError)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -137,10 +135,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
         context("logOut") {
             it("passes the call correctly to Purchases") {
-                let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 CommonFunctionality.logOut { _, _ in }
 
@@ -148,10 +143,7 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns customerInfo if successful") {
-                let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: [String: Any]?
                 var receivedError: ErrorContainer?
@@ -167,12 +159,9 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns error if not successful") {
-                let mockPurchases = MockPurchases()
                 let mockError = NSError(domain: "revenuecat", code: 123)
 
                 mockPurchases.stubbedLogOutCompletionResult = (nil, mockError)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -194,6 +183,173 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect(unwrappedReceivedError.code) == mockError.code
                 expect(unwrappedReceivedError.message) == mockError.localizedDescription
                 expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
+            }
+        }
+
+        context("beginRefundRequest") {
+            if #available(iOS 15.0, *) {
+                context("productId") {
+                    it("passes the call correctly to Purchases") {
+                        CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { _ in }
+
+                        expect(mockPurchases.invokedBeginRefundRequestForProductCount) == 1
+                        expect(mockPurchases.invokedBeginRefundRequestForProductParameters?.productId)
+                        == "mock-product-id"
+                    }
+
+                    it("does not return an error if successful") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.success))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).to(beNil())
+                    }
+
+                    it("returns an error with userCancelled extra info set to true") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.userCancelled))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.info["userCancelled"] as? Bool) == true
+                        expect(completionError?.message) == "User cancelled refund request."
+                    }
+
+                    it("returns an error if request failed") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.error))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.message) == "Error during refund request."
+                    }
+                }
+
+                context("entitlementId") {
+                    it("passes the call correctly to Purchases") {
+                        CommonFunctionality.beginRefundRequest(entitlementId: "mock-entitlement-id") { _ in }
+
+                        expect(mockPurchases.invokedBeginRefundRequestForEntitlementCount) == 1
+                        expect(mockPurchases.invokedBeginRefundRequestForEntitlementParameters?
+                            .entitlementId) == "mock-entitlement-id"
+                    }
+
+                    it("does not return an error if successful") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(entitlementId: "mock-entitlement-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.success))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).to(beNil())
+                    }
+
+                    it("returns an error with userCancelled extra info set to true") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(entitlementId: "mock-entitlement-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.userCancelled))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.info["userCancelled"] as? Bool) == true
+                        expect(completionError?.message) == "User cancelled refund request."
+                    }
+
+                    it("returns an error if request failed") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequest(entitlementId: "mock-entitlement-id") { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.error))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.message) == "Error during refund request."
+                    }
+                }
+
+                context("forActiveEntitlement") {
+                    it("passes the call correctly to Purchases") {
+                        CommonFunctionality.beginRefundRequestForActiveEntitlement { _ in }
+
+                        expect(mockPurchases.invokedBeginRefundRequestForActiveEntitlementCount) == 1
+                    }
+
+                    it("does not return an error if successful") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequestForActiveEntitlement { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.success))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).to(beNil())
+                    }
+
+                    it("returns an error with userCancelled extra info set to true") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequestForActiveEntitlement { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.userCancelled))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.info["userCancelled"] as? Bool) == true
+                        expect(completionError?.message) == "User cancelled refund request."
+                    }
+
+                    it("returns an error if request failed") {
+                        var completionCallCount = 0
+                        var completionError: ErrorContainer? = nil
+
+                        CommonFunctionality.beginRefundRequestForActiveEntitlement { error in
+                            completionCallCount += 1
+                            completionError = error
+                        }
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.error))
+
+                        expect(completionCallCount) == 1
+                        expect(completionError).toNot(beNil())
+                        expect(completionError?.message) == "Error during refund request."
+                    }
+                }
             }
         }
 

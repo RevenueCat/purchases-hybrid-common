@@ -93,6 +93,17 @@ NS_ASSUME_NONNULL_BEGIN
     }
     [RCCommonFunctionality invalidateCustomerInfoCache];
     BOOL canMakePayments __unused = [RCCommonFunctionality canMakePaymentsWithFeatures:@[]];
+
+    if (@available(iOS 15.0, *)) {
+        [RCCommonFunctionality beginRefundRequestProductId:@""
+                                           completionBlock:^(RCErrorContainer * _Nullable error) {
+        }];
+        [RCCommonFunctionality beginRefundRequestEntitlementId:@""
+                                               completionBlock:^(RCErrorContainer * _Nullable error) {
+        }];
+        [RCCommonFunctionality beginRefundRequestForActiveEntitlementCompletion:^(RCErrorContainer * _Nullable error) {
+        }];
+    }
 }
 
 - (void)testDeprecatedAPI {
