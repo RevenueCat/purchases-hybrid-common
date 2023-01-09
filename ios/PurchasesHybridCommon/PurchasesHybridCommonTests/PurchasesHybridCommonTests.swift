@@ -29,6 +29,13 @@ class PurchasesHybridCommonTests: QuickSpec {
     )
 
     override func spec() {
+        var mockPurchases: MockPurchases!
+
+        beforeEach {
+            mockPurchases = .init()
+            CommonFunctionality.sharedInstance = mockPurchases
+        }
+
         context("automaticAppleSearchAdsAttributionCollection") {
             it("sets value") {
                 expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
@@ -63,11 +70,8 @@ class PurchasesHybridCommonTests: QuickSpec {
 
         context("logIn") {
             it("passes the call correctly to Purchases") {
-                let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 let appUserID = "appUserID"
                 CommonFunctionality.logIn(appUserID: appUserID) { _, _ in }
@@ -77,11 +81,8 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns customerInfo and created if successful") {
-                let mockPurchases = MockPurchases()
                 let mockCreated = Bool.random()
                 mockPurchases.stubbedLogInCompletionResult = (Self.mockCustomerInfo, mockCreated, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -103,12 +104,9 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns error if not successful") {
-                let mockPurchases = MockPurchases()
                 let mockError = NSError(domain: "revenuecat", code: 123)
 
                 mockPurchases.stubbedLogInCompletionResult = (nil, false, mockError)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -137,10 +135,7 @@ class PurchasesHybridCommonTests: QuickSpec {
 
         context("logOut") {
             it("passes the call correctly to Purchases") {
-                let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 CommonFunctionality.logOut { _, _ in }
 
@@ -148,10 +143,7 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns customerInfo if successful") {
-                let mockPurchases = MockPurchases()
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: [String: Any]?
                 var receivedError: ErrorContainer?
@@ -167,12 +159,9 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
 
             it("returns error if not successful") {
-                let mockPurchases = MockPurchases()
                 let mockError = NSError(domain: "revenuecat", code: 123)
 
                 mockPurchases.stubbedLogOutCompletionResult = (nil, mockError)
-
-                CommonFunctionality.sharedInstance = mockPurchases
 
                 var receivedResultDict: NSDictionary?
                 var receivedError: ErrorContainer?
@@ -201,10 +190,6 @@ class PurchasesHybridCommonTests: QuickSpec {
             if #available(iOS 15.0, *) {
                 context("productId") {
                     it("passes the call correctly to Purchases") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         CommonFunctionality.beginRefundRequest(productId: "mock-product-id") { _ in }
 
                         expect(mockPurchases.invokedBeginRefundRequestForProductCount) == 1
@@ -213,10 +198,6 @@ class PurchasesHybridCommonTests: QuickSpec {
                     }
 
                     it("does not return an error if successful") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -224,17 +205,13 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(Result(.success, nil))
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.success))
 
                         expect(completionCallCount) == 1
                         expect(completionError).to(beNil())
                     }
 
                     it("returns an error with userCancelled extra info set to true") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -242,7 +219,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(Result(.userCancelled, nil))
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.userCancelled))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())
@@ -251,10 +228,6 @@ class PurchasesHybridCommonTests: QuickSpec {
                     }
 
                     it("returns an error if request failed") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -262,7 +235,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(Result(.error, nil))
+                        mockPurchases.invokedBeginRefundRequestForProductParameters?.1(.success(.error))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())
@@ -272,10 +245,6 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 context("entitlementId") {
                     it("passes the call correctly to Purchases") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         CommonFunctionality.beginRefundRequest(entitlementId: "mock-entitlement-id") { _ in }
 
                         expect(mockPurchases.invokedBeginRefundRequestForEntitlementCount) == 1
@@ -284,10 +253,6 @@ class PurchasesHybridCommonTests: QuickSpec {
                     }
 
                     it("does not return an error if successful") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -295,17 +260,13 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(Result(.success, nil))
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.success))
 
                         expect(completionCallCount) == 1
                         expect(completionError).to(beNil())
                     }
 
                     it("returns an error with userCancelled extra info set to true") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -313,7 +274,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(Result(.userCancelled, nil))
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.userCancelled))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())
@@ -322,10 +283,6 @@ class PurchasesHybridCommonTests: QuickSpec {
                     }
 
                     it("returns an error if request failed") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -333,7 +290,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(Result(.error, nil))
+                        mockPurchases.invokedBeginRefundRequestForEntitlementParameters?.1(.success(.error))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())
@@ -343,20 +300,12 @@ class PurchasesHybridCommonTests: QuickSpec {
 
                 context("forActiveEntitlement") {
                     it("passes the call correctly to Purchases") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         CommonFunctionality.beginRefundRequestForActiveEntitlement { _ in }
 
                         expect(mockPurchases.invokedBeginRefundRequestForActiveEntitlementCount) == 1
                     }
 
                     it("does not return an error if successful") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -364,17 +313,13 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(Result(.success, nil))
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.success))
 
                         expect(completionCallCount) == 1
                         expect(completionError).to(beNil())
                     }
 
                     it("returns an error with userCancelled extra info set to true") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -382,8 +327,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(Result(.userCancelled,
-                                                                                                     nil))
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.userCancelled))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())
@@ -392,10 +336,6 @@ class PurchasesHybridCommonTests: QuickSpec {
                     }
 
                     it("returns an error if request failed") {
-                        let mockPurchases = MockPurchases()
-
-                        CommonFunctionality.sharedInstance = mockPurchases
-
                         var completionCallCount = 0
                         var completionError: ErrorContainer? = nil
 
@@ -403,7 +343,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                             completionCallCount += 1
                             completionError = error
                         }
-                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(Result(.error, nil))
+                        mockPurchases.invokedBeginRefundRequestForActiveEntitlementParameter?(.success(.error))
 
                         expect(completionCallCount) == 1
                         expect(completionError).toNot(beNil())

@@ -120,6 +120,7 @@ import RevenueCat
 
 // MARK: Refund request
 @objc public extension CommonFunctionality {
+
 #if os(iOS)
     @available(iOS 15.0, *)
     @available(tvOS, unavailable)
@@ -129,11 +130,7 @@ import RevenueCat
     @objc(beginRefundRequestProductId:completionBlock:)
     static func beginRefundRequest(productId: String,
                                    completion: @escaping (ErrorContainer?) -> Void) {
-        guard let purchases = Self.sharedInstance as? PurchasesSwiftType else {
-            completion(Self.refundRequestError(description: "Invalid Purchases type."))
-            return
-        }
-        purchases.beginRefundRequest(forProduct: productId) { result in
+        Self.sharedInstance.beginRefundRequest(forProduct: productId) { result in
             Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
         }
     }
@@ -146,11 +143,7 @@ import RevenueCat
     @objc(beginRefundRequestEntitlementId:completionBlock:)
     static func beginRefundRequest(entitlementId: String,
                                    completion: @escaping (ErrorContainer?) -> Void) {
-        guard let purchases = Self.sharedInstance as? PurchasesSwiftType else {
-            completion(Self.refundRequestError(description: "Invalid Purchases type."))
-            return
-        }
-        purchases.beginRefundRequest(forEntitlement: entitlementId) { result in
+        Self.sharedInstance.beginRefundRequest(forEntitlement: entitlementId) { result in
             Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
         }
     }
@@ -162,15 +155,12 @@ import RevenueCat
     @available(macCatalyst, unavailable)
     @objc(beginRefundRequestForActiveEntitlementCompletion:)
     static func beginRefundRequestForActiveEntitlement(completion: @escaping (ErrorContainer?) -> Void) {
-        guard let purchases = Self.sharedInstance as? PurchasesSwiftType else {
-            completion(Self.refundRequestError(description: "Invalid Purchases type."))
-            return
-        }
-        purchases.beginRefundRequestForActiveEntitlement { result in
+        Self.sharedInstance.beginRefundRequestForActiveEntitlement { result in
             Self.processRefundRequestResultWithCompletion(refundRequestResult: result, completion: completion)
         }
     }
 #endif
+
 }
 
 // MARK: purchasing and restoring
@@ -201,7 +191,7 @@ import RevenueCat
                                          Error?,
                                          Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -247,7 +237,7 @@ import RevenueCat
                                          Error?,
                                          Bool) -> Void = { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -291,7 +281,7 @@ import RevenueCat
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         startPurchase { transaction, customerInfo, error, userCancelled in
             if let error = error {
-                completion(nil, ErrorContainer(error: error, extraPayload: ["userCancelled": userCancelled]))
+                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
@@ -535,15 +525,10 @@ private extension CommonFunctionality {
     }
 
     static func productNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
-        var extraPayload: [String: Any] = [:]
-        if let userCancelled = userCancelled {
-            extraPayload["userCancelled"] = userCancelled
-        }
-
         let error = NSError(domain: ErrorCode.errorDomain,
                             code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
-        return ErrorContainer(error: error, extraPayload: extraPayload)
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
     static func package(withIdentifier packageIdentifier: String,
@@ -585,14 +570,18 @@ private extension CommonFunctionality {
     }
 
     static func refundRequestError(description: String, userCancelled: Bool? = nil) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.beginRefundRequestError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
+    }
+
+    static func createErrorContainer(error: Error, userCancelled: Bool? = nil) -> ErrorContainer {
         var extraPayload: [String: Any] = [:]
         if let userCancelled = userCancelled {
             extraPayload["userCancelled"] = userCancelled
         }
 
-        let error = NSError(domain: ErrorCode.errorDomain,
-                            code: ErrorCode.beginRefundRequestError.rawValue,
-                            userInfo: [NSLocalizedDescriptionKey: description])
         return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
