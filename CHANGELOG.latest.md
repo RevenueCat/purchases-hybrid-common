@@ -1,4 +1,5 @@
 ### New Features
-* Adds subscriptionPeriod (#286) via Cesar de la Vega (@vegaro)
+* Add `beginRefundRequest` APIs in iOS (#290) via Toni Rico (@tonidero)
 ### Other Changes
-* Add StoreProduct mapper iOS tests (#285) via Cesar de la Vega (@vegaro)
+* `CommonFunctionality.sharedInstance`: changed type to `PurchasesType & PurchasesSwiftType` (#294) via NachoSoto (@NachoSoto)
+* Update secring (#293) via Cesar de la Vega (@vegaro)
