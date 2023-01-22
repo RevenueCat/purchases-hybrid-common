@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [RCCommonFunctionality setDebugLogsEnabled:NO];
+    [RCCommonFunctionality setLogLevel:@"WARN"];
     [RCCommonFunctionality getCustomerInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                 RCErrorContainer * _Nullable error) {
     }];
