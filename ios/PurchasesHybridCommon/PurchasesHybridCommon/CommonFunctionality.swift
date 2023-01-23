@@ -76,8 +76,18 @@ import RevenueCat
         Self.sharedInstance.allowSharingAppStoreAccount = allowSharingStoreAccount
     }
 
+    @available(*, deprecated, message: "Use setLogLevel instead")
     @objc public static func setDebugLogsEnabled(_ enabled: Bool) {
         Purchases.logLevel = enabled ? .debug : .info
+    }
+
+    @objc public static func setLogLevel(_ level: String) {
+        guard let level = LogLevel.levelsByDescription[level] else {
+            NSLog("Unrecognized log level '\(level)'")
+            return
+        }
+
+        Purchases.logLevel = level
     }
 
     @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")

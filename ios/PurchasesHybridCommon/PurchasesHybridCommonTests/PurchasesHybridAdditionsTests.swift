@@ -9,12 +9,10 @@
 import Quick
 import Nimble
 import RevenueCat
-import PurchasesHybridCommon
-
+@testable import PurchasesHybridCommon
 
 class PurchasesHybridAdditionsTests: QuickSpec {
     override func spec() {
-
         context("configure with user defaults suite name") {
             it("initializes without raising exceptions if no suite name is passed") {
                 expect {

@@ -54,3 +54,18 @@ import RevenueCat
 
 }
 
+extension LogLevel {
+
+    static let levels: Set<LogLevel> = [
+        .verbose,
+        .debug,
+        .info,
+        .warn,
+        .error,
+    ]
+
+    static let levelsByDescription: [String: LogLevel] = .init(
+        uniqueKeysWithValues: LogLevel.levels.map { ($0.description, $0) }
+    )
+}
+

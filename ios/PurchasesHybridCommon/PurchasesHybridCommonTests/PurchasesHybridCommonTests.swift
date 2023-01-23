@@ -353,5 +353,13 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
         }
 
+        context("setLogLevel") {
+            for level in LogLevel.levels {
+                it("sets level to \(level)") {
+                    CommonFunctionality.setLogLevel(level.description)
+                    expect(Purchases.logLevel) == level
+                }
+            }
+        }
     }
 }
