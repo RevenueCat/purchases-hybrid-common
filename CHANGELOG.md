@@ -1,3 +1,7 @@
+## 4.10.0
+### New Features
+* Added `CommonFunctionality.setLogLevel` (#297) via NachoSoto (@NachoSoto)
+
 ## 4.9.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.16.0 => 4.17.2 Android 5.6.6 => 5.6.7 (#298) via RevenueCat Git Bot (@RCGitBot)
