@@ -1,5 +1,4 @@
-### New Features
-* Add `beginRefundRequest` APIs in iOS (#290) via Toni Rico (@tonidero)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.16.0 => 4.17.2 Android 5.6.6 => 5.6.7 (#298) via RevenueCat Git Bot (@RCGitBot)
 ### Other Changes
-* `CommonFunctionality.sharedInstance`: changed type to `PurchasesType & PurchasesSwiftType` (#294) via NachoSoto (@NachoSoto)
-* Update secring (#293) via Cesar de la Vega (@vegaro)
+* Update Gemfile.lock (#296) via Cesar de la Vega (@vegaro)
