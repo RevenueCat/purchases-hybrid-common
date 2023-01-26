@@ -78,6 +78,10 @@ private class CommonApiTests {
         setDebugLogsEnabled(enabled)
     }
 
+    fun checkSetLogLevel(level: String) {
+        setLogLevel(level)
+    }
+
     fun checkSetLogHandler(logHandler: LogHandler) {
         setLogHandler(logHandler)
     }
