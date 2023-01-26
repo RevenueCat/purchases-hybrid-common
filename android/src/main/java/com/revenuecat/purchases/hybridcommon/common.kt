@@ -2,31 +2,32 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.LogHandler
+import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
-import com.revenuecat.purchases.BillingFeature
-import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.LogHandler
-import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.common.warnLog
+import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
-import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getSubscriptionSkusWith
-import com.revenuecat.purchases.purchasePackageWith
-import com.revenuecat.purchases.purchaseProductWith
+import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
+import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
-import com.revenuecat.purchases.restorePurchasesWith
-import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
-
+import com.revenuecat.purchases.purchasePackageWith
+import com.revenuecat.purchases.purchaseProductWith
+import com.revenuecat.purchases.restorePurchasesWith
 import java.net.URL
 
 @Deprecated(
@@ -210,10 +211,19 @@ fun logOut(onResult: OnResult) {
     }
 }
 
+@Deprecated(message = "Use setLogLevel instead")
 fun setDebugLogsEnabled(
     enabled: Boolean
 ) {
     Purchases.debugLogsEnabled = enabled
+}
+
+fun setLogLevel(level: String) {
+    try {
+        Purchases.logLevel = LogLevel.valueOf(level)
+    } catch (e: IllegalArgumentException) {
+        warnLog("Unrecognized log level: $level")
+    }
 }
 
 fun setLogHandler(

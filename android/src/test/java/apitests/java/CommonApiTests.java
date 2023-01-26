@@ -84,6 +84,10 @@ class CommonApiTests {
         CommonKt.setDebugLogsEnabled(enabled);
     }
 
+    private void checkSetLogLevel(String level) {
+        CommonKt.setLogLevel(level);
+    }
+
     private void checkSetLogHandler(LogHandler logHandler) {
         CommonKt.setLogHandler(logHandler);
     }
