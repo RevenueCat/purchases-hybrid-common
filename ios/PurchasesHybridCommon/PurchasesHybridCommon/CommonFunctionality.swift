@@ -90,6 +90,34 @@ import RevenueCat
         Purchases.logLevel = level
     }
 
+    @objc public static func setLogHander(completion: @escaping ([String: String]) -> Void) {
+        Purchases.logHandler = { logLevel, message in
+            let logLevelName: String
+            switch logLevel {
+            case .error:
+                logLevelName = "error"
+                break
+            case .info:
+                logLevelName = "info"
+                break
+            case .debug:
+                logLevelName = "debug"
+                break
+            case .verbose:
+                logLevelName = "verbose"
+                break
+            case .warn:
+                logLevelName = "warn"
+                break
+            }
+            let logDetails = [
+                "logLevel": logLevelName,
+                "message": message
+            ]
+            completion(logDetails)
+        }
+    }
+
     @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")
     @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
         Purchases.automaticAppleSearchAdsAttributionCollection = enabled

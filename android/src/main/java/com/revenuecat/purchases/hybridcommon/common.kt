@@ -23,6 +23,7 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 
@@ -219,6 +220,10 @@ fun setLogHandler(
     logHandler: LogHandler
 ) {
     Purchases.logHandler = logHandler
+}
+
+fun setLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
+    Purchases.logHandler = LogHandlerWithMapping(callback)
 }
 
 fun setProxyURLString(proxyURLString: String?) {
