@@ -1,30 +1,33 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
+import com.revenuecat.purchases.LogHandler
+import com.revenuecat.purchases.LogLevel
+
 class LogHandlerWithMapping(
     private val callback: (logData: Map<String, String>) -> Unit
-) : com.revenuecat.purchases.LogHandler {
+) : LogHandler {
     override fun d(tag: String, msg: String) {
-        invokeCallback("debug", msg)
+        invokeCallback(LogLevel.DEBUG, msg)
     }
 
     override fun e(tag: String, msg: String, throwable: Throwable?) {
         val message = throwable?.let { "$msg. Throwable: $it" } ?: msg
-        invokeCallback("error", message)
+        invokeCallback(LogLevel.ERROR, message)
     }
 
     override fun i(tag: String, msg: String) {
-        invokeCallback("info", msg)
+        invokeCallback(LogLevel.INFO, msg)
     }
 
     override fun v(tag: String, msg: String) {
-        invokeCallback("verbose", msg)
+        invokeCallback(LogLevel.VERBOSE, msg)
     }
 
     override fun w(tag: String, msg: String) {
-        invokeCallback("warn", msg)
+        invokeCallback(LogLevel.WARN, msg)
     }
 
-    private fun invokeCallback(c: String, msg: String) {
-        callback(mapOf("logLevel" to "debug", "message" to msg))
+    private fun invokeCallback(logLevel: LogLevel, msg: String) {
+        callback(mapOf("logLevel" to logLevel.name.lowercase(), "message" to msg))
     }
 }
