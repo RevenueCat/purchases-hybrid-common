@@ -222,6 +222,12 @@ fun setLogHandler(
     Purchases.logHandler = logHandler
 }
 
+/**
+ * Sets a log handler and forwards all logs to completion function.
+ *
+ * @param callback Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel`` name lowercased,
+ * and a `message`, with the log message.
+ */
 fun setLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
     Purchases.logHandler = LogHandlerWithMapping(callback)
 }
