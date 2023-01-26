@@ -361,5 +361,18 @@ class PurchasesHybridCommonTests: QuickSpec {
                 }
             }
         }
+
+        context("setLogHandler") {
+            let expectedMessage = "a message"
+            for level in LogLevel.levels {
+                it("\(level) logs work") {
+                    CommonFunctionality.setLogHander(completion: { logDetails in
+                        expect(logDetails["logLevel"]) == level.description.lowercased()
+                        expect(logDetails["message"]) == expectedMessage
+                    })
+                    Purchases.logHandler(level, expectedMessage)
+                }
+            }
+        }
     }
 }
