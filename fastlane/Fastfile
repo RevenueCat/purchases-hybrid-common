@@ -350,7 +350,7 @@ platform :android do
 
     gradle(
       tasks: [
-        "publish --no-daemon --no-parallel"
+        "publish"
       ],
       properties: gradleProperties,
       project_dir: 'android'
@@ -363,7 +363,7 @@ platform :android do
 
     gradle(
       tasks: [
-        "publish --no-daemon --no-parallel"
+        "publish"
       ],
       properties: gradleProperties,
       project_dir: 'android'
