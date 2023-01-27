@@ -511,7 +511,7 @@ internal class CommonKtTests {
     fun `error logs include error in message`() {
         val expectedMessage = "a message"
         setLogHandler { logDetails ->
-            assertEquals("error", logDetails["logLevel"])
+            assertEquals("ERROR", logDetails["logLevel"])
             assertEquals("$expectedMessage. Throwable: java.lang.ClassCastException: what a pity", logDetails["message"])
         }
         Purchases.logHandler.e("Purchases", expectedMessage, java.lang.ClassCastException("what a pity"))
