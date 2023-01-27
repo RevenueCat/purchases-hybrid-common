@@ -28,6 +28,6 @@ class LogHandlerWithMapping(
     }
 
     private fun invokeCallback(logLevel: LogLevel, msg: String) {
-        callback(mapOf("logLevel" to logLevel.name.lowercase(), "message" to msg))
+        callback(mapOf("logLevel" to logLevel.name.uppercase(), "message" to msg))
     }
 }

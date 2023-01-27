@@ -98,7 +98,7 @@ import RevenueCat
     @objc public static func setLogHander(completion: @escaping ([String: String]) -> Void) {
         Purchases.logHandler = { logLevel, message in
             let logDetails = [
-                "logLevel": logLevel.description.lowercased(),
+                "logLevel": logLevel.description.uppercased(),
                 "message": message
             ]
             completion(logDetails)
