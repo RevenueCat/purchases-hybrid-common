@@ -86,6 +86,10 @@ private class CommonApiTests {
         setLogHandler(logHandler)
     }
 
+    fun checkSetLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
+        setLogHandler(callback)
+    }
+
     fun checkSetProxyURLString(proxyURLString: String?) {
         setProxyURLString(proxyURLString)
     }
