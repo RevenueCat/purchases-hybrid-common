@@ -226,16 +226,10 @@ fun setLogLevel(level: String) {
     }
 }
 
-fun setLogHandler(
-    logHandler: LogHandler
-) {
-    Purchases.logHandler = logHandler
-}
-
 /**
  * Sets a log handler and forwards all logs to completion function.
  *
- * @param callback Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel`` name lowercased,
+ * @param callback Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel`` name uppercased,
  * and a `message`, with the log message.
  */
 fun setLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {

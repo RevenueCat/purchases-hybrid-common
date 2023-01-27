@@ -30,10 +30,16 @@ class PurchasesHybridCommonTests: QuickSpec {
 
     override func spec() {
         var mockPurchases: MockPurchases!
+        var originalHandler: VerboseLogHandler!
 
         beforeEach {
             mockPurchases = .init()
             CommonFunctionality.sharedInstance = mockPurchases
+            originalHandler = Purchases.verboseLogHandler
+        }
+
+        afterEach {
+            Purchases.verboseLogHandler = originalHandler
         }
 
         context("automaticAppleSearchAdsAttributionCollection") {
@@ -366,13 +372,11 @@ class PurchasesHybridCommonTests: QuickSpec {
             let expectedMessage = "a message"
             for level in LogLevel.levels {
                 it("\(level) logs work") {
-                    let originalHandler = Purchases.verboseLogHandler
-                    CommonFunctionality.setLogHander(completion: { logDetails in
+                    CommonFunctionality.setLogHander(onLogReceived: { logDetails in
                         expect(logDetails["logLevel"]) == level.description.uppercased()
                         expect(logDetails["message"]) == expectedMessage
                     })
                     Purchases.logHandler(level, expectedMessage)
-                    Purchases.verboseLogHandler = originalHandler
                 }
             }
         }

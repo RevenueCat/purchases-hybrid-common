@@ -91,10 +91,6 @@ class CommonApiTests {
         CommonKt.setLogLevel(level);
     }
 
-    private void checkSetLogHandler(LogHandler logHandler) {
-        CommonKt.setLogHandler(logHandler);
-    }
-
     private void checkSetLogHandler(Function1<? super Map<String, String>, Unit> callback) {
         CommonKt.setLogHandler(callback);
     }
