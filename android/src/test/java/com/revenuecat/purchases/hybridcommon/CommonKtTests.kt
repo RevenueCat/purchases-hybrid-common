@@ -494,7 +494,7 @@ internal class CommonKtTests {
         val expectedMessage = "a message"
         LogLevel.values().forEach { logLevel ->
             setLogHandler { logDetails ->
-                assertEquals(logLevel.name.lowercase(), logDetails["logLevel"])
+                assertEquals(logLevel.name.uppercase(), logDetails["logLevel"])
                 assertEquals(expectedMessage, logDetails["message"])
             }
             when(logLevel) {

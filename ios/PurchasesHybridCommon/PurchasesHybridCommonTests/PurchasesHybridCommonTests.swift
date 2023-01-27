@@ -368,7 +368,7 @@ class PurchasesHybridCommonTests: QuickSpec {
             for level in LogLevel.levels {
                 it("\(level) logs work") {
                     CommonFunctionality.setLogHander(completion: { logDetails in
-                        expect(logDetails["logLevel"]) == level.description.lowercased()
+                        expect(logDetails["logLevel"]) == level.description.uppercased()
                         expect(logDetails["message"]) == expectedMessage
                     })
                     Purchases.logHandler(level, expectedMessage)
