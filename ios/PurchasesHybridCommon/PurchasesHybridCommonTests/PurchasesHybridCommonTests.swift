@@ -363,6 +363,7 @@ class PurchasesHybridCommonTests: QuickSpec {
         }
 
         context("setLogHandler") {
+            let originalHandler = Purchases.logHandler
             let expectedMessage = "a message"
             for level in LogLevel.levels {
                 it("\(level) logs work") {
@@ -373,6 +374,7 @@ class PurchasesHybridCommonTests: QuickSpec {
                     Purchases.logHandler(level, expectedMessage)
                 }
             }
+            Purchases.logHandler = originalHandler
         }
     }
 }
