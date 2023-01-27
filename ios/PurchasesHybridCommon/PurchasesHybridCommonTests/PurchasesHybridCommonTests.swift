@@ -363,18 +363,18 @@ class PurchasesHybridCommonTests: QuickSpec {
         }
 
         context("setLogHandler") {
-            let originalHandler = Purchases.logHandler
             let expectedMessage = "a message"
             for level in LogLevel.levels {
                 it("\(level) logs work") {
+                    let originalHandler = Purchases.verboseLogHandler
                     CommonFunctionality.setLogHander(completion: { logDetails in
                         expect(logDetails["logLevel"]) == level.description.uppercased()
                         expect(logDetails["message"]) == expectedMessage
                     })
                     Purchases.logHandler(level, expectedMessage)
+                    Purchases.verboseLogHandler = originalHandler
                 }
             }
-            Purchases.logHandler = originalHandler
         }
     }
 }
