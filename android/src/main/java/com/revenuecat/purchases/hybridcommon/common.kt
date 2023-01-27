@@ -2,32 +2,32 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.LogHandler
+import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.UpgradeInfo
-import com.revenuecat.purchases.BillingFeature
-import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.LogHandler
-import com.revenuecat.purchases.LogLevel
-import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.getNonSubscriptionSkusWith
-import com.revenuecat.purchases.getOfferingsWith
-import com.revenuecat.purchases.getCustomerInfoWith
-import com.revenuecat.purchases.getSubscriptionSkusWith
-import com.revenuecat.purchases.purchasePackageWith
-import com.revenuecat.purchases.purchaseProductWith
-import com.revenuecat.purchases.logInWith
-import com.revenuecat.purchases.logOutWith
-import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.common.warnLog
+import com.revenuecat.purchases.getCustomerInfoWith
+import com.revenuecat.purchases.getNonSubscriptionSkusWith
+import com.revenuecat.purchases.getOfferingsWith
+import com.revenuecat.purchases.getSubscriptionSkusWith
+import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
+import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.logInWith
+import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
-
+import com.revenuecat.purchases.purchasePackageWith
+import com.revenuecat.purchases.purchaseProductWith
+import com.revenuecat.purchases.restorePurchasesWith
 import java.net.URL
 
 @Deprecated(
@@ -226,10 +226,14 @@ fun setLogLevel(level: String) {
     }
 }
 
-fun setLogHandler(
-    logHandler: LogHandler
-) {
-    Purchases.logHandler = logHandler
+/**
+ * Sets a log handler and forwards all logs to completion function.
+ *
+ * @param callback Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel`` name uppercased,
+ * and a `message`, with the log message.
+ */
+fun setLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
+    Purchases.logHandler = LogHandlerWithMapping(callback)
 }
 
 fun setProxyURLString(proxyURLString: String?) {

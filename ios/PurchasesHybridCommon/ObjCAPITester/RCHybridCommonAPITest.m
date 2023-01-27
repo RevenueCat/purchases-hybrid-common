@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     [RCCommonFunctionality setDebugLogsEnabled:NO];
     [RCCommonFunctionality setLogLevel:@"WARN"];
+    [RCCommonFunctionality setLogHanderOnLogReceived:^(NSDictionary<NSString *,NSString *> * _Nonnull logDetails) {
+    }];
     [RCCommonFunctionality getCustomerInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                 RCErrorContainer * _Nullable error) {
     }];

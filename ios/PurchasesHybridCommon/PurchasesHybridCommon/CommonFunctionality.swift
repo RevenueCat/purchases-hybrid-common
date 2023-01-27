@@ -90,6 +90,21 @@ import RevenueCat
         Purchases.logLevel = level
     }
 
+    /**
+     * Sets a log handler and forwards all logs to completion function.
+     *
+     * - Parameter completion: Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel``  name uppercased, and a `message`, with the log message.
+     */
+    @objc public static func setLogHander(onLogReceived: @escaping ([String: String]) -> Void) {
+        Purchases.logHandler = { logLevel, message in
+            let logDetails = [
+                "logLevel": logLevel.description,
+                "message": message
+            ]
+            onLogReceived(logDetails)
+        }
+    }
+
     @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")
     @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
         Purchases.automaticAppleSearchAdsAttributionCollection = enabled

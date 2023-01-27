@@ -16,6 +16,9 @@ import com.revenuecat.purchases.hybridcommon.OnResultList;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+
 @SuppressWarnings({"unused", "deprecation"})
 class CommonApiTests {
     private void checkCheckSetAllowSharingAppStoreAccount(boolean enabled) {
@@ -88,8 +91,8 @@ class CommonApiTests {
         CommonKt.setLogLevel(level);
     }
 
-    private void checkSetLogHandler(LogHandler logHandler) {
-        CommonKt.setLogHandler(logHandler);
+    private void checkSetLogHandler(Function1<? super Map<String, String>, Unit> callback) {
+        CommonKt.setLogHandler(callback);
     }
 
     private void checkSetProxyURLString(String proxyUrlString) {

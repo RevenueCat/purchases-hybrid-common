@@ -12,6 +12,7 @@ import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
@@ -486,6 +487,34 @@ internal class CommonKtTests {
 
         assertNotNull(receivedResponse)
         assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `logs are passed correctly to LogHandler`() {
+        val expectedMessage = "a message"
+        LogLevel.values().forEach { logLevel ->
+            setLogHandler { logDetails ->
+                assertEquals(logLevel.name.uppercase(), logDetails["logLevel"])
+                assertEquals(expectedMessage, logDetails["message"])
+            }
+            when(logLevel) {
+                LogLevel.VERBOSE -> Purchases.logHandler.v("Purchases", expectedMessage)
+                LogLevel.DEBUG -> Purchases.logHandler.d("Purchases", expectedMessage)
+                LogLevel.INFO -> Purchases.logHandler.i("Purchases", expectedMessage)
+                LogLevel.WARN -> Purchases.logHandler.w("Purchases", expectedMessage)
+                LogLevel.ERROR -> Purchases.logHandler.e("Purchases", expectedMessage, null)
+            }
+        }
+    }
+
+    @Test
+    fun `error logs include error in message`() {
+        val expectedMessage = "a message"
+        setLogHandler { logDetails ->
+            assertEquals("ERROR", logDetails["logLevel"])
+            assertEquals("$expectedMessage. Throwable: java.lang.ClassCastException: what a pity", logDetails["message"])
+        }
+        Purchases.logHandler.e("Purchases", expectedMessage, java.lang.ClassCastException("what a pity"))
     }
 
     private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
