@@ -1,3 +1,7 @@
+## 4.12.0
+### New Features
+* Adds setLogHandler (#307) via Cesar de la Vega (@vegaro)
+
 ## 4.11.0
 ### New Features
 * Android: added `CommonKt.setLogLevel` (#301) via NachoSoto (@NachoSoto)
