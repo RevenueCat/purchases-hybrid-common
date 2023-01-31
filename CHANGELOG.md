@@ -1,3 +1,9 @@
+## 4.12.1
+### Dependency Updates
+* Create dependabot.yml to automatically update Gemfile (#312) via Cesar de la Vega (@vegaro)
+### Other Changes
+* Update dependabot.yml package system (#314) via Cesar de la Vega (@vegaro)
+
 ## 4.12.0
 ### New Features
 * Adds setLogHandler (#307) via Cesar de la Vega (@vegaro)
