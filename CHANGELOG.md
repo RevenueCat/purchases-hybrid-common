@@ -1,3 +1,7 @@
+## 4.12.2
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `738f255` to `9255366` (#323) via dependabot[bot] (@dependabot[bot])
+
 ## 4.12.0
 ### New Features
 * Adds setLogHandler (#307) via Cesar de la Vega (@vegaro)
