@@ -1,7 +1,33 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.models.Price
+import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.StoreProduct
+
+// TODO: JOSH's temporary (???) extensions to support what was already there
+val StoreProduct.priceAmountMicros: Long
+    get() = this.oneTimeProductPrice?.priceAmountMicros ?: this.defaultOption?.pricingPhases?.lastOrNull()?.priceAmountMicros ?: 0
+val StoreProduct.price: String
+    get() = this.oneTimeProductPrice?.formattedPrice ?: this.defaultOption?.pricingPhases?.lastOrNull()?.formattedPrice ?: ""
+val StoreProduct.priceCurrencyCode: String
+    get() = this.oneTimeProductPrice?.currencyCode ?: this.defaultOption?.pricingPhases?.lastOrNull()?.priceCurrencyCode ?: ""
+val StoreProduct.freeTrialPeriod: String?
+    get() = this.defaultOption?.pricingPhases?.lastOrNull()?.billingPeriod
+
+private val StoreProduct.introductoryPhase: PricingPhase?
+    get() = this.defaultOption?.pricingPhases
+        ?.takeIf { it.size > 1 }
+        ?.firstOrNull()
+        ?.takeIf { it.priceAmountMicros > 0 }
+val StoreProduct.introductoryPrice: String?
+    get() = this.introductoryPhase?.formattedPrice
+val StoreProduct.introductoryPricePeriod: String?
+    get() = this.introductoryPhase?.billingPeriod
+val StoreProduct.introductoryPriceAmountMicros: Long
+    get() = this.introductoryPhase?.priceAmountMicros ?: 0
+val StoreProduct.introductoryPriceCycles: Int
+    get() = this.introductoryPhase?.billingCycleCount ?: 0
 
 fun StoreProduct.map(): Map<String, Any?> =
     mapOf(
