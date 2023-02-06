@@ -2,7 +2,6 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
-import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.LogLevel
@@ -22,6 +21,8 @@ import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
+import com.revenuecat.purchases.models.BillingFeature
+import com.revenuecat.purchases.models.GoogleProrationMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.purchasePackageWith
@@ -66,7 +67,7 @@ fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
     oldSku: String?,
-    prorationMode: Int?,
+    prorationMode: GoogleProrationMode?,
     type: String,
     onResult: OnResult
 ) {
@@ -87,7 +88,7 @@ fun purchaseProduct(
                     Purchases.sharedInstance.purchaseProductWith(
                         activity,
                         productToBuy,
-                        UpgradeInfo(oldSku, prorationMode),
+                        if (prorationMode != null) UpgradeInfo(oldSku, prorationMode) else UpgradeInfo(oldSku),
                         onError = getPurchaseErrorFunction(onResult),
                         onSuccess = getProductChangeCompletedFunction(onResult)
                     )
@@ -131,7 +132,7 @@ fun purchasePackage(
     packageIdentifier: String,
     offeringIdentifier: String,
     oldSku: String?,
-    prorationMode: Int?,
+    prorationMode: GoogleProrationMode?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -154,7 +155,7 @@ fun purchasePackage(
                         Purchases.sharedInstance.purchasePackageWith(
                             activity,
                             packageToBuy,
-                            UpgradeInfo(oldSku, prorationMode),
+                            if (prorationMode != null) UpgradeInfo(oldSku, prorationMode) else UpgradeInfo(oldSku),
                             onError = getPurchaseErrorFunction(onResult),
                             onSuccess = getProductChangeCompletedFunction(onResult)
                         )
