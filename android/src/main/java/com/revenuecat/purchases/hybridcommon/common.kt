@@ -5,7 +5,6 @@ import android.content.Context
 import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.LogHandler
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
@@ -234,6 +233,21 @@ fun setLogLevel(level: String) {
  */
 fun setLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
     Purchases.logHandler = LogHandlerWithMapping(callback)
+}
+
+/**
+ * Sets a log handler and forwards all logs to completion function. Accepts an OnResult so it can be used from
+ * SDKs that don't have Kotlin configured, since they would error because Kotlin's Function1 would not be found.
+ * Function1 is what Kotlin lambdas are converted to. It has a different name than setLogHandler because naming it
+ * the same also gives errors due of missing Function1.
+ *
+ * @param onResult Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel`` name uppercased,
+ * and a `message`, with the log message. The onError of OnResult will never be called.
+ */
+fun setLogHandlerWithOnResult(onResult: OnResult) {
+    setLogHandler { logDetails ->
+        onResult.onReceived(logDetails)
+    }
 }
 
 fun setProxyURLString(proxyURLString: String?) {
