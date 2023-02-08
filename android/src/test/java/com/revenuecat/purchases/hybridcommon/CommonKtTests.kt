@@ -508,6 +508,30 @@ internal class CommonKtTests {
     }
 
     @Test
+    fun `logs are passed correctly to LogHandlerWithOnResult`() {
+        val expectedMessage = "a message"
+        LogLevel.values().forEach { logLevel ->
+            setLogHandlerWithOnResult(object : OnResult {
+                override fun onReceived(logDetails: MutableMap<String, *>?) {
+                    assertEquals(logLevel.name.uppercase(), logDetails?.get("logLevel"))
+                    assertEquals(expectedMessage, logDetails?.get("message"))
+                }
+
+                override fun onError(errorContainer: ErrorContainer?) {
+                    fail("onError shouldn't be called")
+                }
+            })
+            when(logLevel) {
+                LogLevel.VERBOSE -> Purchases.logHandler.v("Purchases", expectedMessage)
+                LogLevel.DEBUG -> Purchases.logHandler.d("Purchases", expectedMessage)
+                LogLevel.INFO -> Purchases.logHandler.i("Purchases", expectedMessage)
+                LogLevel.WARN -> Purchases.logHandler.w("Purchases", expectedMessage)
+                LogLevel.ERROR -> Purchases.logHandler.e("Purchases", expectedMessage, null)
+            }
+        }
+    }
+
+    @Test
     fun `error logs include error in message`() {
         val expectedMessage = "a message"
         setLogHandler { logDetails ->

@@ -95,6 +95,18 @@ class CommonApiTests {
         CommonKt.setLogHandler(callback);
     }
 
+    private void checkSetLogHandlerWithOnResult() {
+        CommonKt.setLogHandlerWithOnResult(new OnResult() {
+            @Override
+            public void onReceived(Map<String, ?> map) {
+            }
+
+            @Override
+            public void onError(ErrorContainer errorContainer) {
+            }
+        });
+    }
+
     private void checkSetProxyURLString(String proxyUrlString) {
         CommonKt.setProxyURLString(proxyUrlString);
     }
