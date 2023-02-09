@@ -221,7 +221,7 @@ internal class CommonKtTests {
         every { mockPurchases.logIn(appUserID, any()) } just runs
 
         logIn(appUserID = appUserID, onResult = object : OnResult {
-            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onReceived(map: Map<String, *>) {}
             override fun onError(errorContainer: ErrorContainer) {}
         })
 
@@ -314,7 +314,7 @@ internal class CommonKtTests {
         every { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) } just runs
 
         logOut(onResult = object : OnResult {
-            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onReceived(map: Map<String, *>) {}
             override fun onError(errorContainer: ErrorContainer) {}
         })
 
@@ -419,11 +419,11 @@ internal class CommonKtTests {
             prorationMode = null,
             type = "subs",
             onResult = object : OnResult {
-                override fun onReceived(map: MutableMap<String, *>?) {
+                override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
                 }
 
-                override fun onError(errorContainer: ErrorContainer?) {
+                override fun onError(errorContainer: ErrorContainer) {
                     fail("Should be success")
                 }
             }
@@ -474,11 +474,11 @@ internal class CommonKtTests {
             oldSku = null,
             prorationMode = null,
             onResult = object : OnResult {
-                override fun onReceived(map: MutableMap<String, *>?) {
+                override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
                 }
 
-                override fun onError(errorContainer: ErrorContainer?) {
+                override fun onError(errorContainer: ErrorContainer) {
                     fail("Should be success")
                 }
             },
@@ -512,12 +512,12 @@ internal class CommonKtTests {
         val expectedMessage = "a message"
         LogLevel.values().forEach { logLevel ->
             setLogHandlerWithOnResult(object : OnResult {
-                override fun onReceived(logDetails: MutableMap<String, *>?) {
-                    assertEquals(logLevel.name.uppercase(), logDetails?.get("logLevel"))
-                    assertEquals(expectedMessage, logDetails?.get("message"))
+                override fun onReceived(logDetails: MutableMap<String, *>) {
+                    assertEquals(logLevel.name.uppercase(), logDetails["logLevel"])
+                    assertEquals(expectedMessage, logDetails["message"])
                 }
 
-                override fun onError(errorContainer: ErrorContainer?) {
+                override fun onError(errorContainer: ErrorContainer) {
                     fail("onError shouldn't be called")
                 }
             })

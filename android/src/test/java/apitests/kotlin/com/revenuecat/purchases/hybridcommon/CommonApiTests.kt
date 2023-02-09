@@ -87,7 +87,7 @@ private class CommonApiTests {
 
     fun checkSetLogHandlerWithOnResult() {
         setLogHandlerWithOnResult(object : OnResult {
-            override fun onReceived(map: Map<String?, *>?) {}
+            override fun onReceived(map: Map<String, *>) {}
             override fun onError(errorContainer: ErrorContainer) {}
         })
     }

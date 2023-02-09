@@ -3,6 +3,8 @@ package apitests.java;
 import android.app.Activity;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.revenuecat.purchases.DangerousSettings;
 import com.revenuecat.purchases.LogHandler;
 import com.revenuecat.purchases.Store;
@@ -98,11 +100,11 @@ class CommonApiTests {
     private void checkSetLogHandlerWithOnResult() {
         CommonKt.setLogHandlerWithOnResult(new OnResult() {
             @Override
-            public void onReceived(Map<String, ?> map) {
+            public void onReceived(@NonNull Map<String, ?> map) {
             }
 
             @Override
-            public void onError(ErrorContainer errorContainer) {
+            public void onError(@NonNull ErrorContainer errorContainer) {
             }
         });
     }
