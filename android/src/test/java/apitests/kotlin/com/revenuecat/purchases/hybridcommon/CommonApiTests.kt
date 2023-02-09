@@ -3,7 +3,6 @@ package apitests.kotlin.com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.LogHandler
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.*
@@ -84,6 +83,13 @@ private class CommonApiTests {
 
     fun checkSetLogHandler(callback: (logDetails: Map<String, String>) -> Unit) {
         setLogHandler(callback)
+    }
+
+    fun checkSetLogHandlerWithOnResult() {
+        setLogHandlerWithOnResult(object : OnResult {
+            override fun onReceived(map: Map<String, *>) {}
+            override fun onError(errorContainer: ErrorContainer) {}
+        })
     }
 
     fun checkSetProxyURLString(proxyURLString: String?) {

@@ -3,6 +3,8 @@ package apitests.java;
 import android.app.Activity;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.revenuecat.purchases.DangerousSettings;
 import com.revenuecat.purchases.LogHandler;
 import com.revenuecat.purchases.Store;
@@ -93,6 +95,18 @@ class CommonApiTests {
 
     private void checkSetLogHandler(Function1<? super Map<String, String>, Unit> callback) {
         CommonKt.setLogHandler(callback);
+    }
+
+    private void checkSetLogHandlerWithOnResult() {
+        CommonKt.setLogHandlerWithOnResult(new OnResult() {
+            @Override
+            public void onReceived(@NonNull Map<String, ?> map) {
+            }
+
+            @Override
+            public void onError(@NonNull ErrorContainer errorContainer) {
+            }
+        });
     }
 
     private void checkSetProxyURLString(String proxyUrlString) {
