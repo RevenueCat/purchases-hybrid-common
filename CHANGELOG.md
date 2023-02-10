@@ -1,3 +1,9 @@
+## 4.13.0
+### New Features
+* Add `setLogHandlerWithOnResult` (#328) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `738f255` to `9255366` (#323) via dependabot[bot] (@dependabot[bot])
+
 ## 4.12.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.17.3 => 4.17.4 (#322) via RevenueCat Git Bot (@RCGitBot)
