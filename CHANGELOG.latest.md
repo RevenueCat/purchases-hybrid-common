@@ -1,4 +1,2 @@
-### New Features
-* Add `setLogHandlerWithOnResult` (#328) via Cesar de la Vega (@vegaro)
 ### Dependency Updates
-* Bump fastlane-plugin-revenuecat_internal from `738f255` to `9255366` (#323) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 4.17.4 => 4.17.5 Android 5.7.0 => 5.7.1 (#330) via RevenueCat Git Bot (@RCGitBot)
