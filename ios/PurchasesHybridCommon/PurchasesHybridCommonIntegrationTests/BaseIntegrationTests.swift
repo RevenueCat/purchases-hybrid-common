@@ -16,10 +16,6 @@ class BaseIntegrationTests: XCTestCase {
         return .default
     }
 
-    override class func setUp() {
-         BundleSandboxEnvironmentDetector.default = MockSandboxEnvironmentDetector()
-    }
-
     override func setUp() async throws {
         try await super.setUp()
 
@@ -83,11 +79,5 @@ private extension BaseIntegrationTests {
         return .init(autoSyncPurchases: true,
                      internalSettings: .init(enableReceiptFetchRetry: true))
     }
-
-}
-
-private final class MockSandboxEnvironmentDetector: SandboxEnvironmentDetector {
-
-    let isSandbox: Bool = true
 
 }
