@@ -1,2 +1,3 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.17.4 => 4.17.5 Android 5.7.0 => 5.7.1 (#330) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-versioning_android from 0.1.0 to 0.1.1 (#332) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.211.0 to 2.212.0 (#334) via dependabot[bot] (@dependabot[bot])
