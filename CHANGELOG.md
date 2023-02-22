@@ -1,3 +1,7 @@
+## 4.13.3
+### Bugfixes
+* Send unsupported error for versions of iOS incompatible with discounts instead of nil (#338) via Cesar de la Vega (@vegaro)
+
 ## 4.13.2
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.17.5 => 4.17.6 (#333) via RevenueCat Git Bot (@RCGitBot)
