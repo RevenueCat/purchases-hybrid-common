@@ -405,7 +405,10 @@ import RevenueCat
                                  discountIdentifier: String?,
                                  completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
-            completion(nil, nil)
+            completion(
+                nil,
+                Self.createErrorContainer(error: ErrorCode.unsupportedError)
+            )
             return
         }
 
