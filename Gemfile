@@ -4,5 +4,5 @@ gem "fastlane"
 
 eval_gemfile("fastlane/Pluginfile")
 
-gem "cocoapods", "~> 1.11"
+gem "cocoapods", "~> 1.12"
 gem 'danger'
