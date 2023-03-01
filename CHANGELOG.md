@@ -1,3 +1,8 @@
+## 4.13.5
+### Other Changes
+* `CommonFunctionality.setLogHandler`: fixed docstring warning (#346) via NachoSoto (@NachoSoto)
+* Bump fastlane from 2.212.0 to 2.212.1 (#343) via dependabot[bot] (@dependabot[bot])
+
 ## 4.13.4
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.17.6 => 4.17.7 (#341) via RevenueCat Git Bot (@RCGitBot)
