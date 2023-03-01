@@ -93,7 +93,7 @@ import RevenueCat
     /**
      * Sets a log handler and forwards all logs to completion function.
      *
-     * - Parameter completion: Gets a map with two keys, a `logLevel` which  is one of the ``LogLevel``  name uppercased, and a `message`, with the log message.
+     * - Parameter onLogReceived: Gets a map with two keys: `logLevel` (``LogLevel``  name uppercased), and `message` (the log message)
      */
     @objc public static func setLogHander(onLogReceived: @escaping ([String: String]) -> Void) {
         Purchases.logHandler = { logLevel, message in
