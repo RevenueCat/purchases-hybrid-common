@@ -18,8 +18,8 @@
           "periodType" : "INTRO",
           "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "store" : "APP_STORE",
-          "unsubscribedDetectedAt" : null,
-          "unsubscribedDetectedAtMillis" : null,
+          "unsubscribeDetectedAt" : null,
+          "unsubscribeDetectedAtMillis" : null,
           "willRenew" : true
         }
       },
@@ -34,8 +34,8 @@
           "periodType" : "INTRO",
           "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "store" : "APP_STORE",
-          "unsubscribedDetectedAt" : null,
-          "unsubscribedDetectedAtMillis" : null,
+          "unsubscribeDetectedAt" : null,
+          "unsubscribeDetectedAtMillis" : null,
           "willRenew" : true
         }
       }

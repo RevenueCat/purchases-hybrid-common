@@ -26,8 +26,8 @@ import RevenueCat
             "store": storeString,
             "productIdentifier": productIdentifier,
             "isSandbox": isSandbox,
-            "unsubscribedDetectedAt": unsubscribeDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
-            "unsubscribedDetectedAtMillis": unsubscribeDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
+            "unsubscribeDetectedAt": unsubscribeDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
+            "unsubscribeDetectedAtMillis": unsubscribeDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "billingIssueDetectedAt": billingIssueDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
             "billingIssueDetectedAtMillis": billingIssueDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "ownershipType": ownershipTypeString
