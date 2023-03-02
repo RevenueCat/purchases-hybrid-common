@@ -1,3 +1,7 @@
+## 4.13.6
+### Dependency Updates
+* Bump cocoapods from 1.11.3 to 1.12.0 (#344) via dependabot[bot] (@dependabot[bot])
+
 ## 4.13.5
 ### Bugfixes
 * `EntitlementInfo`: fixed `unsubscribeDetectedAt` typo (#345) via NachoSoto (@NachoSoto)
