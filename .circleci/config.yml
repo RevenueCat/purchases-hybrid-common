@@ -91,8 +91,7 @@ commands:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
-          command: pod lib lint --fail-fast --platforms=ios,osx,tvos
+          command: pod lib lint --fail-fast --platforms=ios,watchos,osx,tvos
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
