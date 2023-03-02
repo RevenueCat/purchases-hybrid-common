@@ -79,6 +79,7 @@ commands:
   run-ios-tests:
     steps:
       - checkout
+      - install-gems
       - run:
           name: Install pods
           command: pod install --repo-update
