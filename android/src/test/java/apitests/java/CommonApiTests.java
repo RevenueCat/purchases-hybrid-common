@@ -14,6 +14,7 @@ import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
+import com.revenuecat.purchases.models.GoogleProrationMode;
 
 import java.util.List;
 import java.util.Map;
@@ -23,10 +24,6 @@ import kotlin.jvm.functions.Function1;
 
 @SuppressWarnings({"unused", "deprecation"})
 class CommonApiTests {
-    private void checkCheckSetAllowSharingAppStoreAccount(boolean enabled) {
-        CommonKt.setAllowSharingAppStoreAccount(enabled);
-    }
-
     private void checkGetOfferings(OnResult onResult) {
         CommonKt.getOfferings(onResult);
     }
@@ -40,7 +37,7 @@ class CommonApiTests {
     private void checkPurchaseProduct(Activity activity,
                               String productIdentifier,
                               String oldSku,
-                              Integer prorationMode,
+                              GoogleProrationMode prorationMode,
                               String type,
                               OnResult onResult) {
         CommonKt.purchaseProduct(
@@ -57,7 +54,7 @@ class CommonApiTests {
                               String packageIdentifier,
                               String offeringIdentifier,
                               String oldSku,
-                              Integer prorationMode,
+                              GoogleProrationMode prorationMode,
                               OnResult onResult) {
         CommonKt.purchasePackage(
                 activity,
@@ -83,10 +80,6 @@ class CommonApiTests {
 
     private void checkLogOut(OnResult onResult) {
         CommonKt.logOut(onResult);
-    }
-
-    private void checkSetDebugLogsEnabled(boolean enabled) {
-        CommonKt.setDebugLogsEnabled(enabled);
     }
 
     private void checkSetLogLevel(String level) {

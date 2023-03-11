@@ -49,6 +49,7 @@ class EntitlementInfoMapperTests {
             expirationDate = Date.from(Instant.ofEpochSecond(253370768400)), // Jan 1, 9999 @ 00:00:00UTC
             store = store,
             productIdentifier = "product_id",
+            productPlanIdentifier = null,
             isSandbox = false,
             unsubscribeDetectedAt = null,
             billingIssueDetectedAt = null,
