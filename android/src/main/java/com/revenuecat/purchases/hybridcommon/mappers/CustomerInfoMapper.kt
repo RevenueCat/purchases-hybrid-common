@@ -6,7 +6,7 @@ fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
         "entitlements" to entitlements.map(),
         "activeSubscriptions" to activeSubscriptions.toList(),
-        "allPurchasedProductIdentifiers" to allPurchasedSkus.toList(),
+        "allPurchasedProductIdentifiers" to allPurchasedProductIds.toList(),
         "latestExpirationDate" to latestExpirationDate?.toIso8601(),
         "latestExpirationDateMillis" to latestExpirationDate?.toMillis(),
         "firstSeen" to firstSeen.toIso8601(),

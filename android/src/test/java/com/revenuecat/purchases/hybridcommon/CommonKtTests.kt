@@ -4,15 +4,18 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Parcel
 import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.BillingFeature
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
@@ -25,8 +28,17 @@ import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.BillingFeature
+import com.revenuecat.purchases.models.Period
+import com.revenuecat.purchases.models.Price
+import com.revenuecat.purchases.models.PricingPhase
+import com.revenuecat.purchases.models.PurchasingData
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
+import com.revenuecat.purchases.models.SubscriptionOption
+import com.revenuecat.purchases.models.SubscriptionOptions
+import com.revenuecat.purchases.models.toRecurrenceMode
+import com.revenuecat.purchases.purchaseWith
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -393,21 +405,21 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
         val mockPurchase = mockk<StoreTransaction>()
         every {
-            mockPurchase.skus
+            mockPurchase.productIds
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getSubscriptionSkus(listOf(expectedProductIdentifier), capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
         every {
-            mockPurchases.purchaseProduct(mockActivity, mockStoreProduct, capture(capturedPurchaseCallback))
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -446,10 +458,10 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
-        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
         val mockPurchase = mockk<StoreTransaction>()
         every {
-            mockPurchase.skus
+            mockPurchase.productIds
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
@@ -461,9 +473,9 @@ internal class CommonKtTests {
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
-
+2
         every {
-            mockPurchases.purchasePackage(mockActivity, packageToPurchase, capture(capturedPurchaseCallback))
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -558,57 +570,139 @@ internal class CommonKtTests {
         return Triple(offeringIdentifier, packageToPurchase, offerings)
     }
 
-    private fun mockSubscriptionProduct(expectedProductIdentifier: String): StoreProduct {
-        val mockSkuDetails = mockSkuDetails(
-            productId = expectedProductIdentifier,
-            type = BillingClient.SkuType.SUBS
-        )
-        return mockSkuDetails.toStoreProduct()
-    }
-
-    private fun mockSkuDetails(
-        productId: String = "monthly_intro_pricing_one_week",
-        @BillingClient.SkuType type: String = BillingClient.SkuType.SUBS,
-        price: Double = 4.99,
-        subscriptionPeriod: String = "P1M",
-        freeTrialPeriod: String? = null,
-    ): SkuDetails {
-        val mockedSkuDetails = mockk<SkuDetails>()
-        every { mockedSkuDetails.sku } returns productId
-        every { mockedSkuDetails.type } returns type
-        every { mockedSkuDetails.price } returns "${'$'}$price"
-        every { mockedSkuDetails.priceAmountMicros } returns price.times(1_000_000).toLong()
-        every { mockedSkuDetails.priceCurrencyCode } returns "USD"
-        every { mockedSkuDetails.subscriptionPeriod } returns subscriptionPeriod
-        every { mockedSkuDetails.freeTrialPeriod } returns (freeTrialPeriod ?: "")
-        every { mockedSkuDetails.introductoryPrice } returns ""
-        every { mockedSkuDetails.introductoryPricePeriod } returns ""
-        every { mockedSkuDetails.introductoryPriceAmountMicros } returns 0
-        every { mockedSkuDetails.introductoryPriceCycles } returns 0
-        every { mockedSkuDetails.iconUrl } returns ""
-        every { mockedSkuDetails.originalJson } returns """
-            {
-            "skuDetailsToken":"AEuhp4KxWQR-b-OAOXVicqHM4QqnqK9vkPnOXw0vSB9zWPBlTsW8TmtjSEJ_rJ6f0_-i",
-            "productId":"$productId",
-            "type":"$type",
-            "price":"${'$'}$price",
-            "price_amount_micros":${price.times(1_000_000)},
-            "price_currency_code":"USD",
-            "subscriptionPeriod":"$subscriptionPeriod",
-            "freeTrialPeriod":"$freeTrialPeriod",
-            "introductoryPricePeriod":"",
-            "introductoryPriceAmountMicros":0,
-            "introductoryPrice":"",
-            "introductoryPriceCycles":0,
-            "title":"Monthly Product Intro Pricing One Week (PurchasesSample)",
-            "description":"Monthly Product Intro Pricing One Week"
-        }
-        """.trimIndent()
-        every { mockedSkuDetails.title } returns "Monthly Product Intro Pricing One Week (PurchasesSample)"
-        every { mockedSkuDetails.description } returns "Monthly Product Intro Pricing One Week"
-        every { mockedSkuDetails.originalPrice } returns mockedSkuDetails.price
-        every { mockedSkuDetails.originalPriceAmountMicros } returns mockedSkuDetails.priceAmountMicros
-        return mockedSkuDetails
-    }
-
+//    private fun mockSubscriptionProduct(expectedProductIdentifier: String): StoreProduct {
+//        val mockSkuDetails = mockSkuDetails(
+//            productId = expectedProductIdentifier,
+//            type = BillingClient.SkuType.SUBS
+//        )
+//        return mockSkuDetails.toStoreProduct()
+//    }
+//
+//    private fun mockSkuDetails(
+//        productId: String = "monthly_intro_pricing_one_week",
+//        @BillingClient.SkuType type: String = BillingClient.SkuType.SUBS,
+//        price: Double = 4.99,
+//        subscriptionPeriod: String = "P1M",
+//        freeTrialPeriod: String? = null,
+//    ): SkuDetails {
+//        val mockedSkuDetails = mockk<SkuDetails>()
+//        every { mockedSkuDetails.sku } returns productId
+//        every { mockedSkuDetails.type } returns type
+//        every { mockedSkuDetails.price } returns "${'$'}$price"
+//        every { mockedSkuDetails.priceAmountMicros } returns price.times(1_000_000).toLong()
+//        every { mockedSkuDetails.priceCurrencyCode } returns "USD"
+//        every { mockedSkuDetails.subscriptionPeriod } returns subscriptionPeriod
+//        every { mockedSkuDetails.freeTrialPeriod } returns (freeTrialPeriod ?: "")
+//        every { mockedSkuDetails.introductoryPrice } returns ""
+//        every { mockedSkuDetails.introductoryPricePeriod } returns ""
+//        every { mockedSkuDetails.introductoryPriceAmountMicros } returns 0
+//        every { mockedSkuDetails.introductoryPriceCycles } returns 0
+//        every { mockedSkuDetails.iconUrl } returns ""
+//        every { mockedSkuDetails.originalJson } returns """
+//            {
+//            "skuDetailsToken":"AEuhp4KxWQR-b-OAOXVicqHM4QqnqK9vkPnOXw0vSB9zWPBlTsW8TmtjSEJ_rJ6f0_-i",
+//            "productId":"$productId",
+//            "type":"$type",
+//            "price":"${'$'}$price",
+//            "price_amount_micros":${price.times(1_000_000)},
+//            "price_currency_code":"USD",
+//            "subscriptionPeriod":"$subscriptionPeriod",
+//            "freeTrialPeriod":"$freeTrialPeriod",
+//            "introductoryPricePeriod":"",
+//            "introductoryPriceAmountMicros":0,
+//            "introductoryPrice":"",
+//            "introductoryPriceCycles":0,
+//            "title":"Monthly Product Intro Pricing One Week (PurchasesSample)",
+//            "description":"Monthly Product Intro Pricing One Week"
+//        }
+//        """.trimIndent()
+//        every { mockedSkuDetails.title } returns "Monthly Product Intro Pricing One Week (PurchasesSample)"
+//        every { mockedSkuDetails.description } returns "Monthly Product Intro Pricing One Week"
+//        every { mockedSkuDetails.originalPrice } returns mockedSkuDetails.price
+//        every { mockedSkuDetails.originalPriceAmountMicros } returns mockedSkuDetails.priceAmountMicros
+//        return mockedSkuDetails
+//    }
 }
+
+const val MICROS_MULTIPLIER = 1_000_000
+
+@SuppressWarnings("EmptyFunctionBlock")
+fun stubStoreProduct(
+    productId: String,
+    defaultOption: SubscriptionOption? = stubSubscriptionOption(
+        "monthly_base_plan", productId,
+        Period(1, Period.Unit.MONTH, "P1M"),
+    ),
+    subscriptionOptions: List<SubscriptionOption> = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
+    price: Price = subscriptionOptions.first().fullPricePhase!!.price
+): StoreProduct = object : StoreProduct {
+    override val id: String
+        get() = productId
+    override val type: ProductType
+        get() = ProductType.SUBS
+    override val price: Price
+        get() = price
+    override val title: String
+        get() = ""
+    override val description: String
+        get() = ""
+    override val period: Period?
+        get() = subscriptionOptions.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val subscriptionOptions: SubscriptionOptions
+        get() = SubscriptionOptions(subscriptionOptions)
+    override val defaultOption: SubscriptionOption?
+        get() = defaultOption
+    override val purchasingData: PurchasingData
+        get() = StubPurchasingData(
+            productId = productId
+        )
+    override val sku: String
+        get() = productId
+
+    override fun describeContents(): Int = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {}
+}
+
+@SuppressWarnings("EmptyFunctionBlock")
+fun stubSubscriptionOption(
+    id: String,
+    productId: String,
+    duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
+    pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration))
+): SubscriptionOption = object : SubscriptionOption {
+    override val id: String
+        get() = id
+    override val pricingPhases: List<PricingPhase>
+        get() = pricingPhases
+    override val tags: List<String>
+        get() = listOf("tag")
+    override val purchasingData: PurchasingData
+        get() = StubPurchasingData(
+            productId = productId
+        )
+
+    override fun describeContents(): Int = 0
+    override fun writeToParcel(dest: Parcel?, flags: Int) {}
+}
+
+@SuppressWarnings("MatchingDeclarationName")
+private data class StubPurchasingData(
+    override val productId: String,
+) : PurchasingData {
+    override val productType: ProductType
+        get() = ProductType.SUBS
+}
+
+fun stubPricingPhase(
+    billingPeriod: Period = Period(1, Period.Unit.MONTH, "P1M"),
+    priceCurrencyCodeValue: String = "USD",
+    price: Double = 4.99,
+    recurrenceMode: Int = ProductDetails.RecurrenceMode.INFINITE_RECURRING,
+    billingCycleCount: Int = 0
+): PricingPhase = PricingPhase(
+    billingPeriod,
+    recurrenceMode.toRecurrenceMode(),
+    billingCycleCount,
+    Price(if (price == 0.0) "Free" else "${'$'}$price", price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue)
+)

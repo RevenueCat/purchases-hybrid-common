@@ -5,18 +5,18 @@ import android.content.Context
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
-import com.revenuecat.purchases.UpgradeInfo
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.common.warnLog
 import com.revenuecat.purchases.getCustomerInfoWith
-import com.revenuecat.purchases.getNonSubscriptionSkusWith
 import com.revenuecat.purchases.getOfferingsWith
-import com.revenuecat.purchases.getSubscriptionSkusWith
+import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.logInWith
@@ -25,20 +25,9 @@ import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
-import com.revenuecat.purchases.purchasePackageWith
-import com.revenuecat.purchases.purchaseProductWith
+import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import java.net.URL
-
-@Deprecated(
-    "Replaced with configuration in the RevenueCat dashboard",
-    ReplaceWith("configure through the RevenueCat dashboard")
-)
-fun setAllowSharingAppStoreAccount(
-    allowSharingAppStoreAccount: Boolean
-) {
-    Purchases.sharedInstance.allowSharingPlayStoreAccount = allowSharingAppStoreAccount
-}
 
 fun getOfferings(
     onResult: OnResult
@@ -57,9 +46,9 @@ fun getProductInfo(
     val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
 
     if (type.equals("subs", ignoreCase = true)) {
-        Purchases.sharedInstance.getSubscriptionSkusWith(productIDs, onError, onReceived)
+        Purchases.sharedInstance.getProductsWith(productIDs, ProductType.SUBS, onError, onReceived)
     } else {
-        Purchases.sharedInstance.getNonSubscriptionSkusWith(productIDs, onError, onReceived)
+        Purchases.sharedInstance.getProductsWith(productIDs, ProductType.INAPP, onError, onReceived)
     }
 }
 
@@ -74,25 +63,24 @@ fun purchaseProduct(
     if (activity != null) {
         val onReceiveSkus: (List<StoreProduct>) -> Unit = { skus ->
             val productToBuy = skus.firstOrNull {
-                it.sku == productIdentifier && it.type.name.equals(type, ignoreCase = true)
+                // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
+                it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
             if (productToBuy != null) {
-                if (oldSku == null || oldSku.isBlank()) {
-                    Purchases.sharedInstance.purchaseProductWith(
-                        activity,
-                        productToBuy,
-                        onError = getPurchaseErrorFunction(onResult),
-                        onSuccess = getPurchaseCompletedFunction(onResult)
-                    )
-                } else {
-                    Purchases.sharedInstance.purchaseProductWith(
-                        activity,
-                        productToBuy,
-                        if (prorationMode != null) UpgradeInfo(oldSku, prorationMode) else UpgradeInfo(oldSku),
-                        onError = getPurchaseErrorFunction(onResult),
-                        onSuccess = getProductChangeCompletedFunction(onResult)
-                    )
+                val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
+
+                if (oldSku != null && oldSku.isNotBlank()) {
+                    purchaseParams.oldProductId(oldSku)
+                    if (prorationMode != null) {
+                        purchaseParams.googleProrationMode(prorationMode)
+                    }
                 }
+
+                Purchases.sharedInstance.purchaseWith(
+                    purchaseParams.build(),
+                    onError = getPurchaseErrorFunction(onResult),
+                    onSuccess = getPurchaseCompletedFunction(onResult)
+                )
             } else {
                 onResult.onError(
                     PurchasesError(
@@ -104,14 +92,16 @@ fun purchaseProduct(
 
         }
         if (type.equals("subs", ignoreCase = true)) {
-            Purchases.sharedInstance.getSubscriptionSkusWith(
+            Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
+                ProductType.SUBS,
                 { onResult.onError(it.map()) },
                 onReceiveSkus
             )
         } else {
-            Purchases.sharedInstance.getNonSubscriptionSkusWith(
+            Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
+                ProductType.INAPP,
                 { onResult.onError(it.map()) },
                 onReceiveSkus
             )
@@ -144,22 +134,20 @@ fun purchasePackage(
                         it.identifier.equals(packageIdentifier, ignoreCase = true)
                     }
                 if (packageToBuy != null) {
-                    if (oldSku == null || oldSku.isBlank()) {
-                        Purchases.sharedInstance.purchasePackageWith(
-                            activity,
-                            packageToBuy,
-                            onError = getPurchaseErrorFunction(onResult),
-                            onSuccess = getPurchaseCompletedFunction(onResult)
-                        )
-                    } else {
-                        Purchases.sharedInstance.purchasePackageWith(
-                            activity,
-                            packageToBuy,
-                            if (prorationMode != null) UpgradeInfo(oldSku, prorationMode) else UpgradeInfo(oldSku),
-                            onError = getPurchaseErrorFunction(onResult),
-                            onSuccess = getProductChangeCompletedFunction(onResult)
-                        )
+                    val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
+
+                    if (oldSku != null && oldSku.isNotBlank()) {
+                        purchaseParams.oldProductId(oldSku)
+                        if (prorationMode != null) {
+                            purchaseParams.googleProrationMode(prorationMode)
+                        }
                     }
+
+                    Purchases.sharedInstance.purchaseWith(
+                        purchaseParams.build(),
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult)
+                    )
                 } else {
                     onResult.onError(
                         PurchasesError(
@@ -209,13 +197,6 @@ fun logOut(onResult: OnResult) {
     Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
-}
-
-@Deprecated(message = "Use setLogLevel instead")
-fun setDebugLogsEnabled(
-    enabled: Boolean
-) {
-    Purchases.debugLogsEnabled = enabled
 }
 
 fun setLogLevel(level: String) {
@@ -347,14 +328,22 @@ private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boole
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
 
-private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction, CustomerInfo) -> Unit {
+private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
     return { purchase, customerInfo ->
-        onResult.onReceived(
-            mapOf(
-                "productIdentifier" to purchase.skus[0],
-                "customerInfo" to customerInfo.map()
+        purchase?.let {
+            onResult.onReceived(
+                mapOf(
+                    "productIdentifier" to purchase.productIds[0],
+                    "customerInfo" to customerInfo.map()
+                )
             )
-        )
+        } ?: run {
+            // TODO: Figure out how to properly handle a null StoreTransaction (doing this for now
+            onResult.onError(
+                ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
+                    "Error purchasing. Null transaction returned from a successful non-upgrade purchase.", emptyMap())
+            )
+        }
     }
 }
 
@@ -363,7 +352,7 @@ private fun getProductChangeCompletedFunction(onResult: OnResult): (StoreTransac
         onResult.onReceived(
             mapOf(
                 // Get first productIdentifier until we have full support of multi-line subscriptions
-                "productIdentifier" to purchase?.skus?.get(0),
+                "productIdentifier" to purchase?.productIds?.get(0),
                 "customerInfo" to customerInfo.map()
             )
         )

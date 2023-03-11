@@ -6,13 +6,10 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.*
+import com.revenuecat.purchases.models.GoogleProrationMode
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
-    fun checkSetAllowSharingAppStoreAccount(allow: Boolean) {
-        setAllowSharingAppStoreAccount(allow)
-    }
-
     fun checkGetOfferings(onResult: OnResult) {
         getOfferings(onResult)
     }
@@ -29,7 +26,7 @@ private class CommonApiTests {
         activity: Activity?,
         productIdentifier: String,
         oldSku: String?,
-        prorationMode: Int?,
+        prorationMode: GoogleProrationMode?,
         type: String,
         onResult: OnResult
     ) {
@@ -41,7 +38,7 @@ private class CommonApiTests {
         packageIdentifier: String,
         offeringIdentifier: String,
         oldSku: String?,
-        prorationMode: Int?,
+        prorationMode: GoogleProrationMode?,
         onResult: OnResult
     ) {
         purchasePackage(
@@ -71,10 +68,6 @@ private class CommonApiTests {
 
     fun checkLogOut(onResult: OnResult) {
         logOut(onResult)
-    }
-
-    fun checkSetDebugLogsEnabled(enabled: Boolean) {
-        setDebugLogsEnabled(enabled)
     }
 
     fun checkSetLogLevel(level: String) {
