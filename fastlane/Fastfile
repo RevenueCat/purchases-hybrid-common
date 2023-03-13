@@ -355,19 +355,6 @@ platform :android do
       properties: gradleProperties,
       project_dir: 'android'
     )
-
-    UI.verbose("Creating special version for Unity IAP with BillingClient 3 and Amazon 2 for version: #{version}")
-    gradleProperties["ANDROID_VARIANT_TO_PUBLISH"] = "unityIAPRelease"
-
-    UI.verbose("Adding -unityiap to artifact ids")
-
-    gradle(
-      tasks: [
-        "publish --no-daemon --no-parallel"
-      ],
-      properties: gradleProperties,
-      project_dir: 'android'
-    )
   end
 end
 
