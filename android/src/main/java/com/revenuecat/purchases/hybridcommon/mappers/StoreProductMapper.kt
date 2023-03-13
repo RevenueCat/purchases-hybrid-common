@@ -14,7 +14,7 @@ val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
 val StoreProduct.freeTrialPeriod: Period?
     get() = this.subscriptionOptions?.freeTrial?.billingPeriod
-val StoreProduct.freeTrialCycle: Int?
+val StoreProduct.freeTrialCycles: Int?
     get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
 
 private val StoreProduct.introductoryPhase: PricingPhase?
@@ -79,7 +79,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
                     "price" to 0,
                     "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
                     "period" to freeTrialPeriod?.iso8601,
-                    "cycles" to (freeTrialCycle ?: 1)
+                    "cycles" to (freeTrialCycles ?: 1)
                 ) + periodFields
             }
         }
