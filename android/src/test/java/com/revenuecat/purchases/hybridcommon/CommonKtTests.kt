@@ -569,59 +569,6 @@ internal class CommonKtTests {
         val offerings = Offerings(current = offering, all = mapOf(offeringIdentifier to offering))
         return Triple(offeringIdentifier, packageToPurchase, offerings)
     }
-
-//    private fun mockSubscriptionProduct(expectedProductIdentifier: String): StoreProduct {
-//        val mockSkuDetails = mockSkuDetails(
-//            productId = expectedProductIdentifier,
-//            type = BillingClient.SkuType.SUBS
-//        )
-//        return mockSkuDetails.toStoreProduct()
-//    }
-//
-//    private fun mockSkuDetails(
-//        productId: String = "monthly_intro_pricing_one_week",
-//        @BillingClient.SkuType type: String = BillingClient.SkuType.SUBS,
-//        price: Double = 4.99,
-//        subscriptionPeriod: String = "P1M",
-//        freeTrialPeriod: String? = null,
-//    ): SkuDetails {
-//        val mockedSkuDetails = mockk<SkuDetails>()
-//        every { mockedSkuDetails.sku } returns productId
-//        every { mockedSkuDetails.type } returns type
-//        every { mockedSkuDetails.price } returns "${'$'}$price"
-//        every { mockedSkuDetails.priceAmountMicros } returns price.times(1_000_000).toLong()
-//        every { mockedSkuDetails.priceCurrencyCode } returns "USD"
-//        every { mockedSkuDetails.subscriptionPeriod } returns subscriptionPeriod
-//        every { mockedSkuDetails.freeTrialPeriod } returns (freeTrialPeriod ?: "")
-//        every { mockedSkuDetails.introductoryPrice } returns ""
-//        every { mockedSkuDetails.introductoryPricePeriod } returns ""
-//        every { mockedSkuDetails.introductoryPriceAmountMicros } returns 0
-//        every { mockedSkuDetails.introductoryPriceCycles } returns 0
-//        every { mockedSkuDetails.iconUrl } returns ""
-//        every { mockedSkuDetails.originalJson } returns """
-//            {
-//            "skuDetailsToken":"AEuhp4KxWQR-b-OAOXVicqHM4QqnqK9vkPnOXw0vSB9zWPBlTsW8TmtjSEJ_rJ6f0_-i",
-//            "productId":"$productId",
-//            "type":"$type",
-//            "price":"${'$'}$price",
-//            "price_amount_micros":${price.times(1_000_000)},
-//            "price_currency_code":"USD",
-//            "subscriptionPeriod":"$subscriptionPeriod",
-//            "freeTrialPeriod":"$freeTrialPeriod",
-//            "introductoryPricePeriod":"",
-//            "introductoryPriceAmountMicros":0,
-//            "introductoryPrice":"",
-//            "introductoryPriceCycles":0,
-//            "title":"Monthly Product Intro Pricing One Week (PurchasesSample)",
-//            "description":"Monthly Product Intro Pricing One Week"
-//        }
-//        """.trimIndent()
-//        every { mockedSkuDetails.title } returns "Monthly Product Intro Pricing One Week (PurchasesSample)"
-//        every { mockedSkuDetails.description } returns "Monthly Product Intro Pricing One Week"
-//        every { mockedSkuDetails.originalPrice } returns mockedSkuDetails.price
-//        every { mockedSkuDetails.originalPriceAmountMicros } returns mockedSkuDetails.priceAmountMicros
-//        return mockedSkuDetails
-//    }
 }
 
 const val MICROS_MULTIPLIER = 1_000_000
@@ -629,27 +576,30 @@ const val MICROS_MULTIPLIER = 1_000_000
 @SuppressWarnings("EmptyFunctionBlock")
 fun stubStoreProduct(
     productId: String,
+    description: String = "",
+    title: String = "",
+    type: ProductType = ProductType.SUBS,
     defaultOption: SubscriptionOption? = stubSubscriptionOption(
         "monthly_base_plan", productId,
         Period(1, Period.Unit.MONTH, "P1M"),
     ),
-    subscriptionOptions: List<SubscriptionOption> = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
-    price: Price = subscriptionOptions.first().fullPricePhase!!.price
+    subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
+    price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price
 ): StoreProduct = object : StoreProduct {
     override val id: String
         get() = productId
     override val type: ProductType
-        get() = ProductType.SUBS
+        get() = type
     override val price: Price
         get() = price
     override val title: String
-        get() = ""
+        get() = title
     override val description: String
-        get() = ""
+        get() = description
     override val period: Period?
-        get() = subscriptionOptions.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
-    override val subscriptionOptions: SubscriptionOptions
-        get() = SubscriptionOptions(subscriptionOptions)
+        get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val subscriptionOptions: SubscriptionOptions?
+        get() = subscriptionOptions?.let { SubscriptionOptions(it) }
     override val defaultOption: SubscriptionOption?
         get() = defaultOption
     override val purchasingData: PurchasingData
@@ -697,6 +647,7 @@ private data class StubPurchasingData(
 fun stubPricingPhase(
     billingPeriod: Period = Period(1, Period.Unit.MONTH, "P1M"),
     priceCurrencyCodeValue: String = "USD",
+    priceFormatted: String = "$4.99",
     price: Double = 4.99,
     recurrenceMode: Int = ProductDetails.RecurrenceMode.INFINITE_RECURRING,
     billingCycleCount: Int = 0
@@ -704,5 +655,5 @@ fun stubPricingPhase(
     billingPeriod,
     recurrenceMode.toRecurrenceMode(),
     billingCycleCount,
-    Price(if (price == 0.0) "Free" else "${'$'}$price", price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue)
+    Price(priceFormatted, price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue)
 )
