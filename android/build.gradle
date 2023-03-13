@@ -9,7 +9,6 @@ buildscript {
     ext.mockk_version = '1.12.3'
     ext.gradle_maven_publish = '0.22.0'
     ext.purchases_version = '6.0.0-beta.2'
-    ext.billing_unityiap_purchases_version = '3.0.3'
 
     repositories {
         google()
@@ -29,9 +28,6 @@ apply plugin: "de.mannodermaus.android-junit5"
 
 def artifactId = project.property("POM_ARTIFACT_ID")
 def publishVariant = project.property("ANDROID_VARIANT_TO_PUBLISH")
-if (publishVariant == "unityIAPRelease") {
-    project.ext.POM_ARTIFACT_ID = artifactId + "-unityiap"
-}
 
 apply plugin: "com.vanniktech.maven.publish"
 
@@ -69,10 +65,6 @@ android {
     }
     flavorDimensions "dependencyVersions"
     productFlavors {
-        // Temporarily removing this until Unity is supported for BC5
-//        unityIAP {
-//            dimension "dependencyVersions"
-//        }
         latestDependencies {
             dimension "dependencyVersions"
         }
@@ -89,13 +81,6 @@ dependencies {
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
     latestDependenciesApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
     latestDependenciesApi "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
-
-    // Temporarily removing this until Unity is supported for BC5
-//    unityIAPApi "com.revenuecat.purchases:purchases-unityiap:$purchases_version"
-//    unityIAPApi "com.revenuecat.purchases:purchases-core-common-unityiap:$purchases_version"
-//    unityIAPApi "com.revenuecat.purchases:purchases-core-utils-unityiap:$purchases_version"
-//    unityIAPApi "com.revenuecat.purchases:purchases-store-amazon-unityiap:$purchases_version"
-//    testUnityIAPImplementation "com.android.billingclient:billing:$billing_unityiap_purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
