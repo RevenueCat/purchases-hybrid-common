@@ -58,6 +58,7 @@ fun purchaseProduct(
     oldSku: String?,
     prorationMode: GoogleProrationMode?,
     type: String,
+    isPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -69,6 +70,7 @@ fun purchaseProduct(
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
 
+                // Product upgrade
                 if (oldSku != null && oldSku.isNotBlank()) {
                     purchaseParams.oldProductId(oldSku)
                     if (prorationMode != null) {
@@ -76,6 +78,12 @@ fun purchaseProduct(
                     }
                 }
 
+                // Personalized price
+                isPersonalizedPrice?.let {
+                    purchaseParams.isPersonalizedPrice(isPersonalizedPrice)
+                }
+
+                // Perform purchase
                 Purchases.sharedInstance.purchaseWith(
                     purchaseParams.build(),
                     onError = getPurchaseErrorFunction(onResult),
@@ -123,6 +131,7 @@ fun purchasePackage(
     offeringIdentifier: String,
     oldSku: String?,
     prorationMode: GoogleProrationMode?,
+    isPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -136,6 +145,7 @@ fun purchasePackage(
                 if (packageToBuy != null) {
                     val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
 
+                    // Product upgrade
                     if (oldSku != null && oldSku.isNotBlank()) {
                         purchaseParams.oldProductId(oldSku)
                         if (prorationMode != null) {
@@ -143,6 +153,12 @@ fun purchasePackage(
                         }
                     }
 
+                    // Personalized price
+                    isPersonalizedPrice?.let {
+                        purchaseParams.isPersonalizedPrice(isPersonalizedPrice)
+                    }
+
+                    // Perform purchase
                     Purchases.sharedInstance.purchaseWith(
                         purchaseParams.build(),
                         onError = getPurchaseErrorFunction(onResult),

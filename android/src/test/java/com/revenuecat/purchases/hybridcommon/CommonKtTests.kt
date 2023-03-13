@@ -421,6 +421,9 @@ internal class CommonKtTests {
         every {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(false, params.isPersonalizedPrice)
+
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
 
@@ -430,6 +433,68 @@ internal class CommonKtTests {
             oldSku = null,
             prorationMode = null,
             type = "subs",
+            isPersonalizedPrice = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct passes correct productIdentifier after a successful purchase with isPersonalizedPrice`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(true, params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            oldSku = null,
+            prorationMode = null,
+            type = "subs",
+            isPersonalizedPrice = true,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -477,6 +542,9 @@ internal class CommonKtTests {
         every {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(false, params.isPersonalizedPrice)
+
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
 
@@ -485,6 +553,67 @@ internal class CommonKtTests {
             packageIdentifier = "packageIdentifier",
             oldSku = null,
             prorationMode = null,
+            isPersonalizedPrice = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+            offeringIdentifier = offeringIdentifier
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchasePackage passes correct productIdentifier after a successful purchase with isPersonalizedPrice`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
+
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        2
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(true, params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchasePackage(
+            mockActivity,
+            packageIdentifier = "packageIdentifier",
+            oldSku = null,
+            prorationMode = null,
+            isPersonalizedPrice = true,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map

@@ -39,6 +39,7 @@ class CommonApiTests {
                               String oldSku,
                               GoogleProrationMode prorationMode,
                               String type,
+                              Boolean isPersonalizedPrice,
                               OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
@@ -46,6 +47,7 @@ class CommonApiTests {
                 oldSku,
                 prorationMode,
                 type,
+                isPersonalizedPrice,
                 onResult
         );
     }
@@ -55,6 +57,7 @@ class CommonApiTests {
                               String offeringIdentifier,
                               String oldSku,
                               GoogleProrationMode prorationMode,
+                              Boolean isPersonalizedPrice,
                               OnResult onResult) {
         CommonKt.purchasePackage(
                 activity,
@@ -62,6 +65,7 @@ class CommonApiTests {
                 offeringIdentifier,
                 oldSku,
                 prorationMode,
+                isPersonalizedPrice,
                 onResult
         );
     }

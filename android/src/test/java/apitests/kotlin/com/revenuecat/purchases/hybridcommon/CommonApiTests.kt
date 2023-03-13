@@ -28,9 +28,10 @@ private class CommonApiTests {
         oldSku: String?,
         prorationMode: GoogleProrationMode?,
         type: String,
+        isPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
-        purchaseProduct(activity, productIdentifier, oldSku, prorationMode, type, onResult)
+        purchaseProduct(activity, productIdentifier, oldSku, prorationMode, type, isPersonalizedPrice, onResult)
     }
 
     fun checkPurchasePackage(
@@ -39,6 +40,7 @@ private class CommonApiTests {
         offeringIdentifier: String,
         oldSku: String?,
         prorationMode: GoogleProrationMode?,
+        isPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
         purchasePackage(
@@ -47,6 +49,7 @@ private class CommonApiTests {
             offeringIdentifier,
             oldSku,
             prorationMode,
+            isPersonalizedPrice,
             onResult
         )
     }
