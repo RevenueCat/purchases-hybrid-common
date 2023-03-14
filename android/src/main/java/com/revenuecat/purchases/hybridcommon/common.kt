@@ -55,9 +55,10 @@ fun getProductInfo(
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
-    oldSku: String?,
-    prorationMode: GoogleProrationMode?,
     type: String,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -69,13 +70,20 @@ fun purchaseProduct(
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
 
-                if (oldSku != null && oldSku.isNotBlank()) {
-                    purchaseParams.oldProductId(oldSku)
-                    if (prorationMode != null) {
-                        purchaseParams.googleProrationMode(prorationMode)
+                // Product upgrade
+                if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                    purchaseParams.oldProductId(googleOldProductId)
+                    if (googleProrationMode != null) {
+                        purchaseParams.googleProrationMode(googleProrationMode)
                     }
                 }
 
+                // Personalized price
+                googleIsPersonalizedPrice?.let {
+                    purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+                }
+
+                // Perform purchase
                 Purchases.sharedInstance.purchaseWith(
                     purchaseParams.build(),
                     onError = getPurchaseErrorFunction(onResult),
@@ -121,8 +129,9 @@ fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
     offeringIdentifier: String,
-    oldSku: String?,
-    prorationMode: GoogleProrationMode?,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -136,13 +145,20 @@ fun purchasePackage(
                 if (packageToBuy != null) {
                     val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
 
-                    if (oldSku != null && oldSku.isNotBlank()) {
-                        purchaseParams.oldProductId(oldSku)
-                        if (prorationMode != null) {
-                            purchaseParams.googleProrationMode(prorationMode)
+                    // Product upgrade
+                    if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                        purchaseParams.oldProductId(googleOldProductId)
+                        if (googleProrationMode != null) {
+                            purchaseParams.googleProrationMode(googleProrationMode)
                         }
                     }
 
+                    // Personalized price
+                    googleIsPersonalizedPrice?.let {
+                        purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+                    }
+
+                    // Perform purchase
                     Purchases.sharedInstance.purchaseWith(
                         purchaseParams.build(),
                         onError = getPurchaseErrorFunction(onResult),
