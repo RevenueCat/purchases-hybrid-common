@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.PricingPhase
+import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 
 val StoreProduct.priceAmountMicros: Long
@@ -53,7 +54,13 @@ internal fun StoreProduct.mapProductCategory(): String {
 internal fun StoreProduct.mapProductType(): String {
     return when (type) {
         ProductType.INAPP -> "CONSUMABLE"
-        ProductType.SUBS -> "AUTO_RENEWABLE_SUBSCRIPTION" // TODO: Add a new string here prepaid (check recurrence mode)
+        ProductType.SUBS -> {
+            if (defaultOption?.fullPricePhase?.recurrenceMode == RecurrenceMode.NON_RECURRING) {
+                "PREPAID_SUBSCRIPTION"
+            } else {
+                "AUTO_RENEWABLE_SUBSCRIPTION"
+            }
+        }
         ProductType.UNKNOWN -> "UNKNOWN"
     }
 }
