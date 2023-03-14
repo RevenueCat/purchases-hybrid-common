@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.hybridcommon.MICROS_MULTIPLIER
 import com.revenuecat.purchases.hybridcommon.stubPricingPhase
 import com.revenuecat.purchases.hybridcommon.stubStoreProduct
 import com.revenuecat.purchases.hybridcommon.stubSubscriptionOption
@@ -224,5 +225,151 @@ internal class StoreProductMapperTest {
         stubStoreProduct("monthly_product").map().let {
             assertThat(it.size).isEqualTo(11)
         }
+    }
+
+    @Test
+    fun `map has default option as base plan`() {
+        stubStoreProduct(
+            productId = exptectedProductId,
+            defaultOption = stubSubscriptionOption(
+                "monthly_base_plan", exptectedProductId,
+            )
+        ).map().let {
+            val defaultOption = it["defaultOption"] as Map<String, Any?>
+            testBasePlanOption(defaultOption)
+        }
+    }
+
+    @Test
+    fun `map has default option with free trial and intro trial`() {
+        val freeTrialDuration = Period(7, Period.Unit.DAY, "P7D")
+        val introTrialDuration = Period(1, Period.Unit.MONTH, "P1M")
+        val duration = Period(1, Period.Unit.MONTH, "P1M")
+
+        val basePlan = stubSubscriptionOption(
+            "monthly_base_plan", exptectedProductId,
+            duration,
+            pricingPhases = listOf(
+                stubPricingPhase(
+                    billingPeriod = duration,
+                )
+            )
+        )
+        val multiPricingPhaseOption = stubSubscriptionOption(
+            "monthly_base_plan", exptectedProductId,
+            duration,
+            pricingPhases = listOf(
+                stubPricingPhase(
+                    billingPeriod = freeTrialDuration,
+                    priceFormatted = "$0.00",
+                    price = 0.0
+                ),
+                stubPricingPhase(
+                    billingPeriod = introTrialDuration,
+                    priceFormatted = "$2.99",
+                    price = 2.99
+                ),
+                stubPricingPhase(
+                    billingPeriod = duration,
+                )
+            )
+        )
+
+        stubStoreProduct(
+            productId = exptectedProductId,
+            defaultOption = multiPricingPhaseOption,
+            subscriptionOptions = listOf(basePlan, multiPricingPhaseOption)
+        ).map().let {
+            val defaultOption = it["defaultOption"] as Map<String, Any?>
+            testMultiPhaseOption(defaultOption)
+
+            val subscriptionOptions = it["subscriptionOptions"] as List<Map<String, Any?>>
+            testBasePlanOption(subscriptionOptions[0])
+            testMultiPhaseOption(subscriptionOptions[1])
+        }
+    }
+
+    private fun testBasePlanOption(option: Map<String, Any?>) {
+        val billingPeriod = mapOf(
+            "periodUnit" to "MONTH",
+            "periodNumberOfUnits" to 1
+        )
+
+        assertThat(option).isNotNull
+        assertThat(option["tags"]).isEqualTo(listOf("tag"))
+        assertThat(option["isBasePlan"]).isEqualTo(true)
+
+        assertThat(option["billingPeriod"]).isEqualTo(billingPeriod)
+        assertThat(option["fullPricePhase"]).isEqualTo(
+            mapOf(
+                "billingPeriod" to billingPeriod,
+                "recurrenceMode" to 1,
+                "billingCycleCount" to 0,
+                "price" to mapOf(
+                    "formatted" to "$4.99",
+                    "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
+                    "currencyCode" to "USD"
+                ),
+            )
+        )
+        assertThat(option["freePhase"]).isNull()
+        assertThat(option["introPhase"]).isNull()
+    }
+
+    private fun testMultiPhaseOption(option: Map<String, Any?>) {
+        val billingPeriod = mapOf(
+            "periodUnit" to "MONTH",
+            "periodNumberOfUnits" to 1
+        )
+        val freeBillingPeriod = mapOf(
+            "periodUnit" to "DAY",
+            "periodNumberOfUnits" to 7
+        )
+        val introBillingPeriod = mapOf(
+            "periodUnit" to "MONTH",
+            "periodNumberOfUnits" to 1
+        )
+
+        assertThat(option).isNotNull
+        assertThat(option["tags"]).isEqualTo(listOf("tag"))
+        assertThat(option["isBasePlan"]).isEqualTo(false)
+
+        assertThat(option["billingPeriod"]).isEqualTo(billingPeriod)
+        assertThat(option["fullPricePhase"]).isEqualTo(
+            mapOf(
+                "billingPeriod" to billingPeriod,
+                "recurrenceMode" to 1,
+                "billingCycleCount" to 0,
+                "price" to mapOf(
+                    "formatted" to "$4.99",
+                    "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
+                    "currencyCode" to "USD"
+                ),
+            )
+        )
+        assertThat(option["freePhase"]).isEqualTo(
+            mapOf(
+                "billingPeriod" to freeBillingPeriod,
+                "recurrenceMode" to 1,
+                "billingCycleCount" to 0,
+                "price" to mapOf(
+                    "formatted" to "$0.00",
+                    "amountMicros" to 0L,
+                    "currencyCode" to "USD"
+                ),
+            )
+        )
+        assertThat(option["introPhase"]).isEqualTo(
+            mapOf(
+                "billingPeriod" to introBillingPeriod,
+                "recurrenceMode" to 1,
+                "billingCycleCount" to 0,
+                "price" to mapOf(
+                    "formatted" to "$2.99",
+                    "amountMicros" to (2.99 * MICROS_MULTIPLIER).toLong(),
+                    "currencyCode" to "USD"
+                ),
+            )
+        )
     }
 }
