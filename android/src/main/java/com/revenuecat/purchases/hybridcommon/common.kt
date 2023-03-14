@@ -62,8 +62,8 @@ fun purchaseProduct(
     onResult: OnResult
 ) {
     if (activity != null) {
-        val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProduct ->
-            val productToBuy = storeProduct.firstOrNull {
+        val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
+            val productToBuy = storeProducts.firstOrNull {
                 // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
                 it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
