@@ -43,8 +43,8 @@ fun StoreProduct.map(): Map<String, Any?> =
         "productCategory" to mapProductCategory(),
         "productType" to mapProductType(),
         "subscriptionPeriod" to period?.iso8601,
-        "defaultOption" to defaultOption?.mapSubscriptionOption(),
-        "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption() },
+        "defaultOption" to defaultOption?.mapSubscriptionOption(this),
+        "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
@@ -128,9 +128,11 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
     }
 }
 
-private fun SubscriptionOption.mapSubscriptionOption(): Map<String, Any?> {
+private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
     return mapOf(
         "id" to id,
+        "storeProductId" to storeProduct.id,
+        "productId" to storeProduct.purchasingData.productId,
         "pricingPhases" to pricingPhases.map { it.mapPricingPhase() },
         "tags" to tags,
         "isBasePlan" to isBasePlan,

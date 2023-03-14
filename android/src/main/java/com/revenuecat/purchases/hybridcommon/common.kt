@@ -134,7 +134,6 @@ fun purchaseProduct(
     }
 }
 
-
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -183,6 +182,73 @@ fun purchasePackage(
                     )
                 }
             }
+        )
+    } else {
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.PurchaseInvalidError,
+                "There is no current Activity"
+            ).map()
+        )
+    }
+}
+
+fun purchaseSubscriptionOption(
+    activity: Activity?,
+    productIdentifier: String,
+    optionIdentifier: String,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
+    onResult: OnResult
+) {
+    if (activity != null) {
+        val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
+            val optionToBuy = storeProducts.mapNotNull { storeProduct ->
+                storeProduct.subscriptionOptions?.map { Pair(storeProduct, it) }
+            }.flatten().firstOrNull { (storeProduct, subscriptionOption) ->
+                // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
+                storeProduct.purchasingData.productId == productIdentifier && subscriptionOption.id == optionIdentifier
+            }?.second
+
+            if (optionToBuy != null) {
+                val purchaseParams = PurchaseParams.Builder(optionToBuy, activity)
+
+                // Product upgrade
+                if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                    purchaseParams.oldProductId(googleOldProductId)
+                    if (googleProrationMode != null) {
+                        purchaseParams.googleProrationMode(googleProrationMode)
+                    }
+                }
+
+                // Personalized price
+                googleIsPersonalizedPrice?.let {
+                    purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+                }
+
+                // Perform purchase
+                Purchases.sharedInstance.purchaseWith(
+                    purchaseParams.build(),
+                    onError = getPurchaseErrorFunction(onResult),
+                    onSuccess = getPurchaseCompletedFunction(onResult)
+                )
+            } else {
+                onResult.onError(
+                    PurchasesError(
+                        PurchasesErrorCode.ProductNotAvailableForPurchaseError,
+                        "Couldn't find product."
+                    ).map()
+                )
+            }
+
+        }
+
+        Purchases.sharedInstance.getProductsWith(
+            listOf(productIdentifier),
+            ProductType.SUBS,
+            { onResult.onError(it.map()) },
+            onReceiveStoreProducts
         )
     } else {
         onResult.onError(

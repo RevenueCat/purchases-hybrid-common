@@ -631,6 +631,63 @@ internal class CommonKtTests {
     }
 
     @Test
+    fun `purchaseSubsscriptionOption passes correct productIdentifier after a successful purchase`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(false, params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            type = "subs",
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
     fun `logs are passed correctly to LogHandler`() {
         val expectedMessage = "a message"
         LogLevel.values().forEach { logLevel ->
