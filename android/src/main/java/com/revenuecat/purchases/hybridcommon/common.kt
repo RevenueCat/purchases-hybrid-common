@@ -55,10 +55,10 @@ fun getProductInfo(
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
-    oldSku: String?,
-    prorationMode: GoogleProrationMode?,
     type: String,
-    isPersonalizedPrice: Boolean?,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -71,16 +71,16 @@ fun purchaseProduct(
                 val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
 
                 // Product upgrade
-                if (oldSku != null && oldSku.isNotBlank()) {
-                    purchaseParams.oldProductId(oldSku)
-                    if (prorationMode != null) {
-                        purchaseParams.googleProrationMode(prorationMode)
+                if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                    purchaseParams.oldProductId(googleOldProductId)
+                    if (googleProrationMode != null) {
+                        purchaseParams.googleProrationMode(googleProrationMode)
                     }
                 }
 
                 // Personalized price
-                isPersonalizedPrice?.let {
-                    purchaseParams.isPersonalizedPrice(isPersonalizedPrice)
+                googleIsPersonalizedPrice?.let {
+                    purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
                 }
 
                 // Perform purchase
@@ -129,9 +129,9 @@ fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
     offeringIdentifier: String,
-    oldSku: String?,
-    prorationMode: GoogleProrationMode?,
-    isPersonalizedPrice: Boolean?,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
     if (activity != null) {
@@ -146,16 +146,16 @@ fun purchasePackage(
                     val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
 
                     // Product upgrade
-                    if (oldSku != null && oldSku.isNotBlank()) {
-                        purchaseParams.oldProductId(oldSku)
-                        if (prorationMode != null) {
-                            purchaseParams.googleProrationMode(prorationMode)
+                    if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                        purchaseParams.oldProductId(googleOldProductId)
+                        if (googleProrationMode != null) {
+                            purchaseParams.googleProrationMode(googleProrationMode)
                         }
                     }
 
                     // Personalized price
-                    isPersonalizedPrice?.let {
-                        purchaseParams.isPersonalizedPrice(isPersonalizedPrice)
+                    googleIsPersonalizedPrice?.let {
+                        purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
                     }
 
                     // Perform purchase

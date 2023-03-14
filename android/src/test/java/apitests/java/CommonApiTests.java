@@ -36,18 +36,18 @@ class CommonApiTests {
 
     private void checkPurchaseProduct(Activity activity,
                               String productIdentifier,
-                              String oldSku,
-                              GoogleProrationMode prorationMode,
                               String type,
-                              Boolean isPersonalizedPrice,
+                              String googleOldProductId,
+                              GoogleProrationMode googleProrationMode,
+                              Boolean googleIsPersonalizedPrice,
                               OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
                 productIdentifier,
-                oldSku,
-                prorationMode,
                 type,
-                isPersonalizedPrice,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
                 onResult
         );
     }
@@ -55,17 +55,17 @@ class CommonApiTests {
     private void checkPurchasePackage(Activity activity,
                               String packageIdentifier,
                               String offeringIdentifier,
-                              String oldSku,
-                              GoogleProrationMode prorationMode,
-                              Boolean isPersonalizedPrice,
+                              String googleOldProductId,
+                              GoogleProrationMode googleProrationMode,
+                              Boolean googleIsPersonalizedPrice,
                               OnResult onResult) {
         CommonKt.purchasePackage(
                 activity,
                 packageIdentifier,
                 offeringIdentifier,
-                oldSku,
-                prorationMode,
-                isPersonalizedPrice,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
                 onResult
         );
     }

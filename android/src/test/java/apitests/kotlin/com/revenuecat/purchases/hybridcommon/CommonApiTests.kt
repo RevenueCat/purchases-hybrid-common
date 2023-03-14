@@ -25,31 +25,31 @@ private class CommonApiTests {
     fun checkPurchaseProduct(
         activity: Activity?,
         productIdentifier: String,
-        oldSku: String?,
-        prorationMode: GoogleProrationMode?,
         type: String,
-        isPersonalizedPrice: Boolean?,
+        googleOldProductId: String?,
+        googleProrationMode: GoogleProrationMode?,
+        googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
-        purchaseProduct(activity, productIdentifier, oldSku, prorationMode, type, isPersonalizedPrice, onResult)
+        purchaseProduct(activity, productIdentifier, type, googleOldProductId, googleProrationMode, googleIsPersonalizedPrice, onResult)
     }
 
     fun checkPurchasePackage(
         activity: Activity?,
         packageIdentifier: String,
         offeringIdentifier: String,
-        oldSku: String?,
-        prorationMode: GoogleProrationMode?,
-        isPersonalizedPrice: Boolean?,
+        googleOldProductId: String?,
+        googleProrationMode: GoogleProrationMode?,
+        googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
         purchasePackage(
             activity,
             packageIdentifier,
             offeringIdentifier,
-            oldSku,
-            prorationMode,
-            isPersonalizedPrice,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
             onResult
         )
     }

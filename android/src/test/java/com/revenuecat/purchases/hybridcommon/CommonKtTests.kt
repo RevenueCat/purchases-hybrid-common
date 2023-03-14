@@ -430,10 +430,10 @@ internal class CommonKtTests {
         purchaseProduct(
             mockActivity,
             productIdentifier = expectedProductIdentifier,
-            oldSku = null,
-            prorationMode = null,
             type = "subs",
-            isPersonalizedPrice = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -491,10 +491,10 @@ internal class CommonKtTests {
         purchaseProduct(
             mockActivity,
             productIdentifier = expectedProductIdentifier,
-            oldSku = null,
-            prorationMode = null,
             type = "subs",
-            isPersonalizedPrice = true,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = true,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -551,9 +551,9 @@ internal class CommonKtTests {
         purchasePackage(
             mockActivity,
             packageIdentifier = "packageIdentifier",
-            oldSku = null,
-            prorationMode = null,
-            isPersonalizedPrice = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -611,9 +611,9 @@ internal class CommonKtTests {
         purchasePackage(
             mockActivity,
             packageIdentifier = "packageIdentifier",
-            oldSku = null,
-            prorationMode = null,
-            isPersonalizedPrice = true,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = true,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
