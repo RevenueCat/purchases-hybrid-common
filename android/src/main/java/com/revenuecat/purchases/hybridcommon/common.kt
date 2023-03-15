@@ -207,7 +207,6 @@ fun purchaseSubscriptionOption(
             val optionToBuy = storeProducts.mapNotNull { storeProduct ->
                 storeProduct.subscriptionOptions?.map { Pair(storeProduct, it) }
             }.flatten().firstOrNull { (storeProduct, subscriptionOption) ->
-                // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
                 storeProduct.purchasingData.productId == productIdentifier && subscriptionOption.id == optionIdentifier
             }?.second
 
