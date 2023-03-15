@@ -223,7 +223,7 @@ internal class StoreProductMapperTest {
     @Test
     fun `map has correct size`() {
         stubStoreProduct("monthly_product").map().let {
-            assertThat(it.size).isEqualTo(11)
+            assertThat(it.size).isEqualTo(13)
         }
     }
 
