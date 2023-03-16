@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.hybridcommon.mockCurrencyFormatter
-import com.revenuecat.purchases.hybridcommon.mockLogError
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.StoreProduct
 import io.mockk.every
@@ -28,7 +27,8 @@ internal class StoreProductIntroPriceMapperTests {
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
             mockCurrencyFormatter(0, "$0.00")
-            every { mockStoreProduct.freeTrialPeriodNEW } returns Period(7, Period.Unit.DAY, "P7D")
+            every { mockStoreProduct.freeTrialPeriod } returns Period(7, Period.Unit.DAY, "P7D")
+            every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
                 "price" to 0,
@@ -44,7 +44,8 @@ internal class StoreProductIntroPriceMapperTests {
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
             mockCurrencyFormatter(0, "$0.00")
-            every { mockStoreProduct.freeTrialPeriodNEW } returns Period(1, Period.Unit.MONTH, "P1M")
+            every { mockStoreProduct.freeTrialPeriod } returns Period(1, Period.Unit.MONTH, "P1M")
+            every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
                 "price" to 0,
@@ -60,7 +61,8 @@ internal class StoreProductIntroPriceMapperTests {
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
             mockCurrencyFormatter(0, "$0.00")
-            every { mockStoreProduct.freeTrialPeriodNEW } returns Period(0, Period.Unit.DAY, "P0D")
+            every { mockStoreProduct.freeTrialPeriod } returns Period(0, Period.Unit.DAY, "P0D")
+            every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
 
             val expected = mapOf(
@@ -81,7 +83,7 @@ internal class StoreProductIntroPriceMapperTests {
     inner class MappingIntroPrice {
         @BeforeEach
         fun beforeEachTest() {
-            every { mockStoreProduct.freeTrialPeriodNEW?.iso8601 } returns null
+            every { mockStoreProduct.freeTrialPeriod?.iso8601 } returns null
             every { mockStoreProduct.introductoryPriceAmountMicros } returns 10_000_000
             every { mockStoreProduct.introductoryPrice } returns "$10.00"
             every { mockStoreProduct.introductoryPriceCycles } returns 2
@@ -95,7 +97,7 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriodNEW } returns null
+            every { mockStoreProduct.freeTrialPeriod } returns null
             every { mockStoreProduct.introductoryPricePeriodNEW } returns Period(7, Period.Unit.DAY, "P7D")
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
@@ -108,7 +110,7 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriodNEW } returns null
+            every { mockStoreProduct.freeTrialPeriod } returns null
             every { mockStoreProduct.introductoryPricePeriodNEW } returns Period(1, Period.Unit.MONTH, "P1M")
             received = mockStoreProduct.mapIntroPrice()
 
@@ -122,7 +124,7 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriodNEW } returns null
+            every { mockStoreProduct.freeTrialPeriod } returns null
             every { mockStoreProduct.introductoryPricePeriodNEW } returns Period(0, Period.Unit.DAY, "P0D")
             received = mockStoreProduct.mapIntroPrice()
 
@@ -137,7 +139,7 @@ internal class StoreProductIntroPriceMapperTests {
 
     @Test
     fun `when mapping a StoreProduct with no free trial nor introductory price, intro price is null`() {
-        every { mockStoreProduct.freeTrialPeriodNEW } returns null
+        every { mockStoreProduct.freeTrialPeriod } returns null
         every { mockStoreProduct.introductoryPrice } returns null
         received = mockStoreProduct.mapIntroPrice()
         assertThat(received).isEqualTo(null)

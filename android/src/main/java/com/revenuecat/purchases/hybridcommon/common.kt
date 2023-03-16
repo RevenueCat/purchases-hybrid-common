@@ -62,8 +62,8 @@ fun purchaseProduct(
     onResult: OnResult
 ) {
     if (activity != null) {
-        val onReceiveSkus: (List<StoreProduct>) -> Unit = { skus ->
-            val productToBuy = skus.firstOrNull {
+        val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
+            val productToBuy = storeProducts.firstOrNull {
                 // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
                 it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
@@ -104,14 +104,14 @@ fun purchaseProduct(
                 listOf(productIdentifier),
                 ProductType.SUBS,
                 { onResult.onError(it.map()) },
-                onReceiveSkus
+                onReceiveStoreProducts
             )
         } else {
             Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
                 ProductType.INAPP,
                 { onResult.onError(it.map()) },
-                onReceiveSkus
+                onReceiveStoreProducts
             )
         }
     } else {
