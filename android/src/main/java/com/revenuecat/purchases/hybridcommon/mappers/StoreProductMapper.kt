@@ -12,8 +12,10 @@ val StoreProduct.priceString: String
     get() = this.price.formatted
 val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
-val StoreProduct.freeTrialPeriodNEW: Period?
+val StoreProduct.freeTrialPeriod: Period?
     get() = this.subscriptionOptions?.freeTrial?.billingPeriod
+val StoreProduct.freeTrialCycles: Int?
+    get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
 
 private val StoreProduct.introductoryPhase: PricingPhase?
     get() = this.subscriptionOptions?.introTrial?.introPhase
@@ -34,6 +36,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "price" to priceAmountMicros / 1_000_000.0,
         "priceString" to priceString,
         "currencyCode" to priceCurrencyCode,
+        // TOOD: BC5 allows up to 2 intro phases (free and then discount), should this only show the first?
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
         "productCategory" to mapProductCategory(),
@@ -65,19 +68,18 @@ internal fun StoreProduct.mapProductType(): String {
     }
 }
 
-// TODO: This can actually cause issues now with BC5 because there could be an free price and an intro price
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
     return when {
-        freeTrialPeriodNEW != null -> {
+        freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials
             // Format using device locale. iOS will format using App Store locale, but there's no way
             // to figure out how the price in the SKUDetails is being formatted.
-            freeTrialPeriodNEW?.mapPeriod()?.let { periodFields ->
+            freeTrialPeriod?.mapPeriod()?.let { periodFields ->
                 mapOf(
                     "price" to 0,
                     "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
-                    "period" to freeTrialPeriodNEW?.iso8601,
-                    "cycles" to 1 // TODO: I don't think this should be hardcoded to 1
+                    "period" to freeTrialPeriod?.iso8601,
+                    "cycles" to (freeTrialCycles ?: 1)
                 ) + periodFields
             }
         }
@@ -103,10 +105,10 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
             "periodUnit" to "DAY",
             "periodNumberOfUnits" to this.value
         )
-        // TODO: Is week not a thing that we can use? Does this ened to be days (old method didn't have week)
+        // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
-            "periodUnit" to "WEEK",
-            "periodNumberOfUnits" to this.value
+            "periodUnit" to "DAY",
+            "periodNumberOfUnits" to this.value * 7
         )
         Period.Unit.MONTH -> mapOf(
             "periodUnit" to "MONTH",
@@ -121,29 +123,4 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
             "periodNumberOfUnits" to 0
         )
     }
-}
-
-private fun String.mapPeriod(): Map<String, Any?>? {
-    return this.takeUnless { this.isBlank() }
-        ?.let { PurchasesPeriod.parse(it) }
-        ?.let { period ->
-            when {
-                period.years > 0 -> mapOf(
-                    "periodUnit" to "YEAR",
-                    "periodNumberOfUnits" to period.years
-                )
-                period.months > 0 -> mapOf(
-                    "periodUnit" to "MONTH",
-                    "periodNumberOfUnits" to period.months
-                )
-                period.days > 0 -> mapOf(
-                    "periodUnit" to "DAY",
-                    "periodNumberOfUnits" to period.days
-                )
-                else -> mapOf(
-                    "periodUnit" to "DAY",
-                    "periodNumberOfUnits" to 0
-                )
-            }
-        }
 }
