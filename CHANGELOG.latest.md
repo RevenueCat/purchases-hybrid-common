@@ -1,4 +1,2 @@
 ### Dependency Updates
-* [AUTOMATIC] Android 5.8.0 => 5.8.2 (#353) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] Android 5.7.1 => 5.8.0 (#351) via RevenueCat Git Bot (@RCGitBot)
-* Bump cocoapods from 1.11.3 to 1.12.0 (#344) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 4.17.7 => 4.17.8 (#361) via RevenueCat Git Bot (@RCGitBot)
