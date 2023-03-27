@@ -39,6 +39,10 @@ fun setAllowSharingAppStoreAccount(
     Purchases.sharedInstance.allowSharingPlayStoreAccount = allowSharingAppStoreAccount
 }
 
+fun collectDeviceIdentifiers() {
+    Purchases.sharedInstance.collectDeviceIdentifiers()
+}
+
 fun getOfferings(
     onResult: OnResult
 ) {
