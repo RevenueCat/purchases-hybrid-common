@@ -10,6 +10,10 @@ import com.revenuecat.purchases.models.GoogleProrationMode
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
+    fun checkSetAllowSharingAppStoreAccount(allow: Boolean) {
+        setAllowSharingAppStoreAccount(allow)
+    }
+
     fun checkGetOfferings(onResult: OnResult) {
         getOfferings(onResult)
     }
@@ -71,6 +75,10 @@ private class CommonApiTests {
 
     fun checkLogOut(onResult: OnResult) {
         logOut(onResult)
+    }
+
+    fun checkSetDebugLogsEnabled(enabled: Boolean) {
+        setDebugLogsEnabled(enabled)
     }
 
     fun checkSetLogLevel(level: String) {
