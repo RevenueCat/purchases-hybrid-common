@@ -10,22 +10,25 @@ This latest release updates the Android SDK dependency from v5 to [v6](https://g
 ### New `SubscriptionOption` concept
 
 #### Purchasing
+In v4, a Google Play Android `Package` or `StoreProduct` represented a single purchaseable entity, and free trials or intro
+offers would automatically be applied to the purchase if the user was eligible.
 
 Now, in Hybrid Common v5, an Google Play Android `Package` or `StoreProduct` represents a duration of a subscription and contains all the ways to
 purchase that duration -- any offers and its base plan. Each of these purchase options are `SubscriptionOption`s.
 When passing a `Package` to `purchasePackage()` or `StoreProduct` to `purchaseStoreProduct()`, the SDK will use the following logic to choose which
 `SubscriptionOption` to purchase:
-*   - Filters out offers with "rc-ignore-offer" tag
-*   - Uses `SubscriptionOption` with the longest free trial or cheapest first phase
-*   - Falls back to base plan
+- Filters out offers with "rc-ignore-offer" tag
+- Uses `SubscriptionOption` with the longest free trial or cheapest first phase
+    - Only offers the user is eligible will be applied
+- Falls back to base plan
 
 For more control, purchase subscription options with the new `purchaseSubscriptionOption()` method.
 
 #### Models
 
-`StoreProducts` now has a few new properties use for Google Play Android:
+`StoreProduct` now has a few new properties use for Google Play Android:
 - `defaultOption`
-  - A subscription option (could be null)
+  - A subscription option that will automatically be applie when purchasing a `Package` or `StoreProduct`
 - `subscriptionOptions`
   - A list of subscription options (could be null)
 
