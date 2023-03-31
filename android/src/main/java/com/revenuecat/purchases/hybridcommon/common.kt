@@ -29,6 +29,16 @@ import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import java.net.URL
 
+@Deprecated(
+    "Replaced with configuration in the RevenueCat dashboard",
+    ReplaceWith("configure through the RevenueCat dashboard")
+)
+fun setAllowSharingAppStoreAccount(
+    allowSharingAppStoreAccount: Boolean
+) {
+    Purchases.sharedInstance.allowSharingPlayStoreAccount = allowSharingAppStoreAccount
+}
+
 fun getOfferings(
     onResult: OnResult
 ) {
@@ -213,6 +223,13 @@ fun logOut(onResult: OnResult) {
     Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
     }
+}
+
+@Deprecated(message = "Use setLogLevel instead")
+fun setDebugLogsEnabled(
+    enabled: Boolean
+) {
+    Purchases.debugLogsEnabled = enabled
 }
 
 fun setLogLevel(level: String) {

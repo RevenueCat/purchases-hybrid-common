@@ -24,6 +24,10 @@ import kotlin.jvm.functions.Function1;
 
 @SuppressWarnings({"unused", "deprecation"})
 class CommonApiTests {
+    private void checkCheckSetAllowSharingAppStoreAccount(boolean enabled) {
+        CommonKt.setAllowSharingAppStoreAccount(enabled);
+    }
+
     private void checkGetOfferings(OnResult onResult) {
         CommonKt.getOfferings(onResult);
     }
@@ -84,6 +88,10 @@ class CommonApiTests {
 
     private void checkLogOut(OnResult onResult) {
         CommonKt.logOut(onResult);
+    }
+
+    private void checkSetDebugLogsEnabled(boolean enabled) {
+        CommonKt.setDebugLogsEnabled(enabled);
     }
 
     private void checkSetLogLevel(String level) {
