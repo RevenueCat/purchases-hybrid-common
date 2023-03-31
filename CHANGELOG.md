@@ -1,3 +1,6 @@
+## 5.0.0-beta.1
+First beta release of v5
+
 ## 4.14.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.17.7 => 4.17.8 (#361) via RevenueCat Git Bot (@RCGitBot)
