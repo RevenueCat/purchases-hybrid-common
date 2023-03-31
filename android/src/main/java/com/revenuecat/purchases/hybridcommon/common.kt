@@ -78,7 +78,7 @@ fun purchaseProduct(
                 it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
             if (productToBuy != null) {
-                val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
+                val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
 
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -103,7 +103,7 @@ fun purchaseProduct(
                 onResult.onError(
                     PurchasesError(
                         PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                        "Couldn't find product."
+                        "Couldn't find product $productIdentifier"
                     ).map()
                 )
             }
@@ -134,7 +134,6 @@ fun purchaseProduct(
     }
 }
 
-
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -153,7 +152,7 @@ fun purchasePackage(
                         it.identifier.equals(packageIdentifier, ignoreCase = true)
                     }
                 if (packageToBuy != null) {
-                    val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
+                    val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
 
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -178,11 +177,80 @@ fun purchasePackage(
                     onResult.onError(
                         PurchasesError(
                             PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                            "Couldn't find product."
+                            "Couldn't find product for package $packageIdentifier"
                         ).map()
                     )
                 }
             }
+        )
+    } else {
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.PurchaseInvalidError,
+                "There is no current Activity"
+            ).map()
+        )
+    }
+}
+
+fun purchaseSubscriptionOption(
+    activity: Activity?,
+    productIdentifier: String,
+    optionIdentifier: String,
+    googleOldProductId: String?,
+    googleProrationMode: GoogleProrationMode?,
+    googleIsPersonalizedPrice: Boolean?,
+    onResult: OnResult
+) {
+    if (activity != null) {
+        val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
+            // Iterates over StoreProducts and SubscriptionOptions to find
+            // the first matching product id and subscription option id
+            val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
+                storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
+                    storeProduct.purchasingData.productId == productIdentifier &&
+                            subscriptionOption.id == optionIdentifier
+                }
+            }
+
+            if (optionToPurchase != null) {
+                val purchaseParams = PurchaseParams.Builder(activity, optionToPurchase)
+
+                // Product upgrade
+                googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
+                    purchaseParams.oldProductId(it)
+                    if (googleProrationMode != null) {
+                        purchaseParams.googleProrationMode(googleProrationMode)
+                    }
+                }
+
+                // Personalized price
+                googleIsPersonalizedPrice?.let {
+                    purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+                }
+
+                // Perform purchase
+                Purchases.sharedInstance.purchaseWith(
+                    purchaseParams.build(),
+                    onError = getPurchaseErrorFunction(onResult),
+                    onSuccess = getPurchaseCompletedFunction(onResult)
+                )
+            } else {
+                onResult.onError(
+                    PurchasesError(
+                        PurchasesErrorCode.ProductNotAvailableForPurchaseError,
+                        "Couldn't find product $productIdentifier:$optionIdentifier"
+                    ).map()
+                )
+            }
+
+        }
+
+        Purchases.sharedInstance.getProductsWith(
+            listOf(productIdentifier),
+            ProductType.SUBS,
+            { onResult.onError(it.map()) },
+            onReceiveStoreProducts
         )
     } else {
         onResult.onError(

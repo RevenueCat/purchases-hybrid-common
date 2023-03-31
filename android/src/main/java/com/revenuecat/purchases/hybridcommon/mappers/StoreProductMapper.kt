@@ -2,9 +2,11 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.models.Period
+import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.models.SubscriptionOption
 
 val StoreProduct.priceAmountMicros: Long
     get() = this.price.amountMicros
@@ -18,7 +20,7 @@ val StoreProduct.freeTrialCycles: Int?
     get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
 
 private val StoreProduct.introductoryPhase: PricingPhase?
-    get() = this.subscriptionOptions?.introTrial?.introPhase
+    get() = this.subscriptionOptions?.introOffer?.introPhase
 val StoreProduct.introductoryPrice: String?
     get() = this.introductoryPhase?.price?.formatted
 val StoreProduct.introductoryPricePeriodNEW: Period?
@@ -36,12 +38,13 @@ fun StoreProduct.map(): Map<String, Any?> =
         "price" to priceAmountMicros / 1_000_000.0,
         "priceString" to priceString,
         "currencyCode" to priceCurrencyCode,
-        // TOOD: BC5 allows up to 2 intro phases (free and then discount), should this only show the first?
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
         "productCategory" to mapProductCategory(),
         "productType" to mapProductType(),
-        "subscriptionPeriod" to period?.iso8601
+        "subscriptionPeriod" to period?.iso8601,
+        "defaultOption" to defaultOption?.mapSubscriptionOption(this),
+        "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
@@ -123,4 +126,48 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
             "periodNumberOfUnits" to 0
         )
     }
+}
+
+private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
+    return mapOf(
+        // For Google subscriptions, <basePlanId>:<offerId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSku>
+        "id" to id,
+
+        // For Google subscriptions, <productId>:<basePlanId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSku>
+        "storeProductId" to storeProduct.id,
+
+        // For Google subscriptions, <productId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSku>
+        "productId" to storeProduct.purchasingData.productId,
+
+        "pricingPhases" to pricingPhases.map { it.mapPricingPhase() },
+        "tags" to tags,
+        "isBasePlan" to isBasePlan,
+        "billingPeriod" to billingPeriod?.mapPeriod(),
+        "fullPricePhase" to fullPricePhase?.mapPricingPhase(),
+        "freePhase" to freePhase?.mapPricingPhase(),
+        "introPhase" to introPhase?.mapPricingPhase()
+    )
+}
+
+private fun PricingPhase.mapPricingPhase(): Map<String, Any?> {
+    return mapOf(
+        "billingPeriod" to billingPeriod?.mapPeriod(),
+        "recurrenceMode" to recurrenceMode.identifier,
+        "billingCycleCount" to billingCycleCount,
+        "price" to price.mapPrice(),
+    )
+}
+
+private fun Price.mapPrice(): Map<String, Any?> {
+    return mapOf(
+        "formatted" to formatted,
+        "amountMicros" to amountMicros,
+        "currencyCode" to currencyCode
+    )
 }

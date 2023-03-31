@@ -35,7 +35,15 @@ private class CommonApiTests {
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
-        purchaseProduct(activity, productIdentifier, type, googleOldProductId, googleProrationMode, googleIsPersonalizedPrice, onResult)
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
+            onResult
+        )
     }
 
     fun checkPurchasePackage(
@@ -51,6 +59,26 @@ private class CommonApiTests {
             activity,
             packageIdentifier,
             offeringIdentifier,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
+            onResult
+        )
+    }
+
+    fun checkPurchaseSubscriptionOption(
+        activity: Activity?,
+        productIdentifier: String,
+        optionIdentifier: String,
+        googleOldProductId: String?,
+        googleProrationMode: GoogleProrationMode?,
+        googleIsPersonalizedPrice: Boolean?,
+        onResult: OnResult
+    ) {
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
