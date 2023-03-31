@@ -626,7 +626,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `purchaseSubsscriptionOption passes correct productIdentifier after a successful purchase`() {
+    fun `purchaseSubscriptionOption passes correct productIdentifier after a successful purchase`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
