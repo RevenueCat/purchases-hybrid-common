@@ -204,13 +204,14 @@ fun purchaseSubscriptionOption(
 ) {
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
-            val allSubscriptionOptions = storeProducts.mapNotNull { storeProduct ->
-                storeProduct.subscriptionOptions?.map { Pair(storeProduct, it) }
-            }.flatten()
-
-            val optionToPurchase = allSubscriptionOptions.firstOrNull { (storeProduct, subscriptionOption) ->
-                storeProduct.purchasingData.productId == productIdentifier && subscriptionOption.id == optionIdentifier
-            }?.second
+            // Iterates over StoreProducts and SubscriptionOptions to find
+            // the first matching product id and subscription option id
+            val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
+                storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
+                    storeProduct.purchasingData.productId == productIdentifier &&
+                            subscriptionOption.id == optionIdentifier
+                }
+            }
 
             if (optionToPurchase != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, optionToPurchase)

@@ -132,17 +132,17 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
     return mapOf(
         // For Google subscriptions, <basePlanId>:<offerId>
         // For Google and Amazon INAPPs, <productId>
-        // For Amazon subscriptions, <termSkus>
+        // For Amazon subscriptions, <termSku>
         "id" to id,
 
         // For Google subscriptions, <productId>:<basePlanId>
         // For Google and Amazon INAPPs, <productId>
-        // For Amazon subscriptions, <termSkus>
+        // For Amazon subscriptions, <termSku>
         "storeProductId" to storeProduct.id,
 
         // For Google subscriptions, <productId>
         // For Google and Amazon INAPPs, <productId>
-        // For Amazon subscriptions, <termSkus>
+        // For Amazon subscriptions, <termSku>
         "productId" to storeProduct.purchasingData.productId,
 
         "pricingPhases" to pricingPhases.map { it.mapPricingPhase() },
