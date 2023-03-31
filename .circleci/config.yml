@@ -7,7 +7,10 @@ aliases:
   release-tags: &release-tags
     filters:
       tags:
-        only: /^(\d+\.)(\d+\.)(\d+)$/
+        ignore:
+          - /^.*-SNAPSHOT/
+          - latest
+          - /^.*-amazon*/
       branches:
         ignore: /.*/
   release-branches: &release-branches
