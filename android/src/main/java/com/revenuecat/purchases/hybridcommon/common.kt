@@ -78,7 +78,7 @@ fun purchaseProduct(
                 it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
             }
             if (productToBuy != null) {
-                val purchaseParams = PurchaseParams.Builder(productToBuy, activity)
+                val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
 
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -103,7 +103,7 @@ fun purchaseProduct(
                 onResult.onError(
                     PurchasesError(
                         PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                        "Couldn't find product."
+                        "Couldn't find product $productIdentifier"
                     ).map()
                 )
             }
@@ -152,7 +152,7 @@ fun purchasePackage(
                         it.identifier.equals(packageIdentifier, ignoreCase = true)
                     }
                 if (packageToBuy != null) {
-                    val purchaseParams = PurchaseParams.Builder(packageToBuy, activity)
+                    val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
 
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -177,7 +177,7 @@ fun purchasePackage(
                     onResult.onError(
                         PurchasesError(
                             PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                            "Couldn't find product."
+                            "Couldn't find product for package $packageIdentifier"
                         ).map()
                     )
                 }
@@ -204,18 +204,20 @@ fun purchaseSubscriptionOption(
 ) {
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
-            val optionToBuy = storeProducts.mapNotNull { storeProduct ->
+            val allSubscriptionOptions = storeProducts.mapNotNull { storeProduct ->
                 storeProduct.subscriptionOptions?.map { Pair(storeProduct, it) }
-            }.flatten().firstOrNull { (storeProduct, subscriptionOption) ->
+            }.flatten()
+
+            val optionToPurchase = allSubscriptionOptions.firstOrNull { (storeProduct, subscriptionOption) ->
                 storeProduct.purchasingData.productId == productIdentifier && subscriptionOption.id == optionIdentifier
             }?.second
 
-            if (optionToBuy != null) {
-                val purchaseParams = PurchaseParams.Builder(optionToBuy, activity)
+            if (optionToPurchase != null) {
+                val purchaseParams = PurchaseParams.Builder(activity, optionToPurchase)
 
                 // Product upgrade
-                if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
-                    purchaseParams.oldProductId(googleOldProductId)
+                googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
+                    purchaseParams.oldProductId(it)
                     if (googleProrationMode != null) {
                         purchaseParams.googleProrationMode(googleProrationMode)
                     }
@@ -236,7 +238,7 @@ fun purchaseSubscriptionOption(
                 onResult.onError(
                     PurchasesError(
                         PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                        "Couldn't find product."
+                        "Couldn't find product $productIdentifier:$optionIdentifier"
                     ).map()
                 )
             }

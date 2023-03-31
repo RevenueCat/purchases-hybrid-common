@@ -794,10 +794,6 @@ fun stubStoreProduct(
         )
     override val sku: String
         get() = productId
-
-    override fun describeContents(): Int = 0
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {}
 }
 
 @SuppressWarnings("EmptyFunctionBlock")
@@ -817,9 +813,6 @@ fun stubSubscriptionOption(
         get() = StubPurchasingData(
             productId = productId
         )
-
-    override fun describeContents(): Int = 0
-    override fun writeToParcel(dest: Parcel?, flags: Int) {}
 }
 
 @SuppressWarnings("MatchingDeclarationName")

@@ -20,7 +20,7 @@ val StoreProduct.freeTrialCycles: Int?
     get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
 
 private val StoreProduct.introductoryPhase: PricingPhase?
-    get() = this.subscriptionOptions?.introTrial?.introPhase
+    get() = this.subscriptionOptions?.introOffer?.introPhase
 val StoreProduct.introductoryPrice: String?
     get() = this.introductoryPhase?.price?.formatted
 val StoreProduct.introductoryPricePeriodNEW: Period?
@@ -130,9 +130,21 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
 
 private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
     return mapOf(
+        // For Google subscriptions, <basePlanId>:<offerId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSkus>
         "id" to id,
+
+        // For Google subscriptions, <productId>:<basePlanId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSkus>
         "storeProductId" to storeProduct.id,
+
+        // For Google subscriptions, <productId>
+        // For Google and Amazon INAPPs, <productId>
+        // For Amazon subscriptions, <termSkus>
         "productId" to storeProduct.purchasingData.productId,
+
         "pricingPhases" to pricingPhases.map { it.mapPricingPhase() },
         "tags" to tags,
         "isBasePlan" to isBasePlan,

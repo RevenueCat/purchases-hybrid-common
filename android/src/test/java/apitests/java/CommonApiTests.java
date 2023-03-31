@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.revenuecat.purchases.DangerousSettings;
-import com.revenuecat.purchases.LogHandler;
 import com.revenuecat.purchases.Store;
 import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
@@ -33,18 +32,18 @@ class CommonApiTests {
     }
 
     private void checkGetProductInfo(List<String> productIDs,
-                             String type,
-                             OnResultList onResult) {
+                                     String type,
+                                     OnResultList onResult) {
         CommonKt.getProductInfo(productIDs, type, onResult);
     }
 
     private void checkPurchaseProduct(Activity activity,
-                              String productIdentifier,
-                              String type,
-                              String googleOldProductId,
-                              GoogleProrationMode googleProrationMode,
-                              Boolean googleIsPersonalizedPrice,
-                              OnResult onResult) {
+                                      String productIdentifier,
+                                      String type,
+                                      String googleOldProductId,
+                                      GoogleProrationMode googleProrationMode,
+                                      Boolean googleIsPersonalizedPrice,
+                                      OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
                 productIdentifier,
@@ -57,16 +56,34 @@ class CommonApiTests {
     }
 
     private void checkPurchasePackage(Activity activity,
-                              String packageIdentifier,
-                              String offeringIdentifier,
-                              String googleOldProductId,
-                              GoogleProrationMode googleProrationMode,
-                              Boolean googleIsPersonalizedPrice,
-                              OnResult onResult) {
+                                      String packageIdentifier,
+                                      String offeringIdentifier,
+                                      String googleOldProductId,
+                                      GoogleProrationMode googleProrationMode,
+                                      Boolean googleIsPersonalizedPrice,
+                                      OnResult onResult) {
         CommonKt.purchasePackage(
                 activity,
                 packageIdentifier,
                 offeringIdentifier,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
+                onResult
+        );
+    }
+
+    private void checkPurchaseSubscriptionOption(Activity activity,
+                                                 String productIdentifier,
+                                                 String optionIdentifier,
+                                                 String googleOldProductId,
+                                                 GoogleProrationMode googleProrationMode,
+                                                 Boolean googleIsPersonalizedPrice,
+                                                 OnResult onResult) {
+        CommonKt.purchaseSubscriptionOption(
+                activity,
+                productIdentifier,
+                optionIdentifier,
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
