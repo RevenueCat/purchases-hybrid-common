@@ -77,7 +77,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
             // Check freeTrialPeriod first to give priority to trials
             // Format using device locale. iOS will format using App Store locale, but there's no way
             // to figure out how the price in the SKUDetails is being formatted.
-            freeTrialPeriod?.mapPeriod()?.let { periodFields ->
+            freeTrialPeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
                 mapOf(
                     "price" to 0,
                     "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
@@ -87,7 +87,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
             }
         }
         introductoryPrice != null -> {
-            introductoryPricePeriodNEW?.mapPeriod()?.let { periodFields ->
+            introductoryPricePeriodNEW?.mapPeriodForStoreProduct()?.let { periodFields ->
                 mapOf(
                     "price" to introductoryPriceAmountMicros / 1_000_000.0,
                     "priceString" to introductoryPrice,
@@ -102,7 +102,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
     }
 }
 
-private fun Period.mapPeriod(): Map<String, Any?>? {
+private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
     return when(this.unit) {
         Period.Unit.DAY -> mapOf(
             "periodUnit" to "DAY",
@@ -124,6 +124,32 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
         Period.Unit.UNKNOWN -> mapOf(
             "periodUnit" to "DAY",
             "periodNumberOfUnits" to 0
+        )
+    }
+}
+
+private fun Period.mapPeriod(): Map<String, Any?>? {
+    return when(this.unit) {
+        Period.Unit.DAY -> mapOf(
+            "unit" to "DAY",
+            "value" to this.value
+        )
+        // WEEK was added in Android V6 but converting to days for backwards compatibility
+        Period.Unit.WEEK -> mapOf(
+            "unit" to "DAY",
+            "value" to this.value * 7
+        )
+        Period.Unit.MONTH -> mapOf(
+            "unit" to "MONTH",
+            "value" to this.value
+        )
+        Period.Unit.YEAR -> mapOf(
+            "unit" to "YEAR",
+            "value" to this.value
+        )
+        Period.Unit.UNKNOWN -> mapOf(
+            "unit" to "DAY",
+            "value" to 0
         )
     }
 }
