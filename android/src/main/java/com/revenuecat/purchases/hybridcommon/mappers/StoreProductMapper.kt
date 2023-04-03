@@ -77,7 +77,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
             // Check freeTrialPeriod first to give priority to trials
             // Format using device locale. iOS will format using App Store locale, but there's no way
             // to figure out how the price in the SKUDetails is being formatted.
-            freeTrialPeriod?.mapPeriod()?.let { periodFields ->
+            freeTrialPeriod?.mapPeriod(false)?.let { periodFields ->
                 mapOf(
                     "price" to 0,
                     "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
@@ -87,7 +87,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
             }
         }
         introductoryPrice != null -> {
-            introductoryPricePeriodNEW?.mapPeriod()?.let { periodFields ->
+            introductoryPricePeriodNEW?.mapPeriod(false)?.let { periodFields ->
                 mapOf(
                     "price" to introductoryPriceAmountMicros / 1_000_000.0,
                     "priceString" to introductoryPrice,
@@ -102,28 +102,31 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
     }
 }
 
-private fun Period.mapPeriod(): Map<String, Any?>? {
+private fun Period.mapPeriod(forSubscriptionOption: Boolean): Map<String, Any?>? {
+    val unitKey = if (forSubscriptionOption) "unit" else "periodUnit";
+    val valueKey = if (forSubscriptionOption) "value" else "periodNumberOfUnits"
+
     return when(this.unit) {
         Period.Unit.DAY -> mapOf(
-            "periodUnit" to "DAY",
-            "periodNumberOfUnits" to this.value
+            unitKey to "DAY",
+            valueKey to this.value
         )
         // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
-            "periodUnit" to "DAY",
-            "periodNumberOfUnits" to this.value * 7
+            unitKey to "DAY",
+            valueKey to this.value * 7
         )
         Period.Unit.MONTH -> mapOf(
-            "periodUnit" to "MONTH",
-            "periodNumberOfUnits" to this.value
+            unitKey to "MONTH",
+            valueKey to this.value
         )
         Period.Unit.YEAR -> mapOf(
-            "periodUnit" to "YEAR",
-            "periodNumberOfUnits" to this.value
+            unitKey to "YEAR",
+            valueKey to this.value
         )
         Period.Unit.UNKNOWN -> mapOf(
-            "periodUnit" to "DAY",
-            "periodNumberOfUnits" to 0
+            unitKey to "DAY",
+            valueKey to 0
         )
     }
 }
@@ -148,7 +151,7 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
         "pricingPhases" to pricingPhases.map { it.mapPricingPhase() },
         "tags" to tags,
         "isBasePlan" to isBasePlan,
-        "billingPeriod" to billingPeriod?.mapPeriod(),
+        "billingPeriod" to billingPeriod?.mapPeriod(true),
         "fullPricePhase" to fullPricePhase?.mapPricingPhase(),
         "freePhase" to freePhase?.mapPricingPhase(),
         "introPhase" to introPhase?.mapPricingPhase()
@@ -157,7 +160,7 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
 
 private fun PricingPhase.mapPricingPhase(): Map<String, Any?> {
     return mapOf(
-        "billingPeriod" to billingPeriod?.mapPeriod(),
+        "billingPeriod" to billingPeriod?.mapPeriod(true),
         "recurrenceMode" to recurrenceMode.identifier,
         "billingCycleCount" to billingCycleCount,
         "price" to price.mapPrice(),

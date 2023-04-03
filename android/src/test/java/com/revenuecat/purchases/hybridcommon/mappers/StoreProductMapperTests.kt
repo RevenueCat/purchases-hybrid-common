@@ -291,8 +291,8 @@ internal class StoreProductMapperTest {
 
     private fun testBasePlanOption(option: Map<String, Any?>) {
         val billingPeriod = mapOf(
-            "periodUnit" to "MONTH",
-            "periodNumberOfUnits" to 1
+            "unit" to "MONTH",
+            "value" to 1
         )
 
         assertThat(option).isNotNull
@@ -318,16 +318,16 @@ internal class StoreProductMapperTest {
 
     private fun testMultiPhaseOption(option: Map<String, Any?>) {
         val billingPeriod = mapOf(
-            "periodUnit" to "MONTH",
-            "periodNumberOfUnits" to 1
+            "unit" to "MONTH",
+            "value" to 1
         )
         val freeBillingPeriod = mapOf(
-            "periodUnit" to "DAY",
-            "periodNumberOfUnits" to 7
+            "unit" to "DAY",
+            "value" to 7
         )
         val introBillingPeriod = mapOf(
-            "periodUnit" to "MONTH",
-            "periodNumberOfUnits" to 1
+            "unit" to "MONTH",
+            "value" to 1
         )
 
         assertThat(option).isNotNull
