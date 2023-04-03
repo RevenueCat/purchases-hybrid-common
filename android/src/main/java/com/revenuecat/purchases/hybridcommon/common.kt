@@ -77,16 +77,17 @@ fun purchaseProduct(
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             val productToBuy = storeProducts.firstOrNull {
                 // Comparison for when productIdentifier is "subId:basePlanId"
-                val isProduct = (it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true))
+                val foundByProductIdContainingBasePlan =
+                    (it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true))
 
                 // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
-                val isBasePlan = (
+                val foundByProductIdAndGoogleBasePlanId = (
                     it.purchasingData.productId == productIdentifier
                         && it.googleProduct?.basePlanId == googleBasePlanId
                         && it.type.name.equals(type, ignoreCase = true)
                     )
 
-                isProduct || isBasePlan
+                foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
             }
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
