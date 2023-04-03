@@ -63,6 +63,9 @@ fun getProductInfo(
     }
 }
 
+/**
+ *
+ */
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
@@ -87,6 +90,9 @@ fun purchaseProduct(
                         && it.type.name.equals(type, ignoreCase = true)
                     )
 
+                // Finding the matching StoreProduct two different ways:
+                // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
+                // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
             }
             if (productToBuy != null) {
@@ -123,10 +129,10 @@ fun purchaseProduct(
         }
         if (type.equals("subs", ignoreCase = true)) {
             // The "productIdentifier"
-            val productIdWithoutBaseplan = productIdentifier.split(":").first()
+            val productIdWithoutBasePlanId = productIdentifier.split(":").first()
 
             Purchases.sharedInstance.getProductsWith(
-                listOf(productIdWithoutBaseplan),
+                listOf(productIdWithoutBasePlanId),
                 ProductType.SUBS,
                 { onResult.onError(it.map()) },
                 onReceiveStoreProducts
