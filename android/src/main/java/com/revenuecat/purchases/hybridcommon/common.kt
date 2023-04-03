@@ -25,6 +25,7 @@ import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
+import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import java.net.URL
@@ -66,6 +67,7 @@ fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
     type: String,
+    googleBasePlanId: String?,
     googleOldProductId: String?,
     googleProrationMode: GoogleProrationMode?,
     googleIsPersonalizedPrice: Boolean?,
@@ -74,8 +76,21 @@ fun purchaseProduct(
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             val productToBuy = storeProducts.firstOrNull {
-                // TODO: Verify this works because "subId:basePlanId" (it should but strings are silly)
-                it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true)
+                // Comparison for when productIdentifier is "subId:basePlanId"
+                val foundByProductIdContainingBasePlan =
+                    (it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true))
+
+                // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+                val foundByProductIdAndGoogleBasePlanId = (
+                    it.purchasingData.productId == productIdentifier
+                        && it.googleProduct?.basePlanId == googleBasePlanId
+                        && it.type.name.equals(type, ignoreCase = true)
+                    )
+
+                // Finding the matching StoreProduct two different ways:
+                // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
+                // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+                foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
             }
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
@@ -110,8 +125,11 @@ fun purchaseProduct(
 
         }
         if (type.equals("subs", ignoreCase = true)) {
+            // The "productIdentifier"
+            val productIdWithoutBasePlanId = productIdentifier.split(":").first()
+
             Purchases.sharedInstance.getProductsWith(
-                listOf(productIdentifier),
+                listOf(productIdWithoutBasePlanId),
                 ProductType.SUBS,
                 { onResult.onError(it.map()) },
                 onReceiveStoreProducts
