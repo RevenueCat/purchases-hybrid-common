@@ -63,9 +63,6 @@ fun getProductInfo(
     }
 }
 
-/**
- *
- */
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
