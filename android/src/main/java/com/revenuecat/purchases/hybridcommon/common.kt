@@ -76,7 +76,10 @@ fun purchaseProduct(
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             val productToBuy = storeProducts.firstOrNull {
+                // Comparison for when productIdentifier is "subId:basePlanId"
                 val isProduct = (it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true))
+
+                // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 val isBasePlan = (
                     it.purchasingData.productId == productIdentifier
                         && it.googleProduct?.basePlanId == googleBasePlanId
