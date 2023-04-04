@@ -23,7 +23,7 @@ private val StoreProduct.introductoryPhase: PricingPhase?
     get() = this.subscriptionOptions?.introOffer?.introPhase
 val StoreProduct.introductoryPrice: String?
     get() = this.introductoryPhase?.price?.formatted
-val StoreProduct.introductoryPricePeriodNEW: Period?
+val StoreProduct.introductoryPricePeriod: Period?
     get() = this.introductoryPhase?.billingPeriod
 val StoreProduct.introductoryPriceAmountMicros: Long
     get() = this.introductoryPhase?.price?.amountMicros ?: 0
@@ -87,11 +87,11 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
             }
         }
         introductoryPrice != null -> {
-            introductoryPricePeriodNEW?.mapPeriodForStoreProduct()?.let { periodFields ->
+            introductoryPricePeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
                 mapOf(
                     "price" to introductoryPriceAmountMicros / 1_000_000.0,
                     "priceString" to introductoryPrice,
-                    "period" to introductoryPricePeriodNEW?.iso8601,
+                    "period" to introductoryPricePeriod?.iso8601,
                     "cycles" to introductoryPriceCycles
                 ) + periodFields
             }
