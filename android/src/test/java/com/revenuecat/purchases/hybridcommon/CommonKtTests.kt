@@ -4,7 +4,6 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import com.android.billingclient.api.ProductDetails
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
@@ -26,6 +25,7 @@ import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.models.BillingFeature
+import com.revenuecat.purchases.models.GoogleProrationMode
 import com.revenuecat.purchases.models.GoogleStoreProduct
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
@@ -35,7 +35,6 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
-import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.models.toRecurrenceMode
 import io.mockk.Runs
 import io.mockk.every
@@ -879,6 +878,58 @@ internal class CommonKtTests {
             assertEquals("$expectedMessage. Throwable: java.lang.ClassCastException: what a pity", logDetails["message"])
         }
         Purchases.logHandler.e("Purchases", expectedMessage, java.lang.ClassCastException("what a pity"))
+    }
+
+    @Test
+    fun `getGoogleProrationMode returns null if null prorationModeIndex`() {
+        val prorationModeInt: Int? = null
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, null)
+    }
+
+    @Test
+    fun `getGoogleProrationMode returns IMMEDIATE_WITHOUT_PRORATION for 3`() {
+        val prorationModeInt: Int? = 3
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITHOUT_PRORATION)
+    }
+
+    @Test
+    fun `getGoogleProrationMode returns IMMEDIATE_WITH_TIME_PRORATION for 1`() {
+        val prorationModeInt: Int? = 1
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITH_TIME_PRORATION)
+    }
+
+    @Test
+    fun `getGoogleProrationMode throws exception for negative out of bounds number`() {
+        val prorationModeInt: Int? = -1
+
+        var catchWasCalled = false
+        try {
+            val mode = getGoogleProrationMode(prorationModeInt)
+        } catch (e: InvalidProrationModeException) {
+            catchWasCalled = true
+        }
+
+        assertTrue(catchWasCalled)
+    }
+
+    @Test
+    fun `getGoogleProrationMode throws exception for position out of bounds number`() {
+        val prorationModeInt: Int? = 1000
+
+        var catchWasCalled = false
+        try {
+            val mode = getGoogleProrationMode(prorationModeInt)
+        } catch (e: InvalidProrationModeException) {
+            catchWasCalled = true
+        }
+
+        assertTrue(catchWasCalled)
     }
 
     private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
