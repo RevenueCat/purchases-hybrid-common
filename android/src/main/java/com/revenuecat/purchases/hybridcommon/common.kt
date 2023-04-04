@@ -63,21 +63,6 @@ fun getProductInfo(
     }
 }
 
-private fun findGoogleProratinoMode(oldProductId: String?, prorationModeIndex: Int?, onError: (error: PurchasesError) -> Unit) : GoogleProrationMode? {
-    return prorationModeIndex
-        ?.takeIf { oldProductId != null }
-        ?.let { it ->
-            GoogleProrationMode.values().getOrNull(it) ?: run {
-                onError(
-                    PurchasesError(PurchasesErrorCode.UnknownError,
-                        "Invalid google proration mode passed to purchaseProduct."
-                    )
-                )
-                return null
-            }
-        }
-}
-
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
