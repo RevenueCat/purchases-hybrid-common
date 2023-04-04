@@ -32,7 +32,7 @@ private class CommonApiTests {
         type: String,
         googleBasePlanId: String?,
         googleOldProductId: String?,
-        googleProrationMode: GoogleProrationMode?,
+        googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
@@ -53,7 +53,7 @@ private class CommonApiTests {
         packageIdentifier: String,
         offeringIdentifier: String,
         googleOldProductId: String?,
-        googleProrationMode: GoogleProrationMode?,
+        googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
@@ -73,7 +73,7 @@ private class CommonApiTests {
         productIdentifier: String,
         optionIdentifier: String,
         googleOldProductId: String?,
-        googleProrationMode: GoogleProrationMode?,
+        googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {

@@ -63,16 +63,42 @@ fun getProductInfo(
     }
 }
 
+private fun findGoogleProratinoMode(oldProductId: String?, prorationModeIndex: Int?, onError: (error: PurchasesError) -> Unit) : GoogleProrationMode? {
+    return prorationModeIndex
+        ?.takeIf { oldProductId != null }
+        ?.let { it ->
+            GoogleProrationMode.values().getOrNull(it) ?: run {
+                onError(
+                    PurchasesError(PurchasesErrorCode.UnknownError,
+                        "Invalid google proration mode passed to purchaseProduct."
+                    )
+                )
+                return null
+            }
+        }
+}
+
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
     type: String,
     googleBasePlanId: String?,
     googleOldProductId: String?,
-    googleProrationMode: GoogleProrationMode?,
+    googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
+    val googleProrationMode = try {
+        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+    } catch (e: InvalidProrationMode) {
+        onResult.onError(
+            PurchasesError(PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchaseProduct."
+            ).map()
+        )
+        return
+    }
+
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             val productToBuy = storeProducts.firstOrNull {
@@ -157,10 +183,21 @@ fun purchasePackage(
     packageIdentifier: String,
     offeringIdentifier: String,
     googleOldProductId: String?,
-    googleProrationMode: GoogleProrationMode?,
+    googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
+    val googleProrationMode = try {
+        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+    } catch (e: InvalidProrationMode) {
+        onResult.onError(
+            PurchasesError(PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchasePackage."
+            ).map()
+        )
+        return
+    }
+
     if (activity != null) {
         Purchases.sharedInstance.getOfferingsWith(
             { onResult.onError(it.map()) },
@@ -216,10 +253,21 @@ fun purchaseSubscriptionOption(
     productIdentifier: String,
     optionIdentifier: String,
     googleOldProductId: String?,
-    googleProrationMode: GoogleProrationMode?,
+    googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult
 ) {
+    val googleProrationMode = try {
+        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+    } catch (e: InvalidProrationMode) {
+        onResult.onError(
+            PurchasesError(PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchaseSubscriptionOption."
+            ).map()
+        )
+        return
+    }
+
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             // Iterates over StoreProducts and SubscriptionOptions to find
@@ -442,6 +490,21 @@ fun getPromotionalOffer() : ErrorContainer {
 }
 
 // region private functions
+
+internal class InvalidProrationMode(): Exception()
+
+@Throws(InvalidProrationMode::class)
+internal inline fun getGoogleProrationMode(oldProductId: String?, prorationMode: Int?) : GoogleProrationMode?  {
+    return prorationMode
+        ?.takeIf { oldProductId != null }
+        ?.let { index ->
+            GoogleProrationMode.values().find {
+                it.playBillingClientMode == prorationMode
+            } ?: run {
+                throw InvalidProrationMode()
+            }
+        }
+}
 
 private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
