@@ -74,7 +74,7 @@ fun purchaseProduct(
     onResult: OnResult
 ) {
     val googleProrationMode = try {
-        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+        getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
@@ -173,7 +173,7 @@ fun purchasePackage(
     onResult: OnResult
 ) {
     val googleProrationMode = try {
-        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+        getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
@@ -243,7 +243,7 @@ fun purchaseSubscriptionOption(
     onResult: OnResult
 ) {
     val googleProrationMode = try {
-        getGoogleProrationMode(googleOldProductId, googleProrationMode)
+        getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
@@ -479,9 +479,8 @@ fun getPromotionalOffer() : ErrorContainer {
 internal class InvalidProrationModeException(): Exception()
 
 @Throws(InvalidProrationModeException::class)
-internal fun getGoogleProrationMode(oldProductId: String?, prorationMode: Int?) : GoogleProrationMode?  {
+internal fun getGoogleProrationMode(prorationMode: Int?) : GoogleProrationMode?  {
     return prorationMode
-        ?.takeIf { oldProductId != null }
         ?.let { index ->
             GoogleProrationMode.values().find {
                 it.playBillingClientMode == prorationMode

@@ -881,49 +881,36 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `getGoogleProrationMode returns null if null oldProductId`() {
-        val oldProductId: String? = null
-        val prorationModeInt: Int? = 5
-
-        val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
-        assertEquals(mode, null)
-    }
-
-    @Test
     fun `getGoogleProrationMode returns null if null prorationModeIndex`() {
-        val oldProductId: String? = "old_product_id"
         val prorationModeInt: Int? = null
 
-        val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
+        val mode = getGoogleProrationMode(prorationModeInt)
         assertEquals(mode, null)
     }
 
     @Test
     fun `getGoogleProrationMode returns IMMEDIATE_WITHOUT_PRORATION for 3`() {
-        val oldProductId: String? = "old_product_id"
         val prorationModeInt: Int? = 3
 
-        val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
+        val mode = getGoogleProrationMode(prorationModeInt)
         assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITHOUT_PRORATION)
     }
 
     @Test
     fun `getGoogleProrationMode returns IMMEDIATE_WITH_TIME_PRORATION for 1`() {
-        val oldProductId: String? = "old_product_id"
         val prorationModeInt: Int? = 1
 
-        val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
+        val mode = getGoogleProrationMode(prorationModeInt)
         assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITH_TIME_PRORATION)
     }
 
     @Test
     fun `getGoogleProrationMode throws exception for negative out of bounds number`() {
-        val oldProductId: String? = "old_product_id"
         val prorationModeInt: Int? = -1
 
         var catchWasCalled = false
         try {
-            val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
+            val mode = getGoogleProrationMode(prorationModeInt)
         } catch (e: InvalidProrationModeException) {
             catchWasCalled = true
         }
@@ -933,12 +920,11 @@ internal class CommonKtTests {
 
     @Test
     fun `getGoogleProrationMode throws exception for position out of bounds number`() {
-        val oldProductId: String? = "old_product_id"
         val prorationModeInt: Int? = 1000
 
         var catchWasCalled = false
         try {
-            val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
+            val mode = getGoogleProrationMode(prorationModeInt)
         } catch (e: InvalidProrationModeException) {
             catchWasCalled = true
         }
