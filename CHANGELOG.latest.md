@@ -1,4 +1,4 @@
 ### Breaking Changes
-* [BC5] Rename `Period` fields to `unit` and `value` (#365) via Josh Holtz (@joshdholtz)
-### Bug Fixes
-* [BC5] Fix `purchaseProduct` to work with `productIdentifiers` with base plans (#366) via Josh Holtz (@joshdholtz)
+* [BC5] Use Int for Google proration mode to make mapping logic to GoogleProrationMode reusable (#368) via Josh Holtz (@joshdholtz)
+### New Features
+* [BC5] Add `iso8601` to `Period` for subscription option pricing phases (#369) via Josh Holtz (@joshdholtz)
