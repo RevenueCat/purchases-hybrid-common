@@ -75,7 +75,7 @@ fun purchaseProduct(
 ) {
     val googleProrationMode = try {
         getGoogleProrationMode(googleOldProductId, googleProrationMode)
-    } catch (e: InvalidProrationMode) {
+    } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchaseProduct."
@@ -174,7 +174,7 @@ fun purchasePackage(
 ) {
     val googleProrationMode = try {
         getGoogleProrationMode(googleOldProductId, googleProrationMode)
-    } catch (e: InvalidProrationMode) {
+    } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchasePackage."
@@ -244,7 +244,7 @@ fun purchaseSubscriptionOption(
 ) {
     val googleProrationMode = try {
         getGoogleProrationMode(googleOldProductId, googleProrationMode)
-    } catch (e: InvalidProrationMode) {
+    } catch (e: InvalidProrationModeException) {
         onResult.onError(
             PurchasesError(PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchaseSubscriptionOption."
@@ -476,17 +476,17 @@ fun getPromotionalOffer() : ErrorContainer {
 
 // region private functions
 
-internal class InvalidProrationMode(): Exception()
+internal class InvalidProrationModeException(): Exception()
 
-@Throws(InvalidProrationMode::class)
-internal inline fun getGoogleProrationMode(oldProductId: String?, prorationMode: Int?) : GoogleProrationMode?  {
+@Throws(InvalidProrationModeException::class)
+internal fun getGoogleProrationMode(oldProductId: String?, prorationMode: Int?) : GoogleProrationMode?  {
     return prorationMode
         ?.takeIf { oldProductId != null }
         ?.let { index ->
             GoogleProrationMode.values().find {
                 it.playBillingClientMode == prorationMode
             } ?: run {
-                throw InvalidProrationMode()
+                throw InvalidProrationModeException()
             }
         }
 }

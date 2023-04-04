@@ -4,7 +4,6 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.net.Uri
 import com.android.billingclient.api.ProductDetails
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
@@ -36,7 +35,6 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
-import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.models.toRecurrenceMode
 import io.mockk.Runs
 import io.mockk.every
@@ -926,11 +924,11 @@ internal class CommonKtTests {
         var catchWasCalled = false
         try {
             val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
-        } catch (e: InvalidProrationMode) {
+        } catch (e: InvalidProrationModeException) {
             catchWasCalled = true
         }
 
-        assert(catchWasCalled)
+        assertTrue(catchWasCalled)
     }
 
     @Test
@@ -941,11 +939,11 @@ internal class CommonKtTests {
         var catchWasCalled = false
         try {
             val mode = getGoogleProrationMode(oldProductId, prorationModeInt)
-        } catch (e: InvalidProrationMode) {
+        } catch (e: InvalidProrationModeException) {
             catchWasCalled = true
         }
 
-        assert(catchWasCalled)
+        assertTrue(catchWasCalled)
     }
 
     private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
