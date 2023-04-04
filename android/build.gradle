@@ -40,7 +40,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 32
         versionCode 1
-        versionName "5.0.0-beta.2"
+        versionName "5.0.0-beta.3"
 
         consumerProguardFiles 'consumer-rules.pro'
     }
