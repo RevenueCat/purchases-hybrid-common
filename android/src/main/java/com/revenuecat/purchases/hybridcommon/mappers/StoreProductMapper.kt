@@ -151,7 +151,7 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
             "unit" to "DAY",
             "value" to 0
         )
-    }
+    } + mapOf("iso8601" to this.iso8601)
 }
 
 private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
