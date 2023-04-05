@@ -31,6 +31,7 @@ import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.PurchasingData
+import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
@@ -963,12 +964,18 @@ fun stubStoreProduct(
         Period(1, Period.Unit.MONTH, "P1M"),
     ),
     subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
-    price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price
+    price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
+    presentedOfferingIdentifier: String? = null
 ): StoreProduct = object : StoreProduct {
     override val id: String
         get() = productId
     override val type: ProductType
         get() = type
+
+    override fun copyWithOfferingId(offeringId: String): StoreProduct {
+        return this
+    }
+
     override val price: Price
         get() = price
     override val title: String
@@ -977,6 +984,8 @@ fun stubStoreProduct(
         get() = description
     override val period: Period?
         get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val presentedOfferingIdentifier: String?
+        get() = presentedOfferingIdentifier
     override val subscriptionOptions: SubscriptionOptions?
         get() = subscriptionOptions?.let { SubscriptionOptions(it) }
     override val defaultOption: SubscriptionOption?
@@ -994,10 +1003,13 @@ fun stubSubscriptionOption(
     id: String,
     productId: String,
     duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
-    pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration))
+    pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
+    presentedOfferingIdentifier: String? = null
 ): SubscriptionOption = object : SubscriptionOption {
     override val id: String
         get() = id
+    override val presentedOfferingIdentifier: String?
+        get() = presentedOfferingIdentifier
     override val pricingPhases: List<PricingPhase>
         get() = pricingPhases
     override val tags: List<String>
@@ -1021,11 +1033,11 @@ fun stubPricingPhase(
     priceCurrencyCodeValue: String = "USD",
     priceFormatted: String = "$4.99",
     price: Double = 4.99,
-    recurrenceMode: Int = ProductDetails.RecurrenceMode.INFINITE_RECURRING,
+    recurrenceMode: RecurrenceMode = RecurrenceMode.INFINITE_RECURRING,
     billingCycleCount: Int = 0
 ): PricingPhase = PricingPhase(
     billingPeriod,
-    recurrenceMode.toRecurrenceMode(),
+    recurrenceMode,
     billingCycleCount,
-    Price(priceFormatted, price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue)
+    Price(priceFormatted, price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue),
 )

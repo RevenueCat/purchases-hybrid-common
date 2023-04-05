@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -187,6 +188,7 @@ private fun PricingPhase.mapPricingPhase(): Map<String, Any?> {
         "recurrenceMode" to recurrenceMode.identifier,
         "billingCycleCount" to billingCycleCount,
         "price" to price.mapPrice(),
+        "offerPaymentMode" to offerPaymentMode?.toString()
     )
 }
 
