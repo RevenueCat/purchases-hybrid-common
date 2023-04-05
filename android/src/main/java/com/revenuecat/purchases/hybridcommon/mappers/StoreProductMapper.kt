@@ -46,6 +46,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "subscriptionPeriod" to period?.iso8601,
         "defaultOption" to defaultOption?.mapSubscriptionOption(this),
         "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
+        "presentedOfferingIdentifier" to presentedOfferingIdentifier
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
@@ -178,7 +179,8 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
         "billingPeriod" to billingPeriod?.mapPeriod(),
         "fullPricePhase" to fullPricePhase?.mapPricingPhase(),
         "freePhase" to freePhase?.mapPricingPhase(),
-        "introPhase" to introPhase?.mapPricingPhase()
+        "introPhase" to introPhase?.mapPricingPhase(),
+        "presentedOfferingIdentifier" to presentedOfferingIdentifier
     )
 }
 

@@ -225,7 +225,7 @@ internal class StoreProductMapperTest {
     @Test
     fun `map has correct size`() {
         stubStoreProduct("monthly_product").map().let {
-            assertThat(it.size).isEqualTo(13)
+            assertThat(it.size).isEqualTo(14)
         }
     }
 
@@ -292,6 +292,28 @@ internal class StoreProductMapperTest {
             val subscriptionOptions = it["subscriptionOptions"] as List<Map<String, Any?>>
             testBasePlanOption(subscriptionOptions[0])
             testMultiPhaseOption(subscriptionOptions[1])
+        }
+    }
+
+    @Test
+    fun `map presentedOfferingIdentifier correctly when null`() {
+        stubStoreProduct(
+            productId = exptectedProductId,
+            presentedOfferingIdentifier = null
+        ).map().let {
+            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(null)
+        }
+    }
+
+    @Test
+    fun `map presentedOfferingIdentifier correctly when not null`() {
+        val expectedPresentedOfferingIdentifier = "mainoffer"
+
+        stubStoreProduct(
+            productId = exptectedProductId,
+            presentedOfferingIdentifier = expectedPresentedOfferingIdentifier
+        ).map().let {
+            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(expectedPresentedOfferingIdentifier)
         }
     }
 
