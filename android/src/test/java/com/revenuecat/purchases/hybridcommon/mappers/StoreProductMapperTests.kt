@@ -5,8 +5,10 @@ import com.revenuecat.purchases.hybridcommon.MICROS_MULTIPLIER
 import com.revenuecat.purchases.hybridcommon.stubPricingPhase
 import com.revenuecat.purchases.hybridcommon.stubStoreProduct
 import com.revenuecat.purchases.hybridcommon.stubSubscriptionOption
+import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
+import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
@@ -168,7 +170,7 @@ internal class StoreProductMapperTest {
                 pricingPhases = listOf(
                     stubPricingPhase(
                         billingPeriod = duration,
-                        recurrenceMode = 3
+                        recurrenceMode = RecurrenceMode.NON_RECURRING
                     )
                 )
             )
@@ -223,7 +225,7 @@ internal class StoreProductMapperTest {
     @Test
     fun `map has correct size`() {
         stubStoreProduct("monthly_product").map().let {
-            assertThat(it.size).isEqualTo(13)
+            assertThat(it.size).isEqualTo(14)
         }
     }
 
@@ -262,12 +264,16 @@ internal class StoreProductMapperTest {
                 stubPricingPhase(
                     billingPeriod = freeTrialDuration,
                     priceFormatted = "$0.00",
-                    price = 0.0
+                    price = 0.0,
+                    recurrenceMode = RecurrenceMode.FINITE_RECURRING,
+                    billingCycleCount = 1
                 ),
                 stubPricingPhase(
                     billingPeriod = introTrialDuration,
                     priceFormatted = "$2.99",
-                    price = 2.99
+                    price = 2.99,
+                    recurrenceMode = RecurrenceMode.FINITE_RECURRING,
+                    billingCycleCount = 1
                 ),
                 stubPricingPhase(
                     billingPeriod = duration,
@@ -287,6 +293,35 @@ internal class StoreProductMapperTest {
             testBasePlanOption(subscriptionOptions[0])
             testMultiPhaseOption(subscriptionOptions[1])
         }
+    }
+
+    @Test
+    fun `map presentedOfferingIdentifier correctly when null`() {
+        stubStoreProduct(
+            productId = exptectedProductId,
+            presentedOfferingIdentifier = null
+        ).map().let {
+            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(null)
+        }
+    }
+
+    @Test
+    fun `map presentedOfferingIdentifier correctly when not null`() {
+        val expectedPresentedOfferingIdentifier = "mainoffer"
+
+        stubStoreProduct(
+            productId = exptectedProductId,
+            presentedOfferingIdentifier = expectedPresentedOfferingIdentifier
+        ).map().let {
+            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(expectedPresentedOfferingIdentifier)
+        }
+    }
+
+    @Test
+    fun `OfferPaymentMode maps to correct string value`() {
+        assertThat(OfferPaymentMode.FREE_TRIAL.toString()).isEqualTo("FREE_TRIAL")
+        assertThat(OfferPaymentMode.SINGLE_PAYMENT.toString()).isEqualTo("SINGLE_PAYMENT")
+        assertThat(OfferPaymentMode.DISCOUNTED_RECURRING_PAYMENT.toString()).isEqualTo("DISCOUNTED_RECURRING_PAYMENT")
     }
 
     private fun testBasePlanOption(option: Map<String, Any?>) {
@@ -311,6 +346,7 @@ internal class StoreProductMapperTest {
                     "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD"
                 ),
+                "offerPaymentMode" to null
             )
         )
         assertThat(option["freePhase"]).isNull()
@@ -349,30 +385,33 @@ internal class StoreProductMapperTest {
                     "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD"
                 ),
+                "offerPaymentMode" to null
             )
         )
         assertThat(option["freePhase"]).isEqualTo(
             mapOf(
                 "billingPeriod" to freeBillingPeriod,
-                "recurrenceMode" to 1,
-                "billingCycleCount" to 0,
+                "recurrenceMode" to 2,
+                "billingCycleCount" to 1,
                 "price" to mapOf(
                     "formatted" to "$0.00",
                     "amountMicros" to 0L,
                     "currencyCode" to "USD"
                 ),
+                "offerPaymentMode" to "FREE_TRIAL"
             )
         )
         assertThat(option["introPhase"]).isEqualTo(
             mapOf(
                 "billingPeriod" to introBillingPeriod,
-                "recurrenceMode" to 1,
-                "billingCycleCount" to 0,
+                "recurrenceMode" to 2,
+                "billingCycleCount" to 1,
                 "price" to mapOf(
                     "formatted" to "$2.99",
                     "amountMicros" to (2.99 * MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD"
                 ),
+                "offerPaymentMode" to "SINGLE_PAYMENT"
             )
         )
     }

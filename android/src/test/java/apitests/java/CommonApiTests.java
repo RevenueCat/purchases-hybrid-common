@@ -44,6 +44,7 @@ class CommonApiTests {
                                       String googleOldProductId,
                                       Integer googleProrationMode,
                                       Boolean googleIsPersonalizedPrice,
+                                      String presentedOfferingIdentifier,
                                       OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
@@ -53,6 +54,7 @@ class CommonApiTests {
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
+                presentedOfferingIdentifier,
                 onResult
         );
     }
@@ -81,6 +83,7 @@ class CommonApiTests {
                                                  String googleOldProductId,
                                                  Integer googleProrationMode,
                                                  Boolean googleIsPersonalizedPrice,
+                                                 String presentedOfferingIdentifier,
                                                  OnResult onResult) {
         CommonKt.purchaseSubscriptionOption(
                 activity,
@@ -89,6 +92,7 @@ class CommonApiTests {
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
+                presentedOfferingIdentifier,
                 onResult
         );
     }
