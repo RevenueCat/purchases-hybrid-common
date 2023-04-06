@@ -23,6 +23,7 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.models.GoogleSubscriptionOption
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
@@ -71,6 +72,7 @@ fun purchaseProduct(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    presentedOfferingIdentifier: String?,
     onResult: OnResult
 ) {
     val googleProrationMode = try {
@@ -102,7 +104,8 @@ fun purchaseProduct(
                 // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
                 // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
-            }
+            }?.applyOfferingIdentifier(presentedOfferingIdentifier)
+
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
 
@@ -240,6 +243,7 @@ fun purchaseSubscriptionOption(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    presentedOfferingIdentifier: String?,
     onResult: OnResult
 ) {
     val googleProrationMode = try {
@@ -258,10 +262,13 @@ fun purchaseSubscriptionOption(
             // Iterates over StoreProducts and SubscriptionOptions to find
             // the first matching product id and subscription option id
             val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
-                storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
-                    storeProduct.purchasingData.productId == productIdentifier &&
+                // Create StoreProduct copy with presentedOfferingIdentifier if exists
+                // This will give all SubscriptionOption the presentedOfferingIdentifier
+                storeProduct.applyOfferingIdentifier(presentedOfferingIdentifier)
+                    .subscriptionOptions?.firstOrNull { subscriptionOption ->
+                        storeProduct.purchasingData.productId == productIdentifier &&
                             subscriptionOption.id == optionIdentifier
-                }
+                    }
             }
 
             if (optionToPurchase != null) {
@@ -488,6 +495,12 @@ internal fun getGoogleProrationMode(prorationMode: Int?) : GoogleProrationMode? 
                 throw InvalidProrationModeException()
             }
         }
+}
+
+private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?) : StoreProduct {
+    return presentedOfferingIdentifier?.let {
+        this.copyWithOfferingId(it)
+    } ?: this
 }
 
 private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {

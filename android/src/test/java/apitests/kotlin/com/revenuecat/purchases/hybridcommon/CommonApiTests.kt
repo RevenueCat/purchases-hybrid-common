@@ -34,6 +34,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
+        presentedOfferingIdentifier: String?,
         onResult: OnResult
     ) {
         purchaseProduct(
@@ -44,6 +45,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
+            presentedOfferingIdentifier,
             onResult
         )
     }
@@ -75,6 +77,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
+        presentedOfferingIdentifier: String?,
         onResult: OnResult
     ) {
         purchaseSubscriptionOption(
@@ -84,6 +87,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
+            presentedOfferingIdentifier,
             onResult
         )
     }
