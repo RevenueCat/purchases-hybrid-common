@@ -1,3 +1,7 @@
+## 5.0.0-beta.4
+### Bugfixes
+* Add platform check,`OfferPaymentMode`, and `presentedOfferingIdentifier` (#371) via Josh Holtz (@joshdholtz)
+
 ## 5.0.0-beta.3
 ### Breaking Changes
 * [BC5] Use Int for Google proration mode to make mapping logic to GoogleProrationMode reusable (#368) via Josh Holtz (@joshdholtz)
