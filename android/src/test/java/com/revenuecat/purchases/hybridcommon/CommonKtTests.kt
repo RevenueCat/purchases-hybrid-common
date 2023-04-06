@@ -16,6 +16,7 @@ import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
@@ -71,6 +72,7 @@ internal class CommonKtTests {
         } returns mockPurchases
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
+        every { mockPurchases.store } returns Store.PLAY_STORE
     }
 
 
@@ -976,6 +978,34 @@ internal class CommonKtTests {
 
         assertNotNull(receivedResponse)
         assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption errors when store is Amazon`() {
+        every { mockPurchases.store } returns Store.AMAZON
+
+        var receivedErrorContainer: ErrorContainer? = null
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = "product",
+            optionIdentifier = "option",
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Should be success")
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    receivedErrorContainer = errorContainer
+                }
+            }
+        )
+
+        assertNotNull(receivedErrorContainer)
     }
 
     @Test

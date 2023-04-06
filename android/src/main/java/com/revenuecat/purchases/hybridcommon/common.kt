@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import com.android.billingclient.api.Purchase
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.LogLevel
@@ -246,6 +247,15 @@ fun purchaseSubscriptionOption(
     presentedOfferingIdentifier: String?,
     onResult: OnResult
 ) {
+    if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
+        onResult.onError(
+            PurchasesError(PurchasesErrorCode.UnknownError,
+                "purchaseSubscriptionOption() is only supported on the Play Store."
+            ).map()
+        )
+        return
+    }
+
     val googleProrationMode = try {
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
