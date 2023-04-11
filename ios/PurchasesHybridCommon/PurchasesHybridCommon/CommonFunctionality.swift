@@ -151,7 +151,6 @@ import RevenueCat
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
-    @available(macCatalyst, unavailable)
     @objc(beginRefundRequestProductId:completionBlock:)
     static func beginRefundRequest(productId: String,
                                    completion: @escaping (ErrorContainer?) -> Void) {
@@ -164,7 +163,6 @@ import RevenueCat
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
-    @available(macCatalyst, unavailable)
     @objc(beginRefundRequestEntitlementId:completionBlock:)
     static func beginRefundRequest(entitlementId: String,
                                    completion: @escaping (ErrorContainer?) -> Void) {
@@ -177,7 +175,6 @@ import RevenueCat
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
-    @available(macCatalyst, unavailable)
     @objc(beginRefundRequestForActiveEntitlementCompletion:)
     static func beginRefundRequestForActiveEntitlement(completion: @escaping (ErrorContainer?) -> Void) {
         Self.sharedInstance.beginRefundRequestForActiveEntitlement { result in
