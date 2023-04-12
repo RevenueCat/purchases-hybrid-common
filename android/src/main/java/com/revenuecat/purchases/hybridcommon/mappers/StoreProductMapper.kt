@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
-import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -41,8 +40,8 @@ fun StoreProduct.map(): Map<String, Any?> =
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
-        "productCategory" to mapProductCategory(),
         "productType" to mapProductType(),
+        "productSubtype" to mapProductSubtype(),
         "subscriptionPeriod" to period?.iso8601,
         "defaultOption" to defaultOption?.mapSubscriptionOption(this),
         "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
@@ -51,7 +50,7 @@ fun StoreProduct.map(): Map<String, Any?> =
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
-internal fun StoreProduct.mapProductCategory(): String {
+internal fun StoreProduct.mapProductType(): String {
     return when (type) {
         ProductType.INAPP -> "NON_SUBSCRIPTION"
         ProductType.SUBS -> "SUBSCRIPTION"
@@ -59,7 +58,7 @@ internal fun StoreProduct.mapProductCategory(): String {
     }
 }
 
-internal fun StoreProduct.mapProductType(): String {
+internal fun StoreProduct.mapProductSubtype(): String {
     return when (type) {
         ProductType.INAPP -> "CONSUMABLE"
         ProductType.SUBS -> {

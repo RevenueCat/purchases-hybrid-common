@@ -130,36 +130,36 @@ internal class StoreProductMapperTest {
     }
 
     @Test
-    fun `maps product category correctly`() {
+    fun `maps product type correctly`() {
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.SUBS
         ).map().let {
-            assertThat(it["productCategory"]).isEqualTo("SUBSCRIPTION")
+            assertThat(it["productType"]).isEqualTo("SUBSCRIPTION")
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP
         ).map().let {
-            assertThat(it["productCategory"]).isEqualTo("NON_SUBSCRIPTION")
+            assertThat(it["productType"]).isEqualTo("NON_SUBSCRIPTION")
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.UNKNOWN
         ).map().let {
-            assertThat(it["productCategory"]).isEqualTo("UNKNOWN")
+            assertThat(it["productType"]).isEqualTo("UNKNOWN")
         }
     }
 
     @Test
-    fun `maps product type correctly`() {
+    fun `maps product subtype correctly`() {
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.SUBS
         ).map().let {
-            assertThat(it["productType"]).isEqualTo("AUTO_RENEWABLE_SUBSCRIPTION")
+            assertThat(it["productSubtype"]).isEqualTo("AUTO_RENEWABLE_SUBSCRIPTION")
         }
         stubStoreProduct(
             productId = exptectedProductId,
@@ -175,19 +175,19 @@ internal class StoreProductMapperTest {
                 )
             )
         ).map().let {
-            assertThat(it["productType"]).isEqualTo("PREPAID_SUBSCRIPTION")
+            assertThat(it["productSubtype"]).isEqualTo("PREPAID_SUBSCRIPTION")
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP
         ).map().let {
-            assertThat(it["productType"]).isEqualTo("CONSUMABLE")
+            assertThat(it["productSubtype"]).isEqualTo("CONSUMABLE")
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.UNKNOWN
         ).map().let {
-            assertThat(it["productType"]).isEqualTo("UNKNOWN")
+            assertThat(it["productSubtype"]).isEqualTo("UNKNOWN")
         }
     }
 
