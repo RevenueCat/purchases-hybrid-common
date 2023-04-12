@@ -70,16 +70,16 @@ class StoreProductHybridAdditionsTests: QuickSpec {
             it("maps productCategory correctly") {
                 var receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
 
-                expect(receivedDictionary["productCategory"] as? NSString) == "SUBSCRIPTION"
+                expect(receivedDictionary["productType"] as? NSString) == "SUBSCRIPTION"
 
                 receivedDictionary = self.storeProductDictionary(subscriptionPeriod: nil)
 
-                expect(receivedDictionary["productCategory"] as? NSString) == "NON_SUBSCRIPTION"
+                expect(receivedDictionary["productType"] as? NSString) == "NON_SUBSCRIPTION"
             }
             it("maps productType to NON_CONSUMABLE for SK1Products") {
                 let receivedDictionary = self.storeProductDictionary()
 
-                expect(receivedDictionary["productType"] as? NSString) == "NON_CONSUMABLE"
+                expect(receivedDictionary["productSubtype"] as? NSString) == "NON_CONSUMABLE"
             }
             it("maps title correctly") {
                 let expected = "Testing product title"
