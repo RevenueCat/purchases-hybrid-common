@@ -300,6 +300,11 @@ workflows:
     jobs:
       - hold:
           type: approval
+          requires:
+            - test-ios
+            - test-xcode-13-2
+            - integration-test-ios
+            - test-android
           <<: *release-branches
       - tag-release-branch:
           requires:
