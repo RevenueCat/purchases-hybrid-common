@@ -298,24 +298,8 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - hold:
-          type: approval
-          <<: *release-branches
-      - tag-release-branch:
-          requires:
-            - hold
-          <<: *release-branches
-      - deploy-ios:
-          <<: *release-tags
-      - deploy-android:
-          <<: *release-tags
-      - make-github-release:
-          <<: *release-tags
-          requires:
-            - deploy-ios
-            - deploy-android
+      - make-github-release
       - trigger-dependent-updates:
-          <<: *release-tags
           requires:
             - make-github-release
   
