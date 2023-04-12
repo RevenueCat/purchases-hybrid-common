@@ -1,3 +1,8 @@
+## 5.0.0-beta.5
+### Breaking Changes
+* [BC5] iOS rename `productCategory` to `product type` and `productType` to `productSubtype` (#377) via Josh Holtz (@joshdholtz)
+* [BC5] Android rename `productCategory` to `productType` and `productType` to `productSubtype` (#376) via Josh Holtz (@joshdholtz)
+
 ## 5.0.0-beta.4
 ### Bugfixes
 * Add platform check,`OfferPaymentMode`, and `presentedOfferingIdentifier` (#371) via Josh Holtz (@joshdholtz)
