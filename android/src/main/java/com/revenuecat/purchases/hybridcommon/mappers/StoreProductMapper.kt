@@ -40,7 +40,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
-        "productType" to mapProductType(),
+        "productType" to mapProductType().value,
         "productSubtype" to mapProductSubtype(),
         "subscriptionPeriod" to period?.iso8601,
         "defaultOption" to defaultOption?.mapSubscriptionOption(this),
@@ -50,11 +50,24 @@ fun StoreProduct.map(): Map<String, Any?> =
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
-internal fun StoreProduct.mapProductType(): String {
+internal enum class MappedProductType(val value: String) {
+    SUBSCRIPTION("SUBSCRIPTION"),
+    NON_SUBSCRIPTION("NON_SUBSCRIPTION"),
+    UNKNOWN("UNKNOWN");
+
+    val toProductType: ProductType
+        get() = when(this) {
+            NON_SUBSCRIPTION -> ProductType.INAPP
+            SUBSCRIPTION -> ProductType.SUBS
+            UNKNOWN -> ProductType.UNKNOWN
+        }
+}
+
+internal fun StoreProduct.mapProductType(): MappedProductType {
     return when (type) {
-        ProductType.INAPP -> "NON_SUBSCRIPTION"
-        ProductType.SUBS -> "SUBSCRIPTION"
-        ProductType.UNKNOWN -> "UNKNOWN"
+        ProductType.INAPP -> MappedProductType.NON_SUBSCRIPTION
+        ProductType.SUBS -> MappedProductType.SUBSCRIPTION
+        ProductType.UNKNOWN -> MappedProductType.UNKNOWN
     }
 }
 
