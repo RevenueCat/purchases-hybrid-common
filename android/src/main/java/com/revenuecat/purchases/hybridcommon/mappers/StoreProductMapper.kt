@@ -54,6 +54,13 @@ internal enum class MappedProductType(val value: String) {
     SUBSCRIPTION("SUBSCRIPTION"),
     NON_SUBSCRIPTION("NON_SUBSCRIPTION"),
     UNKNOWN("UNKNOWN");
+
+    val toProductType: ProductType
+        get() = when(this) {
+            NON_SUBSCRIPTION -> ProductType.INAPP
+            SUBSCRIPTION -> ProductType.SUBS
+            UNKNOWN -> ProductType.UNKNOWN
+        }
 }
 
 internal fun StoreProduct.mapProductType(): MappedProductType {

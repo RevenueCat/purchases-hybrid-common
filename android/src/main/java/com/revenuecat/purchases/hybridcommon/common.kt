@@ -497,13 +497,11 @@ fun getPromotionalOffer() : ErrorContainer {
 // region private functions
 
 internal fun mapStringTypeToProductType(type: String) : ProductType {
-    MappedProductType.values().firstOrNull { it.value.equals(type, ignoreCase = true) }?.let {
-        return when(it) {
-            MappedProductType.NON_SUBSCRIPTION -> ProductType.INAPP
-            MappedProductType.SUBSCRIPTION -> ProductType.SUBS
-            MappedProductType.UNKNOWN -> ProductType.UNKNOWN
+    MappedProductType.values()
+        .firstOrNull { it.value.equals(type, ignoreCase = true) }
+        ?.let {
+            return it.toProductType
         }
-    }
 
     // Maps strings used in deprecated hybrid methods to native ProductType enum
     // "subs" and "inapp" are legacy purchase types used in v4 and below
