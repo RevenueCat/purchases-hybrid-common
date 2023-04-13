@@ -430,65 +430,6 @@ internal class CommonKtTests {
         purchaseProduct(
             mockActivity,
             productIdentifier = expectedProductIdentifier,
-            type = "SUBSCRIPTION",
-            googleBasePlanId = null,
-            googleOldProductId = null,
-            googleProrationMode = null,
-            googleIsPersonalizedPrice = null,
-            presentedOfferingIdentifier = null,
-            onResult = object : OnResult {
-                override fun onReceived(map: MutableMap<String, *>) {
-                    receivedResponse = map
-                }
-
-                override fun onError(errorContainer: ErrorContainer) {
-                    fail("Should be success")
-                }
-            }
-        )
-
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
-    }
-
-    @Test
-    fun `purchaseProduct passes correct productIdentifier and legacy product type after a successful purchase`() {
-        configure(
-            context = mockContext,
-            apiKey = "api_key",
-            appUserID = "appUserID",
-            observerMode = true,
-            platformInfo = PlatformInfo("flavor", "version")
-        )
-        val expectedProductIdentifier = "product"
-        var receivedResponse: MutableMap<String, *>? = null
-
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
-
-        every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
-        } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
-        }
-
-        val capturedPurchaseCallback = slot<PurchaseCallback>()
-        every {
-            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
-        } answers {
-            val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
-
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
-        }
-
-        purchaseProduct(
-            mockActivity,
-            productIdentifier = expectedProductIdentifier,
             type = "subs",
             googleBasePlanId = null,
             googleOldProductId = null,
@@ -1169,30 +1110,6 @@ internal class CommonKtTests {
         }
 
         assertTrue(catchWasCalled)
-    }
-
-    @Test
-    fun `mapStringTypeToProductType returns ProductType SUBS for subs`() {
-        val productType = mapStringTypeToProductType("subs")
-        assertEquals(ProductType.SUBS, productType)
-    }
-
-    @Test
-    fun `mapStringTypeToProductType returns ProductType SUBS for SUBSCRIPTION`() {
-        val productType = mapStringTypeToProductType("SUBSCRIPTION")
-        assertEquals(ProductType.SUBS, productType)
-    }
-
-    @Test
-    fun `mapStringTypeToProductType returns ProductType INAPP for inapp`() {
-        val productType = mapStringTypeToProductType("inapp")
-        assertEquals(ProductType.INAPP, productType)
-    }
-
-    @Test
-    fun `mapStringTypeToProductType returns ProductType INAPP for NON_SUBSCRIPTION`() {
-        val productType = mapStringTypeToProductType("NON_SUBSCRIPTION")
-        assertEquals(ProductType.INAPP, productType)
     }
 
     private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {

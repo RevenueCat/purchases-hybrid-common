@@ -19,7 +19,6 @@ import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
-import com.revenuecat.purchases.hybridcommon.mappers.MappedProductType
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
@@ -59,7 +58,7 @@ fun getProductInfo(
     val onError: (PurchasesError) -> Unit = { onResult.onError(it.map()) }
     val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
 
-    if (mapStringTypeToProductType(type) == ProductType.SUBS) {
+    if (type.equals("subs", ignoreCase = true)) {
         Purchases.sharedInstance.getProductsWith(productIDs, ProductType.SUBS, onError, onReceived)
     } else {
         Purchases.sharedInstance.getProductsWith(productIDs, ProductType.INAPP, onError, onReceived)
@@ -88,20 +87,18 @@ fun purchaseProduct(
         return
     }
 
-    val productType = mapStringTypeToProductType(type)
-
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
             val productToBuy = storeProducts.firstOrNull {
                 // Comparison for when productIdentifier is "subId:basePlanId"
                 val foundByProductIdContainingBasePlan =
-                    (it.id == productIdentifier && it.type == productType)
+                    (it.id == productIdentifier && it.type.name.equals(type, ignoreCase = true))
 
                 // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 val foundByProductIdAndGoogleBasePlanId = (
                     it.purchasingData.productId == productIdentifier
                         && it.googleProduct?.basePlanId == googleBasePlanId
-                        && it.type == productType
+                        && it.type.name.equals(type, ignoreCase = true)
                     )
 
                 // Finding the matching StoreProduct two different ways:
@@ -142,7 +139,7 @@ fun purchaseProduct(
             }
 
         }
-        if (productType == ProductType.SUBS) {
+        if (type.equals("subs", ignoreCase = true)) {
             // The "productIdentifier"
             val productIdWithoutBasePlanId = productIdentifier.split(":").first()
 
@@ -495,25 +492,6 @@ fun getPromotionalOffer() : ErrorContainer {
 }
 
 // region private functions
-
-internal fun mapStringTypeToProductType(type: String) : ProductType {
-    MappedProductType.values()
-        .firstOrNull { it.value.equals(type, ignoreCase = true) }
-        ?.let {
-            return it.toProductType
-        }
-
-    // Maps strings used in deprecated hybrid methods to native ProductType enum
-    // "subs" and "inapp" are legacy purchase types used in v4 and below
-    return when(type.lowercase()) {
-        "subs" -> ProductType.SUBS
-        "inapp" -> ProductType.INAPP
-        else -> {
-            warnLog("Unrecognized product type: $type... Defaulting to INAPP")
-            ProductType.INAPP
-        }
-    }
-}
 
 internal class InvalidProrationModeException(): Exception()
 
