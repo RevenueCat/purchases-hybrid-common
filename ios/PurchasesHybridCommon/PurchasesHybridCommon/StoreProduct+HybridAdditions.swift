@@ -21,8 +21,8 @@ import StoreKit
             "introPrice": NSNull(),
             "price": self.price,
             "priceString": self.localizedPriceString,
-            "productType": self.productCategoryString,
-            "productSubtype": self.productTypeString,
+            "productCategory": self.productCategoryString,
+            "productType": self.productTypeString,
             "title": self.localizedTitle,
             "subscriptionPeriod": NSNull(),
         ]
