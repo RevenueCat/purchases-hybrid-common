@@ -1,3 +1,9 @@
+## 5.0.0-beta.6
+### Breaking Changes
+* Reverted breaking change for `productType` on `StoreProduct` mapper (#386) via Josh Holtz (@joshdholtz)
+### New Features
+* Add `productCategory` support in `getProductInfo()` and `purchaseProduct()` (#387) via Josh Holtz (@joshdholtz)
+
 ## 5.0.0-beta.5
 ### Breaking Changes
 * iOS rename `productCategory` to `product type` and `productType` to `productSubtype` (#377) via Josh Holtz (@joshdholtz)
