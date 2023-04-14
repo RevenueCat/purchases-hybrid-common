@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ProductType
-import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -41,7 +40,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
-        "productCategory" to mapProductCategory(),
+        "productCategory" to mapProductCategory().value,
         "productType" to mapProductType(),
         "subscriptionPeriod" to period?.iso8601,
         "defaultOption" to defaultOption?.mapSubscriptionOption(this),
@@ -51,11 +50,24 @@ fun StoreProduct.map(): Map<String, Any?> =
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
-internal fun StoreProduct.mapProductCategory(): String {
+internal enum class MappedProductCategory(val value: String) {
+    SUBSCRIPTION("SUBSCRIPTION"),
+    NON_SUBSCRIPTION("NON_SUBSCRIPTION"),
+    UNKNOWN("UNKNOWN");
+
+    val toProductType: ProductType
+        get() = when(this) {
+            NON_SUBSCRIPTION -> ProductType.INAPP
+            SUBSCRIPTION -> ProductType.SUBS
+            UNKNOWN -> ProductType.UNKNOWN
+        }
+}
+
+internal fun StoreProduct.mapProductCategory(): MappedProductCategory {
     return when (type) {
-        ProductType.INAPP -> "NON_SUBSCRIPTION"
-        ProductType.SUBS -> "SUBSCRIPTION"
-        ProductType.UNKNOWN -> "UNKNOWN"
+        ProductType.INAPP -> MappedProductCategory.NON_SUBSCRIPTION
+        ProductType.SUBS -> MappedProductCategory.SUBSCRIPTION
+        ProductType.UNKNOWN -> MappedProductCategory.UNKNOWN
     }
 }
 
