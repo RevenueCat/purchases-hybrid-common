@@ -254,10 +254,10 @@ private_lane :update_native_version do |options|
   if dry_run
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
-    replace_text_in_files(
-      previous_text: previous_version_number,
-      new_text: new_version_number,
-      paths_of_files_to_update: files_to_update
+    replace_version_number(
+        current_version: previous_version_number,
+        new_version_number: new_version_number,
+        files_to_update: files_to_update
     )
   end
   new_version_number
