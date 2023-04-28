@@ -16,7 +16,7 @@ files_with_version_number = {
     './android/build.gradle' => ['versionName "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}']
 }
-PLIST_VERSION_PATTERNS = ['<string>{x}</string>']
+PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
 files_with_version_number_without_prerelease_modifiers = {
     './ios/PurchasesHybridCommon/Info.plist' => PLIST_VERSION_PATTERNS,
     './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
