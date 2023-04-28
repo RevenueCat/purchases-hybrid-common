@@ -10,16 +10,27 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-files_with_version_number = [
-  './.version',
-  './PurchasesHybridCommon.podspec',
-  './android/build.gradle',
-  './android/gradle.properties'
-]
-files_with_version_number_without_prerelease_modifiers = [
-  './ios/PurchasesHybridCommon/Info.plist',
-  './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist'
-]
+files_with_version_number = {
+    './.version' => ['{x}'],
+    './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
+    './android/build.gradle' => ['versionName "{x}"'],
+    './android/gradle.properties' => ['VERSION_NAME={x}']
+}
+PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
+files_with_version_number_without_prerelease_modifiers = {
+    './ios/PurchasesHybridCommon/Info.plist' => PLIST_VERSION_PATTERNS,
+    './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
+}
+POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'']
+files_to_update_ios_dependency = {
+    'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
+    'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
+    'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
+}
+
+files_to_update_android_dependency = {
+    'android/build.gradle' => ['ext.purchases_version = \'{x}\'']
+}
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
 changelog_path = './CHANGELOG.md'
@@ -197,17 +208,12 @@ desc "Update purchases-ios dependency version"
 private_lane :update_ios_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
-  files_to_update = [
-    'PurchasesHybridCommon.podspec',
-    'ios/PurchasesHybridCommon/Podfile',
-    'DEVELOPMENT.md'
-  ]
 
   update_native_version(
     platform_name: "iOS",
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
-    files_to_update: files_to_update
+    files_to_update: files_to_update_ios_dependency
   )
 end
 
@@ -215,15 +221,12 @@ desc "Update purchases-android dependency version"
 private_lane :update_android_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
-  files_to_update = [
-    'android/build.gradle'
-  ]
 
   update_native_version(
     platform_name: "Android",
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
-    files_to_update: files_to_update
+    files_to_update: files_to_update_android_dependency
   )
 end
 
@@ -251,10 +254,10 @@ private_lane :update_native_version do |options|
   if dry_run
     UI.message("ℹ️  Nothing more to do, dry_run: true")
   else
-    replace_text_in_files(
-      previous_text: previous_version_number,
-      new_text: new_version_number,
-      paths_of_files_to_update: files_to_update
+    replace_version_number(
+        current_version: previous_version_number,
+        new_version_number: new_version_number,
+        files_to_update: files_to_update
     )
   end
   new_version_number
@@ -336,7 +339,6 @@ end
 platform :android do
   desc "Upload and close a release"
   lane :deploy do |options|
-    gradle_file_path = "android/build.gradle"
     version = current_version_number
     gradleProperties = {
       "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
