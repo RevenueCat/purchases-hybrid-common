@@ -383,7 +383,7 @@ import RevenueCat
                 completion(eligibilityByProductId.mapValues { [
                     "status": $0.status.rawValue,
                     "description": $0.description
-                ]
+                ] as [String: Any]
                 })
             }
         }
