@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
 
   s.framework      = 'StoreKit'
 
-  s.dependency 'RevenueCat', '4.18.0'
+  s.dependency 'RevenueCat', '4.19.0'
   s.swift_version = '5.0'
 
   s.ios.deployment_target = '11.0'
