@@ -66,7 +66,8 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                 ownershipType: .purchased
             ),
             sandboxEnvironmentDetector: MockSandboxEnvironmentDetector(),
-            requestDate: nil
+            verification: .notRequested,
+            requestDate: .init()
         )
     }
 
