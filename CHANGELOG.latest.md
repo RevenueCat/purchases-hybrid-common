@@ -1,3 +1,4 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.18.0 => 4.19.0 (#404) via RevenueCat Git Bot (@RCGitBot)
-* Bump fastlane-plugin-revenuecat_internal from `fe45299` to `13773d2` (#402) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.212.2 to 2.213.0 (#407) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Xcode 14.3: fixed warning (#405) via NachoSoto (@NachoSoto)
