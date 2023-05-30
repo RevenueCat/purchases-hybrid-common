@@ -39,11 +39,6 @@ executors:
     working_directory: ~/ios
     macos:
       xcode: 13.4.1
-  ios-executor-xcode-13-2:
-    resource_class: macos.x86.medium.gen2
-    working_directory: ~/ios
-    macos:
-      xcode: 13.2.1
 
 commands:
   setup-git-credentials:
@@ -105,8 +100,8 @@ jobs:
     steps:
       - run-ios-tests
 
-  test-xcode-13-2:
-    executor: ios-executor-xcode-13-2
+  test-xcode-13:
+    executor: ios-executor-xcode-13
     steps:
       - run-ios-tests
 
@@ -289,7 +284,7 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - test-ios
-      - test-xcode-13-2
+      - test-xcode-13
       - integration-test-ios
       - test-android
 
