@@ -34,11 +34,6 @@ executors:
     working_directory: ~/ios
     macos:
       xcode: 14.1.0
-  ios-executor-xcode-13:
-    resource_class: macos.x86.medium.gen2
-    working_directory: ~/ios
-    macos:
-      xcode: 13.4.1
 
 commands:
   setup-git-credentials:
@@ -86,8 +81,7 @@ commands:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
-          command: pod lib lint --fail-fast --platforms=ios,osx,tvos
+          command: pod lib lint --fail-fast
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -97,11 +91,6 @@ commands:
 jobs:
   test-ios:
     executor: ios-executor
-    steps:
-      - run-ios-tests
-
-  test-xcode-13:
-    executor: ios-executor-xcode-13
     steps:
       - run-ios-tests
 
@@ -137,8 +126,7 @@ jobs:
           destination: scan-output
   
   deploy-ios:
-    # Xcode 14 not supported until https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed.
-    executor: ios-executor-xcode-13
+    executor: ios-executor
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
@@ -284,7 +272,6 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - test-ios
-      - test-xcode-13
       - integration-test-ios
       - test-android
 
