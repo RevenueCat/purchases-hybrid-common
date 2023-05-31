@@ -15,6 +15,7 @@ import RevenueCat
         var result: [String: Any] = [
             "identifier": identifier,
             "serverDescription": serverDescription,
+            "metadata": metadata,
             "availablePackages": availablePackages.map { $0.dictionary(identifier) }
         ]
 
