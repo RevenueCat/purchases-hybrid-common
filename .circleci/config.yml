@@ -57,7 +57,9 @@ commands:
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
 
-  run-ios-tests:
+jobs:
+  test-ios:
+    <<: *base-ios-job
     steps:
       - checkout
       - run:
@@ -78,12 +80,6 @@ commands:
       - store_artifacts:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
-
-jobs:
-  test-ios:
-    <<: *base-ios-job
-    steps:
-      - run-ios-tests
 
   integration-test-ios:
     <<: *base-ios-job
