@@ -312,9 +312,8 @@ lane :bump_hybrid_dependencies do |options|
 end
 
 platform :ios do
-  desc "Release to CocoaPods, and create GitHub release"
-  lane :release do |options|
-    version_number = current_version_number
+  desc "Release to CocoaPods"
+  lane :push_pods do |options|
     push_pods
   end
 
