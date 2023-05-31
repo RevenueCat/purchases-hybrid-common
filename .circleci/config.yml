@@ -1,6 +1,11 @@
 # For a detailed guide to building and testing on iOS, read the docs:
 # https://circleci.com/docs/2.0/testing-ios/
 
+orbs:
+  android: circleci/android@1.0.3
+  revenuecat: revenuecat/sdks-common-config@2.2.0
+  macos: circleci/macos@2.0.1
+
 version: 2.1
 
 aliases:
@@ -26,11 +31,6 @@ aliases:
         ignore: /.*/
       branches:
         only: /^release\/.*/
-
-orbs:
-  android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@2.2.0
-  macos: circleci/macos@2.0.1
 
 parameters:
   action:
