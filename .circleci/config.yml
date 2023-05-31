@@ -303,9 +303,6 @@ workflows:
             - deploy-android
       - push-pods:
           <<: *release-tags
-          # Xcode 14 not supported until https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed.
-          # This runs as its own job until https://github.com/CocoaPods/CocoaPods/issues/11621 is fixed.
-          xcode_version: '13.4.1'
           requires:
             - make-github-release
       - trigger-dependent-updates:
