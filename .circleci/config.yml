@@ -177,7 +177,7 @@ jobs:
 
   test-android:
     executor:
-      name: cimg/android
+      name: android/android-docker
       resource-class: large
       tag: 2023.06.1
     working_directory: ~/purchases-hybrid-common/android
