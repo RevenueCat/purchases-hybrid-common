@@ -1207,7 +1207,8 @@ internal class CommonKtTests {
         val offering = Offering(
             identifier = offeringIdentifier,
             serverDescription = "",
-            availablePackages = listOf(packageToPurchase)
+            availablePackages = listOf(packageToPurchase),
+            metadata = emptyMap()
         )
         val offerings = Offerings(current = offering, all = mapOf(offeringIdentifier to offering))
         return Triple(offeringIdentifier, packageToPurchase, offerings)
