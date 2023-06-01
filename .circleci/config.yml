@@ -197,8 +197,9 @@ jobs:
 
   deploy-android:
     executor:
-      name: android/android-machine
+      name: android/android-docker
       resource-class: large
+      tag: 2023.06.1
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
