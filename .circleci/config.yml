@@ -2,9 +2,9 @@
 # https://circleci.com/docs/2.0/testing-ios/
 
 orbs:
-  android: circleci/android@1.0.3
+  android: circleci/android@2.3.0
   revenuecat: revenuecat/sdks-common-config@2.2.0
-  macos: circleci/macos@2.0.1
+  macos: circleci/macos@2.3.4
 
 version: 2.1
 
