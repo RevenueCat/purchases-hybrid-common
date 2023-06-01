@@ -60,6 +60,25 @@ commands:
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
 
+  install-sdkman:
+    description: Install SDKMAN
+    steps:
+      - run:
+          name: Installing SDKMAN
+          command: |
+            if curl -s "https://get.sdkman.io?rcupdate=false" | bash; then
+              echo -e '\nsource "/root/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
+              source $BASH_ENV
+            else
+              echo "Error installing SDKMAN, continuing with default Java" >&2
+            fi
+      - run:
+          name: Setup Java environment
+          command: |
+            if ! sdk env install; then
+              echo "Error installing Java SDK through SDKMAN, continuing with default Java" >&2
+            fi
+
 jobs:
   test-ios:
     <<: *base-ios-job
@@ -155,25 +174,6 @@ jobs:
           name: Deploy new version to Cocoapods
           command: bundle exec fastlane push_pods
           no_output_timeout: 30m
-
-  install-sdkman:
-    description: Install SDKMAN
-    steps:
-      - run:
-          name: Installing SDKMAN
-          command: |
-            if curl -s "https://get.sdkman.io?rcupdate=false" | bash; then
-              echo -e '\nsource "/root/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
-              source $BASH_ENV
-            else
-              echo "Error installing SDKMAN, continuing with default Java" >&2
-            fi
-      - run:
-          name: Setup Java environment
-          command: |
-            if ! sdk env install; then
-              echo "Error installing Java SDK through SDKMAN, continuing with default Java" >&2
-            fi
 
   test-android:
     executor:
