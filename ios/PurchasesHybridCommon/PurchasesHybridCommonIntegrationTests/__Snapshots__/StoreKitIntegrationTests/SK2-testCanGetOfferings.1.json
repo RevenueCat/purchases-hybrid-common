@@ -93,6 +93,9 @@
         }
       ],
       "identifier" : "default",
+      "metadata" : {
+        "dontdeletethis" : "useforintegrationtesting"
+      },
       "monthly" : {
         "identifier" : "$rc_monthly",
         "offeringIdentifier" : "default",
@@ -224,6 +227,9 @@
       }
     ],
     "identifier" : "default",
+    "metadata" : {
+      "dontdeletethis" : "useforintegrationtesting"
+    },
     "monthly" : {
       "identifier" : "$rc_monthly",
       "offeringIdentifier" : "default",

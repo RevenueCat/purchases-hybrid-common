@@ -37,7 +37,9 @@ import RevenueCat
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
-        configurationBuilder = configurationBuilder.with(usesStoreKit2IfAvailable: usesStoreKit2IfAvailable)
+        configurationBuilder = (configurationBuilder as ConfigurationBuilderDeprecatable)
+            // Allows silencing deprecation warning, so `pod lib lint` does not fail.
+            .with(usesStoreKit2IfAvailable: usesStoreKit2IfAvailable)
         if let dangerousSettings = dangerousSettings {
             configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
         }
@@ -69,3 +71,12 @@ extension LogLevel {
     )
 }
 
+// MARK: - Deprecations
+
+protocol ConfigurationBuilderDeprecatable {
+
+    func with(usesStoreKit2IfAvailable: Bool) -> Configuration.Builder
+
+}
+
+extension Configuration.Builder: ConfigurationBuilderDeprecatable {}

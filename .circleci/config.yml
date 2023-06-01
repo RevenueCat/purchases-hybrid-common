@@ -1,9 +1,24 @@
 # For a detailed guide to building and testing on iOS, read the docs:
 # https://circleci.com/docs/2.0/testing-ios/
 
+orbs:
+  android: circleci/android@1.0.3
+  revenuecat: revenuecat/sdks-common-config@2.2.0
+  macos: circleci/macos@2.0.1
+
 version: 2.1
 
 aliases:
+  base-ios-job: &base-ios-job
+    resource_class: macos.x86.medium.gen2
+    macos:
+      xcode: << parameters.xcode_version >>
+    parameters:
+      xcode_version:
+        type: string
+        default: 14.3.0
+    working_directory: ~/ios
+    shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
     filters:
       tags:
@@ -20,33 +35,11 @@ aliases:
       branches:
         only: /^release\/.*/
 
-orbs:
-  android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@1.1.0
-  macos: circleci/macos@2.0.1
-
 parameters:
   action:
     type: enum
     enum: [ build, dependency-update, bump ]
     default: build
-
-executors:
-  ios-executor:
-    resource_class: macos.x86.medium.gen2
-    working_directory: ~/ios
-    macos:
-      xcode: 14.1.0
-  ios-executor-xcode-13:
-    resource_class: macos.x86.medium.gen2
-    working_directory: ~/ios
-    macos:
-      xcode: 13.4.1
-  ios-executor-xcode-13-2:
-    resource_class: macos.x86.medium.gen2
-    working_directory: ~/ios
-    macos:
-      xcode: 13.2.1
 
 commands:
   setup-git-credentials:
@@ -67,19 +60,9 @@ commands:
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
 
-  install-gems:
-    steps:
-      - restore_cache:
-          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
-      - run: 
-          name: Bundle install
-          command: bundle install --clean --path vendor/bundle
-      - save_cache:
-          key: v3-gem-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
-  run-ios-tests:
+jobs:
+  test-ios:
+    <<: *base-ios-job
     steps:
       - checkout
       - run:
@@ -94,30 +77,19 @@ commands:
             SCAN_SCHEME: PurchasesHybridCommon
       - run:
           name: Run pod lint tests
-          # TODO: re-enable watchOS when https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed
-          command: pod lib lint --fail-fast --platforms=ios,osx,tvos
+          command: pod lib lint --fail-fast
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
-jobs:
-  test-ios:
-    executor: ios-executor
-    steps:
-      - run-ios-tests
-
-  test-xcode-13-2:
-    executor: ios-executor-xcode-13-2
-    steps:
-      - run-ios-tests
-
   integration-test-ios:
-    executor: ios-executor
+    <<: *base-ios-job
     steps:
       - checkout
-      - install-gems
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
       - run:
           name: Install pods
           command: pod install
@@ -145,9 +117,7 @@ jobs:
           destination: scan-output
   
   deploy-ios:
-    # Xcode 14 not supported until https://github.com/CocoaPods/CocoaPods/issues/11558 is fixed.
-    executor: ios-executor-xcode-13
-    shell: /bin/bash --login -o pipefail
+    <<: *base-ios-job
     steps:
       - checkout
       - trust-github-key
@@ -174,6 +144,18 @@ jobs:
           command: bundle exec fastlane ios release
           no_output_timeout: 30m
 
+  push-pods:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Deploy new version to Cocoapods
+          command: bundle exec fastlane push_pods
+          no_output_timeout: 30m
+
   test-android:
     executor:
       name: android/android-machine
@@ -198,7 +180,8 @@ jobs:
       resource-class: large
     steps:
       - checkout
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - android/accept-licenses
       - restore_cache:
           key: jars-{{ checksum "android/build.gradle" }}
@@ -209,26 +192,28 @@ jobs:
 
   make-github-release:
     docker:
-      - image: cimg/ruby:2.7.2
+      - image: cimg/ruby:3.1.2
     steps:
       - checkout
       - attach_workspace:
           at: .
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
   
   dependency-update:
     docker:
-      - image: cimg/ruby:2.7.2
+      - image: cimg/ruby:3.1.2
     steps:
       - checkout
       - attach_workspace:
           at: .
       - setup-git-credentials
       - trust-github-key
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
@@ -242,7 +227,8 @@ jobs:
       - checkout
       - setup-git-credentials
       - trust-github-key
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run: 
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
@@ -254,7 +240,8 @@ jobs:
       - checkout
       - setup-git-credentials
       - trust-github-key
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
           name: Automatically bump release and create release PR
           command: bundle exec fastlane automatic_bump github_rate_limit:10
@@ -266,7 +253,8 @@ jobs:
       - checkout
       - setup-git-credentials
       - trust-github-key
-      - revenuecat/install-rubydocker-dependencies
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
           name: Kick off Flutter automatic dependency update
           command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
@@ -288,7 +276,6 @@ workflows:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       - test-ios
-      - test-xcode-13-2
       - integration-test-ios
       - test-android
 
@@ -313,6 +300,10 @@ workflows:
           requires:
             - deploy-ios
             - deploy-android
+      - push-pods:
+          <<: *release-tags
+          requires:
+            - make-github-release
       - trigger-dependent-updates:
           <<: *release-tags
           requires:

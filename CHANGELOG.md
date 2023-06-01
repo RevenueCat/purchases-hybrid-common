@@ -112,6 +112,44 @@ Below is an example of what a subscription option:
 Observer mode is still supported in v5. Other than updating the SDK version, there are no changes required.
 
 
+## 4.17.0
+### New Features
+* Add metadata to offering for iOS (#415) via Josh Holtz (@joshdholtz)
+* Remove `watchOS` as a supported platform (#411) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.19.0 => 4.20.0 (#409) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane from 2.212.2 to 2.213.0 (#407) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* `CI`: changed Xcode 13 job to 13.4 (#410) via NachoSoto (@NachoSoto)
+* Xcode 14.3: fixed warning (#405) via NachoSoto (@NachoSoto)
+
+## 4.16.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.18.0 => 4.19.0 (#404) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `fe45299` to `13773d2` (#402) via dependabot[bot] (@dependabot[bot])
+
+## 4.15.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.17.11 => 4.18.0 (#400) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `8482a43` to `fe4529988aa6dd9ec1d507950416091302e6f56e` (#392) via dependabot[bot] (@dependabot[bot])
+* Bump danger from 9.2.0 to 9.3.0 (#397) via dependabot[bot] (@dependabot[bot])
+
+## 4.14.3
+### Dependency Updates
+* [AUTOMATIC] iOS 4.17.10 => 4.17.11 (#394) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.12.0 to 1.12.1 (#393) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.212.1 to 2.212.2 (#391) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 4.17.9 => 4.17.10 (#389) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `9255366` to `8482a43` (#375) via dependabot[bot] (@dependabot[bot])
+
+## 4.14.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.17.8 => 4.17.9 (#379) via RevenueCat Git Bot (@RCGitBot)
+* Bump activesupport from 7.0.4.2 to 7.0.4.3 (#360) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* `CommonFunctionality.beginRefundRequest`: available on Catalyst (#374) via NachoSoto (@NachoSoto)
+
 ## 4.14.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.17.7 => 4.17.8 (#361) via RevenueCat Git Bot (@RCGitBot)
@@ -396,7 +434,7 @@ Observer mode is still supported in v5. Other than updating the SDK version, the
 ## 3.0.0
 
 - Bumped `purchases-ios` to `4.3.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/137
-- Bumped `purchases-android` to `5.1.0` 
+- Bumped `purchases-android` to `5.1.0`
 - Removed `createAlias`, `identify`, `logOut`
 - Renamed `PurchaserInfo` to `CustomerInfo`
 - Renamed `restoreTransactions` -> `restorePurchases`
@@ -495,9 +533,9 @@ Add ownershipType to EntitlementInfo
 #### Identity V3
 
 ##### New methods
-- Introduces `logIn`, a new way of identifying users, which also returns whether a new user has been registered in the system. 
-`logIn` uses a new backend endpoint. 
-- Introduces `logOut`, a replacement for `reset`. 
+- Introduces `logIn`, a new way of identifying users, which also returns whether a new user has been registered in the system.
+`logIn` uses a new backend endpoint.
+- Introduces `logOut`, a replacement for `reset`.
 
 ##### Deprecations
 - deprecates `createAlias` in favor of `logIn`
@@ -523,7 +561,7 @@ Add ownershipType to EntitlementInfo
 
 ### 1.7.0
 
-- Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device. 
+- Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device.
     https://github.com/RevenueCat/purchases-hybrid-common/pull/77
 - Fixes a crash when calling `syncPurchases` with no completion block on iOS
     https://github.com/RevenueCat/purchases-hybrid-common/pull/78
@@ -591,7 +629,7 @@ Add ownershipType to EntitlementInfo
 
 ### 1.4.1
 
-- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead. 
+- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead.
 - Cleans up deprecations
     https://github.com/RevenueCat/purchases-hybrid-common/pull/53/
 - updated Xcode version to use in CI to 12.0
