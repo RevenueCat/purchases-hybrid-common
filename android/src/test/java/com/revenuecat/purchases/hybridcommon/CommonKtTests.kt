@@ -423,7 +423,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -482,7 +482,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -543,7 +543,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             val presentedOfferingIdentifier = getPresentedOfferingId(params)
             assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
@@ -608,7 +608,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -689,7 +689,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -814,7 +814,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -940,7 +940,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
@@ -1009,7 +1009,7 @@ internal class CommonKtTests {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(false, params.isPersonalizedPrice)
+            assertEquals(null, params.isPersonalizedPrice)
 
             val presentedOfferingIdentifier = getPresentedOfferingId(params)
             assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)

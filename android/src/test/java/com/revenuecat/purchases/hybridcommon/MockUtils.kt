@@ -18,14 +18,3 @@ fun mockLogError() {
         )
     } returns 0
 }
-
-fun mockCurrencyFormatter(price: Long, priceString: String) {
-    mockkStatic(NumberFormat::class)
-    mockkStatic(Currency::class)
-    val mockkNumberFormat = mockk<NumberFormat>()
-    val mockkCurrency = mockk<Currency>()
-    every { NumberFormat.getCurrencyInstance() } returns mockkNumberFormat
-    every { Currency.getInstance("USD") } returns mockkCurrency
-    every { mockkNumberFormat.currency = any() } just Runs
-    every { mockkNumberFormat.format(price) } returns priceString
-}
