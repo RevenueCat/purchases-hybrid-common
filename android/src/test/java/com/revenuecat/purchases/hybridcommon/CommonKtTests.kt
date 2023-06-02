@@ -1197,7 +1197,42 @@ internal class CommonKtTests {
         assertEquals(ProductType.INAPP, productType)
     }
 
-    private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
+    @Test
+    fun `offerings maps with empty metadata`() {
+        val productIdentifier = "product"
+        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = emptyMap())
+
+        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
+
+        assertEquals(emptyMap<String, Any>(), mappedMetadata)
+    }
+
+    @Test
+    fun `offerings maps with metadata`() {
+        val metadata = mapOf(
+            "int" to 5,
+            "double" to 5.5,
+            "boolean" to true,
+            "string" to "five",
+            "array" to listOf("five"),
+            "dictionary" to mapOf(
+                "string" to "five"
+            )
+        )
+
+        val productIdentifier = "product"
+        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = metadata)
+
+        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
+
+        assertEquals(metadata, mappedMetadata)
+    }
+
+    private fun getOfferings(mockStoreProduct: StoreProduct, metadata: Map<String, Any> = emptyMap()): Triple<String, Package, Offerings> {
         val offeringIdentifier = "offering"
         val packageToPurchase = Package(
             identifier = "packageIdentifier",
@@ -1209,7 +1244,7 @@ internal class CommonKtTests {
             identifier = offeringIdentifier,
             serverDescription = "",
             availablePackages = listOf(packageToPurchase),
-            metadata = emptyMap()
+            metadata = metadata
         )
         val offerings = Offerings(current = offering, all = mapOf(offeringIdentifier to offering))
         return Triple(offeringIdentifier, packageToPurchase, offerings)
