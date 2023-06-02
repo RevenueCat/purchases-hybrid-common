@@ -1,6 +1,5 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.hybridcommon.mockCurrencyFormatter
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.StoreProduct
 import io.mockk.every
@@ -26,7 +25,6 @@ internal class StoreProductIntroPriceMapperTests {
     inner class MappingFreeTrial {
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
-            mockCurrencyFormatter(0, "$0.00")
             every { mockStoreProduct.freeTrialPeriod } returns Period(7, Period.Unit.DAY, "P7D")
             every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
@@ -43,7 +41,6 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
-            mockCurrencyFormatter(0, "$0.00")
             every { mockStoreProduct.freeTrialPeriod } returns Period(1, Period.Unit.MONTH, "P1M")
             every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
@@ -60,7 +57,6 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
-            mockCurrencyFormatter(0, "$0.00")
             every { mockStoreProduct.freeTrialPeriod } returns Period(0, Period.Unit.DAY, "P0D")
             every { mockStoreProduct.freeTrialCycles } returns 1
             received = mockStoreProduct.mapIntroPrice()
