@@ -14,6 +14,7 @@ private fun Offering.map(): Map<String, Any?> =
     mapOf(
         "identifier" to identifier,
         "serverDescription" to serverDescription,
+        "metadata" to metadata,
         "availablePackages" to availablePackages.map { it.map(identifier) },
         "lifetime" to lifetime?.map(identifier),
         "annual" to annual?.map(identifier),
