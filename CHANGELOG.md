@@ -1,3 +1,9 @@
+## 4.18.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.20.0 => 4.21.0 (#420) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Makes pushing to Cocoapods its own job (#417) via Cesar de la Vega (@vegaro)
+
 ## 4.17.0
 ### New Features
 * Add metadata to offering for iOS (#415) via Josh Holtz (@joshdholtz)
