@@ -77,7 +77,7 @@ private extension BaseIntegrationTests {
 
     private var dangerousSettings: DangerousSettings {
         return .init(autoSyncPurchases: true,
-                     internalSettings: .init(enableReceiptFetchRetry: true))
+                     internalSettings: DangerousSettings.Internal(enableReceiptFetchRetry: true))
     }
 
 }
