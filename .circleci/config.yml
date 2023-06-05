@@ -292,19 +292,12 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - deploy-ios:
-          <<: *release-tags
-      - deploy-android:
-          <<: *release-tags
+      # - deploy-ios:
+      #     <<: *release-tags
+      # - deploy-android:
+      #     <<: *release-tags
       - make-github-release:
           <<: *release-tags
-          requires:
-            - deploy-ios
-            - deploy-android
-      - push-pods:
-          <<: *release-tags
-          requires:
-            - make-github-release
       - trigger-dependent-updates:
           <<: *release-tags
           requires:
