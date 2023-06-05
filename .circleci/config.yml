@@ -138,7 +138,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Deploy new version
-          command: bundle exec fastlane ios release
+          command: bundle exec fastlane ios push_pods
           no_output_timeout: 30m
 
   push-pods:
