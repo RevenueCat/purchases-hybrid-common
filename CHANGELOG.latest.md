@@ -1,4 +1,4 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.20.0 => 4.21.0 (#420) via RevenueCat Git Bot (@RCGitBot)
+* Bump danger from 9.3.0 to 9.3.1 (#425) via dependabot[bot] (@dependabot[bot])
 ### Other Changes
-* Makes pushing to Cocoapods its own job (#417) via Cesar de la Vega (@vegaro)
+* `MockStoreProduct`: fixed `Sendable` warnings (#422) via NachoSoto (@NachoSoto)

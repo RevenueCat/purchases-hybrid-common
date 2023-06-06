@@ -1,3 +1,9 @@
+## 4.18.1
+### Dependency Updates
+* Bump danger from 9.3.0 to 9.3.1 (#425) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* `MockStoreProduct`: fixed `Sendable` warnings (#422) via NachoSoto (@NachoSoto)
+
 ## 4.18.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.20.0 => 4.21.0 (#420) via RevenueCat Git Bot (@RCGitBot)
