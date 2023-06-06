@@ -111,6 +111,11 @@ Below is an example of what a subscription option:
 
 Observer mode is still supported in v5. Other than updating the SDK version, there are no changes required.
 
+## 4.18.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.20.0 => 4.21.0 (#420) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Makes pushing to Cocoapods its own job (#417) via Cesar de la Vega (@vegaro)
 
 ## 4.17.0
 ### New Features

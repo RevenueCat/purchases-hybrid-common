@@ -139,10 +139,6 @@ jobs:
           name: Install pods
           command: pod install
           working_directory: ios/PurchasesHybridCommon
-      - run:
-          name: Deploy new version
-          command: bundle exec fastlane ios release
-          no_output_timeout: 30m
 
   push-pods:
     <<: *base-ios-job
@@ -153,7 +149,7 @@ jobs:
       - trust-github-key
       - run:
           name: Deploy new version to Cocoapods
-          command: bundle exec fastlane push_pods
+          command: bundle exec fastlane ios push_pods
           no_output_timeout: 30m
 
   test-android:

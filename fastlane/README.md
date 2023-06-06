@@ -90,13 +90,13 @@ Run automatic bump in other repos
 
 ## iOS
 
-### ios release
+### ios push_pods
 
 ```sh
-[bundle exec] fastlane ios release
+[bundle exec] fastlane ios push_pods
 ```
 
-Release to CocoaPods, and create GitHub release
+Release to CocoaPods
 
 ### ios replace_api_key_integration_tests
 
