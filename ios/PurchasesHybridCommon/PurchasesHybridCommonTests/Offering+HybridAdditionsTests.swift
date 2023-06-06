@@ -68,11 +68,15 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
     }
 }
 
-private final class MockStoreProduct: StoreProductType, Sendable {
+// These are `enum`s, but for some reason Swift doesn't make them implicitly Sendable.
+extension StoreProduct.ProductCategory: @unchecked Sendable {}
+extension StoreProduct.ProductType: @unchecked Sendable {}
 
-    var productCategory: RevenueCat.StoreProduct.ProductCategory = .subscription
+private struct MockStoreProduct: StoreProductType {
 
-    var productType: RevenueCat.StoreProduct.ProductType = .autoRenewableSubscription
+    var productCategory: StoreProduct.ProductCategory = .subscription
+
+    var productType: StoreProduct.ProductType = .autoRenewableSubscription
 
     var localizedDescription: String = ""
 
