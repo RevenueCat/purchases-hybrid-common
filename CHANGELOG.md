@@ -1,3 +1,7 @@
+## 5.0.0-rc.1
+### New Features
+* Add offering metadata (#419) via Josh Holtz (@joshdholtz)
+
 ## 5.0.0-beta.6
 ### Breaking Changes
 * Reverted breaking change for `productType` on `StoreProduct` mapper (#386) via Josh Holtz (@joshdholtz)
