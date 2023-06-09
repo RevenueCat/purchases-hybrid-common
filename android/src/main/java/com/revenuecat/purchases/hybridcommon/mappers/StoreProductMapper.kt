@@ -196,6 +196,7 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
         "tags" to tags,
         "isBasePlan" to isBasePlan,
         "billingPeriod" to billingPeriod?.mapPeriod(),
+        "isPrepaid" to isPrepaid,
         "fullPricePhase" to fullPricePhase?.mapPricingPhase(),
         "freePhase" to freePhase?.mapPricingPhase(),
         "introPhase" to introPhase?.mapPricingPhase(),
