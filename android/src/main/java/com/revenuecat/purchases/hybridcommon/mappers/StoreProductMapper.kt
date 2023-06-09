@@ -1,6 +1,8 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
+import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.hybridcommon.getGoogleProrationMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -50,6 +52,7 @@ fun StoreProduct.map(): Map<String, Any?> =
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal enum class MappedProductCategory(val value: String) {
     SUBSCRIPTION("SUBSCRIPTION"),
     NON_SUBSCRIPTION("NON_SUBSCRIPTION"),
@@ -63,6 +66,7 @@ internal enum class MappedProductCategory(val value: String) {
         }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapProductCategory(): MappedProductCategory {
     return when (type) {
         ProductType.INAPP -> MappedProductCategory.NON_SUBSCRIPTION
@@ -71,11 +75,12 @@ internal fun StoreProduct.mapProductCategory(): MappedProductCategory {
     }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapProductType(): String {
     return when (type) {
         ProductType.INAPP -> "CONSUMABLE"
         ProductType.SUBS -> {
-            if (defaultOption?.fullPricePhase?.recurrenceMode == RecurrenceMode.NON_RECURRING) {
+            if (defaultOption?.isPrepaid == true) {
                 "PREPAID_SUBSCRIPTION"
             } else {
                 "AUTO_RENEWABLE_SUBSCRIPTION"
@@ -85,7 +90,9 @@ internal fun StoreProduct.mapProductType(): String {
     }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
+    getGoogleProrationMode(3)
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials

@@ -649,7 +649,6 @@ internal class CommonKtTests {
         )
         val expectedProductIdentifier = "product"
         val expectedBasePlanIdentifier = "monthly"
-        val expectedStoreProductIdentifier = "$expectedProductIdentifier:$expectedBasePlanIdentifier"
 
         var receivedResponse: MutableMap<String, *>? = null
 

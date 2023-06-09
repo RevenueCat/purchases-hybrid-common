@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import com.android.billingclient.api.Purchase
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
@@ -496,6 +497,7 @@ fun getPromotionalOffer() : ErrorContainer {
 
 // region private functions
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun mapStringToProductType(type: String) : ProductType {
     MappedProductCategory.values()
         .firstOrNull { it.value.equals(type, ignoreCase = true) }
@@ -515,14 +517,16 @@ internal fun mapStringToProductType(type: String) : ProductType {
     }
 }
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal class InvalidProrationModeException(): Exception()
 
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Throws(InvalidProrationModeException::class)
-internal fun getGoogleProrationMode(prorationMode: Int?) : GoogleProrationMode?  {
-    return prorationMode
-        ?.let { index ->
-            GoogleProrationMode.values().find {
-                it.playBillingClientMode == prorationMode
+internal fun getGoogleProrationMode(prorationModeInt: Int?) : GoogleProrationMode?  {
+    return prorationModeInt
+        ?.let {
+            GoogleProrationMode.values().find { prorationMode ->
+                prorationMode.playBillingClientMode == it
             } ?: run {
                 throw InvalidProrationModeException()
             }
@@ -558,18 +562,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
     }
 }
 
-private fun getProductChangeCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
-    return { purchase, customerInfo ->
-        onResult.onReceived(
-            mapOf(
-                // Get first productIdentifier until we have full support of multi-line subscriptions
-                "productIdentifier" to purchase?.productIds?.get(0),
-                "customerInfo" to customerInfo.map()
-            )
-        )
-    }
-}
-
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun PurchasesError.map(
     extra: Map<String, Any?> = mapOf()
 ): ErrorContainer =
