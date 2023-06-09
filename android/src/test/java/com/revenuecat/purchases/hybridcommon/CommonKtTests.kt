@@ -4,20 +4,21 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.SkuDetails
-import com.revenuecat.purchases.BillingFeature
+import com.android.billingclient.api.ProductDetails
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.google.toStoreProduct
+import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
@@ -25,8 +26,19 @@ import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.BillingFeature
+import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.models.GoogleStoreProduct
+import com.revenuecat.purchases.models.Period
+import com.revenuecat.purchases.models.Price
+import com.revenuecat.purchases.models.PricingPhase
+import com.revenuecat.purchases.models.PurchasingData
+import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
+import com.revenuecat.purchases.models.SubscriptionOption
+import com.revenuecat.purchases.models.SubscriptionOptions
+import com.revenuecat.purchases.models.toRecurrenceMode
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -43,6 +55,7 @@ import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -61,6 +74,7 @@ internal class CommonKtTests {
         } returns mockPurchases
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
+        every { mockPurchases.store } returns Store.PLAY_STORE
     }
 
 
@@ -393,31 +407,365 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
         val mockPurchase = mockk<StoreTransaction>()
         every {
-            mockPurchase.skus
+            mockPurchase.productIds
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getSubscriptionSkus(listOf(expectedProductIdentifier), capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
         every {
-            mockPurchases.purchaseProduct(mockActivity, mockStoreProduct, capture(capturedPurchaseCallback))
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
 
         purchaseProduct(
             mockActivity,
             productIdentifier = expectedProductIdentifier,
-            oldSku = null,
-            prorationMode = null,
+            type = MappedProductCategory.SUBSCRIPTION.value,
+            googleBasePlanId = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct passes correct productIdentifier and legacy product type after a successful purchase`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
             type = "subs",
+            googleBasePlanId = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct passes correct productIdentifier after a successful purchase with presented offering identifier`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedOfferingIdentifier = "my-offer"
+
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            val presentedOfferingIdentifier = getPresentedOfferingId(params)
+            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            type = "subs",
+            googleBasePlanId = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = expectedOfferingIdentifier,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct with base plan id in productIdentifier passes correct productIdentifier after a successful purchase`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        val expectedBasePlanIdentifier = "monthly"
+        val expectedStoreProductIdentifier = "$expectedProductIdentifier:$expectedBasePlanIdentifier"
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedStoreProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedStoreProductIdentifier,
+            type = "subs",
+            googleBasePlanId = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct with base plan id passes correct productIdentifier after a successful purchase`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        val expectedBasePlanIdentifier = "monthly"
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+
+        val mockPurchasingData = mockk<PurchasingData>(relaxed = true)
+        every { mockPurchasingData.productId } returns expectedProductIdentifier
+
+        val mockSubscriptionOption = mockk<SubscriptionOption>(relaxed = true)
+        every { mockSubscriptionOption.purchasingData } returns mockPurchasingData
+
+        val mockStoreProduct = GoogleStoreProduct(
+            productId = expectedProductIdentifier,
+            basePlanId = expectedBasePlanIdentifier,
+            type = ProductType.SUBS,
+            price = Price("", 0, ""),
+            title = "",
+            description = "",
+            period = null,
+            subscriptionOptions = SubscriptionOptions(listOf(mockSubscriptionOption)),
+            defaultOption = mockSubscriptionOption,
+            productDetails = mockk<ProductDetails>(relaxed = true)
+        )
+
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            type = "subs",
+            googleBasePlanId = expectedBasePlanIdentifier,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseProduct passes correct productIdentifier after a successful purchase with isPersonalizedPrice`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(true, params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            type = "subs",
+            googleBasePlanId = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = true,
+            presentedOfferingIdentifier = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -446,10 +794,10 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
-        val mockStoreProduct = mockSubscriptionProduct(expectedProductIdentifier)
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
         val mockPurchase = mockk<StoreTransaction>()
         every {
-            mockPurchase.skus
+            mockPurchase.productIds
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
@@ -461,18 +809,22 @@ internal class CommonKtTests {
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
-
+2
         every {
-            mockPurchases.purchasePackage(mockActivity, packageToPurchase, capture(capturedPurchaseCallback))
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
             capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
         }
 
         purchasePackage(
             mockActivity,
             packageIdentifier = "packageIdentifier",
-            oldSku = null,
-            prorationMode = null,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -487,6 +839,233 @@ internal class CommonKtTests {
 
         assertNotNull(receivedResponse)
         assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchasePackage passes correct productIdentifier after a successful purchase with isPersonalizedPrice`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
+
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        2
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(true, params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchasePackage(
+            mockActivity,
+            packageIdentifier = "packageIdentifier",
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = true,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+            offeringIdentifier = offeringIdentifier
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption passes correct productIdentifier after a successful purchase`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOptionIdentifier = "monthly"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val subscriptionOption = stubSubscriptionOption(
+            expectedOptionIdentifier,
+            productId = expectedProductIdentifier
+        )
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(
+            expectedProductIdentifier,
+            defaultOption = subscriptionOption
+        )
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            optionIdentifier = expectedOptionIdentifier,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption passes correct productIdentifier after a successful purchase with presented offering identifier`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
+        )
+        val expectedOfferingIdentifier = "my-offers"
+
+        val expectedProductIdentifier = "product"
+        val expectedOptionIdentifier = "monthly"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val subscriptionOption = stubSubscriptionOption(
+            expectedOptionIdentifier,
+            productId = expectedProductIdentifier
+        )
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = stubStoreProduct(
+            expectedProductIdentifier,
+            defaultOption = subscriptionOption
+        )
+        val mockPurchase = mockk<StoreTransaction>()
+        every {
+            mockPurchase.productIds
+        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        every {
+            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertNull(params.isPersonalizedPrice)
+
+            val presentedOfferingIdentifier = getPresentedOfferingId(params)
+            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+
+            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+        }
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            optionIdentifier = expectedOptionIdentifier,
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = expectedOfferingIdentifier,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            }
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption errors when store is Amazon`() {
+        every { mockPurchases.store } returns Store.AMAZON
+
+        var receivedErrorContainer: ErrorContainer? = null
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = "product",
+            optionIdentifier = "option",
+            googleOldProductId = null,
+            googleProrationMode = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingIdentifier = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Should be success")
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    receivedErrorContainer = errorContainer
+                }
+            }
+        )
+
+        assertNotNull(receivedErrorContainer)
     }
 
     @Test
@@ -541,7 +1120,118 @@ internal class CommonKtTests {
         Purchases.logHandler.e("Purchases", expectedMessage, java.lang.ClassCastException("what a pity"))
     }
 
-    private fun getOfferings(mockStoreProduct: StoreProduct): Triple<String, Package, Offerings> {
+    @Test
+    fun `getGoogleProrationMode returns null if null prorationModeIndex`() {
+        val prorationModeInt: Int? = null
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, null)
+    }
+
+    @Test
+    fun `getGoogleProrationMode returns IMMEDIATE_WITHOUT_PRORATION for 3`() {
+        val prorationModeInt: Int? = 3
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITHOUT_PRORATION)
+    }
+
+    @Test
+    fun `getGoogleProrationMode returns IMMEDIATE_WITH_TIME_PRORATION for 1`() {
+        val prorationModeInt: Int? = 1
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITH_TIME_PRORATION)
+    }
+
+    @Test
+    fun `getGoogleProrationMode throws exception for negative out of bounds number`() {
+        val prorationModeInt: Int? = -1
+
+        var catchWasCalled = false
+        try {
+            val mode = getGoogleProrationMode(prorationModeInt)
+        } catch (e: InvalidProrationModeException) {
+            catchWasCalled = true
+        }
+
+        assertTrue(catchWasCalled)
+    }
+
+    @Test
+    fun `getGoogleProrationMode throws exception for position out of bounds number`() {
+        val prorationModeInt: Int? = 1000
+
+        var catchWasCalled = false
+        try {
+            val mode = getGoogleProrationMode(prorationModeInt)
+        } catch (e: InvalidProrationModeException) {
+            catchWasCalled = true
+        }
+
+        assertTrue(catchWasCalled)
+    }
+
+    @Test
+    fun `mapStringToProductType returns ProductType SUBS for subs`() {
+        val productType = mapStringToProductType("subs")
+        assertEquals(ProductType.SUBS, productType)
+    }
+
+    @Test
+    fun `mapStringToProductType returns ProductType SUBS for SUBSCRIPTION`() {
+        val productType = mapStringToProductType("SUBSCRIPTION")
+        assertEquals(ProductType.SUBS, productType)
+    }
+
+    @Test
+    fun `mapStringToProductType returns ProductType INAPP for inapp`() {
+        val productType = mapStringToProductType("inapp")
+        assertEquals(ProductType.INAPP, productType)
+    }
+
+    @Test
+    fun `mapStringToProductType returns ProductType INAPP for NON_SUBSCRIPTION`() {
+        val productType = mapStringToProductType("NON_SUBSCRIPTION")
+        assertEquals(ProductType.INAPP, productType)
+    }
+
+    @Test
+    fun `offerings maps with empty metadata`() {
+        val productIdentifier = "product"
+        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = emptyMap())
+
+        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
+
+        assertEquals(emptyMap<String, Any>(), mappedMetadata)
+    }
+
+    @Test
+    fun `offerings maps with metadata`() {
+        val metadata = mapOf(
+            "int" to 5,
+            "double" to 5.5,
+            "boolean" to true,
+            "string" to "five",
+            "array" to listOf("five"),
+            "dictionary" to mapOf(
+                "string" to "five"
+            )
+        )
+
+        val productIdentifier = "product"
+        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = metadata)
+
+        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
+
+        assertEquals(metadata, mappedMetadata)
+    }
+
+    private fun getOfferings(mockStoreProduct: StoreProduct, metadata: Map<String, Any> = emptyMap()): Triple<String, Package, Offerings> {
         val offeringIdentifier = "offering"
         val packageToPurchase = Package(
             identifier = "packageIdentifier",
@@ -552,63 +1242,127 @@ internal class CommonKtTests {
         val offering = Offering(
             identifier = offeringIdentifier,
             serverDescription = "",
-            availablePackages = listOf(packageToPurchase)
+            availablePackages = listOf(packageToPurchase),
+            metadata = metadata
         )
         val offerings = Offerings(current = offering, all = mapOf(offeringIdentifier to offering))
         return Triple(offeringIdentifier, packageToPurchase, offerings)
     }
-
-    private fun mockSubscriptionProduct(expectedProductIdentifier: String): StoreProduct {
-        val mockSkuDetails = mockSkuDetails(
-            productId = expectedProductIdentifier,
-            type = BillingClient.SkuType.SUBS
-        )
-        return mockSkuDetails.toStoreProduct()
-    }
-
-    private fun mockSkuDetails(
-        productId: String = "monthly_intro_pricing_one_week",
-        @BillingClient.SkuType type: String = BillingClient.SkuType.SUBS,
-        price: Double = 4.99,
-        subscriptionPeriod: String = "P1M",
-        freeTrialPeriod: String? = null,
-    ): SkuDetails {
-        val mockedSkuDetails = mockk<SkuDetails>()
-        every { mockedSkuDetails.sku } returns productId
-        every { mockedSkuDetails.type } returns type
-        every { mockedSkuDetails.price } returns "${'$'}$price"
-        every { mockedSkuDetails.priceAmountMicros } returns price.times(1_000_000).toLong()
-        every { mockedSkuDetails.priceCurrencyCode } returns "USD"
-        every { mockedSkuDetails.subscriptionPeriod } returns subscriptionPeriod
-        every { mockedSkuDetails.freeTrialPeriod } returns (freeTrialPeriod ?: "")
-        every { mockedSkuDetails.introductoryPrice } returns ""
-        every { mockedSkuDetails.introductoryPricePeriod } returns ""
-        every { mockedSkuDetails.introductoryPriceAmountMicros } returns 0
-        every { mockedSkuDetails.introductoryPriceCycles } returns 0
-        every { mockedSkuDetails.iconUrl } returns ""
-        every { mockedSkuDetails.originalJson } returns """
-            {
-            "skuDetailsToken":"AEuhp4KxWQR-b-OAOXVicqHM4QqnqK9vkPnOXw0vSB9zWPBlTsW8TmtjSEJ_rJ6f0_-i",
-            "productId":"$productId",
-            "type":"$type",
-            "price":"${'$'}$price",
-            "price_amount_micros":${price.times(1_000_000)},
-            "price_currency_code":"USD",
-            "subscriptionPeriod":"$subscriptionPeriod",
-            "freeTrialPeriod":"$freeTrialPeriod",
-            "introductoryPricePeriod":"",
-            "introductoryPriceAmountMicros":0,
-            "introductoryPrice":"",
-            "introductoryPriceCycles":0,
-            "title":"Monthly Product Intro Pricing One Week (PurchasesSample)",
-            "description":"Monthly Product Intro Pricing One Week"
-        }
-        """.trimIndent()
-        every { mockedSkuDetails.title } returns "Monthly Product Intro Pricing One Week (PurchasesSample)"
-        every { mockedSkuDetails.description } returns "Monthly Product Intro Pricing One Week"
-        every { mockedSkuDetails.originalPrice } returns mockedSkuDetails.price
-        every { mockedSkuDetails.originalPriceAmountMicros } returns mockedSkuDetails.priceAmountMicros
-        return mockedSkuDetails
-    }
-
 }
+
+const val MICROS_MULTIPLIER = 1_000_000
+
+fun getPresentedOfferingId(purchaseParams: PurchaseParams) : String? {
+    // Uses reflection to test presentedOfferingIdentifier exists in purchasing params
+    val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingIdentifier" }
+    return prop!!.call(purchaseParams) as? String?
+}
+
+@SuppressWarnings("EmptyFunctionBlock")
+fun stubStoreProduct(
+    productId: String,
+    description: String = "",
+    title: String = "",
+    type: ProductType = ProductType.SUBS,
+    defaultOption: SubscriptionOption? = stubSubscriptionOption(
+        "monthly_base_plan", productId,
+        Period(1, Period.Unit.MONTH, "P1M"),
+    ),
+    subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
+    price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
+    presentedOfferingIdentifier: String? = null
+): StoreProduct = object : StoreProduct {
+    override val id: String
+        get() = productId
+    override val type: ProductType
+        get() = type
+    override val price: Price
+        get() = price
+    override val title: String
+        get() = title
+    override val description: String
+        get() = description
+    override val period: Period?
+        get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val presentedOfferingIdentifier: String?
+        get() = presentedOfferingIdentifier
+    override val subscriptionOptions: SubscriptionOptions?
+        get() = subscriptionOptions?.let { SubscriptionOptions(it) }
+    override val defaultOption: SubscriptionOption?
+        get() = defaultOption
+    override val purchasingData: PurchasingData
+        get() = StubPurchasingData(
+            productId = productId.split(":").first()
+        )
+    override val sku: String
+        get() = productId
+    override fun copyWithOfferingId(offeringId: String): StoreProduct {
+
+        fun SubscriptionOption.applyOffering(offeringId: String): SubscriptionOption {
+            return stubSubscriptionOption(
+                id,
+                productId,
+                presentedOfferingIdentifier = offeringId
+            )
+        }
+
+        return stubStoreProduct(
+            productId,
+            description,
+            title,
+            type,
+            defaultOption?.let {
+                it.applyOffering(offeringId)
+            },
+            subscriptionOptions?.map {
+                it.applyOffering(offeringId)
+            },
+            price,
+            offeringId
+        )
+    }
+}
+
+@SuppressWarnings("EmptyFunctionBlock")
+fun stubSubscriptionOption(
+    id: String,
+    productId: String,
+    duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
+    pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
+    presentedOfferingIdentifier: String? = null
+): SubscriptionOption = object : SubscriptionOption {
+    override val id: String
+        get() = id
+    override val presentedOfferingIdentifier: String?
+        get() = presentedOfferingIdentifier
+    override val pricingPhases: List<PricingPhase>
+        get() = pricingPhases
+    override val tags: List<String>
+        get() = listOf("tag")
+    override val purchasingData: PurchasingData
+        get() = StubPurchasingData(
+            productId = productId
+        )
+}
+
+@SuppressWarnings("MatchingDeclarationName")
+private data class StubPurchasingData(
+    override val productId: String,
+) : PurchasingData {
+    override val productType: ProductType
+        get() = ProductType.SUBS
+}
+
+fun stubPricingPhase(
+    billingPeriod: Period = Period(1, Period.Unit.MONTH, "P1M"),
+    priceCurrencyCodeValue: String = "USD",
+    priceFormatted: String = "$4.99",
+    price: Double = 4.99,
+    recurrenceMode: RecurrenceMode = RecurrenceMode.INFINITE_RECURRING,
+    billingCycleCount: Int = 0
+): PricingPhase = PricingPhase(
+    billingPeriod,
+    recurrenceMode,
+    billingCycleCount,
+    Price(priceFormatted, price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue),
+)

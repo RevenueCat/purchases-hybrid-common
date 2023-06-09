@@ -30,13 +30,7 @@ internal class ConfiguringUnitTests {
         every { mockContext.applicationContext } returns mockApplicationContext
         mockkObject(Purchases)
         every {
-            Purchases.configure(
-                context = any(),
-                apiKey = any(),
-                appUserID = any(),
-                observerMode = any(),
-                service = any()
-            )
+            Purchases.configure(any())
         } returns mockPurchases
         every {
             Purchases.configure(configuration = capture(purchasesConfigurationSlot))

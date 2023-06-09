@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.revenuecat.purchases.DangerousSettings;
-import com.revenuecat.purchases.LogHandler;
 import com.revenuecat.purchases.Store;
 import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
@@ -14,6 +13,7 @@ import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
+import com.revenuecat.purchases.models.GoogleProrationMode;
 
 import java.util.List;
 import java.util.Map;
@@ -32,39 +32,67 @@ class CommonApiTests {
     }
 
     private void checkGetProductInfo(List<String> productIDs,
-                             String type,
-                             OnResultList onResult) {
+                                     String type,
+                                     OnResultList onResult) {
         CommonKt.getProductInfo(productIDs, type, onResult);
     }
 
     private void checkPurchaseProduct(Activity activity,
-                              String productIdentifier,
-                              String oldSku,
-                              Integer prorationMode,
-                              String type,
-                              OnResult onResult) {
+                                      String productIdentifier,
+                                      String type,
+                                      String googleBasePlanId,
+                                      String googleOldProductId,
+                                      Integer googleProrationMode,
+                                      Boolean googleIsPersonalizedPrice,
+                                      String presentedOfferingIdentifier,
+                                      OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
                 productIdentifier,
-                oldSku,
-                prorationMode,
                 type,
+                googleBasePlanId,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
+                presentedOfferingIdentifier,
                 onResult
         );
     }
 
     private void checkPurchasePackage(Activity activity,
-                              String packageIdentifier,
-                              String offeringIdentifier,
-                              String oldSku,
-                              Integer prorationMode,
-                              OnResult onResult) {
+                                      String packageIdentifier,
+                                      String offeringIdentifier,
+                                      String googleOldProductId,
+                                      Integer googleProrationMode,
+                                      Boolean googleIsPersonalizedPrice,
+                                      OnResult onResult) {
         CommonKt.purchasePackage(
                 activity,
                 packageIdentifier,
                 offeringIdentifier,
-                oldSku,
-                prorationMode,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
+                onResult
+        );
+    }
+
+    private void checkPurchaseSubscriptionOption(Activity activity,
+                                                 String productIdentifier,
+                                                 String optionIdentifier,
+                                                 String googleOldProductId,
+                                                 Integer googleProrationMode,
+                                                 Boolean googleIsPersonalizedPrice,
+                                                 String presentedOfferingIdentifier,
+                                                 OnResult onResult) {
+        CommonKt.purchaseSubscriptionOption(
+                activity,
+                productIdentifier,
+                optionIdentifier,
+                googleOldProductId,
+                googleProrationMode,
+                googleIsPersonalizedPrice,
+                presentedOfferingIdentifier,
                 onResult
         );
     }

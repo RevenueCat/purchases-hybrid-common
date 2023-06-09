@@ -1,3 +1,120 @@
+## 5.0.0-rc.1
+### New Features
+* Add offering metadata (#419) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.6
+### Breaking Changes
+* Reverted breaking change for `productType` on `StoreProduct` mapper (#386) via Josh Holtz (@joshdholtz)
+### New Features
+* Add `productCategory` support in `getProductInfo()` and `purchaseProduct()` (#387) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.5
+### Breaking Changes
+* iOS rename `productCategory` to `product type` and `productType` to `productSubtype` (#377) via Josh Holtz (@joshdholtz)
+* Android rename `productCategory` to `productType` and `productType` to `productSubtype` (#376) via Josh Holtz (@joshdholtz)
+### Other Changes
+* Use new mapped product type values for `purchaseProduct()` and `getProductInfo()` (#384) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.4
+### Bugfixes
+* Add platform check,`OfferPaymentMode`, and `presentedOfferingIdentifier` (#371) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.3
+### Breaking Changes
+* [BC5] Use Int for Google proration mode to make mapping logic to GoogleProrationMode reusable (#368) via Josh Holtz (@joshdholtz)
+### New Features
+* [BC5] Add `iso8601` to `Period` for subscription option pricing phases (#369) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.2
+### Breaking Changes
+* [BC5] Rename `Period` fields to `unit` and `value` (#365) via Josh Holtz (@joshdholtz)
+### Bug Fixes
+* [BC5] Fix `purchaseProduct` to work with `productIdentifiers` with base plans (#366) via Josh Holtz (@joshdholtz)
+
+## 5.0.0-beta.1
+The first beta of **RevenueCat Purchases Hybrid Common v5** is here!! 😻
+
+This latest release updates the Android SDK dependency from v5 to [v6](https://github.com/RevenueCat/purchases-android/releases/tag/6.0.0) to use BillingClient 5. This version of BillingClient brings an entire new subscription model which has resulted in large changes across the entire SDK.
+
+### Migration Guides
+- See [Android Native - 5.x to 6.x Migration](https://www.revenuecat.com/docs/android-native-5x-to-6x-migration) for a
+  more thorough explanation of the new Google subscription model announced with BillingClient 5 and how to take
+  advantage of it in V6. This guide includes tips on product setup with the new model.
+
+### New `SubscriptionOption` concept
+
+#### Purchasing
+In v4, a Google Play Android `Package` or `StoreProduct` represented a single purchaseable entity, and free trials or intro
+offers would automatically be applied to the purchase if the user was eligible.
+
+Now, in Hybrid Common v5, an Google Play Android `Package` or `StoreProduct` represents a duration of a subscription and contains all the ways to
+purchase that duration -- any offers and its base plan. Each of these purchase options are `SubscriptionOption`s.
+When passing a `Package` to `purchasePackage()` or `StoreProduct` to `purchaseStoreProduct()`, the SDK will use the following logic to choose which
+`SubscriptionOption` to purchase:
+- Filters out offers with "rc-ignore-offer" tag
+- Uses `SubscriptionOption` with the longest free trial or cheapest first phase
+    - Only offers the user is eligible will be applied
+- Falls back to base plan
+
+For more control, purchase subscription options with the new `purchaseSubscriptionOption()` method.
+
+#### Models
+
+`StoreProduct` now has a few new properties use for Google Play Android:
+- `defaultOption`
+  - A subscription option that will automatically be applie when purchasing a `Package` or `StoreProduct`
+- `subscriptionOptions`
+  - A list of subscription options (could be null)
+
+##### Subscription Option
+
+Below is an example of what a subscription option:
+
+```js
+{
+    "id": "basePlan",
+    "storeProductId": "subId:basePlanId",
+    "productId": "subId",
+    "pricingPhases": [
+        {
+            "price": 0,
+            "priceString": "FREE",
+            "period": "P1M",
+            "cycles": 1
+        },
+        {
+            "price": 4.99,
+            "priceString": "$4.99",
+            "period": "P1M",
+            "cycles": 0
+        }
+    ],
+    "tags": ["free-offers"],
+    "isBasePlan": false,
+    "billingPeriod": {
+        "periodUnit": "MONTH",
+        "periodNumberOfUnits": 0
+    },
+    "fullPricePhase": {
+        "price": 4.99,
+        "priceString": "$4.99",
+        "period": "P1M",
+        "cycles": 0
+    },
+    "freePhase" {
+        "price": 0,
+        "priceString": "FREE",
+        "period": "P1M",
+        "cycles": 1
+    },
+    "introPhase": null
+}
+```
+
+### Observer Mode
+
+Observer mode is still supported in v5. Other than updating the SDK version, there are no changes required.
+
 ## 4.18.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.20.0 => 4.21.0 (#420) via RevenueCat Git Bot (@RCGitBot)
@@ -326,7 +443,7 @@
 ## 3.0.0
 
 - Bumped `purchases-ios` to `4.3.0` https://github.com/RevenueCat/purchases-hybrid-common/pull/137
-- Bumped `purchases-android` to `5.1.0` 
+- Bumped `purchases-android` to `5.1.0`
 - Removed `createAlias`, `identify`, `logOut`
 - Renamed `PurchaserInfo` to `CustomerInfo`
 - Renamed `restoreTransactions` -> `restorePurchases`
@@ -425,9 +542,9 @@ Add ownershipType to EntitlementInfo
 #### Identity V3
 
 ##### New methods
-- Introduces `logIn`, a new way of identifying users, which also returns whether a new user has been registered in the system. 
-`logIn` uses a new backend endpoint. 
-- Introduces `logOut`, a replacement for `reset`. 
+- Introduces `logIn`, a new way of identifying users, which also returns whether a new user has been registered in the system.
+`logIn` uses a new backend endpoint.
+- Introduces `logOut`, a replacement for `reset`.
 
 ##### Deprecations
 - deprecates `createAlias` in favor of `logIn`
@@ -453,7 +570,7 @@ Add ownershipType to EntitlementInfo
 
 ### 1.7.0
 
-- Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device. 
+- Adds a new method, `canMakePayments`, that provides a way to check if the current user is allowed to make purchases on the device.
     https://github.com/RevenueCat/purchases-hybrid-common/pull/77
 - Fixes a crash when calling `syncPurchases` with no completion block on iOS
     https://github.com/RevenueCat/purchases-hybrid-common/pull/78
@@ -521,7 +638,7 @@ Add ownershipType to EntitlementInfo
 
 ### 1.4.1
 
-- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead. 
+- Fixes an issue where `setFBAnonymousID` would set the `appsflyerID` instead.
 - Cleans up deprecations
     https://github.com/RevenueCat/purchases-hybrid-common/pull/53/
 - updated Xcode version to use in CI to 12.0

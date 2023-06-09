@@ -52,7 +52,8 @@ lane :bump do |options|
     github_rate_limit: options[:github_rate_limit],
     editor: options[:editor],
     next_version: options[:next_version],
-    automatic_release: options[:automatic_release]
+    automatic_release: options[:automatic_release],
+    is_prerelease: options[:is_prerelease]
   )
 end
 
@@ -348,19 +349,6 @@ platform :android do
       "RELEASE_SIGNING_ENABLED" => true
     }
     UI.verbose("Deploying #{version}")
-
-    gradle(
-      tasks: [
-        "publish --no-daemon --no-parallel"
-      ],
-      properties: gradleProperties,
-      project_dir: 'android'
-    )
-
-    UI.verbose("Creating special version for Unity IAP with BillingClient 3 and Amazon 2 for version: #{version}")
-    gradleProperties["ANDROID_VARIANT_TO_PUBLISH"] = "unityIAPRelease"
-
-    UI.verbose("Adding -unityiap to artifact ids")
 
     gradle(
       tasks: [

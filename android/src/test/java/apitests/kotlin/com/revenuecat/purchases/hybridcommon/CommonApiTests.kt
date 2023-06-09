@@ -6,6 +6,7 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.*
+import com.revenuecat.purchases.models.GoogleProrationMode
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
@@ -28,28 +29,65 @@ private class CommonApiTests {
     fun checkPurchaseProduct(
         activity: Activity?,
         productIdentifier: String,
-        oldSku: String?,
-        prorationMode: Int?,
         type: String,
+        googleBasePlanId: String?,
+        googleOldProductId: String?,
+        googleProrationMode: Int?,
+        googleIsPersonalizedPrice: Boolean?,
+        presentedOfferingIdentifier: String?,
         onResult: OnResult
     ) {
-        purchaseProduct(activity, productIdentifier, oldSku, prorationMode, type, onResult)
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleBasePlanId,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingIdentifier,
+            onResult
+        )
     }
 
     fun checkPurchasePackage(
         activity: Activity?,
         packageIdentifier: String,
         offeringIdentifier: String,
-        oldSku: String?,
-        prorationMode: Int?,
+        googleOldProductId: String?,
+        googleProrationMode: Int?,
+        googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult
     ) {
         purchasePackage(
             activity,
             packageIdentifier,
             offeringIdentifier,
-            oldSku,
-            prorationMode,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
+            onResult
+        )
+    }
+
+    fun checkPurchaseSubscriptionOption(
+        activity: Activity?,
+        productIdentifier: String,
+        optionIdentifier: String,
+        googleOldProductId: String?,
+        googleProrationMode: Int?,
+        googleIsPersonalizedPrice: Boolean?,
+        presentedOfferingIdentifier: String?,
+        onResult: OnResult
+    ) {
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
+            googleOldProductId,
+            googleProrationMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingIdentifier,
             onResult
         )
     }
