@@ -160,6 +160,9 @@ internal class StoreProductMapperTest {
             type = ProductType.SUBS
         ).map().let {
             assertThat(it["productType"]).isEqualTo("AUTO_RENEWABLE_SUBSCRIPTION")
+
+            val defaultOption = it["defaultOption"] as Map<String, Any>
+            assertThat(defaultOption["isPrepaid"]).isEqualTo(false)
         }
         stubStoreProduct(
             productId = exptectedProductId,
@@ -176,18 +179,27 @@ internal class StoreProductMapperTest {
             )
         ).map().let {
             assertThat(it["productType"]).isEqualTo("PREPAID_SUBSCRIPTION")
+
+            val defaultOption = it["defaultOption"] as Map<String, Any>
+            assertThat(defaultOption["isPrepaid"]).isEqualTo(true)
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP
         ).map().let {
             assertThat(it["productType"]).isEqualTo("CONSUMABLE")
+
+            val defaultOption = it["defaultOption"] as Map<String, Any>
+            assertThat(defaultOption["isPrepaid"]).isEqualTo(false)
         }
         stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.UNKNOWN
         ).map().let {
             assertThat(it["productType"]).isEqualTo("UNKNOWN")
+
+            val defaultOption = it["defaultOption"] as Map<String, Any>
+            assertThat(defaultOption["isPrepaid"]).isEqualTo(false)
         }
     }
 
