@@ -9,7 +9,7 @@ fun mockLogError() {
     every {
         Log.e(
             any(),
-            any()
+            any(),
         )
     } returns 0
 }

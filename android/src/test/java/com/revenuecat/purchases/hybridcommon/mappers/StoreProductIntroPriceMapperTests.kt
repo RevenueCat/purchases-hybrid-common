@@ -34,7 +34,7 @@ internal class StoreProductIntroPriceMapperTests {
                 "period" to "P7D",
                 "cycles" to 1,
                 "periodUnit" to "DAY",
-                "periodNumberOfUnits" to 7
+                "periodNumberOfUnits" to 7,
             )
             assertThat(expected).isEqualTo(received)
         }
@@ -50,7 +50,7 @@ internal class StoreProductIntroPriceMapperTests {
                 "period" to "P1M",
                 "cycles" to 1,
                 "periodUnit" to "MONTH",
-                "periodNumberOfUnits" to 1
+                "periodNumberOfUnits" to 1,
             )
             assertThat(expected).isEqualTo(received)
         }
@@ -67,7 +67,7 @@ internal class StoreProductIntroPriceMapperTests {
                 "period" to "P0D",
                 "cycles" to 1,
                 "periodUnit" to "DAY",
-                "periodNumberOfUnits" to 0
+                "periodNumberOfUnits" to 0,
             )
             assertThat(expected).isEqualTo(received)
         }
@@ -87,7 +87,7 @@ internal class StoreProductIntroPriceMapperTests {
         private val expectedCommon = mapOf(
             "price" to 10.0,
             "priceString" to "$10.00",
-            "cycles" to 2
+            "cycles" to 2,
         )
 
         @Test
@@ -98,7 +98,7 @@ internal class StoreProductIntroPriceMapperTests {
             val expected = mapOf(
                 "period" to "P7D",
                 "periodUnit" to "DAY",
-                "periodNumberOfUnits" to 7
+                "periodNumberOfUnits" to 7,
             ) + expectedCommon
             assertThat(expected).isEqualTo(received)
         }
@@ -112,7 +112,7 @@ internal class StoreProductIntroPriceMapperTests {
             val expected = mapOf(
                 "period" to "P1M",
                 "periodUnit" to "MONTH",
-                "periodNumberOfUnits" to 1
+                "periodNumberOfUnits" to 1,
             ) + expectedCommon
             assertThat(expected).isEqualTo(received)
         }
@@ -126,7 +126,7 @@ internal class StoreProductIntroPriceMapperTests {
             val expected = mapOf(
                 "period" to "P0D",
                 "periodUnit" to "DAY",
-                "periodNumberOfUnits" to 0
+                "periodNumberOfUnits" to 0,
             ) + expectedCommon
             assertThat(expected).isEqualTo(received)
         }

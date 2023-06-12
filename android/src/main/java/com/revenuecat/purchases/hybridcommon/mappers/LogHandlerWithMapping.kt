@@ -4,7 +4,7 @@ import com.revenuecat.purchases.LogHandler
 import com.revenuecat.purchases.LogLevel
 
 class LogHandlerWithMapping(
-    private val callback: (logData: Map<String, String>) -> Unit
+    private val callback: (logData: Map<String, String>) -> Unit,
 ) : LogHandler {
     override fun d(tag: String, msg: String) {
         invokeCallback(LogLevel.DEBUG, msg)

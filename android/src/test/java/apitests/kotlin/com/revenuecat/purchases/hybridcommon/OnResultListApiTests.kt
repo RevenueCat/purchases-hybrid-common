@@ -7,14 +7,14 @@ import com.revenuecat.purchases.hybridcommon.OnResultList
 class OnResultListApiTests {
     fun checkOnReceived(
         onResult: OnResultList,
-        resultMap: List<Map<String, Any>>
+        resultMap: List<Map<String, Any>>,
     ) {
         onResult.onReceived(resultMap)
     }
 
     fun checkOnError(
         onResult: OnResultList,
-        errorContainer: ErrorContainer
+        errorContainer: ErrorContainer,
     ) {
         onResult.onError(errorContainer)
     }

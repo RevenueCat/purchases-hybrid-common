@@ -48,7 +48,7 @@ private class CommonApiTests {
     fun checkGetProductInfo(
         productIDs: List<String>,
         type: String,
-        onResult: OnResultList
+        onResult: OnResultList,
     ) {
         getProductInfo(productIDs, type, onResult)
     }
@@ -62,7 +62,7 @@ private class CommonApiTests {
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingIdentifier: String?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchaseProduct(
             activity,
@@ -73,7 +73,7 @@ private class CommonApiTests {
             googleProrationMode,
             googleIsPersonalizedPrice,
             presentedOfferingIdentifier,
-            onResult
+            onResult,
         )
     }
 
@@ -84,7 +84,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchasePackage(
             activity,
@@ -93,7 +93,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
-            onResult
+            onResult,
         )
     }
 
@@ -105,7 +105,7 @@ private class CommonApiTests {
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingIdentifier: String?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -115,7 +115,7 @@ private class CommonApiTests {
             googleProrationMode,
             googleIsPersonalizedPrice,
             presentedOfferingIdentifier,
-            onResult
+            onResult,
         )
     }
 
@@ -129,7 +129,7 @@ private class CommonApiTests {
 
     fun checkLogIn(
         appUserID: String,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         logIn(appUserID, onResult)
     }
@@ -183,7 +183,7 @@ private class CommonApiTests {
 
     fun checkCheckTrialOrIntroductoryPriceEligibility(productIdentifiers: List<String>) {
         val result: Map<String, Map<String, Any>> = checkTrialOrIntroductoryPriceEligibility(
-            productIdentifiers
+            productIdentifiers,
         )
     }
 
@@ -194,7 +194,7 @@ private class CommonApiTests {
     fun checkCanMakePayments(
         context: Context,
         features: List<Int>,
-        onResult: OnResultAny<Boolean>
+        onResult: OnResultAny<Boolean>,
     ) {
         canMakePayments(context, features, onResult)
     }
@@ -206,7 +206,7 @@ private class CommonApiTests {
         observerMode: Boolean?,
         platformInfo: PlatformInfo,
         store: Store,
-        dangerousSettings: DangerousSettings
+        dangerousSettings: DangerousSettings,
     ) {
         configure(context, apiKey, appUserID, observerMode, platformInfo)
         configure(context, apiKey, appUserID, observerMode, platformInfo, store, dangerousSettings)

@@ -58,7 +58,7 @@ internal class CustomerInfoMappersTests {
             "transactionIdentifier",
             "productid",
             "productid",
-            Date()
+            Date(),
         )
         every { mockCustomerInfo.nonSubscriptionTransactions } returns listOf(transaction)
 
