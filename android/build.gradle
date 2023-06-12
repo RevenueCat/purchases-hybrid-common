@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -9,6 +12,7 @@ buildscript {
     ext.mockk_version = '1.12.8'
     ext.gradle_maven_publish = '0.22.0'
     ext.purchases_version = '6.4.0'
+    ext.detekt_version = '1.23.0'
 
     repositories {
         google()
@@ -22,14 +26,18 @@ buildscript {
     }
 }
 
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "$detekt_version"
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: "de.mannodermaus.android-junit5"
-
-def artifactId = project.property("POM_ARTIFACT_ID")
-def publishVariant = project.property("ANDROID_VARIANT_TO_PUBLISH")
-
 apply plugin: "com.vanniktech.maven.publish"
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
+}
 
 android {
     namespace 'com.revenuecat.purchases.hybridcommon'
@@ -71,6 +79,10 @@ android {
     }
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    baseline = file("config/detekt/detekt-baseline.xml")
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

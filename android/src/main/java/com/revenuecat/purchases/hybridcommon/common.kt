@@ -3,7 +3,6 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import com.android.billingclient.api.Purchase
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.LogLevel
@@ -26,7 +25,6 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
-import com.revenuecat.purchases.models.GoogleSubscriptionOption
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
@@ -36,16 +34,16 @@ import java.net.URL
 
 @Deprecated(
     "Replaced with configuration in the RevenueCat dashboard",
-    ReplaceWith("configure through the RevenueCat dashboard")
+    ReplaceWith("configure through the RevenueCat dashboard"),
 )
 fun setAllowSharingAppStoreAccount(
-    allowSharingAppStoreAccount: Boolean
+    allowSharingAppStoreAccount: Boolean,
 ) {
     Purchases.sharedInstance.allowSharingPlayStoreAccount = allowSharingAppStoreAccount
 }
 
 fun getOfferings(
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
@@ -55,7 +53,7 @@ fun getOfferings(
 fun getProductInfo(
     productIDs: List<String>,
     type: String,
-    onResult: OnResultList
+    onResult: OnResultList,
 ) {
     val onError: (PurchasesError) -> Unit = { onResult.onError(it.map()) }
     val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
@@ -76,15 +74,16 @@ fun purchaseProduct(
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingIdentifier: String?,
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     val googleProrationMode = try {
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchaseProduct."
-            ).map()
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchaseProduct.",
+            ).map(),
         )
         return
     }
@@ -100,9 +99,9 @@ fun purchaseProduct(
 
                 // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 val foundByProductIdAndGoogleBasePlanId = (
-                    it.purchasingData.productId == productIdentifier
-                        && it.googleProduct?.basePlanId == googleBasePlanId
-                        && it.type == productType
+                    it.purchasingData.productId == productIdentifier &&
+                        it.googleProduct?.basePlanId == googleBasePlanId &&
+                        it.type == productType
                     )
 
                 // Finding the matching StoreProduct two different ways:
@@ -131,17 +130,16 @@ fun purchaseProduct(
                 Purchases.sharedInstance.purchaseWith(
                     purchaseParams.build(),
                     onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult)
+                    onSuccess = getPurchaseCompletedFunction(onResult),
                 )
             } else {
                 onResult.onError(
                     PurchasesError(
                         PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                        "Couldn't find product $productIdentifier"
-                    ).map()
+                        "Couldn't find product $productIdentifier",
+                    ).map(),
                 )
             }
-
         }
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
@@ -151,22 +149,22 @@ fun purchaseProduct(
                 listOf(productIdWithoutBasePlanId),
                 ProductType.SUBS,
                 { onResult.onError(it.map()) },
-                onReceiveStoreProducts
+                onReceiveStoreProducts,
             )
         } else {
             Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
                 ProductType.INAPP,
                 { onResult.onError(it.map()) },
-                onReceiveStoreProducts
+                onReceiveStoreProducts,
             )
         }
     } else {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.PurchaseInvalidError,
-                "There is no current Activity"
-            ).map()
+                "There is no current Activity",
+            ).map(),
         )
     }
 }
@@ -178,15 +176,16 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     val googleProrationMode = try {
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchasePackage."
-            ).map()
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchasePackage.",
+            ).map(),
         )
         return
     }
@@ -219,24 +218,24 @@ fun purchasePackage(
                     Purchases.sharedInstance.purchaseWith(
                         purchaseParams.build(),
                         onError = getPurchaseErrorFunction(onResult),
-                        onSuccess = getPurchaseCompletedFunction(onResult)
+                        onSuccess = getPurchaseCompletedFunction(onResult),
                     )
                 } else {
                     onResult.onError(
                         PurchasesError(
                             PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                            "Couldn't find product for package $packageIdentifier"
-                        ).map()
+                            "Couldn't find product for package $packageIdentifier",
+                        ).map(),
                     )
                 }
-            }
+            },
         )
     } else {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.PurchaseInvalidError,
-                "There is no current Activity"
-            ).map()
+                "There is no current Activity",
+            ).map(),
         )
     }
 }
@@ -249,13 +248,14 @@ fun purchaseSubscriptionOption(
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingIdentifier: String?,
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
-                "purchaseSubscriptionOption() is only supported on the Play Store."
-            ).map()
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "purchaseSubscriptionOption() is only supported on the Play Store.",
+            ).map(),
         )
         return
     }
@@ -264,9 +264,10 @@ fun purchaseSubscriptionOption(
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchaseSubscriptionOption."
-            ).map()
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid google proration mode passed to purchaseSubscriptionOption.",
+            ).map(),
         )
         return
     }
@@ -305,31 +306,30 @@ fun purchaseSubscriptionOption(
                 Purchases.sharedInstance.purchaseWith(
                     purchaseParams.build(),
                     onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult)
+                    onSuccess = getPurchaseCompletedFunction(onResult),
                 )
             } else {
                 onResult.onError(
                     PurchasesError(
                         PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                        "Couldn't find product $productIdentifier:$optionIdentifier"
-                    ).map()
+                        "Couldn't find product $productIdentifier:$optionIdentifier",
+                    ).map(),
                 )
             }
-
         }
 
         Purchases.sharedInstance.getProductsWith(
             listOf(productIdentifier),
             ProductType.SUBS,
             { onResult.onError(it.map()) },
-            onReceiveStoreProducts
+            onReceiveStoreProducts,
         )
     } else {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.PurchaseInvalidError,
-                "There is no current Activity"
-            ).map()
+                "There is no current Activity",
+            ).map(),
         )
     }
 }
@@ -337,7 +337,7 @@ fun purchaseSubscriptionOption(
 fun getAppUserID() = Purchases.sharedInstance.appUserID
 
 fun restorePurchases(
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     Purchases.sharedInstance.restorePurchasesWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
@@ -346,17 +346,19 @@ fun restorePurchases(
 
 fun logIn(
     appUserID: String,
-    onResult: OnResult
+    onResult: OnResult,
 ) {
-    Purchases.sharedInstance.logInWith(appUserID,
+    Purchases.sharedInstance.logInWith(
+        appUserID,
         onError = { onResult.onError(it.map()) },
         onSuccess = { customerInfo, created ->
             val resultMap: Map<String, Any?> = mapOf(
                 "customerInfo" to customerInfo.map(),
-                "created" to created
+                "created" to created,
             )
             onResult.onReceived(resultMap)
-        })
+        },
+    )
 }
 
 fun logOut(onResult: OnResult) {
@@ -367,7 +369,7 @@ fun logOut(onResult: OnResult) {
 
 @Deprecated(message = "Use setLogLevel instead")
 fun setDebugLogsEnabled(
-    enabled: Boolean
+    enabled: Boolean,
 ) {
     Purchases.debugLogsEnabled = enabled
 }
@@ -414,7 +416,7 @@ fun getProxyURLString(): String? {
 }
 
 fun getCustomerInfo(
-    onResult: OnResult
+    onResult: OnResult,
 ) {
     Purchases.sharedInstance.getCustomerInfoWith(onError = { onResult.onError(it.map()) }) {
         onResult.onReceived(it.map())
@@ -430,14 +432,14 @@ fun isAnonymous(): Boolean {
 }
 
 fun setFinishTransactions(
-    enabled: Boolean
+    enabled: Boolean,
 ) {
     Purchases.sharedInstance.finishTransactions = enabled
 }
 
 // Returns Unknown for all since it's not available in Android
 fun checkTrialOrIntroductoryPriceEligibility(
-    productIdentifiers: List<String>
+    productIdentifiers: List<String>,
 ): Map<String, Map<String, Any>> {
     // INTRO_ELIGIBILITY_STATUS_UNKNOWN = 0
     return productIdentifiers.map {
@@ -449,16 +451,22 @@ fun invalidateCustomerInfoCache() {
     Purchases.sharedInstance.invalidateCustomerInfoCache()
 }
 
-fun canMakePayments(context: Context,
-                    features: List<Int>,
-                    onResult: OnResultAny<Boolean>) {
+fun canMakePayments(
+    context: Context,
+    features: List<Int>,
+    onResult: OnResultAny<Boolean>,
+) {
     val billingFeatures = mutableListOf<BillingFeature>()
     try {
         val billingFeatureEnumValues = BillingFeature.values()
         billingFeatures.addAll(features.map { billingFeatureEnumValues[it] })
     } catch (e: IndexOutOfBoundsException) {
-        onResult.onError(PurchasesError(PurchasesErrorCode.UnknownError,
-                "Invalid feature type passed to canMakePayments.").map())
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid feature type passed to canMakePayments.",
+            ).map(),
+        )
         return
     }
 
@@ -475,7 +483,7 @@ fun configure(
     observerMode: Boolean?,
     platformInfo: PlatformInfo,
     store: Store = Store.PLAY_STORE,
-    dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true)
+    dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
 ) {
     Purchases.platformInfo = platformInfo
     val builder =
@@ -490,15 +498,18 @@ fun configure(
     Purchases.configure(builder.build())
 }
 
-fun getPromotionalOffer() : ErrorContainer {
-    return ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
-        "Android platform doesn't support promotional offers", emptyMap())
+fun getPromotionalOffer(): ErrorContainer {
+    return ErrorContainer(
+        PurchasesErrorCode.UnsupportedError.code,
+        "Android platform doesn't support promotional offers",
+        emptyMap(),
+    )
 }
 
 // region private functions
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal fun mapStringToProductType(type: String) : ProductType {
+internal fun mapStringToProductType(type: String): ProductType {
     MappedProductCategory.values()
         .firstOrNull { it.value.equals(type, ignoreCase = true) }
         ?.let {
@@ -507,7 +518,7 @@ internal fun mapStringToProductType(type: String) : ProductType {
 
     // Maps strings used in deprecated hybrid methods to native ProductType enum
     // "subs" and "inapp" are legacy purchase types used in v4 and below
-    return when(type.lowercase()) {
+    return when (type.lowercase()) {
         "subs" -> ProductType.SUBS
         "inapp" -> ProductType.INAPP
         else -> {
@@ -518,11 +529,11 @@ internal fun mapStringToProductType(type: String) : ProductType {
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal class InvalidProrationModeException(): Exception()
+internal class InvalidProrationModeException : Exception()
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Throws(InvalidProrationModeException::class)
-internal fun getGoogleProrationMode(prorationModeInt: Int?) : GoogleProrationMode?  {
+internal fun getGoogleProrationMode(prorationModeInt: Int?): GoogleProrationMode? {
     return prorationModeInt
         ?.let {
             GoogleProrationMode.values().find { prorationMode ->
@@ -533,7 +544,7 @@ internal fun getGoogleProrationMode(prorationModeInt: Int?) : GoogleProrationMod
         }
 }
 
-private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?) : StoreProduct {
+private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?): StoreProduct {
     return presentedOfferingIdentifier?.let {
         this.copyWithOfferingId(it)
     } ?: this
@@ -549,14 +560,17 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
             onResult.onReceived(
                 mapOf(
                     "productIdentifier" to purchase.productIds[0],
-                    "customerInfo" to customerInfo.map()
-                )
+                    "customerInfo" to customerInfo.map(),
+                ),
             )
         } ?: run {
-            // TODO: Figure out how to properly handle a null StoreTransaction (doing this for now
+            // TODO Figure out how to properly handle a null StoreTransaction (doing this for now
             onResult.onError(
-                ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
-                    "Error purchasing. Null transaction returned from a successful non-upgrade purchase.", emptyMap())
+                ErrorContainer(
+                    PurchasesErrorCode.UnsupportedError.code,
+                    "Error purchasing. Null transaction returned from a successful non-upgrade purchase.",
+                    emptyMap(),
+                ),
             )
         }
     }
@@ -564,7 +578,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun PurchasesError.map(
-    extra: Map<String, Any?> = mapOf()
+    extra: Map<String, Any?> = mapOf(),
 ): ErrorContainer =
     ErrorContainer(
         code.code,
@@ -574,12 +588,12 @@ internal fun PurchasesError.map(
             "message" to message,
             "readableErrorCode" to code.name,
             "readable_error_code" to code.name,
-            "underlyingErrorMessage" to (underlyingErrorMessage ?: "")
-        ) + extra
+            "underlyingErrorMessage" to (underlyingErrorMessage ?: ""),
+        ) + extra,
     )
 
 data class ErrorContainer(
     val code: Int,
     val message: String,
-    val info: Map<String, Any?>
+    val info: Map<String, Any?>,
 )

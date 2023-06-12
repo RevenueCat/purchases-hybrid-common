@@ -7,14 +7,14 @@ import com.revenuecat.purchases.hybridcommon.OnResultAny
 private class OnResultAnyApiTests<T> {
     fun checkOnSuccess(
         onResult: OnResultAny<T>,
-        result: T
+        result: T,
     ) {
         onResult.onReceived(result)
     }
 
     fun checkOnError(
         onResult: OnResultAny<T>,
-        errorContainer: ErrorContainer
+        errorContainer: ErrorContainer,
     ) {
         onResult.onError(errorContainer)
     }

@@ -2,11 +2,9 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.ProductType
-import com.revenuecat.purchases.hybridcommon.getGoogleProrationMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
-import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.SubscriptionOption
 
@@ -32,12 +30,15 @@ val StoreProduct.introductoryPriceAmountMicros: Long
 val StoreProduct.introductoryPriceCycles: Int
     get() = this.introductoryPhase?.billingCycleCount ?: 0
 
+private const val DAYS_PER_WEEK = 7
+private const val MICROS_CONVERSION_METRIC = 1_000_000.0
+
 fun StoreProduct.map(): Map<String, Any?> =
     mapOf(
         "identifier" to id,
         "description" to description,
         "title" to title,
-        "price" to priceAmountMicros / 1_000_000.0,
+        "price" to priceAmountMicros / MICROS_CONVERSION_METRIC,
         "priceString" to priceString,
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
@@ -47,7 +48,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "subscriptionPeriod" to period?.iso8601,
         "defaultOption" to defaultOption?.mapSubscriptionOption(this),
         "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
-        "presentedOfferingIdentifier" to presentedOfferingIdentifier
+        "presentedOfferingIdentifier" to presentedOfferingIdentifier,
     )
 
 fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
@@ -56,10 +57,11 @@ fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 internal enum class MappedProductCategory(val value: String) {
     SUBSCRIPTION("SUBSCRIPTION"),
     NON_SUBSCRIPTION("NON_SUBSCRIPTION"),
-    UNKNOWN("UNKNOWN");
+    UNKNOWN("UNKNOWN"),
+    ;
 
     val toProductType: ProductType
-        get() = when(this) {
+        get() = when (this) {
             NON_SUBSCRIPTION -> ProductType.INAPP
             SUBSCRIPTION -> ProductType.SUBS
             UNKNOWN -> ProductType.UNKNOWN
@@ -92,7 +94,6 @@ internal fun StoreProduct.mapProductType(): String {
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
-    getGoogleProrationMode(3)
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials
@@ -103,17 +104,17 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
                     "price" to 0,
                     "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
                     "period" to freeTrialPeriod?.iso8601,
-                    "cycles" to (freeTrialCycles ?: 1)
+                    "cycles" to (freeTrialCycles ?: 1),
                 ) + periodFields
             }
         }
         introductoryPrice != null -> {
             introductoryPricePeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
                 mapOf(
-                    "price" to introductoryPriceAmountMicros / 1_000_000.0,
+                    "price" to introductoryPriceAmountMicros / MICROS_CONVERSION_METRIC,
                     "priceString" to introductoryPrice,
                     "period" to introductoryPricePeriod?.iso8601,
-                    "cycles" to introductoryPriceCycles
+                    "cycles" to introductoryPriceCycles,
                 ) + periodFields
             }
         }
@@ -124,53 +125,53 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
 }
 
 private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
-    return when(this.unit) {
+    return when (this.unit) {
         Period.Unit.DAY -> mapOf(
             "periodUnit" to "DAY",
-            "periodNumberOfUnits" to this.value
+            "periodNumberOfUnits" to this.value,
         )
         // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
             "periodUnit" to "DAY",
-            "periodNumberOfUnits" to this.value * 7
+            "periodNumberOfUnits" to this.value * DAYS_PER_WEEK,
         )
         Period.Unit.MONTH -> mapOf(
             "periodUnit" to "MONTH",
-            "periodNumberOfUnits" to this.value
+            "periodNumberOfUnits" to this.value,
         )
         Period.Unit.YEAR -> mapOf(
             "periodUnit" to "YEAR",
-            "periodNumberOfUnits" to this.value
+            "periodNumberOfUnits" to this.value,
         )
         Period.Unit.UNKNOWN -> mapOf(
             "periodUnit" to "DAY",
-            "periodNumberOfUnits" to 0
+            "periodNumberOfUnits" to 0,
         )
     }
 }
 
 private fun Period.mapPeriod(): Map<String, Any?>? {
-    return when(this.unit) {
+    return when (this.unit) {
         Period.Unit.DAY -> mapOf(
             "unit" to "DAY",
-            "value" to this.value
+            "value" to this.value,
         )
         // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
             "unit" to "DAY",
-            "value" to this.value * 7
+            "value" to this.value * DAYS_PER_WEEK,
         )
         Period.Unit.MONTH -> mapOf(
             "unit" to "MONTH",
-            "value" to this.value
+            "value" to this.value,
         )
         Period.Unit.YEAR -> mapOf(
             "unit" to "YEAR",
-            "value" to this.value
+            "value" to this.value,
         )
         Period.Unit.UNKNOWN -> mapOf(
             "unit" to "DAY",
-            "value" to 0
+            "value" to 0,
         )
     } + mapOf("iso8601" to this.iso8601)
 }
@@ -200,7 +201,7 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
         "fullPricePhase" to fullPricePhase?.mapPricingPhase(),
         "freePhase" to freePhase?.mapPricingPhase(),
         "introPhase" to introPhase?.mapPricingPhase(),
-        "presentedOfferingIdentifier" to presentedOfferingIdentifier
+        "presentedOfferingIdentifier" to presentedOfferingIdentifier,
     )
 }
 
@@ -210,7 +211,7 @@ private fun PricingPhase.mapPricingPhase(): Map<String, Any?> {
         "recurrenceMode" to recurrenceMode.identifier,
         "billingCycleCount" to billingCycleCount,
         "price" to price.mapPrice(),
-        "offerPaymentMode" to offerPaymentMode?.toString()
+        "offerPaymentMode" to offerPaymentMode?.toString(),
     )
 }
 
@@ -218,6 +219,6 @@ private fun Price.mapPrice(): Map<String, Any?> {
     return mapOf(
         "formatted" to formatted,
         "amountMicros" to amountMicros,
-        "currencyCode" to currencyCode
+        "currencyCode" to currencyCode,
     )
 }

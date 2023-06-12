@@ -22,5 +22,5 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "managementURL" to managementURL?.toString(),
         "originalPurchaseDate" to originalPurchaseDate?.toIso8601(),
         "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis(),
-        "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() }
+        "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() },
     )

@@ -45,14 +45,14 @@ internal class ConfiguringUnitTests {
             appUserID = "appUserID",
             observerMode = false,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         assertConfiguration(
             purchasesConfigurationSlot,
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
-            expectedObserverMode = false
+            expectedObserverMode = false,
         )
     }
 
@@ -64,14 +64,14 @@ internal class ConfiguringUnitTests {
             appUserID = "appUserID",
             observerMode = true,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         assertConfiguration(
             purchasesConfigurationSlot,
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
-            expectedObserverMode = true
+            expectedObserverMode = true,
         )
     }
 
@@ -83,7 +83,7 @@ internal class ConfiguringUnitTests {
             appUserID = "appUserID",
             observerMode = null,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         assertConfiguration(
             purchasesConfigurationSlot,
@@ -102,14 +102,14 @@ internal class ConfiguringUnitTests {
             appUserID = null,
             observerMode = null,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         assertConfiguration(
             purchasesConfigurationSlot,
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = null,
-            expectedObserverMode = false
+            expectedObserverMode = false,
         )
     }
 
@@ -121,7 +121,7 @@ internal class ConfiguringUnitTests {
             appUserID = "appUserID",
             observerMode = false,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         verify(exactly = 1) {
             Purchases.platformInfo = expectedPlatformInfo
@@ -137,7 +137,7 @@ internal class ConfiguringUnitTests {
             appUserID = "appUserID",
             observerMode = false,
             platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE
+            store = Store.PLAY_STORE,
         )
         assertEquals(expectedDangerousSettings, purchasesConfigurationSlot.captured.dangerousSettings)
     }
@@ -152,7 +152,7 @@ internal class ConfiguringUnitTests {
             observerMode = false,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
-            dangerousSettings = expectedDangerousSettings
+            dangerousSettings = expectedDangerousSettings,
         )
         assertEquals(expectedDangerousSettings, purchasesConfigurationSlot.captured.dangerousSettings)
     }

@@ -5,8 +5,35 @@ import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.hybridcommon.*
-import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.hybridcommon.ErrorContainer
+import com.revenuecat.purchases.hybridcommon.OnResult
+import com.revenuecat.purchases.hybridcommon.OnResultAny
+import com.revenuecat.purchases.hybridcommon.OnResultList
+import com.revenuecat.purchases.hybridcommon.canMakePayments
+import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility
+import com.revenuecat.purchases.hybridcommon.configure
+import com.revenuecat.purchases.hybridcommon.getAppUserID
+import com.revenuecat.purchases.hybridcommon.getCustomerInfo
+import com.revenuecat.purchases.hybridcommon.getOfferings
+import com.revenuecat.purchases.hybridcommon.getProductInfo
+import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
+import com.revenuecat.purchases.hybridcommon.getProxyURLString
+import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache
+import com.revenuecat.purchases.hybridcommon.isAnonymous
+import com.revenuecat.purchases.hybridcommon.logIn
+import com.revenuecat.purchases.hybridcommon.logOut
+import com.revenuecat.purchases.hybridcommon.purchasePackage
+import com.revenuecat.purchases.hybridcommon.purchaseProduct
+import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
+import com.revenuecat.purchases.hybridcommon.restorePurchases
+import com.revenuecat.purchases.hybridcommon.setAllowSharingAppStoreAccount
+import com.revenuecat.purchases.hybridcommon.setDebugLogsEnabled
+import com.revenuecat.purchases.hybridcommon.setFinishTransactions
+import com.revenuecat.purchases.hybridcommon.setLogHandler
+import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
+import com.revenuecat.purchases.hybridcommon.setLogLevel
+import com.revenuecat.purchases.hybridcommon.setProxyURLString
+import com.revenuecat.purchases.hybridcommon.syncPurchases
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
@@ -21,7 +48,7 @@ private class CommonApiTests {
     fun checkGetProductInfo(
         productIDs: List<String>,
         type: String,
-        onResult: OnResultList
+        onResult: OnResultList,
     ) {
         getProductInfo(productIDs, type, onResult)
     }
@@ -35,7 +62,7 @@ private class CommonApiTests {
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingIdentifier: String?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchaseProduct(
             activity,
@@ -46,7 +73,7 @@ private class CommonApiTests {
             googleProrationMode,
             googleIsPersonalizedPrice,
             presentedOfferingIdentifier,
-            onResult
+            onResult,
         )
     }
 
@@ -57,7 +84,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchasePackage(
             activity,
@@ -66,7 +93,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
-            onResult
+            onResult,
         )
     }
 
@@ -78,7 +105,7 @@ private class CommonApiTests {
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingIdentifier: String?,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -88,7 +115,7 @@ private class CommonApiTests {
             googleProrationMode,
             googleIsPersonalizedPrice,
             presentedOfferingIdentifier,
-            onResult
+            onResult,
         )
     }
 
@@ -102,7 +129,7 @@ private class CommonApiTests {
 
     fun checkLogIn(
         appUserID: String,
-        onResult: OnResult
+        onResult: OnResult,
     ) {
         logIn(appUserID, onResult)
     }
@@ -156,7 +183,7 @@ private class CommonApiTests {
 
     fun checkCheckTrialOrIntroductoryPriceEligibility(productIdentifiers: List<String>) {
         val result: Map<String, Map<String, Any>> = checkTrialOrIntroductoryPriceEligibility(
-            productIdentifiers
+            productIdentifiers,
         )
     }
 
@@ -167,7 +194,7 @@ private class CommonApiTests {
     fun checkCanMakePayments(
         context: Context,
         features: List<Int>,
-        onResult: OnResultAny<Boolean>
+        onResult: OnResultAny<Boolean>,
     ) {
         canMakePayments(context, features, onResult)
     }
@@ -179,7 +206,7 @@ private class CommonApiTests {
         observerMode: Boolean?,
         platformInfo: PlatformInfo,
         store: Store,
-        dangerousSettings: DangerousSettings
+        dangerousSettings: DangerousSettings,
     ) {
         configure(context, apiKey, appUserID, observerMode, platformInfo)
         configure(context, apiKey, appUserID, observerMode, platformInfo, store, dangerousSettings)

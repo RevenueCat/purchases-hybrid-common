@@ -7,7 +7,7 @@ import com.revenuecat.purchases.Package
 fun Offerings.map(): Map<String, Any?> =
     mapOf(
         "all" to this.all.mapValues { it.value.map() },
-        "current" to this.current?.map()
+        "current" to this.current?.map(),
     )
 
 private fun Offering.map(): Map<String, Any?> =
@@ -22,7 +22,7 @@ private fun Offering.map(): Map<String, Any?> =
         "threeMonth" to threeMonth?.map(identifier),
         "twoMonth" to twoMonth?.map(identifier),
         "monthly" to monthly?.map(identifier),
-        "weekly" to weekly?.map(identifier)
+        "weekly" to weekly?.map(identifier),
     )
 
 private fun Package.map(offeringIdentifier: String): Map<String, Any?> =
@@ -30,5 +30,5 @@ private fun Package.map(offeringIdentifier: String): Map<String, Any?> =
         "identifier" to identifier,
         "packageType" to packageType.name,
         "product" to product.map(),
-        "offeringIdentifier" to offeringIdentifier
+        "offeringIdentifier" to offeringIdentifier,
     )

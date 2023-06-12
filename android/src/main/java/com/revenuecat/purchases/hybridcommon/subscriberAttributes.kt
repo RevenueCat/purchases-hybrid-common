@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon
 
 import com.revenuecat.purchases.Purchases
-import org.json.JSONObject
 
 // region Attribution IDs
 

@@ -11,5 +11,5 @@ fun Transaction.map(): Map<String, Any?> =
         // Deprecated: Use productIdentifier in this map instead
         "productId" to this.productIdentifier,
         "purchaseDateMillis" to this.purchaseDate.toMillis(),
-        "purchaseDate" to this.purchaseDate.toIso8601()
+        "purchaseDate" to this.purchaseDate.toIso8601(),
     )
