@@ -152,6 +152,22 @@ jobs:
           command: bundle exec fastlane ios push_pods
           no_output_timeout: 30m
 
+  detekt-android:
+    executor:
+      name: android/android-machine
+      resource-class: large
+    working_directory: ~/purchases-hybrid-common/android
+    shell: /bin/bash --login -o pipefail
+    steps:
+      - checkout:
+          path: ~/purchases-hybrid-common
+      - revenuecat/prepare-android
+      - android/restore-gradle-cache
+      - run:
+          name: Detekt
+          command: ./gradlew detekt
+      - android/save-gradle-cache
+
   test-android:
     executor:
       name: android/android-machine
@@ -274,6 +290,7 @@ workflows:
       - test-ios
       - integration-test-ios
       - test-android
+      - detekt-android
 
   deploy:
     when:
