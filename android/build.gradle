@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -76,6 +79,10 @@ android {
     }
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    baseline = file("config/detekt/detekt-baseline.xml")
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
