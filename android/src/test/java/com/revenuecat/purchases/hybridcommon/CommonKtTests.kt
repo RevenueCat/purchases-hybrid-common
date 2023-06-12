@@ -535,7 +535,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `purchaseProduct passes correct productIdentifier after a successful purchase with presented offering identifier`() {
+    fun `purchaseProduct passes productIdentifier after successful purchase with presented offering identifier`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -603,7 +603,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `purchaseProduct with base plan id in productIdentifier passes correct productIdentifier after a successful purchase`() {
+    fun `purchaseProduct with base plan id in productIdentifier passes productIdentifier after successful purchase`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -1007,7 +1007,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `purchaseSubscriptionOption passes correct productIdentifier after a successful purchase with presented offering identifier`() {
+    fun `purchaseSubscriptionOption passes productIdentifier after successful purchase with presented offeringId`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -1276,7 +1276,10 @@ internal class CommonKtTests {
         assertEquals(metadata, mappedMetadata)
     }
 
-    private fun getOfferings(mockStoreProduct: StoreProduct, metadata: Map<String, Any> = emptyMap()): Triple<String, Package, Offerings> {
+    private fun getOfferings(
+        mockStoreProduct: StoreProduct,
+        metadata: Map<String, Any> = emptyMap()
+    ): Triple<String, Package, Offerings> {
         val offeringIdentifier = "offering"
         val packageToPurchase = Package(
             identifier = "packageIdentifier",

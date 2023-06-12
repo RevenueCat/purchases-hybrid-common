@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class MappersHelpersTests {
+internal class MappersTests {
 
     @Test
     fun `parsing simple date format returns the correct date`() {

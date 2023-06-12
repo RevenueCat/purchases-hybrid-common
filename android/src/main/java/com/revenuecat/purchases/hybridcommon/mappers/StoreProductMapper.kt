@@ -2,7 +2,6 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.ProductType
-import com.revenuecat.purchases.hybridcommon.getGoogleProrationMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -31,12 +30,15 @@ val StoreProduct.introductoryPriceAmountMicros: Long
 val StoreProduct.introductoryPriceCycles: Int
     get() = this.introductoryPhase?.billingCycleCount ?: 0
 
+private const val DAYS_PER_WEEK = 7
+private const val MICROS_CONVERSION_METRIC = 1_000_000.0
+
 fun StoreProduct.map(): Map<String, Any?> =
     mapOf(
         "identifier" to id,
         "description" to description,
         "title" to title,
-        "price" to priceAmountMicros / 1_000_000.0,
+        "price" to priceAmountMicros / MICROS_CONVERSION_METRIC,
         "priceString" to priceString,
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
@@ -91,7 +93,6 @@ internal fun StoreProduct.mapProductType(): String {
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
-    getGoogleProrationMode(3)
     return when {
         freeTrialPeriod != null -> {
             // Check freeTrialPeriod first to give priority to trials
@@ -109,7 +110,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
         introductoryPrice != null -> {
             introductoryPricePeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
                 mapOf(
-                    "price" to introductoryPriceAmountMicros / 1_000_000.0,
+                    "price" to introductoryPriceAmountMicros / MICROS_CONVERSION_METRIC,
                     "priceString" to introductoryPrice,
                     "period" to introductoryPricePeriod?.iso8601,
                     "cycles" to introductoryPriceCycles
@@ -131,7 +132,7 @@ private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
         // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
             "periodUnit" to "DAY",
-            "periodNumberOfUnits" to this.value * 7
+            "periodNumberOfUnits" to this.value * DAYS_PER_WEEK
         )
         Period.Unit.MONTH -> mapOf(
             "periodUnit" to "MONTH",
@@ -157,7 +158,7 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
         // WEEK was added in Android V6 but converting to days for backwards compatibility
         Period.Unit.WEEK -> mapOf(
             "unit" to "DAY",
-            "value" to this.value * 7
+            "value" to this.value * DAYS_PER_WEEK
         )
         Period.Unit.MONTH -> mapOf(
             "unit" to "MONTH",

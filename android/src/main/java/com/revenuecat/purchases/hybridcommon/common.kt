@@ -529,7 +529,7 @@ internal fun mapStringToProductType(type: String): ProductType {
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal class InvalidProrationModeException() : Exception()
+internal class InvalidProrationModeException : Exception()
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Throws(InvalidProrationModeException::class)
@@ -564,7 +564,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
                 )
             )
         } ?: run {
-            // TODO: Figure out how to properly handle a null StoreTransaction (doing this for now
+            // TODO Figure out how to properly handle a null StoreTransaction (doing this for now
             onResult.onError(
                 ErrorContainer(
                     PurchasesErrorCode.UnsupportedError.code,

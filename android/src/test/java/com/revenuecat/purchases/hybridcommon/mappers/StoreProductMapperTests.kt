@@ -12,7 +12,7 @@ import com.revenuecat.purchases.models.RecurrenceMode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class StoreProductMapperTest {
+internal class StoreProductMapperTests {
 
     val exptectedProductId = "expected_product_identifier"
 
@@ -23,7 +23,7 @@ internal class StoreProductMapperTest {
         }
     }
 
-    // TODO: Fix stubs for all of these tests
+    // TODO Fix stubs for all of these tests
     @Test
     fun `maps product description correctly`() {
         val expected = "Expected Description"
@@ -373,6 +373,7 @@ internal class StoreProductMapperTest {
         assertThat(option["introPhase"]).isNull()
     }
 
+    @Suppress("LongMethod")
     private fun testMultiPhaseOption(option: Map<String, Any?>) {
         val billingPeriod = mapOf(
             "unit" to "MONTH",

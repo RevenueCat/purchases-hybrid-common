@@ -32,7 +32,8 @@ class EntitlementInfoMapperTests {
 
             assertThat(dictionary[storeDictionaryKey])
                 .`as`(
-                    "Expected the dictionary's \"store\" value to equal \"$expectedDictionaryValue\" for the store value $store, but instead found \"${dictionary[storeDictionaryKey]}\"."
+                    "Expected the dictionary's \"store\" value to equal \"$expectedDictionaryValue\" " +
+                        "for the store value $store, but instead found \"${dictionary[storeDictionaryKey]}\"."
                 )
                 .isEqualTo(expectedDictionaryValue)
         }

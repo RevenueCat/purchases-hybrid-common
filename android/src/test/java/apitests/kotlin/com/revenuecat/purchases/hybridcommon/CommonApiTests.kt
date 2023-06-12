@@ -5,7 +5,35 @@ import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.hybridcommon.*
+import com.revenuecat.purchases.hybridcommon.ErrorContainer
+import com.revenuecat.purchases.hybridcommon.OnResult
+import com.revenuecat.purchases.hybridcommon.OnResultAny
+import com.revenuecat.purchases.hybridcommon.OnResultList
+import com.revenuecat.purchases.hybridcommon.canMakePayments
+import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility
+import com.revenuecat.purchases.hybridcommon.configure
+import com.revenuecat.purchases.hybridcommon.getAppUserID
+import com.revenuecat.purchases.hybridcommon.getCustomerInfo
+import com.revenuecat.purchases.hybridcommon.getOfferings
+import com.revenuecat.purchases.hybridcommon.getProductInfo
+import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
+import com.revenuecat.purchases.hybridcommon.getProxyURLString
+import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache
+import com.revenuecat.purchases.hybridcommon.isAnonymous
+import com.revenuecat.purchases.hybridcommon.logIn
+import com.revenuecat.purchases.hybridcommon.logOut
+import com.revenuecat.purchases.hybridcommon.purchasePackage
+import com.revenuecat.purchases.hybridcommon.purchaseProduct
+import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
+import com.revenuecat.purchases.hybridcommon.restorePurchases
+import com.revenuecat.purchases.hybridcommon.setAllowSharingAppStoreAccount
+import com.revenuecat.purchases.hybridcommon.setDebugLogsEnabled
+import com.revenuecat.purchases.hybridcommon.setFinishTransactions
+import com.revenuecat.purchases.hybridcommon.setLogHandler
+import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
+import com.revenuecat.purchases.hybridcommon.setLogLevel
+import com.revenuecat.purchases.hybridcommon.setProxyURLString
+import com.revenuecat.purchases.hybridcommon.syncPurchases
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {

@@ -1,6 +1,23 @@
 package apitests.kotlin.com.revenuecat.purchases.hybridcommon
 
-import com.revenuecat.purchases.hybridcommon.*
+import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers
+import com.revenuecat.purchases.hybridcommon.setAd
+import com.revenuecat.purchases.hybridcommon.setAdGroup
+import com.revenuecat.purchases.hybridcommon.setAdjustID
+import com.revenuecat.purchases.hybridcommon.setAirshipChannelID
+import com.revenuecat.purchases.hybridcommon.setAppsflyerID
+import com.revenuecat.purchases.hybridcommon.setAttributes
+import com.revenuecat.purchases.hybridcommon.setCampaign
+import com.revenuecat.purchases.hybridcommon.setCreative
+import com.revenuecat.purchases.hybridcommon.setDisplayName
+import com.revenuecat.purchases.hybridcommon.setEmail
+import com.revenuecat.purchases.hybridcommon.setFBAnonymousID
+import com.revenuecat.purchases.hybridcommon.setKeyword
+import com.revenuecat.purchases.hybridcommon.setMediaSource
+import com.revenuecat.purchases.hybridcommon.setMparticleID
+import com.revenuecat.purchases.hybridcommon.setOnesignalID
+import com.revenuecat.purchases.hybridcommon.setPhoneNumber
+import com.revenuecat.purchases.hybridcommon.setPushToken
 
 @Suppress("unused")
 private class SubscriberAttributesApiTests {
