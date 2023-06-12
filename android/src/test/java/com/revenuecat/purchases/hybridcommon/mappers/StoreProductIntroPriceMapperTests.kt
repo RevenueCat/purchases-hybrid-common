@@ -73,7 +73,6 @@ internal class StoreProductIntroPriceMapperTests {
         }
     }
 
-
     @Nested
     @DisplayName("when mapping a StoreProduct with an intro price")
     inner class MappingIntroPrice {

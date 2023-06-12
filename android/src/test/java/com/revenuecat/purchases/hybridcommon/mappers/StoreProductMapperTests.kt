@@ -9,9 +9,7 @@ import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.RecurrenceMode
-import com.revenuecat.purchases.models.StoreProduct
 import org.assertj.core.api.Assertions.assertThat
-import org.json.JSONObject
 import org.junit.jupiter.api.Test
 
 internal class StoreProductMapperTest {
@@ -58,7 +56,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
                 duration,
                 pricingPhases = listOf(
                     stubPricingPhase(
@@ -84,7 +83,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
                 duration,
                 pricingPhases = listOf(
                     stubPricingPhase(
@@ -110,7 +110,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
             )
         ).map().let {
             assertThat(it["introPrice"]).isNull()
@@ -122,7 +123,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
             )
         ).map().let {
             assertThat(it["discounts"]).isNull()
@@ -168,7 +170,8 @@ internal class StoreProductMapperTest {
             productId = exptectedProductId,
             type = ProductType.SUBS,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
                 duration,
                 pricingPhases = listOf(
                     stubPricingPhase(
@@ -217,7 +220,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
                 Period(1, Period.Unit.MONTH, "P1M")
             )
         ).map().let {
@@ -226,7 +230,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
                 Period(1, Period.Unit.MONTH, "P1Y")
             )
         ).map().let {
@@ -246,7 +251,8 @@ internal class StoreProductMapperTest {
         stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = stubSubscriptionOption(
-                "monthly_base_plan", exptectedProductId,
+                "monthly_base_plan",
+                exptectedProductId,
             )
         ).map().let {
             val defaultOption = it["defaultOption"] as Map<String, Any?>
@@ -261,7 +267,8 @@ internal class StoreProductMapperTest {
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
         val basePlan = stubSubscriptionOption(
-            "monthly_base_plan", exptectedProductId,
+            "monthly_base_plan",
+            exptectedProductId,
             duration,
             pricingPhases = listOf(
                 stubPricingPhase(
@@ -270,7 +277,8 @@ internal class StoreProductMapperTest {
             )
         )
         val multiPricingPhaseOption = stubSubscriptionOption(
-            "monthly_base_plan", exptectedProductId,
+            "monthly_base_plan",
+            exptectedProductId,
             duration,
             pricingPhases = listOf(
                 stubPricingPhase(

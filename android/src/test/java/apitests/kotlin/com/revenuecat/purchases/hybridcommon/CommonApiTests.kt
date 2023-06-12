@@ -6,7 +6,6 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.*
-import com.revenuecat.purchases.models.GoogleProrationMode
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {

@@ -34,5 +34,4 @@ internal class MappersHelpersTests {
             assertThat(errorContainer.code).isEqualTo(errorCode.code)
         }
     }
-
 }

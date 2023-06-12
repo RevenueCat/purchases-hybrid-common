@@ -6,7 +6,6 @@ import com.revenuecat.purchases.hybridcommon.getGoogleProrationMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
-import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.SubscriptionOption
 
@@ -59,7 +58,7 @@ internal enum class MappedProductCategory(val value: String) {
     UNKNOWN("UNKNOWN");
 
     val toProductType: ProductType
-        get() = when(this) {
+        get() = when (this) {
             NON_SUBSCRIPTION -> ProductType.INAPP
             SUBSCRIPTION -> ProductType.SUBS
             UNKNOWN -> ProductType.UNKNOWN
@@ -124,7 +123,7 @@ internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
 }
 
 private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
-    return when(this.unit) {
+    return when (this.unit) {
         Period.Unit.DAY -> mapOf(
             "periodUnit" to "DAY",
             "periodNumberOfUnits" to this.value
@@ -150,7 +149,7 @@ private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
 }
 
 private fun Period.mapPeriod(): Map<String, Any?>? {
-    return when(this.unit) {
+    return when (this.unit) {
         Period.Unit.DAY -> mapOf(
             "unit" to "DAY",
             "value" to this.value

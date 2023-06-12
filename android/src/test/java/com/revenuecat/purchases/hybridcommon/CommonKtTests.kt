@@ -1,16 +1,15 @@
 package com.revenuecat.purchases.hybridcommon
 
-
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import com.android.billingclient.api.ProductDetails
+import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
-import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -38,7 +37,6 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
-import com.revenuecat.purchases.models.toRecurrenceMode
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -76,7 +74,6 @@ internal class CommonKtTests {
         every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.store } returns Store.PLAY_STORE
     }
-
 
     @Test
     fun `Calling setProxyURLString, sets the proxyURL correctly from a valid URL`() {
@@ -129,9 +126,11 @@ internal class CommonKtTests {
         val returnedResult = slot<Boolean>()
         every { onResult.onReceived(capture(returnedResult)) } just runs
 
-        canMakePayments(mockContext,
+        canMakePayments(
+            mockContext,
             listOf(),
-            onResult)
+            onResult
+        )
 
         assertEquals(receivedCanMakePayments, returnedResult.captured)
     }
@@ -139,11 +138,11 @@ internal class CommonKtTests {
     @Test
     fun `calling canMakePayments with empty list correctly passes through to Purchases`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = true,
-                platformInfo = PlatformInfo("flavor", "version")
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
         )
 
         every {
@@ -153,26 +152,29 @@ internal class CommonKtTests {
         val onResult = mockk<OnResultAny<Boolean>>()
         every { onResult.onReceived(any()) } just Runs
 
-        canMakePayments(mockContext,
-                listOf(),
-                onResult)
+        canMakePayments(
+            mockContext,
+            listOf(),
+            onResult
+        )
 
         verify(exactly = 1) {
             Purchases.canMakePayments(
-                    mockContext,
-                    listOf(),
-                    any())
+                mockContext,
+                listOf(),
+                any()
+            )
         }
     }
 
     @Test
     fun `canMakePayments correctly maps all integer values to BillingFeature enum type`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = true,
-                platformInfo = PlatformInfo("flavor", "version")
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
         )
 
         every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
@@ -183,15 +185,18 @@ internal class CommonKtTests {
         val billingFeatureValues = BillingFeature.values()
 
         billingFeatureValues.forEachIndexed { index, billingFeature ->
-            canMakePayments(mockContext,
-                    listOf(index),
-                    onResult)
+            canMakePayments(
+                mockContext,
+                listOf(index),
+                onResult
+            )
 
             verify(exactly = 1) {
                 Purchases.canMakePayments(
-                        mockContext,
-                        listOf(billingFeature),
-                        any())
+                    mockContext,
+                    listOf(billingFeature),
+                    any()
+                )
             }
         }
     }
@@ -199,21 +204,23 @@ internal class CommonKtTests {
     @Test
     fun `calling canMakePayments with invalid integer results in error`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = true,
-                platformInfo = PlatformInfo("flavor", "version")
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = true,
+            platformInfo = PlatformInfo("flavor", "version")
         )
 
         every { Purchases.canMakePayments(mockContext, any(), any()) } just runs
 
         val onResultAny = mockk<OnResultAny<Boolean>>()
-        every { onResultAny.onError(any())} just runs
+        every { onResultAny.onError(any()) } just runs
 
-        canMakePayments(mockContext,
-                listOf(8),
-                onResultAny)
+        canMakePayments(
+            mockContext,
+            listOf(8),
+            onResultAny
+        )
 
         verify(exactly = 1) {
             onResultAny.onError(any())
@@ -234,10 +241,13 @@ internal class CommonKtTests {
 
         every { mockPurchases.logIn(appUserID, any()) } just runs
 
-        logIn(appUserID = appUserID, onResult = object : OnResult {
-            override fun onReceived(map: Map<String, *>) {}
-            override fun onError(errorContainer: ErrorContainer) {}
-        })
+        logIn(
+            appUserID = appUserID,
+            onResult = object : OnResult {
+                override fun onReceived(map: Map<String, *>) {}
+                override fun onError(errorContainer: ErrorContainer) {}
+            }
+        )
 
         verify(exactly = 1) { mockPurchases.logIn(appUserID, any()) }
     }
@@ -273,10 +283,12 @@ internal class CommonKtTests {
         val mockInfoMap = mockInfo.map()
 
         verify(exactly = 1) {
-            onResult.onReceived(mapOf(
-                "created" to mockCreated,
-                "customerInfo" to mockInfoMap
-            ))
+            onResult.onReceived(
+                mapOf(
+                    "created" to mockCreated,
+                    "customerInfo" to mockInfoMap
+                )
+            )
         }
     }
 
@@ -327,10 +339,12 @@ internal class CommonKtTests {
 
         every { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) } just runs
 
-        logOut(onResult = object : OnResult {
-            override fun onReceived(map: Map<String, *>) {}
-            override fun onError(errorContainer: ErrorContainer) {}
-        })
+        logOut(
+            onResult = object : OnResult {
+                override fun onReceived(map: Map<String, *>) {}
+                override fun onError(errorContainer: ErrorContainer) {}
+            }
+        )
 
         verify(exactly = 1) { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) }
     }
@@ -414,7 +428,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -473,7 +491,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -534,7 +556,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -599,7 +625,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -679,7 +709,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -809,7 +843,7 @@ internal class CommonKtTests {
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
-2
+        2
         every {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
@@ -930,7 +964,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -999,7 +1037,11 @@ internal class CommonKtTests {
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
-            mockPurchases.getProducts(listOf(expectedProductIdentifier), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
         }
@@ -1076,7 +1118,7 @@ internal class CommonKtTests {
                 assertEquals(logLevel.name.uppercase(), logDetails["logLevel"])
                 assertEquals(expectedMessage, logDetails["message"])
             }
-            when(logLevel) {
+            when (logLevel) {
                 LogLevel.VERBOSE -> Purchases.logHandler.v("Purchases", expectedMessage)
                 LogLevel.DEBUG -> Purchases.logHandler.d("Purchases", expectedMessage)
                 LogLevel.INFO -> Purchases.logHandler.i("Purchases", expectedMessage)
@@ -1100,7 +1142,7 @@ internal class CommonKtTests {
                     fail("onError shouldn't be called")
                 }
             })
-            when(logLevel) {
+            when (logLevel) {
                 LogLevel.VERBOSE -> Purchases.logHandler.v("Purchases", expectedMessage)
                 LogLevel.DEBUG -> Purchases.logHandler.d("Purchases", expectedMessage)
                 LogLevel.INFO -> Purchases.logHandler.i("Purchases", expectedMessage)
@@ -1115,7 +1157,10 @@ internal class CommonKtTests {
         val expectedMessage = "a message"
         setLogHandler { logDetails ->
             assertEquals("ERROR", logDetails["logLevel"])
-            assertEquals("$expectedMessage. Throwable: java.lang.ClassCastException: what a pity", logDetails["message"])
+            assertEquals(
+                "$expectedMessage. Throwable: java.lang.ClassCastException: what a pity",
+                logDetails["message"]
+            )
         }
         Purchases.logHandler.e("Purchases", expectedMessage, java.lang.ClassCastException("what a pity"))
     }
@@ -1252,7 +1297,7 @@ internal class CommonKtTests {
 
 const val MICROS_MULTIPLIER = 1_000_000
 
-fun getPresentedOfferingId(purchaseParams: PurchaseParams) : String? {
+fun getPresentedOfferingId(purchaseParams: PurchaseParams): String? {
     // Uses reflection to test presentedOfferingIdentifier exists in purchasing params
     val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingIdentifier" }
     return prop!!.call(purchaseParams) as? String?
@@ -1265,7 +1310,8 @@ fun stubStoreProduct(
     title: String = "",
     type: ProductType = ProductType.SUBS,
     defaultOption: SubscriptionOption? = stubSubscriptionOption(
-        "monthly_base_plan", productId,
+        "monthly_base_plan",
+        productId,
         Period(1, Period.Unit.MONTH, "P1M"),
     ),
     subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
@@ -1297,7 +1343,6 @@ fun stubStoreProduct(
     override val sku: String
         get() = productId
     override fun copyWithOfferingId(offeringId: String): StoreProduct {
-
         fun SubscriptionOption.applyOffering(offeringId: String): SubscriptionOption {
             return stubSubscriptionOption(
                 id,

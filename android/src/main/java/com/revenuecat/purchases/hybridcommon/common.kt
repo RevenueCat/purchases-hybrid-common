@@ -3,7 +3,6 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import com.android.billingclient.api.Purchase
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.LogLevel
@@ -26,7 +25,6 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
-import com.revenuecat.purchases.models.GoogleSubscriptionOption
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
@@ -82,7 +80,8 @@ fun purchaseProduct(
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchaseProduct."
             ).map()
         )
@@ -100,9 +99,9 @@ fun purchaseProduct(
 
                 // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 val foundByProductIdAndGoogleBasePlanId = (
-                    it.purchasingData.productId == productIdentifier
-                        && it.googleProduct?.basePlanId == googleBasePlanId
-                        && it.type == productType
+                    it.purchasingData.productId == productIdentifier &&
+                        it.googleProduct?.basePlanId == googleBasePlanId &&
+                        it.type == productType
                     )
 
                 // Finding the matching StoreProduct two different ways:
@@ -141,7 +140,6 @@ fun purchaseProduct(
                     ).map()
                 )
             }
-
         }
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
@@ -184,7 +182,8 @@ fun purchasePackage(
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchasePackage."
             ).map()
         )
@@ -253,7 +252,8 @@ fun purchaseSubscriptionOption(
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
                 "purchaseSubscriptionOption() is only supported on the Play Store."
             ).map()
         )
@@ -264,7 +264,8 @@ fun purchaseSubscriptionOption(
         getGoogleProrationMode(googleProrationMode)
     } catch (e: InvalidProrationModeException) {
         onResult.onError(
-            PurchasesError(PurchasesErrorCode.UnknownError,
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
                 "Invalid google proration mode passed to purchaseSubscriptionOption."
             ).map()
         )
@@ -315,7 +316,6 @@ fun purchaseSubscriptionOption(
                     ).map()
                 )
             }
-
         }
 
         Purchases.sharedInstance.getProductsWith(
@@ -348,7 +348,8 @@ fun logIn(
     appUserID: String,
     onResult: OnResult
 ) {
-    Purchases.sharedInstance.logInWith(appUserID,
+    Purchases.sharedInstance.logInWith(
+        appUserID,
         onError = { onResult.onError(it.map()) },
         onSuccess = { customerInfo, created ->
             val resultMap: Map<String, Any?> = mapOf(
@@ -356,7 +357,8 @@ fun logIn(
                 "created" to created
             )
             onResult.onReceived(resultMap)
-        })
+        }
+    )
 }
 
 fun logOut(onResult: OnResult) {
@@ -449,16 +451,22 @@ fun invalidateCustomerInfoCache() {
     Purchases.sharedInstance.invalidateCustomerInfoCache()
 }
 
-fun canMakePayments(context: Context,
-                    features: List<Int>,
-                    onResult: OnResultAny<Boolean>) {
+fun canMakePayments(
+    context: Context,
+    features: List<Int>,
+    onResult: OnResultAny<Boolean>
+) {
     val billingFeatures = mutableListOf<BillingFeature>()
     try {
         val billingFeatureEnumValues = BillingFeature.values()
         billingFeatures.addAll(features.map { billingFeatureEnumValues[it] })
     } catch (e: IndexOutOfBoundsException) {
-        onResult.onError(PurchasesError(PurchasesErrorCode.UnknownError,
-                "Invalid feature type passed to canMakePayments.").map())
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.UnknownError,
+                "Invalid feature type passed to canMakePayments."
+            ).map()
+        )
         return
     }
 
@@ -490,15 +498,18 @@ fun configure(
     Purchases.configure(builder.build())
 }
 
-fun getPromotionalOffer() : ErrorContainer {
-    return ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
-        "Android platform doesn't support promotional offers", emptyMap())
+fun getPromotionalOffer(): ErrorContainer {
+    return ErrorContainer(
+        PurchasesErrorCode.UnsupportedError.code,
+        "Android platform doesn't support promotional offers",
+        emptyMap()
+    )
 }
 
 // region private functions
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal fun mapStringToProductType(type: String) : ProductType {
+internal fun mapStringToProductType(type: String): ProductType {
     MappedProductCategory.values()
         .firstOrNull { it.value.equals(type, ignoreCase = true) }
         ?.let {
@@ -507,7 +518,7 @@ internal fun mapStringToProductType(type: String) : ProductType {
 
     // Maps strings used in deprecated hybrid methods to native ProductType enum
     // "subs" and "inapp" are legacy purchase types used in v4 and below
-    return when(type.lowercase()) {
+    return when (type.lowercase()) {
         "subs" -> ProductType.SUBS
         "inapp" -> ProductType.INAPP
         else -> {
@@ -518,11 +529,11 @@ internal fun mapStringToProductType(type: String) : ProductType {
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal class InvalidProrationModeException(): Exception()
+internal class InvalidProrationModeException() : Exception()
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Throws(InvalidProrationModeException::class)
-internal fun getGoogleProrationMode(prorationModeInt: Int?) : GoogleProrationMode?  {
+internal fun getGoogleProrationMode(prorationModeInt: Int?): GoogleProrationMode? {
     return prorationModeInt
         ?.let {
             GoogleProrationMode.values().find { prorationMode ->
@@ -533,7 +544,7 @@ internal fun getGoogleProrationMode(prorationModeInt: Int?) : GoogleProrationMod
         }
 }
 
-private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?) : StoreProduct {
+private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?): StoreProduct {
     return presentedOfferingIdentifier?.let {
         this.copyWithOfferingId(it)
     } ?: this
@@ -555,8 +566,11 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
         } ?: run {
             // TODO: Figure out how to properly handle a null StoreTransaction (doing this for now
             onResult.onError(
-                ErrorContainer(PurchasesErrorCode.UnsupportedError.code,
-                    "Error purchasing. Null transaction returned from a successful non-upgrade purchase.", emptyMap())
+                ErrorContainer(
+                    PurchasesErrorCode.UnsupportedError.code,
+                    "Error purchasing. Null transaction returned from a successful non-upgrade purchase.",
+                    emptyMap()
+                )
             )
         }
     }
