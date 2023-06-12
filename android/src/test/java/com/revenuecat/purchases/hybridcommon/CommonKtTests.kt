@@ -843,7 +843,7 @@ internal class CommonKtTests {
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
-        2
+
         every {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
