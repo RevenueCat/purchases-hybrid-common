@@ -30,16 +30,16 @@ class PurchasesHybridCommonTests: QuickSpec {
 
     override func spec() {
         var mockPurchases: MockPurchases!
-        var originalHandler: VerboseLogHandler!
 
         beforeEach {
             mockPurchases = .init()
             CommonFunctionality.sharedInstance = mockPurchases
-            originalHandler = Purchases.verboseLogHandler
         }
 
         afterEach {
-            Purchases.verboseLogHandler = originalHandler
+            // Fixme: This can be replaced with `Purchases.restoreLogHandler()`
+            // when is released https://github.com/RevenueCat/purchases-ios/pull/2699
+            Logger.internalLogHandler = Logger.defaultLogHandler
         }
 
         context("automaticAppleSearchAdsAttributionCollection") {

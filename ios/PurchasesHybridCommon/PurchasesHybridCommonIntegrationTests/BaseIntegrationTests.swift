@@ -57,7 +57,7 @@ private extension BaseIntegrationTests {
         do {
             try manager.removeItem(at: url)
         } catch {
-            Logger.appleWarning("Error attempting to remove receipt URL '\(url)': \(error)")
+            Logger.appleError("Error attempting to remove receipt URL '\(url)': \(error)")
         }
     }
 
