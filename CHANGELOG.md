@@ -1,3 +1,7 @@
+## 5.2.3
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `13773d2` to `b2108fb` (#443) via dependabot[bot] (@dependabot[bot])
+
 ## 5.2.2
 ### Dependency Updates
 * [AUTOMATIC] Android 6.5.1 => 6.5.2 (#440) via RevenueCat Git Bot (@RCGitBot)
