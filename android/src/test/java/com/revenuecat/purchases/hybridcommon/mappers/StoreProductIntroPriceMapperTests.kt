@@ -32,7 +32,7 @@ internal class StoreProductIntroPriceMapperTests {
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(7, Period.Unit.DAY, "P7D"),
-                recurrenceMode = RecurrenceMode.NON_RECURRING
+                recurrenceMode = RecurrenceMode.NON_RECURRING,
             )
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
@@ -52,7 +52,7 @@ internal class StoreProductIntroPriceMapperTests {
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(1, Period.Unit.MONTH, "P1M"),
-                recurrenceMode = RecurrenceMode.NON_RECURRING
+                recurrenceMode = RecurrenceMode.NON_RECURRING,
             )
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
@@ -72,7 +72,7 @@ internal class StoreProductIntroPriceMapperTests {
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(0, Period.Unit.DAY, "P0D"),
-                recurrenceMode = RecurrenceMode.NON_RECURRING
+                recurrenceMode = RecurrenceMode.NON_RECURRING,
             )
             received = mockStoreProduct.mapIntroPrice()
 
