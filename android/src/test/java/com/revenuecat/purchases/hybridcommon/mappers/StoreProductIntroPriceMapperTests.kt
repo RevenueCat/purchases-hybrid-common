@@ -1,6 +1,9 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.models.Period
+import com.revenuecat.purchases.models.Price
+import com.revenuecat.purchases.models.PricingPhase
+import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
 import io.mockk.every
 import io.mockk.mockk
@@ -25,8 +28,12 @@ internal class StoreProductIntroPriceMapperTests {
     inner class MappingFreeTrial {
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns Period(7, Period.Unit.DAY, "P7D")
-            every { mockStoreProduct.freeTrialCycles } returns 1
+            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+                price = Price("$0.00", 0, "USD"),
+                billingCycleCount = 1,
+                billingPeriod = Period(7, Period.Unit.DAY, "P7D"),
+                recurrenceMode = RecurrenceMode.NON_RECURRING
+            )
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
                 "price" to 0,
@@ -41,8 +48,12 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns Period(1, Period.Unit.MONTH, "P1M")
-            every { mockStoreProduct.freeTrialCycles } returns 1
+            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+                price = Price("$0.00", 0, "USD"),
+                billingCycleCount = 1,
+                billingPeriod = Period(1, Period.Unit.MONTH, "P1M"),
+                recurrenceMode = RecurrenceMode.NON_RECURRING
+            )
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
                 "price" to 0,
@@ -57,8 +68,12 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns Period(0, Period.Unit.DAY, "P0D")
-            every { mockStoreProduct.freeTrialCycles } returns 1
+            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+                price = Price("$0.00", 0, "USD"),
+                billingCycleCount = 1,
+                billingPeriod = Period(0, Period.Unit.DAY, "P0D"),
+                recurrenceMode = RecurrenceMode.NON_RECURRING
+            )
             received = mockStoreProduct.mapIntroPrice()
 
             val expected = mapOf(
