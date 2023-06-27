@@ -15,7 +15,7 @@ val StoreProduct.priceString: String
 val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
 val StoreProduct.freeTrialPeriod: Period?
-    get() = this.subscriptionOptions?.freeTrial?.billingPeriod
+    get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingPeriod
 val StoreProduct.freeTrialCycles: Int?
     get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
 
