@@ -320,7 +320,7 @@ workflows:
       - trigger-dependent-updates:
           <<: *release-tags
           requires:
-            - make-github-release
+            - push-pods
   
   weekly-run-workflow:
     when:
