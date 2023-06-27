@@ -71,12 +71,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    flavorDimensions "dependencyVersions"
-    productFlavors {
-        latestDependencies {
-            dimension "dependencyVersions"
-        }
-    }
 }
 
 detekt {
@@ -89,10 +83,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.3.0'
 
-    latestDependenciesApi "com.revenuecat.purchases:purchases:$purchases_version"
-    latestDependenciesApi "com.revenuecat.purchases:purchases-core-common:$purchases_version"
-    latestDependenciesApi "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
-    latestDependenciesApi "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
+    api "com.revenuecat.purchases:purchases:$purchases_version"
+    api "com.revenuecat.purchases:purchases-core-common:$purchases_version"
+    api "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
+    api "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
 
     // assertion
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
