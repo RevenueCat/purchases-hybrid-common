@@ -116,15 +116,75 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with a platform info, should configure the Android SDK with that platform info`() {
         configure(
-            context = mockContext,
-            apiKey = "api_key",
-            appUserID = "appUserID",
-            observerMode = false,
-            platformInfo = expectedPlatformInfo,
-            store = Store.PLAY_STORE,
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo,
+                store = Store.PLAY_STORE,
         )
         verify(exactly = 1) {
             Purchases.platformInfo = expectedPlatformInfo
+        }
+    }
+
+    @Test
+    fun `calling configure with no verification mode`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo,
+                verificationMode = null
+        )
+        verify(exactly = 1) {
+            // TODO
+        }
+    }
+
+    @Test
+    fun `calling configure with verification mode disabled`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo,
+                verificationMode = "DISABLED"
+        )
+        verify(exactly = 1) {
+            // TODO
+        }
+    }
+
+    @Test
+    fun `calling configure with verification mode informational`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo,
+                verificationMode = "INFORMATIONAL"
+        )
+        verify(exactly = 1) {
+            // TODO
+        }
+    }
+
+    @Test
+    fun `calling configure with verification mode enforced`() {
+        configure(
+                context = mockContext,
+                apiKey = "api_key",
+                appUserID = "appUserID",
+                observerMode = false,
+                platformInfo = expectedPlatformInfo,
+                verificationMode = "ENFORCED"
+        )
+        verify(exactly = 1) {
+            // TODO
         }
     }
 
