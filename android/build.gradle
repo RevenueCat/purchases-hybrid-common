@@ -51,6 +51,7 @@ android {
         versionName "5.2.4"
 
         consumerProguardFiles 'consumer-rules.pro'
+        missingDimensionStrategy 'extraAPIs', 'defaults'
     }
 
     buildTypes {
@@ -85,7 +86,6 @@ dependencies {
 
     api "com.revenuecat.purchases:purchases:$purchases_version"
     api "com.revenuecat.purchases:purchases-core-common:$purchases_version"
-    api "com.revenuecat.purchases:purchases-core-utils:$purchases_version"
     api "com.revenuecat.purchases:purchases-store-amazon:$purchases_version"
 
     // assertion
