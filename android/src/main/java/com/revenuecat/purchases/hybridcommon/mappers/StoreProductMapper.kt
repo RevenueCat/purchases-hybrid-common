@@ -15,12 +15,12 @@ val StoreProduct.priceString: String
 val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
 val StoreProduct.freeTrialPeriod: Period?
-    get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingPeriod
+    get() = this.defaultOption?.freePhase?.billingPeriod
 val StoreProduct.freeTrialCycles: Int?
-    get() = this.subscriptionOptions?.freeTrial?.freePhase?.billingCycleCount
+    get() = this.defaultOption?.freePhase?.billingCycleCount
 
 private val StoreProduct.introductoryPhase: PricingPhase?
-    get() = this.subscriptionOptions?.introOffer?.introPhase
+    get() = this.defaultOption?.introPhase
 val StoreProduct.introductoryPrice: String?
     get() = this.introductoryPhase?.price?.formatted
 val StoreProduct.introductoryPricePeriod: Period?
