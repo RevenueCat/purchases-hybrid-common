@@ -28,7 +28,7 @@ internal class StoreProductIntroPriceMapperTests {
     inner class MappingFreeTrial {
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+            every { mockStoreProduct.defaultOption?.freePhase } returns PricingPhase(
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(7, Period.Unit.DAY, "P7D"),
@@ -48,7 +48,7 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
-            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+            every { mockStoreProduct.defaultOption?.freePhase } returns PricingPhase(
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(1, Period.Unit.MONTH, "P1M"),
@@ -68,7 +68,7 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.subscriptionOptions?.freeTrial?.freePhase } returns PricingPhase(
+            every { mockStoreProduct.defaultOption?.freePhase } returns PricingPhase(
                 price = Price("$0.00", 0, "USD"),
                 billingCycleCount = 1,
                 billingPeriod = Period(0, Period.Unit.DAY, "P0D"),
