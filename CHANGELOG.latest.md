@@ -1,4 +1,5 @@
 ### Bugfixes
-* Android: retrieve free trial period from the free phase (#446) via Mark Villacampa (@MarkVillacampa)
-### Dependency Updates
-* Bump fastlane-plugin-revenuecat_internal from `13773d2` to `b2108fb` (#443) via dependabot[bot] (@dependabot[bot])
+* Fix free trial and intro price to derive from defaultOption (#449) via Josh Holtz (@joshdholtz)
+### Other Changes
+* `.composite-enable`: fixed file reference (#450) via NachoSoto (@NachoSoto)
+* CI: wait until pods have been pushed to trigger dependent updates (#448) via Mark Villacampa (@MarkVillacampa)
