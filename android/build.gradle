@@ -48,7 +48,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 33
         versionCode 1
-        versionName "5.2.3"
+        versionName "5.2.4"
 
         consumerProguardFiles 'consumer-rules.pro'
     }

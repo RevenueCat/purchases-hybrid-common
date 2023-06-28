@@ -1,3 +1,10 @@
+## 5.2.4
+### Bugfixes
+* Fix free trial and intro price to derive from defaultOption (#449) via Josh Holtz (@joshdholtz)
+### Other Changes
+* `.composite-enable`: fixed file reference (#450) via NachoSoto (@NachoSoto)
+* CI: wait until pods have been pushed to trigger dependent updates (#448) via Mark Villacampa (@MarkVillacampa)
+
 ## 5.2.3
 ### Bugfixes
 * Android: retrieve free trial period from the free phase (#446) via Mark Villacampa (@MarkVillacampa)
