@@ -8,7 +8,7 @@ internal class PurchasesPeriodTests {
 
     @Test
     fun `when parsing an invalid PurchasesPeriod, there is no exception`() {
-        mockLogError()
+        mockLogs()
 
         val period = PurchasesPeriod.parse("365")
         assertThat(period).isNull()

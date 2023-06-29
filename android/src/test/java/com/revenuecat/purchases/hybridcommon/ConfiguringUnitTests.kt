@@ -2,15 +2,19 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.common.verification.SignatureVerificationMode
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
@@ -35,6 +39,8 @@ internal class ConfiguringUnitTests {
         every {
             Purchases.configure(configuration = capture(purchasesConfigurationSlot))
         } returns mockPurchases
+
+        mockLogs()
     }
 
     @Test
@@ -123,9 +129,8 @@ internal class ConfiguringUnitTests {
                 platformInfo = expectedPlatformInfo,
                 store = Store.PLAY_STORE,
         )
-        verify(exactly = 1) {
-            Purchases.platformInfo = expectedPlatformInfo
-        }
+
+        Purchases.platformInfo = expectedPlatformInfo
     }
 
     @Test
@@ -138,9 +143,7 @@ internal class ConfiguringUnitTests {
                 platformInfo = expectedPlatformInfo,
                 verificationMode = null
         )
-        verify(exactly = 1) {
-            // TODO
-        }
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
@@ -153,9 +156,7 @@ internal class ConfiguringUnitTests {
                 platformInfo = expectedPlatformInfo,
                 verificationMode = "DISABLED"
         )
-        verify(exactly = 1) {
-            // TODO
-        }
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
@@ -168,9 +169,7 @@ internal class ConfiguringUnitTests {
                 platformInfo = expectedPlatformInfo,
                 verificationMode = "INFORMATIONAL"
         )
-        verify(exactly = 1) {
-            // TODO
-        }
+        assertEquals(EntitlementVerificationMode.INFORMATIONAL, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
@@ -183,9 +182,8 @@ internal class ConfiguringUnitTests {
                 platformInfo = expectedPlatformInfo,
                 verificationMode = "ENFORCED"
         )
-        verify(exactly = 1) {
-            // TODO
-        }
+        // Enforced is not available yet
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
