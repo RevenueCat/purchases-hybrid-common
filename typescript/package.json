@@ -1,0 +1,25 @@
+{
+  "name": "purchases-hybrid-typescript-interfaces",
+  "version": "5.2.4",
+  "description": "Typescript interfaces to be used by RevenueCat's hybrid SDKs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevenueCat/purchases-hybrid-common.git"
+  },
+  "keywords": [
+    "RevenueCat"
+  ],
+  "author": "RevenueCat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RevenueCat/purchases-hybrid-common/issues"
+  },
+  "homepage": "https://github.com/RevenueCat/purchases-hybrid-common#readme",
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
