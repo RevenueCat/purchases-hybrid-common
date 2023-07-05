@@ -244,6 +244,7 @@ export interface PurchasesOffering {
     /**
      * Offering metadata defined in RevenueCat dashboard.
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly metadata: Map<string, any>;
     /**
      * Array of `Package` objects available for purchase.
