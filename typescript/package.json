@@ -1,5 +1,5 @@
 {
-  "name": "purchases-hybrid-typescript-interfaces",
+  "name": "@revenuecat/purchases-hybrid-typescript-interfaces",
   "version": "5.2.4",
   "description": "Typescript interfaces to be used by RevenueCat's hybrid SDKs",
   "main": "index.js",
