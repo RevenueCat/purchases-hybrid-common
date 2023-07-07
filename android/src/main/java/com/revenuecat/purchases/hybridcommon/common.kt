@@ -517,7 +517,7 @@ fun configure(
     }
     if (verificationMode != null) {
         try {
-            builder.verificationModeAndDiagnostics(EntitlementVerificationMode.valueOf(verificationMode))
+            builder.entitlementVerificationMode(EntitlementVerificationMode.valueOf(verificationMode))
         } catch (e: IllegalArgumentException) {
             warnLog("Attempted to configure with unknown verification mode: $verificationMode.")
         }
