@@ -1,3 +1,9 @@
+## 5.3.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.23.1 => 4.24.1 (#457) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Remove latestDependencies variant (#445) via Cesar de la Vega (@vegaro)
+
 ## 5.2.4
 ### Bugfixes
 * Fix free trial and intro price to derive from defaultOption (#449) via Josh Holtz (@joshdholtz)
