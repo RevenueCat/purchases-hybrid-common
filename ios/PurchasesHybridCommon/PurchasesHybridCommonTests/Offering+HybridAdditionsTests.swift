@@ -26,7 +26,7 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
                             .init(
                                 identifier: "annual",
                                 packageType: .annual,
-                                storeProduct: MockStoreProduct(),
+                                storeProduct: TestStoreProduct().toStoreProduct(),
                                 offeringIdentifier: "default"
                             )
                         ]
@@ -54,7 +54,7 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
                             .init(
                                 identifier: "annual",
                                 packageType: .annual,
-                                storeProduct: MockStoreProduct(),
+                                storeProduct: TestStoreProduct().toStoreProduct(),
                                 offeringIdentifier: "default"
                             )
                         ]
@@ -72,34 +72,17 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
 extension StoreProduct.ProductCategory: @unchecked Sendable {}
 extension StoreProduct.ProductType: @unchecked Sendable {}
 
-private struct MockStoreProduct: StoreProductType {
+private extension TestStoreProduct {
 
-    var productCategory: StoreProduct.ProductCategory = .subscription
-
-    var productType: StoreProduct.ProductType = .autoRenewableSubscription
-
-    var localizedDescription: String = ""
-
-    var localizedTitle: String = ""
-
-    var currencyCode: String? = ""
-
-    var price: Decimal = 0.0
-
-    var localizedPriceString: String = ""
-
-    var productIdentifier: String = ""
-
-    var isFamilyShareable: Bool = false
-
-    var subscriptionGroupIdentifier: String? = nil
-
-    var priceFormatter: NumberFormatter? = nil
-
-    var subscriptionPeriod: RevenueCat.SubscriptionPeriod? = nil
-
-    var introductoryDiscount: RevenueCat.StoreProductDiscount? = nil
-
-    var discounts: [RevenueCat.StoreProductDiscount] = []
+    init() {
+        self.init(
+            localizedTitle: "",
+            price: 0.0,
+            localizedPriceString: "",
+            productIdentifier: "",
+            productType: .autoRenewableSubscription,
+            localizedDescription: ""
+        )
+    }
 
 }
