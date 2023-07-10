@@ -1,5 +1,4 @@
-### Bugfixes
-* Fix free trial and intro price to derive from defaultOption (#449) via Josh Holtz (@joshdholtz)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.23.1 => 4.24.1 (#457) via RevenueCat Git Bot (@RCGitBot)
 ### Other Changes
-* `.composite-enable`: fixed file reference (#450) via NachoSoto (@NachoSoto)
-* CI: wait until pods have been pushed to trigger dependent updates (#448) via Mark Villacampa (@MarkVillacampa)
+* Remove latestDependencies variant (#445) via Cesar de la Vega (@vegaro)
