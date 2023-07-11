@@ -361,6 +361,24 @@ platform :android do
   end
 end
 
+platform :typescript do
+  desc "Deploy npm package to npm.js"
+  lane :deploy do |options|
+    version_number = current_version_number
+    is_prerelease = Gem::Version.new(version_number).prerelease?
+
+    args = [
+      'npm',
+      'publish',
+      is_prerelease ? '--tag next' : nil
+    ].compact
+
+    Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+      sh(args)
+    end
+  end
+end
+
 def current_version_number
   File.read("../.version")
 end

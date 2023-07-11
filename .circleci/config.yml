@@ -61,6 +61,12 @@ commands:
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
 
+  copy-npm-rc:
+    steps:
+      - run:
+          name: Copy npmrc sample file to final location
+          command: cp .npmrc.SAMPLE .npmrc
+
 jobs:
   test-ios:
     <<: *base-ios-job
@@ -203,6 +209,19 @@ jobs:
           name: Deployment
           command: bundle exec fastlane android deploy
 
+  deploy-typescript:
+    executor: node/default
+    working_directory: ~/purchases-hybrid-common/typescript
+    steps:
+      - checkout:
+          path: ~/purchases-hybrid-common
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - copy-npm-rc
+      - run:
+          name: Deploy typescript interfaces NPM package
+          command: bundle exec fastlane typescript deploy
+
   make-github-release:
     docker:
       - image: cimg/ruby:3.1.2
@@ -321,11 +340,14 @@ workflows:
           <<: *release-tags
       - deploy-android:
           <<: *release-tags
+      - deploy-typescript:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-ios
             - deploy-android
+            - deploy-typescript
       - push-pods:
           <<: *release-tags
           requires:

@@ -121,6 +121,19 @@ Upload and close a release
 
 ----
 
+
+## typescript
+
+### typescript deploy
+
+```sh
+[bundle exec] fastlane typescript deploy
+```
+
+Deploy npm package to npm.js
+
+----
+
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
 More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
