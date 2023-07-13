@@ -320,7 +320,7 @@ jobs:
       - node/install:
           install-yarn: true
       - run:
-          command: yarn && yarn apitests
+          command: yarn && yarn build && yarn apitests
 
 workflows:
   version: 2
