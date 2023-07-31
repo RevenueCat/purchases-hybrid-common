@@ -302,10 +302,9 @@ jobs:
 
   typescript-lint:
     executor: node/default
-    working_directory: ~/purchases-hybrid-common/typescript
+    working_directory: project/typescript
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
+      - checkout
       - node/install:
           install-yarn: true
       - run:
@@ -313,10 +312,9 @@ jobs:
 
   typescript-apitests:
     executor: node/default
-    working_directory: ~/purchases-hybrid-common/typescript
+    working_directory: project/typescript
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
+      - checkout
       - node/install:
           install-yarn: true
       - run:
