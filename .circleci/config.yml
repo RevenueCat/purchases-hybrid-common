@@ -212,7 +212,8 @@ jobs:
   deploy-typescript:
     executor: node/default
     steps:
-      - checkout
+      - checkout:
+          path: ~/purchases-hybrid-common
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - node/install:
@@ -302,9 +303,10 @@ jobs:
 
   typescript-lint:
     executor: node/default
-    working_directory: project/typescript
+    working_directory: ~/purchases-hybrid-common/typescript
     steps:
-      - checkout
+      - checkout:
+          path: ~/purchases-hybrid-common
       - node/install:
           install-yarn: true
       - run:
@@ -312,9 +314,10 @@ jobs:
 
   typescript-apitests:
     executor: node/default
-    working_directory: project/typescript
+    working_directory: ~/purchases-hybrid-common/typescript
     steps:
-      - checkout
+      - checkout:
+          path: ~/purchases-hybrid-common
       - node/install:
           install-yarn: true
       - run:
