@@ -5,6 +5,7 @@ orbs:
   android: circleci/android@1.0.3
   revenuecat: revenuecat/sdks-common-config@2.2.0
   macos: circleci/macos@2.0.1
+  node: circleci/node@5.1.0
 
 version: 2.1
 
@@ -59,6 +60,12 @@ commands:
               do ssh-keyscan github.com,$ip; \
               ssh-keyscan $ip; \
               done 2>/dev/null >> ~/.ssh/known_hosts
+
+  copy-npm-rc:
+    steps:
+      - run:
+          name: Copy npmrc sample file to final location
+          command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
 
 jobs:
   test-ios:
@@ -202,6 +209,19 @@ jobs:
           name: Deployment
           command: bundle exec fastlane android deploy
 
+  deploy-typescript:
+    executor: node/default
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - node/install:
+          install-yarn: true
+      - copy-npm-rc
+      - run:
+          name: Deploy typescript interfaces NPM package
+          command: bundle exec fastlane typescript deploy
+
   make-github-release:
     docker:
       - image: cimg/ruby:3.1.2
@@ -280,6 +300,17 @@ jobs:
           command: bundle exec fastlane bump_hybrid_dependencies repo_name:cordova-plugin-purchases
           when: always
 
+  typescript-lint:
+    executor: node/default
+    working_directory: ~/purchases-hybrid-common/typescript
+    steps:
+      - checkout:
+          path: ~/purchases-hybrid-common
+      - node/install:
+          install-yarn: true
+      - run:
+          command: yarn && yarn eslint
+
 workflows:
   version: 2
   test:
@@ -291,6 +322,7 @@ workflows:
       - integration-test-ios
       - test-android
       - detekt-android
+      - typescript-lint
 
   deploy:
     when:
@@ -308,11 +340,14 @@ workflows:
           <<: *release-tags
       - deploy-android:
           <<: *release-tags
+      - deploy-typescript:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-ios
             - deploy-android
+            - deploy-typescript
       - push-pods:
           <<: *release-tags
           requires:

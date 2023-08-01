@@ -14,7 +14,8 @@ files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
     './android/build.gradle' => ['versionName "{x}"'],
-    './android/gradle.properties' => ['VERSION_NAME={x}']
+    './android/gradle.properties' => ['VERSION_NAME={x}'],
+    './typescript/package.json' => ['"version": "{x}"']
 }
 PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
 files_with_version_number_without_prerelease_modifiers = {
@@ -357,6 +358,30 @@ platform :android do
       properties: gradleProperties,
       project_dir: 'android'
     )
+  end
+end
+
+platform :typescript do
+  desc "Deploy npm package to npm.js"
+  lane :deploy do |options|
+    version_number = current_version_number
+    is_prerelease = Gem::Version.new(version_number).prerelease?
+
+    build_args = [
+      'yarn && yarn build'
+    ]
+
+    publish_args = [
+      'npm',
+      'publish',
+      '--access public',
+      is_prerelease ? '--tag next' : nil
+    ].compact
+
+    Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+      sh(build_args)
+      sh(publish_args)
+    end
   end
 end
 
