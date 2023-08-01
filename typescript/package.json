@@ -11,7 +11,7 @@
     "tsconfig.json"
   ],
   "scripts": {
-    "apitests": "tsc apitesters/",
+    "apitests": "tsc --p apitesters/",
     "lint": "eslint",
     "build": "tsc",
     "build-watch": "tsc --watch"

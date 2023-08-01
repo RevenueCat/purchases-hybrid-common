@@ -311,6 +311,17 @@ jobs:
       - run:
           command: yarn && yarn eslint
 
+  typescript-apitests:
+    executor: node/default
+    working_directory: ~/purchases-hybrid-common/typescript
+    steps:
+      - checkout:
+          path: ~/purchases-hybrid-common
+      - node/install:
+          install-yarn: true
+      - run:
+          command: yarn && yarn build && yarn apitests
+
 workflows:
   version: 2
   test:
@@ -323,6 +334,7 @@ workflows:
       - test-android
       - detekt-android
       - typescript-lint
+      - typescript-apitests
 
   deploy:
     when:
