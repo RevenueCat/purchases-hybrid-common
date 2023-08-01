@@ -65,7 +65,7 @@ commands:
     steps:
       - run:
           name: Copy npmrc sample file to final location
-          command: cp .npmrc.SAMPLE .npmrc
+          command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
 
 jobs:
   test-ios:
@@ -211,12 +211,12 @@ jobs:
 
   deploy-typescript:
     executor: node/default
-    working_directory: ~/purchases-hybrid-common/typescript
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
+      - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
+      - node/install:
+          install-yarn: true
       - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package

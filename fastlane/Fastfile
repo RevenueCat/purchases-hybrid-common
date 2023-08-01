@@ -367,14 +367,20 @@ platform :typescript do
     version_number = current_version_number
     is_prerelease = Gem::Version.new(version_number).prerelease?
 
-    args = [
+    build_args = [
+      'yarn && yarn build'
+    ]
+
+    publish_args = [
       'npm',
       'publish',
+      '--access public',
       is_prerelease ? '--tag next' : nil
     ].compact
 
     Dir.chdir(File.expand_path('typescript', get_root_folder)) do
-      sh(args)
+      sh(build_args)
+      sh(publish_args)
     end
   end
 end
