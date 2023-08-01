@@ -212,8 +212,7 @@ jobs:
   deploy-typescript:
     executor: node/default
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
+      - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - node/install:
