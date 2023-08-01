@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "purchases-hybrid-typescript-interfaces": ["./src/index"]
+      "purchases-typescript-internal": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

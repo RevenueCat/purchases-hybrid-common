@@ -1,8 +1,8 @@
 {
-  "name": "@revenuecat/purchases-hybrid-typescript-interfaces",
-  "title": "Purchases hybrid typescript interfaces",
+  "name": "@revenuecat/purchases-typescript-internal",
+  "title": "Purchases typescript internal shared code",
   "version": "5.3.0",
-  "description": "Typescript interfaces to be used by RevenueCat's hybrid SDKs. Not meant for external usage.",
+  "description": "Typescript code to be used by RevenueCat's hybrid SDKs. Not meant for external usage.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "source": "src/index",
