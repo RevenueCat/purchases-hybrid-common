@@ -1,3 +1,10 @@
+## 5.6.0
+### Dependency Updates
+* [AUTOMATIC] Android 6.8.0 => 6.9.0 (#469) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Add API tests to typescript interfaces (#459) via Toni Rico (@tonidero)
+* Move typescript interfaces to PHC (#455) via Toni Rico (@tonidero)
+
 ## 5.5.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.25.1 => 4.25.2 Android 6.7.0 => 6.8.0 (#466) via RevenueCat Git Bot (@RCGitBot)
