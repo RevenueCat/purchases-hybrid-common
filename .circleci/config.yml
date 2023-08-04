@@ -210,13 +210,11 @@ jobs:
           command: bundle exec fastlane android deploy
 
   deploy-typescript:
-    executor: node/default
+    executor: cimg/ruby:3.1.2-node
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - node/install:
-          install-yarn: true
       - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package
