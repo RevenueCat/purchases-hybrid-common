@@ -357,8 +357,7 @@ workflows:
           <<: *release-tags
           requires:
             - deploy-ios
-            # Temporarily removing to fix deployment. Will revert after deployment is done
-            # - deploy-android
+            - deploy-android
             - deploy-typescript
       - push-pods:
           <<: *release-tags
