@@ -2,9 +2,6 @@
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  */
 export interface PurchasesEntitlementInfo {
-    // "unsubscribeDetectedAtMillis": unsubscribeDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
-    // "billingIssueDetectedAtMillis": billingIssueDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
-    // "ownershipType": ownershipTypeString
     /**
      * The entitlement identifier configured in the RevenueCat dashboard
      */
