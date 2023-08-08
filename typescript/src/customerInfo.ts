@@ -19,18 +19,31 @@ export interface PurchasesEntitlementInfo {
      */
     readonly periodType: string;
     /**
-     * The latest purchase or renewal date for the entitlement.
+     * The latest purchase or renewal date for the entitlement in ISO8601 format.
      */
     readonly latestPurchaseDate: string;
     /**
-     * The first date this entitlement was purchased.
+     * The latest purchase or renewal date for the entitlement in milliseconds.
+     */
+    readonly latestPurchaseDateMillis: number;
+    /**
+     * The first date this entitlement was purchased in ISO8601 format.
      */
     readonly originalPurchaseDate: string;
     /**
-     * The expiration date for the entitlement, can be `null` for lifetime access. If the `periodType` is `trial`,
-     * this is the trial expiration date.
+     * The first date this entitlement was purchased in milliseconds.
+     */
+    readonly originalPurchaseDateMillis: number;
+    /**
+     * The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. 
+     * If the `periodType` is `trial`, this is the trial expiration date.
      */
     readonly expirationDate: string | null;
+    /**
+     * The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. 
+     * If the `periodType` is `trial`, this is the trial expiration date. 
+     */
+    readonly expirationDateMillis: number | null;
     /**
      * The store where this entitlement was unlocked from.
      */
@@ -44,17 +57,38 @@ export interface PurchasesEntitlementInfo {
      */
     readonly isSandbox: boolean;
     /**
-     * The date an unsubscribe was detected. Can be `null`.
+     * The date an unsubscribe was detected in ISO8601 format. Can be `null`.
      *
      * @note: Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
      */
     readonly unsubscribeDetectedAt: string | null;
     /**
-     * The date a billing issue was detected. Can be `null` if there is no billing issue or an issue has been resolved
+     * The date an unsubscribe was detected in milliseconds. Can be `null`.
+     *
+     * @note: Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
+     */
+    readonly unsubscribeDetectedAtMillis: number | null;
+    /**
+     * The date a billing issue was detected in ISO8601 format. Can be `null` if there is no billing issue or an 
+     * issue has been resolved
      *
      * @note: Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
      */
     readonly billingIssueDetectedAt: string | null;
+    /**
+     * The date a billing issue was detected in milliseconds. Can be `null` if there is no billing issue or an 
+     * issue has been resolved
+     *
+     * @note: Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
+     */
+    readonly billingIssueDetectedAtMillis: number | null;
+    /**
+     * Supported ownership types for an entitlement. 
+     * PURCHASED if the purchase was made directly by this user.
+     * FAMILY_SHARED if the purchase has been shared to this user by a family member.
+     * UNKNOWN if the purchase has no or an unknown ownership type.
+     */
+    readonly ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN";
 }
 
 /**

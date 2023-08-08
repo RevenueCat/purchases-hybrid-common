@@ -38,13 +38,19 @@ function checkEntitlementInfo(info: PurchasesEntitlementInfo) {
   const willRenew: boolean = info.willRenew;
   const periodType: string = info.periodType;
   const latestPurchaseDate: string = info.latestPurchaseDate;
+  const latestPurchaseDateMillis: number = info.latestPurchaseDateMillis;
   const originalPurchaseDate: string = info.originalPurchaseDate;
+  const originalPurchaseDateMillis: number = info.originalPurchaseDateMillis;
   const expirationDate: string | null = info.expirationDate;
+  const expirationDateMillis: number | null = info.expirationDateMillis;
   const store: string = info.store;
   const productIdentifier: string = info.productIdentifier;
   const isSandbox: boolean = info.isSandbox;
   const unsubscribeDetectedAt: string | null = info.unsubscribeDetectedAt;
+  const unsubscribeDetectedAtMillis: number | null = info.unsubscribeDetectedAtMillis;
   const billingIssueDetectedAt: string | null = info.billingIssueDetectedAt;
+  const billingIssueDetectedAtMillis: number | null = info.billingIssueDetectedAtMillis;
+  const ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN" = info.ownershipType;
 }
 
 function checkTransaction(transaction: PurchasesStoreTransaction) {
