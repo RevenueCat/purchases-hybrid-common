@@ -62,6 +62,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let transactionDateString = "1990-08-30T02:40:36Z"
 
                     let expectedTransactionID = "expectedTransactionID"
+                    let storeTransactionID = "storeTransaction"
                     let expectedProductID = "expectedProductID"
 
                     let mockCustomerInfo = try CustomerInfo.fromJSON(
@@ -76,6 +77,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                                    {
                                     "\(expectedProductID)": [{
                                         "id": "\(expectedTransactionID)",
+                                        "store_transaction_id": "\(storeTransactionID)",
                                         "is_sandbox": true,
                                         "original_purchase_date": "\(transactionDateString)",
                                         "purchase_date": "\(transactionDateString)",
