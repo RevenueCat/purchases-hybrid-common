@@ -1,3 +1,7 @@
+## 5.6.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.25.4 => 4.25.6 (#475) via RevenueCat Git Bot (@RCGitBot)
+
 ## 5.6.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.25.2 => 4.25.4 Android 6.9.0 => 6.9.1 (#473) via RevenueCat Git Bot (@RCGitBot)
