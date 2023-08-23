@@ -1,3 +1,7 @@
+## 5.6.4
+### Dependency Updates
+* Bump activesupport from 7.0.4.3 to 7.0.7.2 (#479) via dependabot[bot] (@dependabot[bot])
+
 ## 5.6.3
 ### Dependency Updates
 * [AUTOMATIC] Android 6.9.1 => 6.9.2 (#477) via RevenueCat Git Bot (@RCGitBot)
