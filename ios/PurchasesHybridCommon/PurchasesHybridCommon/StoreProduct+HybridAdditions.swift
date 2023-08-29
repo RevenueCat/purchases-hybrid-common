@@ -10,9 +10,9 @@ import Foundation
 import RevenueCat
 import StoreKit
 
-@objc public extension StoreProduct {
+internal extension StoreProduct {
 
-    @objc var rc_dictionary: [String: Any] {
+    var rc_dictionary: [String: Any] {
         var dictionary: [String: Any] = [
             "currencyCode": self.currencyCode ?? NSNull(),
             "description": self.localizedDescription,
@@ -45,7 +45,6 @@ import StoreKit
         return dictionary
     }
 
-    @objc(rc_normalizedSubscriptionPeriod:)
     static func rc_normalized(subscriptionPeriod: SubscriptionPeriod) -> String {
         let unitString: String
         switch subscriptionPeriod.unit {
@@ -63,7 +62,6 @@ import StoreKit
         return "P\(subscriptionPeriod.value)\(unitString)"
     }
 
-    @objc(rc_normalizedSubscriptionPeriodUnit:)
     static func rc_normalized(subscriptionPeriodUnit: SubscriptionPeriod.Unit) -> String {
         switch subscriptionPeriodUnit {
         case .day:

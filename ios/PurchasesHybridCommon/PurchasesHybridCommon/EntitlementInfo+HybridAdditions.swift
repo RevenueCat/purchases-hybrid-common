@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-@objc public extension EntitlementInfo {
+internal extension EntitlementInfo {
 
     var dictionary: [String: Any] {
         return [

@@ -9,6 +9,7 @@
 import Quick
 import Nimble
 import StoreKit
+@testable import PurchasesHybridCommon
 @testable import RevenueCat
 
 class StoreProductHybridAdditionsTests: QuickSpec {

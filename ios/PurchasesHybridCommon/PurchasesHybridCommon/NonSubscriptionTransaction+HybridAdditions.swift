@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-@objc public extension NonSubscriptionTransaction {
+internal extension NonSubscriptionTransaction {
 
     var dictionary: [String: Any] {
         return [

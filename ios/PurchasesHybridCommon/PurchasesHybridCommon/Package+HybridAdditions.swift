@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-@objc public extension Package {
+internal extension Package {
 
     func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
         return [
