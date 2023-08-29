@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-@objc public extension Offerings {
+internal extension Offerings {
 
     var dictionary: [String: Any] {
         var result: [String: Any] = ["all": all.mapValues { $0.dictionary }]

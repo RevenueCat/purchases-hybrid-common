@@ -10,13 +10,13 @@ import Foundation
 import StoreKit
 import RevenueCat
 
-@objc public extension StoreProductDiscount {
+internal extension StoreProductDiscount {
 
-    @objc var rc_currencyCode: String? {
+    var rc_currencyCode: String? {
         return currencyCode
     }
 
-    @objc var rc_dictionary: [String: Any] {
+    var rc_dictionary: [String: Any] {
 
         var dictionary: [String: Any] = [
             "price": price,

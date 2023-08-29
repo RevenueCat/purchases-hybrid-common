@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-@objc public extension StoreTransaction {
+internal extension StoreTransaction {
 
     var dictionary: [String: Any] {
         return [
