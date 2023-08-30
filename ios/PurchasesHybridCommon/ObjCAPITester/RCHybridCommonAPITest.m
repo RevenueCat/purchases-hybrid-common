@@ -107,6 +107,9 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality beginRefundRequestForActiveEntitlementCompletion:^(RCErrorContainer * _Nullable error) {
         }];
     }
+
+    RCCustomerInfo *info;
+    NSDictionary<NSString *, NSObject *> __unused *dictionary = [RCCommonFunctionality encodeCustomerInfo:info];
 }
 
 - (void)testDeprecatedAPI {
