@@ -611,3 +611,16 @@ private extension CommonFunctionality {
     }
 
 }
+
+// MARK: - Encoding
+
+@objc public extension CommonFunctionality {
+
+    // Note: see https://github.com/RevenueCat/purchases-hybrid-common/pull/485
+    // `CustomerInfo.dictionary` can't be made an `@objc public` method while supporting iOS < 13.0
+    @objc(encodeCustomerInfo:)
+    static func encode(customerInfo: CustomerInfo) -> [String: Any] {
+        return customerInfo.dictionary
+    }
+
+}
