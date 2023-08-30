@@ -35,7 +35,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
 
                     let urlPath = "https://revenuecat.com"
 
-                    let dictionary = mockCustomerInfo.dictionary
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
                     expect(dictionary["managementURL"] as? String) == urlPath
                 }
                 it ("contains null when the management url doesn't exist") {
@@ -53,7 +53,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                         """
                     )
 
-                    let dictionary = mockCustomerInfo.dictionary
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
                     expect(dictionary["managementURL"] as? NSNull) == NSNull()
                 }
             }
@@ -92,7 +92,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let dateformatter = ISO8601DateFormatter()
                     let transactionDate = dateformatter.date(from: transactionDateString)!
 
-                    let dictionary = mockCustomerInfo.dictionary
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
                     let nonSubscriptionTransactions = try XCTUnwrap(dictionary["nonSubscriptionTransactions"] as? [Any])
                     expect(nonSubscriptionTransactions.count) == 1
 
@@ -102,8 +102,6 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     expect(transactionDictionary["productIdentifier"] as? String) == expectedProductID
                     expect(transactionDictionary["productId"] as? String) == expectedProductID
                     expect(transactionDictionary["purchaseDateMillis"] as? Double) == transactionDate.rc_millisecondsSince1970AsDouble()
-
-
                     expect(transactionDictionary["purchaseDate"] as? String) == dateformatter.string(from: transactionDate as Date)
                 }
                 it("is empty when there are no non subscription transactions") {
@@ -121,7 +119,7 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                         """
                     )
 
-                    let dictionary = mockCustomerInfo.dictionary
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
                     let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
                     expect(nonSubscriptionTransactions?.count) == 0
                 }

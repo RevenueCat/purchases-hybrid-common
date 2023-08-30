@@ -12,7 +12,6 @@ import RevenueCat
 internal extension CustomerInfo {
 
     var dictionary: [String: Any] {
-
         let sortedProductIdentifiers = allPurchasedProductIdentifiers.sorted()
 
         var allExpirations: [String: Any] = [:]
