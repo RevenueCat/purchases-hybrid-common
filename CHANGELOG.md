@@ -1,3 +1,7 @@
+## 6.1.0
+### New Features
+* Expose `CommonFunctionality.encode(customerInfo:)` (#487) via NachoSoto (@NachoSoto)
+
 ## 6.0.0
 ### Breaking Changes
 * Changed iOS `HybridAdditions` to `internal` (#485) via NachoSoto (@NachoSoto)
