@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "target": "es5",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["es6", "dom", "es2016", "esnext.asynciterable"],
     "declaration": true,
     "outDir": "./dist",
