@@ -364,24 +364,46 @@ end
 platform :typescript do
   desc "Deploy npm package to npm.js"
   lane :deploy do |options|
-    version_number = current_version_number
-    is_prerelease = Gem::Version.new(version_number).prerelease?
+    build_and_publish_typescript_package
+  end
 
-    build_args = [
-      'yarn && yarn build'
-    ]
+  lane :deploy_esm do |options|
+    make_typescript_package_esm
+    build_and_publish_typescript_package
+  end
+end
 
-    publish_args = [
-      'npm',
-      'publish',
-      '--access public',
-      is_prerelease ? '--tag next' : nil
-    ].compact
+def make_typescript_package_esm
+  replace_text_in_files(
+    previous_text: "@revenuecat/purchases-typescript-internal",
+    new_text: "@revenuecat/purchases-typescript-internal-esm",
+    paths_of_files_to_update: ["typescript/package.json"]
+  )
+  replace_text_in_files(
+    previous_text: "commonjs",
+    new_text: "esnext",
+    paths_of_files_to_update: ["typescript/tsconfig.json"]
+  )
+end
 
-    Dir.chdir(File.expand_path('typescript', get_root_folder)) do
-      sh(build_args)
-      sh(publish_args)
-    end
+def build_and_publish_typescript_package
+  version_number = current_version_number
+  is_prerelease = Gem::Version.new(version_number).prerelease?
+
+  build_args = [
+    'yarn && yarn build'
+  ]
+
+  publish_args = [
+    'npm',
+    'publish',
+    '--access public',
+    is_prerelease ? '--tag next' : nil
+  ].compact
+
+  Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+    sh(build_args)
+    sh(publish_args)
   end
 end
 

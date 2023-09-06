@@ -132,6 +132,14 @@ Upload and close a release
 
 Deploy npm package to npm.js
 
+### typescript deploy_esm
+
+```sh
+[bundle exec] fastlane typescript deploy_esm
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
