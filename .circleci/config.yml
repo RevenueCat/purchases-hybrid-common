@@ -221,6 +221,18 @@ jobs:
           name: Deploy typescript interfaces NPM package
           command: bundle exec fastlane typescript deploy
 
+  deploy-typescript-esm:
+    docker:
+      - image: cimg/ruby:3.1.2-node
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - copy-npm-rc
+      - run:
+          name: Deploy typescript interfaces ESNext NPM package
+          command: bundle exec fastlane typescript deploy_esm
+
   make-github-release:
     docker:
       - image: cimg/ruby:3.1.2
@@ -357,12 +369,15 @@ workflows:
           <<: *release-tags
       - deploy-typescript:
           <<: *release-tags
+      - deploy-typescript-esm:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-ios
             - deploy-android
             - deploy-typescript
+            - deploy-typescript-esm
       - push-pods:
           <<: *release-tags
           requires:
