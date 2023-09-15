@@ -314,6 +314,10 @@ jobs:
           name: Kick off Unity automatic dependency update
           command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-unity
           when: always
+      - run:
+          name: Kick off Capacitor automatic dependency update
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor
+          when: always
 
   typescript-lint:
     executor: node/default
