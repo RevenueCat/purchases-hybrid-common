@@ -1,3 +1,9 @@
+## 6.2.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.25.10 => 4.26.0 (#498) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Trigger automatic PHC updates in Capacitor plugin (#497) via Toni Rico (@tonidero)
+
 ## 6.1.3
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.25.9 => 4.25.10 (#495) via RevenueCat Git Bot (@RCGitBot)
