@@ -371,14 +371,8 @@ export enum PRORATION_MODE {
     IMMEDIATE_WITHOUT_PRORATION = 3,
 
     /**
-     * Replacement takes effect when the old plan expires, and the new price will
-     * be charged at the same time.
-     */
-    DEFERRED = 4,
-     
-    /**
-     * Replacement takes effect immediately, and the user is charged full price 
-     * of new plan and is given a full billing cycle of subscription, 
+     * Replacement takes effect immediately, and the user is charged full price
+     * of new plan and is given a full billing cycle of subscription,
      * plus remaining prorated time from the old plan.
      */
     IMMEDIATE_AND_CHARGE_FULL_PRICE = 5,
