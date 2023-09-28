@@ -24,7 +24,7 @@ function checkProduct(product: PurchasesStoreProduct) {
   const productCategory: PRODUCT_CATEGORY | null = product.productCategory;
   const productType: PRODUCT_TYPE = product.productType;
   const defaultOption: SubscriptionOption | null = product.defaultOption;
-  const subscriptionOptions: SubscriptionOption[] | null =  product.subscriptionOptions;
+  const subscriptionOptions: SubscriptionOption[] | null = product.subscriptionOptions;
   const presentedOfferingIdentifier: string | null = product.presentedOfferingIdentifier;
 }
 
@@ -127,43 +127,56 @@ function checkPrice(price: Price) {
 }
 
 function checkRecurrenceMode(mode: RECURRENCE_MODE) {
-  switch(mode) {
-    case RECURRENCE_MODE.INFINITE_RECURRING,
-    RECURRENCE_MODE.FINITE_RECURRING,
-    RECURRENCE_MODE.NON_RECURRING: {
-       break;
+  switch (mode) {
+    case RECURRENCE_MODE.INFINITE_RECURRING:
+    case RECURRENCE_MODE.FINITE_RECURRING:
+    case RECURRENCE_MODE.NON_RECURRING: {
+      break;
     }
-  };
+  }
 }
 
 function checkPeriodUnit(periodUnit: PERIOD_UNIT) {
-  switch(periodUnit) {
-    case PERIOD_UNIT.DAY,
-    PERIOD_UNIT.WEEK,
-    PERIOD_UNIT.MONTH,
-    PERIOD_UNIT.YEAR,
-    PERIOD_UNIT.UNKNOWN: {
-       break;
+  switch (periodUnit) {
+    case PERIOD_UNIT.DAY:
+    case PERIOD_UNIT.WEEK:
+    case PERIOD_UNIT.MONTH:
+    case PERIOD_UNIT.YEAR:
+    case PERIOD_UNIT.UNKNOWN: {
+      break;
     }
-  };
+  }
 }
 
 function checkOfferPaymentMode(offerPaymentMode: OFFER_PAYMENT_MODE) {
-  switch(offerPaymentMode) {
-    case OFFER_PAYMENT_MODE.FREE_TRIAL,
-    OFFER_PAYMENT_MODE.SINGLE_PAYMENT,
-    OFFER_PAYMENT_MODE.DISCOUNTED_RECURRING_PAYMENT: {
-       break;
+  switch (offerPaymentMode) {
+    case OFFER_PAYMENT_MODE.FREE_TRIAL:
+    case OFFER_PAYMENT_MODE.SINGLE_PAYMENT:
+    case OFFER_PAYMENT_MODE.DISCOUNTED_RECURRING_PAYMENT: {
+      break;
     }
-  };
+  }
 }
 
 function checkOfferProductCategory(productCategory: PRODUCT_CATEGORY) {
-  switch(productCategory) {
-    case PRODUCT_CATEGORY.NON_SUBSCRIPTION,
-    PRODUCT_CATEGORY.SUBSCRIPTION,
-    PRODUCT_CATEGORY.UNKNOWN: {
-       break;
+  switch (productCategory) {
+    case PRODUCT_CATEGORY.NON_SUBSCRIPTION:
+    case PRODUCT_CATEGORY.SUBSCRIPTION:
+    case PRODUCT_CATEGORY.UNKNOWN: {
+      break;
     }
-  };
+  }
+}
+
+function checkOfferProductType(productType: PRODUCT_TYPE) {
+  switch (productType) {
+    case PRODUCT_TYPE.CONSUMABLE:
+    case PRODUCT_TYPE.NON_CONSUMABLE:
+    case PRODUCT_TYPE.NON_RENEWABLE_SUBSCRIPTION:
+    case PRODUCT_TYPE.AUTO_RENEWABLE_SUBSCRIPTION:
+    case PRODUCT_TYPE.PREPAID_SUBSCRIPTION:
+    case PRODUCT_TYPE.UNKNOWN:
+      break;
+
+  }
 }
