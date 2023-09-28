@@ -108,6 +108,10 @@ export interface PurchasesStoreProduct {
      */
     readonly productCategory: PRODUCT_CATEGORY | null;
     /**
+     * Product type.
+     */
+    readonly productType: PRODUCT_TYPE;
+    /**
      * Subscription period, specified in ISO 8601 format. For example,
      * P1W equates to one week, P1M equates to one month,
      * P3M equates to three months, P6M equates to six months,
@@ -135,11 +139,43 @@ export enum PRODUCT_CATEGORY {
      * A type of product for non-subscription.
      */
     NON_SUBSCRIPTION = "NON_SUBSCRIPTION",
-  
+
     /**
      * A type of product for subscriptions.
      */
     SUBSCRIPTION = "SUBSCRIPTION",
+
+    /**
+     * A type of product for unknowns.
+     */
+    UNKNOWN = "UNKNOWN",
+}
+
+export enum PRODUCT_TYPE {
+    /**
+     * A consumable in-app purchase.
+     */
+    CONSUMABLE = "CONSUMABLE",
+
+    /**
+     * A non-consumable in-app purchase.
+     */
+    NON_CONSUMABLE = "NON_CONSUMABLE",
+
+    /**
+     * A non-renewing subscription.
+     */
+    NON_RENEWABLE_SUBSCRIPTION = "NON_RENEWABLE_SUBSCRIPTION",
+
+    /**
+     * An auto-renewable subscription.
+     */
+    AUTO_RENEWABLE_SUBSCRIPTION = "AUTO_RENEWABLE_SUBSCRIPTION",
+
+    /**
+     * A subscription that is pre-paid.
+     */
+    PREPAID_SUBSCRIPTION = "PREPAID_SUBSCRIPTION",
 
     /**
      * A type of product for unknowns.
@@ -375,10 +411,10 @@ export enum PRORATION_MODE {
      * be charged at the same time.
      */
     DEFERRED = 4,
-     
+
     /**
-     * Replacement takes effect immediately, and the user is charged full price 
-     * of new plan and is given a full billing cycle of subscription, 
+     * Replacement takes effect immediately, and the user is charged full price
+     * of new plan and is given a full billing cycle of subscription,
      * plus remaining prorated time from the old plan.
      */
     IMMEDIATE_AND_CHARGE_FULL_PRICE = 5,
@@ -537,7 +573,7 @@ export interface Price {
 
     /**
      * Price in micro-units, where 1,000,000 micro-units equal one unit of the currency.
-     * 
+     *
      * For example, if price is "€7.99", price_amount_micros is 7,990,000. This value represents
      * the localized, rounded price for a particular currency.
      */
@@ -545,7 +581,7 @@ export interface Price {
 
     /**
      * Returns ISO 4217 currency code for price and original price.
-     * 
+     *
      * For example, if price is specified in British pounds sterling, price_currency_code is "GBP".
      * If currency code cannot be determined, currency symbol is returned.
      */

@@ -8,7 +8,7 @@ import {
   PurchasesPackage, PurchasesPromotionalOffer,
   PurchasesStoreProduct, UpgradeInfo,
   SubscriptionOption, PricingPhase,
-  Price, Period, OFFER_PAYMENT_MODE, PERIOD_UNIT, PRODUCT_CATEGORY, RECURRENCE_MODE
+  Price, Period, OFFER_PAYMENT_MODE, PERIOD_UNIT, PRODUCT_CATEGORY, RECURRENCE_MODE, PRODUCT_TYPE
 } from "../dist";
 
 function checkProduct(product: PurchasesStoreProduct) {
@@ -22,6 +22,7 @@ function checkProduct(product: PurchasesStoreProduct) {
   const discounts: PurchasesStoreProductDiscount[] | null = product.discounts;
   const subscriptionPeriod: string | null = product.subscriptionPeriod;
   const productCategory: PRODUCT_CATEGORY | null = product.productCategory;
+  const productType: PRODUCT_TYPE = product.productType;
   const defaultOption: SubscriptionOption | null = product.defaultOption;
   const subscriptionOptions: SubscriptionOption[] | null =  product.subscriptionOptions;
   const presentedOfferingIdentifier: string | null = product.presentedOfferingIdentifier;
@@ -126,43 +127,43 @@ function checkPrice(price: Price) {
 }
 
 function checkRecurrenceMode(mode: RECURRENCE_MODE) {
-  switch(mode) { 
-    case RECURRENCE_MODE.INFINITE_RECURRING, 
-    RECURRENCE_MODE.FINITE_RECURRING, 
-    RECURRENCE_MODE.NON_RECURRING: { 
-       break; 
-    } 
+  switch(mode) {
+    case RECURRENCE_MODE.INFINITE_RECURRING,
+    RECURRENCE_MODE.FINITE_RECURRING,
+    RECURRENCE_MODE.NON_RECURRING: {
+       break;
+    }
   };
 }
 
 function checkPeriodUnit(periodUnit: PERIOD_UNIT) {
-  switch(periodUnit) { 
-    case PERIOD_UNIT.DAY, 
-    PERIOD_UNIT.WEEK, 
+  switch(periodUnit) {
+    case PERIOD_UNIT.DAY,
+    PERIOD_UNIT.WEEK,
     PERIOD_UNIT.MONTH,
     PERIOD_UNIT.YEAR,
-    PERIOD_UNIT.UNKNOWN: { 
-       break; 
-    } 
+    PERIOD_UNIT.UNKNOWN: {
+       break;
+    }
   };
 }
 
 function checkOfferPaymentMode(offerPaymentMode: OFFER_PAYMENT_MODE) {
-  switch(offerPaymentMode) { 
-    case OFFER_PAYMENT_MODE.FREE_TRIAL, 
-    OFFER_PAYMENT_MODE.SINGLE_PAYMENT, 
-    OFFER_PAYMENT_MODE.DISCOUNTED_RECURRING_PAYMENT: { 
-       break; 
-    } 
+  switch(offerPaymentMode) {
+    case OFFER_PAYMENT_MODE.FREE_TRIAL,
+    OFFER_PAYMENT_MODE.SINGLE_PAYMENT,
+    OFFER_PAYMENT_MODE.DISCOUNTED_RECURRING_PAYMENT: {
+       break;
+    }
   };
 }
 
 function checkOfferProductCategory(productCategory: PRODUCT_CATEGORY) {
-  switch(productCategory) { 
-    case PRODUCT_CATEGORY.NON_SUBSCRIPTION, 
-    PRODUCT_CATEGORY.SUBSCRIPTION, 
-    PRODUCT_CATEGORY.UNKNOWN: { 
-       break; 
-    } 
+  switch(productCategory) {
+    case PRODUCT_CATEGORY.NON_SUBSCRIPTION,
+    PRODUCT_CATEGORY.SUBSCRIPTION,
+    PRODUCT_CATEGORY.UNKNOWN: {
+       break;
+    }
   };
 }
