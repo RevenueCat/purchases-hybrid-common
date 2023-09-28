@@ -108,7 +108,7 @@ export interface PurchasesStoreProduct {
      */
     readonly productCategory: PRODUCT_CATEGORY | null;
     /**
-     * Product type.
+     * The specific type of subscription or one time purchase this product represents
      */
     readonly productType: PRODUCT_TYPE;
     /**
@@ -158,12 +158,12 @@ export enum PRODUCT_TYPE {
     CONSUMABLE = "CONSUMABLE",
 
     /**
-     * A non-consumable in-app purchase.
+     * A non-consumable in-app purchase. Only applies to Apple Store products.
      */
     NON_CONSUMABLE = "NON_CONSUMABLE",
 
     /**
-     * A non-renewing subscription.
+     * A non-renewing subscription. Only applies to Apple Store products.
      */
     NON_RENEWABLE_SUBSCRIPTION = "NON_RENEWABLE_SUBSCRIPTION",
 
@@ -173,12 +173,12 @@ export enum PRODUCT_TYPE {
     AUTO_RENEWABLE_SUBSCRIPTION = "AUTO_RENEWABLE_SUBSCRIPTION",
 
     /**
-     * A subscription that is pre-paid.
+     * A subscription that is pre-paid. Only applies to Google Play products.
      */
     PREPAID_SUBSCRIPTION = "PREPAID_SUBSCRIPTION",
 
     /**
-     * A type of product for unknowns.
+     * Unable to determine product type.
      */
     UNKNOWN = "UNKNOWN",
   }
