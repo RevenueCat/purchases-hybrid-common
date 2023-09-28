@@ -40,7 +40,13 @@ import RevenueCat
         get { Purchases.proxyURL?.absoluteString }
         set {
             if let value = newValue {
-                guard let proxyURL = URL(string: value) else {
+                var url: URL?
+                if #available(iOS 17.0, macCatalyst 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
+                    url = URL(string: value, encodingInvalidCharacters: false)
+                } else {
+                    url = URL(string: value)
+                }
+                guard let proxyURL = url else {
                     fatalError("could not set the proxyURL, provided value is not a valid URL: \(value)")
                 }
                 Purchases.proxyURL = proxyURL
