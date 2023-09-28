@@ -1,3 +1,7 @@
+## 6.3.0
+### New Features
+* Add product type to typescript types (#507) via Cesar de la Vega (@vegaro)
+
 ## 6.2.0
 ### Dependency Updates
 * Bump fastlane from 2.214.0 to 2.215.1 (#500) via dependabot[bot] (@dependabot[bot])
