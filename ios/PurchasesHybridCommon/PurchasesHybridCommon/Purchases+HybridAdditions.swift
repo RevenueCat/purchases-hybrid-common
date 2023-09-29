@@ -12,7 +12,7 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:)
+            usesStoreKit2IfAvailable:dangerousSettings:shouldShowStoreMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
@@ -20,7 +20,8 @@ import RevenueCat
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
                           usesStoreKit2IfAvailable: Bool = false,
-                          dangerousSettings: DangerousSettings?) -> Purchases {
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowStoreMessagesAutomatically: Bool? = nil) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -46,6 +47,10 @@ import RevenueCat
         if let platformFlavor = platformFlavor, let platformFlavorVersion = platformFlavorVersion {
             let platformInfo = Purchases.PlatformInfo(flavor: platformFlavor, version: platformFlavorVersion)
             configurationBuilder = configurationBuilder.with(platformInfo: platformInfo)
+        }
+        if let shouldShowStoreMessagesAutomatically = shouldShowStoreMessagesAutomatically {
+            configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
+                                                                shouldShowStoreMessagesAutomatically)
         }
 
         let purchases = self.configure(with: configurationBuilder.build())

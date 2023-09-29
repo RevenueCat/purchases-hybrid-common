@@ -199,6 +199,36 @@ import RevenueCat
 
 }
 
+// MARK: In app messages
+@objc public extension CommonFunctionality {
+
+#if os(iOS)
+    @available(iOS 16.4, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc(showStoreMessagesCompletion:)
+    static func showStoreMessages(completion: @escaping (ErrorContainer?) -> Void) {
+        Self.sharedInstance.showStoreMessages { result in
+            Self.processShowStoreMessagesResultWithCompletion(showStoreMessagesResult: result, completion: completion)
+        }
+    }
+
+    @available(iOS 16.4, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc(showStoreMessagesForTypes:completion:)
+    static func showStoreMessages(forRawValues rawValues: Set<NSNumber>,
+                                  completion: @escaping (ErrorContainer?) -> Void) {
+        Self.sharedInstance.showStoreMessages(forRawValues: rawValues) { result in
+            Self.processShowStoreMessagesResultWithCompletion(showStoreMessagesResult: result, completion: completion)
+        }
+    }
+#endif
+
+}
+
 // MARK: purchasing and restoring
 @objc public extension CommonFunctionality {
 
@@ -603,6 +633,18 @@ private extension CommonFunctionality {
             case .error:
                 completion(Self.refundRequestError(description: "Error during refund request."))
             }
+        case let .failure(error):
+            completion(ErrorContainer(error: error, extraPayload: [:]))
+        }
+    }
+
+    static func processShowStoreMessagesResultWithCompletion(
+        showStoreMessagesResult: Result<Void, PublicError>,
+        completion: @escaping (ErrorContainer?) -> Void
+    ) {
+        switch showStoreMessagesResult {
+        case let .success(_):
+            completion(nil)
         case let .failure(error):
             completion(ErrorContainer(error: error, extraPayload: [:]))
         }
