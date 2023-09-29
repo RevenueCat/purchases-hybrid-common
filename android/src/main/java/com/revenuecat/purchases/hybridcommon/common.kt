@@ -489,6 +489,7 @@ fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InApp
     }
 }
 
+@Suppress("LongParameterList")
 @JvmOverloads
 fun configure(
     context: Context,
