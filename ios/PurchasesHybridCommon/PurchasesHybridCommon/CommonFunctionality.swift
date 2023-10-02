@@ -40,7 +40,11 @@ import RevenueCat
         get { Purchases.proxyURL?.absoluteString }
         set {
             if let value = newValue {
-                var url: URL?
+                let url: URL?
+                // Starting with iOS 17, URL(string:) returns a non-nil value from invalid URLs. 
+                // So we use a new method to get the old behavior.
+                // Since the new method isn't recognized by older Xcodes, we use Swift 5.9 as a proxy for Xcode 15+.
+                // https://developer.apple.com/documentation/xcode-release-notes/xcode-15_0-release-notes
                 #if swift(>=5.9)
                 if #available(iOS 17.0, macCatalyst 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
                     url = URL(string: value, encodingInvalidCharacters: false)
