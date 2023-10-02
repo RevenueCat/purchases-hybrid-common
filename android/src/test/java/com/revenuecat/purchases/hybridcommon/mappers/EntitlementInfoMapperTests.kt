@@ -26,7 +26,9 @@ class EntitlementInfoMapperTests {
         assertThat(resultMap["periodType"]).isEqualTo("NORMAL")
         assertThat(resultMap["latestPurchaseDateMillis"]).isEqualTo(mockEntitlementInfo.latestPurchaseDate.toMillis())
         assertThat(resultMap["latestPurchaseDate"]).isEqualTo(mockEntitlementInfo.latestPurchaseDate.toIso8601())
-        assertThat(resultMap["originalPurchaseDateMillis"]).isEqualTo(mockEntitlementInfo.originalPurchaseDate.toMillis())
+        assertThat(resultMap["originalPurchaseDateMillis"]).isEqualTo(
+            mockEntitlementInfo.originalPurchaseDate.toMillis(),
+        )
         assertThat(resultMap["originalPurchaseDate"]).isEqualTo(mockEntitlementInfo.originalPurchaseDate.toIso8601())
         assertThat(resultMap["expirationDateMillis"]).isEqualTo(mockEntitlementInfo.expirationDate?.toMillis())
         assertThat(resultMap["expirationDate"]).isEqualTo(mockEntitlementInfo.expirationDate?.toIso8601())
