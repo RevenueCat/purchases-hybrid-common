@@ -108,7 +108,8 @@ export interface PurchasesStoreProduct {
      */
     readonly productCategory: PRODUCT_CATEGORY | null;
     /**
-     * The specific type of subscription or one time purchase this product represents
+     * The specific type of subscription or one time purchase this product represents. 
+     * Important: In iOS, if using StoreKit 1, we cannot determine the type.
      */
     readonly productType: PRODUCT_TYPE;
     /**
