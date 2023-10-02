@@ -25,6 +25,7 @@ internal extension EntitlementInfo {
             "expirationDateMillis": expirationDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "store": storeString,
             "productIdentifier": productIdentifier,
+            "productPlanIdentifier": NSNull(), // Only used in Android
             "isSandbox": isSandbox,
             "unsubscribeDetectedAt": unsubscribeDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
             "unsubscribeDetectedAtMillis": unsubscribeDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
