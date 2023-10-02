@@ -1,5 +1,8 @@
+### New Features
+* Add product type to typescript types (#507) via Cesar de la Vega (@vegaro)
+### Bugfixes
+* Add `product_plan_identifier` to `EntitlementInfo` model (#512) via Toni Rico (@tonidero)
 ### Dependency Updates
-* Bump fastlane from 2.214.0 to 2.215.1 (#500) via dependabot[bot] (@dependabot[bot])
-* [AUTOMATIC] iOS 4.25.10 => 4.26.0 (#498) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 4.26.0 => 4.26.1 Android 6.9.4 => 6.9.5 (#504) via RevenueCat Git Bot (@RCGitBot)
 ### Other Changes
-* Trigger automatic PHC updates in Capacitor plugin (#497) via Toni Rico (@tonidero)
+* fix proxyURL not crashing if invalid url is passed (#508) via Andy Boedo (@aboedo)
