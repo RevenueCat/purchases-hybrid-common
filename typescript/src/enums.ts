@@ -77,6 +77,7 @@ export enum LOG_LEVEL {
  * method in Purchases.
  */
 export enum IN_APP_MESSAGE_TYPE {
+  // Make sure the enum values are in sync with those defined in iOS/Android
   /**
    * In-app messages to indicate there has been a billing issue charging the user.
    */
