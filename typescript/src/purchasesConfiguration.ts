@@ -44,5 +44,5 @@ export interface PurchasesConfiguration {
    * This allows to disable that behavior, so you can display those messages at your convenience. For more information,
    * check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging
    */
-  shouldShowStoreMessages?: boolean;
+  shouldShowInAppMessagesAutomatically?: boolean;
 }
