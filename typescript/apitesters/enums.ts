@@ -4,7 +4,8 @@ import {
   PACKAGE_TYPE,
   REFUND_REQUEST_STATUS,
   INTRO_ELIGIBILITY_STATUS,
-  PRORATION_MODE
+  PRORATION_MODE,
+  IN_APP_MESSAGE_TYPE
 } from '../dist';
 
 function checkPurchaseType(type: PURCHASE_TYPE): boolean {
@@ -91,6 +92,17 @@ function checkRefundRequestStatus(status: REFUND_REQUEST_STATUS): boolean {
     case REFUND_REQUEST_STATUS.USER_CANCELLED:
       return true;
     case REFUND_REQUEST_STATUS.ERROR:
+      return true;
+  }
+}
+
+function checkInAppMessages(messageType: IN_APP_MESSAGE_TYPE): boolean {
+  switch (messageType) {
+    case IN_APP_MESSAGE_TYPE.BILLING_ISSUE:
+      return true;
+    case IN_APP_MESSAGE_TYPE.PRICE_INCREASE_CONSENT:
+      return true;
+    case IN_APP_MESSAGE_TYPE.GENERIC:
       return true;
   }
 }

@@ -69,3 +69,27 @@ export enum LOG_LEVEL {
   WARN = "WARN",
   ERROR = "ERROR"
 }
+
+/**
+ * Enum for in-app message types.
+ * This can be used if you disable automatic in-app message from showing automatically.
+ * Then, you can pass what type of messages you want to show in the `showInAppMessages`
+ * method in Purchases.
+ */
+export enum IN_APP_MESSAGE_TYPE {
+  /**
+   * In-app messages to indicate there has been a billing issue charging the user.
+   */
+  BILLING_ISSUE,
+
+  /**
+   * iOS-only. This message will show if you increase the price of a subscription and 
+   * the user needs to opt-in to the increase.
+   */
+  PRICE_INCREASE_CONSENT,
+
+  /**
+   * iOS-only. StoreKit generic messages.
+   */
+  GENERIC
+}
