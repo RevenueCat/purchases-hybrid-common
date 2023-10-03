@@ -80,16 +80,16 @@ export enum IN_APP_MESSAGE_TYPE {
   /**
    * In-app messages to indicate there has been a billing issue charging the user.
    */
-  BILLING_ISSUE,
+  BILLING_ISSUE = 0,
 
   /**
    * iOS-only. This message will show if you increase the price of a subscription and 
    * the user needs to opt-in to the increase.
    */
-  PRICE_INCREASE_CONSENT,
+  PRICE_INCREASE_CONSENT = 1,
 
   /**
    * iOS-only. StoreKit generic messages.
    */
-  GENERIC
+  GENERIC = 2
 }
