@@ -33,7 +33,9 @@ import com.revenuecat.purchases.hybridcommon.setLogHandler
 import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
 import com.revenuecat.purchases.hybridcommon.setLogLevel
 import com.revenuecat.purchases.hybridcommon.setProxyURLString
+import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
+import com.revenuecat.purchases.models.InAppMessageType
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
@@ -199,6 +201,12 @@ private class CommonApiTests {
         canMakePayments(context, features, onResult)
     }
 
+    fun checkShowInAppMessagesIfNeeded(activity: Activity?) {
+        showInAppMessagesIfNeeded(activity)
+        showInAppMessagesIfNeeded(activity, listOf(InAppMessageType.BILLING_ISSUES))
+        showInAppMessagesIfNeeded(activity, null)
+    }
+
     fun checkConfigure(
         context: Context,
         apiKey: String,
@@ -207,9 +215,20 @@ private class CommonApiTests {
         platformInfo: PlatformInfo,
         store: Store,
         dangerousSettings: DangerousSettings,
+        shouldShowInAppMessagesAutomatically: Boolean?,
     ) {
         configure(context, apiKey, appUserID, observerMode, platformInfo)
         configure(context, apiKey, appUserID, observerMode, platformInfo, store, dangerousSettings)
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            observerMode,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+        )
     }
 
     fun checkGetPromotionalOffer() {

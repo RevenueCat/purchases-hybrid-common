@@ -12,7 +12,7 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:)
+            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
@@ -20,7 +20,8 @@ import RevenueCat
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
                           usesStoreKit2IfAvailable: Bool = false,
-                          dangerousSettings: DangerousSettings?) -> Purchases {
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -47,6 +48,8 @@ import RevenueCat
             let platformInfo = Purchases.PlatformInfo(flavor: platformFlavor, version: platformFlavorVersion)
             configurationBuilder = configurationBuilder.with(platformInfo: platformInfo)
         }
+        configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
+                                                            shouldShowInAppMessagesAutomatically)
 
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases

@@ -199,6 +199,41 @@ import RevenueCat
 
 }
 
+// MARK: In app messages
+@objc public extension CommonFunctionality {
+
+#if os(iOS) || targetEnvironment(macCatalyst) || VISION_OS
+    @available(iOS 16.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc(showStoreMessagesCompletion:)
+    static func showStoreMessages(completion: @escaping () -> Void) {
+        _ = Task<Void, Never> {
+            await Self.sharedInstance.showStoreMessages(for: Set(StoreMessageType.allCases))
+            completion()
+        }
+    }
+
+    @available(iOS 16.0, *)
+    @available(tvOS, unavailable)
+    @available(macOS, unavailable)
+    @available(watchOS, unavailable)
+    @objc(showStoreMessagesForTypes:completion:)
+    static func showStoreMessages(forRawValues rawValues: Set<NSNumber>,
+                                  completion: @escaping () -> Void) {
+        let storeMessageTypes = rawValues.compactMap { number in
+            StoreMessageType(rawValue: number.intValue)
+        }
+        _ = Task<Void, Never> {
+            await Self.sharedInstance.showStoreMessages(for: Set(storeMessageTypes))
+            completion()
+        }
+    }
+#endif
+
+}
+
 // MARK: purchasing and restoring
 @objc public extension CommonFunctionality {
 

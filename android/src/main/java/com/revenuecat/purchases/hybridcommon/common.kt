@@ -25,6 +25,7 @@ import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.models.InAppMessageType
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
@@ -476,6 +477,20 @@ fun canMakePayments(
 }
 
 @JvmOverloads
+fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InAppMessageType>? = null) {
+    if (activity == null) {
+        errorLog("showInAppMessages called with null activity")
+        return
+    }
+    if (inAppMessageTypes == null) {
+        Purchases.sharedInstance.showInAppMessagesIfNeeded(activity)
+    } else {
+        Purchases.sharedInstance.showInAppMessagesIfNeeded(activity, inAppMessageTypes)
+    }
+}
+
+@Suppress("LongParameterList")
+@JvmOverloads
 fun configure(
     context: Context,
     apiKey: String,
@@ -484,6 +499,7 @@ fun configure(
     platformInfo: PlatformInfo,
     store: Store = Store.PLAY_STORE,
     dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
+    shouldShowInAppMessagesAutomatically: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
     val builder =
@@ -494,7 +510,9 @@ fun configure(
     if (observerMode != null) {
         builder.observerMode(observerMode)
     }
-
+    if (shouldShowInAppMessagesAutomatically != null) {
+        builder.showInAppMessagesAutomatically(shouldShowInAppMessagesAutomatically)
+    }
     Purchases.configure(builder.build())
 }
 
@@ -601,5 +619,11 @@ data class ErrorContainer(
 internal fun warnLog(message: String) {
     if (Purchases.logLevel <= LogLevel.WARN) {
         Log.w("PurchasesHybridCommon", message)
+    }
+}
+
+internal fun errorLog(message: String) {
+    if (Purchases.logLevel <= LogLevel.ERROR) {
+        Log.e("PurchasesHybridCommon", message)
     }
 }

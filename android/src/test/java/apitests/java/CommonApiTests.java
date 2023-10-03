@@ -14,6 +14,7 @@ import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
 import com.revenuecat.purchases.models.GoogleProrationMode;
+import com.revenuecat.purchases.models.InAppMessageType;
 
 import java.util.List;
 import java.util.Map;
@@ -173,16 +174,32 @@ class CommonApiTests {
         CommonKt.canMakePayments(context, features, onResult);
     }
 
+    private void checkShowInAppMessagesIfNeeded(Activity activity, List<InAppMessageType> types) {
+        CommonKt.showInAppMessagesIfNeeded(activity);
+        CommonKt.showInAppMessagesIfNeeded(activity, types);
+        CommonKt.showInAppMessagesIfNeeded(activity, null);
+    }
+
     private void checkConfigure(Context context,
                                 String apiKey,
                                 String appUserId,
                                 Boolean observerMode,
                                 PlatformInfo platformInfo,
                                 Store store,
-                                DangerousSettings dangerousSettings) {
+                                DangerousSettings dangerousSettings,
+                                Boolean shouldShowInAppMessagesAutomatically) {
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store);
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store, dangerousSettings);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                observerMode,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically);
     }
 
     private void checkGetPromotionalOffer() {
