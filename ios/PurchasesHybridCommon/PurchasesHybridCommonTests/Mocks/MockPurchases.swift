@@ -510,6 +510,7 @@ final class MockPurchases: PurchasesType {
         invokedBeginRefundRequestForActiveEntitlementParameter = completion
         invokedBeginRefundRequestForActiveEntitlementParameterList.append(completion)
     }
+
 }
 
 extension MockPurchases {
@@ -647,5 +648,8 @@ extension MockPurchases: PurchasesSwiftType {
         fatalError("Not mocked")
     }
 
+    func showStoreMessages(for types: Set<StoreMessageType>) async {
+        fatalError("Not mocked")
+    }
 
 }
