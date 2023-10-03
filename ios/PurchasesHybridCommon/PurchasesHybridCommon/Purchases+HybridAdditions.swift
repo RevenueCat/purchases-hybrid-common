@@ -21,7 +21,7 @@ import RevenueCat
                           platformFlavorVersion: String?,
                           usesStoreKit2IfAvailable: Bool = false,
                           dangerousSettings: DangerousSettings?,
-                          shouldShowInAppMessagesAutomatically: Bool? = nil) -> Purchases {
+                          shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -48,10 +48,8 @@ import RevenueCat
             let platformInfo = Purchases.PlatformInfo(flavor: platformFlavor, version: platformFlavorVersion)
             configurationBuilder = configurationBuilder.with(platformInfo: platformInfo)
         }
-        if let shouldShowInAppMessagesAutomatically = shouldShowInAppMessagesAutomatically {
-            configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
-                                                                shouldShowInAppMessagesAutomatically)
-        }
+        configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
+                                                            shouldShowInAppMessagesAutomatically)
 
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases
