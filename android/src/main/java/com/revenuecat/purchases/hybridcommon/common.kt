@@ -507,15 +507,12 @@ fun configure(
             .appUserID(appUserID)
             .store(store)
             .dangerousSettings(dangerousSettings)
-            .apply {
-                if (observerMode != null) {
-                    observerMode(observerMode)
-                }
-                if (shouldShowInAppMessagesAutomatically != null) {
-                    showInAppMessagesAutomatically(shouldShowInAppMessagesAutomatically)
-                }
-            }
-
+    if (observerMode != null) {
+        builder.observerMode(observerMode)
+    }
+    if (shouldShowInAppMessagesAutomatically != null) {
+        builder.showInAppMessagesAutomatically(shouldShowInAppMessagesAutomatically)
+    }
     Purchases.configure(builder.build())
 }
 
