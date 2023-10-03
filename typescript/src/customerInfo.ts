@@ -53,6 +53,10 @@ export interface PurchasesEntitlementInfo {
      */
     readonly productIdentifier: string;
     /**
+     * The product plan identifier that unlocked this entitlement. Android subscriptions only, null on consumables and iOS.
+     */
+    readonly productPlanIdentifier: string | null;
+    /**
      * False if this entitlement is unlocked via a production purchase
      */
     readonly isSandbox: boolean;

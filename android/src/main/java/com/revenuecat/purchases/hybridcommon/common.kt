@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
@@ -14,7 +15,6 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.common.warnLog
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
@@ -597,3 +597,9 @@ data class ErrorContainer(
     val message: String,
     val info: Map<String, Any?>,
 )
+
+internal fun warnLog(message: String) {
+    if (Purchases.logLevel <= LogLevel.WARN) {
+        Log.w("PurchasesHybridCommon", message)
+    }
+}

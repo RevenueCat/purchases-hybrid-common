@@ -16,6 +16,7 @@ fun EntitlementInfo.map(): Map<String, Any?> =
         "expirationDate" to this.expirationDate?.toIso8601(),
         "store" to this.store.name,
         "productIdentifier" to this.productIdentifier,
+        "productPlanIdentifier" to this.productPlanIdentifier,
         "isSandbox" to this.isSandbox,
         "unsubscribeDetectedAt" to this.unsubscribeDetectedAt?.toIso8601(),
         "unsubscribeDetectedAtMillis" to this.unsubscribeDetectedAt?.toMillis(),

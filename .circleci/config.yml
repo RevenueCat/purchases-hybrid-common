@@ -68,7 +68,7 @@ commands:
           command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
 
 jobs:
-  test-ios:
+  test-ios-16:
     <<: *base-ios-job
     steps:
       - checkout
@@ -82,9 +82,31 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 14 (16.4)
       - run:
           name: Run pod lint tests
           command: pod lib lint --fail-fast
+      - store_test_results:
+          path: ios/PurchasesHybridCommon/test_output
+      - store_artifacts:
+          path: ios/PurchasesHybridCommon/test_output
+          destination: scan-output
+
+  test-ios-17:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - run:
+          name: Install pods
+          command: pod install --repo-update
+          working_directory: ios/PurchasesHybridCommon
+      - run:
+          name: Run ios tests
+          command: fastlane scan
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 15 (17.0)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -348,7 +370,10 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - test-ios
+      - test-ios-16:
+          xcode_version: '14.3.0'
+      - test-ios-17:
+          xcode_version: '15.0.0'
       - integration-test-ios
       - test-android
       - detekt-android

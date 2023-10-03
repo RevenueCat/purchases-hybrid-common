@@ -4,6 +4,7 @@ import com.revenuecat.purchases.EntitlementInfo
 import com.revenuecat.purchases.OwnershipType
 import com.revenuecat.purchases.PeriodType
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.VerificationResult
 import org.assertj.core.api.Assertions.assertThat
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -13,6 +14,34 @@ import java.util.Date
 class EntitlementInfoMapperTests {
 
     private val storeDictionaryKey = "store"
+
+    @Test
+    fun `EntitlementInfo maps to expected map`() {
+        val mockEntitlementInfo = generateMockEntitlementInfo(store = Store.PLAY_STORE)
+        val resultMap = mockEntitlementInfo.map()
+        assertThat(resultMap.size).isEqualTo(19)
+        assertThat(resultMap["identifier"]).isEqualTo("entitlement_id")
+        assertThat(resultMap["isActive"]).isEqualTo(true)
+        assertThat(resultMap["willRenew"]).isEqualTo(true)
+        assertThat(resultMap["periodType"]).isEqualTo("NORMAL")
+        assertThat(resultMap["latestPurchaseDateMillis"]).isEqualTo(mockEntitlementInfo.latestPurchaseDate.toMillis())
+        assertThat(resultMap["latestPurchaseDate"]).isEqualTo(mockEntitlementInfo.latestPurchaseDate.toIso8601())
+        assertThat(resultMap["originalPurchaseDateMillis"]).isEqualTo(
+            mockEntitlementInfo.originalPurchaseDate.toMillis(),
+        )
+        assertThat(resultMap["originalPurchaseDate"]).isEqualTo(mockEntitlementInfo.originalPurchaseDate.toIso8601())
+        assertThat(resultMap["expirationDateMillis"]).isEqualTo(mockEntitlementInfo.expirationDate?.toMillis())
+        assertThat(resultMap["expirationDate"]).isEqualTo(mockEntitlementInfo.expirationDate?.toIso8601())
+        assertThat(resultMap[storeDictionaryKey]).isEqualTo("PLAY_STORE")
+        assertThat(resultMap["productIdentifier"]).isEqualTo("product_id")
+        assertThat(resultMap["productPlanIdentifier"]).isEqualTo("test_plan_identifier")
+        assertThat(resultMap["isSandbox"]).isEqualTo(false)
+        assertThat(resultMap["unsubscribeDetectedAt"]).isNull()
+        assertThat(resultMap["unsubscribeDetectedAtMillis"]).isNull()
+        assertThat(resultMap["billingIssueDetectedAt"]).isNull()
+        assertThat(resultMap["billingIssueDetectedAtMillis"]).isNull()
+        assertThat(resultMap["ownershipType"]).isEqualTo("PURCHASED")
+    }
 
     @Test
     fun `EntitlementInfo Store is correctly added to the dictionary`() {
@@ -52,12 +81,13 @@ class EntitlementInfoMapperTests {
             expirationDate = Date.from(Instant.ofEpochSecond(253370768400)), // Jan 1, 9999 @ 00:00:00UTC
             store = store,
             productIdentifier = "product_id",
-            productPlanIdentifier = null,
+            productPlanIdentifier = "test_plan_identifier",
             isSandbox = false,
             unsubscribeDetectedAt = null,
             billingIssueDetectedAt = null,
             ownershipType = OwnershipType.PURCHASED,
             jsonObject = JSONObject(),
+            verification = VerificationResult.VERIFIED,
         )
     }
 }
