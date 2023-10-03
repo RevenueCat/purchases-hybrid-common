@@ -202,17 +202,20 @@ import RevenueCat
 // MARK: In app messages
 @objc public extension CommonFunctionality {
 
-#if os(iOS)
-    @available(iOS 16.4, *)
+#if os(iOS) || targetEnvironment(macCatalyst) || VISION_OS
+    @available(iOS 16.0, *)
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
     @objc(showStoreMessagesCompletion:)
     static func showStoreMessages(completion: @escaping () -> Void) {
-        Self.sharedInstance.showStoreMessages(completion)
+        _ = Task<Void, Never> {
+            await Self.sharedInstance.showStoreMessages(for: Set(StoreMessageType.allCases))
+            completion()
+        }
     }
 
-    @available(iOS 16.4, *)
+    @available(iOS 16.0, *)
     @available(tvOS, unavailable)
     @available(macOS, unavailable)
     @available(watchOS, unavailable)
@@ -222,7 +225,10 @@ import RevenueCat
         let storeMessageTypes = rawValues.compactMap { number in
             StoreMessageType(rawValue: number.intValue)
         }
-        Self.sharedInstance.showStoreMessages(for: Set(storeMessageTypes), completion: completion)
+        _ = Task<Void, Never> {
+            await Self.sharedInstance.showStoreMessages(for: Set(storeMessageTypes))
+            completion()
+        }
     }
 #endif
 
