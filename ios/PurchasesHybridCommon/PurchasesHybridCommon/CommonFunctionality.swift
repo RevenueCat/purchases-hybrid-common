@@ -219,7 +219,10 @@ import RevenueCat
     @objc(showStoreMessagesForTypes:completion:)
     static func showStoreMessages(forRawValues rawValues: Set<NSNumber>,
                                   completion: @escaping () -> Void) {
-        Self.sharedInstance.showStoreMessages(forRawValues: rawValues, completion: completion)
+        let storeMessageTypes = rawValues.map { number in
+            StoreMessageType(rawValue: number.intValue)
+        }
+        Self.sharedInstance.showStoreMessages(for: Set(storeMessageTypes), completion: completion)
     }
 #endif
 
