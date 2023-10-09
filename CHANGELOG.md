@@ -1,3 +1,7 @@
+## 7.0.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.27.0 => 4.27.2 (#524) via RevenueCat Git Bot (@RCGitBot)
+
 ## 7.0.0
 ### Breaking Changes
 * Add in app messages API support (#510) via Toni Rico (@tonidero)
