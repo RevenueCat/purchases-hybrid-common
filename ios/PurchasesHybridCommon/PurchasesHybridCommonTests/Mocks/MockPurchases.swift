@@ -8,6 +8,9 @@ import RevenueCat
 import StoreKit
 
 final class MockPurchases: PurchasesType {
+    var cachedCustomerInfo: RevenueCat.CustomerInfo?
+
+    var cachedOfferings: RevenueCat.Offerings?
     
     var delegate: RevenueCat.PurchasesDelegate?
 
