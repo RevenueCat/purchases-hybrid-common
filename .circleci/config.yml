@@ -118,7 +118,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 15 (17.0)
+            SCAN_DEVICE: iPhone 15 (17.0.1)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
