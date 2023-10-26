@@ -72,6 +72,12 @@ jobs:
     <<: *base-ios-job
     steps:
       - checkout
+      - run: 
+          name: Bundle install
+          command: |
+              bundle config set --local clean 'true'
+              bundle config set --local path 'vendor/bundle'
+              bundle install
       - run:
           name: Install pods
           command: bundle exec pod install --repo-update
@@ -96,6 +102,12 @@ jobs:
     <<: *base-ios-job
     steps:
       - checkout
+      - run: 
+          name: Bundle install
+          command: |
+              bundle config set --local clean 'true'
+              bundle config set --local path 'vendor/bundle'
+              bundle install
       - run:
           name: Install pods
           command: bundle exec pod install --repo-update
