@@ -72,9 +72,15 @@ jobs:
     <<: *base-ios-job
     steps:
       - checkout
+      - run: 
+          name: Bundle install
+          command: |
+              bundle config set --local clean 'true'
+              bundle config set --local path 'vendor/bundle'
+              bundle install
       - run:
           name: Install pods
-          command: pod install --repo-update
+          command: bundle exec pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Run ios tests
@@ -96,9 +102,15 @@ jobs:
     <<: *base-ios-job
     steps:
       - checkout
+      - run: 
+          name: Bundle install
+          command: |
+              bundle config set --local clean 'true'
+              bundle config set --local path 'vendor/bundle'
+              bundle install
       - run:
           name: Install pods
-          command: pod install --repo-update
+          command: bundle exec pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Run ios tests
@@ -106,7 +118,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 15 (17.0)
+            SCAN_DEVICE: iPhone 15 (17.0.1)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -121,7 +133,7 @@ jobs:
           cache-version: v1
       - run:
           name: Install pods
-          command: pod install
+          command: bundle exec pod install
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Update API key
@@ -166,7 +178,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Install pods
-          command: pod install
+          command: bundle exec pod install
           working_directory: ios/PurchasesHybridCommon
 
   push-pods:
