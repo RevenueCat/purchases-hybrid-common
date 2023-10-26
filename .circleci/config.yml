@@ -74,7 +74,7 @@ jobs:
       - checkout
       - run:
           name: Install pods
-          command: pod install --repo-update
+          command: bundle exec pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Run ios tests
@@ -98,7 +98,7 @@ jobs:
       - checkout
       - run:
           name: Install pods
-          command: pod install --repo-update
+          command: bundle exec pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Run ios tests
@@ -121,7 +121,7 @@ jobs:
           cache-version: v1
       - run:
           name: Install pods
-          command: pod install
+          command: bundle exec pod install
           working_directory: ios/PurchasesHybridCommon
       - run:
           name: Update API key
@@ -166,7 +166,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Install pods
-          command: pod install
+          command: bundle exec pod install
           working_directory: ios/PurchasesHybridCommon
 
   push-pods:
