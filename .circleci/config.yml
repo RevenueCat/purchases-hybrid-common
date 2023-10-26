@@ -67,21 +67,21 @@ commands:
           name: Copy npmrc sample file to final location
           command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
 
+  install-cocoapods:
+    steps:
+      - run:
+          name: Install pods
+          command: bundle exec pod install --repo-update
+          working_directory: ios/PurchasesHybridCommon
+
 jobs:
   test-ios-16:
     <<: *base-ios-job
     steps:
       - checkout
-      - run: 
-          name: Bundle install
-          command: |
-              bundle config set --local clean 'true'
-              bundle config set --local path 'vendor/bundle'
-              bundle install
-      - run:
-          name: Install pods
-          command: bundle exec pod install --repo-update
-          working_directory: ios/PurchasesHybridCommon
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -102,16 +102,9 @@ jobs:
     <<: *base-ios-job
     steps:
       - checkout
-      - run: 
-          name: Bundle install
-          command: |
-              bundle config set --local clean 'true'
-              bundle config set --local path 'vendor/bundle'
-              bundle install
-      - run:
-          name: Install pods
-          command: bundle exec pod install --repo-update
-          working_directory: ios/PurchasesHybridCommon
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -131,10 +124,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - run:
-          name: Install pods
-          command: bundle exec pod install
-          working_directory: ios/PurchasesHybridCommon
+      - install-cocoapods
       - run:
           name: Update API key
           command: bundle exec fastlane ios replace_api_key_integration_tests
@@ -162,24 +152,9 @@ jobs:
     steps:
       - checkout
       - trust-github-key
-      # Bundler
-      - restore_cache:
-          keys: 
-            - v1-gem-cache-{{ checksum "Gemfile.lock" }}
-      - run: 
-          name: Bundle install
-          command: |
-              bundle config set --local clean 'true'
-              bundle config set --local path 'vendor/bundle'
-              bundle install
-      - save_cache:
-          key: v1-gem-cache-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-      - run:
-          name: Install pods
-          command: bundle exec pod install
-          working_directory: ios/PurchasesHybridCommon
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
 
   push-pods:
     <<: *base-ios-job
