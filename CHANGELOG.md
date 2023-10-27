@@ -1,3 +1,9 @@
+## 7.1.2
+### Dependency Updates
+* Bump cocoapods from 1.14.0 to 1.14.2 (#537) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Use RevenueCat orb for bundle install cache (#536) via Josh Holtz (@joshdholtz)
+
 ## 7.1.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.28.0 => 4.28.1 (#532) via RevenueCat Git Bot (@RCGitBot)
