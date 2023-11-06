@@ -1,3 +1,7 @@
+## 7.2.1
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `a297205` to `0ddee10` (#541) via dependabot[bot] (@dependabot[bot])
+
 ## 7.2.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.28.1 => 4.29.0 (#539) via RevenueCat Git Bot (@RCGitBot)
