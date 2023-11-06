@@ -98,6 +98,14 @@ Run automatic bump in other repos
 
 Release to CocoaPods
 
+### ios pod_lint
+
+```sh
+[bundle exec] fastlane ios pod_lint
+```
+
+Lint Podspec
+
 ### ios replace_api_key_integration_tests
 
 ```sh

@@ -363,6 +363,18 @@ jobs:
       - run:
           command: yarn && yarn build && yarn apitests
 
+  check-pods:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Lint Podspec
+          command: bundle exec fastlane ios pod_lint
+          no_output_timeout: 30m
+
 workflows:
   version: 2
   test:
@@ -374,6 +386,8 @@ workflows:
           xcode_version: '14.3.0'
       - test-ios-17:
           xcode_version: '15.0.0'
+      - check-pods:
+          xcode_version: '14.3.0'
       - integration-test-ios
       - test-android
       - detekt-android

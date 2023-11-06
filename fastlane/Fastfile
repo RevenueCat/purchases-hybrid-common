@@ -22,7 +22,7 @@ files_with_version_number_without_prerelease_modifiers = {
     './ios/PurchasesHybridCommon/Info.plist' => PLIST_VERSION_PATTERNS,
     './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
 }
-POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'']
+POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
@@ -319,6 +319,11 @@ platform :ios do
     push_pods
   end
 
+  desc "Lint Podspec"
+  lane :pod_lint do |options|
+    check_pods
+  end
+
   desc "replace API KEY for integration tests"
   lane :replace_api_key_integration_tests do
     folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
@@ -413,6 +418,15 @@ end
 
 def push_pods
   pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+end
+
+def check_pods
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommon.podspec', 
+    platforms: 'ios,osx,tvos',
+    fail_fast: true
+  )
 end
 
 def is_snapshot_version?(version_name)

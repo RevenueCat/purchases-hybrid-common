@@ -6,7 +6,8 @@ target 'PurchasesHybridCommon' do
 
   # Pods for PurchasesHybridCommon
   pod 'RevenueCat', '4.30.5'
-  
+  pod 'RevenueCatUI', '4.30.5'
+
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
     pod 'Quick'
@@ -26,4 +27,5 @@ target 'ObjCAPITester' do
   use_frameworks!
 
   pod 'RevenueCat', '4.30.5'
+  pod 'RevenueCatUI', '4.30.5'
 end
