@@ -19,7 +19,7 @@ import UIKit
     public let vc: UIViewController = UIHostingController(rootView: PaywallView())
 
     @objc
-    public static func presentPaywallIfNeeded() {
+    public static func presentPaywall() {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
@@ -29,6 +29,20 @@ import UIKit
         controller.modalPresentationStyle = .pageSheet
 
         rootController.present(controller, animated: true)
+    }
+
+    @objc
+    public static func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+        _ = Task { @MainActor in
+            do {
+                let customerInfo = try await Purchases.shared.customerInfo()
+                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
+                    self.presentPaywall()
+                }
+            } catch {
+                NSLog("Failed presenting paywall")
+            }
+        }
     }
 
 }
