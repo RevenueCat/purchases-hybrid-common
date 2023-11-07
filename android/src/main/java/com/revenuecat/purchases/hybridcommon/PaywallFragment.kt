@@ -19,7 +19,7 @@ internal class PaywallFragment(
 
         launcher = PaywallActivityLauncher(
             this,
-           this
+            this
         )
 
         requiredEntitlementIdentifier?.let {
