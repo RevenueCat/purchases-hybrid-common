@@ -45,7 +45,8 @@ android {
     buildToolsVersion "32.0.0"
 
     defaultConfig {
-        minSdkVersion 19
+        // TODO: revert this to 19
+        minSdkVersion 24
         targetSdkVersion 33
         versionCode 1
         versionName "7.3.3"
