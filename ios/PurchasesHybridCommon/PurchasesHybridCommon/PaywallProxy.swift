@@ -6,6 +6,8 @@
 //  Copyright © 2023 RevenueCat. All rights reserved.
 //
 
+#if !os(macOS) && !os(tvOS) && !os(watchOS)
+
 import Foundation
 import SwiftUI
 import RevenueCat
@@ -46,3 +48,5 @@ import UIKit
     }
 
 }
+
+#endif
