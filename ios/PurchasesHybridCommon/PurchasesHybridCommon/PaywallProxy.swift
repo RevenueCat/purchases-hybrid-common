@@ -27,7 +27,7 @@ import UIKit
             return
         }
 
-        let controller = PaywallViewController()
+        let controller = PaywallViewController(displayCloseButton: true)
         controller.modalPresentationStyle = .pageSheet
 
         rootController.present(controller, animated: true)
