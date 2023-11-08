@@ -9,9 +9,8 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 
 @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 internal class PaywallFragment(
-    private val requiredEntitlementIdentifier: String?
-): Fragment(), PaywallResultHandler {
-
+    private val requiredEntitlementIdentifier: String?,
+) : Fragment(), PaywallResultHandler {
     private lateinit var launcher: PaywallActivityLauncher
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +18,7 @@ internal class PaywallFragment(
 
         launcher = PaywallActivityLauncher(
             this,
-            this
+            this,
         )
 
         requiredEntitlementIdentifier?.let {
@@ -32,5 +31,4 @@ internal class PaywallFragment(
     }
 
     override fun onActivityResult(result: PaywallResult) = Unit
-
 }
