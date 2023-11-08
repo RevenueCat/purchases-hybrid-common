@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.android_tools = '7.4.0'
+    ext.android_tools = '8.0.2'
     ext.kotlin_version = '1.7.21'
     ext.android_junit5_version = '1.8.2.0'
     ext.junit5 = '5.8.2'
