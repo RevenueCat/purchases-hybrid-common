@@ -43,6 +43,25 @@ parameters:
     default: build
 
 commands:
+  install-sdkman:
+    description: Install SDKMAN
+    steps:
+      - run:
+          name: Installing SDKMAN
+          command: |
+            if curl -s "https://get.sdkman.io?rcupdate=false" | bash; then
+              echo -e '\nsource "/home/circleci/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
+              source $BASH_ENV
+            else
+              echo "Error installing SDKMAN, continuing with default Java" >&2
+            fi
+      - run:
+          name: Setup Java environment
+          command: |
+            if ! sdk env install; then
+              echo "Error installing Java SDK through SDKMAN, continuing with default Java" >&2
+            fi
+
   setup-git-credentials:
      steps:
        - run:
@@ -177,6 +196,7 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
+      - install-sdkman
       - revenuecat/prepare-android
       - android/restore-gradle-cache
       - run:
@@ -192,6 +212,7 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
+      - install-sdkman
       - revenuecat/prepare-android
       - run:
           name: Run Tests
@@ -208,6 +229,7 @@ jobs:
       resource-class: large
     steps:
       - checkout
+      - install-sdkman
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - android/accept-licenses
