@@ -28,7 +28,7 @@ executors:
     resource_class: macos.x86.medium.gen2
     working_directory: ~/ios
     macos:
-      xcode: 13.2.1
+      xcode: 13.4.1
 
 commands:
   trust-github-key:
