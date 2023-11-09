@@ -6,12 +6,12 @@ target 'PurchasesHybridCommon' do
   use_frameworks!
 
   # Pods for PurchasesHybridCommon
-  pod 'Purchases', '3.13.2'
+  pod 'Purchases', '3.14.4'
   
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
-    pod 'Quick'
-    pod 'Nimble'
+    pod 'Quick', '~> 4.0.0'
+    pod 'Nimble', '~> 9.2.0'
   end
 
 end
