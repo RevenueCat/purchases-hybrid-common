@@ -32,9 +32,25 @@ NS_ASSUME_NONNULL_BEGIN
                         observerMode:observerMode
                         userDefaults:userDefaults
                       platformFlavor:platformFlavor
-               platformFlavorVersion:platformFlavorVersion];
+               platformFlavorVersion:platformFlavorVersion
+                   dangerousSettings:nil];
 }
 #pragma clang diagnostic pop
+
++ (instancetype)configureWithAPIKey:(NSString *)APIKey
+                          appUserID:(nullable NSString *)appUserID
+                       observerMode:(BOOL)observerMode
+                       userDefaults:(nullable NSUserDefaults *)userDefaults
+                     platformFlavor:(nullable NSString *)platformFlavor
+              platformFlavorVersion:(nullable NSString *)platformFlavorVersion {
+    return [self configureWithAPIKey:APIKey
+                           appUserID:appUserID
+                        observerMode:observerMode
+                        userDefaults:userDefaults
+                      platformFlavor:platformFlavor
+               platformFlavorVersion:platformFlavorVersion
+                   dangerousSettings:nil];
+}
 
 @end
 

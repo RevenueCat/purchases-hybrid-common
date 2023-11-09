@@ -27,6 +27,14 @@ NS_ASSUME_NONNULL_BEGIN
                      platformFlavor:(nullable NSString *)platformFlavor
               platformFlavorVersion:(nullable NSString *)platformFlavorVersion;
 
++ (instancetype)configureWithAPIKey:(NSString *)APIKey
+                          appUserID:(nullable NSString *)appUserID
+                       observerMode:(BOOL)observerMode
+                       userDefaults:(nullable NSUserDefaults *)userDefaults
+                     platformFlavor:(nullable NSString *)platformFlavor
+              platformFlavorVersion:(nullable NSString *)platformFlavorVersion
+                  dangerousSettings:(nullable RCDangerousSettings *)dangerousSettings;
+
 @end
 
 
