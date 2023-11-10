@@ -74,6 +74,9 @@ jobs:
       - checkout
       - trust-github-key
       - run:
+          name: Install dependencies
+          command: bundle install --clean --path vendor/bundle
+      - run:
           name: Deploy new version
           command: bundle exec fastlane ios release
 
