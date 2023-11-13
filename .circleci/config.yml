@@ -165,15 +165,6 @@ jobs:
       - store_artifacts:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
-  
-  deploy-ios:
-    <<: *base-ios-job
-    steps:
-      - checkout
-      - trust-github-key
-      - revenuecat/install-gem-mac-dependencies:
-          cache-version: v1
-      - install-cocoapods
 
   push-pods:
     <<: *base-ios-job
@@ -401,7 +392,7 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - deploy-ios:
+      - push-pods:
           <<: *release-tags
       - deploy-android:
           <<: *release-tags
@@ -412,18 +403,14 @@ workflows:
       - make-github-release:
           <<: *release-tags
           requires:
-            - deploy-ios
+            - push-pods
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
-      - push-pods:
-          <<: *release-tags
-          requires:
-            - make-github-release
       - trigger-dependent-updates:
           <<: *release-tags
           requires:
-            - push-pods
+            - make-github-release
   
   weekly-run-workflow:
     when:
