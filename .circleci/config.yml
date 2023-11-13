@@ -166,7 +166,7 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
-  push-pods:
+  deploy-ios:
     <<: *base-ios-job
     steps:
       - checkout
@@ -392,7 +392,7 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - push-pods:
+      - deploy-ios:
           <<: *release-tags
       - deploy-android:
           <<: *release-tags
@@ -403,7 +403,7 @@ workflows:
       - make-github-release:
           <<: *release-tags
           requires:
-            - push-pods
+            - deploy-ios
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
