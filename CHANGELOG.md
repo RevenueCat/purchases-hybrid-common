@@ -1,3 +1,9 @@
+## 7.3.2
+### Dependency Updates
+* [AUTOMATIC] Android 7.2.1 => 7.2.2 (#556) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* `Android`: bump gradle version (#552) via NachoSoto (@NachoSoto)
+
 ## 7.3.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.30.2 => 4.30.4 Android 7.2.0 => 7.2.1 (#550) via RevenueCat Git Bot (@RCGitBot)
