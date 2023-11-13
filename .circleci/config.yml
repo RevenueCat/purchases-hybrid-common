@@ -405,19 +405,17 @@ workflows:
           <<: *release-tags
       - deploy-android:
           <<: *release-tags
-      # Temporarily disable typescript deployment to release 7.3.2
-      # - deploy-typescript:
-      #     <<: *release-tags
-      # - deploy-typescript-esm:
-      #     <<: *release-tags
+      - deploy-typescript:
+          <<: *release-tags
+      - deploy-typescript-esm:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-ios
             - deploy-android
-            # Temporarily disable typescript deployment to release 7.3.2
-            # - deploy-typescript
-            # - deploy-typescript-esm
+            - deploy-typescript
+            - deploy-typescript-esm
       - push-pods:
           <<: *release-tags
           requires:
