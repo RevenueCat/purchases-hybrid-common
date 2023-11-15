@@ -1,3 +1,7 @@
+## 7.3.4
+### Dependency Updates
+* Bump danger from 9.3.2 to 9.4.0 (#565) via dependabot[bot] (@dependabot[bot])
+
 ## 7.3.3
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.30.4 => 4.30.5 (#562) via RevenueCat Git Bot (@RCGitBot)
