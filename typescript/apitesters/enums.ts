@@ -7,6 +7,7 @@ import {
   PRORATION_MODE,
   IN_APP_MESSAGE_TYPE
 } from '../dist';
+import { ENTITLEMENT_VERIFICATION_MODE } from '../src';
 
 function checkPurchaseType(type: PURCHASE_TYPE): boolean {
   switch (type) {
@@ -101,6 +102,15 @@ function checkInAppMessages(messageType: IN_APP_MESSAGE_TYPE): boolean {
     case IN_APP_MESSAGE_TYPE.PRICE_INCREASE_CONSENT:
       return true;
     case IN_APP_MESSAGE_TYPE.GENERIC:
+      return true;
+  }
+}
+
+function checkVerificationMode(verificationMode: ENTITLEMENT_VERIFICATION_MODE): boolean {
+  switch (verificationMode) {
+    case ENTITLEMENT_VERIFICATION_MODE.DISABLED:
+      return true;
+    case ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL:
       return true;
   }
 }

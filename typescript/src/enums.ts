@@ -94,3 +94,28 @@ export enum IN_APP_MESSAGE_TYPE {
    */
   GENERIC = 2
 }
+
+/**
+ * Enum of entitlement verification modes.
+ */
+export enum ENTITLEMENT_VERIFICATION_MODE {
+  /**
+   * The SDK will not perform any entitlement verification.
+   */
+  DISABLED = "DISABLED",
+
+  /**
+     * Enable entitlement verification.
+     *
+     * If verification fails, this will be indicated with [VerificationResult.FAILED] in
+     * the [EntitlementInfos.verification] and [EntitlementInfo.verification] properties but parsing will not fail
+     * (i.e. Entitlements will still be granted).
+     *
+     * This can be useful if you want to handle verification failures to display an error/warning to the user
+     * or to track this situation but still grant access.
+     */
+  INFORMATIONAL = "INFORMATIONAL",
+
+  // Add ENFORCED mode once we're ready to ship it.
+  // ENFORCED = "ENFORCED"
+}
