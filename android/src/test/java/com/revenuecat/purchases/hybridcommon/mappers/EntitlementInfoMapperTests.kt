@@ -41,6 +41,7 @@ class EntitlementInfoMapperTests {
         assertThat(resultMap["billingIssueDetectedAt"]).isNull()
         assertThat(resultMap["billingIssueDetectedAtMillis"]).isNull()
         assertThat(resultMap["ownershipType"]).isEqualTo("PURCHASED")
+        assertThat(resultMap["verification"]).isEqualTo("VERIFIED")
     }
 
     @Test
