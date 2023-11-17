@@ -1,3 +1,5 @@
+import { VERIFICATION_RESULT } from "./enums";
+
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  */
@@ -93,6 +95,10 @@ export interface PurchasesEntitlementInfo {
      * UNKNOWN if the purchase has no or an unknown ownership type.
      */
     readonly ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN";
+    /**
+     * If entitlement verification was enabled, the result of that verification. If not, VerificationResult.NOT_REQUESTED
+     */
+    readonly verification: VERIFICATION_RESULT;
 }
 
 /**
@@ -107,6 +113,10 @@ export interface PurchasesEntitlementInfos {
      * Map of active EntitlementInfo (`PurchasesEntitlementInfo`) objects keyed by entitlement identifier.
      */
     readonly active: { [key: string]: PurchasesEntitlementInfo };
+    /**
+     * If entitlement verification was enabled, the result of that verification. If not, VerificationResult.NOT_REQUESTED
+     */
+    readonly verification: VERIFICATION_RESULT;
 }
 
 

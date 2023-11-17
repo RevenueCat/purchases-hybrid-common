@@ -119,3 +119,37 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
   // Add ENFORCED mode once we're ready to ship it.
   // ENFORCED = "ENFORCED"
 }
+
+/**
+ * The result of the verification process. For more details check: http://rev.cat/trusted-entitlements
+ *
+ * This is accomplished by preventing MiTM attacks between the SDK and the RevenueCat server.
+ * With verification enabled, the SDK ensures that the response created by the server was not
+ * modified by a third-party, and the response received is exactly what was sent.
+ *
+ * - Note: Verification is only performed if enabled using PurchasesConfiguration's
+ * entitlementVerificationMode property. This is disabled by default.
+ */
+export enum VERIFICATION_RESULT {
+    /**
+     * No verification was done.
+     *
+     * This value is returned when verification is not enabled in PurchasesConfiguration
+     */
+    NOT_REQUESTED = "NOT_REQUESTED",
+
+    /**
+     * Verification with our server was performed successfully.
+     */
+    VERIFIED = "VERIFIED",
+
+    /**
+     * Verification failed, possibly due to a MiTM attack.
+     */
+    FAILED = "FAILED",
+
+    /**
+     * Verification was performed on device.
+     */
+    VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE",
+}
