@@ -26,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                  platformFlavorVersion:@""
                                               usesStoreKit2IfAvailable:YES
                                                      dangerousSettings:nil
-                                  shouldShowInAppMessagesAutomatically:NO];
+                                  shouldShowInAppMessagesAutomatically:NO
+                                                      verificationMode:@""];
 }
 
 @end

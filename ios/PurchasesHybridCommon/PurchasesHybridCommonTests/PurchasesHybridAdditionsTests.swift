@@ -21,7 +21,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: nil,
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3")
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil)
                 }.notTo(raiseException())
             }
             it("initializes without raising exceptions if a suite name is passed") {
@@ -31,7 +32,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3")
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil)
                 }.notTo(raiseException())
             }
         }
@@ -44,6 +46,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
                                         verificationMode: "DISABLED")
                 }.notTo(raiseException())
             }
@@ -56,6 +59,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
                                         verificationMode: "INFORMATIONAL")
                 }.notTo(raiseException())
             }
@@ -67,6 +71,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
                                         verificationMode: "ENFORCED")
                 }.notTo(raiseException())
             }

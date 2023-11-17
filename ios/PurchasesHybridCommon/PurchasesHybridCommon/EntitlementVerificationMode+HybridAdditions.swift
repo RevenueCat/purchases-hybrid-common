@@ -28,7 +28,8 @@ extension Configuration.EntitlementVerificationMode {
     private static let modesByName: [String: Self] = Dictionary(uniqueKeysWithValues: [
         Self.disabled,
         Self.informational,
-        Self.enforced
+        // Disabled temporarily since enforced is not available yet.
+        // Self.enforced
     ].map { ($0.name, $0) })
 
 }
