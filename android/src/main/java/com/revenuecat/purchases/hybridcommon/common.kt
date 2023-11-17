@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
@@ -500,6 +501,7 @@ fun configure(
     store: Store = Store.PLAY_STORE,
     dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
     shouldShowInAppMessagesAutomatically: Boolean? = null,
+    verificationMode: String? = null,
 ) {
     Purchases.platformInfo = platformInfo
     val builder =
@@ -513,6 +515,14 @@ fun configure(
     if (shouldShowInAppMessagesAutomatically != null) {
         builder.showInAppMessagesAutomatically(shouldShowInAppMessagesAutomatically)
     }
+    if (verificationMode != null) {
+        try {
+            builder.entitlementVerificationMode(EntitlementVerificationMode.valueOf(verificationMode))
+        } catch (e: IllegalArgumentException) {
+            warnLog("Attempted to configure with unknown verification mode: $verificationMode.")
+        }
+    }
+
     Purchases.configure(builder.build())
 }
 

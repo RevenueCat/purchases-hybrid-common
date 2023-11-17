@@ -216,6 +216,7 @@ private class CommonApiTests {
         store: Store,
         dangerousSettings: DangerousSettings,
         shouldShowInAppMessagesAutomatically: Boolean?,
+        verificationMode: String?,
     ) {
         configure(context, apiKey, appUserID, observerMode, platformInfo)
         configure(context, apiKey, appUserID, observerMode, platformInfo, store, dangerousSettings)
@@ -228,6 +229,17 @@ private class CommonApiTests {
             store,
             dangerousSettings,
             shouldShowInAppMessagesAutomatically,
+        )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            observerMode,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
         )
     }
 

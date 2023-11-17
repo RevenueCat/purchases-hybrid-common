@@ -12,7 +12,7 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
+            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
@@ -21,7 +21,8 @@ import RevenueCat
                           platformFlavorVersion: String?,
                           usesStoreKit2IfAvailable: Bool = false,
                           dangerousSettings: DangerousSettings?,
-                          shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String? = nil) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -50,6 +51,16 @@ import RevenueCat
         }
         configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
                                                             shouldShowInAppMessagesAutomatically)
+
+        if let verificationMode {
+            if let mode = Configuration.EntitlementVerificationMode(name: verificationMode) {
+                if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *) {
+                    configurationBuilder = configurationBuilder.with(entitlementVerificationMode: mode)
+                }
+            } else {
+                NSLog("Attempted to configure with unknown verification mode: '\(verificationMode)'")
+            }
+        }
 
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases
