@@ -21,6 +21,7 @@
           "store" : "APP_STORE",
           "unsubscribeDetectedAt" : null,
           "unsubscribeDetectedAtMillis" : null,
+          "verification" : "NOT_REQUESTED",
           "willRenew" : true
         }
       },
@@ -38,9 +39,11 @@
           "store" : "APP_STORE",
           "unsubscribeDetectedAt" : null,
           "unsubscribeDetectedAtMillis" : null,
+          "verification" : "NOT_REQUESTED",
           "willRenew" : true
         }
-      }
+      },
+      "verification" : "NOT_REQUESTED"
     },
     "managementURL" : "https:\/\/apps.apple.com\/account\/subscriptions",
     "nonSubscriptionTransactions" : [

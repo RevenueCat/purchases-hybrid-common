@@ -11,7 +11,8 @@
     },
     "all" : {
 
-    }
+    },
+    "verification" : "NOT_REQUESTED"
   },
   "latestExpirationDate" : null,
   "latestExpirationDateMillis" : null,
