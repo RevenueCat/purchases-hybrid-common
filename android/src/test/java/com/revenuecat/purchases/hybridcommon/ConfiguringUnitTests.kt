@@ -2,21 +2,17 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.common.verification.SignatureVerificationMode
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.slot
-import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -122,12 +118,12 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with a platform info, should configure the Android SDK with that platform info`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = false,
-                platformInfo = expectedPlatformInfo,
-                store = Store.PLAY_STORE,
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            store = Store.PLAY_STORE,
         )
 
         Purchases.platformInfo = expectedPlatformInfo
@@ -136,12 +132,12 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with no verification mode`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = false,
-                platformInfo = expectedPlatformInfo,
-                verificationMode = null
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = null,
         )
         assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
@@ -149,12 +145,12 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with verification mode disabled`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = false,
-                platformInfo = expectedPlatformInfo,
-                verificationMode = "DISABLED"
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "DISABLED",
         )
         assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
@@ -162,12 +158,12 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with verification mode informational`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = false,
-                platformInfo = expectedPlatformInfo,
-                verificationMode = "INFORMATIONAL"
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "INFORMATIONAL",
         )
         assertEquals(EntitlementVerificationMode.INFORMATIONAL, purchasesConfigurationSlot.captured.verificationMode)
     }
@@ -175,12 +171,12 @@ internal class ConfiguringUnitTests {
     @Test
     fun `calling configure with verification mode enforced`() {
         configure(
-                context = mockContext,
-                apiKey = "api_key",
-                appUserID = "appUserID",
-                observerMode = false,
-                platformInfo = expectedPlatformInfo,
-                verificationMode = "ENFORCED"
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "ENFORCED",
         )
         // Enforced is not available yet
         assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
