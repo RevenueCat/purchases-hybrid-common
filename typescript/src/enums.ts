@@ -121,7 +121,7 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
 }
 
 /**
- * The result of the verification process.
+ * The result of the verification process. For more details check: http://rev.cat/trusted-entitlements
  *
  * This is accomplished by preventing MiTM attacks between the SDK and the RevenueCat server.
  * With verification enabled, the SDK ensures that the response created by the server was not
