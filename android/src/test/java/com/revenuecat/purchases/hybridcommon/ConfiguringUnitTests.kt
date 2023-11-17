@@ -126,7 +126,7 @@ internal class ConfiguringUnitTests {
             store = Store.PLAY_STORE,
         )
 
-        Purchases.platformInfo = expectedPlatformInfo
+        assertEquals(expectedPlatformInfo, Purchases.platformInfo)
     }
 
     @Test
