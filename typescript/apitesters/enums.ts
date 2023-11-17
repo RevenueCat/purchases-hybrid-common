@@ -5,9 +5,10 @@ import {
   REFUND_REQUEST_STATUS,
   INTRO_ELIGIBILITY_STATUS,
   PRORATION_MODE,
-  IN_APP_MESSAGE_TYPE
+  IN_APP_MESSAGE_TYPE,
+  ENTITLEMENT_VERIFICATION_MODE,
+  VERIFICATION_RESULT
 } from '../dist';
-import { ENTITLEMENT_VERIFICATION_MODE } from '../src';
 
 function checkPurchaseType(type: PURCHASE_TYPE): boolean {
   switch (type) {
@@ -111,6 +112,19 @@ function checkVerificationMode(verificationMode: ENTITLEMENT_VERIFICATION_MODE):
     case ENTITLEMENT_VERIFICATION_MODE.DISABLED:
       return true;
     case ENTITLEMENT_VERIFICATION_MODE.INFORMATIONAL:
+      return true;
+  }
+}
+
+function checkVerificationResult(verificationResult: VERIFICATION_RESULT): boolean {
+  switch (verificationResult) {
+    case VERIFICATION_RESULT.NOT_REQUESTED:
+      return true;
+    case VERIFICATION_RESULT.VERIFIED:
+      return true;
+    case VERIFICATION_RESULT.VERIFIED_ON_DEVICE:
+      return true;
+    case VERIFICATION_RESULT.FAILED:
       return true;
   }
 }

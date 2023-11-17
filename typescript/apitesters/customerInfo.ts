@@ -3,7 +3,8 @@ import {
   CustomerInfo,
   PurchasesEntitlementInfo,
   PurchasesEntitlementInfos,
-  PurchasesStoreTransaction
+  PurchasesStoreTransaction,
+  VERIFICATION_RESULT
 } from "../src";
 
 function checkLoginResult(result: LogInResult) {
@@ -30,6 +31,7 @@ function checkCustomerInfo(info: CustomerInfo) {
 function checkEntitlementInfos(infos: PurchasesEntitlementInfos) {
   const all: { [p: string]: PurchasesEntitlementInfo } = infos.all;
   const active: { [p: string]: PurchasesEntitlementInfo } = infos.active;
+  const verification: VERIFICATION_RESULT = infos.verification;
 }
 
 function checkEntitlementInfo(info: PurchasesEntitlementInfo) {
@@ -52,6 +54,7 @@ function checkEntitlementInfo(info: PurchasesEntitlementInfo) {
   const billingIssueDetectedAt: string | null = info.billingIssueDetectedAt;
   const billingIssueDetectedAtMillis: number | null = info.billingIssueDetectedAtMillis;
   const ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN" = info.ownershipType;
+  const verification: VERIFICATION_RESULT = info.verification;
 }
 
 function checkTransaction(transaction: PurchasesStoreTransaction) {
