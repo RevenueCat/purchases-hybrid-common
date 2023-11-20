@@ -22,7 +22,7 @@ import RevenueCat
                           usesStoreKit2IfAvailable: Bool = false,
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
-                          verificationMode: String? = nil) -> Purchases {
+                          verificationMode: String?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
