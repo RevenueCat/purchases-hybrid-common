@@ -52,5 +52,5 @@ export interface PurchasesConfiguration {
    * Verification strictness levels for [EntitlementInfo].
    * See https://rev.cat/trusted-entitlements for more info.
    */
-  entitlementVerificationInfo?: ENTITLEMENT_VERIFICATION_MODE;
+  entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
 }
