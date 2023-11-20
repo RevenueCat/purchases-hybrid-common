@@ -68,6 +68,29 @@ import RevenueCat
         return purchases
     }
 
+
+    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
+            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          observerMode: Bool,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          usesStoreKit2IfAvailable: Bool = false,
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         observerMode: observerMode,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         usesStoreKit2IfAvailable: usesStoreKit2IfAvailable,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: nil)
+    }
 }
 
 extension LogLevel {
