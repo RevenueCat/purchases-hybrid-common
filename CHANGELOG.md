@@ -1,3 +1,9 @@
+## 7.4.1
+### Bugfixes
+* Fix breaking change in objc in 7.4.0 (#572) via Toni Rico (@tonidero)
+### Dependency Updates
+* [AUTOMATIC] Android 7.2.3 => 7.2.4 (#573) via RevenueCat Git Bot (@RCGitBot)
+
 ## 7.4.0
 ### New Features
 * `Trusted Entitlements`: Add `verification` field to EntitlementInfo and EntitlementInfos (#569) via Toni Rico (@tonidero)
