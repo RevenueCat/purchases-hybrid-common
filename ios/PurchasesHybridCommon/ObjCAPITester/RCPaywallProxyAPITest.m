@@ -19,8 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testAPI {
     if (@available(iOS 15.0, *)) {
-        [PaywallProxy presentPaywall];
-        [PaywallProxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
+        PaywallProxy *proxy = [PaywallProxy new];
+        [proxy presentPaywall];
+        [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
     }
 }
 
