@@ -30,6 +30,7 @@ import UIKit
         }
 
         let controller = PaywallViewController(displayCloseButton: true)
+        controller.delegate = self
         controller.modalPresentationStyle = .pageSheet
 
         rootController.present(controller, animated: true)
