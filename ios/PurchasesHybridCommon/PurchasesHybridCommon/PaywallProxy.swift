@@ -18,10 +18,12 @@ import UIKit
 @objcMembers public class PaywallProxy: NSObject {
 
     @objc
-    public let vc: UIViewController = UIHostingController(rootView: PaywallView())
+    public func createPaywallView() -> UIViewController {
+        return UIHostingController(rootView: PaywallView())
+    }
 
     @objc
-    public static func presentPaywall() {
+    public func presentPaywall() {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
@@ -34,7 +36,7 @@ import UIKit
     }
 
     @objc
-    public static func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
@@ -42,9 +44,19 @@ import UIKit
                     self.presentPaywall()
                 }
             } catch {
-                NSLog("Failed presenting paywall")
+                NSLog("Failed presenting paywall: \(error)")
             }
         }
+    }
+
+}
+
+@available(iOS 15.0, *)
+extension PaywallProxy: PaywallViewControllerDelegate {
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didFinishPurchasingWith customerInfo: CustomerInfo) {
+        controller.dismiss(animated: true)
     }
 
 }
