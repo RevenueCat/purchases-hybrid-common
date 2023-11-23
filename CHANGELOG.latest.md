@@ -1,6 +1,2 @@
-### Breaking Changes
-* Fix entitlement verification name typo (#574) via Toni Rico (@tonidero)
-### Bugfixes
-* Fix breaking change in objc in 7.4.0 (#572) via Toni Rico (@tonidero)
 ### Dependency Updates
-* [AUTOMATIC] Android 7.2.3 => 7.2.4 (#573) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.14.2 to 1.14.3 (#576) via dependabot[bot] (@dependabot[bot])
