@@ -435,8 +435,11 @@ workflows:
 
   automatic-release:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
       - release:
           filters:
