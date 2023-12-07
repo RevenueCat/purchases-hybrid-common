@@ -37,6 +37,45 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 }.notTo(raiseException())
             }
         }
+        context("configure with verification mode") {
+            it("disabled") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
+                                        verificationMode: "DISABLED")
+                }.notTo(raiseException())
+            }
+
+            it("informational") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
+                                        verificationMode: "INFORMATIONAL")
+                }.notTo(raiseException())
+            }
+            it("enforced") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        dangerousSettings: nil,
+                                        verificationMode: "ENFORCED")
+                }.notTo(raiseException())
+            }
+        }
         context("configure with dangerous settings") {
             it("initializes without raising exceptions if dangerous settings is passed") {
                 expect {

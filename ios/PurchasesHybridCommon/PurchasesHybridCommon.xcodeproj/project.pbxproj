@@ -42,6 +42,7 @@
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
 		4F72072C2AF310390017395F /* PaywallProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F72072B2AF310390017395F /* PaywallProxy.swift */; };
 		4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */; };
+		4FBD2DA72A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */; };
 		579EF61C286B761C002263AD /* PurchasesHybridCommon.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 57FFDE47286B72750089A57B /* PurchasesHybridCommon.storekit */; };
 		57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */; };
 		57D6691E28DD19D900622DE6 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 57D6691D28DD19D900622DE6 /* SnapshotTesting */; };
@@ -137,6 +138,7 @@
 		4F72072B2AF310390017395F /* PaywallProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallProxy.swift; sourceTree = "<group>"; };
 		4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCPaywallProxyAPITest.m; sourceTree = "<group>"; };
 		4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EntitlementVerificationMode+HybridAdditions.swift"; sourceTree = "<group>"; };
 		517430C4E8FC91A379B7BFE0 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
 		57920F7A286B9B78000461A9 /* __Snapshots__ */ = {isa = PBXFileReference; lastKnownFileType = folder; path = __Snapshots__; sourceTree = "<group>"; };
 		57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NonSubscriptionTransaction+HybridAdditions.swift"; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */,
 				2D4FDFE62807436200863298 /* StoreTransaction+HybridAdditions.swift */,
 				2D4FDFEA28074C3800863298 /* EntitlementInfos+HybridAdditions.swift */,
+				4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */,
 				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
 				2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */,
 				2D900D942807580000676D73 /* Package+HybridAdditions.swift */,
@@ -730,6 +733,7 @@
 				2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */,
 				2DD3D1882810AF5A00A19EC6 /* StoreProductDiscount+HybridAdditions.swift in Sources */,
 				2DD3D1902810AF5A00A19EC6 /* StoreProduct+HybridAdditions.swift in Sources */,
+				4FBD2DA72A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift in Sources */,
 				2DD3D1872810AF5A00A19EC6 /* ErrorContainer.swift in Sources */,
 				2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */,
 				2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */,

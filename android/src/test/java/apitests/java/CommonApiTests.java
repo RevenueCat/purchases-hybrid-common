@@ -13,7 +13,6 @@ import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
-import com.revenuecat.purchases.models.GoogleProrationMode;
 import com.revenuecat.purchases.models.InAppMessageType;
 
 import java.util.List;
@@ -187,7 +186,9 @@ class CommonApiTests {
                                 PlatformInfo platformInfo,
                                 Store store,
                                 DangerousSettings dangerousSettings,
-                                Boolean shouldShowInAppMessagesAutomatically) {
+                                Boolean shouldShowInAppMessagesAutomatically,
+                                String verificationMode
+    ) {
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store);
         CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store, dangerousSettings);
@@ -200,6 +201,16 @@ class CommonApiTests {
                 store,
                 dangerousSettings,
                 shouldShowInAppMessagesAutomatically);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                observerMode,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically,
+                verificationMode);
     }
 
     private void checkGetPromotionalOffer() {

@@ -26,7 +26,17 @@ NS_ASSUME_NONNULL_BEGIN
                                                  platformFlavorVersion:@""
                                               usesStoreKit2IfAvailable:YES
                                                      dangerousSettings:nil
-                                  shouldShowInAppMessagesAutomatically:NO];
+                                  shouldShowInAppMessagesAutomatically:NO
+                                                      verificationMode:@""];
+    RCPurchases *purchases2 __unused = [RCPurchases configureWithAPIKey:@""
+                                                              appUserID:@""
+                                                           observerMode:NO
+                                                  userDefaultsSuiteName:nil
+                                                         platformFlavor:nil
+                                                  platformFlavorVersion:@""
+                                               usesStoreKit2IfAvailable:YES
+                                                      dangerousSettings:nil
+                                   shouldShowInAppMessagesAutomatically:NO];
 }
 
 @end

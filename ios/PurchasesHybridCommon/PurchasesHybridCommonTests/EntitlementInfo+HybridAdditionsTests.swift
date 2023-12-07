@@ -47,6 +47,15 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                     }
                 }
             }
+
+            context("verification") {
+                it("is properly set") {
+                    let mockEntitlementInfo = self.mockEntitlementInfo(store: Store.appStore)
+                    let dictionary = mockEntitlementInfo.dictionary
+
+                    expect(dictionary["verification"] as? String).to(equal("NOT_REQUESTED"))
+                }
+            }
         }
     }
 
@@ -69,15 +78,5 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
             verification: .notRequested,
             requestDate: .init()
         )
-    }
-
-    private func mockProductData(withStore store: String) -> [String: Any] {
-        return [
-            "expires_date": Self.expiresDate,
-            "original_purchase_date": Self.purchaseDate,
-            "period_type": "normal",
-            "purchase_date": Self.purchaseDate,
-            "store": store
-        ]
     }
 }

@@ -19,7 +19,7 @@ class EntitlementInfoMapperTests {
     fun `EntitlementInfo maps to expected map`() {
         val mockEntitlementInfo = generateMockEntitlementInfo(store = Store.PLAY_STORE)
         val resultMap = mockEntitlementInfo.map()
-        assertThat(resultMap.size).isEqualTo(19)
+        assertThat(resultMap.size).isEqualTo(20)
         assertThat(resultMap["identifier"]).isEqualTo("entitlement_id")
         assertThat(resultMap["isActive"]).isEqualTo(true)
         assertThat(resultMap["willRenew"]).isEqualTo(true)
@@ -41,6 +41,7 @@ class EntitlementInfoMapperTests {
         assertThat(resultMap["billingIssueDetectedAt"]).isNull()
         assertThat(resultMap["billingIssueDetectedAtMillis"]).isNull()
         assertThat(resultMap["ownershipType"]).isEqualTo("PURCHASED")
+        assertThat(resultMap["verification"]).isEqualTo("VERIFIED")
     }
 
     @Test
