@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.Store
@@ -12,7 +13,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.slot
-import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -35,6 +35,8 @@ internal class ConfiguringUnitTests {
         every {
             Purchases.configure(configuration = capture(purchasesConfigurationSlot))
         } returns mockPurchases
+
+        mockLogs()
     }
 
     @Test
@@ -123,9 +125,61 @@ internal class ConfiguringUnitTests {
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
-        verify(exactly = 1) {
-            Purchases.platformInfo = expectedPlatformInfo
-        }
+
+        assertEquals(expectedPlatformInfo, Purchases.platformInfo)
+    }
+
+    @Test
+    fun `calling configure with no verification mode`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = null,
+        )
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
+    }
+
+    @Test
+    fun `calling configure with verification mode disabled`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "DISABLED",
+        )
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
+    }
+
+    @Test
+    fun `calling configure with verification mode informational`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "INFORMATIONAL",
+        )
+        assertEquals(EntitlementVerificationMode.INFORMATIONAL, purchasesConfigurationSlot.captured.verificationMode)
+    }
+
+    @Test
+    fun `calling configure with verification mode enforced`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            observerMode = false,
+            platformInfo = expectedPlatformInfo,
+            verificationMode = "ENFORCED",
+        )
+        // Enforced is not available yet
+        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test

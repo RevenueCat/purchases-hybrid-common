@@ -1,3 +1,29 @@
+## 8.1.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.1 => 4.31.2 Android 7.2.6 => 7.2.7 (#588) via RevenueCat Git Bot (@RCGitBot)
+* Bump danger from 9.4.0 to 9.4.1 (#583) via dependabot[bot] (@dependabot[bot])
+
+## 8.1.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.30.5 => 4.31.1 Android 7.2.4 => 7.2.6 (#584) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.14.2 to 1.14.3 (#576) via dependabot[bot] (@dependabot[bot])
+
+## 8.0.0
+### Breaking Changes
+* Fix entitlement verification name typo (#574) via Toni Rico (@tonidero)
+### Bugfixes
+* Fix breaking change in objc in 7.4.0 (#572) via Toni Rico (@tonidero)
+### Dependency Updates
+* [AUTOMATIC] Android 7.2.3 => 7.2.4 (#573) via RevenueCat Git Bot (@RCGitBot)
+
+## 7.4.0
+### New Features
+* `Trusted Entitlements`: Add `verification` field to EntitlementInfo and EntitlementInfos (#569) via Toni Rico (@tonidero)
+* `Trusted Entitlements`: add support for setting `VerificationMode` (#451) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* Bump fastlane from 2.216.0 to 2.217.0 (#566) via dependabot[bot] (@dependabot[bot])
+* Bump danger from 9.3.2 to 9.4.0 (#565) via dependabot[bot] (@dependabot[bot])
+
 ## 7.3.3
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.30.4 => 4.30.5 (#562) via RevenueCat Git Bot (@RCGitBot)

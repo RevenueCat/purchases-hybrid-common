@@ -1,3 +1,5 @@
+import { ENTITLEMENT_VERIFICATION_MODE } from "./enums";
+
 /**
  * Holds parameters to initialize the SDK.
  */
@@ -45,4 +47,10 @@ export interface PurchasesConfiguration {
    * check: https://rev.cat/storekit-message and https://rev.cat/googleplayinappmessaging
    */
   shouldShowInAppMessagesAutomatically?: boolean;
+
+  /**
+   * Verification strictness levels for [EntitlementInfo].
+   * See https://rev.cat/trusted-entitlements for more info.
+   */
+  entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
 }
