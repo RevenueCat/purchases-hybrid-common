@@ -1,3 +1,9 @@
+## 8.1.2
+### Dependency Updates
+* Bump danger from 9.4.1 to 9.4.2 (#594) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Merge dependency-update workflows and fix automatic-release being triggered when executing action (#591) via Cesar de la Vega (@vegaro)
+
 ## 8.1.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.1 => 4.31.2 Android 7.2.6 => 7.2.7 (#588) via RevenueCat Git Bot (@RCGitBot)
