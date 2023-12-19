@@ -61,7 +61,6 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
         self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo)
-        controller.dismiss(animated: true)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
