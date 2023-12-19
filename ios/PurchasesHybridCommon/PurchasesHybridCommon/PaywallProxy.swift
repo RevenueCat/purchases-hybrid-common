@@ -67,8 +67,6 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
-        // We are not dismissing the controller here since it's already performed in the other delegate method.
-        // Currently in the native sdk, both methods are called, and we don't want to dismiss the controller twice.
         self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo, transaction: transaction)
     }
 
