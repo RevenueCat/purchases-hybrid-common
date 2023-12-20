@@ -17,6 +17,9 @@ import UIKit
 @available(iOS 15.0, *)
 @objcMembers public class PaywallProxy: NSObject {
 
+    /// See ``PaywallViewControllerDelegate`` for receiving events.
+    public weak var delegate: PaywallViewControllerDelegate?
+
     @objc
     public func createPaywallView() -> UIViewController {
         return UIHostingController(rootView: PaywallView())
@@ -57,9 +60,23 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
-        controller.dismiss(animated: true)
+        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo)
     }
 
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didFinishPurchasingWith customerInfo: CustomerInfo,
+                                      transaction: StoreTransaction?) {
+        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo, transaction: transaction)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didFinishRestoringWith customerInfo: CustomerInfo) {
+        self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo)
+    }
+
+    public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerWasDismissed?(controller)
+    }
 }
 
 #endif
