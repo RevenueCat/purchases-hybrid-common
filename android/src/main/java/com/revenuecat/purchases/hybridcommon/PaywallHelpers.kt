@@ -6,10 +6,18 @@ import androidx.fragment.app.FragmentActivity
 fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     requiredEntitlementIdentifier: String? = null,
+    paywallResultListener: PaywallResultListener? = null,
 ) {
     fragment
         .supportFragmentManager
         .beginTransaction()
-        .add(PaywallFragment(requiredEntitlementIdentifier), PaywallFragment.tag)
+        .add(
+            PaywallFragment.newInstance(
+                fragment,
+                requiredEntitlementIdentifier,
+                paywallResultListener,
+            ),
+            PaywallFragment.tag,
+        )
         .commit()
 }
