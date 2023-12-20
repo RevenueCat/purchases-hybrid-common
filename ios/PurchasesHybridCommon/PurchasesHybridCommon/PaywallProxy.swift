@@ -73,6 +73,10 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo)
     }
+
+    public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerWasDismissed?(controller)
+    }
 }
 
 #endif
