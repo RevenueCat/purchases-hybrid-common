@@ -15,7 +15,7 @@ fun presentPaywallFromFragment(
             PaywallFragment.newInstance(
                 fragment,
                 requiredEntitlementIdentifier,
-                paywallResultListener
+                paywallResultListener,
             ),
             PaywallFragment.tag,
         )
