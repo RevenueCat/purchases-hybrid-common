@@ -426,17 +426,13 @@ workflows:
           requires:
             - make-github-release
   
-  weekly-run-workflow:
+  dependency-update:
     when:
-      and:
-        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
-    jobs:
-      - dependency-update 
-
-  trigger-dependency-update:
-    when:
-      equal: [ dependency-update, << pipeline.parameters.action >> ]
+      or:
+        - and:
+            - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+            - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
+        - equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
       - dependency-update
 
@@ -449,8 +445,11 @@ workflows:
 
   automatic-release:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
       - release:
           filters:
