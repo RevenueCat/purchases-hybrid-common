@@ -19,6 +19,6 @@ include(":hybridcommon")
 
 // Run enableLocalBuild task to enable building purchases-android from your local copy
 if (file(".composite-enable").exists()) {
-    val path = file(".composite-enable").readText()
+    val path = file(".composite-enable").readText().trim()
     includeBuild(path)
 }

@@ -58,25 +58,3 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
 }
-
-val purchasesPath: String by project // Command line argument is always a part of project
-
-// Call passing parameter -PpurchasesPath="$HOME/Development/repos/purchases-android"
-task("enableLocalBuild") {
-    group = "Tools"
-    description = "Enable composite build"
-    doLast {
-        File(".composite-enable").writeText(purchasesPath)
-    }
-}
-
-task("disableLocalBuild") {
-    group = "Tools"
-    description = "Disable composite build"
-    doLast {
-        val file = File(".composite-enable")
-        if (file.exists()) {
-            file.delete()
-        }
-    }
-}
