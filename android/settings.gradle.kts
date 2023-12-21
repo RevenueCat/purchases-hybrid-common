@@ -22,3 +22,4 @@ if (file(".composite-enable").exists()) {
     val path = file(".composite-enable").readText().trim()
     includeBuild(path)
 }
+include(":hybridcommon-ui")

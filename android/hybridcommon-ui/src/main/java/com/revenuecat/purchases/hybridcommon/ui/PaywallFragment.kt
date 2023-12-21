@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.hybridcommon
+package com.revenuecat.purchases.hybridcommon.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.mavenPublish)
     alias(libs.plugins.detekt)
 }
 
@@ -15,7 +16,7 @@ detekt {
 }
 
 android {
-    namespace = "com.revenuecat.api_tests"
+    namespace = "com.revenuecat.purchases.hybridcommon.ui"
     compileSdk = 34
 
     defaultConfig {
@@ -28,10 +29,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
@@ -44,8 +42,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":hybridcommon"))
-    implementation(project(":hybridcommon-ui"))
     implementation(libs.core.ktx)
+    implementation(libs.fragment.ktx)
+    api(libs.purchases)
+    api(libs.purchases.ui)
     testImplementation(libs.junit)
 }

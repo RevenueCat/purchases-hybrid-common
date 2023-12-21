@@ -1,6 +1,7 @@
 [versions]
 agp = "8.2.0"
 assertj-core = "3.22.0"
+fragmentKtx = "1.6.2"
 junit-jupiter = "5.8.2"
 kotlin = "1.7.21"
 core-ktx = "1.12.0"
@@ -14,6 +15,7 @@ mavenPublish = "0.22.0"
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj-core" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
