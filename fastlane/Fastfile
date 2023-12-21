@@ -13,7 +13,6 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
-    './android/build.gradle' => ['versionName "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
     './typescript/package.json' => ['"version": "{x}"']
 }
@@ -30,7 +29,7 @@ files_to_update_ios_dependency = {
 }
 
 files_to_update_android_dependency = {
-    'android/build.gradle' => ['ext.purchases_version = \'{x}\'']
+    'android/gradle/libs.versions.toml' => ['purchases = "{x}"']
 }
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
