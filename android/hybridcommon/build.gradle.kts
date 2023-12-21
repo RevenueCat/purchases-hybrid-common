@@ -47,7 +47,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.core.ktx)
     api(libs.purchases)
     api(libs.purchases.ui)
