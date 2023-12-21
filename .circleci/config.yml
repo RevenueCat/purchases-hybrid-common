@@ -225,7 +225,7 @@ jobs:
           cache-version: v1
       - android/accept-licenses
       - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}
+          key: jars-{{ checksum "android/hybridcommon/build.gradle.kts" }}
       - android/restore-build-cache
       - run:
           name: Deployment
