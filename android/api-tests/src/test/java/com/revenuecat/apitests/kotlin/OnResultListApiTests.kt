@@ -1,4 +1,4 @@
-package com.revenuecat.api_tests.kotlin
+package com.revenuecat.apitests.kotlin
 
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
 import com.revenuecat.purchases.hybridcommon.OnResultList

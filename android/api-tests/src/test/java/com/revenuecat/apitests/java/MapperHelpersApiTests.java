@@ -1,4 +1,4 @@
-package com.revenuecat.api_tests.java.mappers;
+package com.revenuecat.apitests.java.mappers;
 
 import com.revenuecat.purchases.hybridcommon.mappers.MappersHelpersKt;
 

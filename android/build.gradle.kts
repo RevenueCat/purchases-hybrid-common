@@ -4,16 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.mavenPublish) apply false
-    alias(libs.plugins.detekt)
-}
-
-dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detekt}")
-}
-
-detekt {
-    buildUponDefaultConfig = true
-    baseline = file("config/detekt/detekt-baseline.xml")
+    alias(libs.plugins.detekt) apply false
 }
 
 true // Needed to make the Suppress annotation work for the plugins block

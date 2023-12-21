@@ -1,4 +1,4 @@
-package apitests.kotlin.com.revenuecat.purchases.hybridcommon.mappers
+package com.revenuecat.apitests.kotlin.mappers
 
 import com.revenuecat.purchases.hybridcommon.mappers.convertToJson
 import com.revenuecat.purchases.hybridcommon.mappers.convertToJsonArray

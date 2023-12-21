@@ -4,6 +4,16 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.androidJunit5)
     alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.detekt)
+}
+
+dependencies {
+    detektPlugins(libs.detekt.formatting)
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    baseline = file("config/detekt/detekt-baseline.xml")
 }
 
 android {

@@ -26,6 +26,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
 purchases-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }
 purchases-amazon = { module = "com.revenuecat.purchases:purchases-store-amazon", version.ref = "purchases" }
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 [plugins]
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

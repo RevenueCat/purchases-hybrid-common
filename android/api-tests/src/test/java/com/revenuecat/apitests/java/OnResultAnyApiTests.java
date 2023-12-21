@@ -1,4 +1,4 @@
-package com.revenuecat.api_tests.java;
+package com.revenuecat.apitests.java;
 
 import com.revenuecat.purchases.hybridcommon.ErrorContainer;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;

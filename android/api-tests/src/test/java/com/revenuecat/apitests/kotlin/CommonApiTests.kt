@@ -1,4 +1,4 @@
-package com.revenuecat.api_tests.kotlin
+package com.revenuecat.apitests.kotlin
 
 import android.app.Activity
 import android.content.Context
@@ -152,6 +152,7 @@ private class CommonApiTests {
         setLogHandler(callback)
     }
 
+    @Suppress("EmptyFunctionBlock")
     fun checkSetLogHandlerWithOnResult() {
         setLogHandlerWithOnResult(object : OnResult {
             override fun onReceived(map: Map<String, *>) {}

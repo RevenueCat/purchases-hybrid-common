@@ -2,6 +2,16 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.detekt)
+}
+
+dependencies {
+    detektPlugins(libs.detekt.formatting)
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    baseline = file("config/detekt/detekt-baseline.xml")
 }
 
 android {
