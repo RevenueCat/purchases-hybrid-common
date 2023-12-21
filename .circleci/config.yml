@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@2.2.0
+  revenuecat: revenuecat/sdks-common-config@3.0.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -225,7 +225,7 @@ jobs:
           cache-version: v1
       - android/accept-licenses
       - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}
+          key: jars-{{ checksum "android/hybridcommon/build.gradle.kts" }}
       - android/restore-build-cache
       - run:
           name: Deployment
