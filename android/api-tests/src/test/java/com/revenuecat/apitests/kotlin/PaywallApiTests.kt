@@ -6,7 +6,7 @@ import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 
-@Suppress("unused", "UNUSED_VARIABLE")
+@Suppress("unused", "UNUSED_VARIABLE", "EmptyFunctionBlock")
 private class PaywallApiTests {
 
     @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
@@ -35,5 +35,4 @@ private class PaywallApiTests {
             paywallResultListener = paywallResultListener,
         )
     }
-
 }
