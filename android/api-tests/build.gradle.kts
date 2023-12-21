@@ -47,6 +47,4 @@ dependencies {
     implementation(project(":hybridcommon"))
     implementation(libs.core.ktx)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }

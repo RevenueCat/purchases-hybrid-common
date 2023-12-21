@@ -57,8 +57,6 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
 
 val purchasesPath: String by project // Command line argument is always a part of project
