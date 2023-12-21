@@ -1,7 +1,0 @@
-rootProject.name = 'purchases-hybrid-common'
-
-// Run enableLocalBuild task to enable building purchases-android from your local copy
-if (file(".composite-enable").exists()) {
-    String path = file(".composite-enable").text
-    includeBuild (path)
-}
