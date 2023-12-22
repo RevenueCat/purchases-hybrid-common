@@ -406,25 +406,25 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      # - deploy-ios:
-      #     <<: *release-tags
+      - deploy-ios:
+          <<: *release-tags
       - deploy-android:
           <<: *release-tags
-      # - deploy-typescript:
-      #     <<: *release-tags
-      # - deploy-typescript-esm:
-      #     <<: *release-tags
+      - deploy-typescript:
+          <<: *release-tags
+      - deploy-typescript-esm:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
-            # - deploy-ios
+            - deploy-ios
             - deploy-android
-            # - deploy-typescript
-            # - deploy-typescript-esm
-      # - trigger-dependent-updates:
-      #     <<: *release-tags
-      #     requires:
-      #       - make-github-release
+            - deploy-typescript
+            - deploy-typescript-esm
+      - trigger-dependent-updates:
+          <<: *release-tags
+          requires:
+            - make-github-release
   
   dependency-update:
     when:
