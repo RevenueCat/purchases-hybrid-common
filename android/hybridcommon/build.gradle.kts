@@ -46,7 +46,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.core.ktx)
     api(libs.purchases)
     api(libs.purchases.amazon)
     testImplementation(libs.kotlin.test)
