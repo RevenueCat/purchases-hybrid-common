@@ -27,37 +27,48 @@ import UIKit
 
     @objc
     public func presentPaywall() {
-        presentPaywall(optionalDisplayCloseButton: nil)
+        presentPaywall(optionalDisplayCloseButton: nil, optionalOffering: nil)
     }
 
     @objc
     public func presentPaywall(displayCloseButton: Bool) {
-        presentPaywall(optionalDisplayCloseButton: displayCloseButton)
+        presentPaywall(optionalDisplayCloseButton: displayCloseButton, optionalOffering: nil)
+    }
+
+    @objc
+    public func presentPaywall(offering: Offering) {
+        presentPaywall(optionalDisplayCloseButton: nil, optionalOffering: offering)
+    }
+
+    @objc
+    public func presentPaywall(offering: Offering, displayCloseButton: Bool) {
+        presentPaywall(optionalDisplayCloseButton: displayCloseButton, optionalOffering: offering)
     }
 
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                               optionalDisplayCloseButton: nil)
+                               optionalDisplayCloseButton: nil,
+                               optionalOffering: nil)
     }
 
     @objc
-    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, displayCloseButton: Bool) {
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, 
+                                       displayCloseButton: Bool) {
         presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                               optionalDisplayCloseButton: displayCloseButton)
+                               optionalDisplayCloseButton: displayCloseButton,
+                               optionalOffering: nil)
     }
 
-    private func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, optionalDisplayCloseButton: Bool?) {
+    private func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, 
+                                        optionalDisplayCloseButton: Bool?,
+                                        optionalOffering: Offering?) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
                 if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
-                    if let displayCloseButton = optionalDisplayCloseButton {
-                        self.presentPaywall(displayCloseButton: displayCloseButton)
-                    } else {
-                        self.presentPaywall()
-                    }
-
+                    self.presentPaywall(optionalDisplayCloseButton: optionalDisplayCloseButton,
+                                        optionalOffering: optionalOffering)
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
@@ -65,7 +76,8 @@ import UIKit
         }
     }
 
-    private func presentPaywall(optionalDisplayCloseButton: Bool?) {
+    private func presentPaywall(optionalDisplayCloseButton: Bool?,
+                                optionalOffering: Offering?) {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
@@ -73,7 +85,7 @@ import UIKit
 
         let controller: PaywallViewController
         if let displayCloseButton = optionalDisplayCloseButton {
-            controller = PaywallViewController(displayCloseButton: displayCloseButton)
+            controller = PaywallViewController(offering: optionalOffering, displayCloseButton: displayCloseButton)
         } else {
             controller = PaywallViewController()
         }

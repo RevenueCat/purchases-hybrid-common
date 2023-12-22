@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import androidx.fragment.app.FragmentActivity
+import com.revenuecat.purchases.Offering
 
 @JvmOverloads
 fun presentPaywallFromFragment(
@@ -8,6 +9,7 @@ fun presentPaywallFromFragment(
     requiredEntitlementIdentifier: String? = null,
     paywallResultListener: PaywallResultListener? = null,
     shouldDisplayDismissButton: Boolean? = null,
+    offering: Offering? = null,
 ) {
     fragment
         .supportFragmentManager
@@ -18,6 +20,7 @@ fun presentPaywallFromFragment(
                 requiredEntitlementIdentifier,
                 paywallResultListener,
                 shouldDisplayDismissButton,
+                offering,
             ),
             PaywallFragment.tag,
         )
