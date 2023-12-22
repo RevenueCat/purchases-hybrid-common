@@ -7,6 +7,7 @@ fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     requiredEntitlementIdentifier: String? = null,
     paywallResultListener: PaywallResultListener? = null,
+    shouldDisplayDismissButton: Boolean? = null,
 ) {
     fragment
         .supportFragmentManager
@@ -16,6 +17,7 @@ fun presentPaywallFromFragment(
                 fragment,
                 requiredEntitlementIdentifier,
                 paywallResultListener,
+                shouldDisplayDismissButton,
             ),
             PaywallFragment.tag,
         )

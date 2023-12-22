@@ -21,7 +21,8 @@ class PaywallApiTests {
     private void checkPresentPaywall(
             FragmentActivity fragmentActivity,
             String requiredEntitlementIdentifier,
-            PaywallResultListener listener
+            PaywallResultListener listener,
+            Boolean shouldDisplayDismissButton
     ) {
         PaywallHelpersKt.presentPaywallFromFragment(
                 fragmentActivity
@@ -31,6 +32,9 @@ class PaywallApiTests {
         );
         PaywallHelpersKt.presentPaywallFromFragment(
                 fragmentActivity, requiredEntitlementIdentifier, listener
+        );
+        PaywallHelpersKt.presentPaywallFromFragment(
+                fragmentActivity, requiredEntitlementIdentifier, listener, shouldDisplayDismissButton
         );
     }
 }
