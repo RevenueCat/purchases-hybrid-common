@@ -61,6 +61,20 @@ import UIKit
         }
     }
 
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, displayCloseButton: Bool) {
+        _ = Task { @MainActor in
+            do {
+                let customerInfo = try await Purchases.shared.customerInfo()
+                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
+                    self.presentPaywall(displayCloseButton: displayCloseButton)
+                }
+            } catch {
+                NSLog("Failed presenting paywall: \(error)")
+            }
+        }
+    }
+
     private func configureAndPresentPaywall(_ viewController: PaywallViewController, rootController: UIViewController) {
         viewController.delegate = self
         viewController.modalPresentationStyle = .pageSheet
