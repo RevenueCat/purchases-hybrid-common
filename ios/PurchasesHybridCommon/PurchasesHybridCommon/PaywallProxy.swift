@@ -26,13 +26,15 @@ import UIKit
     }
 
     @objc
-    public func presentPaywall() {
+    public func presentPaywall(
+        displayCloseButton: Bool = false
+    ) {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
         }
 
-        let controller = PaywallViewController(displayCloseButton: true)
+        let controller = PaywallViewController(displayCloseButton: displayCloseButton)
         controller.delegate = self
         controller.modalPresentationStyle = .pageSheet
 
