@@ -1,19 +1,4 @@
 ### RevenueCatUI
-* Separate paywalls into a different module (#604) via Toni Rico (@tonidero)
-* Add PaywallFragmentViewModel to share data with caller fragment/activity (#602) via Toni Rico (@tonidero)
-* Paywalls: Expose delegate in PaywallProxy to receive events (#586) via Toni Rico (@tonidero)
-### Other Changes
-* Update paywalls branch with main (#592) via Cesar de la Vega (@vegaro)
-* Re-organize android library (#603) via Toni Rico (@tonidero)
-* Update paywalls with latest main (#601) via Toni Rico (@tonidero)
-* Actually set delegate via NachoSoto (@NachoSoto)
-* Dismiss paywall automatically via NachoSoto (@NachoSoto)
-* `displayCloseButton` via NachoSoto (@NachoSoto)
-* Lint via NachoSoto (@NachoSoto)
-* [remove me] change `minSdkVersion` via NachoSoto (@NachoSoto)
-* Fix other platforms via NachoSoto (@NachoSoto)
-* Optional parameter via NachoSoto (@NachoSoto)
-* Lint via NachoSoto (@NachoSoto)
-* Revert SDK version change via NachoSoto (@NachoSoto)
-* Finished API via NachoSoto (@NachoSoto)
-* [WIP] `RevenueCatUI` support via NachoSoto (@NachoSoto)
+* Update purchases android to 7.3.0 (#609) via Toni Rico (@tonidero)
+### Dependency Updates
+* Remove core-ktx dependency (#608) via Toni Rico (@tonidero)
