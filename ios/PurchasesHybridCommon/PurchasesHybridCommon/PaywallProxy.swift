@@ -26,19 +26,25 @@ import UIKit
     }
 
     @objc
-    public func presentPaywall(
-        displayCloseButton: Bool = false
-    ) {
+    public func presentPaywall() {
+        guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
+            NSLog("Unable to find root UIViewController")
+            return
+        }
+
+        let controller = PaywallViewController()
+        configureAndPresentPaywall(controller, rootController: rootController)
+    }
+
+    @objc
+    public func presentPaywall(displayCloseButton: Bool) {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
         }
 
         let controller = PaywallViewController(displayCloseButton: displayCloseButton)
-        controller.delegate = self
-        controller.modalPresentationStyle = .pageSheet
-
-        rootController.present(controller, animated: true)
+        configureAndPresentPaywall(controller, rootController: rootController)
     }
 
     @objc
@@ -53,6 +59,12 @@ import UIKit
                 NSLog("Failed presenting paywall: \(error)")
             }
         }
+    }
+
+    private func configureAndPresentPaywall(_ viewController: PaywallViewController, rootController: UIViewController) {
+        viewController.delegate = self
+        viewController.modalPresentationStyle = .pageSheet
+        rootController.present(viewController, animated: true)
     }
 
 }
