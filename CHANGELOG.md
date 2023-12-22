@@ -1,3 +1,24 @@
+## 8.1.3-beta.5
+### RevenueCatUI
+* Separate paywalls into a different module (#604) via Toni Rico (@tonidero)
+* Add PaywallFragmentViewModel to share data with caller fragment/activity (#602) via Toni Rico (@tonidero)
+* Paywalls: Expose delegate in PaywallProxy to receive events (#586) via Toni Rico (@tonidero)
+### Other Changes
+* Update paywalls branch with main (#592) via Cesar de la Vega (@vegaro)
+* Re-organize android library (#603) via Toni Rico (@tonidero)
+* Update paywalls with latest main (#601) via Toni Rico (@tonidero)
+* Actually set delegate via NachoSoto (@NachoSoto)
+* Dismiss paywall automatically via NachoSoto (@NachoSoto)
+* `displayCloseButton` via NachoSoto (@NachoSoto)
+* Lint via NachoSoto (@NachoSoto)
+* [remove me] change `minSdkVersion` via NachoSoto (@NachoSoto)
+* Fix other platforms via NachoSoto (@NachoSoto)
+* Optional parameter via NachoSoto (@NachoSoto)
+* Lint via NachoSoto (@NachoSoto)
+* Revert SDK version change via NachoSoto (@NachoSoto)
+* Finished API via NachoSoto (@NachoSoto)
+* [WIP] `RevenueCatUI` support via NachoSoto (@NachoSoto)
+
 ## 8.1.2
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.2 => 4.31.4 Android 7.2.7 => 7.2.8 (#596) via RevenueCat Git Bot (@RCGitBot)
