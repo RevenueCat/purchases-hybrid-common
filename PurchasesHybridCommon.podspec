@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "PurchasesHybridCommon"
-  s.version          = "8.1.3-beta.5"
+  s.version          = "8.1.3-beta.6"
   s.summary          = "Common files for hybrid SDKs for RevenueCat's Subscription and in-app-purchase backend service."
 
   s.description      = <<-DESC

@@ -1,3 +1,9 @@
+## 8.1.3-beta.6
+### RevenueCatUI
+* Update purchases android to 7.3.0 (#609) via Toni Rico (@tonidero)
+### Dependency Updates
+* Remove core-ktx dependency (#608) via Toni Rico (@tonidero)
+
 ## 8.1.3-beta.5
 ### RevenueCatUI
 * Separate paywalls into a different module (#604) via Toni Rico (@tonidero)
