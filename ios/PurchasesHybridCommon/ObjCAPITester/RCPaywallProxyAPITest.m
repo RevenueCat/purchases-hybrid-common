@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
         [proxy presentPaywall];
         [proxy presentPaywallWithDisplayCloseButton:true];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
+        [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
     }
 }
 
