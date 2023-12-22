@@ -27,58 +27,60 @@ import UIKit
 
     @objc
     public func presentPaywall() {
-        guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
-            NSLog("Unable to find root UIViewController")
-            return
-        }
-
-        let controller = PaywallViewController()
-        configureAndPresentPaywall(controller, rootController: rootController)
+        presentPaywall(optionalDisplayCloseButton: nil)
     }
 
     @objc
     public func presentPaywall(displayCloseButton: Bool) {
+        presentPaywall(optionalDisplayCloseButton: displayCloseButton)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+        presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                               optionalDisplayCloseButton: nil)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, displayCloseButton: Bool) {
+        presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                               optionalDisplayCloseButton: displayCloseButton)
+    }
+
+    private func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, optionalDisplayCloseButton: Bool?) {
+        _ = Task { @MainActor in
+            do {
+                let customerInfo = try await Purchases.shared.customerInfo()
+                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
+                    if let displayCloseButton = optionalDisplayCloseButton {
+                        self.presentPaywall(displayCloseButton: displayCloseButton)
+                    } else {
+                        self.presentPaywall()
+                    }
+
+                }
+            } catch {
+                NSLog("Failed presenting paywall: \(error)")
+            }
+        }
+    }
+
+    private func presentPaywall(optionalDisplayCloseButton: Bool?) {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
         }
 
-        let controller = PaywallViewController(displayCloseButton: displayCloseButton)
-        configureAndPresentPaywall(controller, rootController: rootController)
-    }
-
-    @objc
-    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
-        _ = Task { @MainActor in
-            do {
-                let customerInfo = try await Purchases.shared.customerInfo()
-                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
-                    self.presentPaywall()
-                }
-            } catch {
-                NSLog("Failed presenting paywall: \(error)")
-            }
+        let controller: PaywallViewController
+        if let displayCloseButton = optionalDisplayCloseButton {
+            controller = PaywallViewController(displayCloseButton: displayCloseButton)
+        } else {
+            controller = PaywallViewController()
         }
-    }
 
-    @objc
-    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, displayCloseButton: Bool) {
-        _ = Task { @MainActor in
-            do {
-                let customerInfo = try await Purchases.shared.customerInfo()
-                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
-                    self.presentPaywall(displayCloseButton: displayCloseButton)
-                }
-            } catch {
-                NSLog("Failed presenting paywall: \(error)")
-            }
-        }
-    }
-
-    private func configureAndPresentPaywall(_ viewController: PaywallViewController, rootController: UIViewController) {
-        viewController.delegate = self
-        viewController.modalPresentationStyle = .pageSheet
-        rootController.present(viewController, animated: true)
+        controller.delegate = self
+        controller.modalPresentationStyle = .pageSheet
+        rootController.present(controller, animated: true)
     }
 
 }
