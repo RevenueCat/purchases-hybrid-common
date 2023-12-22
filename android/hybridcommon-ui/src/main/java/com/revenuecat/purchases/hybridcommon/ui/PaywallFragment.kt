@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -13,6 +14,7 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     companion object {
         private const val requiredEntitlementIdentifierKey = "requiredEntitlementIdentifier"
+        private const val shouldDisplayDismissButtonKey = "shouldDisplayDismissButton"
         const val tag: String = "revenuecat-paywall-fragment"
 
         @JvmStatic
@@ -20,12 +22,14 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             activity: FragmentActivity,
             requiredEntitlementIdentifier: String? = null,
             paywallResultListener: PaywallResultListener? = null,
+            shouldDisplayDismissButton: Boolean? = null,
         ): PaywallFragment {
             val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
                     putString(requiredEntitlementIdentifierKey, requiredEntitlementIdentifier)
+                    shouldDisplayDismissButton?.let { putBoolean(shouldDisplayDismissButtonKey, it) }
                 }
             }
         }
@@ -37,6 +41,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private val requiredEntitlementIdentifier: String?
         get() = arguments?.getString(requiredEntitlementIdentifierKey)
 
+    private val shouldDisplayDismissButton: Boolean?
+        get() = arguments?.getBoolean(shouldDisplayDismissButtonKey)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,8 +53,13 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         )
         viewModel = ViewModelProvider(requireActivity())[PaywallFragmentViewModel::class.java]
 
-        requiredEntitlementIdentifier?.let {
-            launcher.launchIfNeeded(requiredEntitlementIdentifier = it)
+        requiredEntitlementIdentifier?.let { requiredEntitlementIdentifier ->
+            shouldDisplayDismissButton?.let { shouldDisplayDismissButton ->
+                launcher.launchIfNeeded(
+                    requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                    shouldDisplayDismissButton = shouldDisplayDismissButton,
+                )
+            } ?: launcher.launchIfNeeded(requiredEntitlementIdentifier = requiredEntitlementIdentifier)
         } ?: launcher.launch()
     }
 
