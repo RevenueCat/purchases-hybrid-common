@@ -21,8 +21,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        // TODO: revert this to 19
-        minSdk = 24
+        minSdk = 19
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -49,7 +48,6 @@ android {
 dependencies {
     implementation(libs.core.ktx)
     api(libs.purchases)
-    api(libs.purchases.ui)
     api(libs.purchases.amazon)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.junit)

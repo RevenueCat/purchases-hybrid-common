@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/api-tests" />
             <option value="$PROJECT_DIR$/hybridcommon" />
+            <option value="$PROJECT_DIR$/hybridcommon-ui" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
