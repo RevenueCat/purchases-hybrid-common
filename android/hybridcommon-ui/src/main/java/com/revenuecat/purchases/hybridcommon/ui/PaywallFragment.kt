@@ -73,11 +73,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val offering = offeringIdentifier
 
         if (displayDismissButton != null && offering != null) {
-                launcher.launchIfNeeded(
-                    requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                    shouldDisplayDismissButton = displayDismissButton,
-                    offeringIdentifier = offering,
-                )
+            launcher.launchIfNeeded(
+                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                shouldDisplayDismissButton = displayDismissButton,
+                offeringIdentifier = offering,
+            )
         } else if (displayDismissButton != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
