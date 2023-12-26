@@ -11,7 +11,7 @@ buildscript {
     ext.assertj_version = '3.22.0'
     ext.mockk_version = '1.12.8'
     ext.gradle_maven_publish = '0.22.0'
-    ext.purchases_version = '7.3.0'
+    ext.purchases_version = '7.3.1'
     ext.detekt_version = '1.23.0'
 
     repositories {
