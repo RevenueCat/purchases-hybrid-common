@@ -1,7 +1,4 @@
 pre-push:
-  commands:
-    change-dir:
-      run: cd android
   scripts:
     "detekt.sh":
       runner: bash
