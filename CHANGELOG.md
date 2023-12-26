@@ -1,3 +1,7 @@
+## 8.2.1
+### Dependency Updates
+* [AUTOMATIC] Android 7.3.0 => 7.3.1 (#618) via RevenueCat Git Bot (@RCGitBot)
+
 ## 8.2.0
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.5 => 4.31.6 Android 7.2.8 => 7.3.0 (#613) via RevenueCat Git Bot (@RCGitBot)
