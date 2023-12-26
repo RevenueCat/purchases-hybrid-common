@@ -1,4 +1,5 @@
-### RevenueCatUI
-* Update purchases android to 7.3.0 (#609) via Toni Rico (@tonidero)
 ### Dependency Updates
-* Remove core-ktx dependency (#608) via Toni Rico (@tonidero)
+* [AUTOMATIC] iOS 4.31.5 => 4.31.6 Android 7.2.8 => 7.3.0 (#613) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 4.31.4 => 4.31.5 (#599) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Trim version file contents (#607) via Toni Rico (@tonidero)
