@@ -13,6 +13,7 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     companion object {
         private const val requiredEntitlementIdentifierKey = "requiredEntitlementIdentifier"
+        private const val shouldDisplayDismissButtonKey = "shouldDisplayDismissButton"
         const val tag: String = "revenuecat-paywall-fragment"
 
         @JvmStatic
@@ -20,12 +21,14 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             activity: FragmentActivity,
             requiredEntitlementIdentifier: String? = null,
             paywallResultListener: PaywallResultListener? = null,
+            shouldDisplayDismissButton: Boolean? = null,
         ): PaywallFragment {
             val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
                     putString(requiredEntitlementIdentifierKey, requiredEntitlementIdentifier)
+                    shouldDisplayDismissButton?.let { putBoolean(shouldDisplayDismissButtonKey, it) }
                 }
             }
         }
@@ -37,6 +40,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private val requiredEntitlementIdentifier: String?
         get() = arguments?.getString(requiredEntitlementIdentifierKey)
 
+    private val shouldDisplayDismissButton: Boolean?
+        get() = arguments?.getBoolean(shouldDisplayDismissButtonKey)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,12 +52,27 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         )
         viewModel = ViewModelProvider(requireActivity())[PaywallFragmentViewModel::class.java]
 
-        requiredEntitlementIdentifier?.let {
-            launcher.launchIfNeeded(requiredEntitlementIdentifier = it)
-        } ?: launcher.launch()
+        requiredEntitlementIdentifier?.let { requiredEntitlementIdentifier ->
+            launchPaywallIfNeeded(requiredEntitlementIdentifier)
+        } ?: launchPaywall()
     }
 
     override fun onActivityResult(result: PaywallResult) {
         viewModel.paywallResultListener?.onPaywallResult(result)
+    }
+
+    private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+        shouldDisplayDismissButton?.let { shouldDisplayDismissButton ->
+            launcher.launchIfNeeded(
+                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                shouldDisplayDismissButton = shouldDisplayDismissButton,
+            )
+        } ?: launcher.launchIfNeeded(requiredEntitlementIdentifier = requiredEntitlementIdentifier)
+    }
+
+    private fun launchPaywall() {
+        shouldDisplayDismissButton?.let {
+            launcher.launch(shouldDisplayDismissButton = it)
+        } ?: launcher.launch()
     }
 }

@@ -27,30 +27,60 @@ import UIKit
 
     @objc
     public func presentPaywall() {
-        guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
-            NSLog("Unable to find root UIViewController")
-            return
-        }
+        presentPaywall(optionalDisplayCloseButton: nil)
+    }
 
-        let controller = PaywallViewController(displayCloseButton: true)
-        controller.delegate = self
-        controller.modalPresentationStyle = .pageSheet
-
-        rootController.present(controller, animated: true)
+    @objc
+    public func presentPaywall(displayCloseButton: Bool) {
+        presentPaywall(optionalDisplayCloseButton: displayCloseButton)
     }
 
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+        presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                               optionalDisplayCloseButton: nil)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, displayCloseButton: Bool) {
+        presentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                               optionalDisplayCloseButton: displayCloseButton)
+    }
+
+    private func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, optionalDisplayCloseButton: Bool?) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
                 if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
-                    self.presentPaywall()
+                    if let displayCloseButton = optionalDisplayCloseButton {
+                        self.presentPaywall(displayCloseButton: displayCloseButton)
+                    } else {
+                        self.presentPaywall()
+                    }
+
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
             }
         }
+    }
+
+    private func presentPaywall(optionalDisplayCloseButton: Bool?) {
+        guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
+            NSLog("Unable to find root UIViewController")
+            return
+        }
+
+        let controller: PaywallViewController
+        if let displayCloseButton = optionalDisplayCloseButton {
+            controller = PaywallViewController(displayCloseButton: displayCloseButton)
+        } else {
+            controller = PaywallViewController()
+        }
+
+        controller.delegate = self
+        controller.modalPresentationStyle = .pageSheet
+        rootController.present(controller, animated: true)
     }
 
 }

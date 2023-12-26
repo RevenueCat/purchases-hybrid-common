@@ -21,7 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
     if (@available(iOS 15.0, *)) {
         PaywallProxy *proxy = [PaywallProxy new];
         [proxy presentPaywall];
+        [proxy presentPaywallWithDisplayCloseButton:true];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
+        [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
     }
 }
 

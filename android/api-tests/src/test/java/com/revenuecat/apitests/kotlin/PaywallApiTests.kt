@@ -21,6 +21,7 @@ private class PaywallApiTests {
         fragmentActivity: FragmentActivity,
         requiredEntitlementIdentifier: String?,
         paywallResultListener: PaywallResultListener?,
+        shouldDisplayDismissButton: Boolean?,
     ) {
         presentPaywallFromFragment(
             fragment = fragmentActivity,
@@ -33,6 +34,12 @@ private class PaywallApiTests {
             fragment = fragmentActivity,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
+        )
+        presentPaywallFromFragment(
+            fragment = fragmentActivity,
+            requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+            paywallResultListener = paywallResultListener,
+            shouldDisplayDismissButton = shouldDisplayDismissButton,
         )
     }
 }
