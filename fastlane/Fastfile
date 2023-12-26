@@ -412,7 +412,7 @@ def build_and_publish_typescript_package
 end
 
 def current_version_number
-  File.read("../.version")
+  File.read("../.version").strip
 end
 
 def push_pods
