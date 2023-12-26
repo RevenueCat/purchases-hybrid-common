@@ -1,6 +1,7 @@
 package com.revenuecat.apitests.kotlin
 
 import androidx.fragment.app.FragmentActivity
+import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
@@ -22,6 +23,7 @@ private class PaywallApiTests {
         requiredEntitlementIdentifier: String?,
         paywallResultListener: PaywallResultListener?,
         shouldDisplayDismissButton: Boolean?,
+        offering: Offering?,
     ) {
         presentPaywallFromFragment(
             fragment = fragmentActivity,
@@ -40,6 +42,13 @@ private class PaywallApiTests {
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,
+        )
+        presentPaywallFromFragment(
+            fragment = fragmentActivity,
+            requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+            paywallResultListener = paywallResultListener,
+            shouldDisplayDismissButton = shouldDisplayDismissButton,
+            offering = offering,
         )
     }
 }

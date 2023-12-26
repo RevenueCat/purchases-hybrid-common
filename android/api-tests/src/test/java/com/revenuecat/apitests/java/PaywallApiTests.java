@@ -3,6 +3,7 @@ package com.revenuecat.apitests.java;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.revenuecat.purchases.Offering;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallHelpersKt;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener;
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult;
@@ -22,7 +23,8 @@ class PaywallApiTests {
             FragmentActivity fragmentActivity,
             String requiredEntitlementIdentifier,
             PaywallResultListener listener,
-            Boolean shouldDisplayDismissButton
+            Boolean shouldDisplayDismissButton,
+            Offering offering
     ) {
         PaywallHelpersKt.presentPaywallFromFragment(
                 fragmentActivity
@@ -35,6 +37,9 @@ class PaywallApiTests {
         );
         PaywallHelpersKt.presentPaywallFromFragment(
                 fragmentActivity, requiredEntitlementIdentifier, listener, shouldDisplayDismissButton
+        );
+        PaywallHelpersKt.presentPaywallFromFragment(
+                fragmentActivity, requiredEntitlementIdentifier, listener, shouldDisplayDismissButton, offering
         );
     }
 }

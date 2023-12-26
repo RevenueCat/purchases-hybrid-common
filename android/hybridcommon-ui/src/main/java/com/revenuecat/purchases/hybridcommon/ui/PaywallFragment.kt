@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -14,6 +15,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     companion object {
         private const val requiredEntitlementIdentifierKey = "requiredEntitlementIdentifier"
         private const val shouldDisplayDismissButtonKey = "shouldDisplayDismissButton"
+        private const val offeringIdentifierKey = "offeringIdentifier"
         const val tag: String = "revenuecat-paywall-fragment"
 
         @JvmStatic
@@ -22,6 +24,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             requiredEntitlementIdentifier: String? = null,
             paywallResultListener: PaywallResultListener? = null,
             shouldDisplayDismissButton: Boolean? = null,
+            offering: Offering? = null,
         ): PaywallFragment {
             val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
@@ -29,6 +32,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 arguments = Bundle().apply {
                     putString(requiredEntitlementIdentifierKey, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(shouldDisplayDismissButtonKey, it) }
+                    offering?.let { putString(offeringIdentifierKey, it.identifier) }
                 }
             }
         }
@@ -42,6 +46,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
     private val shouldDisplayDismissButton: Boolean?
         get() = arguments?.getBoolean(shouldDisplayDismissButtonKey)
+
+    private val offeringIdentifier: String?
+        get() = arguments?.getString(offeringIdentifierKey)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,17 +69,45 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
-        shouldDisplayDismissButton?.let { shouldDisplayDismissButton ->
+        val displayDismissButton = shouldDisplayDismissButton
+        val offering = offeringIdentifier
+
+        if (displayDismissButton != null && offering != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                shouldDisplayDismissButton = shouldDisplayDismissButton,
+                shouldDisplayDismissButton = displayDismissButton,
+                offeringIdentifier = offering,
             )
-        } ?: launcher.launchIfNeeded(requiredEntitlementIdentifier = requiredEntitlementIdentifier)
+        } else if (displayDismissButton != null) {
+            launcher.launchIfNeeded(
+                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                shouldDisplayDismissButton = displayDismissButton,
+            )
+        } else if (offering != null) {
+            launcher.launchIfNeeded(
+                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                offeringIdentifier = offering,
+            )
+        } else {
+            launcher.launchIfNeeded(requiredEntitlementIdentifier = requiredEntitlementIdentifier)
+        }
     }
 
     private fun launchPaywall() {
-        shouldDisplayDismissButton?.let {
-            launcher.launch(shouldDisplayDismissButton = it)
-        } ?: launcher.launch()
+        val offering = offeringIdentifier
+        val displayDismissButton = shouldDisplayDismissButton
+
+        if (displayDismissButton != null && offering != null) {
+            launcher.launch(
+                shouldDisplayDismissButton = displayDismissButton,
+                offeringIdentifier = offering,
+            )
+        } else if (displayDismissButton != null) {
+            launcher.launch(shouldDisplayDismissButton = displayDismissButton)
+        } else if (offering != null) {
+            launcher.launch(offeringIdentifier = offering)
+        } else {
+            launcher.launch()
+        }
     }
 }
