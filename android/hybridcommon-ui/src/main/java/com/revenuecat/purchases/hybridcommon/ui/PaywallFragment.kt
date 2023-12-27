@@ -45,7 +45,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         get() = arguments?.getString(requiredEntitlementIdentifierKey)
 
     private val shouldDisplayDismissButton: Boolean?
-        get() = arguments?.getBoolean(shouldDisplayDismissButtonKey)
+        get() {
+            return arguments?.let {
+                if (it.containsKey(shouldDisplayDismissButtonKey)) {
+                    it.getBoolean(shouldDisplayDismissButtonKey)
+                } else {
+                    null
+                }
+            }
+        }
 
     private val offeringIdentifier: String?
         get() = arguments?.getString(offeringIdentifierKey)
