@@ -26,6 +26,11 @@ import UIKit
     }
 
     @objc
+    public func createFooterPaywallView() -> UIViewController {
+        return PaywallFooterViewController()
+    }
+
+    @objc
     public func presentPaywall() {
         privatePresentPaywall(displayCloseButton: nil, offering: nil)
     }
