@@ -1,6 +1,3 @@
 ### RevenueCatUI
-* Add offering parameter for launching paywalls (#612) via Cesar de la Vega (@vegaro)
-* Add shouldDisplayDismissButton (#606) via Cesar de la Vega (@vegaro)
-### Dependency Updates
-* Android 7.3.0 => 7.3.1
-* iOS 4.31.5 => 4.31.6
+* Fix dismiss button not showing in Android when not specified (#622) via Cesar de la Vega (@vegaro)
+* Add createFooterPaywallView to PaywallProxy (#624) via Cesar de la Vega (@vegaro)
