@@ -1,3 +1,9 @@
+## 8.2.2
+### Dependency Updates
+* Bump fastlane from 2.217.0 to 2.218.0 (#626) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add lefthook to configure a pre-push hook that runs detekt (#615) via Cesar de la Vega (@vegaro)
+
 ## 8.2.1
 ### Dependency Updates
 * [AUTOMATIC] Android 7.3.0 => 7.3.1 (#618) via RevenueCat Git Bot (@RCGitBot)
