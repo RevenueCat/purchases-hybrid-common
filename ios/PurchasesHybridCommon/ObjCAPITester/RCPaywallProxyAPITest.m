@@ -25,10 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
-                                                onPaywallDisplayResult:^(BOOL shouldDisplay) {}];
+                                                       onPaywallResult:^(NSString *result) {}];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
                                                     displayCloseButton:true
-                                                onPaywallDisplayResult:^(BOOL shouldDisplay) {}];
+                                                       onPaywallResult:^(NSString *result) {}];
     }
 }
 

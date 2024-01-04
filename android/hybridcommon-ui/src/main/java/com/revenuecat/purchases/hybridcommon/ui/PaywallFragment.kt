@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
+import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 
@@ -16,6 +17,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         private const val requiredEntitlementIdentifierKey = "requiredEntitlementIdentifier"
         private const val shouldDisplayDismissButtonKey = "shouldDisplayDismissButton"
         private const val offeringIdentifierKey = "offeringIdentifier"
+        private const val notPresentedPaywallResult = "NOT_PRESENTED"
         const val tag: String = "revenuecat-paywall-fragment"
 
         @JvmStatic
@@ -74,6 +76,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
     override fun onActivityResult(result: PaywallResult) {
         viewModel.paywallResultListener?.onPaywallResult(result)
+        viewModel.paywallResultListener?.onPaywallResult(result.name)
     }
 
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
@@ -85,6 +88,13 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 shouldDisplayDismissButton = displayDismissButton,
                 offeringIdentifier = offering,
+                paywallDisplayCallback = object : PaywallDisplayCallback {
+                    override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
+                        if (!wasDisplayed) {
+                            viewModel.paywallResultListener?.onPaywallResult(notPresentedPaywallResult)
+                        }
+                    }
+                },
             )
         } else if (displayDismissButton != null) {
             launcher.launchIfNeeded(

@@ -16,6 +16,10 @@ class PaywallApiTests {
             @Override
             public void onPaywallResult(@NonNull PaywallResult paywallResult) {
             }
+
+            @Override
+            public void onPaywallResult(@NonNull String paywallResult) {
+            }
         };
     }
 
