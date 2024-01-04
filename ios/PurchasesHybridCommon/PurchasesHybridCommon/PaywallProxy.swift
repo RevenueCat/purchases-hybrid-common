@@ -50,28 +50,54 @@ import UIKit
         privatePresentPaywall(displayCloseButton: displayCloseButton, offering: offering)
     }
 
+    @available(*, deprecated, message: "Use presentPaywallIfNeeded with onPaywallDisplayResult instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                       displayCloseButton: nil,
-                                      offering: nil)
+                                      offering: nil,
+                                      onPaywallDisplayResult: nil)
     }
 
+    @available(*, deprecated, message: "Use presentPaywallIfNeeded with onPaywallDisplayResult instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, 
                                        displayCloseButton: Bool) {
         privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                       displayCloseButton: displayCloseButton,
-                                      offering: nil)
+                                      offering: nil,
+                                      onPaywallDisplayResult: nil)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
+                                       onPaywallDisplayResult: ((Bool) -> Void)?) {
+        privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                      displayCloseButton: nil,
+                                      offering: nil,
+                                      onPaywallDisplayResult: onPaywallDisplayResult)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
+                                       displayCloseButton: Bool,
+                                       onPaywallDisplayResult: ((Bool) -> Void)?) {
+        privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                      displayCloseButton: displayCloseButton,
+                                      offering: nil,
+                                      onPaywallDisplayResult: onPaywallDisplayResult)
     }
 
     private func privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                                displayCloseButton: Bool?,
-                                               offering: Offering?) {
+                                               offering: Offering?,
+                                               onPaywallDisplayResult: ((Bool) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
-                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
+                let shouldDisplay = !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
+                onPaywallDisplayResult?(shouldDisplay)
+                if shouldDisplay {
                     self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                         offering: offering)
                 }
