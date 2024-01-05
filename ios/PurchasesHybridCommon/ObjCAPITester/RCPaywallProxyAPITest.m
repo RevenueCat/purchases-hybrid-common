@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
         PaywallProxy *proxy = [PaywallProxy new];
         [proxy presentPaywall];
         [proxy presentPaywallWithDisplayCloseButton:true];
+        [proxy presentPaywallOnPaywallResult:^(NSString *result) {}];
+        [proxy presentPaywallWithDisplayCloseButton:true onPaywallResult:^(NSString *result) {}];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
