@@ -22,15 +22,15 @@ NS_ASSUME_NONNULL_BEGIN
         PaywallProxy *proxy = [PaywallProxy new];
         [proxy presentPaywall];
         [proxy presentPaywallWithDisplayCloseButton:true];
-        [proxy presentPaywallOnPaywallResult:^(NSString *result) {}];
-        [proxy presentPaywallWithDisplayCloseButton:true onPaywallResult:^(NSString *result) {}];
+        [proxy presentPaywallWithPaywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallWithDisplayCloseButton:true paywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
-                                                       onPaywallResult:^(NSString *result) {}];
+                                                  paywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
                                                     displayCloseButton:true
-                                                       onPaywallResult:^(NSString *result) {}];
+                                                  paywallResultHandler:^(NSString *result) {}];
     }
 }
 
