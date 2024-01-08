@@ -7,7 +7,8 @@ import {
   PRORATION_MODE,
   IN_APP_MESSAGE_TYPE,
   ENTITLEMENT_VERIFICATION_MODE,
-  VERIFICATION_RESULT
+  VERIFICATION_RESULT,
+  PAYWALL_RESULT
 } from '../dist';
 
 function checkPurchaseType(type: PURCHASE_TYPE): boolean {
@@ -125,6 +126,21 @@ function checkVerificationResult(verificationResult: VERIFICATION_RESULT): boole
     case VERIFICATION_RESULT.VERIFIED_ON_DEVICE:
       return true;
     case VERIFICATION_RESULT.FAILED:
+      return true;
+  }
+}
+
+function checkPaywallResult(paywallResult: PAYWALL_RESULT): boolean {
+  switch (paywallResult) {
+    case PAYWALL_RESULT.NOT_PRESENTED:
+      return true;
+    case PAYWALL_RESULT.ERROR:
+      return true;
+    case PAYWALL_RESULT.CANCELLED:
+      return true;
+    case PAYWALL_RESULT.PURCHASED:
+      return true;
+    case PAYWALL_RESULT.RESTORED:
       return true;
   }
 }
