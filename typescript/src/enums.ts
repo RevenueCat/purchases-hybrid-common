@@ -153,3 +153,34 @@ export enum VERIFICATION_RESULT {
      */
     VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE",
 }
+
+/**
+ * The result of presenting a paywall. This will be the last situation the user experienced before the 
+ * paywall closed.
+ */
+export enum PAYWALL_RESULT {
+  /**
+   * If the paywall wasn't presented. Only returned when using "presentPaywallIfNeeded"
+   */
+  NOT_PRESENTED = "NOT_PRESENTED",
+
+  /**
+   * If an error happened during purchase/restoration.
+   */
+  ERROR = "ERROR",
+
+  /**
+   * If the paywall was closed without performing an operation
+   */
+  CANCELLED = "CANCELLED",
+
+  /**
+   * If a successful purchase happened inside the paywall
+   */
+  PURCHASED = "PURCHASED",
+
+  /**
+   * If a successful restore happened inside the paywall
+   */
+  RESTORED = "RESTORED",
+}
