@@ -273,6 +273,10 @@ end
 
 desc "Run automatic bump in other repos"
 lane :bump_hybrid_dependencies do |options|
+  if current_version_prerelease?
+    UI.error("Hybrids won't update automatically for PHC prerelase versions")
+    next
+  end
   version_number_for_bump = current_version_number
   repo_name = options[:repo_name]
 
@@ -391,8 +395,7 @@ def make_typescript_package_esm
 end
 
 def build_and_publish_typescript_package
-  version_number = current_version_number
-  is_prerelease = Gem::Version.new(version_number).prerelease?
+  is_prerelease = current_version_prerelease?
 
   build_args = [
     'yarn && yarn build'
@@ -409,6 +412,10 @@ def build_and_publish_typescript_package
     sh(build_args)
     sh(publish_args)
   end
+end
+
+def current_version_prerelease?
+  Gem::Version.new(current_version_number).prerelease?
 end
 
 def current_version_number
