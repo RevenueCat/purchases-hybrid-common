@@ -1,3 +1,12 @@
+## 8.2.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 7.3.1 => 7.3.2 (#632) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane from 2.218.0 to 2.219.0 (#629) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.217.0 to 2.218.0 (#626) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add lefthook to configure a pre-push hook that runs detekt (#615) via Cesar de la Vega (@vegaro)
+
 ## 8.2.1
 ### Dependency Updates
 * [AUTOMATIC] Android 7.3.0 => 7.3.1 (#618) via RevenueCat Git Bot (@RCGitBot)
