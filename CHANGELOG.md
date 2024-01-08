@@ -1,3 +1,8 @@
+## 8.10.0-beta.9
+### RevenueCatUI
+* Add `PAYWALL_RESULT` to typescript enums (#634) via Toni Rico (@tonidero)
+* Support result present paywall (#628) via Toni Rico (@tonidero)
+
 ## 8.10.0-beta.8
 ### RevenueCatUI
 * Fix dismiss button not showing in Android when not specified (#622) via Cesar de la Vega (@vegaro)
