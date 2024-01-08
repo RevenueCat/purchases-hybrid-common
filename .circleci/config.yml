@@ -25,8 +25,13 @@ aliases:
       tags:
         ignore:
           - /^.*-SNAPSHOT/
-          - latest
-          - /^.*-amazon*/
+      branches:
+        ignore: /.*/
+  stable-release-tags: &stable-release-tags
+    filters:
+      tags:
+        ignore:
+          - /^.*-*/
       branches:
         ignore: /.*/
   release-branches: &release-branches
@@ -267,7 +272,7 @@ jobs:
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
-  
+
   dependency-update:
     docker:
       - image: cimg/ruby:3.1.2
@@ -282,7 +287,7 @@ jobs:
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
-  
+
   tag-release-branch:
     docker:
       - image: cimg/ruby:3.1.2
@@ -294,7 +299,7 @@ jobs:
       - trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - run: 
+      - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
 
@@ -422,10 +427,10 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
       - trigger-dependent-updates:
-          <<: *release-tags
+          <<: *stable-release-tags
           requires:
             - make-github-release
-  
+
   dependency-update:
     when:
       or:
