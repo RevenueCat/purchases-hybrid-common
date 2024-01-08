@@ -1,0 +1,4 @@
+pre-push:
+  scripts:
+    "detekt.sh":
+      runner: bash
