@@ -20,6 +20,9 @@ import UIKit
     /// See ``PaywallViewControllerDelegate`` for receiving events.
     public weak var delegate: PaywallViewControllerDelegate?
 
+    private var resultByVC: [PaywallViewController: (paywallResultHandler: (String) -> Void,
+                                                     result: PaywallResult)] = [:]
+
     @objc
     public func createPaywallView() -> UIViewController {
         return UIHostingController(rootView: PaywallView())
@@ -30,50 +33,109 @@ import UIKit
         return PaywallFooterViewController()
     }
 
+    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall() {
-        privatePresentPaywall(displayCloseButton: nil, offering: nil)
+        self.privatePresentPaywall(displayCloseButton: nil, offering: nil)
     }
 
+    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(displayCloseButton: Bool) {
-        privatePresentPaywall(displayCloseButton: displayCloseButton, offering: nil)
+        self.privatePresentPaywall(displayCloseButton: displayCloseButton, offering: nil)
     }
 
+    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(offering: Offering) {
-        privatePresentPaywall(displayCloseButton: nil, offering: offering)
+        self.privatePresentPaywall(displayCloseButton: nil, offering: offering)
     }
 
+    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(offering: Offering, displayCloseButton: Bool) {
-        privatePresentPaywall(displayCloseButton: displayCloseButton, offering: offering)
+        self.privatePresentPaywall(displayCloseButton: displayCloseButton, offering: offering)
     }
 
     @objc
-    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
-        privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                      displayCloseButton: nil,
-                                      offering: nil)
+    public func presentPaywall(paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywall(displayCloseButton: nil, offering: nil, paywallResultHandler: paywallResultHandler)
     }
 
+    @objc
+    public func presentPaywall(displayCloseButton: Bool, paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
+                                   offering: nil,
+                                   paywallResultHandler: paywallResultHandler)
+    }
+
+    @objc
+    public func presentPaywall(offering: Offering, paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywall(displayCloseButton: nil,
+                                   offering: offering,
+                                   paywallResultHandler: paywallResultHandler)
+    }
+
+    @objc
+    public func presentPaywall(offering: Offering,
+                               displayCloseButton: Bool,
+                               paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
+                                   offering: offering,
+                                   paywallResultHandler: paywallResultHandler)
+    }
+
+    @available(*, deprecated, message: "Use presentPaywallIfNeeded with paywallResultHandler instead")
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
+        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                           displayCloseButton: nil,
+                                           offering: nil,
+                                           paywallResultHandler: nil)
+    }
+
+    @available(*, deprecated, message: "Use presentPaywallIfNeeded with paywallResultHandler instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String, 
                                        displayCloseButton: Bool) {
-        privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                      displayCloseButton: displayCloseButton,
-                                      offering: nil)
+        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                           displayCloseButton: displayCloseButton,
+                                           offering: nil,
+                                           paywallResultHandler: nil)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
+                                       paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                           displayCloseButton: nil,
+                                           offering: nil,
+                                           paywallResultHandler: paywallResultHandler)
+    }
+
+    @objc
+    public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
+                                       displayCloseButton: Bool,
+                                       paywallResultHandler: @escaping (String) -> Void) {
+        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                           displayCloseButton: displayCloseButton,
+                                           offering: nil,
+                                           paywallResultHandler: paywallResultHandler)
     }
 
     private func privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                                displayCloseButton: Bool?,
-                                               offering: Offering?) {
+                                               offering: Offering?,
+                                               paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
-                if !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier) {
+                let shouldDisplay = !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
+                if shouldDisplay {
                     self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                         offering: offering)
+                } else {
+                    paywallResultHandler?(PaywallResult.notPresented.name)
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
@@ -82,7 +144,8 @@ import UIKit
     }
 
     private func privatePresentPaywall(displayCloseButton: Bool?,
-                                       offering: Offering?) {
+                                       offering: Offering?,
+                                       paywallResultHandler: ((String) -> Void)? = nil) {
         guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
@@ -97,6 +160,9 @@ import UIKit
 
         controller.delegate = self
         controller.modalPresentationStyle = .pageSheet
+        if let paywallResultHandler {
+            self.resultByVC[controller] = (paywallResultHandler, .cancelled)
+        }
         rootController.present(controller, animated: true)
     }
 
@@ -107,6 +173,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
+        self.resultByVC[controller]?.1 = .purchased
         self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo)
     }
 
@@ -118,11 +185,14 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
+        self.resultByVC[controller]?.1 = .restored
         self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo)
     }
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerWasDismissed?(controller)
+        guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
+        paywallResultHandler(result.name)
     }
 }
 

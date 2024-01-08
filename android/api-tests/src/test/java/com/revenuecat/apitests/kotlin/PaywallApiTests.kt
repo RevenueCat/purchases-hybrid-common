@@ -15,6 +15,9 @@ private class PaywallApiTests {
         val listener: PaywallResultListener = object : PaywallResultListener {
             override fun onPaywallResult(paywallResult: PaywallResult) {
             }
+
+            override fun onPaywallResult(paywallResult: String) {
+            }
         }
     }
 
