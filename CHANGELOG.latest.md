@@ -1,3 +1,6 @@
 ### RevenueCatUI
-* Add `PAYWALL_RESULT` to typescript enums (#634) via Toni Rico (@tonidero)
-* Support result present paywall (#628) via Toni Rico (@tonidero)
+* Add API tests for paywall result enum in typescript (#636) via Toni Rico (@tonidero)
+* Fix paywall result not being returned (#639) via Toni Rico (@tonidero)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 7.3.1 => 7.3.2 (#632) via RevenueCat Git Bot (@RCGitBot)
