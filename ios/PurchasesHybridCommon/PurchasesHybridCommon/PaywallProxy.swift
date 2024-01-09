@@ -133,7 +133,8 @@ import UIKit
                 let shouldDisplay = !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
                 if shouldDisplay {
                     self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                        offering: offering)
+                                               offering: offering,
+                                               paywallResultHandler: paywallResultHandler)
                 } else {
                     paywallResultHandler?(PaywallResult.notPresented.name)
                 }

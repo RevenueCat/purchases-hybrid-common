@@ -82,32 +82,38 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         val displayDismissButton = shouldDisplayDismissButton
         val offering = offeringIdentifier
+        val paywallDisplayCallback = object : PaywallDisplayCallback {
+            override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
+                if (!wasDisplayed) {
+                    viewModel.paywallResultListener?.onPaywallResult(notPresentedPaywallResult)
+                }
+            }
+        }
 
         if (displayDismissButton != null && offering != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 shouldDisplayDismissButton = displayDismissButton,
                 offeringIdentifier = offering,
-                paywallDisplayCallback = object : PaywallDisplayCallback {
-                    override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
-                        if (!wasDisplayed) {
-                            viewModel.paywallResultListener?.onPaywallResult(notPresentedPaywallResult)
-                        }
-                    }
-                },
+                paywallDisplayCallback = paywallDisplayCallback,
             )
         } else if (displayDismissButton != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 shouldDisplayDismissButton = displayDismissButton,
+                paywallDisplayCallback = paywallDisplayCallback,
             )
         } else if (offering != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 offeringIdentifier = offering,
+                paywallDisplayCallback = paywallDisplayCallback,
             )
         } else {
-            launcher.launchIfNeeded(requiredEntitlementIdentifier = requiredEntitlementIdentifier)
+            launcher.launchIfNeeded(
+                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
+                paywallDisplayCallback = paywallDisplayCallback,
+            )
         }
     }
 
