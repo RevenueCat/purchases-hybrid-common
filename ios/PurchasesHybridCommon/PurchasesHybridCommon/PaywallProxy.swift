@@ -30,7 +30,10 @@ import UIKit
 
     @objc
     public func createFooterPaywallView() -> UIViewController {
-        return PaywallFooterViewController()
+        let controller = PaywallFooterViewController()
+        controller.delegate = self
+
+        return controller
     }
 
     @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
@@ -195,6 +198,11 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
     }
+
+    public func paywallViewControlleSizeDidChange(_ size: CGSize) {
+        self.delegate?.paywallViewControlleSizeDidChange?(size)
+    }
+
 }
 
 #endif
