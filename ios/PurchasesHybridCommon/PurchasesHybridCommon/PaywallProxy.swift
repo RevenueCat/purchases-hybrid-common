@@ -199,8 +199,9 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         paywallResultHandler(result.name)
     }
 
-    public func paywallViewControlleSizeDidChange(_ size: CGSize) {
-        self.delegate?.paywallViewControlleSizeDidChange?(size)
+    public func paywallViewController(_ controller: PaywallViewController, 
+                                      didChangeSize size: CGSize) {
+        self.delegate?.paywallViewController?(controller, didChangeSize: size)
     }
 
 }
