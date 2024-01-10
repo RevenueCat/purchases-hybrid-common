@@ -1,29 +1,3 @@
-## 8.10.0-beta.10
-### RevenueCatUI
-* Add API tests for paywall result enum in typescript (#636) via Toni Rico (@tonidero)
-* Fix paywall result not being returned (#639) via Toni Rico (@tonidero)
-### Dependency Updates
-* [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] Android 7.3.1 => 7.3.2 (#632) via RevenueCat Git Bot (@RCGitBot)
-
-## 8.10.0-beta.9
-### RevenueCatUI
-* Add `PAYWALL_RESULT` to typescript enums (#634) via Toni Rico (@tonidero)
-* Support result present paywall (#628) via Toni Rico (@tonidero)
-
-## 8.10.0-beta.8
-### RevenueCatUI
-* Fix dismiss button not showing in Android when not specified (#622) via Cesar de la Vega (@vegaro)
-* Add createFooterPaywallView to PaywallProxy (#624) via Cesar de la Vega (@vegaro)
-
-## 8.10.0-beta.7
-### RevenueCatUI
-* Add offering parameter for launching paywalls (#612) via Cesar de la Vega (@vegaro)
-* Add shouldDisplayDismissButton (#606) via Cesar de la Vega (@vegaro)
-### Dependency Updates
-* Android 7.3.0 => 7.3.1
-* iOS 4.31.5 => 4.31.6
-
 ## 8.2.2
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
@@ -43,33 +17,6 @@
 * [AUTOMATIC] iOS 4.31.4 => 4.31.5 (#599) via RevenueCat Git Bot (@RCGitBot)
 ### Other Changes
 * Trim version file contents (#607) via Toni Rico (@tonidero)
-
-## 8.1.3-beta.6
-### RevenueCatUI
-* Update purchases android to 7.3.0 (#609) via Toni Rico (@tonidero)
-### Dependency Updates
-* Remove core-ktx dependency (#608) via Toni Rico (@tonidero)
-
-## 8.1.3-beta.5
-### RevenueCatUI
-* Separate paywalls into a different module (#604) via Toni Rico (@tonidero)
-* Add PaywallFragmentViewModel to share data with caller fragment/activity (#602) via Toni Rico (@tonidero)
-* Paywalls: Expose delegate in PaywallProxy to receive events (#586) via Toni Rico (@tonidero)
-### Other Changes
-* Update paywalls branch with main (#592) via Cesar de la Vega (@vegaro)
-* Re-organize android library (#603) via Toni Rico (@tonidero)
-* Update paywalls with latest main (#601) via Toni Rico (@tonidero)
-* Actually set delegate via NachoSoto (@NachoSoto)
-* Dismiss paywall automatically via NachoSoto (@NachoSoto)
-* `displayCloseButton` via NachoSoto (@NachoSoto)
-* Lint via NachoSoto (@NachoSoto)
-* [remove me] change `minSdkVersion` via NachoSoto (@NachoSoto)
-* Fix other platforms via NachoSoto (@NachoSoto)
-* Optional parameter via NachoSoto (@NachoSoto)
-* Lint via NachoSoto (@NachoSoto)
-* Revert SDK version change via NachoSoto (@NachoSoto)
-* Finished API via NachoSoto (@NachoSoto)
-* [WIP] `RevenueCatUI` support via NachoSoto (@NachoSoto)
 
 ## 8.1.2
 ### Dependency Updates
