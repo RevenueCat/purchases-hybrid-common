@@ -200,8 +200,8 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     }
 
     public func paywallViewController(_ controller: PaywallViewController, 
-                                      didChangeSize size: CGSize) {
-        self.delegate?.paywallViewController?(controller, didChangeSize: size)
+                                      didChangeSizeTo size: CGSize) {
+        self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
     }
 
 }
