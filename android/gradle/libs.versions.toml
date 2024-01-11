@@ -1,0 +1,32 @@
+[versions]
+agp = "8.2.0"
+assertj-core = "3.22.0"
+fragmentKtx = "1.6.2"
+junit-jupiter = "5.8.2"
+kotlin = "1.7.21"
+junit = "4.13.2"
+mockk = "1.12.8"
+purchases = "7.3.2"
+detekt = "1.23.0"
+android-junit5-version = "1.8.2.0"
+mavenPublish = "0.22.0"
+
+[libraries]
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj-core" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
+purchases-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }
+purchases-amazon = { module = "com.revenuecat.purchases:purchases-store-amazon", version.ref = "purchases" }
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
+[plugins]
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+androidJunit5 = { id = "de.mannodermaus.android-junit5", version.ref = "android-junit5-version" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }

@@ -13,7 +13,6 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
-    './android/build.gradle' => ['versionName "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
     './typescript/package.json' => ['"version": "{x}"']
 }
@@ -22,7 +21,7 @@ files_with_version_number_without_prerelease_modifiers = {
     './ios/PurchasesHybridCommon/Info.plist' => PLIST_VERSION_PATTERNS,
     './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
 }
-POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'']
+POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
@@ -30,7 +29,7 @@ files_to_update_ios_dependency = {
 }
 
 files_to_update_android_dependency = {
-    'android/build.gradle' => ['ext.purchases_version = \'{x}\'']
+    'android/gradle/libs.versions.toml' => ['purchases = "{x}"']
 }
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
@@ -319,6 +318,11 @@ platform :ios do
     push_pods
   end
 
+  desc "Lint Podspec"
+  lane :pod_lint do |options|
+    check_pods
+  end
+
   desc "replace API KEY for integration tests"
   lane :replace_api_key_integration_tests do
     folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
@@ -344,7 +348,7 @@ platform :android do
     gradleProperties = {
       "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
       "signing.password" => ENV['GPG_SIGNING_KEY_PW'],
-      "signing.secretKeyRingFile" => "./secring.gpg",
+      "signing.secretKeyRingFile" => "#{File.expand_path('android', get_root_folder)}/secring.gpg",
       "mavenCentralUsername" => ENV['SONATYPE_NEXUS_TOKEN_USERNAME'],
       "mavenCentralPassword" => ENV['SONATYPE_NEXUS_TOKEN_PASSWORD'],
       "RELEASE_SIGNING_ENABLED" => true
@@ -413,6 +417,15 @@ end
 
 def push_pods
   pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+end
+
+def check_pods
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommon.podspec', 
+    platforms: 'ios,osx,tvos',
+    fail_fast: true
+  )
 end
 
 def is_snapshot_version?(version_name)

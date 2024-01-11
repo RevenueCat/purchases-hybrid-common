@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@2.2.0
+  revenuecat: revenuecat/sdks-common-config@3.0.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -25,8 +25,13 @@ aliases:
       tags:
         ignore:
           - /^.*-SNAPSHOT/
-          - latest
-          - /^.*-amazon*/
+      branches:
+        ignore: /.*/
+  stable-release-tags: &stable-release-tags
+    filters:
+      tags:
+        ignore:
+          - /^.*-*/
       branches:
         ignore: /.*/
   release-branches: &release-branches
@@ -225,7 +230,7 @@ jobs:
           cache-version: v1
       - android/accept-licenses
       - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}
+          key: jars-{{ checksum "android/hybridcommon/build.gradle.kts" }}
       - android/restore-build-cache
       - run:
           name: Deployment
@@ -267,7 +272,7 @@ jobs:
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
-  
+
   dependency-update:
     docker:
       - image: cimg/ruby:3.1.2
@@ -282,7 +287,7 @@ jobs:
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
-  
+
   tag-release-branch:
     docker:
       - image: cimg/ruby:3.1.2
@@ -294,7 +299,7 @@ jobs:
       - trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - run: 
+      - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
 
@@ -363,6 +368,18 @@ jobs:
       - run:
           command: yarn && yarn build && yarn apitests
 
+  check-pods:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Lint Podspec
+          command: bundle exec fastlane ios pod_lint
+          no_output_timeout: 30m
+
 workflows:
   version: 2
   test:
@@ -374,6 +391,8 @@ workflows:
           xcode_version: '14.3.0'
       - test-ios-17:
           xcode_version: '15.0.0'
+      - check-pods:
+          xcode_version: '14.3.0'
       - integration-test-ios
       - test-android
       - detekt-android
@@ -408,10 +427,10 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
       - trigger-dependent-updates:
-          <<: *release-tags
+          <<: *stable-release-tags
           requires:
             - make-github-release
-  
+
   dependency-update:
     when:
       or:
