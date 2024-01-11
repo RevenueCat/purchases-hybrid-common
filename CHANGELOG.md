@@ -1,3 +1,8 @@
+## 8.10.0
+### RevenueCatUI
+* `RevenueCatUI` (#647) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.7 => 4.31.8 (#645) via RevenueCat Git Bot (@RCGitBot)
 ## 8.2.2
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
