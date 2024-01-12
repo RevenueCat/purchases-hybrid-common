@@ -433,7 +433,7 @@ def is_snapshot_version?(version_name)
 end
 
 def parse_previous_android_native_version
-  parse_version_in_file(/(?<=ext\.purchases_version = ["'])(.*)(?=["'])/, "android/build.gradle")
+  parse_version_in_file(/(?<=purchases = ["'])(.*)(?=["'])/, "android/gradle/libs.versions.toml")
 end
 
 def parse_previous_ios_native_version
