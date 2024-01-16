@@ -150,7 +150,7 @@ import UIKit
     private func privatePresentPaywall(displayCloseButton: Bool?,
                                        offering: Offering?,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
-        guard let rootController = UIApplication.shared.keyWindow?.rootViewController else {
+        guard let rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
         }
@@ -168,6 +168,16 @@ import UIKit
             self.resultByVC[controller] = (paywallResultHandler, .cancelled)
         }
         rootController.present(controller, animated: true)
+    }
+
+    private static var rootViewController: UIViewController? {
+        let scene = UIApplication
+            .shared
+            .connectedScenes
+            .first { $0.activationState == .foregroundActive }
+
+        guard let windowScene = scene as? UIWindowScene else { return nil }
+        return windowScene.windows.first?.rootViewController
     }
 
 }
