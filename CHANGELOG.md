@@ -1,3 +1,9 @@
+## 8.10.2
+### RevenueCatUI
+* `Paywalls`: fix `UIApplication.keyWindow` deprecation warning (#656) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* Bump lefthook from 1.5.6 to 1.5.7 (#658) via dependabot[bot] (@dependabot[bot])
+
 ## 8.10.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.31.8 => 4.31.9 Android 7.3.2 => 7.3.3 (#653) via RevenueCat Git Bot (@RCGitBot)
