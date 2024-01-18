@@ -1,3 +1,7 @@
+## 8.11.1
+### Dependency Updates
+* [AUTOMATIC] Android 7.3.4 => 7.3.5 (#662) via RevenueCat Git Bot (@RCGitBot)
+
 ## 8.11.0
 ### RevenueCatUI
 * `Paywalls`: fix `UIApplication.keyWindow` deprecation warning (#656) via NachoSoto (@NachoSoto)
