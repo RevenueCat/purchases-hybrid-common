@@ -11,13 +11,13 @@ version: 2.1
 
 aliases:
   base-ios-job: &base-ios-job
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     macos:
       xcode: << parameters.xcode_version >>
     parameters:
       xcode_version:
         type: string
-        default: 14.3.0
+        default: 15.2.0
     working_directory: ~/ios
     shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
@@ -135,7 +135,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 15 (17.0.1)
+            SCAN_DEVICE: iPhone 15 (17.2)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -390,9 +390,8 @@ workflows:
       - test-ios-16:
           xcode_version: '14.3.0'
       - test-ios-17:
-          xcode_version: '15.0.0'
-      - check-pods:
-          xcode_version: '14.3.0'
+          xcode_version: '15.2.0'
+      - check-pods
       - integration-test-ios
       - test-android
       - detekt-android
