@@ -17,7 +17,7 @@ aliases:
     parameters:
       xcode_version:
         type: string
-        default: 14.3.0
+        default: 15.2.0
     working_directory: ~/ios
     shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
@@ -391,8 +391,7 @@ workflows:
           xcode_version: '14.3.0'
       - test-ios-17:
           xcode_version: '15.2.0'
-      - check-pods:
-          xcode_version: '15.2.0'
+      - check-pods
       - integration-test-ios
       - test-android
       - detekt-android
