@@ -31,7 +31,7 @@ aliases:
     filters:
       tags:
         ignore:
-          - /^.*-*/
+          - /^.*-.*$/
       branches:
         ignore: /.*/
   release-branches: &release-branches
