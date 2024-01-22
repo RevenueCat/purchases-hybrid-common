@@ -177,7 +177,7 @@ import UIKit
             .first { $0.activationState == .foregroundActive }
 
         guard let windowScene = scene as? UIWindowScene else { return nil }
-        return windowScene.windows.first?.rootViewController
+        return windowScene.keyWindow?.rootViewController
     }
 
 }
