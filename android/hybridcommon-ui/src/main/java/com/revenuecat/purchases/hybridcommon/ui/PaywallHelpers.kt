@@ -24,7 +24,7 @@ fun presentPaywallFromFragment(
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,
-            offering = offering,
+            paywallSource = offering?.let { PaywallSource.Offering(it) } ?: PaywallSource.DefaultOffering,
         ),
     )
 }
@@ -38,23 +38,13 @@ fun presentPaywallFromFragment(
             .supportFragmentManager
             .beginTransaction()
             .add(
-                if (offeringIdentifier != null) {
-                    PaywallFragment.newInstance(
-                        fragment,
-                        requiredEntitlementIdentifier,
-                        paywallResultListener,
-                        shouldDisplayDismissButton,
-                        offeringIdentifier,
-                    )
-                } else {
-                    PaywallFragment.newInstance(
-                        fragment,
-                        requiredEntitlementIdentifier,
-                        paywallResultListener,
-                        shouldDisplayDismissButton,
-                        offering,
-                    )
-                },
+                PaywallFragment.newInstance(
+                    fragment,
+                    requiredEntitlementIdentifier,
+                    paywallResultListener,
+                    shouldDisplayDismissButton,
+                    paywallSource,
+                ),
                 PaywallFragment.tag,
             )
             .commit()
@@ -62,9 +52,8 @@ fun presentPaywallFromFragment(
 }
 
 data class PresentPaywallOptions(
+    val paywallSource: PaywallSource = PaywallSource.DefaultOffering,
     val requiredEntitlementIdentifier: String? = null,
     val paywallResultListener: PaywallResultListener? = null,
     val shouldDisplayDismissButton: Boolean? = null,
-    val offering: Offering? = null,
-    val offeringIdentifier: String? = null,
 )
