@@ -1,3 +1,10 @@
+## 8.11.2
+### RevenueCatUI
+* Fix getting `rootViewController` (#667) via Cesar de la Vega (@vegaro)
+### Other Changes
+* `CircleCI`: change jobs to use Apple Silicon (#665) via NachoSoto (@NachoSoto)
+* Fix `stable-release-tags` filter in config.yaml (#664) via Cesar de la Vega (@vegaro)
+
 ## 8.11.1
 ### Dependency Updates
 * [AUTOMATIC] Android 7.3.4 => 7.3.5 (#662) via RevenueCat Git Bot (@RCGitBot)
