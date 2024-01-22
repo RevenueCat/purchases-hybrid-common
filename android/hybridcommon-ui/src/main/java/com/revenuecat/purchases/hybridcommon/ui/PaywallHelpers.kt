@@ -29,7 +29,6 @@ fun presentPaywallFromFragment(
     )
 }
 
-@JvmOverloads
 fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     options: PresentPaywallOptions,
