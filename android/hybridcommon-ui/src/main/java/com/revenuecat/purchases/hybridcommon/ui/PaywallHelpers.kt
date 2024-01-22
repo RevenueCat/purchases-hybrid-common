@@ -8,7 +8,7 @@ import com.revenuecat.purchases.Offering
     message = "Use presentPaywallFromFragment with Options instead",
     replaceWith = ReplaceWith(
         expression = "presentPaywallFromFragment(fragment, options)",
-        imports = ["com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment"]
+        imports = ["com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment"],
     ),
 )
 fun presentPaywallFromFragment(
@@ -25,7 +25,7 @@ fun presentPaywallFromFragment(
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,
             offering = offering,
-        )
+        ),
     )
 }
 
