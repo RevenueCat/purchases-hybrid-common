@@ -3,10 +3,8 @@
 target 'PurchasesHybridCommon' do
   platform :ios, '11.0'
   use_frameworks!
-
-  # Pods for PurchasesHybridCommon
+  
   pod 'RevenueCat', '4.32.1'
-  pod 'RevenueCatUI', '4.32.1'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -19,6 +17,15 @@ target 'PurchasesHybridCommon' do
     pod 'Quick'
     pod 'Nimble'
   end
+
+end
+
+target 'PurchasesHybridCommonUI' do
+  platform :ios, '11.0'
+  use_frameworks!
+
+  pod 'RevenueCat', '4.32.1'
+  pod 'RevenueCatUI', '4.32.1'
 
 end
 

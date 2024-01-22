@@ -171,7 +171,7 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
-  deploy-ios:
+  deploy-ios-phc:
     <<: *base-ios-job
     steps:
       - checkout
@@ -179,8 +179,20 @@ jobs:
           cache-version: v1
       - trust-github-key
       - run:
-          name: Deploy new version to Cocoapods
-          command: bundle exec fastlane ios push_pods
+          name: Deploy PurchasesHybridCommon to Cocoapods
+          command: bundle exec fastlane ios push_pod_PHC
+          no_output_timeout: 30m
+
+  deploy-ios-phcui:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Deploy PurchasesHybridCommonUI to Cocoapods
+          command: bundle exec fastlane ios push_pod_PHCUI
           no_output_timeout: 30m
 
   detekt-android:
@@ -413,8 +425,12 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - deploy-ios:
+      - deploy-ios-phc:
           <<: *release-tags
+      - deploy-ios-phcui:
+          <<: *release-tags
+          requires:
+            - deploy-ios-phc
       - deploy-android:
           <<: *release-tags
       - deploy-typescript:
@@ -424,7 +440,8 @@ workflows:
       - make-github-release:
           <<: *release-tags
           requires:
-            - deploy-ios
+            - deploy-ios-phc
+            - deploy-ios-phcui
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm

@@ -1,6 +1,6 @@
 //
 //  PaywallProxy.swift
-//  PurchasesHybridCommon
+//  PurchasesHybridCommonUI
 //
 //  Created by Nacho Soto on 11/1/23.
 //  Copyright © 2023 RevenueCat. All rights reserved.
