@@ -28,13 +28,30 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             shouldDisplayDismissButton: Boolean? = null,
             offering: Offering? = null,
         ): PaywallFragment {
+            return newInstance(
+                activity,
+                requiredEntitlementIdentifier,
+                paywallResultListener,
+                shouldDisplayDismissButton,
+                offering?.identifier,
+            )
+        }
+
+        @JvmStatic
+        fun newInstance(
+            activity: FragmentActivity,
+            requiredEntitlementIdentifier: String? = null,
+            paywallResultListener: PaywallResultListener? = null,
+            shouldDisplayDismissButton: Boolean? = null,
+            offeringIdentifier: String? = null,
+        ): PaywallFragment {
             val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
                     putString(requiredEntitlementIdentifierKey, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(shouldDisplayDismissButtonKey, it) }
-                    offering?.let { putString(offeringIdentifierKey, it.identifier) }
+                    offeringIdentifier?.let { putString(offeringIdentifierKey, it) }
                 }
             }
         }
