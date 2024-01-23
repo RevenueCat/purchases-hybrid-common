@@ -24,17 +24,17 @@ import UIKit
                                                      result: PaywallResult)] = [:]
 
     @objc
-    public func createPaywallView() -> UIViewController {
+    public func createPaywallView() -> PaywallViewController {
         return PaywallViewController()
     }
 
     @objc
-    public func createPaywallView(offeringIdentifier: String) -> UIViewController {
+    public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
         return PaywallViewController(offeringIdentifier: offeringIdentifier)
     }
 
     @objc
-    public func createFooterPaywallView() -> UIViewController {
+    public func createFooterPaywallView() -> PaywallFooterViewController {
         let controller = PaywallFooterViewController()
         controller.delegate = self
 
@@ -42,7 +42,7 @@ import UIKit
     }
 
     @objc
-    public func createFooterPaywallView(offeringIdentifier: String) -> UIViewController {
+    public func createFooterPaywallView(offeringIdentifier: String) -> PaywallFooterViewController {
         let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier)
         controller.delegate = self
 
