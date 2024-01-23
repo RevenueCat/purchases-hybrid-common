@@ -45,10 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
                                                     displayCloseButton:true
                                                   paywallResultHandler:^(NSString *result) {}];
 
-        __unused UIViewController *view1 = [proxy createPaywallView];
-        __unused UIViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
-        __unused UIViewController *footer1 = [proxy createFooterPaywallView];
-        __unused UIViewController *footer2 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering"];
+        __unused RCPaywallViewController *view1 = [proxy createPaywallView];
+        __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
+        __unused RCPaywallFooterViewController *footer1 = [proxy createFooterPaywallView];
+        __unused RCPaywallFooterViewController *footer2 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering"];
     }
 }
 
