@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
+@import RevenueCat;
+@import UIKit;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,11 +21,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testAPI {
     if (@available(iOS 15.0, *)) {
+        RCOffering *offering;
+
         PaywallProxy *proxy = [PaywallProxy new];
         [proxy presentPaywall];
         [proxy presentPaywallWithDisplayCloseButton:true];
         [proxy presentPaywallWithPaywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallWithDisplayCloseButton:true paywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallWithOffering:offering displayCloseButton:true paywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallWithOfferingIdentifier:@"offering" 
+                                 displayCloseButton:true
+                               paywallResultHandler:^(NSString *result) {}];
+
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
@@ -31,6 +40,15 @@ NS_ASSUME_NONNULL_BEGIN
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
                                                     displayCloseButton:true
                                                   paywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""
+                                                    offeringIdentifier:@"offering"
+                                                    displayCloseButton:true
+                                                  paywallResultHandler:^(NSString *result) {}];
+
+        __unused RCPaywallViewController *view1 = [proxy createPaywallView];
+        __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
+        __unused RCPaywallFooterViewController *footer1 = [proxy createFooterPaywallView];
+        __unused RCPaywallFooterViewController *footer2 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering"];
     }
 }
 
