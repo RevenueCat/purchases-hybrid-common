@@ -26,7 +26,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             requiredEntitlementIdentifier: String? = null,
             paywallResultListener: PaywallResultListener? = null,
             shouldDisplayDismissButton: Boolean? = null,
-            offering: Offering? = null,
+            paywallSource: PaywallSource,
         ): PaywallFragment {
             val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
@@ -34,7 +34,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 arguments = Bundle().apply {
                     putString(requiredEntitlementIdentifierKey, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(shouldDisplayDismissButtonKey, it) }
-                    offering?.let { putString(offeringIdentifierKey, it.identifier) }
+                    when (paywallSource) {
+                        is PaywallSource.Offering -> putString(offeringIdentifierKey, paywallSource.value.identifier)
+                        is PaywallSource.OfferingIdentifier -> putString(offeringIdentifierKey, paywallSource.value)
+                        is PaywallSource.DefaultOffering -> Unit
+                    }
                 }
             }
         }
