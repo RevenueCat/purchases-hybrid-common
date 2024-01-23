@@ -6,8 +6,8 @@
 //  Copyright © 2023 RevenueCat. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-@import PurchasesHybridCommon;
+@import Foundation;
+@import PurchasesHybridCommonUI;
 @import RevenueCat;
 @import UIKit;
 

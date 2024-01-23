@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
-  s.name             = "PurchasesHybridCommon"
-  s.version          = "8.12.0"
-  s.summary          = "Common files for hybrid SDKs for RevenueCat's Subscription and in-app-purchase backend service."
+  s.name             = "PurchasesHybridCommonUI"
+  s.version          = "8.11.2"
+  s.summary          = "Common files for hybrid SDKs for RevenueCat UI"
 
   s.description      = <<-DESC
                        Save yourself the hastle of implementing a subscriptions backend. Use RevenueCat instead https://www.revenuecat.com/
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.framework      = 'StoreKit'
   s.framework      = 'SwiftUI'
 
-  s.dependency 'RevenueCat', '4.32.1'
+  s.dependency 'RevenueCatUI', '4.32.1'
   s.swift_version = '5.7'
 
   s.ios.deployment_target = '11.0'
@@ -25,10 +25,10 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
-  s.source_files = ['ios/PurchasesHybridCommon/PurchasesHybridCommon/**/*.{h,m,swift}']
+  s.source_files = ['ios/PurchasesHybridCommon/PurchasesHybridCommonUI/**/*.{h,m,swift}']
 
   s.public_header_files = [
-    'ios/PurchasesHybridCommon/PurchasesHybridCommon/*.h'
+    'ios/PurchasesHybridCommon/PurchasesHybridCommonUI/*.h'
   ]
 
 end

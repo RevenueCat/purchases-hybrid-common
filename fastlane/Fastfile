@@ -24,6 +24,7 @@ files_with_version_number_without_prerelease_modifiers = {
 POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
+    'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
     'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
 }
@@ -313,9 +314,14 @@ lane :bump_hybrid_dependencies do |options|
 end
 
 platform :ios do
-  desc "Release to CocoaPods"
-  lane :push_pods do |options|
-    push_pods
+  desc "Release PurchasesHybridCommon to CocoaPods"
+  lane :push_pod_PHC do |options|
+    pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+  end
+
+  desc "Release PurchasesHybridCommonUI to CocoaPods"
+  lane :push_pod_PHCUI do |options|
+    pod_push(path: "PurchasesHybridCommonUI.podspec", synchronous: true)
   end
 
   desc "Lint Podspec"
@@ -415,14 +421,17 @@ def current_version_number
   File.read("../.version").strip
 end
 
-def push_pods
-  pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
-end
-
 def check_pods
   pod_lib_lint(
     verbose: true,
     podspec: 'PurchasesHybridCommon.podspec', 
+    platforms: 'ios,osx,tvos',
+    fail_fast: true
+  )
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommonUI.podspec', 
+    include_podspecs: 'PurchasesHybridCommonUI.podspec',
     platforms: 'ios,osx,tvos',
     fail_fast: true
   )

@@ -90,13 +90,21 @@ Run automatic bump in other repos
 
 ## iOS
 
-### ios push_pods
+### ios push_pod_PHC
 
 ```sh
-[bundle exec] fastlane ios push_pods
+[bundle exec] fastlane ios push_pod_PHC
 ```
 
-Release to CocoaPods
+Release PurchasesHybridCommon to CocoaPods
+
+### ios push_pod_PHCUI
+
+```sh
+[bundle exec] fastlane ios push_pod_PHCUI
+```
+
+Release PurchasesHybridCommonUI to CocoaPods
 
 ### ios pod_lint
 
