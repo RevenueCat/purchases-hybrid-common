@@ -1,3 +1,9 @@
+## 9.0.0
+### Breaking Changes
+* Separate `PurchasesHybridCommonUI` (#672) via NachoSoto (@NachoSoto)
+### Other Changes
+* `CircleCI`: don't skip major bumps (#679) via NachoSoto (@NachoSoto)
+
 ## 8.12.0
 ### RevenueCatUI
 * `Paywalls`: add methods for presenting paywalls with an offering identifier (Android) (#670) via Cesar de la Vega (@vegaro)
