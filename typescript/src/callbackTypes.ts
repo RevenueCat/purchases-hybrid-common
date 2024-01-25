@@ -1,5 +1,5 @@
 import {
-  CustomerInfo
+  CustomerInfo, PurchasesStoreTransaction
 } from './customerInfo';
 import {
   LOG_LEVEL
@@ -12,7 +12,7 @@ import {
 */
 export type CustomerInfoUpdateListener = (customerInfo: CustomerInfo) => void;
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => void;
-export type MakePurchaseResult = { productIdentifier: string; customerInfo: CustomerInfo; };
+export type MakePurchaseResult = { productIdentifier: string; customerInfo: CustomerInfo; transaction: PurchasesStoreTransaction };
 export type LogHandler = (logLevel: LOG_LEVEL, message: string) => void;
 
 /**
