@@ -424,18 +424,10 @@ internal class CommonKtTests {
         val expectedPurchaseDate: Long = 1000
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = mockk<StoreTransaction>()
-        every {
-            mockTransaction.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
-        every {
-            mockTransaction.orderId
-        } returns expectedTransactionIdentifier
-        every {
-            mockTransaction.purchaseTime
-        } returns expectedPurchaseDate
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
         every {
             mockPurchases.getProducts(
@@ -500,12 +492,10 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
         every {
             mockPurchases.getProducts(
@@ -524,7 +514,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -561,16 +551,14 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedOfferingIdentifier = "my-offer"
-
         val expectedProductIdentifier = "product"
+
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
         every {
             mockPurchases.getProducts(
@@ -592,7 +580,7 @@ internal class CommonKtTests {
             val presentedOfferingIdentifier = getPresentedOfferingId(params)
             assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -634,12 +622,10 @@ internal class CommonKtTests {
 
         var receivedResponse: MutableMap<String, *>? = null
 
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedStoreProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
 
         every {
             mockPurchases.getProducts(
@@ -658,7 +644,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -720,10 +706,7 @@ internal class CommonKtTests {
             productDetails = mockk<ProductDetails>(relaxed = true),
         )
 
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -742,7 +725,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -783,10 +766,8 @@ internal class CommonKtTests {
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -805,7 +786,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertEquals(true, params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -846,10 +827,7 @@ internal class CommonKtTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
@@ -867,7 +845,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchasePackage(
@@ -906,10 +884,7 @@ internal class CommonKtTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
@@ -920,14 +895,14 @@ internal class CommonKtTests {
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
-        2
+
         every {
             mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
         } answers {
             val params = it.invocation.args.first() as PurchaseParams
             assertEquals(true, params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchasePackage(
@@ -975,10 +950,7 @@ internal class CommonKtTests {
             expectedProductIdentifier,
             defaultOption = subscriptionOption,
         )
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -997,7 +969,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseSubscriptionOption(
@@ -1048,10 +1020,7 @@ internal class CommonKtTests {
             expectedProductIdentifier,
             defaultOption = subscriptionOption,
         )
-        val mockPurchase = mockk<StoreTransaction>()
-        every {
-            mockPurchase.productIds
-        } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        val mockTransaction = createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -1073,7 +1042,7 @@ internal class CommonKtTests {
             val presentedOfferingIdentifier = getPresentedOfferingId(params)
             assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseSubscriptionOption(
@@ -1408,6 +1377,25 @@ fun stubSubscriptionOption(
         get() = StubPurchasingData(
             productId = productId,
         )
+}
+
+private fun createMockTransaction(
+    productIdentifier: String,
+    transactionIdentifier: String = "1",
+    purchaseDate: Long = 1000
+): StoreTransaction {
+    val mockTransaction = mockk<StoreTransaction>()
+    every {
+        mockTransaction.productIds
+    } returns ArrayList(listOf(productIdentifier, "other"))
+    every {
+        mockTransaction.orderId
+    } returns transactionIdentifier
+    every {
+        mockTransaction.purchaseTime
+    } returns purchaseDate
+
+    return mockTransaction
 }
 
 @SuppressWarnings("MatchingDeclarationName")
