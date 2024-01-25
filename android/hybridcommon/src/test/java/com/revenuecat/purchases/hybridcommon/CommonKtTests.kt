@@ -409,6 +409,7 @@ internal class CommonKtTests {
         assertTrue(error.message.isNotEmpty())
     }
 
+    @SuppressWarnings("LongMethod")
     @Test
     fun `purchaseProduct passes correct productIdentifier after a successful purchase`() {
         configure(

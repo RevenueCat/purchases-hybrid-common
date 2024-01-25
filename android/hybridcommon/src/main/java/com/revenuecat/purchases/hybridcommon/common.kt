@@ -589,7 +589,7 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
                 mapOf(
                     "productIdentifier" to transaction.productIds[0],
                     "customerInfo" to customerInfo.map(),
-                    "transaction" to transaction.map()
+                    "transaction" to transaction.map(),
                 ),
             )
         } ?: run {

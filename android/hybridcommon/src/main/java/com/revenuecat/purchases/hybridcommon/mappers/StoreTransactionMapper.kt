@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.models.StoreTransaction
-import com.revenuecat.purchases.models.Transaction
 import java.util.Date
 
 fun StoreTransaction.map(): Map<String, Any?> =
