@@ -1292,11 +1292,12 @@ fun getPresentedOfferingId(purchaseParams: PurchaseParams): String? {
     return prop!!.call(purchaseParams) as? String?
 }
 
-@SuppressWarnings("EmptyFunctionBlock")
+@SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
 fun stubStoreProduct(
     productId: String,
     description: String = "",
     title: String = "",
+    name: String = "",
     type: ProductType = ProductType.SUBS,
     defaultOption: SubscriptionOption? = stubSubscriptionOption(
         "monthly_base_plan",
@@ -1315,6 +1316,8 @@ fun stubStoreProduct(
         get() = price
     override val title: String
         get() = title
+    override val name: String
+        get() = name
     override val description: String
         get() = description
     override val period: Period?
@@ -1344,6 +1347,7 @@ fun stubStoreProduct(
             productId,
             description,
             title,
+            name,
             type,
             defaultOption?.let {
                 it.applyOffering(offeringId)
