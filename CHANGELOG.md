@@ -1,3 +1,7 @@
+## 9.2.0
+### New Features
+* `MakePurchaseResult`: added transaction (#690) via NachoSoto (@NachoSoto)
+
 ## 9.1.0
 ### New Features
 * `Common`: purchase methods also return `StoreTransaction` (#686) via NachoSoto (@NachoSoto)
