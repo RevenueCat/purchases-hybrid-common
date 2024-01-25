@@ -1292,7 +1292,7 @@ fun getPresentedOfferingId(purchaseParams: PurchaseParams): String? {
     return prop!!.call(purchaseParams) as? String?
 }
 
-@SuppressWarnings("EmptyFunctionBlock")
+@SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
 fun stubStoreProduct(
     productId: String,
     description: String = "",
