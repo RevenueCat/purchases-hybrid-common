@@ -257,22 +257,7 @@ import RevenueCat
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: @Sendable (StoreTransaction?,
-                                         CustomerInfo?,
-                                         Error?,
-                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
-            if let error = error {
-                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
-            } else if let customerInfo = customerInfo,
-                      let transaction = transaction {
-                completion([
-                    "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
-                ], nil)
-            } else {
-                completion(nil, ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:]))
-            }
-        }
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         self.product(with: productIdentifier) { storeProduct in
             guard let storeProduct = storeProduct else {
@@ -303,25 +288,9 @@ import RevenueCat
                          offeringIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: @Sendable (StoreTransaction?,
-                                         CustomerInfo?,
-                                         Error?,
-                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
-            if let error = error {
-                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
-            } else if let customerInfo = customerInfo,
-                      let transaction = transaction {
-                completion([
-                    "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
-                ], nil)
-            } else {
-                let error = ErrorCode.unknownError as NSError
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-            }
-        }
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
-        package(withIdentifier: packageIdentifier, offeringIdentifier: offeringIdentifier) { package in
+        Self.package(withIdentifier: packageIdentifier, offeringIdentifier: offeringIdentifier) { package in
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -335,8 +304,8 @@ import RevenueCat
                         return
                     }
                     Self.sharedInstance.purchase(package: package,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
+                                                 promotionalOffer: promotionalOffer,
+                                                 completion: hybridCompletion)
                     return
                 }
 
@@ -350,18 +319,30 @@ import RevenueCat
     @objc(makeDeferredPurchase:completionBlock:)
     static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        startPurchase { transaction, customerInfo, error, userCancelled in
+        startPurchase(Self.createPurchaseCompletionBlock(completion: completion))
+    }
+
+    private static func createPurchaseCompletionBlock(
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) -> @Sendable (StoreTransaction?,
+                    CustomerInfo?,
+                    Error?,
+                    Bool) -> Void {
+        return { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
                     "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
+                    "productIdentifier": transaction.productIdentifier,
+                    "transaction": transaction.dictionary
                 ], nil)
             } else {
-                let error = ErrorCode.unknownError as NSError
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                completion(
+                    nil,
+                    ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+                )
             }
         }
     }
