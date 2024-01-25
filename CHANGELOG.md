@@ -1,3 +1,10 @@
+## 9.1.0
+### New Features
+* `Common`: purchase methods also return `StoreTransaction` (#686) via NachoSoto (@NachoSoto)
+* `CommonFunctionality`: `purchase` methods also return `StoreTransaction` (#685) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] Android 7.3.5 => 7.4.0 (#688) via RevenueCat Git Bot (@RCGitBot)
+
 ## 9.0.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.32.1 => 4.32.2 (#683) via RevenueCat Git Bot (@RCGitBot)
