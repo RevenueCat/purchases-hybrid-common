@@ -1382,7 +1382,7 @@ fun stubSubscriptionOption(
 private fun createMockTransaction(
     productIdentifier: String,
     transactionIdentifier: String = "1",
-    purchaseDate: Long = 1000
+    purchaseDate: Long = 1000,
 ): StoreTransaction {
     val mockTransaction = mockk<StoreTransaction>()
     every {
