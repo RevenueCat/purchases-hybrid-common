@@ -583,12 +583,13 @@ private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boole
 }
 
 private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
-    return { purchase, customerInfo ->
-        purchase?.let {
+    return { transaction, customerInfo ->
+        transaction?.let {
             onResult.onReceived(
                 mapOf(
-                    "productIdentifier" to purchase.productIds[0],
+                    "productIdentifier" to transaction.productIds[0],
                     "customerInfo" to customerInfo.map(),
+                    "transaction" to transaction.map()
                 ),
             )
         } ?: run {
