@@ -52,6 +52,7 @@ import java.net.URL
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -418,14 +419,22 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
+        val expectedTransactionIdentifier = "1"
+        val expectedPurchaseDate: Long = 1000
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockPurchase = mockk<StoreTransaction>()
+        val mockTransaction = mockk<StoreTransaction>()
         every {
-            mockPurchase.productIds
+            mockTransaction.productIds
         } returns ArrayList(listOf(expectedProductIdentifier, "other"))
+        every {
+            mockTransaction.orderId
+        } returns expectedTransactionIdentifier
+        every {
+            mockTransaction.purchaseTime
+        } returns expectedPurchaseDate
 
         every {
             mockPurchases.getProducts(
@@ -444,7 +453,7 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            capturedPurchaseCallback.captured.onCompleted(mockPurchase, mockk(relaxed = true))
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
         purchaseProduct(
@@ -469,6 +478,13 @@ internal class CommonKtTests {
 
         assertNotNull(receivedResponse)
         assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+
+        val transaction = receivedResponse?.get("transaction")
+        assertIs<Map<String, Any>>(transaction)
+
+        assertEquals(expectedTransactionIdentifier, transaction["transactionIdentifier"])
+        assertEquals(expectedProductIdentifier, transaction["productIdentifier"])
+        assertEquals(expectedPurchaseDate, transaction["purchaseDateMillis"])
     }
 
     @Test
