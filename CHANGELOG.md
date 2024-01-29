@@ -1,3 +1,7 @@
+## 9.2.2
+### Dependency Updates
+* Bump cocoapods from 1.14.3 to 1.15.0 (#694) via dependabot[bot] (@dependabot[bot])
+
 ## 9.2.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.32.2 => 4.32.3 (#693) via RevenueCat Git Bot (@RCGitBot)
