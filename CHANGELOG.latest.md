@@ -1,3 +1,3 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.32.2 => 4.32.3 (#693) via RevenueCat Git Bot (@RCGitBot)
-* Bump fastlane-plugin-revenuecat_internal from `e6ba247` to `9c82c7a` (#695) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 4.32.3 => 4.33.0 Android 7.4.0 => 7.4.1 (#701) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.14.3 to 1.15.0 (#694) via dependabot[bot] (@dependabot[bot])
