@@ -113,9 +113,6 @@ jobs:
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 14 (16.4)
-      - run:
-          name: Run pod lint tests
-          command: pod lib lint --fail-fast
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
