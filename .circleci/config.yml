@@ -402,10 +402,8 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - test-ios-16:
-          xcode_version: '14.3.0'
-      - test-ios-17:
-          xcode_version: '15.2.0'
+      - test-ios-16
+      - test-ios-17
       - check-pods
       - integration-test-ios
       - test-android
