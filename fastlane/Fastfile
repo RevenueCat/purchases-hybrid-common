@@ -423,14 +423,14 @@ def check_pods
   pod_lib_lint(
     verbose: true,
     podspec: 'PurchasesHybridCommon.podspec', 
-    platforms: 'ios,osx,tvos',
+    platforms: 'ios,osx,tvos,visionos',
     fail_fast: true
   )
   pod_lib_lint(
     verbose: true,
     podspec: 'PurchasesHybridCommonUI.podspec', 
     include_podspecs: 'PurchasesHybridCommonUI.podspec',
-    platforms: 'ios,osx,tvos',
+    platforms: 'ios,osx,tvos,visionos',
     fail_fast: true
   )
 end
