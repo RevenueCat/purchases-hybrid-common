@@ -15,20 +15,20 @@ private fun Offering.map(): Map<String, Any?> =
         "identifier" to identifier,
         "serverDescription" to serverDescription,
         "metadata" to metadata,
-        "availablePackages" to availablePackages.map { it.map(identifier) },
-        "lifetime" to lifetime?.map(identifier),
-        "annual" to annual?.map(identifier),
-        "sixMonth" to sixMonth?.map(identifier),
-        "threeMonth" to threeMonth?.map(identifier),
-        "twoMonth" to twoMonth?.map(identifier),
-        "monthly" to monthly?.map(identifier),
-        "weekly" to weekly?.map(identifier),
+        "availablePackages" to availablePackages.map { it.map() },
+        "lifetime" to lifetime?.map(),
+        "annual" to annual?.map(),
+        "sixMonth" to sixMonth?.map(),
+        "threeMonth" to threeMonth?.map(),
+        "twoMonth" to twoMonth?.map(),
+        "monthly" to monthly?.map(),
+        "weekly" to weekly?.map(),
     )
 
-private fun Package.map(offeringIdentifier: String): Map<String, Any?> =
+fun Package.map(): Map<String, Any?> =
     mapOf(
         "identifier" to identifier,
         "packageType" to packageType.name,
         "product" to product.map(),
-        "offeringIdentifier" to offeringIdentifier,
+        "offeringIdentifier" to offering,
     )

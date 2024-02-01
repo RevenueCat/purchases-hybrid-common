@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation(libs.fragment.ktx)
+    implementation(project(":hybridcommon"))
     api(libs.purchases)
     api(libs.purchases.ui)
     testImplementation(libs.junit)
