@@ -1,5 +1,2 @@
 ### New Features
-* Add support for `visionOS` (#700) via NachoSoto (@NachoSoto)
-### Dependency Updates
-* [AUTOMATIC] iOS 4.32.3 => 4.33.0 Android 7.4.0 => 7.4.1 (#701) via RevenueCat Git Bot (@RCGitBot)
-* Bump cocoapods from 1.14.3 to 1.15.0 (#694) via dependabot[bot] (@dependabot[bot])
+* Create PaywallListenerWrapper and expose mappers (#704) via Cesar de la Vega (@vegaro)
