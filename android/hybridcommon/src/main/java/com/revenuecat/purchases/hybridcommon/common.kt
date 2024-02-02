@@ -605,22 +605,6 @@ private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?
     }
 }
 
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal fun PurchasesError.map(
-    extra: Map<String, Any?> = mapOf(),
-): ErrorContainer =
-    ErrorContainer(
-        code.code,
-        message,
-        mapOf(
-            "code" to code.code,
-            "message" to message,
-            "readableErrorCode" to code.name,
-            "readable_error_code" to code.name,
-            "underlyingErrorMessage" to (underlyingErrorMessage ?: ""),
-        ) + extra,
-    )
-
 data class ErrorContainer(
     val code: Int,
     val message: String,

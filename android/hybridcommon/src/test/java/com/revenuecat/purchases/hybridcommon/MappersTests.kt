@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
