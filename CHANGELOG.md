@@ -1,3 +1,7 @@
+## 9.4.0
+### New Features
+* Create PaywallListenerWrapper and expose mappers (#704) via Cesar de la Vega (@vegaro)
+
 ## 9.3.0
 ### New Features
 * Add support for `visionOS` (#700) via NachoSoto (@NachoSoto)
