@@ -193,7 +193,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
-        self.delegate?.paywallViewController?(controller, 
+        self.delegate?.paywallViewController?(controller,
                                               didFinishPurchasingWith: customerInfo.dictionary,
                                               transaction: transaction?.dictionary)
     }
@@ -212,8 +212,6 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
         let error = ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
-        // TODO: remove
-        self.delegate?.paywallViewController?(controller, didFailRestoringWith: error.info)
         self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
     }
 
