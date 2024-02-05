@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.framework      = 'SwiftUI'
 
   s.dependency 'RevenueCatUI', '4.33.0'
-  s.dependency 'PurchasesHybridCommon', '4.33.0'
+  s.dependency 'PurchasesHybridCommon', '9.4.0'
   s.swift_version = '5.7'
 
   s.ios.deployment_target = '11.0'

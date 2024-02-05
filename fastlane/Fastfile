@@ -13,7 +13,10 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
-    './PurchasesHybridCommonUI.podspec' => ['s.version          = "{x}"'],
+    './PurchasesHybridCommonUI.podspec' => [
+        's.version          = "{x}"',
+        's.dependency \'PurchasesHybridCommon\', \'{x}\''
+    ],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
     './typescript/package.json' => ['"version": "{x}"']
 }
@@ -71,7 +74,7 @@ lane :automatic_bump do |options|
     UI.message('Skipping automatic bump since the next version doesn\'t include public facing changes')
     next
   end
-  
+
   bump(options)
 end
 
@@ -422,13 +425,13 @@ end
 def check_pods
   pod_lib_lint(
     verbose: true,
-    podspec: 'PurchasesHybridCommon.podspec', 
+    podspec: 'PurchasesHybridCommon.podspec',
     platforms: 'ios,osx,tvos,visionos',
     fail_fast: true
   )
   pod_lib_lint(
     verbose: true,
-    podspec: 'PurchasesHybridCommonUI.podspec', 
+    podspec: 'PurchasesHybridCommonUI.podspec',
     include_podspecs: 'PurchasesHybridCommonUI.podspec',
     platforms: 'ios,osx,tvos,visionos',
     fail_fast: true
