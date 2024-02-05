@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.framework      = 'StoreKit'
   s.framework      = 'SwiftUI'
 
-  s.dependency 'RevenueCatUI', '4.33.0'
+  s.dependency 'RevenueCatUI', '4.34.0'
   s.dependency 'PurchasesHybridCommon', s.version.to_s
   s.swift_version = '5.7'
 
