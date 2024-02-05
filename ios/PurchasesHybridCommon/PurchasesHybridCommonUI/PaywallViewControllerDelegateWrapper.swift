@@ -4,6 +4,7 @@
 //
 //  Created by Cesar de la Vega on 2/2/24.
 //
+#if canImport(UIKit) && !os(tvOS) && !os(watchOS)
 
 import Foundation
 import RevenueCat
@@ -58,3 +59,5 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
                                         didChangeSizeTo size: CGSize)
 
 }
+
+#endif
