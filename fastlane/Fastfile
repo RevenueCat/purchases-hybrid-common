@@ -13,10 +13,7 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
-    './PurchasesHybridCommonUI.podspec' => [
-        's.version          = "{x}"',
-        's.dependency \'PurchasesHybridCommon\', \'{x}\''
-    ],
+    './PurchasesHybridCommonUI.podspec' => ['s.version          = "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
     './typescript/package.json' => ['"version": "{x}"']
 }
