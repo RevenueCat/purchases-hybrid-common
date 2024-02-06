@@ -1,3 +1,7 @@
+## 9.5.1
+### Dependency Updates
+* Bump cocoapods from 1.15.0 to 1.15.1 (#715) via dependabot[bot] (@dependabot[bot])
+
 ## 9.5.0
 ### RevenueCatUI
 * [AUTOMATIC] iOS 4.34.0 => 4.35.0 (#713) via RevenueCat Git Bot (@RCGitBot)
