@@ -10,6 +10,7 @@
 
 import Foundation
 import SwiftUI
+import PurchasesHybridCommon
 import RevenueCat
 import RevenueCatUI
 import UIKit
@@ -17,8 +18,8 @@ import UIKit
 @available(iOS 15.0, *)
 @objcMembers public class PaywallProxy: NSObject {
 
-    /// See ``PaywallViewControllerDelegate`` for receiving events.
-    public weak var delegate: PaywallViewControllerDelegate?
+    /// See ``PaywallViewControllerDelegateWrapper`` for receiving events.
+    public weak var delegate: PaywallViewControllerDelegateWrapper?
 
     private var resultByVC: [PaywallViewController: (paywallResultHandler: (String) -> Void,
                                                      result: PaywallResult)] = [:]
@@ -186,19 +187,37 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .purchased
-        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo)
+        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo.dictionary)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
-        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo, transaction: transaction)
+        self.delegate?.paywallViewController?(controller,
+                                              didFinishPurchasingWith: customerInfo.dictionary,
+                                              transaction: transaction?.dictionary)
+    }
+
+    public func paywallViewControllerDidCancelPurchase(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerDidCancelPurchase?(controller)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didFailPurchasingWith error: NSError) {
+        let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+        self.delegate?.paywallViewController?(controller, didFailPurchasingWith: errorContainer.info)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
-        self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo)
+        self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didFailRestoringWith error: NSError) {
+        let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+        self.delegate?.paywallViewController?(controller, didFailRestoringWith: errorContainer.info)
     }
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
@@ -207,7 +226,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         paywallResultHandler(result.name)
     }
 
-    public func paywallViewController(_ controller: PaywallViewController, 
+    public func paywallViewController(_ controller: PaywallViewController,
                                       didChangeSizeTo size: CGSize) {
         self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
     }

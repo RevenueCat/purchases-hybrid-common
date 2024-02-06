@@ -3,7 +3,7 @@
 target 'PurchasesHybridCommon' do
   platform :ios, '11.0'
   use_frameworks!
-  
+
   pod 'RevenueCat', '4.35.0'
 
   target 'PurchasesHybridCommonTests' do
