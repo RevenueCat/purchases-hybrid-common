@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   s.documentation_url = "https://docs.revenuecat.com/"
 
   s.framework      = 'StoreKit'
-  s.framework      = 'SwiftUI'
 
   s.dependency 'RevenueCat', '4.35.0'
   s.swift_version = '5.7'
