@@ -15,6 +15,10 @@ import RevenueCatUI
 @objc(RCPaywallViewControllerDelegateWrapper)
 public protocol PaywallViewControllerDelegateWrapper: AnyObject {
 
+    /// Notifies that a purchase has started in a ``PaywallViewController``.
+    @objc(paywallViewControllerDidStartPurchase:)
+    optional func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController)
+
     /// Notifies that a purchase has completed in a ``PaywallViewController``.
     @objc(paywallViewController:didFinishPurchasingWithCustomerInfoDictionary:)
     optional func paywallViewController(_ controller: PaywallViewController,
