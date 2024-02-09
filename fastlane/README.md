@@ -45,6 +45,22 @@ Make GitHub release for current version
 
 Make GitHub release for specific version
 
+### trigger_update_dependencies
+
+```sh
+[bundle exec] fastlane trigger_update_dependencies
+```
+
+Trigger update dependencies to latest GitHub releases
+
+### trigger_bump
+
+```sh
+[bundle exec] fastlane trigger_bump
+```
+
+Trigger bump
+
 ### open_pr_upgrading_dependencies
 
 ```sh
