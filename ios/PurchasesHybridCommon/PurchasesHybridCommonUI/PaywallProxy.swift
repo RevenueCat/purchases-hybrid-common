@@ -26,12 +26,18 @@ import UIKit
 
     @objc
     public func createPaywallView() -> PaywallViewController {
-        return PaywallViewController()
+        let controller = PaywallViewController()
+        controller.delegate = self
+        
+        return controller
     }
 
     @objc
     public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
-        return PaywallViewController(offeringIdentifier: offeringIdentifier)
+        let controller = PaywallViewController(offeringIdentifier: offeringIdentifier)
+        controller.delegate = self
+
+        return controller
     }
 
     @objc
