@@ -91,6 +91,16 @@ lane :github_release do |options|
   )
 end
 
+desc "Trigger update dependencies to latest GitHub releases"
+lane :trigger_update_dependencies do
+    trigger_action(action: "dependency-update")
+end
+
+desc "Trigger bump"
+lane :trigger_bump do
+    trigger_action(action: "bump")
+end
+
 desc "Update dependencies to latest GitHub releases and opens a PR"
 lane :open_pr_upgrading_dependencies do |options|
   ensure_git_status_clean
@@ -202,6 +212,32 @@ lane :tag_current_branch do |options|
 
   add_git_tag(tag: version_number)
   push_git_tags(tag: version_number)
+end
+
+private_lane :trigger_action do |options|
+    require 'rest-client'
+
+    # Prompt branch
+    default_branch = git_branch
+    branch = UI.input("Branch (defaults to #{default_branch}): ")
+    branch = default_branch if branch == ""
+
+    # Get CircleCI token
+    circle_token = ENV["CIRCLE_TOKEN"]
+    UI.user_error! "Please set the CIRCLE_TOKEN environment variable" unless circle_token
+
+    # Make request
+    headers = {"Circle-Token": circle_token, "Content-Type": "application/json", "Accept": "application/json"}
+    data = {parameters: {:action => options[:action]}, branch: branch}
+    url = "https://circleci.com/api/v2/project/github/RevenueCat/#{repo_name}/pipeline"
+
+    resp = RestClient.post url, data.to_json, headers
+
+    # Print workflow url
+    number = JSON.parse(resp.body)["number"]
+    workflow_url = "https://app.circleci.com/pipelines/github/RevenueCat/#{repo_name}/#{number}"
+
+    UI.important "Workflow: #{workflow_url}"
 end
 
 desc "Update purchases-ios dependency version"
