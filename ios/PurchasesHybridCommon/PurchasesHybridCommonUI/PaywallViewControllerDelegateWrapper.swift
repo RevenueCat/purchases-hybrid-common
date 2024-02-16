@@ -19,6 +19,11 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     @objc(paywallViewControllerDidStartPurchase:)
     optional func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController)
 
+    /// Notifies that a purchase has started in a ``PaywallViewController``.
+    @objc(paywallViewController:didStartPurchaseWithPackage:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        didStartPurchaseWith packageDictionary: [String: Any])
+
     /// Notifies that a purchase has completed in a ``PaywallViewController``.
     @objc(paywallViewController:didFinishPurchasingWithCustomerInfoDictionary:)
     optional func paywallViewController(_ controller: PaywallViewController,
