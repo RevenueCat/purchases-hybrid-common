@@ -39,6 +39,10 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     optional func paywallViewController(_ controller: PaywallViewController,
                                         didFailPurchasingWith errorDictionary: [String: Any])
 
+    /// Notifies that a restore has started in a ``PaywallViewController``.
+    @objc(paywallViewControllerDidStartRestore:)
+    optional func paywallViewControllerDidStartRestore(_ controller: PaywallViewController)
+
     /// Notifies that the restore operation has completed in a ``PaywallViewController``.
     ///
     /// - Warning: Receiving a ``CustomerInfo``does not imply that the user has any entitlements,

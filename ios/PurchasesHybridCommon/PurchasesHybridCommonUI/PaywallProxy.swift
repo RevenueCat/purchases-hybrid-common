@@ -218,6 +218,10 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         self.delegate?.paywallViewController?(controller, didFailPurchasingWith: errorContainer.info)
     }
 
+    public func paywallViewControllerDidStartRestore(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerDidStartRestore?(controller)
+    }
+
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
