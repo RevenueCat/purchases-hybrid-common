@@ -1288,7 +1288,7 @@ internal class CommonKtTests {
 const val MICROS_MULTIPLIER = 1_000_000
 
 fun getPresentedOfferingContext(purchaseParams: PurchaseParams): PresentedOfferingContext? {
-    // Uses reflection to test presentedOfferingIdentifier exists in purchasing params
+    // Uses reflection to test presentedOfferingContext exists in purchasing params
     val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingContext" }
     return prop!!.call(purchaseParams) as? PresentedOfferingContext?
 }
@@ -1307,7 +1307,7 @@ fun stubStoreProduct(
     ),
     subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
     price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
-    presentedOfferingIdentifier: String? = null,
+    presentedOfferingContext: PresentedOfferingContext? = null,
 ): StoreProduct = object : StoreProduct {
     override val id: String
         get() = productId
@@ -1324,9 +1324,9 @@ fun stubStoreProduct(
     override val period: Period?
         get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
     override val presentedOfferingContext: PresentedOfferingContext?
-        get() = presentedOfferingIdentifier?.let { PresentedOfferingContext(it) }
+        get() = presentedOfferingContext
     override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingIdentifier
+        get() = presentedOfferingContext?.offeringIdentifier
     override val subscriptionOptions: SubscriptionOptions?
         get() = subscriptionOptions?.let { SubscriptionOptions(it) }
     override val defaultOption: SubscriptionOption?
@@ -1338,11 +1338,14 @@ fun stubStoreProduct(
     override val sku: String
         get() = productId
     override fun copyWithOfferingId(offeringId: String): StoreProduct {
-        fun SubscriptionOption.applyOffering(offeringId: String): SubscriptionOption {
+        return copyWithPresentedOfferingContext(PresentedOfferingContext(offeringId))
+    }
+    override fun copyWithPresentedOfferingContext(presentedOfferingContext: PresentedOfferingContext?): StoreProduct {
+        fun SubscriptionOption.applyOfferingContext(presentedOfferingContext: PresentedOfferingContext?): SubscriptionOption {
             return stubSubscriptionOption(
                 id,
                 productId,
-                presentedOfferingIdentifier = offeringId,
+                presentedOfferingContext = presentedOfferingContext,
             )
         }
 
@@ -1353,18 +1356,14 @@ fun stubStoreProduct(
             name,
             type,
             defaultOption?.let {
-                it.applyOffering(offeringId)
+                it.applyOfferingContext(presentedOfferingContext)
             },
             subscriptionOptions?.map {
-                it.applyOffering(offeringId)
+                it.applyOfferingContext(presentedOfferingContext)
             },
             price,
-            offeringId,
+            presentedOfferingContext,
         )
-    }
-
-    override fun copyWithPresentedOfferingContext(presentedOfferingContext: PresentedOfferingContext?): StoreProduct {
-        TODO("Not yet implemented")
     }
 }
 
@@ -1374,14 +1373,14 @@ fun stubSubscriptionOption(
     productId: String,
     duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
     pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
-    presentedOfferingIdentifier: String? = null,
+    presentedOfferingContext: PresentedOfferingContext? = null,
 ): SubscriptionOption = object : SubscriptionOption {
     override val id: String
         get() = id
     override val presentedOfferingContext: PresentedOfferingContext?
-        get() = presentedOfferingIdentifier?.let { PresentedOfferingContext(it) }
+        get() = presentedOfferingContext
     override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingIdentifier
+        get() = presentedOfferingContext?.offeringIdentifier
     override val pricingPhases: List<PricingPhase>
         get() = pricingPhases
     override val tags: List<String>
