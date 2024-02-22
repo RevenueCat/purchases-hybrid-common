@@ -578,8 +578,8 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            val presentedOfferingIdentifier = getPresentedOfferingId(params)
-            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+            val presentedOfferingContext = getPresentedOfferingContext(params)
+            assertEquals(PresentedOfferingContext(expectedOfferingIdentifier), presentedOfferingContext)
 
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
@@ -1040,8 +1040,8 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            val presentedOfferingIdentifier = getPresentedOfferingId(params)
-            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+            val presentedOfferingContext = getPresentedOfferingContext(params)
+            assertEquals(PresentedOfferingContext(expectedOfferingIdentifier), presentedOfferingContext)
 
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
@@ -1287,10 +1287,10 @@ internal class CommonKtTests {
 
 const val MICROS_MULTIPLIER = 1_000_000
 
-fun getPresentedOfferingId(purchaseParams: PurchaseParams): String? {
+fun getPresentedOfferingContext(purchaseParams: PurchaseParams): PresentedOfferingContext? {
     // Uses reflection to test presentedOfferingIdentifier exists in purchasing params
-    val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingIdentifier" }
-    return prop!!.call(purchaseParams) as? String?
+    val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingContext" }
+    return prop!!.call(purchaseParams) as? PresentedOfferingContext?
 }
 
 @SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
