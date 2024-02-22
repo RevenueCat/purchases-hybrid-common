@@ -1340,8 +1340,12 @@ fun stubStoreProduct(
     override fun copyWithOfferingId(offeringId: String): StoreProduct {
         return copyWithPresentedOfferingContext(PresentedOfferingContext(offeringId))
     }
-    override fun copyWithPresentedOfferingContext(presentedOfferingContext: PresentedOfferingContext?): StoreProduct {
-        fun SubscriptionOption.applyOfferingContext(presentedOfferingContext: PresentedOfferingContext?): SubscriptionOption {
+    override fun copyWithPresentedOfferingContext(
+        presentedOfferingContext: PresentedOfferingContext?,
+    ): StoreProduct {
+        fun SubscriptionOption.applyOfferingContext(
+            presentedOfferingContext: PresentedOfferingContext?,
+        ): SubscriptionOption {
             return stubSubscriptionOption(
                 id,
                 productId,
