@@ -10,6 +10,7 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -1322,6 +1323,8 @@ fun stubStoreProduct(
         get() = description
     override val period: Period?
         get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val presentedOfferingContext: PresentedOfferingContext?
+        get() = presentedOfferingIdentifier?.let { PresentedOfferingContext(it) }
     override val presentedOfferingIdentifier: String?
         get() = presentedOfferingIdentifier
     override val subscriptionOptions: SubscriptionOptions?
@@ -1358,6 +1361,10 @@ fun stubStoreProduct(
             price,
             offeringId,
         )
+    }
+
+    override fun copyWithPresentedOfferingContext(presentedOfferingContext: PresentedOfferingContext?): StoreProduct {
+        TODO("Not yet implemented")
     }
 }
 
