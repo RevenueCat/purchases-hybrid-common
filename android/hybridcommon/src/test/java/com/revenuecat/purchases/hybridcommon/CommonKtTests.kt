@@ -1378,6 +1378,8 @@ fun stubSubscriptionOption(
 ): SubscriptionOption = object : SubscriptionOption {
     override val id: String
         get() = id
+    override val presentedOfferingContext: PresentedOfferingContext?
+        get() = presentedOfferingIdentifier?.let { PresentedOfferingContext(it) }
     override val presentedOfferingIdentifier: String?
         get() = presentedOfferingIdentifier
     override val pricingPhases: List<PricingPhase>
