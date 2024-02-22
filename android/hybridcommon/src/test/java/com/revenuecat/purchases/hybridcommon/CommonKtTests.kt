@@ -10,6 +10,7 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -577,8 +578,8 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            val presentedOfferingIdentifier = getPresentedOfferingId(params)
-            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+            val presentedOfferingContext = getPresentedOfferingContext(params)
+            assertEquals(PresentedOfferingContext(expectedOfferingIdentifier), presentedOfferingContext)
 
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
@@ -1039,8 +1040,8 @@ internal class CommonKtTests {
             val params = it.invocation.args.first() as PurchaseParams
             assertNull(params.isPersonalizedPrice)
 
-            val presentedOfferingIdentifier = getPresentedOfferingId(params)
-            assertEquals(expectedOfferingIdentifier, presentedOfferingIdentifier)
+            val presentedOfferingContext = getPresentedOfferingContext(params)
+            assertEquals(PresentedOfferingContext(expectedOfferingIdentifier), presentedOfferingContext)
 
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
@@ -1286,10 +1287,10 @@ internal class CommonKtTests {
 
 const val MICROS_MULTIPLIER = 1_000_000
 
-fun getPresentedOfferingId(purchaseParams: PurchaseParams): String? {
-    // Uses reflection to test presentedOfferingIdentifier exists in purchasing params
-    val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingIdentifier" }
-    return prop!!.call(purchaseParams) as? String?
+fun getPresentedOfferingContext(purchaseParams: PurchaseParams): PresentedOfferingContext? {
+    // Uses reflection to test presentedOfferingContext exists in purchasing params
+    val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingContext" }
+    return prop!!.call(purchaseParams) as? PresentedOfferingContext?
 }
 
 @SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
@@ -1306,7 +1307,7 @@ fun stubStoreProduct(
     ),
     subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
     price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
-    presentedOfferingIdentifier: String? = null,
+    presentedOfferingContext: PresentedOfferingContext? = null,
 ): StoreProduct = object : StoreProduct {
     override val id: String
         get() = productId
@@ -1322,8 +1323,10 @@ fun stubStoreProduct(
         get() = description
     override val period: Period?
         get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
+    override val presentedOfferingContext: PresentedOfferingContext?
+        get() = presentedOfferingContext
     override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingIdentifier
+        get() = presentedOfferingContext?.offeringIdentifier
     override val subscriptionOptions: SubscriptionOptions?
         get() = subscriptionOptions?.let { SubscriptionOptions(it) }
     override val defaultOption: SubscriptionOption?
@@ -1335,11 +1338,18 @@ fun stubStoreProduct(
     override val sku: String
         get() = productId
     override fun copyWithOfferingId(offeringId: String): StoreProduct {
-        fun SubscriptionOption.applyOffering(offeringId: String): SubscriptionOption {
+        return copyWithPresentedOfferingContext(PresentedOfferingContext(offeringId))
+    }
+    override fun copyWithPresentedOfferingContext(
+        presentedOfferingContext: PresentedOfferingContext?,
+    ): StoreProduct {
+        fun SubscriptionOption.applyOfferingContext(
+            presentedOfferingContext: PresentedOfferingContext?,
+        ): SubscriptionOption {
             return stubSubscriptionOption(
                 id,
                 productId,
-                presentedOfferingIdentifier = offeringId,
+                presentedOfferingContext = presentedOfferingContext,
             )
         }
 
@@ -1350,13 +1360,13 @@ fun stubStoreProduct(
             name,
             type,
             defaultOption?.let {
-                it.applyOffering(offeringId)
+                it.applyOfferingContext(presentedOfferingContext)
             },
             subscriptionOptions?.map {
-                it.applyOffering(offeringId)
+                it.applyOfferingContext(presentedOfferingContext)
             },
             price,
-            offeringId,
+            presentedOfferingContext,
         )
     }
 }
@@ -1367,12 +1377,14 @@ fun stubSubscriptionOption(
     productId: String,
     duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
     pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
-    presentedOfferingIdentifier: String? = null,
+    presentedOfferingContext: PresentedOfferingContext? = null,
 ): SubscriptionOption = object : SubscriptionOption {
     override val id: String
         get() = id
+    override val presentedOfferingContext: PresentedOfferingContext?
+        get() = presentedOfferingContext
     override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingIdentifier
+        get() = presentedOfferingContext?.offeringIdentifier
     override val pricingPhases: List<PricingPhase>
         get() = pricingPhases
     override val tags: List<String>

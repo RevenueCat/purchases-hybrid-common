@@ -1,5 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.hybridcommon.MICROS_MULTIPLIER
 import com.revenuecat.purchases.hybridcommon.stubPricingPhase
@@ -319,21 +320,21 @@ internal class StoreProductMapperTests {
     fun `map presentedOfferingIdentifier correctly when null`() {
         stubStoreProduct(
             productId = exptectedProductId,
-            presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
         ).map().let {
-            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(null)
+            assertThat(it["presentedOfferingIdentifier"]).isNull()
         }
     }
 
     @Test
     fun `map presentedOfferingIdentifier correctly when not null`() {
-        val expectedPresentedOfferingIdentifier = "mainoffer"
+        val expectedPresentedOfferingContext = PresentedOfferingContext("mainoffer")
 
         stubStoreProduct(
             productId = exptectedProductId,
-            presentedOfferingIdentifier = expectedPresentedOfferingIdentifier,
+            presentedOfferingContext = expectedPresentedOfferingContext,
         ).map().let {
-            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(expectedPresentedOfferingIdentifier)
+            assertThat(it["presentedOfferingIdentifier"]).isEqualTo(expectedPresentedOfferingContext.offeringIdentifier)
         }
     }
 
