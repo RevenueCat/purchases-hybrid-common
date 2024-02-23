@@ -195,6 +195,12 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
+                                      didStartPurchaseWith package: Package) {
+        self.delegate?.paywallViewController?(controller,
+                                              didStartPurchaseWith: package.dictionary)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .purchased
         self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo.dictionary)

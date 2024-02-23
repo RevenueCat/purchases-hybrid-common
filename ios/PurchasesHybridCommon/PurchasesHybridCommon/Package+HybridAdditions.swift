@@ -9,8 +9,12 @@
 import Foundation
 import RevenueCat
 
-internal extension Package {
+public extension Package {
 
+    var dictionary: [String: Any] {
+        return dictionary(offeringIdentifier)
+    }
+    
     func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
         return [
             "identifier": identifier,
