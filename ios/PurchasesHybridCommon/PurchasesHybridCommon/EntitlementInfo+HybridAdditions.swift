@@ -12,7 +12,6 @@ import RevenueCat
 internal extension EntitlementInfo {
 
     var dictionary: [String: Any] {
-        let verificationResult: VerificationResult
         return [
             "identifier": identifier,
             "isActive": isActive,
