@@ -1,10 +1,10 @@
 # Uncomment the next line to define a global platform for your project
 
 target 'PurchasesHybridCommon' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.40.0'
+  pod 'RevenueCat', '5.0.0-beta.3'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -21,18 +21,18 @@ target 'PurchasesHybridCommon' do
 end
 
 target 'PurchasesHybridCommonUI' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.40.0'
-  pod 'RevenueCatUI', '4.40.0'
+  pod 'RevenueCat', '5.0.0-beta.3'
+  pod 'RevenueCatUI', '5.0.0-beta.3'
 
 end
 
 target 'ObjCAPITester' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.40.0'
-  pod 'RevenueCatUI', '4.40.0'
+  pod 'RevenueCat', '5.0.0-beta.3'
+  pod 'RevenueCatUI', '5.0.0-beta.3'
 end

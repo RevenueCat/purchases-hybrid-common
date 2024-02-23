@@ -12,7 +12,7 @@ import XCTest
 
 class BaseIntegrationTests: XCTestCase {
 
-    class var storeKit2Setting: StoreKit2Setting {
+    class var storeKitVersion: StoreKitVersion {
         return .default
     }
 

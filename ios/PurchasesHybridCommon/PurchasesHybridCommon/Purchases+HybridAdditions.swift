@@ -35,7 +35,7 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        configurationBuilder = configurationBuilder.with(observerMode: observerMode)
+        configurationBuilder = configurationBuilder.with(observerMode: observerMode, storeKitVersion: usesStoreKit2IfAvailable ? .storeKit2 : .storeKit1)
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
@@ -54,9 +54,7 @@ import RevenueCat
 
         if let verificationMode {
             if let mode = Configuration.EntitlementVerificationMode(name: verificationMode) {
-                if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *) {
-                    configurationBuilder = configurationBuilder.with(entitlementVerificationMode: mode)
-                }
+                configurationBuilder = configurationBuilder.with(entitlementVerificationMode: mode)
             } else {
                 NSLog("Attempted to configure with unknown verification mode: '\(verificationMode)'")
             }

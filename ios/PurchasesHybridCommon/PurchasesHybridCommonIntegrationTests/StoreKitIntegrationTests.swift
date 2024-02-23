@@ -17,7 +17,7 @@ import XCTest
 
 class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
-    override class var storeKit2Setting: StoreKit2Setting { return .enabledForCompatibleDevices }
+    override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
 }
 
@@ -53,8 +53,8 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         _ = try await CommonFunctionality.offerings()
     }
 
-    override class var storeKit2Setting: StoreKit2Setting {
-        return .disabled
+    override class var storeKitVersion: StoreKitVersion {
+        return .storeKit1
     }
 
     func testCanGetOfferings() async throws {
@@ -116,7 +116,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     }
 
     func testTrialOrIntroductoryPriceEligibility() async throws {
-        if Self.storeKit2Setting == .disabled {
+        if Self.storeKitVersion == .storeKit1 {
             // SK1 implementation relies on the receipt being loaded already.
             // See `TrialOrIntroPriceEligibilityChecker.sk1CheckEligibility`
             _ = try await CommonFunctionality.restorePurchases()
@@ -129,7 +129,6 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(result)
     }
 
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
     func testIneligibleForPromotionalOfferByDefault() async {
         do {
             _ = try await CommonFunctionality.promotionalOffer(
@@ -143,7 +142,6 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         }
     }
 
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
     func testPromotionalOffer() async throws {
         try await self.purchaseMonthlyOffering()
         try self.testSession.expireSubscription(productIdentifier: Self.productIdentifier)
@@ -157,7 +155,6 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(result)
     }
 
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
     func testIneligibleForPromotionalError() async throws {
         do {
             _ = try await CommonFunctionality.promotionalOffer(
@@ -181,7 +178,7 @@ private extension StoreKit1IntegrationTests {
         file: StaticString = #file,
         line: UInt = #line
     ) {
-        let name = "\(Self.storeKit2Setting.testSuffix)-\(testName)"
+        let name = "SK\(Self.storeKitVersion.debugDescription)-\(testName)"
         SnapshotTesting.assertSnapshot(matching: value,
                                        as: .json,
                                        file: file,
@@ -235,17 +232,6 @@ private extension StoreKit1IntegrationTests {
             product: productIdentifier,
             signedDiscountTimestamp: nil
         )
-    }
-
-}
-
-private extension StoreKit2Setting {
-
-    var testSuffix: String {
-        switch self {
-        case .disabled, .enabledOnlyForOptimizations: return "SK1"
-        case .enabledForCompatibleDevices: return "SK2"
-        }
     }
 
 }
