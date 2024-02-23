@@ -41,7 +41,7 @@ import RevenueCat
         set {
             if let value = newValue {
                 let url: URL?
-                // Starting with iOS 17, URL(string:) returns a non-nil value from invalid URLs. 
+                // Starting with iOS 17, URL(string:) returns a non-nil value from invalid URLs.
                 // So we use a new method to get the old behavior.
                 // Since the new method isn't recognized by older Xcodes, we use Swift 5.9 as a proxy for Xcode 15+.
                 // https://developer.apple.com/documentation/xcode-release-notes/xcode-15_0-release-notes
@@ -266,17 +266,14 @@ import RevenueCat
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(product: storeProduct,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
+                guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
+                    completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                     return
                 }
-
+                Self.sharedInstance.purchase(product: storeProduct,
+                                            promotionalOffer: promotionalOffer,
+                                            completion: hybridCompletion)
+                return
             }
 
             Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
@@ -298,17 +295,14 @@ import RevenueCat
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(package: package,
-                                                 promotionalOffer: promotionalOffer,
-                                                 completion: hybridCompletion)
+                guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
+                    completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                     return
                 }
-
+                Self.sharedInstance.purchase(package: package,
+                                                promotionalOffer: promotionalOffer,
+                                                completion: hybridCompletion)
+                return
             }
 
             Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
@@ -431,13 +425,6 @@ import RevenueCat
     static func promotionalOffer(for productIdentifier: String,
                                  discountIdentifier: String?,
                                  completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
-            completion(
-                nil,
-                Self.createErrorContainer(error: ErrorCode.unsupportedError)
-            )
-            return
-        }
 
         product(with: productIdentifier) { storeProduct in
             guard let storeProduct = storeProduct else {
@@ -596,7 +583,6 @@ private extension CommonFunctionality {
         }
     }
 
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
     static func discount(with identifier: String?, for product: StoreProduct) -> StoreProductDiscount? {
         if identifier == nil {
             return product.discounts.first
