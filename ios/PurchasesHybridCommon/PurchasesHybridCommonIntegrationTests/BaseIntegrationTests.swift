@@ -69,7 +69,7 @@ private extension BaseIntegrationTests {
             userDefaultsSuiteName: Constants.userDefaultsSuiteName,
             platformFlavor: nil,
             platformFlavorVersion: nil,
-            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
+            usesStoreKit2IfAvailable: Self.storeKitVersion == .storeKit2,
             dangerousSettings: self.dangerousSettings
         )
         Purchases.logLevel = .debug
