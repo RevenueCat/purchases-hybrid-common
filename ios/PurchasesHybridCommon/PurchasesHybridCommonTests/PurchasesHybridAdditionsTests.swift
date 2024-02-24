@@ -22,6 +22,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: nil,
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil)
                 }.notTo(raiseException())
             }
@@ -33,6 +34,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil)
                 }.notTo(raiseException())
             }
@@ -45,7 +47,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3",
+                                        platformFlavorVersion: "1.2.3", 
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "DISABLED")
                 }.notTo(raiseException())
@@ -59,6 +62,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "INFORMATIONAL")
                 }.notTo(raiseException())
@@ -71,6 +75,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "ENFORCED")
                 }.notTo(raiseException())
@@ -84,8 +89,51 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         observerMode: false,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
-                                        platformFlavorVersion: "1.2.3",
+                                        platformFlavorVersion: "1.2.3", 
+                                        storeKitVersion: "DEFAULT",
                                         dangerousSettings: DangerousSettings(autoSyncPurchases: false))
+                }.notTo(raiseException())
+            }
+        }
+        context("configure with StoreKit version") {
+            it("DEFAULT") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "DEFAULT",
+                                        dangerousSettings: nil,
+                                        verificationMode: "DISABLED")
+                }.notTo(raiseException())
+            }
+
+            it("STOREKIT_2") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "STOREKIT_2",
+                                        dangerousSettings: nil,
+                                        verificationMode: "DISABLED")
+                }.notTo(raiseException())
+            }
+            it("STOREKIT_1") {
+                expect {
+                    Purchases.configure(apiKey: "api key",
+                                        appUserID: nil,
+                                        observerMode: false,
+                                        userDefaultsSuiteName: "test",
+                                        platformFlavor: "hybrid-platform",
+                                        platformFlavorVersion: "1.2.3",
+                                        storeKitVersion: "STOREKIT_1",
+                                        dangerousSettings: nil,
+                                        verificationMode: "DISABLED")
                 }.notTo(raiseException())
             }
         }
