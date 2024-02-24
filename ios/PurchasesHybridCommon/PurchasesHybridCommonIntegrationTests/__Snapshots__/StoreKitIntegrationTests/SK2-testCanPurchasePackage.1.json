@@ -49,7 +49,7 @@
     "nonSubscriptionTransactions" : [
 
     ],
-    "originalApplicationVersion" : "1.0"
+    "originalApplicationVersion" : null
   },
   "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
   "transaction" : {
