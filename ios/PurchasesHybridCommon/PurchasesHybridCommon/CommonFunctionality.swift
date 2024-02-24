@@ -640,3 +640,26 @@ private extension CommonFunctionality {
     }
 
 }
+
+// MARK: StoreKit 2 Observer Mode
+@objc public extension CommonFunctionality {
+
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    @objc(handleObserverModeTransactionForProductID:completion:) 
+    static func handleObserverModeTransaction(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+        _ = Task<Void, Never> {
+            let result = await StoreKit.Transaction.latest(for: productID)
+            if let result = result {
+                do {
+                    let transaction = try await Self.sharedInstance.handleObserverModeTransaction(.success(result))
+                    completion?(transaction?.dictionary, nil)
+                } catch {
+                    completion?(nil, ErrorContainer(error: error, extraPayload: [:]))
+                }
+            } else {
+                completion?(nil, nil)
+            }
+        }
+    }
+
+}
