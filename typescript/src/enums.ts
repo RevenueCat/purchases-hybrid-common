@@ -84,7 +84,7 @@ export enum IN_APP_MESSAGE_TYPE {
   BILLING_ISSUE = 0,
 
   /**
-   * iOS-only. This message will show if you increase the price of a subscription and 
+   * iOS-only. This message will show if you increase the price of a subscription and
    * the user needs to opt-in to the increase.
    */
   PRICE_INCREASE_CONSENT = 1,
@@ -155,7 +155,7 @@ export enum VERIFICATION_RESULT {
 }
 
 /**
- * The result of presenting a paywall. This will be the last situation the user experienced before the 
+ * The result of presenting a paywall. This will be the last situation the user experienced before the
  * paywall closed.
  */
 export enum PAYWALL_RESULT {
@@ -183,4 +183,26 @@ export enum PAYWALL_RESULT {
    * If a successful restore happened inside the paywall
    */
   RESTORED = "RESTORED",
+}
+
+/**
+ * Defines which version of StoreKit may be used
+ */
+export enum STOREKIT_VERSION {
+  /**
+   * Always use StoreKit 1.
+   */
+  STOREKIT_1 = "STOREKIT_1",
+
+  /**
+   * Always use StoreKit 2 (StoreKit 1 will be used if StoreKit 2 is not available in the current device.)
+   * - Warning: Make sure you have an In-App Purchase Key configured in your app.
+   * Please see https://rev.cat/in-app-purchase-key-configuration for more info.
+   */
+  STOREKIT_2 = "STOREKIT_2",
+
+  /**
+   * Let RevenueCat use the most appropiate version of StoreKit
+  */
+ DEFAULT = "DEFAULT",
 }

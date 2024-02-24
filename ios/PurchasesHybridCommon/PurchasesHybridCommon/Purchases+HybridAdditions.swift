@@ -12,14 +12,14 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:verificationMode:)
+            storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          usesStoreKit2IfAvailable: Bool = false,
+                          storeKitVersion: String?,
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
                           verificationMode: String?) -> Purchases {
@@ -35,16 +35,21 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        configurationBuilder = configurationBuilder.with(
-            observerMode: observerMode, 
-            storeKitVersion: usesStoreKit2IfAvailable ? .storeKit2 : .storeKit1
-        )
+        if let storeKitVersion {
+            if let version = StoreKitVersion(name: storeKitVersion) {
+                if observerMode {
+                    configurationBuilder = configurationBuilder.with(observerMode: observerMode,
+                                                                     storeKitVersion: version)
+                } else {
+                    configurationBuilder = configurationBuilder.with(storeKitVersion: version)
+                }
+            } else {
+                NSLog("Attempted to configure with unknown StoreKit version: '\(storeKitVersion)'")
+            }
+        }
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
-        configurationBuilder = configurationBuilder.with(
-            storeKitVersion: usesStoreKit2IfAvailable ? .storeKit2 : .storeKit1
-        )
         if let dangerousSettings = dangerousSettings {
             configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
         }
@@ -71,14 +76,14 @@ import RevenueCat
 
 
     @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
+            storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           observerMode: Bool,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          usesStoreKit2IfAvailable: Bool = false,
+                          storeKitVersion: String?,
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         return configure(apiKey: apiKey,
@@ -87,7 +92,7 @@ import RevenueCat
                          userDefaultsSuiteName: userDefaultsSuiteName,
                          platformFlavor: platformFlavor,
                          platformFlavorVersion: platformFlavorVersion,
-                         usesStoreKit2IfAvailable: usesStoreKit2IfAvailable,
+                         storeKitVersion: storeKitVersion,
                          dangerousSettings: dangerousSettings,
                          shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                          verificationMode: nil)
@@ -108,13 +113,3 @@ extension LogLevel {
         uniqueKeysWithValues: LogLevel.levels.map { ($0.description, $0) }
     )
 }
-
-// MARK: - Deprecations
-
-protocol ConfigurationBuilderDeprecatable {
-
-    func with(usesStoreKit2IfAvailable: Bool) -> Configuration.Builder
-
-}
-
-extension Configuration.Builder: ConfigurationBuilderDeprecatable {}
