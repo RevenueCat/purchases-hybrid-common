@@ -21,6 +21,26 @@ class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
 }
 
+class StoreKit2ObserverModeIntegrationTests: StoreKit2IntegrationTests {
+
+    override class var observerMode: Bool { true }
+
+    func testHandleObserverMoveTransaction() async throws {
+        _ = try await Product.products(for: [Self.productIdentifier]).first?.purchase()
+
+        let (dict, error) = try await withCheckedThrowingContinuation { continuation in
+            CommonFunctionality.handleObserverModeTransaction(productID: Self.productIdentifier) { (dict, error) in
+                continuation.resume(returning: (dict, error))
+            }
+        }
+        expect(error).to(beNil())
+        var unwrappedDict = try XCTUnwrap(dict)
+        removeDates(&unwrappedDict)
+        await self.assertSnapshot(unwrappedDict)
+    }
+
+}
+
 class StoreKit1IntegrationTests: BaseIntegrationTests {
 
     private var testSession: SKTestSession!

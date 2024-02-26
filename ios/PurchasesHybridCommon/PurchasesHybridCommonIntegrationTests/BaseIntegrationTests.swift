@@ -16,6 +16,10 @@ class BaseIntegrationTests: XCTestCase {
         return .default
     }
 
+    class var observerMode: Bool {
+        return false
+    }
+
     override func setUp() async throws {
         try await super.setUp()
 
@@ -65,7 +69,7 @@ private extension BaseIntegrationTests {
         _ = Purchases.configure(
             apiKey: Constants.apiKey,
             appUserID: nil,
-            observerMode: false,
+            observerMode: Self.observerMode,
             userDefaultsSuiteName: Constants.userDefaultsSuiteName,
             platformFlavor: nil,
             platformFlavorVersion: nil,
