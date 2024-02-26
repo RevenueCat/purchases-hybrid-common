@@ -694,6 +694,13 @@ private extension CommonFunctionality {
         return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
+    static func transactionNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.unknownError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
+    }
+
 }
 
 // MARK: - Encoding
@@ -725,7 +732,10 @@ private extension CommonFunctionality {
                     completion?(nil, ErrorContainer(error: error, extraPayload: [:]))
                 }
             } else {
-                completion?(nil, nil)
+                completion?(nil, transactionNotFoundError(
+                    description: "Couldn't find transaction for product ID '\(productID)'.",
+                    userCancelled: false
+                ))
             }
         }
     }
