@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "PurchasesHybridCommonUI"
-  s.version          = "9.8.0"
+  s.version          = "10.0.0-beta.1"
   s.summary          = "Common files for hybrid SDKs for RevenueCat UI"
 
   s.description      = <<-DESC
