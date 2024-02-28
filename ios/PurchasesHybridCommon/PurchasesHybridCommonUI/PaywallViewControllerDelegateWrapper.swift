@@ -62,6 +62,13 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     optional func paywallViewController(_ controller: PaywallViewController,
                                         didFailRestoringWith errorDictionary: [String: Any])
 
+    /// Notifies that the ``PaywallViewController`` has to be dismissed.
+    /// - After close button is pressed if it's present
+    /// - After a successful purchase
+    /// Only called if the shouldAutomaticallyDismiss configuration option is set to false (true by default).
+    @objc(paywallViewControllerRequestedDismissal:)
+    optional func paywallViewControllerRequestedDismissal(_ controller: PaywallViewController)
+
     /// Notifies that the ``PaywallViewController`` was dismissed.
     @objc(paywallViewControllerWasDismissed:)
     optional func paywallViewControllerWasDismissed(_ controller: PaywallViewController)

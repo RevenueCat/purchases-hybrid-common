@@ -9,7 +9,6 @@
 #if !os(macOS) && !os(tvOS) && !os(watchOS)
 
 import Foundation
-import SwiftUI
 import PurchasesHybridCommon
 import RevenueCat
 import RevenueCatUI
@@ -28,15 +27,18 @@ import UIKit
     public func createPaywallView() -> PaywallViewController {
         let controller = PaywallViewController()
         controller.delegate = self
-        
+        controller.updateAutomaticallyDismiss(with: false)
         return controller
     }
 
     @objc
-    public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
+    public func createPaywallView(
+        offeringIdentifier: String,
+        dismissHandler: (() -> Void)? = nil
+    ) -> PaywallViewController {
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier)
         controller.delegate = self
-
+        controller.updateAutomaticallyDismiss(with: false)
         return controller
     }
 
@@ -244,6 +246,10 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         self.delegate?.paywallViewControllerWasDismissed?(controller)
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
+    }
+
+    public func paywallViewControllerRequestedDismissal(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerRequestedDismissal?(controller)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
