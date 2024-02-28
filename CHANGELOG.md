@@ -1,3 +1,7 @@
+## 9.8.1
+### Dependency Updates
+* Bump lefthook from 1.6.1 to 1.6.4 (#745) via dependabot[bot] (@dependabot[bot])
+
 ## 9.8.0
 ### New Features
 * Add `didStartRestore` (#734) via Cesar de la Vega (@vegaro)
