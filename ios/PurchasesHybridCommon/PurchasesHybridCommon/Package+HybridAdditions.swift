@@ -9,6 +9,21 @@
 import Foundation
 import RevenueCat
 
+public extension PresentedOfferingContext {
+
+    var dictionary: [String: Any] {
+        let dict: [String: Any?] = [
+            "offeringIdentifier": self.offeringIdentifier,
+            "placementIdentifier": self.placementIdentifier,
+            "targetingRevision": self.targetingContext?.revision,
+            "targetingRuleId": self.targetingContext?.ruleId,
+        ]
+
+        return dict.compactMapValues { $0 }
+    }
+
+}
+
 public extension Package {
 
     var dictionary: [String: Any] {
@@ -20,7 +35,8 @@ public extension Package {
             "identifier": identifier,
             "packageType": packageType.name,
             "product": storeProduct.rc_dictionary,
-            "offeringIdentifier": offeringIdentifier
+            "offeringIdentifier": offeringIdentifier,
+            "presentedOfferingContext": presentedOfferingContext.dictionary
         ]
     }
 
