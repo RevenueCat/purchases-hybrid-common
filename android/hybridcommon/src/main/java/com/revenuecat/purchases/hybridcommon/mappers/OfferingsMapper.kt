@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.PresentedOfferingContext
 
 fun Offerings.map(): Map<String, Any?> =
     mapOf(
@@ -10,7 +11,7 @@ fun Offerings.map(): Map<String, Any?> =
         "current" to this.current?.map(),
     )
 
-private fun Offering.map(): Map<String, Any?> =
+fun Offering.map(): Map<String, Any?> =
     mapOf(
         "identifier" to identifier,
         "serverDescription" to serverDescription,
@@ -30,5 +31,14 @@ fun Package.map(): Map<String, Any?> =
         "identifier" to identifier,
         "packageType" to packageType.name,
         "product" to product.map(),
-        "offeringIdentifier" to offering,
+        "offeringIdentifier" to presentedOfferingContext.offeringIdentifier,
+        "presentedOfferingContext" to presentedOfferingContext.map(),
+    )
+
+fun PresentedOfferingContext.map(): Map<String, Any?> =
+    mapOf(
+        "offeringIdentifier" to offeringIdentifier,
+        "placementIdentifier" to placementIdentifier,
+        "targetingRevision" to targetingContext?.revision,
+        "targetingRuleId" to targetingContext?.ruleId,
     )

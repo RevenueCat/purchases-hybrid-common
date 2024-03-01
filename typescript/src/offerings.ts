@@ -130,6 +130,11 @@ export interface PurchasesStoreProduct {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingIdentifier: string | null;
+  /**
+   * Offering context this package belongs to.
+   * Null if not using offerings or if fetched directly from store via getProducts.
+   */
+  readonly presentedOfferingContext: PresentedOfferingContext | null;
 }
 
 export enum PRODUCT_CATEGORY {
@@ -262,10 +267,31 @@ export interface PurchasesPackage {
   readonly offeringIdentifier: string;
   /**
    * Offering context this package belongs to.
+   * Null if not using offerings or if fetched directly from store via getProducts.
    */
-  readonly presentedOfferingContext: {
-    [key: string]: unknown;
-  };
+  readonly presentedOfferingContext: PresentedOfferingContext | null;
+}
+
+/**
+ * Contains data about the context in which an offering was presented.
+ */
+export interface PresentedOfferingContext {
+  /**
+   * The identifier of the offering used to obtain this object.
+   */
+  readonly offeringIdentifier: string;
+  /**
+   * The identifier of the placement used to obtain this object.
+   */
+  readonly placementIdentifier: string | null;
+  /**
+   * The revision of the targeting used to obtain this object.
+   */
+  readonly targetingRevision: string | null;
+  /**
+   * The rule id from the targeting used to obtain this object.
+   */
+  readonly targetingRuleId: string | null;
 }
 
 /**
@@ -491,6 +517,11 @@ export interface SubscriptionOption {
    * Offering identifier the subscription option was presented from
    */
   readonly presentedOfferingIdentifier: string | null;
+  /**
+   * Offering context this package belongs to.
+   * Null if not using offerings or if fetched directly from store via getProducts.
+   */
+  readonly presentedOfferingContext: PresentedOfferingContext | null;
 }
 
 /**

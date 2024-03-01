@@ -8,6 +8,7 @@ import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -52,6 +53,16 @@ fun getOfferings(
     }
 }
 
+fun getCurrentOfferingForPlacement(
+    placementIdentifier: String,
+    onResult: OnNullableResult,
+) {
+    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
+        val offering = it.getCurrentOfferingForPlacement(placementIdentifier)
+        onResult.onReceived(offering?.map())
+    }
+}
+
 fun getProductInfo(
     productIDs: List<String>,
     type: String,
@@ -76,6 +87,7 @@ fun purchaseProduct(
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingIdentifier: String?,
+    presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
     val googleProrationMode = try {
@@ -114,6 +126,10 @@ fun purchaseProduct(
 
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
+
+                presentedOfferingContext?.toPresentedOfferingContext()?.let {
+                    purchaseParams.presentedOfferingContext(it)
+                }
 
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -175,6 +191,7 @@ fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
     offeringIdentifier: String,
+    presentedOfferingContext: Map<String, Any?>?,
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
@@ -202,6 +219,10 @@ fun purchasePackage(
                     }
                 if (packageToBuy != null) {
                     val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
+
+                    presentedOfferingContext?.toPresentedOfferingContext()?.let {
+                        purchaseParams.presentedOfferingContext(it)
+                    }
 
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -246,6 +267,7 @@ fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
     optionIdentifier: String,
+    presentedOfferingContext: Map<String, Any?>?,
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
@@ -290,6 +312,10 @@ fun purchaseSubscriptionOption(
 
             if (optionToPurchase != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, optionToPurchase)
+
+                presentedOfferingContext?.toPresentedOfferingContext()?.let {
+                    purchaseParams.presentedOfferingContext(it)
+                }
 
                 // Product upgrade
                 googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
@@ -620,5 +646,33 @@ internal fun warnLog(message: String) {
 internal fun errorLog(message: String) {
     if (Purchases.logLevel <= LogLevel.ERROR) {
         Log.e("PurchasesHybridCommon", message)
+    }
+}
+
+internal fun Map<String, Any?>.toPresentedOfferingContext(): PresentedOfferingContext? {
+    val offeringIdentifier = this["offeringIdentifier"] as? String
+
+    return offeringIdentifier?.let {
+        val placementIdentifier = this["placementIdentifier"] as? String
+        val targetingRevision = convertToInt(this["targetingRevision"])
+        val targetingRuleId = this["targetingRuleId"] as? String
+
+        val targetingContext = if (targetingRevision != null && targetingRuleId != null) {
+            PresentedOfferingContext.TargetingContext(targetingRevision, targetingRuleId)
+        } else {
+            null
+        }
+
+        PresentedOfferingContext(it, placementIdentifier, targetingContext)
+    } ?: run {
+        null
+    }
+}
+
+internal fun convertToInt(value: Any?): Int? {
+    return when (value) {
+        is Int -> value
+        is Double -> value.toInt()
+        else -> null
     }
 }
