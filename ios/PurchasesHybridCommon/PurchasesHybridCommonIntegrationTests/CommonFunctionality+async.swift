@@ -34,6 +34,7 @@ extension CommonFunctionality {
         return try await withCheckedThrowingContinuation { continuation in
             Self.purchase(package: packageIdentifier,
                           offeringIdentifier: offeringIdentifier,
+                          presentedOfferingContext: nil,
                           signedDiscountTimestamp: signedDiscountTimestamp) { dictionary, error in
                 continuation.resume(with: Result(dictionary, error?.error))
             }
