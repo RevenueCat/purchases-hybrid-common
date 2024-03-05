@@ -459,6 +459,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -527,6 +528,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -593,6 +595,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = expectedOfferingIdentifier,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -657,6 +660,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -738,6 +742,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -799,6 +804,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = true,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -865,6 +871,7 @@ internal class CommonKtTests {
                 }
             },
             offeringIdentifier = offeringIdentifier,
+            presentedOfferingContext = null,
         )
 
         assertNotNull(receivedResponse)
@@ -922,6 +929,7 @@ internal class CommonKtTests {
                 }
             },
             offeringIdentifier = offeringIdentifier,
+            presentedOfferingContext = null,
         )
 
         assertNotNull(receivedResponse)
@@ -981,6 +989,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -1054,6 +1063,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = expectedOfferingIdentifier,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -1083,6 +1093,7 @@ internal class CommonKtTests {
             googleProrationMode = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingIdentifier = null,
+            presentedOfferingContext = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     fail("Should be success")

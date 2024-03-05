@@ -83,18 +83,6 @@ import RevenueCat
         }
     }
 
-    @objc(getCurrentOfferingForPlacement:completionBlock:)
-    public static func getCurrentOffering(
-        forPlacement placementIdentifier: String,
-        completion: @escaping ([String: Any]?, PublicError?) -> Void
-    ) {
-        Self.sharedInstance.getOfferings { offerings, error in
-            let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
-            let dict = offering?.dictionary
-            completion(dict, error)
-        }
-    }
-
     private static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
@@ -421,6 +409,29 @@ import RevenueCat
         }
     }
 
+    @objc(getCurrentOfferingForPlacement:completionBlock:)
+    static func getCurrentOffering(
+        forPlacement placementIdentifier: String,
+        completion: @escaping ([String: Any]?, PublicError?) -> Void
+    ) {
+        Self.sharedInstance.getOfferings { offerings, error in
+            let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
+            let dict = offering?.dictionary
+            completion(dict, error)
+        }
+    }
+
+    @objc(syncAttributesAndOfferingsIfNeededWithCompletionBlock:)
+    static func syncAttributesAndOfferingsIfNeeded(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.sharedInstance.syncAttributesAndOfferingsIfNeeded { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
 
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
     static func checkTrialOrIntroductoryPriceEligibility(
@@ -434,7 +445,6 @@ import RevenueCat
                 })
             }
         }
-
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Self.sharedInstance.getProducts(productIds) { products in

@@ -45,6 +45,7 @@ class CommonApiTests {
                                       Integer googleProrationMode,
                                       Boolean googleIsPersonalizedPrice,
                                       String presentedOfferingIdentifier,
+                                      Map<String, Object> presentedOfferingContext,
                                       OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
@@ -55,6 +56,7 @@ class CommonApiTests {
                 googleProrationMode,
                 googleIsPersonalizedPrice,
                 presentedOfferingIdentifier,
+                presentedOfferingContext,
                 onResult
         );
     }
@@ -62,6 +64,7 @@ class CommonApiTests {
     private void checkPurchasePackage(Activity activity,
                                       String packageIdentifier,
                                       String offeringIdentifier,
+                                      Map<String, Object> presentedOfferingContext,
                                       String googleOldProductId,
                                       Integer googleProrationMode,
                                       Boolean googleIsPersonalizedPrice,
@@ -70,6 +73,7 @@ class CommonApiTests {
                 activity,
                 packageIdentifier,
                 offeringIdentifier,
+                presentedOfferingContext,
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
@@ -84,6 +88,7 @@ class CommonApiTests {
                                                  Integer googleProrationMode,
                                                  Boolean googleIsPersonalizedPrice,
                                                  String presentedOfferingIdentifier,
+                                                 Map<String, Object> presentedOfferingContext,
                                                  OnResult onResult) {
         CommonKt.purchaseSubscriptionOption(
                 activity,
@@ -93,6 +98,7 @@ class CommonApiTests {
                 googleProrationMode,
                 googleIsPersonalizedPrice,
                 presentedOfferingIdentifier,
+                presentedOfferingContext,
                 onResult
         );
     }

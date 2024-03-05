@@ -33,6 +33,7 @@ import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
+import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
 import java.net.URL
 
 @Deprecated(
@@ -63,6 +64,14 @@ fun getCurrentOfferingForPlacement(
     }
 }
 
+fun syncAttributesAndOfferingsIfNeeded(
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.syncAttributesAndOfferingsIfNeededWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
 fun getProductInfo(
     productIDs: List<String>,
     type: String,
@@ -78,6 +87,7 @@ fun getProductInfo(
     }
 }
 
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
@@ -187,6 +197,7 @@ fun purchaseProduct(
     }
 }
 
+@Suppress("LongParameterList")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -263,15 +274,16 @@ fun purchasePackage(
     }
 }
 
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
 fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
     optionIdentifier: String,
-    presentedOfferingContext: Map<String, Any?>?,
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingIdentifier: String?,
+    presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
