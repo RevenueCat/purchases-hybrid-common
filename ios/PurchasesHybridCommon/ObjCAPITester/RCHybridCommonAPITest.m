@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     [RCCommonFunctionality purchasePackage:@""
                                   offering:@""
+                  presentedOfferingContext:nil
                    signedDiscountTimestamp:@""
                            completionBlock:^(NSDictionary * _Nullable customerInfo,
                                              RCErrorContainer * _Nullable error) {
