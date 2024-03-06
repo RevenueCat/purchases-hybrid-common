@@ -39,6 +39,11 @@ fun PresentedOfferingContext.map(): Map<String, Any?> =
     mapOf(
         "offeringIdentifier" to offeringIdentifier,
         "placementIdentifier" to placementIdentifier,
-        "targetingRevision" to targetingContext?.revision,
-        "targetingRuleId" to targetingContext?.ruleId,
+        "targetingContext" to targetingContext?.map(),
+    )
+
+fun PresentedOfferingContext.TargetingContext.map(): Map<String, Any> =
+    mapOf(
+        "revision" to revision,
+        "ruleId" to ruleId,
     )

@@ -663,13 +663,15 @@ internal fun Map<String, Any?>.toPresentedOfferingContext(): PresentedOfferingCo
 
     return offeringIdentifier?.let {
         val placementIdentifier = this["placementIdentifier"] as? String
-        val targetingRevision = convertToInt(this["targetingRevision"])
-        val targetingRuleId = this["targetingRuleId"] as? String
+        val targetingContext = (this["targetingContext"] as? Map<*, *>)?.let { contextMap ->
+            val targetingRevision = convertToInt(contextMap["revision"])
+            val targetingRuleId = contextMap["ruleId"] as? String
 
-        val targetingContext = if (targetingRevision != null && targetingRuleId != null) {
-            PresentedOfferingContext.TargetingContext(targetingRevision, targetingRuleId)
-        } else {
-            null
+            if (targetingRevision != null && targetingRuleId != null) {
+                PresentedOfferingContext.TargetingContext(targetingRevision, targetingRuleId)
+            } else {
+                null
+            }
         }
 
         PresentedOfferingContext(it, placementIdentifier, targetingContext)

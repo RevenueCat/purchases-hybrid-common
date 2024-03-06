@@ -15,8 +15,18 @@ public extension PresentedOfferingContext {
         return [
             "offeringIdentifier": self.offeringIdentifier,
             "placementIdentifier": self.placementIdentifier  ?? NSNull(),
-            "targetingRevision": self.targetingContext?.revision ?? NSNull(),
-            "targetingRuleId": self.targetingContext?.ruleId ?? NSNull(),
+            "targetingContext": self.targetingContext?.dictionary ?? NSNull()
+        ]
+    }
+
+}
+
+public extension PresentedOfferingContext.TargetingContext {
+
+    var dictionary: [String: Any] {
+        return [
+            "revision": self.revision,
+            "ruleId": self.ruleId
         ]
     }
 

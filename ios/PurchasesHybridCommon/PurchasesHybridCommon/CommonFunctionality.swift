@@ -624,7 +624,10 @@ private extension CommonFunctionality {
         let placementIdentifier = presentedOfferingContext["placementIdentifier"] as? String
 
         let targetingContext: PresentedOfferingContext.TargetingContext?
-        if let revision = presentedOfferingContext["targetingRevision"] as? Int, let ruleId = presentedOfferingContext["targetingRuleId"] as? String {
+
+        if let dict = presentedOfferingContext["targetingContext"] as? [String: Any?],
+            let revision = dict["revision"] as? Int,
+            let ruleId = dict["ruleId"] as? String {
             targetingContext = .init(revision: revision, ruleId: ruleId)
         } else {
             targetingContext = nil
