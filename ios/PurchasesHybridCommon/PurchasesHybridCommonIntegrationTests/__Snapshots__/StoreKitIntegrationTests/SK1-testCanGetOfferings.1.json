@@ -5,6 +5,9 @@
         "identifier" : "$rc_annual",
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
+        "presentedOfferingContext" : {
+          "offeringIdentifier" : "default"
+        },
         "product" : {
           "currencyCode" : "USD",
           "description" : "Annual Subscription with 1 week trial",
@@ -33,6 +36,9 @@
           "identifier" : "$rc_annual",
           "offeringIdentifier" : "default",
           "packageType" : "ANNUAL",
+          "presentedOfferingContext" : {
+            "offeringIdentifier" : "default"
+          },
           "product" : {
             "currencyCode" : "USD",
             "description" : "Annual Subscription with 1 week trial",
@@ -60,6 +66,9 @@
           "identifier" : "$rc_monthly",
           "offeringIdentifier" : "default",
           "packageType" : "MONTHLY",
+          "presentedOfferingContext" : {
+            "offeringIdentifier" : "default"
+          },
           "product" : {
             "currencyCode" : "USD",
             "description" : "Monthly Subscription with 1 week trial",
@@ -100,6 +109,9 @@
         "identifier" : "$rc_monthly",
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
+        "presentedOfferingContext" : {
+          "offeringIdentifier" : "default"
+        },
         "product" : {
           "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
@@ -139,6 +151,9 @@
       "identifier" : "$rc_annual",
       "offeringIdentifier" : "default",
       "packageType" : "ANNUAL",
+      "presentedOfferingContext" : {
+        "offeringIdentifier" : "default"
+      },
       "product" : {
         "currencyCode" : "USD",
         "description" : "Annual Subscription with 1 week trial",
@@ -167,6 +182,9 @@
         "identifier" : "$rc_annual",
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
+        "presentedOfferingContext" : {
+          "offeringIdentifier" : "default"
+        },
         "product" : {
           "currencyCode" : "USD",
           "description" : "Annual Subscription with 1 week trial",
@@ -194,6 +212,9 @@
         "identifier" : "$rc_monthly",
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
+        "presentedOfferingContext" : {
+          "offeringIdentifier" : "default"
+        },
         "product" : {
           "currencyCode" : "USD",
           "description" : "Monthly Subscription with 1 week trial",
@@ -234,6 +255,9 @@
       "identifier" : "$rc_monthly",
       "offeringIdentifier" : "default",
       "packageType" : "MONTHLY",
+      "presentedOfferingContext" : {
+        "offeringIdentifier" : "default"
+      },
       "product" : {
         "currencyCode" : "USD",
         "description" : "Monthly Subscription with 1 week trial",
