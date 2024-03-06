@@ -283,17 +283,15 @@ import RevenueCat
         }
     }
 
-    @objc(purchasePackage:offering:presentedOfferingContext:signedDiscountTimestamp:completionBlock:)
+    @objc(purchasePackage:presentedOfferingContext:signedDiscountTimestamp:completionBlock:)
     static func purchase(package packageIdentifier: String,
-                         offeringIdentifier: String,
-                         presentedOfferingContext: [String: Any]?,
+                         presentedOfferingContext: [String: Any],
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         Self.package(
             withIdentifier: packageIdentifier,
-            offeringIdentifier: offeringIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
         ) { package in
             guard let package = package else {
@@ -618,7 +616,7 @@ private extension CommonFunctionality {
         return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
-    static func toPresentedOfferingContext(presentedOfferingContext: [String: Any]?) -> PresentedOfferingContext? {
+    static func toPresentedOfferingContext(presentedOfferingContext: [String: Any?]?) -> PresentedOfferingContext? {
         guard let presentedOfferingContext, let offeringIdentifier = presentedOfferingContext["offeringIdentifier"] as? String else {
             return nil
         }
@@ -640,11 +638,14 @@ private extension CommonFunctionality {
     }
 
     static func package(withIdentifier packageIdentifier: String,
-                        offeringIdentifier: String,
                         presentedOfferingContext: PresentedOfferingContext?,
                         completion: @escaping(Package?) -> Void) {
+        guard let presentedOfferingContext else {
+            return completion(nil)
+        }
+
         Self.sharedInstance.getOfferings { offerings, error in
-            let offering = offerings?.offering(identifier: offeringIdentifier)
+            let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
             let foundPackage = offering?.package(identifier: packageIdentifier)
 
             let package = foundPackage.flatMap { pkg in
@@ -652,7 +653,7 @@ private extension CommonFunctionality {
                     identifier: pkg.identifier,
                     packageType: pkg.packageType,
                     storeProduct: pkg.storeProduct,
-                    presentedOfferingContext: presentedOfferingContext ?? pkg.presentedOfferingContext
+                    presentedOfferingContext: presentedOfferingContext
                 )
             }
 

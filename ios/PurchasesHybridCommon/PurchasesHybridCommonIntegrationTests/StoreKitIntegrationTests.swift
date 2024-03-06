@@ -220,7 +220,7 @@ private extension StoreKit1IntegrationTests {
 
         return try await CommonFunctionality.purchase(
             package: package.identifier,
-            offeringIdentifier: package.offeringIdentifier,
+            presentedOfferingContext: package.presentedOfferingContext.dictionary,
             signedDiscountTimestamp: nil
         )
     }

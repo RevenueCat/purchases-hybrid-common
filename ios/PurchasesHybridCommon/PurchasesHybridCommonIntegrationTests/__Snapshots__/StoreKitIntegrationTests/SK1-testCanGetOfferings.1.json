@@ -6,7 +6,10 @@
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
         "presentedOfferingContext" : {
-          "offeringIdentifier" : "default"
+          "offeringIdentifier" : "default",
+          "placementIdentifier" : null,
+          "targetingRevision" : null,
+          "targetingRuleId" : null
         },
         "product" : {
           "currencyCode" : "USD",
@@ -37,7 +40,10 @@
           "offeringIdentifier" : "default",
           "packageType" : "ANNUAL",
           "presentedOfferingContext" : {
-            "offeringIdentifier" : "default"
+            "offeringIdentifier" : "default",
+            "placementIdentifier" : null,
+            "targetingRevision" : null,
+            "targetingRuleId" : null
           },
           "product" : {
             "currencyCode" : "USD",
@@ -67,7 +73,10 @@
           "offeringIdentifier" : "default",
           "packageType" : "MONTHLY",
           "presentedOfferingContext" : {
-            "offeringIdentifier" : "default"
+            "offeringIdentifier" : "default",
+            "placementIdentifier" : null,
+            "targetingRevision" : null,
+            "targetingRuleId" : null
           },
           "product" : {
             "currencyCode" : "USD",
@@ -110,7 +119,10 @@
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
         "presentedOfferingContext" : {
-          "offeringIdentifier" : "default"
+          "offeringIdentifier" : "default",
+          "placementIdentifier" : null,
+          "targetingRevision" : null,
+          "targetingRuleId" : null
         },
         "product" : {
           "currencyCode" : "USD",
@@ -153,6 +165,7 @@
       "packageType" : "ANNUAL",
       "presentedOfferingContext" : {
         "offeringIdentifier" : "default",
+        "placementIdentifier" : null,
         "targetingRevision" : 2,
         "targetingRuleId" : "J1RgmSUMEy"
       },
@@ -186,6 +199,7 @@
         "packageType" : "ANNUAL",
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
+          "placementIdentifier" : null,
           "targetingRevision" : 2,
           "targetingRuleId" : "J1RgmSUMEy"
         },
@@ -218,6 +232,7 @@
         "packageType" : "MONTHLY",
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
+          "placementIdentifier" : null,
           "targetingRevision" : 2,
           "targetingRuleId" : "J1RgmSUMEy"
         },
@@ -263,6 +278,7 @@
       "packageType" : "MONTHLY",
       "presentedOfferingContext" : {
         "offeringIdentifier" : "default",
+        "placementIdentifier" : null,
         "targetingRevision" : 2,
         "targetingRuleId" : "J1RgmSUMEy"
       },

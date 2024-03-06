@@ -128,6 +128,7 @@ export interface PurchasesStoreProduct {
   /**
    * Offering identifier the store product was presented from.
    * Null if not using offerings or if fetched directly from store via getProducts.
+   * @deprecated, use presentedOfferingContext
    */
   readonly presentedOfferingIdentifier: string | null;
   /**
@@ -268,6 +269,7 @@ export interface PurchasesPackage {
   /**
    * Offering context this package belongs to.
    * Null if not using offerings or if fetched directly from store via getProducts.
+   * @deprecated, use presentedOfferingContext
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
 }
@@ -515,6 +517,7 @@ export interface SubscriptionOption {
 
   /**
    * Offering identifier the subscription option was presented from
+   * @deprecated, use presentedOfferingContext
    */
   readonly presentedOfferingIdentifier: string | null;
   /**

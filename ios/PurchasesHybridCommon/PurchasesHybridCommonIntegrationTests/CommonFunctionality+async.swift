@@ -59,12 +59,11 @@ extension CommonFunctionality {
     }
 
     static func purchase(package packageIdentifier: String,
-                         offeringIdentifier: String,
+                         presentedOfferingContext: [String: Any?],
                          signedDiscountTimestamp: String?) async throws -> [String: Any] {
         return try await withCheckedThrowingContinuation { continuation in
             Self.purchase(package: packageIdentifier,
-                          offeringIdentifier: offeringIdentifier,
-                          presentedOfferingContext: nil,
+                          presentedOfferingContext: presentedOfferingContext,
                           signedDiscountTimestamp: signedDiscountTimestamp) { dictionary, error in
                 continuation.resume(with: Result(dictionary, error?.error))
             }

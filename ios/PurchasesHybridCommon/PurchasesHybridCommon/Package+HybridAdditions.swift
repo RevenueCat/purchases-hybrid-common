@@ -12,14 +12,12 @@ import RevenueCat
 public extension PresentedOfferingContext {
 
     var dictionary: [String: Any] {
-        let dict: [String: Any?] = [
+        return [
             "offeringIdentifier": self.offeringIdentifier,
-            "placementIdentifier": self.placementIdentifier,
-            "targetingRevision": self.targetingContext?.revision,
-            "targetingRuleId": self.targetingContext?.ruleId,
+            "placementIdentifier": self.placementIdentifier  ?? NSNull(),
+            "targetingRevision": self.targetingContext?.revision ?? NSNull(),
+            "targetingRuleId": self.targetingContext?.ruleId ?? NSNull(),
         ]
-
-        return dict.compactMapValues { $0 }
     }
 
 }
