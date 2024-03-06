@@ -412,12 +412,17 @@ import RevenueCat
     @objc(getCurrentOfferingForPlacement:completionBlock:)
     static func getCurrentOffering(
         forPlacement placementIdentifier: String,
-        completion: @escaping ([String: Any]?, PublicError?) -> Void
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         Self.sharedInstance.getOfferings { offerings, error in
-            let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
-            let dict = offering?.dictionary
-            completion(dict, error)
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
+                let dict = offering?.dictionary
+                completion(dict, nil)
+            }
         }
     }
 

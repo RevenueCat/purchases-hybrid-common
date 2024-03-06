@@ -152,7 +152,9 @@
       "offeringIdentifier" : "default",
       "packageType" : "ANNUAL",
       "presentedOfferingContext" : {
-        "offeringIdentifier" : "default"
+        "offeringIdentifier" : "default",
+        "targetingRevision" : 2,
+        "targetingRuleId" : "J1RgmSUMEy"
       },
       "product" : {
         "currencyCode" : "USD",
@@ -183,7 +185,9 @@
         "offeringIdentifier" : "default",
         "packageType" : "ANNUAL",
         "presentedOfferingContext" : {
-          "offeringIdentifier" : "default"
+          "offeringIdentifier" : "default",
+          "targetingRevision" : 2,
+          "targetingRuleId" : "J1RgmSUMEy"
         },
         "product" : {
           "currencyCode" : "USD",
@@ -213,7 +217,9 @@
         "offeringIdentifier" : "default",
         "packageType" : "MONTHLY",
         "presentedOfferingContext" : {
-          "offeringIdentifier" : "default"
+          "offeringIdentifier" : "default",
+          "targetingRevision" : 2,
+          "targetingRuleId" : "J1RgmSUMEy"
         },
         "product" : {
           "currencyCode" : "USD",
@@ -256,7 +262,9 @@
       "offeringIdentifier" : "default",
       "packageType" : "MONTHLY",
       "presentedOfferingContext" : {
-        "offeringIdentifier" : "default"
+        "offeringIdentifier" : "default",
+        "targetingRevision" : 2,
+        "targetingRuleId" : "J1RgmSUMEy"
       },
       "product" : {
         "currencyCode" : "USD",

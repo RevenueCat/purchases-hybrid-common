@@ -63,6 +63,16 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(offerings)
     }
 
+    func testCanGetCurrentOfferingForPlacement() async throws {
+        let onboardingOffering = try await CommonFunctionality.currentOffering(forPlacement: "onboarding")
+        let settingsOffering = try await CommonFunctionality.currentOffering(forPlacement: "settings")
+        let fallbackOffering = try await CommonFunctionality.currentOffering(forPlacement: "doesnt exist")
+
+        expect(onboardingOffering).to(beNil())
+        expect(settingsOffering).notTo(beNil())
+        expect(fallbackOffering).notTo(beNil())
+    }
+
     func testCanPurchasePackage() async throws {
         var data = try await self.purchaseMonthlyOffering()
         removeDates(&data)

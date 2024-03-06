@@ -53,6 +53,15 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];
+
+    [RCCommonFunctionality getCurrentOfferingForPlacement:@"" completionBlock:^(NSDictionary<NSString *,id> * _Nullable offering, RCErrorContainer * _Nullable error) {
+
+    }];
+
+    [RCCommonFunctionality syncAttributesAndOfferingsIfNeededWithCompletionBlock:^(NSDictionary<NSString *,id> * _Nullable offerings, RCErrorContainer * _Nullable error) {
+
+    }];
+
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
 
     [RCCommonFunctionality purchaseProduct:@""
