@@ -264,14 +264,14 @@ export interface PurchasesPackage {
   readonly product: PurchasesStoreProduct;
   /**
    * Offering this package belongs to.
+   * @deprecated, use presentedOfferingContext
    */
   readonly offeringIdentifier: string;
   /**
    * Offering context this package belongs to.
    * Null if not using offerings or if fetched directly from store via getProducts.
-   * @deprecated, use presentedOfferingContext
    */
-  readonly presentedOfferingContext: PresentedOfferingContext | null;
+  readonly presentedOfferingContext: PresentedOfferingContext;
 }
 
 /**

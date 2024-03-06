@@ -96,7 +96,6 @@ fun purchaseProduct(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingIdentifier: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
@@ -132,7 +131,7 @@ fun purchaseProduct(
                 // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
                 // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
-            }?.applyOfferingIdentifier(presentedOfferingIdentifier)
+            }
 
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
@@ -201,8 +200,7 @@ fun purchaseProduct(
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
-    offeringIdentifier: String,
-    presentedOfferingContext: Map<String, Any?>?,
+    presentedOfferingContext: Map<String, Any?>,
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
@@ -224,16 +222,25 @@ fun purchasePackage(
         Purchases.sharedInstance.getOfferingsWith(
             { onResult.onError(it.map()) },
             { offerings ->
+                val context = presentedOfferingContext.toPresentedOfferingContext()
+                if (context == null) {
+                    onResult.onError(
+                        PurchasesError(
+                            PurchasesErrorCode.PurchaseInvalidError,
+                            "There is no or invalid presented offering context data provided to make this purchase",
+                        ).map(),
+                    )
+                    return@getOfferingsWith
+                }
+
                 val packageToBuy =
-                    offerings[offeringIdentifier]?.availablePackages?.firstOrNull {
+                    offerings[context.offeringIdentifier]?.availablePackages?.firstOrNull {
                         it.identifier.equals(packageIdentifier, ignoreCase = true)
                     }
                 if (packageToBuy != null) {
                     val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
 
-                    presentedOfferingContext?.toPresentedOfferingContext()?.let {
-                        purchaseParams.presentedOfferingContext(it)
-                    }
+                    purchaseParams.presentedOfferingContext(context)
 
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -282,7 +289,6 @@ fun purchaseSubscriptionOption(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingIdentifier: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
@@ -313,10 +319,7 @@ fun purchaseSubscriptionOption(
             // Iterates over StoreProducts and SubscriptionOptions to find
             // the first matching product id and subscription option id
             val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
-                // Create StoreProduct copy with presentedOfferingIdentifier if exists
-                // This will give all SubscriptionOption the presentedOfferingIdentifier
-                storeProduct.applyOfferingIdentifier(presentedOfferingIdentifier)
-                    .subscriptionOptions?.firstOrNull { subscriptionOption ->
+                storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
                         storeProduct.purchasingData.productId == productIdentifier &&
                             subscriptionOption.id == optionIdentifier
                     }
