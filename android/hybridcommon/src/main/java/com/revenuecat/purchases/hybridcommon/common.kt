@@ -196,7 +196,7 @@ fun purchaseProduct(
     }
 }
 
-@Suppress("LongParameterList")
+@Suppress("LongMethod", "LongParameterList")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -320,9 +320,9 @@ fun purchaseSubscriptionOption(
             // the first matching product id and subscription option id
             val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
                 storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
-                        storeProduct.purchasingData.productId == productIdentifier &&
-                            subscriptionOption.id == optionIdentifier
-                    }
+                    storeProduct.purchasingData.productId == productIdentifier &&
+                        subscriptionOption.id == optionIdentifier
+                }
             }
 
             if (optionToPurchase != null) {
@@ -611,12 +611,6 @@ internal fun getGoogleProrationMode(prorationModeInt: Int?): GoogleProrationMode
                 throw InvalidProrationModeException()
             }
         }
-}
-
-private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?): StoreProduct {
-    return presentedOfferingIdentifier?.let {
-        this.copyWithOfferingId(it)
-    } ?: this
 }
 
 private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
