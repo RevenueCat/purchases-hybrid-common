@@ -1,3 +1,7 @@
+## 6.3.2
+### Dependency Updates
+* Bump android to 6.9.7
+
 ## 6.3.1
 ### Dependency Updates
 * Bump android to 6.9.6 (#708) via Toni Rico (@tonidero)
