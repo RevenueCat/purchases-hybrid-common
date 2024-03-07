@@ -14,7 +14,7 @@ public extension PresentedOfferingContext {
     var dictionary: [String: Any] {
         return [
             "offeringIdentifier": self.offeringIdentifier,
-            "placementIdentifier": self.placementIdentifier  ?? NSNull(),
+            "placementIdentifier": self.placementIdentifier ?? NSNull(),
             "targetingContext": self.targetingContext?.dictionary ?? NSNull()
         ]
     }
