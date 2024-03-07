@@ -5,7 +5,7 @@
 In `ios/PurchasesHybridCommon/Podfile` replace:
 
 ```
-  pod 'RevenueCat', '4.37.0'
+  pod 'RevenueCat', '5.0.0-beta.3'
 ```
 
 with:

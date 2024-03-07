@@ -27,19 +27,14 @@ internal extension StoreProduct {
             "subscriptionPeriod": NSNull(),
         ]
 
-        if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *),
-           let introductoryDiscount = self.introductoryDiscount {
+        if let introductoryDiscount = self.introductoryDiscount {
             dictionary["introPrice"] = introductoryDiscount.rc_dictionary
         }
 
-        if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
-            dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
-        }
+        dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
 
-        if #available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *) {
-            if let subscriptionPeriod = self.subscriptionPeriod {
-                dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
-            }
+        if let subscriptionPeriod = self.subscriptionPeriod {
+            dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
         }
 
         return dictionary

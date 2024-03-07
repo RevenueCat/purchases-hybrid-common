@@ -11,7 +11,7 @@ final class MockPurchases: PurchasesType {
     var cachedCustomerInfo: RevenueCat.CustomerInfo?
 
     var cachedOfferings: RevenueCat.Offerings?
-    
+
     var delegate: RevenueCat.PurchasesDelegate?
 
     init() {}
@@ -555,9 +555,8 @@ extension MockPurchases {
 
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
 extension MockPurchases: PurchasesSwiftType {
-    
+
     var customerInfoStream: AsyncStream<CustomerInfo> {
         fatalError("This method is not mocked")
     }
@@ -622,7 +621,6 @@ extension MockPurchases: PurchasesSwiftType {
         fatalError("Not mocked")
     }
 
-    @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
     func eligiblePromotionalOffers(forProduct product: StoreProduct) async -> [PromotionalOffer] {
         fatalError("This method is not mocked")
     }
@@ -652,6 +650,13 @@ extension MockPurchases: PurchasesSwiftType {
     }
 
     func showStoreMessages(for types: Set<StoreMessageType>) async {
+        fatalError("Not mocked")
+    }
+
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func handleObserverModeTransaction(
+        _ purchaseResult: Product.PurchaseResult
+    ) async throws -> RevenueCat.StoreTransaction? {
         fatalError("Not mocked")
     }
 

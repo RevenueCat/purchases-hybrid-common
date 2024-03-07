@@ -8,8 +8,6 @@
 
 import Foundation
 
-// note: This extension is only temporary, since we're
-// dropping iOS 11 in the upcoming major
 extension Date {
 
     func rc_formattedAsISO8601() -> String {
