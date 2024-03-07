@@ -1,3 +1,7 @@
+## 10.0.0
+### Breaking Changes
+* Add targeting placements and custom attributes (#748) via Josh Holtz (@joshdholtz)
+
 ## 9.9.0
 ### Dependency Updates
 * [AUTOMATIC] Android 7.6.0 => 7.7.1 (#751) via RevenueCat Git Bot (@RCGitBot)
