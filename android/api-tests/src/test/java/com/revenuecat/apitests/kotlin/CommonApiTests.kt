@@ -63,7 +63,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
-        presentedOfferingIdentifier: String?,
+        presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
     ) {
         purchaseProduct(
@@ -74,7 +74,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
-            presentedOfferingIdentifier,
+            presentedOfferingContext,
             onResult,
         )
     }
@@ -82,7 +82,7 @@ private class CommonApiTests {
     fun checkPurchasePackage(
         activity: Activity?,
         packageIdentifier: String,
-        offeringIdentifier: String,
+        presentedOfferingContext: Map<String, Any?>,
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
@@ -91,7 +91,7 @@ private class CommonApiTests {
         purchasePackage(
             activity,
             packageIdentifier,
-            offeringIdentifier,
+            presentedOfferingContext,
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
@@ -106,7 +106,7 @@ private class CommonApiTests {
         googleOldProductId: String?,
         googleProrationMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
-        presentedOfferingIdentifier: String?,
+        presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
     ) {
         purchaseSubscriptionOption(
@@ -116,7 +116,7 @@ private class CommonApiTests {
             googleOldProductId,
             googleProrationMode,
             googleIsPersonalizedPrice,
-            presentedOfferingIdentifier,
+            presentedOfferingContext,
             onResult,
         )
     }

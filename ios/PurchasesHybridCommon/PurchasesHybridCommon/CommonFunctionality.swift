@@ -283,14 +283,17 @@ import RevenueCat
         }
     }
 
-    @objc(purchasePackage:offering:signedDiscountTimestamp:completionBlock:)
+    @objc(purchasePackage:presentedOfferingContext:signedDiscountTimestamp:completionBlock:)
     static func purchase(package packageIdentifier: String,
-                         offeringIdentifier: String,
+                         presentedOfferingContext: [String: Any],
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
-        Self.package(withIdentifier: packageIdentifier, offeringIdentifier: offeringIdentifier) { package in
+        Self.package(
+            withIdentifier: packageIdentifier,
+            presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
+        ) { package in
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -404,6 +407,34 @@ import RevenueCat
         }
     }
 
+    @objc(getCurrentOfferingForPlacement:completionBlock:)
+    static func getCurrentOffering(
+        forPlacement placementIdentifier: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.getOfferings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
+                let dict = offering?.dictionary
+                completion(dict, nil)
+            }
+        }
+    }
+
+    @objc(syncAttributesAndOfferingsIfNeededWithCompletionBlock:)
+    static func syncAttributesAndOfferingsIfNeeded(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.sharedInstance.syncAttributesAndOfferingsIfNeeded { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
 
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
     static func checkTrialOrIntroductoryPriceEligibility(
@@ -417,7 +448,6 @@ import RevenueCat
                 })
             }
         }
-
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Self.sharedInstance.getProducts(productIds) { products in
@@ -586,12 +616,50 @@ private extension CommonFunctionality {
         return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
+    static func toPresentedOfferingContext(presentedOfferingContext: [String: Any?]?) -> PresentedOfferingContext? {
+        guard let presentedOfferingContext, let offeringIdentifier = presentedOfferingContext["offeringIdentifier"] as? String else {
+            return nil
+        }
+
+        let placementIdentifier = presentedOfferingContext["placementIdentifier"] as? String
+
+        let targetingContext: PresentedOfferingContext.TargetingContext?
+
+        if let dict = presentedOfferingContext["targetingContext"] as? [String: Any?],
+            let revision = dict["revision"] as? Int,
+            let ruleId = dict["ruleId"] as? String {
+            targetingContext = .init(revision: revision, ruleId: ruleId)
+        } else {
+            targetingContext = nil
+        }
+
+        return PresentedOfferingContext(
+            offeringIdentifier: offeringIdentifier,
+            placementIdentifier: placementIdentifier,
+            targetingContext: targetingContext
+        )
+    }
+
     static func package(withIdentifier packageIdentifier: String,
-                        offeringIdentifier: String,
+                        presentedOfferingContext: PresentedOfferingContext?,
                         completion: @escaping(Package?) -> Void) {
+        guard let presentedOfferingContext else {
+            return completion(nil)
+        }
+
         Self.sharedInstance.getOfferings { offerings, error in
-            let offering = offerings?.offering(identifier: offeringIdentifier)
-            let package = offering?.package(identifier: packageIdentifier)
+            let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
+            let foundPackage = offering?.package(identifier: packageIdentifier)
+
+            let package = foundPackage.flatMap { pkg in
+                Package(
+                    identifier: pkg.identifier,
+                    packageType: pkg.packageType,
+                    storeProduct: pkg.storeProduct,
+                    presentedOfferingContext: presentedOfferingContext
+                )
+            }
+
             completion(package)
         }
     }

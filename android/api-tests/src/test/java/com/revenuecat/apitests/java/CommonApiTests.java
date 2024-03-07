@@ -44,7 +44,7 @@ class CommonApiTests {
                                       String googleOldProductId,
                                       Integer googleProrationMode,
                                       Boolean googleIsPersonalizedPrice,
-                                      String presentedOfferingIdentifier,
+                                      Map<String, Object> presentedOfferingContext,
                                       OnResult onResult) {
         CommonKt.purchaseProduct(
                 activity,
@@ -54,14 +54,14 @@ class CommonApiTests {
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
-                presentedOfferingIdentifier,
+                presentedOfferingContext,
                 onResult
         );
     }
 
     private void checkPurchasePackage(Activity activity,
                                       String packageIdentifier,
-                                      String offeringIdentifier,
+                                      Map<String, Object> presentedOfferingContext,
                                       String googleOldProductId,
                                       Integer googleProrationMode,
                                       Boolean googleIsPersonalizedPrice,
@@ -69,7 +69,7 @@ class CommonApiTests {
         CommonKt.purchasePackage(
                 activity,
                 packageIdentifier,
-                offeringIdentifier,
+                presentedOfferingContext,
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
@@ -83,7 +83,7 @@ class CommonApiTests {
                                                  String googleOldProductId,
                                                  Integer googleProrationMode,
                                                  Boolean googleIsPersonalizedPrice,
-                                                 String presentedOfferingIdentifier,
+                                                 Map<String, Object> presentedOfferingContext,
                                                  OnResult onResult) {
         CommonKt.purchaseSubscriptionOption(
                 activity,
@@ -92,7 +92,7 @@ class CommonApiTests {
                 googleOldProductId,
                 googleProrationMode,
                 googleIsPersonalizedPrice,
-                presentedOfferingIdentifier,
+                presentedOfferingContext,
                 onResult
         );
     }

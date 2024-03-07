@@ -8,6 +8,7 @@ import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -32,6 +33,7 @@ import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
+import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
 import java.net.URL
 
 @Deprecated(
@@ -52,6 +54,24 @@ fun getOfferings(
     }
 }
 
+fun getCurrentOfferingForPlacement(
+    placementIdentifier: String,
+    onResult: OnNullableResult,
+) {
+    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
+        val offering = it.getCurrentOfferingForPlacement(placementIdentifier)
+        onResult.onReceived(offering?.map())
+    }
+}
+
+fun syncAttributesAndOfferingsIfNeeded(
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.syncAttributesAndOfferingsIfNeededWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
+}
+
 fun getProductInfo(
     productIDs: List<String>,
     type: String,
@@ -67,6 +87,7 @@ fun getProductInfo(
     }
 }
 
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
@@ -75,7 +96,7 @@ fun purchaseProduct(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingIdentifier: String?,
+    presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
     val googleProrationMode = try {
@@ -110,10 +131,14 @@ fun purchaseProduct(
                 // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
                 // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
                 foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
-            }?.applyOfferingIdentifier(presentedOfferingIdentifier)
+            }
 
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
+
+                presentedOfferingContext?.toPresentedOfferingContext()?.let {
+                    purchaseParams.presentedOfferingContext(it)
+                }
 
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -171,10 +196,11 @@ fun purchaseProduct(
     }
 }
 
+@Suppress("LongMethod", "LongParameterList")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
-    offeringIdentifier: String,
+    presentedOfferingContext: Map<String, Any?>,
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
@@ -196,12 +222,25 @@ fun purchasePackage(
         Purchases.sharedInstance.getOfferingsWith(
             { onResult.onError(it.map()) },
             { offerings ->
+                val context = presentedOfferingContext.toPresentedOfferingContext()
+                if (context == null) {
+                    onResult.onError(
+                        PurchasesError(
+                            PurchasesErrorCode.PurchaseInvalidError,
+                            "There is no or invalid presented offering context data provided to make this purchase",
+                        ).map(),
+                    )
+                    return@getOfferingsWith
+                }
+
                 val packageToBuy =
-                    offerings[offeringIdentifier]?.availablePackages?.firstOrNull {
+                    offerings[context.offeringIdentifier]?.availablePackages?.firstOrNull {
                         it.identifier.equals(packageIdentifier, ignoreCase = true)
                     }
                 if (packageToBuy != null) {
                     val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
+
+                    purchaseParams.presentedOfferingContext(context)
 
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
@@ -242,6 +281,7 @@ fun purchasePackage(
     }
 }
 
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
 fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
@@ -249,7 +289,7 @@ fun purchaseSubscriptionOption(
     googleOldProductId: String?,
     googleProrationMode: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingIdentifier: String?,
+    presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
@@ -279,17 +319,18 @@ fun purchaseSubscriptionOption(
             // Iterates over StoreProducts and SubscriptionOptions to find
             // the first matching product id and subscription option id
             val optionToPurchase = storeProducts.firstNotNullOfOrNull { storeProduct ->
-                // Create StoreProduct copy with presentedOfferingIdentifier if exists
-                // This will give all SubscriptionOption the presentedOfferingIdentifier
-                storeProduct.applyOfferingIdentifier(presentedOfferingIdentifier)
-                    .subscriptionOptions?.firstOrNull { subscriptionOption ->
-                        storeProduct.purchasingData.productId == productIdentifier &&
-                            subscriptionOption.id == optionIdentifier
-                    }
+                storeProduct.subscriptionOptions?.firstOrNull { subscriptionOption ->
+                    storeProduct.purchasingData.productId == productIdentifier &&
+                        subscriptionOption.id == optionIdentifier
+                }
             }
 
             if (optionToPurchase != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, optionToPurchase)
+
+                presentedOfferingContext?.toPresentedOfferingContext()?.let {
+                    purchaseParams.presentedOfferingContext(it)
+                }
 
                 // Product upgrade
                 googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
@@ -572,12 +613,6 @@ internal fun getGoogleProrationMode(prorationModeInt: Int?): GoogleProrationMode
         }
 }
 
-private fun StoreProduct.applyOfferingIdentifier(presentedOfferingIdentifier: String?): StoreProduct {
-    return presentedOfferingIdentifier?.let {
-        this.copyWithOfferingId(it)
-    } ?: this
-}
-
 private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
     return { error, userCancelled -> onResult.onError(error.map(mapOf("userCancelled" to userCancelled))) }
 }
@@ -620,5 +655,35 @@ internal fun warnLog(message: String) {
 internal fun errorLog(message: String) {
     if (Purchases.logLevel <= LogLevel.ERROR) {
         Log.e("PurchasesHybridCommon", message)
+    }
+}
+
+internal fun Map<String, Any?>.toPresentedOfferingContext(): PresentedOfferingContext? {
+    val offeringIdentifier = this["offeringIdentifier"] as? String
+
+    return offeringIdentifier?.let {
+        val placementIdentifier = this["placementIdentifier"] as? String
+        val targetingContext = (this["targetingContext"] as? Map<*, *>)?.let { contextMap ->
+            val targetingRevision = convertToInt(contextMap["revision"])
+            val targetingRuleId = contextMap["ruleId"] as? String
+
+            if (targetingRevision != null && targetingRuleId != null) {
+                PresentedOfferingContext.TargetingContext(targetingRevision, targetingRuleId)
+            } else {
+                null
+            }
+        }
+
+        PresentedOfferingContext(it, placementIdentifier, targetingContext)
+    } ?: run {
+        null
+    }
+}
+
+internal fun convertToInt(value: Any?): Int? {
+    return when (value) {
+        is Int -> value
+        is Double -> value.toInt()
+        else -> null
     }
 }
