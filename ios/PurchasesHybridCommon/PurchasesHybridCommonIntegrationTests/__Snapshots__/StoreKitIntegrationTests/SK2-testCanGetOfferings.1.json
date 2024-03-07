@@ -8,8 +8,7 @@
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
-          "targetingRevision" : null,
-          "targetingRuleId" : null
+          "targetingContext" : null
         },
         "product" : {
           "currencyCode" : "USD",
@@ -42,8 +41,7 @@
           "presentedOfferingContext" : {
             "offeringIdentifier" : "default",
             "placementIdentifier" : null,
-            "targetingRevision" : null,
-            "targetingRuleId" : null
+            "targetingContext" : null
           },
           "product" : {
             "currencyCode" : "USD",
@@ -75,8 +73,7 @@
           "presentedOfferingContext" : {
             "offeringIdentifier" : "default",
             "placementIdentifier" : null,
-            "targetingRevision" : null,
-            "targetingRuleId" : null
+            "targetingContext" : null
           },
           "product" : {
             "currencyCode" : "USD",
@@ -121,8 +118,7 @@
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
-          "targetingRevision" : null,
-          "targetingRuleId" : null
+          "targetingContext" : null
         },
         "product" : {
           "currencyCode" : "USD",
@@ -166,8 +162,10 @@
       "presentedOfferingContext" : {
         "offeringIdentifier" : "default",
         "placementIdentifier" : null,
-        "targetingRevision" : 2,
-        "targetingRuleId" : "J1RgmSUMEy"
+        "targetingContext" : {
+          "revision" : 2,
+          "ruleId" : "J1RgmSUMEy"
+        }
       },
       "product" : {
         "currencyCode" : "USD",
@@ -200,8 +198,10 @@
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
-          "targetingRevision" : 2,
-          "targetingRuleId" : "J1RgmSUMEy"
+          "targetingContext" : {
+            "revision" : 2,
+            "ruleId" : "J1RgmSUMEy"
+          }
         },
         "product" : {
           "currencyCode" : "USD",
@@ -233,8 +233,10 @@
         "presentedOfferingContext" : {
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
-          "targetingRevision" : 2,
-          "targetingRuleId" : "J1RgmSUMEy"
+          "targetingContext" : {
+            "revision" : 2,
+            "ruleId" : "J1RgmSUMEy"
+          }
         },
         "product" : {
           "currencyCode" : "USD",
@@ -279,8 +281,10 @@
       "presentedOfferingContext" : {
         "offeringIdentifier" : "default",
         "placementIdentifier" : null,
-        "targetingRevision" : 2,
-        "targetingRuleId" : "J1RgmSUMEy"
+        "targetingContext" : {
+          "revision" : 2,
+          "ruleId" : "J1RgmSUMEy"
+        }
       },
       "product" : {
         "currencyCode" : "USD",
