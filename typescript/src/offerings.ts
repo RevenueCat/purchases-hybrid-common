@@ -289,11 +289,21 @@ export interface PresentedOfferingContext {
   /**
    * The revision of the targeting used to obtain this object.
    */
-  readonly targetingRevision: string | null;
+  readonly targetingContext: PresentedOfferingTargetingContext | null;
+}
+
+/**
+ * Contains data about the context in which an offering was presented.
+ */
+export interface PresentedOfferingTargetingContext {
+  /**
+   * The revision of the targeting used to obtain this object.
+   */
+  readonly revision: string;
   /**
    * The rule id from the targeting used to obtain this object.
    */
-  readonly targetingRuleId: string | null;
+  readonly ruleId: string;
 }
 
 /**
