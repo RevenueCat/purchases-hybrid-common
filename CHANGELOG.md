@@ -1,3 +1,7 @@
+## 10.0.1
+### Other Changes
+* Update CHANGELOG.md (#755) via Cesar de la Vega (@vegaro)
+
 ## 10.0.0
 ### Breaking Changes
 * Add targeting placements and custom attributes (#748) via Josh Holtz (@joshdholtz)

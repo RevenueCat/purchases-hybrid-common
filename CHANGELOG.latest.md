@@ -1,2 +1,2 @@
-### Breaking Changes
-* Add targeting placements and custom attributes (#748) via Josh Holtz (@joshdholtz)
+### Other Changes
+* Update CHANGELOG.md (#755) via Cesar de la Vega (@vegaro)
