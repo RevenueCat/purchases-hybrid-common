@@ -245,6 +245,14 @@
 * URL(string:): add clarifying comment (#511) via Andy Boedo (@aboedo)
 * Add documentation for productType field in StoreProduct in typescript (#515) via Toni Rico (@tonidero)
 
+## 6.3.2
+### Dependency Updates
+* Bump android to 6.9.7
+
+## 6.3.1
+### Dependency Updates
+* Bump android to 6.9.6 (#708) via Toni Rico (@tonidero)
+
 ## 6.3.0
 ### New Features
 * Add product type to typescript types (#507) via Cesar de la Vega (@vegaro)
