@@ -27,7 +27,7 @@ import UIKit
     public func createPaywallView() -> PaywallViewController {
         let controller = PaywallViewController()
         controller.delegate = self
-        controller.updateAutomaticallyDismiss(with: false)
+        controller.requestedDismissalDelegate = self
         return controller
     }
 
@@ -38,7 +38,7 @@ import UIKit
     ) -> PaywallViewController {
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier)
         controller.delegate = self
-        controller.updateAutomaticallyDismiss(with: false)
+        controller.requestedDismissalDelegate = self
         return controller
     }
 
@@ -248,13 +248,18 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         paywallResultHandler(result.name)
     }
 
-    public func paywallViewControllerRequestedDismissal(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-    }
-
     public func paywallViewController(_ controller: PaywallViewController,
                                       didChangeSizeTo size: CGSize) {
         self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
+    }
+
+}
+
+@available(iOS 15.0, *)
+extension PaywallProxy : PaywallViewControllerRequestedDismissalDelegate {
+
+    public func paywallViewControllerRequestedDismissal(_ controller: PaywallViewController) {
+        self.delegate?.paywallViewControllerRequestedDismissal?(controller)
     }
 
 }
