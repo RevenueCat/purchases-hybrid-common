@@ -1,15 +1,27 @@
 import {
   INTRO_ELIGIBILITY_STATUS,
   IntroEligibility,
-  PACKAGE_TYPE, PRORATION_MODE,
+  PACKAGE_TYPE,
+  PRORATION_MODE,
   PurchasesStoreProductDiscount,
   PurchasesIntroPrice,
-  PurchasesOffering, PurchasesOfferings,
-  PurchasesPackage, PurchasesPromotionalOffer,
-  PurchasesStoreProduct, UpgradeInfo,
-  SubscriptionOption, PricingPhase,
-  Price, Period, OFFER_PAYMENT_MODE, PERIOD_UNIT, PRODUCT_CATEGORY, RECURRENCE_MODE, PRODUCT_TYPE
+  PurchasesOffering,
+  PurchasesOfferings,
+  PurchasesPackage,
+  PurchasesPromotionalOffer,
+  PurchasesStoreProduct,
+  UpgradeInfo,
+  SubscriptionOption,
+  PricingPhase,
+  Price,
+  Period,
+  OFFER_PAYMENT_MODE,
+  PERIOD_UNIT,
+  PRODUCT_CATEGORY,
+  RECURRENCE_MODE,
+  PRODUCT_TYPE,
 } from "../dist";
+import { PresentedOfferingContext } from "../src";
 
 function checkProduct(product: PurchasesStoreProduct) {
   const identifier: string = product.identifier;
@@ -24,8 +36,12 @@ function checkProduct(product: PurchasesStoreProduct) {
   const productCategory: PRODUCT_CATEGORY | null = product.productCategory;
   const productType: PRODUCT_TYPE = product.productType;
   const defaultOption: SubscriptionOption | null = product.defaultOption;
-  const subscriptionOptions: SubscriptionOption[] | null = product.subscriptionOptions;
-  const presentedOfferingIdentifier: string | null = product.presentedOfferingIdentifier;
+  const subscriptionOptions: SubscriptionOption[] | null =
+    product.subscriptionOptions;
+  const presentedOfferingIdentifier: string | null =
+    product.presentedOfferingIdentifier;
+  const presentedOfferingContext: PresentedOfferingContext | null =
+    product.presentedOfferingContext;
 }
 
 function checkDiscount(discount: PurchasesStoreProductDiscount) {
@@ -52,6 +68,8 @@ function checkPackage(pack: PurchasesPackage) {
   const packageType: PACKAGE_TYPE = pack.packageType;
   const product: PurchasesStoreProduct = pack.product;
   const offeringIdentifier: string = pack.offeringIdentifier;
+  const presentedOfferingContext: PresentedOfferingContext =
+    pack.presentedOfferingContext;
 }
 
 function checkOffering(offering: PurchasesOffering) {
@@ -103,7 +121,10 @@ function checkSubscriptionOption(option: SubscriptionOption) {
   const fullPricePhase: PricingPhase | null = option.fullPricePhase;
   const freePhase: PricingPhase | null = option.freePhase;
   const introPhase: PricingPhase | null = option.introPhase;
-  const presentedOfferingIdentifier: string | null = option.presentedOfferingIdentifier;
+  const presentedOfferingIdentifier: string | null =
+    option.presentedOfferingIdentifier;
+  const presentedOfferingContext: PresentedOfferingContext | null =
+    option.presentedOfferingContext;
 }
 
 function checkPricingPhase(pricePhase: PricingPhase) {
@@ -111,7 +132,8 @@ function checkPricingPhase(pricePhase: PricingPhase) {
   const recurrenceMode: RECURRENCE_MODE | null = pricePhase.recurrenceMode;
   const billingCycleCount: number | null = pricePhase.billingCycleCount;
   const price: Price = pricePhase.price;
-  const offerPaymentMode: OFFER_PAYMENT_MODE | null = pricePhase.offerPaymentMode;
+  const offerPaymentMode: OFFER_PAYMENT_MODE | null =
+    pricePhase.offerPaymentMode;
 }
 
 function checkPeriod(period: Period) {
@@ -177,6 +199,23 @@ function checkOfferProductType(productType: PRODUCT_TYPE) {
     case PRODUCT_TYPE.PREPAID_SUBSCRIPTION:
     case PRODUCT_TYPE.UNKNOWN:
       break;
-
   }
+}
+
+function checkPresentedOfferingcontext(
+  presentedOfferingContext: PresentedOfferingContext
+) {
+  const offeringIdentifier: string =
+    presentedOfferingContext.offeringIdentifier;
+  const placementIdentifier: string | null =
+    presentedOfferingContext.placementIdentifier;
+  const targetingContext: PresentedOfferingTargetingContext | null =
+    presentedOfferingContext.targetingContext;
+}
+
+function checkPresentedOfferingTargetingContext(
+  targetingContext: PresentedOfferingTargetingContext
+) {
+  const revision: number = targetingContext.revision;
+  const ruleId: string = targetingContext.ruleId;
 }

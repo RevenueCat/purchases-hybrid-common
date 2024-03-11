@@ -299,7 +299,7 @@ export interface PresentedOfferingTargetingContext {
   /**
    * The revision of the targeting used to obtain this object.
    */
-  readonly revision: string;
+  readonly revision: number;
   /**
    * The rule id from the targeting used to obtain this object.
    */
