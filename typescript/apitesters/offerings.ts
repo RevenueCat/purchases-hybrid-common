@@ -3,6 +3,8 @@ import {
   IntroEligibility,
   PACKAGE_TYPE,
   PRORATION_MODE,
+  PresentedOfferingContext,
+  PresentedOfferingTargetingContext,
   PurchasesStoreProductDiscount,
   PurchasesIntroPrice,
   PurchasesOffering,
@@ -21,7 +23,6 @@ import {
   RECURRENCE_MODE,
   PRODUCT_TYPE,
 } from "../dist";
-import { PresentedOfferingContext } from "../src";
 
 function checkProduct(product: PurchasesStoreProduct) {
   const identifier: string = product.identifier;
