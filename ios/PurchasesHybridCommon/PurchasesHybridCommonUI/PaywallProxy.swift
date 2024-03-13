@@ -25,7 +25,7 @@ import UIKit
 
     @objc
     public func createPaywallView() -> PaywallViewController {
-        let controller = PaywallViewController(dismissalRequest: { controller in
+        let controller = PaywallViewController(dismissRequestedHandler: { controller in
             self.delegate?.paywallViewControllerRequestedDismissal?(controller)
         })
         controller.delegate = self
@@ -38,16 +38,18 @@ import UIKit
         dismissHandler: (() -> Void)? = nil
     ) -> PaywallViewController {
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier,
-                                               dismissalRequest: { controller in
-                                                   self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-                                               })
+                                               dismissRequestedHandler: { controller in
+            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
+        })
         controller.delegate = self
         return controller
     }
 
     @objc
     public func createFooterPaywallView() -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController()
+        let controller = PaywallFooterViewController(dismissRequestedHandler: { controller in
+            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
+        })
         controller.delegate = self
 
         return controller
@@ -55,7 +57,10 @@ import UIKit
 
     @objc
     public func createFooterPaywallView(offeringIdentifier: String) -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier)
+        let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier,
+                                                     dismissRequestedHandler: { controller in
+            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
+        })
         controller.delegate = self
 
         return controller
