@@ -1,5 +1,2 @@
-### New Features
-* Fix revision type in PresentedOfferingTargetingContext context and add API testers (#759) via Josh Holtz (@joshdholtz)
-### Other Changes
-* Update RELEASING.md (#757) via Cesar de la Vega (@vegaro)
-* Update CHANGELOG.md (#755) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.38.1 => 4.39.0 Android 7.7.1 => 7.7.2 (#761) via RevenueCat Git Bot (@RCGitBot)
