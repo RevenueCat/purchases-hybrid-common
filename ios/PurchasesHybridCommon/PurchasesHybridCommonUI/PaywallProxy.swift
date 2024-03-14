@@ -9,7 +9,6 @@
 #if !os(macOS) && !os(tvOS) && !os(watchOS)
 
 import Foundation
-import SwiftUI
 import PurchasesHybridCommon
 import RevenueCat
 import RevenueCatUI
@@ -26,23 +25,22 @@ import UIKit
 
     @objc
     public func createPaywallView() -> PaywallViewController {
-        let controller = PaywallViewController()
+        let controller = PaywallViewController(dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
-        
         return controller
     }
 
     @objc
     public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
-        let controller = PaywallViewController(offeringIdentifier: offeringIdentifier)
+        let controller = PaywallViewController(offeringIdentifier: offeringIdentifier,
+                                               dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
-
         return controller
     }
 
     @objc
     public func createFooterPaywallView() -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController()
+        let controller = PaywallFooterViewController(dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
 
         return controller
@@ -50,7 +48,8 @@ import UIKit
 
     @objc
     public func createFooterPaywallView(offeringIdentifier: String) -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier)
+        let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier,
+                                                     dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
 
         return controller
@@ -183,6 +182,13 @@ import UIKit
         case offeringIdentifier(String)
         case defaultOffering
 
+    }
+
+    private func createDismissHandler() -> (PaywallViewController) -> Void {
+        return { [weak self] controller in
+            guard let delegate = self?.delegate else { return }
+            delegate.paywallViewControllerRequestedDismissal?(controller)
+        }
     }
 
 }
