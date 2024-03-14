@@ -25,9 +25,7 @@ import UIKit
 
     @objc
     public func createPaywallView() -> PaywallViewController {
-        let controller = PaywallViewController(dismissRequestedHandler: { controller in
-            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-        })
+        let controller = PaywallViewController(dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
         return controller
     }
