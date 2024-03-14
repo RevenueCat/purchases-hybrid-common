@@ -33,10 +33,7 @@ import UIKit
     }
 
     @objc
-    public func createPaywallView(
-        offeringIdentifier: String,
-        dismissHandler: (() -> Void)? = nil
-    ) -> PaywallViewController {
+    public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier,
                                                dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
