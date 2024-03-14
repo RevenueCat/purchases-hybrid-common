@@ -38,18 +38,14 @@ import UIKit
         dismissHandler: (() -> Void)? = nil
     ) -> PaywallViewController {
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier,
-                                               dismissRequestedHandler: { controller in
-            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-        })
+                                               dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
         return controller
     }
 
     @objc
     public func createFooterPaywallView() -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController(dismissRequestedHandler: { controller in
-            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-        })
+        let controller = PaywallFooterViewController(dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
 
         return controller
@@ -58,9 +54,7 @@ import UIKit
     @objc
     public func createFooterPaywallView(offeringIdentifier: String) -> PaywallFooterViewController {
         let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier,
-                                                     dismissRequestedHandler: { controller in
-            self.delegate?.paywallViewControllerRequestedDismissal?(controller)
-        })
+                                                     dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
 
         return controller
@@ -193,6 +187,13 @@ import UIKit
         case offeringIdentifier(String)
         case defaultOffering
 
+    }
+
+    private func createDismissHandler() -> (PaywallViewController) -> Void {
+        return { [weak self] controller in
+            guard let delegate = self?.delegate else { return }
+            delegate.paywallViewControllerRequestedDismissal?(controller)
+        }
     }
 
 }
