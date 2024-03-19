@@ -2,6 +2,9 @@ package com.revenuecat.purchases.hybridcommon.ui
 
 import androidx.fragment.app.FragmentActivity
 import com.revenuecat.purchases.Offering
+import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
+import com.revenuecat.purchases.ui.revenuecatui.fonts.ParcelizableFontProvider
+import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
 @JvmOverloads
 @Deprecated(
@@ -29,6 +32,7 @@ fun presentPaywallFromFragment(
     )
 }
 
+@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     options: PresentPaywallOptions,
@@ -44,6 +48,7 @@ fun presentPaywallFromFragment(
                     paywallResultListener,
                     shouldDisplayDismissButton,
                     paywallSource,
+                    fontFamily,
                 ),
                 PaywallFragment.tag,
             )
@@ -51,9 +56,11 @@ fun presentPaywallFromFragment(
     }
 }
 
-data class PresentPaywallOptions(
+// TODO optin is breaking
+data class PresentPaywallOptions @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class) constructor(
     val paywallSource: PaywallSource = PaywallSource.DefaultOffering,
     val requiredEntitlementIdentifier: String? = null,
     val paywallResultListener: PaywallResultListener? = null,
     val shouldDisplayDismissButton: Boolean? = null,
+    val fontFamily: PaywallFontFamily? = null,
 )
