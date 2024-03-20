@@ -11,7 +11,6 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProvider
-import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFont
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
 @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
@@ -21,12 +20,13 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             REQUIRED_ENTITLEMENT_IDENTIFIER("requiredEntitlementIdentifier"),
             SHOULD_DISPLAY_DISMISS_BUTTON("shouldDisplayDismissButton"),
             OFFERING_IDENTIFIER("offeringIdentifier"),
-            FONT_FAMILY("fontProvider");
+            FONT_FAMILY("fontProvider"),
         }
 
         private const val notPresentedPaywallResult = "NOT_PRESENTED"
         const val tag: String = "revenuecat-paywall-fragment"
 
+        @Suppress("LongParameterList")
         @JvmStatic
         fun newInstance(
             activity: FragmentActivity,
@@ -45,12 +45,12 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                     when (paywallSource) {
                         is PaywallSource.Offering -> putString(
                             Key.OFFERING_IDENTIFIER.key,
-                            paywallSource.value.identifier
+                            paywallSource.value.identifier,
                         )
 
                         is PaywallSource.OfferingIdentifier -> putString(
                             Key.OFFERING_IDENTIFIER.key,
-                            paywallSource.value
+                            paywallSource.value,
                         )
 
                         is PaywallSource.DefaultOffering -> Unit
@@ -168,12 +168,12 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         } else if (displayDismissButton != null) {
             launcher.launch(
                 shouldDisplayDismissButton = displayDismissButton,
-                fontProvider = fontProvider
+                fontProvider = fontProvider,
             )
         } else if (offering != null) {
             launcher.launch(
                 offeringIdentifier = offering,
-                fontProvider = fontProvider
+                fontProvider = fontProvider,
             )
         } else {
             launcher.launch(fontProvider = fontProvider)
