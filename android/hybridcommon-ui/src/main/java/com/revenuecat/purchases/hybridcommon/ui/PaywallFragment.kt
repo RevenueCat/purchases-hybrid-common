@@ -16,7 +16,7 @@ import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     companion object {
-        enum class Key(val key: String) {
+        enum class OptionKey(val key: String) {
             REQUIRED_ENTITLEMENT_IDENTIFIER("requiredEntitlementIdentifier"),
             SHOULD_DISPLAY_DISMISS_BUTTON("shouldDisplayDismissButton"),
             OFFERING_IDENTIFIER("offeringIdentifier"),
@@ -40,22 +40,22 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             paywallFragmentViewModel.paywallResultListener = paywallResultListener
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
-                    putString(Key.REQUIRED_ENTITLEMENT_IDENTIFIER.key, requiredEntitlementIdentifier)
-                    shouldDisplayDismissButton?.let { putBoolean(Key.SHOULD_DISPLAY_DISMISS_BUTTON.key, it) }
+                    putString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key, requiredEntitlementIdentifier)
+                    shouldDisplayDismissButton?.let { putBoolean(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key, it) }
                     when (paywallSource) {
                         is PaywallSource.Offering -> putString(
-                            Key.OFFERING_IDENTIFIER.key,
+                            OptionKey.OFFERING_IDENTIFIER.key,
                             paywallSource.value.identifier,
                         )
 
                         is PaywallSource.OfferingIdentifier -> putString(
-                            Key.OFFERING_IDENTIFIER.key,
+                            OptionKey.OFFERING_IDENTIFIER.key,
                             paywallSource.value,
                         )
 
                         is PaywallSource.DefaultOffering -> Unit
                     }
-                    fontFamily?.let { putParcelable(Key.FONT_FAMILY.key, it) }
+                    fontFamily?.let { putParcelable(OptionKey.FONT_FAMILY.key, it) }
                 }
             }
         }
@@ -65,13 +65,13 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private lateinit var viewModel: PaywallFragmentViewModel
 
     private val requiredEntitlementIdentifier: String?
-        get() = arguments?.getString(Key.REQUIRED_ENTITLEMENT_IDENTIFIER.key)
+        get() = arguments?.getString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key)
 
     private val shouldDisplayDismissButtonArg: Boolean?
         get() {
             return arguments?.let {
-                if (it.containsKey(Key.SHOULD_DISPLAY_DISMISS_BUTTON.key)) {
-                    it.getBoolean(Key.SHOULD_DISPLAY_DISMISS_BUTTON.key)
+                if (it.containsKey(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key)) {
+                    it.getBoolean(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key)
                 } else {
                     null
                 }
@@ -79,17 +79,17 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         }
 
     private val fontFamily: PaywallFontFamily?
-        get() = arguments?.takeIf { it.containsKey(Key.FONT_FAMILY.key) }?.let {
+        get() = arguments?.takeIf { it.containsKey(OptionKey.FONT_FAMILY.key) }?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(Key.FONT_FAMILY.key, PaywallFontFamily::class.java)
+                it.getParcelable(OptionKey.FONT_FAMILY.key, PaywallFontFamily::class.java)
             } else {
                 @Suppress("DEPRECATION")
-                it.getParcelable(Key.FONT_FAMILY.key)
+                it.getParcelable(OptionKey.FONT_FAMILY.key)
             }
         }
 
     private val offeringIdentifierArg: String?
-        get() = arguments?.getString(Key.OFFERING_IDENTIFIER.key)
+        get() = arguments?.getString(OptionKey.OFFERING_IDENTIFIER.key)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -56,7 +56,7 @@ fun presentPaywallFromFragment(
 }
 
 @OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
-data class PresentPaywallOptions(
+data class PresentPaywallOptions @JvmOverloads constructor(
     val paywallSource: PaywallSource = PaywallSource.DefaultOffering,
     val requiredEntitlementIdentifier: String? = null,
     val paywallResultListener: PaywallResultListener? = null,
