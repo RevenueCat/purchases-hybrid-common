@@ -1,3 +1,7 @@
+## 10.3.1
+### Bugfixes
+* Fix compilation in xcode 14 (Swift 5.8) (#774) via Cesar de la Vega (@vegaro)
+
 ## 10.3.0
 ### New Features
 * Add font support to presentPaywall (#769) via Cesar de la Vega (@vegaro)
