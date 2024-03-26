@@ -69,10 +69,11 @@ import UIKit
             displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String
 
-        let content = if (offeringIdentifier != nil) {
-            Content.offeringIdentifier(offeringIdentifier!)
+        let content: Content
+        if (offeringIdentifier != nil) {
+            content = Content.offeringIdentifier(offeringIdentifier!)
         } else {
-            Content.defaultOffering
+            content = Content.defaultOffering
         }
 
         self.privatePresentPaywall(displayCloseButton: displayCloseButton,
@@ -93,10 +94,11 @@ import UIKit
             displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String
 
-        let content = if (offeringIdentifier != nil) {
-            Content.offeringIdentifier(offeringIdentifier!)
+        let content: Content
+        if (offeringIdentifier != nil) {
+            content = Content.offeringIdentifier(offeringIdentifier!)
         } else {
-            Content.defaultOffering
+            content = Content.defaultOffering
         }
 
         self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
