@@ -49,7 +49,7 @@ export interface PurchasesEntitlementInfo {
     /**
      * The store where this entitlement was unlocked from.
      */
-    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "UNKNOWN_STORE";
+    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "UNKNOWN_STORE";
     /**
      * The product identifier that unlocked this entitlement
      */
