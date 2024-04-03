@@ -523,10 +523,13 @@ fun canMakePayments(
 }
 
 fun getAmazonLWAConsentStatus(
-    onResult: OnResultAny<AmazonLWAConsentStatus>,
+    onResult: OnResultAny<Boolean>,
 ) {
     Purchases.sharedInstance.getAmazonLWAConsentStatus(onSuccess = {
-        onResult.onReceived(it)
+        onResult.onReceived(when (it) {
+            AmazonLWAConsentStatus.CONSENTED -> true
+            AmazonLWAConsentStatus.UNAVAILABLE -> false
+        })
     }, onError = {
         onResult.onError(it.map())
     })
