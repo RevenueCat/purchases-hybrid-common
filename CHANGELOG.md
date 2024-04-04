@@ -1,3 +1,7 @@
+## 10.3.3
+### Dependency Updates
+* Bump fastlane from 2.219.0 to 2.220.0 (#780) via dependabot[bot] (@dependabot[bot])
+
 ## 10.3.2
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.39.0 => 4.39.1 Android 7.8.0 => 7.8.1 (#776) via RevenueCat Git Bot (@RCGitBot)
