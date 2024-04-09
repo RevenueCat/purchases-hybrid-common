@@ -1,2 +1,3 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.39.0 => 4.39.1 Android 7.8.0 => 7.8.1 (#776) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.6.8 to 1.6.9 (#784) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.7 to 1.6.8 (#778) via dependabot[bot] (@dependabot[bot])
