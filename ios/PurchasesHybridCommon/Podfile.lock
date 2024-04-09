@@ -1,26 +1,15 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-<<<<<<< HEAD
-  - RevenueCat (4.40.0)
-  - RevenueCatUI (4.40.0):
-    - RevenueCat (= 4.40.0)
-=======
   - RevenueCat (5.0.0-beta.3)
   - RevenueCatUI (5.0.0-beta.3):
     - RevenueCat (= 5.0.0-beta.3)
->>>>>>> f9ebfaa (Bump iOS SDK to 5.0.0-beta.3)
 
 DEPENDENCIES:
   - Nimble
   - Quick
-<<<<<<< HEAD
-  - RevenueCat (= 4.40.0)
-  - RevenueCatUI (= 4.40.0)
-=======
   - RevenueCat (= 5.0.0-beta.3)
   - RevenueCatUI (= 5.0.0-beta.3)
->>>>>>> f9ebfaa (Bump iOS SDK to 5.0.0-beta.3)
 
 SPEC REPOS:
   trunk:
@@ -32,16 +21,9 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-<<<<<<< HEAD
-  RevenueCat: f33d2bb58e75afc68d3a8cf193971f008f553a2c
-  RevenueCatUI: f3c05c088452b96b9acc33f048459497b5615391
-
-PODFILE CHECKSUM: 4b67add96f8b3745ceda538d67c47f31f39f3886
-=======
   RevenueCat: 40e259013468caf616c49cd67a78e5754f123547
   RevenueCatUI: 7b9d1cc5ca8e5eabb92be8ee39c7c2352561041d
 
 PODFILE CHECKSUM: 11ffe426600ae69e83dbf1bbabf1c7afcc3244ca
->>>>>>> f9ebfaa (Bump iOS SDK to 5.0.0-beta.3)
 
 COCOAPODS: 1.15.2
