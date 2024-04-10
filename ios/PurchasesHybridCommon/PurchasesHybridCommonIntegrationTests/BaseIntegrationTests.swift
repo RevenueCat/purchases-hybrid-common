@@ -12,8 +12,12 @@ import XCTest
 
 class BaseIntegrationTests: XCTestCase {
 
-    class var storeKit2Setting: StoreKit2Setting {
+    class var storeKitVersion: StoreKitVersion {
         return .default
+    }
+
+    class var observerMode: Bool {
+        return false
     }
 
     override func setUp() async throws {
@@ -65,11 +69,11 @@ private extension BaseIntegrationTests {
         _ = Purchases.configure(
             apiKey: Constants.apiKey,
             appUserID: nil,
-            observerMode: false,
+            observerMode: Self.observerMode,
             userDefaultsSuiteName: Constants.userDefaultsSuiteName,
             platformFlavor: nil,
             platformFlavorVersion: nil,
-            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
+            storeKitVersion: Self.storeKitVersion.name,
             dangerousSettings: self.dangerousSettings
         )
         Purchases.logLevel = .debug

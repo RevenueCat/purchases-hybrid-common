@@ -12,12 +12,6 @@ import RevenueCat
 internal extension EntitlementInfo {
 
     var dictionary: [String: Any] {
-        let verificationResult: VerificationResult
-        if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *) {
-            verificationResult = verification
-        } else {
-            verificationResult = .notRequested
-        }
         return [
             "identifier": identifier,
             "isActive": isActive,
@@ -38,7 +32,7 @@ internal extension EntitlementInfo {
             "billingIssueDetectedAt": billingIssueDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
             "billingIssueDetectedAtMillis": billingIssueDetectedAt?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "ownershipType": ownershipTypeString,
-            "verification": verificationResult.name
+            "verification": verification.name
         ]
     }
 

@@ -1,12 +1,12 @@
 import { PurchasesConfiguration } from "../dist";
-import { ENTITLEMENT_VERIFICATION_MODE } from "../src";
+import { ENTITLEMENT_VERIFICATION_MODE, STOREKIT_VERSION } from "../src";
 
 function checkPurchasesConfiguration(configuration: PurchasesConfiguration) {
     const apiKey: string = configuration.apiKey;
     const appUserID: string | null | undefined = configuration.appUserID;
     const observerMode: boolean | undefined = configuration.observerMode;
     const userDefaultsSuiteName: string | undefined = configuration.userDefaultsSuiteName;
-    const usesStoreKit2IfAvailable: boolean | undefined = configuration.usesStoreKit2IfAvailable;
+    const storeKitVersion: STOREKIT_VERSION | undefined = configuration.storeKitVersion;
     const useAmazon: boolean | undefined = configuration.useAmazon;
     const shouldShowInAppMessagesAutomatically: boolean | undefined = configuration.shouldShowInAppMessagesAutomatically;
     const entitlementVerificationMode: ENTITLEMENT_VERIFICATION_MODE | undefined = configuration.entitlementVerificationMode;
@@ -15,12 +15,12 @@ function checkPurchasesConfiguration(configuration: PurchasesConfiguration) {
         appUserID: appUserID,
         observerMode: observerMode,
         userDefaultsSuiteName: userDefaultsSuiteName,
-        usesStoreKit2IfAvailable: usesStoreKit2IfAvailable,
+        storeKitVersion: storeKitVersion,
         useAmazon: useAmazon,
         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
         entitlementVerificationMode: entitlementVerificationMode
-    } 
+    }
     const configuration3: PurchasesConfiguration = {
         apiKey: apiKey
-    } 
+    }
 }

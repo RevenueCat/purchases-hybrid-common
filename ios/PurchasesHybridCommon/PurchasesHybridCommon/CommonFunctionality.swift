@@ -41,7 +41,7 @@ import RevenueCat
         set {
             if let value = newValue {
                 let url: URL?
-                // Starting with iOS 17, URL(string:) returns a non-nil value from invalid URLs. 
+                // Starting with iOS 17, URL(string:) returns a non-nil value from invalid URLs.
                 // So we use a new method to get the old behavior.
                 // Since the new method isn't recognized by older Xcodes, we use Swift 5.9 as a proxy for Xcode 15+.
                 // https://developer.apple.com/documentation/xcode-release-notes/xcode-15_0-release-notes
@@ -266,17 +266,14 @@ import RevenueCat
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(product: storeProduct,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
+                guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
+                    completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                     return
                 }
-
+                Self.sharedInstance.purchase(product: storeProduct,
+                                            promotionalOffer: promotionalOffer,
+                                            completion: hybridCompletion)
+                return
             }
 
             Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
@@ -301,17 +298,14 @@ import RevenueCat
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(package: package,
-                                                 promotionalOffer: promotionalOffer,
-                                                 completion: hybridCompletion)
+                guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
+                    completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                     return
                 }
-
+                Self.sharedInstance.purchase(package: package,
+                                                promotionalOffer: promotionalOffer,
+                                                completion: hybridCompletion)
+                return
             }
 
             Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
@@ -461,13 +455,6 @@ import RevenueCat
     static func promotionalOffer(for productIdentifier: String,
                                  discountIdentifier: String?,
                                  completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        guard #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) else {
-            completion(
-                nil,
-                Self.createErrorContainer(error: ErrorCode.unsupportedError)
-            )
-            return
-        }
 
         product(with: productIdentifier) { storeProduct in
             guard let storeProduct = storeProduct else {
@@ -664,7 +651,6 @@ private extension CommonFunctionality {
         }
     }
 
-    @available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *)
     static func discount(with identifier: String?, for product: StoreProduct) -> StoreProductDiscount? {
         if identifier == nil {
             return product.discounts.first
@@ -708,6 +694,13 @@ private extension CommonFunctionality {
         return ErrorContainer(error: error, extraPayload: extraPayload)
     }
 
+    static func transactionNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.unknownError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
+    }
+
 }
 
 // MARK: - Encoding
@@ -719,6 +712,32 @@ private extension CommonFunctionality {
     @objc(encodeCustomerInfo:)
     static func encode(customerInfo: CustomerInfo) -> [String: Any] {
         return customerInfo.dictionary
+    }
+
+}
+
+// MARK: StoreKit 2 Observer Mode
+@objc public extension CommonFunctionality {
+
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    @objc(handleObserverModeTransactionForProductID:completion:) 
+    static func handleObserverModeTransaction(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+        _ = Task<Void, Never> {
+            let result = await StoreKit.Transaction.latest(for: productID)
+            if let result = result {
+                do {
+                    let transaction = try await Self.sharedInstance.handleObserverModeTransaction(.success(result))
+                    completion?(transaction?.dictionary, nil)
+                } catch {
+                    completion?(nil, ErrorContainer(error: error, extraPayload: [:]))
+                }
+            } else {
+                completion?(nil, transactionNotFoundError(
+                    description: "Couldn't find transaction for product ID '\(productID)'.",
+                    userCancelled: false
+                ))
+            }
+        }
     }
 
 }

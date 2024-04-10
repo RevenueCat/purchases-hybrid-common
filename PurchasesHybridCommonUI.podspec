@@ -16,13 +16,13 @@ Pod::Spec.new do |s|
   s.framework      = 'StoreKit'
   s.framework      = 'SwiftUI'
 
-  s.dependency 'RevenueCatUI', '4.40.0'
+  s.dependency 'RevenueCatUI', '5.0.0-beta.3'
   s.dependency 'PurchasesHybridCommon', s.version.to_s
   s.swift_version = '5.7'
 
-  s.ios.deployment_target = '11.0'
-  s.osx.deployment_target = '10.13'
-  s.tvos.deployment_target = '11.0'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
+  s.tvos.deployment_target = '13.0'
   s.visionos.deployment_target = '1.0'
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
