@@ -1,3 +1,4 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.39.1 => 4.40.0 (#782) via RevenueCat Git Bot (@RCGitBot)
-* Bump fastlane from 2.219.0 to 2.220.0 (#780) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.9 to 1.6.10 (#787) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.8 to 1.6.9 (#784) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.7 to 1.6.8 (#778) via dependabot[bot] (@dependabot[bot])
