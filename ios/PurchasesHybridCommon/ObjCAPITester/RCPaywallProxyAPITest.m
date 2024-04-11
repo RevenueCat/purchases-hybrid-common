@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
         [proxy presentPaywallWithOfferingIdentifier:@"offering" 
                                  displayCloseButton:true
                                paywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallWithOptions:[NSDictionary new] paywallResultHandler:^(NSString * _Nonnull result) {}];
 
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
@@ -44,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                     offeringIdentifier:@"offering"
                                                     displayCloseButton:true
                                                   paywallResultHandler:^(NSString *result) {}];
+        [proxy presentPaywallIfNeededWithOptions:[NSDictionary new] paywallResultHandler:^(NSString * _Nonnull result) {
+        }];
 
         __unused RCPaywallViewController *view1 = [proxy createPaywallView];
         __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
