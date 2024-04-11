@@ -21,6 +21,7 @@ import UIKit
         @objc public static let requiredEntitlementIdentifier = "requiredEntitlementIdentifier"
         @objc public static let offeringIdentifier = "offeringIdentifier"
         @objc public static let displayCloseButton = "displayCloseButton"
+        @objc public static let shouldBlockTouchEvents = "shouldBlockTouchEvents"
         @objc public static let fontName = "fontName"
     }
 
@@ -67,7 +68,8 @@ import UIKit
                                paywallResultHandler: @escaping (String) -> Void) {
         let offeringIdentifier = options[PaywallOptionsKeys.offeringIdentifier] as? String,
             displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String
+            fontName = options[PaywallOptionsKeys.fontName] as? String,
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
 
         let content: Content
         if (offeringIdentifier != nil) {
@@ -79,6 +81,7 @@ import UIKit
         self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                    content: content,
                                    fontName: fontName,
+                                   shouldBlockTouchEvents: shouldBlockTouchEvents,
                                    paywallResultHandler: paywallResultHandler)
     }
 
@@ -92,7 +95,8 @@ import UIKit
 
         let offeringIdentifier = options[PaywallOptionsKeys.offeringIdentifier] as? String,
             displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String
+            fontName = options[PaywallOptionsKeys.fontName] as? String,
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
 
         let content: Content
         if (offeringIdentifier != nil) {
@@ -105,6 +109,7 @@ import UIKit
                                            displayCloseButton: displayCloseButton,
                                            content: content,
                                            fontName: fontName,
+                                           shouldBlockTouchEvents: shouldBlockTouchEvents,
                                            paywallResultHandler: paywallResultHandler)
     }
 
@@ -112,6 +117,7 @@ import UIKit
                                                displayCloseButton: Bool = false,
                                                content: Content = .defaultOffering,
                                                fontName: String? = nil,
+                                               shouldBlockTouchEvents: Bool = false,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
@@ -121,6 +127,7 @@ import UIKit
                     self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                                content: content,
                                                fontName: fontName,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
                     paywallResultHandler?(PaywallResult.notPresented.name)
@@ -134,6 +141,7 @@ import UIKit
     private func privatePresentPaywall(displayCloseButton: Bool = false,
                                        content: Content = .defaultOffering,
                                        fontName: String? = nil,
+                                       shouldBlockTouchEvents: Bool = false,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard let rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
@@ -152,13 +160,17 @@ import UIKit
         case let .offering(offering):
             controller = PaywallViewController(offering: offering, 
                                                fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton)
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
         case let .offeringIdentifier(identifier):
             controller = PaywallViewController(offeringIdentifier: identifier, 
                                                fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton)
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
         case .defaultOffering:
-            controller = PaywallViewController(fonts: fontProvider, displayCloseButton: displayCloseButton)
+            controller = PaywallViewController(fonts: fontProvider, 
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
         }
 
         controller.delegate = self
