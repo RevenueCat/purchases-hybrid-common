@@ -90,6 +90,8 @@ private extension EntitlementInfo {
             return "STRIPE"
         case .rcBilling:
             return "RC_BILLING"
+        case .external:
+            return "EXTERNAL"
         @unknown default:
             return "UNKNOWN_STORE"
         }
