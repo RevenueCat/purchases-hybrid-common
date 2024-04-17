@@ -143,9 +143,16 @@ import UIKit
                                        fontName: String? = nil,
                                        shouldBlockTouchEvents: Bool = false,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
-        guard let rootController = Self.rootViewController else {
+        guard var rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
             return
+        }
+
+        // In case we are currently presenting a modal or any other
+        // view controller get to the top of the chain.
+        while (true) {
+          guard let presentedVC = rootController.presentedViewController else { break };
+          rootController = presentedVC
         }
 
         let fontProvider: PaywallFontProvider
