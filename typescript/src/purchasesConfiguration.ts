@@ -2,6 +2,7 @@ import { ENTITLEMENT_VERIFICATION_MODE } from "./enums";
 
 /**
  * Holds parameters to initialize the SDK.
+ * @public
  */
 export interface PurchasesConfiguration {
   /**
@@ -28,7 +29,7 @@ export interface PurchasesConfiguration {
    * iOS-only, will be ignored for Android.
    * Set this to TRUE to enable StoreKit2.
    * Default is FALSE.
-   * 
+   *
    * @deprecated RevenueCat currently uses StoreKit 1 for purchases, as its stability in production scenarios has
    * proven to be more performant than StoreKit 2.
    * We're collecting more data on the best approach, but StoreKit 1 vs StoreKit 2 is an implementation detail

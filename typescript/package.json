@@ -14,7 +14,8 @@
     "apitests": "tsc --p apitesters/",
     "lint": "eslint",
     "build": "tsc",
-    "build-watch": "tsc --watch"
+    "build-watch": "tsc --watch",
+    "extract-api": "api-extractor run --local --verbose"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   },
   "homepage": "https://github.com/RevenueCat/purchases-hybrid-common#readme",
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.43.1",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.44.0",

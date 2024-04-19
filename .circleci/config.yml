@@ -378,7 +378,10 @@ jobs:
       - node/install:
           install-yarn: true
       - run:
-          command: yarn && yarn build && yarn apitests
+          command: yarn && yarn build && yarn extract-api
+      - run:
+          name: Check if API has changed
+          command: git diff --exit-code api-report/**
 
   check-pods:
     <<: *base-ios-job

@@ -1,5 +1,7 @@
 node_modules
 dist
+temp
+.idea
 
 **/package-lock.json
 **/yarn.lock
