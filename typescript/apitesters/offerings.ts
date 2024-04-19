@@ -51,7 +51,7 @@ function checkDiscount(discount: PurchasesStoreProductDiscount) {
   const priceString: string = discount.priceString;
   const cycles: number = discount.cycles;
   const period: string = discount.period;
-  const periodUnit: string = discount.periodUnit;
+  const periodUnit: PERIOD_UNIT = discount.periodUnit;
   const periodNumberOfUnits: number = discount.periodNumberOfUnits;
 }
 
@@ -60,7 +60,7 @@ function checkIntroPrice(introPrice: PurchasesIntroPrice) {
   const priceString: string = introPrice.priceString;
   const cycles: number = introPrice.cycles;
   const period: string = introPrice.period;
-  const periodUnit: string = introPrice.periodUnit;
+  const periodUnit: PERIOD_UNIT = introPrice.periodUnit;
   const periodNumberOfUnits: number = introPrice.periodNumberOfUnits;
 }
 
