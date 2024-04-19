@@ -1,3 +1,7 @@
+## 10.4.3
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `1e62420` to `f88dcd4` (#798) via dependabot[bot] (@dependabot[bot])
+
 ## 10.4.2
 ### Bugfixes
 * [EXTERNAL] fix(PaywallProxy): check if root view controller is already presenting (#792) via @MegaMaddin (#793) via Toni Rico (@tonidero)
