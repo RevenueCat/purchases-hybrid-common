@@ -2,6 +2,7 @@ node_modules
 dist
 temp
 .idea
+api-report/purchases-typescript-internal.api.json
 
 **/package-lock.json
 **/yarn.lock
