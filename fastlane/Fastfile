@@ -103,7 +103,7 @@ end
 
 desc "Check typescript library API changes"
 lane :check_typescript_api_changes do
-  update_api_report
+  update_typescript_api_report
   sh("git diff --exit-code typescript/api-report/**")
 end
 
