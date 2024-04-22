@@ -61,6 +61,22 @@ Trigger update dependencies to latest GitHub releases
 
 Trigger bump
 
+### check_typescript_api_changes
+
+```sh
+[bundle exec] fastlane check_typescript_api_changes
+```
+
+Check typescript library API changes
+
+### update_typescript_api_report
+
+```sh
+[bundle exec] fastlane update_typescript_api_report
+```
+
+Update typescript library API report
+
 ### open_pr_upgrading_dependencies
 
 ```sh

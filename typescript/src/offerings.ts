@@ -1,3 +1,7 @@
+/**
+ * Enum indicating possible package types.
+ * @public
+ */
 export enum PACKAGE_TYPE {
   /**
    * A package that was defined with a custom identifier.
@@ -45,6 +49,10 @@ export enum PACKAGE_TYPE {
   WEEKLY = "WEEKLY",
 }
 
+/**
+ * Enum indicating possible eligibility status for introductory pricing.
+ * @public
+ */
 export enum INTRO_ELIGIBILITY_STATUS {
   /**
    * RevenueCat doesn't have enough information to determine eligibility.
@@ -64,6 +72,10 @@ export enum INTRO_ELIGIBILITY_STATUS {
   INTRO_ELIGIBILITY_STATUS_NO_INTRO_OFFER_EXISTS,
 }
 
+/**
+ * Type representing a product from the Store.
+ * @public
+ */
 export interface PurchasesStoreProduct {
   /**
    * Product Id.
@@ -128,7 +140,7 @@ export interface PurchasesStoreProduct {
   /**
    * Offering identifier the store product was presented from.
    * Null if not using offerings or if fetched directly from store via getProducts.
-   * @deprecated, use presentedOfferingContext
+   * @deprecated Use presentedOfferingContext
    */
   readonly presentedOfferingIdentifier: string | null;
   /**
@@ -138,6 +150,10 @@ export interface PurchasesStoreProduct {
   readonly presentedOfferingContext: PresentedOfferingContext | null;
 }
 
+/**
+ * Enum indicating possible product categories.
+ * @public
+ */
 export enum PRODUCT_CATEGORY {
   /**
    * A type of product for non-subscription.
@@ -155,6 +171,10 @@ export enum PRODUCT_CATEGORY {
   UNKNOWN = "UNKNOWN",
 }
 
+/**
+ * Enum indicating possible product types.
+ * @public
+ */
 export enum PRODUCT_TYPE {
   /**
    * A consumable in-app purchase.
@@ -187,6 +207,10 @@ export enum PRODUCT_TYPE {
   UNKNOWN = "UNKNOWN",
 }
 
+/**
+ * Contains information about a discount offer for a product
+ * @public
+ */
 export interface PurchasesStoreProductDiscount {
   /**
    * Identifier of the discount.
@@ -218,6 +242,10 @@ export interface PurchasesStoreProductDiscount {
   readonly periodNumberOfUnits: number;
 }
 
+/**
+ * Contains information about the introductory price for a product
+ * @public
+ */
 export interface PurchasesIntroPrice {
   /**
    * Price in the local currency.
@@ -248,6 +276,7 @@ export interface PurchasesIntroPrice {
 /**
  * Contains information about the product available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
+ * @public
  */
 export interface PurchasesPackage {
   /**
@@ -264,7 +293,7 @@ export interface PurchasesPackage {
   readonly product: PurchasesStoreProduct;
   /**
    * Offering this package belongs to.
-   * @deprecated, use presentedOfferingContext
+   * @deprecated Use presentedOfferingContext
    */
   readonly offeringIdentifier: string;
   /**
@@ -276,6 +305,7 @@ export interface PurchasesPackage {
 
 /**
  * Contains data about the context in which an offering was presented.
+ * @public
  */
 export interface PresentedOfferingContext {
   /**
@@ -294,6 +324,7 @@ export interface PresentedOfferingContext {
 
 /**
  * Contains data about the context in which an offering was presented.
+ * @public
  */
 export interface PresentedOfferingTargetingContext {
   /**
@@ -309,6 +340,7 @@ export interface PresentedOfferingTargetingContext {
 /**
  * An offering is a collection of Packages (`PurchasesPackage`) available for the user to purchase.
  * For more info see https://docs.revenuecat.com/docs/entitlements
+ * @public
  */
 export interface PurchasesOffering {
   /**
@@ -363,6 +395,7 @@ export interface PurchasesOffering {
 /**
  * Contains all the offerings configured in RevenueCat dashboard.
  * For more info see https://docs.revenuecat.com/docs/entitlements
+ * @public
  */
 export interface PurchasesOfferings {
   /**
@@ -377,7 +410,8 @@ export interface PurchasesOfferings {
 
 /**
  * Holds the information used when upgrading from another sku. For Android use only.
- * @deprecated, use GoogleProductChangeInfo
+ * @deprecated Use GoogleProductChangeInfo
+ * @public
  */
 export interface UpgradeInfo {
   /**
@@ -392,6 +426,7 @@ export interface UpgradeInfo {
 
 /**
  * Holds the information used when upgrading from another sku. For Android use only.
+ * @public
  */
 export interface GoogleProductChangeInfo {
   /**
@@ -406,6 +441,7 @@ export interface GoogleProductChangeInfo {
 
 /**
  * Holds the introductory price status
+ * @public
  */
 export interface IntroEligibility {
   /**
@@ -418,6 +454,10 @@ export interface IntroEligibility {
   readonly description: string;
 }
 
+/**
+ * Holds the information about a PromotionalOffer in Apple's App Store.
+ * @public
+ */
 export interface PurchasesPromotionalOffer {
   readonly identifier: string;
   readonly keyIdentifier: string;
@@ -426,6 +466,10 @@ export interface PurchasesPromotionalOffer {
   readonly timestamp: number;
 }
 
+/**
+ * Enum with possible proration modes in a subscription upgrade or downgrade in the Play Store. Used only for Google.
+ * @public
+ */
 export enum PRORATION_MODE {
   UNKNOWN_SUBSCRIPTION_UPGRADE_DOWNGRADE_POLICY = 0,
 
@@ -459,24 +503,25 @@ export enum PRORATION_MODE {
 /**
  * Contains all details associated with a SubscriptionOption
  * Used only for Google
+ * @public
  */
 export interface SubscriptionOption {
   /**
    * Identifier of the subscription option
    * If this SubscriptionOption represents a base plan, this will be the basePlanId.
-   * If it represents an offer, it will be {basePlanId}:{offerId}
+   * If it represents an offer, it will be basePlanId:offerId
    */
   readonly id: string;
 
   /**
    * Identifier of the StoreProduct associated with this SubscriptionOption
-   * This will be {subId}:{basePlanId}
+   * This will be subId:basePlanId
    */
   readonly storeProductId: string;
 
   /**
    * Identifer of the subscription associated with this SubscriptionOption
-   * This will be {subId}
+   * This will be subId
    */
   readonly productId: string;
 
@@ -527,7 +572,7 @@ export interface SubscriptionOption {
 
   /**
    * Offering identifier the subscription option was presented from
-   * @deprecated, use presentedOfferingContext
+   * @deprecated Use presentedOfferingContext
    */
   readonly presentedOfferingIdentifier: string | null;
   /**
@@ -539,6 +584,7 @@ export interface SubscriptionOption {
 
 /**
  * Contains all the details associated with a PricingPhase
+ * @public
  */
 export interface PricingPhase {
   /**
@@ -570,6 +616,7 @@ export interface PricingPhase {
 
 /**
  * Recurrence mode for a pricing phase
+ * @public
  */
 export enum RECURRENCE_MODE {
   /**
@@ -588,6 +635,7 @@ export enum RECURRENCE_MODE {
 
 /**
  * Payment mode for offer pricing phases. Google Play only.
+ * @public
  */
 export enum OFFER_PAYMENT_MODE {
   /**
@@ -606,6 +654,7 @@ export enum OFFER_PAYMENT_MODE {
 
 /**
  * Contains all the details associated with a Price
+ * @public
  */
 export interface Price {
   /**
@@ -632,6 +681,7 @@ export interface Price {
 
 /**
  * Contains all the details associated with a Period
+ * @public
  */
 export interface Period {
   /**
@@ -654,6 +704,7 @@ export interface Period {
 
 /**
  * Time duration unit for Period.
+ * @public
  */
 export enum PERIOD_UNIT {
   DAY = "DAY",

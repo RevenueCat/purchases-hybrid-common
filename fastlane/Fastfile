@@ -101,6 +101,19 @@ lane :trigger_bump do
     trigger_action(action: "bump")
 end
 
+desc "Check typescript library API changes"
+lane :check_typescript_api_changes do
+  update_typescript_api_report
+  sh("git diff --exit-code typescript/api-report/**")
+end
+
+desc "Update typescript library API report"
+lane :update_typescript_api_report do
+  Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+    sh("yarn && yarn build && yarn extract-api")
+  end
+end
+
 desc "Update dependencies to latest GitHub releases and opens a PR"
 lane :open_pr_upgrading_dependencies do |options|
   ensure_git_status_clean

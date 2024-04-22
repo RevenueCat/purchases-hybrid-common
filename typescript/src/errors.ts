@@ -1,5 +1,8 @@
 /* tslint:disable:max-classes-per-file */
-// Error codes indicating the reason for an error.
+/**
+ * Error codes indicating the reason for an error.
+ * @public
+ */
 export enum PURCHASES_ERROR_CODE {
     UNKNOWN_ERROR = "0",
     PURCHASE_CANCELLED_ERROR = "1",
@@ -38,20 +41,29 @@ export enum PURCHASES_ERROR_CODE {
     OFFLINE_CONNECTION_ERROR = "35",
 }
 
+/**
+ * Type encapsulating an error in an SDK operation.
+ * @public
+ */
 export interface PurchasesError {
     code: PURCHASES_ERROR_CODE;
     message: string;
-    // @deprecated
-    // access readableErrorCode through userInfo.readableErrorCode
+    /**
+     * @deprecated access readableErrorCode through userInfo.readableErrorCode
+     */
     readableErrorCode: string;
     userInfo: ErrorInfo;
     underlyingErrorMessage: string;
-
-    // @deprecated
-    // use code === Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR instead
+    /**
+     * @deprecated use code === Purchases.PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR instead
+     */
     userCancelled: boolean | null;
 }
 
+/**
+ * Type encapsulating extra info on an error in an SDK operation.
+ * @public
+ */
 export interface ErrorInfo {
     readableErrorCode: string;
 }
