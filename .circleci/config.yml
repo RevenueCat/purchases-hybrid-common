@@ -376,6 +376,8 @@ jobs:
       - checkout
       - node/install:
           install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
           name: Check if API has changed
           command: bundle exec fastlane check_typescript_api_changes
