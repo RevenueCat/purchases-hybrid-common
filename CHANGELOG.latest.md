@@ -1,3 +1,4 @@
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.40.1 => 4.41.0 Android 7.8.2 => 7.9.0 (#800) via RevenueCat Git Bot (@RCGitBot)
-* Bump fastlane-plugin-revenuecat_internal from `1e62420` to `f88dcd4` (#798) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `f88dcd4` to `dd5e21f` (#802) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add api-extractor to automate API tests (#796) via Toni Rico (@tonidero)
