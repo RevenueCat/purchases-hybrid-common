@@ -1,2 +1,2 @@
 ### Dependency Updates
-* [AUTOMATIC] Android 7.9.0 => 7.10.0 (#806) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 7.10.0 => 7.10.1 (#808) via RevenueCat Git Bot (@RCGitBot)
