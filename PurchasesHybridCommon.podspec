@@ -31,4 +31,6 @@ Pod::Spec.new do |s|
     'ios/PurchasesHybridCommon/PurchasesHybridCommon/*.h'
   ]
 
+  s.resource_bundles = {'PurchasesHybridCommon' => ['ios/PurchasesHybridCommon/PurchasesHybridCommon/PrivacyInfo.xcprivacy']}
+
 end
