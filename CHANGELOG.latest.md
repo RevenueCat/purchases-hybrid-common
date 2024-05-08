@@ -1,3 +1,4 @@
+### Bugfixes
+* Add PrivacyInfo.xcprivacy (#814) via Cesar de la Vega (@vegaro)
 ### Dependency Updates
-* [AUTOMATIC] iOS 4.41.1 => 4.41.2 (#810) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] Android 7.10.0 => 7.10.1 (#808) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `dd5e21f` to `8ec0072` (#812) via dependabot[bot] (@dependabot[bot])
