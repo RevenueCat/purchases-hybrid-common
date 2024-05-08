@@ -1,3 +1,9 @@
+## 10.6.2
+### Bugfixes
+* Add PrivacyInfo.xcprivacy (#814) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `dd5e21f` to `8ec0072` (#812) via dependabot[bot] (@dependabot[bot])
+
 ## 10.6.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 4.41.1 => 4.41.2 (#810) via RevenueCat Git Bot (@RCGitBot)
