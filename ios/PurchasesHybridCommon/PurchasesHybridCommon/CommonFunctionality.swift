@@ -556,6 +556,9 @@ import RevenueCat
     @objc static func setOnesignalID(_ onesignalID: String?) {
         Self.sharedInstance.attribution.setOnesignalID(onesignalID)
     }
+    @objc static func setOnesignalUserID(_ onesignalUserID: String?) {
+        Self.sharedInstance.attribution.setOnesignalUserID(onesignalUserID)
+    }
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
         Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }

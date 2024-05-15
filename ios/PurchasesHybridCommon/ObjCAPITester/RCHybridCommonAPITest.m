@@ -151,6 +151,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setMparticleID:nil];
     [RCCommonFunctionality setOnesignalID:@""];
     [RCCommonFunctionality setOnesignalID:nil];
+    [RCCommonFunctionality setOnesignalUserID:@""];
+    [RCCommonFunctionality setOnesignalUserID:nil];
     [RCCommonFunctionality setAirshipChannelID:@""];
     [RCCommonFunctionality setAirshipChannelID:nil];
     [RCCommonFunctionality setMediaSource:@""];
