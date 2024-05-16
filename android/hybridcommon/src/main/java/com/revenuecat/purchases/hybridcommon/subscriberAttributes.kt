@@ -40,6 +40,10 @@ fun setOnesignalID(onesignalID: String?) {
     Purchases.sharedInstance.setOnesignalID(onesignalID)
 }
 
+fun setOnesignalUserID(onesignalUserID: String?) {
+    Purchases.sharedInstance.setOnesignalUserID(onesignalUserID)
+}
+
 fun setAirshipChannelID(airshipChannelID: String?) {
     Purchases.sharedInstance.setAirshipChannelID(airshipChannelID)
 }

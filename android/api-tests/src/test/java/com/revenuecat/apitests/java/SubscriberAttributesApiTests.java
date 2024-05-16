@@ -30,6 +30,7 @@ class SubscriberAttributesApiTests {
 
     private void checkSetOnesignalID(String id) {
         SubscriberAttributesKt.setOnesignalID(id);
+        SubscriberAttributesKt.setOnesignalUserID(id);
     }
 
     private void checkSetAirshipChannelID(String id) {

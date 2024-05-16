@@ -16,6 +16,7 @@ import com.revenuecat.purchases.hybridcommon.setKeyword
 import com.revenuecat.purchases.hybridcommon.setMediaSource
 import com.revenuecat.purchases.hybridcommon.setMparticleID
 import com.revenuecat.purchases.hybridcommon.setOnesignalID
+import com.revenuecat.purchases.hybridcommon.setOnesignalUserID
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber
 import com.revenuecat.purchases.hybridcommon.setPushToken
 
@@ -46,6 +47,7 @@ private class SubscriberAttributesApiTests {
 
     fun checkSetOnesignalID(id: String?) {
         setOnesignalID(id)
+        setOnesignalUserID(id)
     }
 
     fun checkSetAirshipChannelID(id: String?) {
