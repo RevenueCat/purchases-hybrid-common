@@ -1,29 +1,49 @@
 PODS:
-  - Nimble (10.0.0)
-  - Quick (5.0.1)
-  - RevenueCat (5.0.0-beta.3)
-  - RevenueCatUI (5.0.0-beta.3):
-    - RevenueCat (= 5.0.0-beta.3)
+  - CwlCatchException (2.2.0):
+    - CwlCatchExceptionSupport (~> 2.2.0)
+  - CwlCatchExceptionSupport (2.2.0)
+  - CwlMachBadInstructionHandler (2.2.0)
+  - CwlPosixPreconditionTesting (2.2.0)
+  - CwlPreconditionTesting (2.2.1):
+    - CwlCatchException (~> 2.2.0)
+    - CwlMachBadInstructionHandler (~> 2.2.0)
+    - CwlPosixPreconditionTesting (~> 2.2.0)
+  - Nimble (13.3.0):
+    - CwlPreconditionTesting (~> 2.2.0)
+  - Quick (7.6.0)
+  - RevenueCat (5.0.0-rc.1)
+  - RevenueCatUI (5.0.0-rc.1):
+    - RevenueCat (= 5.0.0-rc.1)
 
 DEPENDENCIES:
   - Nimble
   - Quick
-  - RevenueCat (= 5.0.0-beta.3)
-  - RevenueCatUI (= 5.0.0-beta.3)
+  - RevenueCat (= 5.0.0-rc.1)
+  - RevenueCatUI (= 5.0.0-rc.1)
 
 SPEC REPOS:
   trunk:
+    - CwlCatchException
+    - CwlCatchExceptionSupport
+    - CwlMachBadInstructionHandler
+    - CwlPosixPreconditionTesting
+    - CwlPreconditionTesting
     - Nimble
     - Quick
     - RevenueCat
     - RevenueCatUI
 
 SPEC CHECKSUMS:
-  Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
-  Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 40e259013468caf616c49cd67a78e5754f123547
-  RevenueCatUI: 7b9d1cc5ca8e5eabb92be8ee39c7c2352561041d
+  CwlCatchException: 51bf8319009a31104ea6f0568730d1ecc25b6454
+  CwlCatchExceptionSupport: 1345d6adb01a505933f2bc972dab60dcb9ce3e50
+  CwlMachBadInstructionHandler: ea1030428925d9bf340882522af30712fb4bf356
+  CwlPosixPreconditionTesting: a125dee731883f2582715f548c6b6c92c7fde145
+  CwlPreconditionTesting: ccfd08aca58d14e04062b2a3dd2fd52e09857453
+  Nimble: 3ac6c6b0b7e9835d1540b6507d8054b12a415536
+  Quick: a65742a544182cb9ecb231e1e71bcb87f4d12ce3
+  RevenueCat: ae6d68d89bf6770271302a4c8e07c64388fe960c
+  RevenueCatUI: fa1b7810c2814699f7736828d4957aa55917f459
 
-PODFILE CHECKSUM: 11ffe426600ae69e83dbf1bbabf1c7afcc3244ca
+PODFILE CHECKSUM: f07e7178c5f8844080d8d38c0ee1cf141189843f
 
 COCOAPODS: 1.15.2
