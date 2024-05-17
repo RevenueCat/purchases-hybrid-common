@@ -1,3 +1,7 @@
+## 10.7.0
+### New Features
+* Add support for new OneSignal `setOnesignalUserID` method for OneSignal 11+ (#817) via Toni Rico (@tonidero)
+
 ## 10.6.2
 ### Bugfixes
 * Add PrivacyInfo.xcprivacy (#814) via Cesar de la Vega (@vegaro)
