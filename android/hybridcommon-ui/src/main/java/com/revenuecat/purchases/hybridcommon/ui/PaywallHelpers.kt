@@ -13,6 +13,7 @@ import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
         imports = ["com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment"],
     ),
 )
+@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     requiredEntitlementIdentifier: String? = null,
