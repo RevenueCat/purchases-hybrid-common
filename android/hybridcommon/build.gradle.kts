@@ -46,10 +46,8 @@ android {
 }
 
 dependencies {
-//    api(libs.purchases)
-//    api(libs.purchases.amazon)
-    implementation("com.github.RevenueCat.purchases-android:purchases:quick-subscribe-SNAPSHOT")
-    implementation("com.github.RevenueCat.purchases-android:purchases-store-amazon:quick-subscribe-SNAPSHOT")
+    api(libs.purchases)
+    api(libs.purchases.amazon)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.junit)
     testImplementation(libs.assertj.core)
