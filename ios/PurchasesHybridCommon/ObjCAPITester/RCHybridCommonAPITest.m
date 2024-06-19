@@ -63,6 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
+    NSString *version __unused = RCCommonFunctionality.hybridCommonVersion;
 
     [RCCommonFunctionality purchaseProduct:@""
                    signedDiscountTimestamp:@""

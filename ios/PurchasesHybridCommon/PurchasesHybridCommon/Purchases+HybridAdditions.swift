@@ -91,11 +91,6 @@ import RevenueCat
                          shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                          verificationMode: nil)
     }
-    
-    @objc(hybridCommonVersion)
-    static func hybridCommonVersion() -> String {
-        return Constants.hybridCommonVersion
-    }
 }
 
 extension LogLevel {
