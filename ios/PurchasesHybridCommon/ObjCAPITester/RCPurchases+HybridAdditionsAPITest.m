@@ -37,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                usesStoreKit2IfAvailable:YES
                                                       dangerousSettings:nil
                                    shouldShowInAppMessagesAutomatically:NO];
+    NSString *version __unused = [RCPurchases hybridCommonVersion];
 }
 
 @end
