@@ -8,6 +8,6 @@
 
 import Foundation
 
-public struct Constants {
+internal struct Constants {
     static let hybridCommonVersion = "10.9.0"
 }
