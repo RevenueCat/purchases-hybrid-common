@@ -61,10 +61,10 @@
 		57FFDE3F286A777D0089A57B /* StoreKitIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE3E286A777D0089A57B /* StoreKitIntegrationTests.swift */; };
 		57FFDE41286A77E30089A57B /* CommonFunctionality+async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE40286A77E30089A57B /* CommonFunctionality+async.swift */; };
 		57FFDE46286B606A0089A57B /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
+		77D5E72A2C233E2C002ECC77 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D5E7292C233E2C002ECC77 /* Constants.swift */; };
 		AE0B58267EE48614BBF43A9E /* Pods_PurchasesHybridCommonUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02631302E453BBC6C5F5471 /* Pods_PurchasesHybridCommonUI.framework */; };
 		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
-		C5335FED2A63D9B5B628774F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */; };
 		F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */; };
 		FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */; };
@@ -186,6 +186,7 @@
 		711DF19865BA5A0D096991CE /* Pods-PurchasesHybridCommon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon/Pods-PurchasesHybridCommon.release.xcconfig"; sourceTree = "<group>"; };
 		7242C47A3C4806DEA1CF448A /* Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommonSwift_PurchasesHybridCommonSwiftTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		77D5E7292C233E2C002ECC77 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		874034FC7C4796FE81D5697E /* Pods-ObjCAPITester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.release.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.release.xcconfig"; sourceTree = "<group>"; };
 		8C34B61CED05F8CC62580BC8 /* Pods-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonTests/Pods-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		9FF4DDCEACFA974E979B246A /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -208,7 +209,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5335FED2A63D9B5B628774F /* BuildFile in Frameworks */,
 				F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +344,7 @@
 				4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */,
 				2D4FDFEC28074EB900863298 /* ErrorContainer.swift */,
 				2D900D902807574D00676D73 /* Offering+HybridAdditions.swift */,
+				77D5E7292C233E2C002ECC77 /* Constants.swift */,
 				2D900D942807580000676D73 /* Package+HybridAdditions.swift */,
 				2D900D962807593100676D73 /* StoreProductDiscount+HybridAdditions.swift */,
 				2D900D9828075B9000676D73 /* StoreProduct+HybridAdditions.swift */,
@@ -609,7 +610,7 @@
 				TargetAttributes = {
 					2D54BEFF2437AD5800FF4EE4 = {
 						CreatedOnToolsVersion = 11.4;
-						LastSwiftMigration = 1200;
+						LastSwiftMigration = 1530;
 					};
 					2D557F74280710FA0090FACC = {
 						CreatedOnToolsVersion = 13.3;
@@ -848,6 +849,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */,
+				77D5E72A2C233E2C002ECC77 /* Constants.swift in Sources */,
 				2DD3D1882810AF5A00A19EC6 /* StoreProductDiscount+HybridAdditions.swift in Sources */,
 				2DD3D1902810AF5A00A19EC6 /* StoreProduct+HybridAdditions.swift in Sources */,
 				4FBD2DA72A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift in Sources */,
@@ -993,6 +995,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1027,6 +1030,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

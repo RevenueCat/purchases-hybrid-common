@@ -35,6 +35,7 @@ import RevenueCat
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
     @objc public static var appUserID: String { Self.sharedInstance.appUserID }
     @objc public static var isAnonymous: Bool { Self.sharedInstance.isAnonymous }
+    @objc public static var hybridCommonVersion: String { Constants.hybridCommonVersion }
 
     @objc public static var proxyURLString: String? {
         get { Purchases.proxyURL?.absoluteString }

@@ -15,7 +15,8 @@ files_with_version_number = {
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
     './PurchasesHybridCommonUI.podspec' => ['s.version          = "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
-    './typescript/package.json' => ['"version": "{x}"']
+    './typescript/package.json' => ['"version": "{x}"'],
+    './ios/PurchasesHybridCommon/PurchasesHybridCommon/Constants.swift' => [' hybridCommonVersion = "{x}"']
 }
 PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
 files_with_version_number_without_prerelease_modifiers = {
