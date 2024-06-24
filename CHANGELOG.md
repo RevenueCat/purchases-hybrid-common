@@ -1,3 +1,9 @@
+## 10.10.1
+### Dependency Updates
+* Bump fastlane from 2.221.0 to 2.221.1 (#841) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Adds .aiexclude (#843) via JayShortway (@JayShortway)
+
 ## 10.10.0
 ### New Features
 * Exposes PHC version (#838) via JayShortway (@JayShortway)
