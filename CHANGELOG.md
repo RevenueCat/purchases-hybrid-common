@@ -1,3 +1,7 @@
+## 10.11.0
+### New Features
+* Adds .aiexclude (#843) via JayShortway (@JayShortway)
+
 ## 10.10.0
 ### New Features
 * Exposes PHC version (#838) via JayShortway (@JayShortway)
