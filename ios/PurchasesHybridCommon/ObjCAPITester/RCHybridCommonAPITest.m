@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     }];
 
-    [RCCommonFunctionality setFinishTransactions:NO];
+    [RCCommonFunctionality setPurchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
                                                     completionBlock:^(NSDictionary<NSString *, NSObject *>
                                                                       * _Nonnull eligibilities) {
