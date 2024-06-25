@@ -5,6 +5,7 @@ import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
@@ -45,7 +46,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -54,7 +55,7 @@ internal class ConfiguringUnitTests {
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
-            expectedObserverMode = false,
+            expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
         )
     }
 
@@ -64,7 +65,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = true,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -73,17 +74,17 @@ internal class ConfiguringUnitTests {
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
-            expectedObserverMode = true,
+            expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
         )
     }
 
     @Test
-    fun `calling configure with a null observer mode should configure the Android SDK with observer mode false`() {
+    fun `calling configure with default expectedPurchasesAreCompletedBy should configure the Android SDK with expectedPurchasesAreCompletedBy RevenueCat`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = null,
+            purchasesAreCompletedBy = null,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -92,7 +93,7 @@ internal class ConfiguringUnitTests {
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
-            expectedObserverMode = false,
+            expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
         )
     }
 
@@ -102,7 +103,6 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = null,
-            observerMode = null,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -111,7 +111,7 @@ internal class ConfiguringUnitTests {
             expectedContext = mockContext,
             expectedApiKey = "api_key",
             expectedAppUserID = null,
-            expectedObserverMode = false,
+            expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
         )
     }
 
@@ -121,7 +121,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -135,7 +135,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             verificationMode = null,
         )
@@ -148,7 +148,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             verificationMode = "DISABLED",
         )
@@ -161,7 +161,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             verificationMode = "INFORMATIONAL",
         )
@@ -174,7 +174,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             verificationMode = "ENFORCED",
         )
@@ -189,7 +189,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -203,7 +203,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            observerMode = false,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
             dangerousSettings = expectedDangerousSettings,
@@ -216,14 +216,14 @@ internal class ConfiguringUnitTests {
         expectedContext: Context,
         expectedApiKey: String,
         expectedAppUserID: String?,
-        expectedObserverMode: Boolean,
+        expectedPurchasesAreCompletedBy: PurchasesAreCompletedBy,
     ) {
         assertTrue(purchasesConfigurationSlot.isCaptured)
         purchasesConfigurationSlot.captured.let { captured ->
             assertEquals(expectedContext, captured.context)
             assertEquals(expectedApiKey, captured.apiKey)
             assertEquals(expectedAppUserID, captured.appUserID)
-            assertEquals(expectedObserverMode, captured.observerMode)
+            assertEquals(expectedPurchasesAreCompletedBy, captured.purchasesAreCompletedBy)
         }
     }
 }

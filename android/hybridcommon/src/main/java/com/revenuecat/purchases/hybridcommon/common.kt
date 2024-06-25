@@ -12,6 +12,7 @@ import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
@@ -474,10 +475,10 @@ fun isAnonymous(): Boolean {
     return Purchases.sharedInstance.isAnonymous
 }
 
-fun setFinishTransactions(
-    enabled: Boolean,
+fun setPurchasesAreCompletedBy(
+    purchasesAreCompletedBy: PurchasesAreCompletedBy
 ) {
-    Purchases.sharedInstance.finishTransactions = enabled
+    Purchases.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
 }
 
 // Returns Unknown for all since it's not available in Android
@@ -537,7 +538,7 @@ fun configure(
     context: Context,
     apiKey: String,
     appUserID: String?,
-    observerMode: Boolean?,
+    purchasesAreCompletedBy: PurchasesAreCompletedBy? = null,
     platformInfo: PlatformInfo,
     store: Store = Store.PLAY_STORE,
     dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
@@ -545,26 +546,22 @@ fun configure(
     verificationMode: String? = null,
 ) {
     Purchases.platformInfo = platformInfo
-    val builder =
-        PurchasesConfiguration.Builder(context, apiKey)
-            .appUserID(appUserID)
-            .store(store)
-            .dangerousSettings(dangerousSettings)
-    if (observerMode != null) {
-        builder.observerMode(observerMode)
-    }
-    if (shouldShowInAppMessagesAutomatically != null) {
-        builder.showInAppMessagesAutomatically(shouldShowInAppMessagesAutomatically)
-    }
-    if (verificationMode != null) {
-        try {
-            builder.entitlementVerificationMode(EntitlementVerificationMode.valueOf(verificationMode))
-        } catch (e: IllegalArgumentException) {
-            warnLog("Attempted to configure with unknown verification mode: $verificationMode.")
-        }
-    }
 
-    Purchases.configure(builder.build())
+    PurchasesConfiguration.Builder(context, apiKey)
+        .appUserID(appUserID)
+        .store(store)
+        .dangerousSettings(dangerousSettings)
+        .apply {
+            purchasesAreCompletedBy?.let { purchasesAreCompletedBy(it) }
+            shouldShowInAppMessagesAutomatically?.let { showInAppMessagesAutomatically(it) }
+            verificationMode?.let { verificationMode ->
+                try {
+                    entitlementVerificationMode(EntitlementVerificationMode.valueOf(verificationMode))
+                } catch (e: IllegalArgumentException) {
+                    warnLog("Attempted to configure with unknown verification mode: $verificationMode.")
+                }
+            }
+        }.also { Purchases.configure(it.build()) }
 }
 
 fun getPromotionalOffer(): ErrorContainer {

@@ -3,6 +3,7 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -28,11 +29,11 @@ import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
 import com.revenuecat.purchases.hybridcommon.restorePurchases
 import com.revenuecat.purchases.hybridcommon.setAllowSharingAppStoreAccount
 import com.revenuecat.purchases.hybridcommon.setDebugLogsEnabled
-import com.revenuecat.purchases.hybridcommon.setFinishTransactions
 import com.revenuecat.purchases.hybridcommon.setLogHandler
 import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
 import com.revenuecat.purchases.hybridcommon.setLogLevel
 import com.revenuecat.purchases.hybridcommon.setProxyURLString
+import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
 import com.revenuecat.purchases.models.InAppMessageType
@@ -180,8 +181,8 @@ private class CommonApiTests {
         val isAnonymous: Boolean = isAnonymous()
     }
 
-    fun checkSetFinishTransactions(enabled: Boolean) {
-        setFinishTransactions(enabled)
+    fun checkSetPurchasesAreCompletedBy(purchasesAreCompletedBy: PurchasesAreCompletedBy) {
+        setPurchasesAreCompletedBy(purchasesAreCompletedBy)
     }
 
     fun checkCheckTrialOrIntroductoryPriceEligibility(productIdentifiers: List<String>) {
@@ -212,20 +213,20 @@ private class CommonApiTests {
         context: Context,
         apiKey: String,
         appUserID: String?,
-        observerMode: Boolean?,
+        purchasesAreCompletedBy: PurchasesAreCompletedBy,
         platformInfo: PlatformInfo,
         store: Store,
         dangerousSettings: DangerousSettings,
         shouldShowInAppMessagesAutomatically: Boolean?,
         verificationMode: String?,
     ) {
-        configure(context, apiKey, appUserID, observerMode, platformInfo)
-        configure(context, apiKey, appUserID, observerMode, platformInfo, store, dangerousSettings)
+        configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
+        configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
         configure(
             context,
             apiKey,
             appUserID,
-            observerMode,
+            purchasesAreCompletedBy,
             platformInfo,
             store,
             dangerousSettings,
@@ -235,7 +236,7 @@ private class CommonApiTests {
             context,
             apiKey,
             appUserID,
-            observerMode,
+            purchasesAreCompletedBy,
             platformInfo,
             store,
             dangerousSettings,

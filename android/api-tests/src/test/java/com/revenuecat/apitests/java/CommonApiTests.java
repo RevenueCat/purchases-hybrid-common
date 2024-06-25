@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.revenuecat.purchases.DangerousSettings;
+import com.revenuecat.purchases.PurchasesAreCompletedBy;
 import com.revenuecat.purchases.Store;
 import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
@@ -157,8 +158,8 @@ class CommonApiTests {
         boolean isAnonymous = CommonKt.isAnonymous();
     }
 
-    private void checkSetFinishTransactions(boolean enabled) {
-        CommonKt.setFinishTransactions(enabled);
+    private void checkSetPurchasesAreCompletedBy(PurchasesAreCompletedBy purchasesAreCompletedBy) {
+        CommonKt.setPurchasesAreCompletedBy(purchasesAreCompletedBy);
     }
 
     private void checkCheckTrialOrIntroductoryPriceEligibility(List<String> productIdentifiers) {
@@ -182,21 +183,21 @@ class CommonApiTests {
     private void checkConfigure(Context context,
                                 String apiKey,
                                 String appUserId,
-                                Boolean observerMode,
+                                PurchasesAreCompletedBy purchasesAreCompletedBy,
                                 PlatformInfo platformInfo,
                                 Store store,
                                 DangerousSettings dangerousSettings,
                                 Boolean shouldShowInAppMessagesAutomatically,
                                 String verificationMode
     ) {
-        CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo);
-        CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store);
-        CommonKt.configure(context, apiKey, appUserId, observerMode, platformInfo, store, dangerousSettings);
+        CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo);
+        CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store);
+        CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store, dangerousSettings);
         CommonKt.configure(
                 context,
                 apiKey,
                 appUserId,
-                observerMode,
+                purchasesAreCompletedBy,
                 platformInfo,
                 store,
                 dangerousSettings,
@@ -205,7 +206,7 @@ class CommonApiTests {
                 context,
                 apiKey,
                 appUserId,
-                observerMode,
+                purchasesAreCompletedBy,
                 platformInfo,
                 store,
                 dangerousSettings,
