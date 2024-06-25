@@ -476,7 +476,7 @@ fun isAnonymous(): Boolean {
 }
 
 fun setPurchasesAreCompletedBy(
-    purchasesAreCompletedBy: PurchasesAreCompletedBy
+    purchasesAreCompletedBy: PurchasesAreCompletedBy,
 ) {
     Purchases.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
 }

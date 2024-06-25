@@ -79,7 +79,7 @@ internal class ConfiguringUnitTests {
     }
 
     @Test
-    fun `calling configure with default expectedPurchasesAreCompletedBy should configure the Android SDK with expectedPurchasesAreCompletedBy RevenueCat`() {
+    fun `calling configure with null expectedPurchasesAreCompletedBy configures the Android SDK`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
