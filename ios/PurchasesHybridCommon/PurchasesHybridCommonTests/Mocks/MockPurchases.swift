@@ -556,6 +556,11 @@ extension MockPurchases {
         set { fatalError("Not mocked") }
     }
 
+    var purchasesAreCompletedBy: RevenueCat.PurchasesAreCompletedBy {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
     var attribution: Attribution {
         get { fatalError("Not mocked") }
         set { fatalError("Not mocked") }

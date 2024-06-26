@@ -65,7 +65,7 @@ private extension BaseIntegrationTests {
         _ = Purchases.configure(
             apiKey: Constants.apiKey,
             appUserID: nil,
-            observerMode: false,
+            purchasesAreCompletedBy: .revenueCat,
             userDefaultsSuiteName: Constants.userDefaultsSuiteName,
             platformFlavor: nil,
             platformFlavorVersion: nil,
