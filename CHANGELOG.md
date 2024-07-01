@@ -1,3 +1,7 @@
+## 11.0.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.43.1 => 4.43.2 (#849) via RevenueCat Git Bot (@RCGitBot)
+
 ## 11.0.0
 ### Breaking Changes
 * `purchasesAreCompletedBy`. Remove `observerMode`. iOS 4.43.0 => 4.43.1 (#845) via RevenueCat Git Bot (@RCGitBot)
