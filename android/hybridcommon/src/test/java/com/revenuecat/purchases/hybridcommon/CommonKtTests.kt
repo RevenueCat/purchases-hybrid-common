@@ -1178,6 +1178,14 @@ internal class CommonKtTests {
     }
 
     @Test
+    fun `getGoogleProrationMode returns DEFERRED for 4`() {
+        val prorationModeInt: Int? = 4
+
+        val mode = getGoogleProrationMode(prorationModeInt)
+        assertEquals(mode, GoogleProrationMode.DEFERRED)
+    }
+
+    @Test
     fun `getGoogleProrationMode throws exception for negative out of bounds number`() {
         val prorationModeInt: Int? = -1
 
