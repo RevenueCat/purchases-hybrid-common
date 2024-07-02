@@ -1,3 +1,7 @@
+## 11.1.1
+### Bugfixes
+* Add `DEFERRED` to typescript enum (#854) via Toni Rico (@tonidero)
+
 ## 11.1.0
 ### Dependency Updates
 * Bump Android 7.12.0 (#851) via Toni Rico (@tonidero)
