@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import com.revenuecat.purchases.AmazonLWAConsentStatus
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
@@ -517,6 +518,19 @@ fun canMakePayments(
     Purchases.canMakePayments(context, billingFeatures) {
         onResult.onReceived(it)
     }
+}
+
+fun getAmazonLWAConsentStatus(
+    onResult: OnResultAny<Boolean>,
+) {
+    Purchases.sharedInstance.getAmazonLWAConsentStatusWith(onSuccess = {
+        onResult.onReceived(when (it) {
+            AmazonLWAConsentStatus.CONSENTED -> true
+            AmazonLWAConsentStatus.UNAVAILABLE -> false
+        })
+    }, onError = {
+        onResult.onError(it.map())
+    })
 }
 
 @JvmOverloads
