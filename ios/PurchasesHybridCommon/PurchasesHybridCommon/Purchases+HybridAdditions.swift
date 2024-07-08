@@ -11,11 +11,11 @@ import RevenueCat
 
 @objc public extension Purchases {
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
             storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          observerMode: Bool,
+                          purchasesAreCompletedBy: String?,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -36,11 +36,24 @@ import RevenueCat
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
         if let storeKitVersion {
+            let purchasesAreCompletedByConfigured: Bool
+
             if let version = StoreKitVersion(name: storeKitVersion) {
-                if observerMode {
-                    configurationBuilder = configurationBuilder.with(observerMode: observerMode,
-                                                                     storeKitVersion: version)
+                if let purchasesAreCompletedBy {
+                    if let purchasesAreCompletedByEnum = PurchasesAreCompletedBy(name: purchasesAreCompletedBy) {
+                        configurationBuilder = configurationBuilder.with(
+                            purchasesAreCompletedBy: purchasesAreCompletedByEnum, 
+                            storeKitVersion: version
+                        )
+                        purchasesAreCompletedByConfigured = true
+                    } else {
+                        purchasesAreCompletedByConfigured = false
+                    }
                 } else {
+                    purchasesAreCompletedByConfigured = false
+                }
+
+                if !purchasesAreCompletedByConfigured {
                     configurationBuilder = configurationBuilder.with(storeKitVersion: version)
                 }
             } else {
@@ -75,11 +88,11 @@ import RevenueCat
     }
 
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
             storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          observerMode: Bool,
+                          purchasesAreCompletedBy: String?,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -88,7 +101,7 @@ import RevenueCat
                           shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         return configure(apiKey: apiKey,
                          appUserID: appUserID,
-                         observerMode: observerMode,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
                          userDefaultsSuiteName: userDefaultsSuiteName,
                          platformFlavor: platformFlavor,
                          platformFlavorVersion: platformFlavorVersion,

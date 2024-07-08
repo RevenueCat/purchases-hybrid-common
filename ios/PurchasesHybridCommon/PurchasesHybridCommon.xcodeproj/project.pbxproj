@@ -65,10 +65,12 @@
 		AE0B58267EE48614BBF43A9E /* Pods_PurchasesHybridCommonUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02631302E453BBC6C5F5471 /* Pods_PurchasesHybridCommonUI.framework */; };
 		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
-		C5335FED2A63D9B5B628774F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		C5335FED2A63D9B5B628774F /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */; };
 		F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */; };
 		FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */; };
+		FD6A08BB2C3C3BB1005696B3 /* RCPurchasesAreCompletedBy+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6A08BA2C3C3BB1005696B3 /* RCPurchasesAreCompletedBy+HybridAdditions.swift */; };
+		FD6A08C32C3C3F29005696B3 /* PurchasesAreCompletedBy+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6A08C22C3C3F29005696B3 /* PurchasesAreCompletedBy+HybridAdditionsTests.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -202,6 +204,8 @@
 		E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.debug.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.debug.xcconfig"; sourceTree = "<group>"; };
 		EC917227AAA9D46865C0C01D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+TestExtensions.swift"; sourceTree = "<group>"; };
+		FD6A08BA2C3C3BB1005696B3 /* RCPurchasesAreCompletedBy+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RCPurchasesAreCompletedBy+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FD6A08C22C3C3F29005696B3 /* PurchasesAreCompletedBy+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchasesAreCompletedBy+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,7 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5335FED2A63D9B5B628774F /* BuildFile in Frameworks */,
+				C5335FED2A63D9B5B628774F /* (null) in Frameworks */,
 				F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,6 +305,7 @@
 				FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */,
 				FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */,
 				35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */,
+				FD6A08C22C3C3F29005696B3 /* PurchasesAreCompletedBy+HybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -356,6 +361,7 @@
 				2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */,
 				2DED033B280F5759009C5D65 /* CommonFunctionality.swift */,
 				2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */,
+				FD6A08BA2C3C3BB1005696B3 /* RCPurchasesAreCompletedBy+HybridAdditions.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -858,6 +864,7 @@
 				2DD3D18F2810AF5A00A19EC6 /* EntitlementInfo+HybridAdditions.swift in Sources */,
 				2DD3D1922810AF5A00A19EC6 /* PromotionalOffer+HybridAdditions.swift in Sources */,
 				2DD3D1862810AF5A00A19EC6 /* Package+HybridAdditions.swift in Sources */,
+				FD6A08BB2C3C3BB1005696B3 /* RCPurchasesAreCompletedBy+HybridAdditions.swift in Sources */,
 				2DD3D18C2810AF5A00A19EC6 /* Purchases+HybridAdditions.swift in Sources */,
 				2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */,
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
@@ -899,6 +906,7 @@
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
 				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
+				FD6A08C32C3C3F29005696B3 /* PurchasesAreCompletedBy+HybridAdditionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

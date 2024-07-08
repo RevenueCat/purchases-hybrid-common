@@ -119,11 +119,6 @@ import RevenueCat
         }
     }
 
-    @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
-    }
-
     @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
     @available(tvOS, unavailable)
     @available(watchOS, unavailable)
@@ -131,6 +126,7 @@ import RevenueCat
         Self.sharedInstance.attribution.enableAdServicesAttributionTokenCollection()
     }
 
+    @available(*, deprecated, message: "Use purchasesAreCompletedBy instead.")
     @objc public static func setFinishTransactions(_ finishTransactions: Bool) {
         Self.sharedInstance.finishTransactions = finishTransactions
     }
@@ -703,6 +699,20 @@ private extension CommonFunctionality {
 
 }
 
+// MARK: - Obsoletions
+@objc public extension CommonFunctionality {
+
+    // Obsoleted in purchases-ios 5.0.0
+    @available(iOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(watchOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(macOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(tvOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(swift, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @objc static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
+        fatalError()
+    }
+}
+
 // MARK: - Encoding
 
 @objc public extension CommonFunctionality {
@@ -721,12 +731,12 @@ private extension CommonFunctionality {
 
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
     @objc(handleObserverModeTransactionForProductID:completion:) 
-    static func handleObserverModeTransaction(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+    static func recordPurchase(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         _ = Task<Void, Never> {
             let result = await StoreKit.Transaction.latest(for: productID)
             if let result = result {
                 do {
-                    let transaction = try await Self.sharedInstance.handleObserverModeTransaction(.success(result))
+                    let transaction = try await Self.sharedInstance.recordPurchase(.success(result))
                     completion?(transaction?.dictionary, nil)
                 } catch {
                     completion?(nil, ErrorContainer(error: error, extraPayload: [:]))
