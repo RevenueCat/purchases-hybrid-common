@@ -76,7 +76,7 @@ import RevenueCat
 
 
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
-            platformFlavorVersion:usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: PurchasesAreCompletedBy,
