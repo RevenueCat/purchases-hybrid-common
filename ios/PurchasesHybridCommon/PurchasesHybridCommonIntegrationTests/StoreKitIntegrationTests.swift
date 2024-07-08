@@ -17,8 +17,40 @@ import XCTest
 
 class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
-    override class var storeKit2Setting: StoreKit2Setting { return .enabledForCompatibleDevices }
+    override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
+}
+
+class StoreKit2ObserverModeIntegrationTests: StoreKit2IntegrationTests {
+
+    override class var purchasesAreCompletedBy: PurchasesAreCompletedBy {
+        return .myApp
+    }
+
+    func testRecordPurchase() async throws {
+        _ = try await Product.products(for: [Self.productIdentifier]).first?.purchase()
+
+        let (dict, error) = try await withCheckedThrowingContinuation { continuation in
+            CommonFunctionality.recordPurchase(productID: Self.productIdentifier) { (dict, error) in
+                continuation.resume(returning: (dict, error))
+            }
+
+        }
+        expect(error).to(beNil())
+        var unwrappedDict = try XCTUnwrap(dict)
+        removeDates(&unwrappedDict)
+        await self.assertSnapshot(unwrappedDict)
+    }
+
+    func testHandleObserverModeTransactionMissingTransaction() async throws {
+        let (dict, error) = try await withCheckedThrowingContinuation { continuation in
+            CommonFunctionality.recordPurchase(productID: "invalid_product_id") { (dict, error) in
+                continuation.resume(returning: (dict, error))
+            }
+        }
+        expect(error?.error).to(matchError(ErrorCode.unknownError))
+        expect(dict).to(beNil())
+    }
 }
 
 class StoreKit1IntegrationTests: BaseIntegrationTests {
@@ -53,8 +85,8 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         _ = try await CommonFunctionality.offerings()
     }
 
-    override class var storeKit2Setting: StoreKit2Setting {
-        return .disabled
+    override class var storeKitVersion: StoreKitVersion {
+        return .storeKit1
     }
 
     func testCanGetOfferings() async throws {
@@ -116,7 +148,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     }
 
     func testTrialOrIntroductoryPriceEligibility() async throws {
-        if Self.storeKit2Setting == .disabled {
+        if Self.storeKitVersion == .storeKit1 {
             // SK1 implementation relies on the receipt being loaded already.
             // See `TrialOrIntroPriceEligibilityChecker.sk1CheckEligibility`
             _ = try await CommonFunctionality.restorePurchases()
@@ -181,7 +213,7 @@ private extension StoreKit1IntegrationTests {
         file: StaticString = #file,
         line: UInt = #line
     ) {
-        let name = "\(Self.storeKit2Setting.testSuffix)-\(testName)"
+        let name = "\(Self.storeKitVersion.testSuffix)-\(testName)"
         SnapshotTesting.assertSnapshot(matching: value,
                                        as: .json,
                                        file: file,
@@ -239,12 +271,12 @@ private extension StoreKit1IntegrationTests {
 
 }
 
-private extension StoreKit2Setting {
+private extension StoreKitVersion {
 
     var testSuffix: String {
         switch self {
-        case .disabled, .enabledOnlyForOptimizations: return "SK1"
-        case .enabledForCompatibleDevices: return "SK2"
+        case .storeKit1: return "SK1"
+        case .storeKit2: return "SK2"
         }
     }
 

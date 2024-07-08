@@ -12,7 +12,7 @@ import RevenueCat
 @objc public extension Purchases {
 
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
-            platformFlavorVersion:usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
             verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
@@ -20,7 +20,7 @@ import RevenueCat
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          usesStoreKit2IfAvailable: Bool = false,
+                          storeKitVersion: String? = "DEFAULT",
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
                           verificationMode: String?) -> Purchases {
@@ -36,13 +36,18 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        configurationBuilder = configurationBuilder.with(purchasesAreCompletedBy: purchasesAreCompletedBy)
+        if let storeKitVersion {
+            if let version = StoreKitVersion(name: storeKitVersion) {
+                configurationBuilder = configurationBuilder.with(
+                    purchasesAreCompletedBy: purchasesAreCompletedBy,
+                    storeKitVersion: version
+                )
+            }
+        }
+
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
-        configurationBuilder = (configurationBuilder as ConfigurationBuilderDeprecatable)
-            // Allows silencing deprecation warning, so `pod lib lint` does not fail.
-            .with(usesStoreKit2IfAvailable: usesStoreKit2IfAvailable)
         if let dangerousSettings = dangerousSettings {
             configurationBuilder = configurationBuilder.with(dangerousSettings: dangerousSettings)
         }
@@ -78,7 +83,7 @@ import RevenueCat
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          usesStoreKit2IfAvailable: Bool = false,
+                          storeKitVersion: String? = "DEFAULT",
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         return configure(apiKey: apiKey,
@@ -87,7 +92,7 @@ import RevenueCat
                          userDefaultsSuiteName: userDefaultsSuiteName,
                          platformFlavor: platformFlavor,
                          platformFlavorVersion: platformFlavorVersion,
-                         usesStoreKit2IfAvailable: usesStoreKit2IfAvailable,
+                         storeKitVersion: storeKitVersion,
                          dangerousSettings: dangerousSettings,
                          shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                          verificationMode: nil)

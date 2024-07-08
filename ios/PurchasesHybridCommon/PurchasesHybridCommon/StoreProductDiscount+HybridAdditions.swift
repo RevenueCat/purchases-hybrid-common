@@ -27,10 +27,8 @@ internal extension StoreProductDiscount {
             "cycles": numberOfPeriods
         ]
         
-        if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
-            if offerIdentifier != nil {
-                dictionary["identifier"] = offerIdentifier
-            }
+        if offerIdentifier != nil {
+            dictionary["identifier"] = offerIdentifier
         }
         return dictionary
     }

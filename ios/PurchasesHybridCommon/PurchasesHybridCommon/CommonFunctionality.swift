@@ -120,11 +120,6 @@ import RevenueCat
         }
     }
 
-    @available(*, deprecated, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @objc public static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        Purchases.automaticAppleSearchAdsAttributionCollection = enabled
-    }
-
     @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
     @available(tvOS, unavailable)
     @available(watchOS, unavailable)
@@ -502,6 +497,32 @@ import RevenueCat
 
 }
 
+// MARK: StoreKit 2 Observer Mode
+@objc public extension CommonFunctionality {
+
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    @objc(handleObserverModeTransactionForProductID:completion:)
+    static func recordPurchase(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
+        _ = Task<Void, Never> {
+            let result = await StoreKit.Transaction.latest(for: productID)
+            if let result = result {
+                do {
+                    let transaction = try await Self.sharedInstance.recordPurchase(.success(result))
+                    completion?(transaction?.dictionary, nil)
+                } catch {
+                    completion?(nil, ErrorContainer(error: error, extraPayload: [:]))
+                }
+            } else {
+                completion?(nil, transactionNotFoundError(
+                    description: "Couldn't find transaction for product ID '\(productID)'.",
+                    userCancelled: false
+                ))
+            }
+        }
+    }
+
+}
+
 // MARK: Subscriber attributes
 @objc public extension CommonFunctionality {
 
@@ -564,6 +585,20 @@ import RevenueCat
         Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }
 
+}
+
+// MARK: - Obsoletions
+@objc public extension CommonFunctionality {
+
+    // Obsoleted in purchases-ios 5.0.0
+    @available(iOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(watchOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(macOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(tvOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @available(swift, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
+    @objc static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
+        fatalError()
+    }
 }
 
 // MARK: Campaign parameters
@@ -675,6 +710,13 @@ private extension CommonFunctionality {
         } else {
             return product.discounts.first { $0.offerIdentifier == identifier }
         }
+    }
+
+    static func transactionNotFoundError(description: String, userCancelled: Bool?) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.unknownError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
     static func processRefundRequestResultWithCompletion(

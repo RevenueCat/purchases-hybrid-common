@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "PurchasesHybridCommon"
-  s.version          = "11.1.1"
+  s.version          = "12.0.0"
   s.summary          = "Common files for hybrid SDKs for RevenueCat's Subscription and in-app-purchase backend service."
 
   s.description      = <<-DESC
@@ -15,12 +15,12 @@ Pod::Spec.new do |s|
 
   s.framework      = 'StoreKit'
 
-  s.dependency 'RevenueCat', '4.43.2'
+  s.dependency 'RevenueCat', '5.0.0'
   s.swift_version = '5.7'
 
-  s.ios.deployment_target = '11.0'
-  s.osx.deployment_target = '10.13'
-  s.tvos.deployment_target = '11.0'
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '10.15'
+  s.tvos.deployment_target = '13.0'
   s.visionos.deployment_target = '1.0'
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
