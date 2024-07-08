@@ -8,13 +8,13 @@ target 'PurchasesHybridCommon' do
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
-    pod 'Quick'
+    pod 'Quick', '5.0.1'
     pod 'Nimble'
   end
 
   target 'PurchasesHybridCommonIntegrationTests' do
     # Pods for testing
-    pod 'Quick'
+    pod 'Quick', '5.0.1'
     pod 'Nimble'
   end
 
