@@ -586,6 +586,26 @@ export interface SubscriptionOption {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * For installment subscriptions, the details of the installment plan the customer commits to.
+   * Null for non-installment subscriptions.
+   * Installment plans are only available for Google Play subscriptions.
+   */
+  readonly installmentsInfo: InstallmentsInfo | null;
+}
+
+/**
+ * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ */
+export interface InstallmentsInfo {
+  /**
+   * Number of payments the customer commits to in order to purchase the subscription.
+   */
+  readonly commitmentPaymentsCount: number;
+  /**
+   * After the commitment payments are complete, the number of payments the user commits to upon a renewal.
+   */
+  readonly renewalCommitmentPaymentsCount: number;
 }
 
 /**
