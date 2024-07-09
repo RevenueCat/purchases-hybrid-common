@@ -28,8 +28,9 @@ import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.models.BillingFeature
-import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.GoogleStoreProduct
+import com.revenuecat.purchases.models.InstallmentsInfo
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -457,7 +458,7 @@ internal class CommonKtTests {
             type = MappedProductCategory.SUBSCRIPTION.value,
             googleBasePlanId = null,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -525,7 +526,7 @@ internal class CommonKtTests {
             type = "subs",
             googleBasePlanId = null,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -591,7 +592,7 @@ internal class CommonKtTests {
             type = "subs",
             googleBasePlanId = null,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = PresentedOfferingContext(expectedOfferingIdentifier).map(),
             onResult = object : OnResult {
@@ -655,7 +656,7 @@ internal class CommonKtTests {
             type = "subs",
             googleBasePlanId = null,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -736,7 +737,7 @@ internal class CommonKtTests {
             type = "subs",
             googleBasePlanId = expectedBasePlanIdentifier,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -797,7 +798,7 @@ internal class CommonKtTests {
             type = "subs",
             googleBasePlanId = null,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = true,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -854,7 +855,7 @@ internal class CommonKtTests {
             mockActivity,
             packageIdentifier = "packageIdentifier",
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
@@ -911,7 +912,7 @@ internal class CommonKtTests {
             mockActivity,
             packageIdentifier = "packageIdentifier",
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = true,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
@@ -979,7 +980,7 @@ internal class CommonKtTests {
             productIdentifier = expectedProductIdentifier,
             optionIdentifier = expectedOptionIdentifier,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -1052,7 +1053,7 @@ internal class CommonKtTests {
             productIdentifier = expectedProductIdentifier,
             optionIdentifier = expectedOptionIdentifier,
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = PresentedOfferingContext(expectedOfferingIdentifier).map(),
             onResult = object : OnResult {
@@ -1081,7 +1082,7 @@ internal class CommonKtTests {
             productIdentifier = "product",
             optionIdentifier = "option",
             googleOldProductId = null,
-            googleProrationMode = null,
+            googleReplacementModeInt = null,
             googleIsPersonalizedPrice = null,
             presentedOfferingContext = null,
             onResult = object : OnResult {
@@ -1154,45 +1155,45 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `getGoogleProrationMode returns null if null prorationModeIndex`() {
-        val prorationModeInt: Int? = null
+    fun `getGoogleReplacementMode returns null if null replacementModeIndex`() {
+        val replacementModeInt: Int? = null
 
-        val mode = getGoogleProrationMode(prorationModeInt)
+        val mode = getGoogleReplacementMode(replacementModeInt)
         assertEquals(mode, null)
     }
 
     @Test
-    fun `getGoogleProrationMode returns IMMEDIATE_WITHOUT_PRORATION for 3`() {
-        val prorationModeInt: Int? = 3
+    fun `getGoogleReplacementMode returns WITHOUT_PRORATION for 3`() {
+        val replacementModeInt: Int? = 3
 
-        val mode = getGoogleProrationMode(prorationModeInt)
-        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITHOUT_PRORATION)
+        val mode = getGoogleReplacementMode(replacementModeInt)
+        assertEquals(mode, GoogleReplacementMode.WITHOUT_PRORATION)
     }
 
     @Test
-    fun `getGoogleProrationMode returns IMMEDIATE_WITH_TIME_PRORATION for 1`() {
-        val prorationModeInt: Int? = 1
+    fun `getGoogleReplacementMode returns IMMEDIATE_WITH_TIME_PRORATION for 1`() {
+        val replacementModeInt: Int? = 1
 
-        val mode = getGoogleProrationMode(prorationModeInt)
-        assertEquals(mode, GoogleProrationMode.IMMEDIATE_WITH_TIME_PRORATION)
+        val mode = getGoogleReplacementMode(replacementModeInt)
+        assertEquals(mode, GoogleReplacementMode.WITH_TIME_PRORATION)
     }
 
     @Test
-    fun `getGoogleProrationMode returns DEFERRED for 4`() {
-        val prorationModeInt: Int? = 4
+    fun `getGoogleReplacementMode returns DEFERRED for 6`() {
+        val replacementModeInt: Int? = 6
 
-        val mode = getGoogleProrationMode(prorationModeInt)
-        assertEquals(mode, GoogleProrationMode.DEFERRED)
+        val mode = getGoogleReplacementMode(replacementModeInt)
+        assertEquals(mode, GoogleReplacementMode.DEFERRED)
     }
 
     @Test
-    fun `getGoogleProrationMode throws exception for negative out of bounds number`() {
-        val prorationModeInt: Int? = -1
+    fun `getGoogleReplacementMode throws exception for negative out of bounds number`() {
+        val replacementModeInt: Int? = -1
 
         var catchWasCalled = false
         try {
-            val mode = getGoogleProrationMode(prorationModeInt)
-        } catch (e: InvalidProrationModeException) {
+            val mode = getGoogleReplacementMode(replacementModeInt)
+        } catch (e: InvalidReplacementModeException) {
             catchWasCalled = true
         }
 
@@ -1200,13 +1201,13 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `getGoogleProrationMode throws exception for position out of bounds number`() {
-        val prorationModeInt: Int? = 1000
+    fun `getGoogleReplacementMode throws exception for position out of bounds number`() {
+        val replacementModeInt: Int? = 1000
 
         var catchWasCalled = false
         try {
-            val mode = getGoogleProrationMode(prorationModeInt)
-        } catch (e: InvalidProrationModeException) {
+            val mode = getGoogleReplacementMode(replacementModeInt)
+        } catch (e: InvalidReplacementModeException) {
             catchWasCalled = true
         }
 
@@ -1402,6 +1403,8 @@ fun stubSubscriptionOption(
         get() = StubPurchasingData(
             productId = productId,
         )
+    override val installmentsInfo: InstallmentsInfo?
+        get() = null
 }
 
 private fun createMockTransaction(

@@ -62,7 +62,7 @@ private class CommonApiTests {
         type: String,
         googleBasePlanId: String?,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
@@ -73,7 +73,7 @@ private class CommonApiTests {
             type,
             googleBasePlanId,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
@@ -85,7 +85,7 @@ private class CommonApiTests {
         packageIdentifier: String,
         presentedOfferingContext: Map<String, Any?>,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult,
     ) {
@@ -94,7 +94,7 @@ private class CommonApiTests {
             packageIdentifier,
             presentedOfferingContext,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             onResult,
         )
@@ -105,7 +105,7 @@ private class CommonApiTests {
         productIdentifier: String,
         optionIdentifier: String,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
@@ -115,7 +115,7 @@ private class CommonApiTests {
             productIdentifier,
             optionIdentifier,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
@@ -219,6 +219,7 @@ private class CommonApiTests {
         dangerousSettings: DangerousSettings,
         shouldShowInAppMessagesAutomatically: Boolean?,
         verificationMode: String?,
+        pendingTransactionsForPrepaidPlansEnabled: Boolean?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -242,6 +243,7 @@ private class CommonApiTests {
             dangerousSettings,
             shouldShowInAppMessagesAutomatically,
             verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
         )
     }
 
