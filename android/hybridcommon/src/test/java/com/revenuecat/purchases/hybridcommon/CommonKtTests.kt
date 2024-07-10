@@ -111,7 +111,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -145,7 +145,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -177,7 +177,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -211,7 +211,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -239,7 +239,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -264,7 +264,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -304,7 +304,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -337,7 +337,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -359,7 +359,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -385,7 +385,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
@@ -419,7 +419,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -489,7 +489,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -550,7 +550,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedOfferingIdentifier = "my-offer"
@@ -616,7 +616,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -680,7 +680,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -761,7 +761,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -822,7 +822,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -879,7 +879,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -936,7 +936,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -1004,7 +1004,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedOfferingIdentifier = "my-offers"

@@ -476,9 +476,11 @@ fun isAnonymous(): Boolean {
 }
 
 fun setPurchasesAreCompletedBy(
-    purchasesAreCompletedBy: PurchasesAreCompletedBy,
+    purchasesAreCompletedBy: String,
 ) {
-    Purchases.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
+    purchasesAreCompletedBy.toPurchasesAreCompletedBy()?.let {
+        Purchases.sharedInstance.purchasesAreCompletedBy = it
+    }
 }
 
 // Returns Unknown for all since it's not available in Android
@@ -538,7 +540,7 @@ fun configure(
     context: Context,
     apiKey: String,
     appUserID: String?,
-    purchasesAreCompletedBy: PurchasesAreCompletedBy? = null,
+    purchasesAreCompletedBy: String? = null,
     platformInfo: PlatformInfo,
     store: Store = Store.PLAY_STORE,
     dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
@@ -553,7 +555,7 @@ fun configure(
         .store(store)
         .dangerousSettings(dangerousSettings)
         .apply {
-            purchasesAreCompletedBy?.let { purchasesAreCompletedBy(it) }
+            purchasesAreCompletedBy?.toPurchasesAreCompletedBy()?.let { purchasesAreCompletedBy(it) }
             shouldShowInAppMessagesAutomatically?.let { showInAppMessagesAutomatically(it) }
             verificationMode?.let { verificationMode ->
                 try {
@@ -575,6 +577,17 @@ fun getPromotionalOffer(): ErrorContainer {
 }
 
 // region private functions
+
+private fun String.toPurchasesAreCompletedBy(): PurchasesAreCompletedBy? {
+    return when (this) {
+        "REVENUECAT" -> PurchasesAreCompletedBy.REVENUECAT
+        "MY_APP" -> PurchasesAreCompletedBy.MY_APP
+        else -> {
+            Log.e("PurchasesHybridCommon", "Unrecognized PurchasesAreCompletedBy: $this")
+            null
+        }
+    }
+}
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun mapStringToProductType(type: String): ProductType {

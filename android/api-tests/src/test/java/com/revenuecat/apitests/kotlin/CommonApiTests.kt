@@ -3,7 +3,6 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -181,7 +180,7 @@ private class CommonApiTests {
         val isAnonymous: Boolean = isAnonymous()
     }
 
-    fun checkSetPurchasesAreCompletedBy(purchasesAreCompletedBy: PurchasesAreCompletedBy) {
+    fun checkSetPurchasesAreCompletedBy(purchasesAreCompletedBy: String) {
         setPurchasesAreCompletedBy(purchasesAreCompletedBy)
     }
 
@@ -213,7 +212,7 @@ private class CommonApiTests {
         context: Context,
         apiKey: String,
         appUserID: String?,
-        purchasesAreCompletedBy: PurchasesAreCompletedBy,
+        purchasesAreCompletedBy: String?,
         platformInfo: PlatformInfo,
         store: Store,
         dangerousSettings: DangerousSettings,

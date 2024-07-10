@@ -132,8 +132,10 @@ import RevenueCat
         Self.sharedInstance.attribution.enableAdServicesAttributionTokenCollection()
     }
 
-    @objc public static func setPurchasesAreCompletedBy(_ purchasesAreCompletedBy: PurchasesAreCompletedBy) {
-        Self.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
+    @objc public static func setPurchasesAreCompletedBy(_ purchasesAreCompletedBy: String) {
+        if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy.fromString(purchasesAreCompletedBy) {
+            Self.sharedInstance.purchasesAreCompletedBy = actualPurchasesAreCompletedBy
+        }
     }
 
     @objc public static func invalidateCustomerInfoCache() {

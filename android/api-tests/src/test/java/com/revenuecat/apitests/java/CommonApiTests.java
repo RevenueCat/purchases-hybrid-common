@@ -158,7 +158,7 @@ class CommonApiTests {
         boolean isAnonymous = CommonKt.isAnonymous();
     }
 
-    private void checkSetPurchasesAreCompletedBy(PurchasesAreCompletedBy purchasesAreCompletedBy) {
+    private void checkSetPurchasesAreCompletedBy(String purchasesAreCompletedBy) {
         CommonKt.setPurchasesAreCompletedBy(purchasesAreCompletedBy);
     }
 
@@ -183,7 +183,7 @@ class CommonApiTests {
     private void checkConfigure(Context context,
                                 String apiKey,
                                 String appUserId,
-                                PurchasesAreCompletedBy purchasesAreCompletedBy,
+                                String purchasesAreCompletedBy,
                                 PlatformInfo platformInfo,
                                 Store store,
                                 DangerousSettings dangerousSettings,

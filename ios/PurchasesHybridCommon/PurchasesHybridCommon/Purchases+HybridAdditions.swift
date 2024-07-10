@@ -16,7 +16,7 @@ import RevenueCat
             verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          purchasesAreCompletedBy: PurchasesAreCompletedBy,
+                          purchasesAreCompletedBy: String?,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -36,7 +36,11 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        configurationBuilder = configurationBuilder.with(purchasesAreCompletedBy: purchasesAreCompletedBy)
+        if let purchasesAreCompletedBy = purchasesAreCompletedBy {
+            if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy.fromString(purchasesAreCompletedBy) {
+                configurationBuilder = configurationBuilder.with(purchasesAreCompletedBy: actualPurchasesAreCompletedBy)
+            }
+        }
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
@@ -74,7 +78,7 @@ import RevenueCat
             platformFlavorVersion:usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          purchasesAreCompletedBy: PurchasesAreCompletedBy,
+                          purchasesAreCompletedBy: String?,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -107,6 +111,22 @@ extension LogLevel {
     static let levelsByDescription: [String: LogLevel] = .init(
         uniqueKeysWithValues: LogLevel.levels.map { ($0.description, $0) }
     )
+}
+
+extension PurchasesAreCompletedBy {
+
+    static func fromString(_ purchasesAreCompletedByString: String) -> PurchasesAreCompletedBy? {
+        var purchasesAreCompletedBy: PurchasesAreCompletedBy? = nil
+        if purchasesAreCompletedByString == "MY_APP" {
+            purchasesAreCompletedBy = .myApp
+        } else if purchasesAreCompletedByString == "REVENUECAT" {
+            purchasesAreCompletedBy = .revenueCat
+        } else {
+            NSLog("Error: Unrecognized purchasesAreCompletedBy \(purchasesAreCompletedByString)")
+        }
+        return purchasesAreCompletedBy
+    }
+
 }
 
 // MARK: - Deprecations

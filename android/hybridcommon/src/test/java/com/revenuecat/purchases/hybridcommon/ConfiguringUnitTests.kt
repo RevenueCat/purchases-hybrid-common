@@ -46,7 +46,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -65,7 +65,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -121,7 +121,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -135,7 +135,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             verificationMode = null,
         )
@@ -148,7 +148,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             verificationMode = "DISABLED",
         )
@@ -161,7 +161,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             verificationMode = "INFORMATIONAL",
         )
@@ -174,7 +174,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             verificationMode = "ENFORCED",
         )
@@ -189,7 +189,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
         )
@@ -203,7 +203,7 @@ internal class ConfiguringUnitTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
             dangerousSettings = expectedDangerousSettings,
