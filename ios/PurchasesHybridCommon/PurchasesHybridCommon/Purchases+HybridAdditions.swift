@@ -20,7 +20,7 @@ import RevenueCat
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          storeKitVersion: String? = "DEFAULT",
+                          storeKitVersion: String = "DEFAULT",
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
                           verificationMode: String?) -> Purchases {
@@ -36,13 +36,12 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        if let storeKitVersion {
-            if let version = StoreKitVersion(name: storeKitVersion) {
-                configurationBuilder = configurationBuilder.with(
-                    purchasesAreCompletedBy: purchasesAreCompletedBy,
-                    storeKitVersion: version
-                )
-            }
+
+        if let version = StoreKitVersion(name: storeKitVersion) {
+            configurationBuilder = configurationBuilder.with(
+                purchasesAreCompletedBy: purchasesAreCompletedBy,
+                storeKitVersion: version
+            )
         }
 
         if let userDefaults = userDefaults {
@@ -83,7 +82,7 @@ import RevenueCat
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
-                          storeKitVersion: String? = "DEFAULT",
+                          storeKitVersion: String = "DEFAULT",
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         return configure(apiKey: apiKey,
