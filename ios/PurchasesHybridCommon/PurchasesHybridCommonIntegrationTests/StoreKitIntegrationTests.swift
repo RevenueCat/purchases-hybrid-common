@@ -21,11 +21,13 @@ class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
 }
 
-class StoreKit2ObserverModeIntegrationTests: StoreKit2IntegrationTests {
+class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
 
     override class var purchasesAreCompletedBy: PurchasesAreCompletedBy {
         return .myApp
     }
+
+    override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
     func testRecordPurchase() async throws {
         _ = try await Product.products(for: [Self.productIdentifier]).first?.purchase()
@@ -127,11 +129,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
             try await self.purchaseMonthlyOffering()
             fail("Expected error")
         } catch {
-            if Purchases.shared.isStoreKit2EnabledAndAvailable {
-                expect(error).to(matchError(ErrorCode.storeProblemError))
-            } else {
-                expect(error).to(matchError(ErrorCode.invalidPromotionalOfferError))
-            }
+            expect(error).to(matchError(ErrorCode.storeProblemError))
         }
     }
 
@@ -210,27 +208,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
 
 private extension StoreKit1IntegrationTests {
 
-    @MainActor
-    func assertSnapshot(
-        _ value: Any,
-        testName: String = #function,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) {
-        let name = "\(Self.storeKitVersion.testSuffix)-\(testName)"
-        SnapshotTesting.assertSnapshot(matching: value,
-                                       as: .json,
-                                       file: file,
-                                       testName: name,
-                                       line: line)
-    }
-
-}
-
-private extension StoreKit1IntegrationTests {
-
     static let entitlementIdentifier = "premium"
-    static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
 
     static let discountIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount"
 
@@ -275,7 +253,7 @@ private extension StoreKit1IntegrationTests {
 
 }
 
-private extension StoreKitVersion {
+internal extension StoreKitVersion {
 
     var testSuffix: String {
         switch self {

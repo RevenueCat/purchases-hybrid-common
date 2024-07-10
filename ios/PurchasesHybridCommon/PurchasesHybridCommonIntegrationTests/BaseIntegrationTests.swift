@@ -20,6 +20,8 @@ class BaseIntegrationTests: XCTestCase {
         return .revenueCat
     }
 
+    static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+
     override func setUp() async throws {
         try await super.setUp()
 
@@ -47,6 +49,21 @@ class BaseIntegrationTests: XCTestCase {
         Purchases.clearSingleton()
 
         super.tearDown()
+    }
+
+    @MainActor
+    func assertSnapshot(
+        _ value: Any,
+        testName: String = #function,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let name = "\(Self.storeKitVersion.testSuffix)-\(testName)"
+        SnapshotTesting.assertSnapshot(matching: value,
+                                       as: .json,
+                                       file: file,
+                                       testName: name,
+                                       line: line)
     }
 
 }
