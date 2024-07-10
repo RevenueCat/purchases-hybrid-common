@@ -54,4 +54,11 @@ export interface PurchasesConfiguration {
    * See https://rev.cat/trusted-entitlements for more info.
    */
   entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+
+  /**
+   * Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported
+   * in Google Play). Note that entitlements are not granted until payment is done.
+   * Disabled by default.
+   */
+  pendingTransactionsForPrepaidPlansEnabled?: boolean;
 }

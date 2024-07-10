@@ -305,6 +305,7 @@ export interface PurchasesConfiguration {
     appUserID?: string | null;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     observerMode?: boolean;
+    pendingTransactionsForPrepaidPlansEnabled?: boolean;
     shouldShowInAppMessagesAutomatically?: boolean;
     useAmazon?: boolean;
     userDefaultsSuiteName?: string;
