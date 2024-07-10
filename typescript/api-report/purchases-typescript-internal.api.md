@@ -300,10 +300,9 @@ export interface PurchasesConfiguration {
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     observerMode?: boolean;
     shouldShowInAppMessagesAutomatically?: boolean;
+    storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
     userDefaultsSuiteName?: string;
-    // @deprecated
-    usesStoreKit2IfAvailable?: boolean;
 }
 
 // @public
@@ -362,7 +361,7 @@ export interface PurchasesIntroPrice {
     readonly cycles: number;
     readonly period: string;
     readonly periodNumberOfUnits: number;
-    readonly periodUnit: string;
+    readonly periodUnit: PERIOD_UNIT;
     readonly price: number;
     readonly priceString: string;
 }
@@ -442,7 +441,7 @@ export interface PurchasesStoreProductDiscount {
     readonly identifier: string;
     readonly period: string;
     readonly periodNumberOfUnits: number;
-    readonly periodUnit: string;
+    readonly periodUnit: PERIOD_UNIT;
     readonly price: number;
     readonly priceString: string;
 }
@@ -470,6 +469,13 @@ export enum REFUND_REQUEST_STATUS {
 
 // @public
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => void;
+
+// @public
+export enum STOREKIT_VERSION {
+    DEFAULT = "DEFAULT",
+    STOREKIT_1 = "STOREKIT_1",
+    STOREKIT_2 = "STOREKIT_2"
+}
 
 // @public
 export interface SubscriptionOption {
