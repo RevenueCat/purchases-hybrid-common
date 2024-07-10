@@ -501,7 +501,7 @@ import RevenueCat
 @objc public extension CommonFunctionality {
 
     @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
-    @objc(handleObserverModeTransactionForProductID:completion:)
+    @objc(recordPurchaseForProductID:completion:)
     static func recordPurchase(productID: String, completion: (([String: Any]?, ErrorContainer?) -> Void)?) {
         _ = Task<Void, Never> {
             let result = await StoreKit.Transaction.latest(for: productID)
