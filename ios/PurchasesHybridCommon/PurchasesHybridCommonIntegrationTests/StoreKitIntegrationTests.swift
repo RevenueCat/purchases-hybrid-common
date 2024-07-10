@@ -127,7 +127,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
             try await self.purchaseMonthlyOffering()
             fail("Expected error")
         } catch {
-            expect(error).to(matchError(ErrorCode.invalidPromotionalOfferError))
+            expect(error).to(matchError(ErrorCode.storeProblemError))
         }
     }
 
