@@ -63,6 +63,12 @@ export enum IN_APP_MESSAGE_TYPE {
 }
 
 // @public
+export interface InstallmentsInfo {
+    readonly commitmentPaymentsCount: number;
+    readonly renewalCommitmentPaymentsCount: number;
+}
+
+// @public
 export enum INTRO_ELIGIBILITY_STATUS {
     INTRO_ELIGIBILITY_STATUS_ELIGIBLE = 2,
     INTRO_ELIGIBILITY_STATUS_INELIGIBLE = 1,
@@ -477,6 +483,7 @@ export interface SubscriptionOption {
     readonly freePhase: PricingPhase | null;
     readonly fullPricePhase: PricingPhase | null;
     readonly id: string;
+    readonly installmentsInfo: InstallmentsInfo | null;
     readonly introPhase: PricingPhase | null;
     readonly isBasePlan: boolean;
     readonly isPrepaid: boolean;

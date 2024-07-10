@@ -596,6 +596,7 @@ export interface SubscriptionOption {
 
 /**
  * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ * @public
  */
 export interface InstallmentsInfo {
   /**
