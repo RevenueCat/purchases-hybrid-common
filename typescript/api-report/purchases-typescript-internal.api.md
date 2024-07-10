@@ -226,6 +226,12 @@ export enum PURCHASE_TYPE {
 }
 
 // @public
+export enum PURCHASES_ARE_COMPLETED_BY {
+    MY_APP = "MY_APP",
+    REVENUECAT = "REVENUECAT"
+}
+
+// @public
 export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     API_ENDPOINT_BLOCKED = "33",
@@ -304,8 +310,10 @@ export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+    // @deprecated
     observerMode?: boolean;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
+    purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
     shouldShowInAppMessagesAutomatically?: boolean;
     useAmazon?: boolean;
     userDefaultsSuiteName?: string;
