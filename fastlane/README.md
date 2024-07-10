@@ -45,6 +45,38 @@ Make GitHub release for current version
 
 Make GitHub release for specific version
 
+### trigger_update_dependencies
+
+```sh
+[bundle exec] fastlane trigger_update_dependencies
+```
+
+Trigger update dependencies to latest GitHub releases
+
+### trigger_bump
+
+```sh
+[bundle exec] fastlane trigger_bump
+```
+
+Trigger bump
+
+### check_typescript_api_changes
+
+```sh
+[bundle exec] fastlane check_typescript_api_changes
+```
+
+Check typescript library API changes
+
+### update_typescript_api_report
+
+```sh
+[bundle exec] fastlane update_typescript_api_report
+```
+
+Update typescript library API report
+
 ### open_pr_upgrading_dependencies
 
 ```sh
@@ -90,13 +122,29 @@ Run automatic bump in other repos
 
 ## iOS
 
-### ios push_pods
+### ios push_pod_PHC
 
 ```sh
-[bundle exec] fastlane ios push_pods
+[bundle exec] fastlane ios push_pod_PHC
 ```
 
-Release to CocoaPods
+Release PurchasesHybridCommon to CocoaPods
+
+### ios push_pod_PHCUI
+
+```sh
+[bundle exec] fastlane ios push_pod_PHCUI
+```
+
+Release PurchasesHybridCommonUI to CocoaPods
+
+### ios pod_lint
+
+```sh
+[bundle exec] fastlane ios pod_lint
+```
+
+Lint Podspec
 
 ### ios replace_api_key_integration_tests
 

@@ -1,5 +1,6 @@
 /**
- * @deprecated, use PRODUCT_CATEGORY
+ * @deprecated Use PRODUCT_CATEGORY
+ * @public
  */
 export enum PURCHASE_TYPE {
   /**
@@ -17,6 +18,7 @@ export enum PURCHASE_TYPE {
  * Enum for billing features.
  * Currently, these are only relevant for Google Play Android users:
  * https://developer.android.com/reference/com/android/billingclient/api/BillingClient.FeatureType
+ * @public
  */
 export enum BILLING_FEATURE {
   /**
@@ -45,6 +47,10 @@ export enum BILLING_FEATURE {
   PRICE_CHANGE_CONFIRMATION,
 }
 
+/**
+ * Enum for possible refund request results.
+ * @public
+ */
 export enum REFUND_REQUEST_STATUS {
   /**
    * Apple has received the refund request.
@@ -62,6 +68,10 @@ export enum REFUND_REQUEST_STATUS {
   ERROR
 }
 
+/**
+ * Enum for possible log levels to print.
+ * @public
+ */
 export enum LOG_LEVEL {
   VERBOSE = "VERBOSE",
   DEBUG = "DEBUG",
@@ -75,6 +85,7 @@ export enum LOG_LEVEL {
  * This can be used if you disable automatic in-app message from showing automatically.
  * Then, you can pass what type of messages you want to show in the `showInAppMessages`
  * method in Purchases.
+ * @public
  */
 export enum IN_APP_MESSAGE_TYPE {
   // Make sure the enum values are in sync with those defined in iOS/Android
@@ -84,7 +95,7 @@ export enum IN_APP_MESSAGE_TYPE {
   BILLING_ISSUE = 0,
 
   /**
-   * iOS-only. This message will show if you increase the price of a subscription and 
+   * iOS-only. This message will show if you increase the price of a subscription and
    * the user needs to opt-in to the increase.
    */
   PRICE_INCREASE_CONSENT = 1,
@@ -97,6 +108,7 @@ export enum IN_APP_MESSAGE_TYPE {
 
 /**
  * Enum of entitlement verification modes.
+ * @public
  */
 export enum ENTITLEMENT_VERIFICATION_MODE {
   /**
@@ -129,6 +141,8 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
  *
  * - Note: Verification is only performed if enabled using PurchasesConfiguration's
  * entitlementVerificationMode property. This is disabled by default.
+ *
+ * @public
  */
 export enum VERIFICATION_RESULT {
     /**
@@ -152,4 +166,37 @@ export enum VERIFICATION_RESULT {
      * Verification was performed on device.
      */
     VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE",
+}
+
+/**
+ * The result of presenting a paywall. This will be the last situation the user experienced before the
+ * paywall closed.
+ *
+ * @public
+ */
+export enum PAYWALL_RESULT {
+  /**
+   * If the paywall wasn't presented. Only returned when using "presentPaywallIfNeeded"
+   */
+  NOT_PRESENTED = "NOT_PRESENTED",
+
+  /**
+   * If an error happened during purchase/restoration.
+   */
+  ERROR = "ERROR",
+
+  /**
+   * If the paywall was closed without performing an operation
+   */
+  CANCELLED = "CANCELLED",
+
+  /**
+   * If a successful purchase happened inside the paywall
+   */
+  PURCHASED = "PURCHASED",
+
+  /**
+   * If a successful restore happened inside the paywall
+   */
+  RESTORED = "RESTORED",
 }

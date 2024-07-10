@@ -16,6 +16,7 @@ internal extension Offerings {
         if let current = current {
             result["current"] = current.dictionary
         }
+        
         return result
     }
 }

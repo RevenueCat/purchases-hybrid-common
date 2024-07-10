@@ -88,6 +88,10 @@ private extension EntitlementInfo {
             return "AMAZON"
         case .stripe:
             return "STRIPE"
+        case .rcBilling:
+            return "RC_BILLING"
+        case .external:
+            return "EXTERNAL"
         @unknown default:
             return "UNKNOWN_STORE"
         }

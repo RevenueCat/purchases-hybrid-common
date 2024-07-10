@@ -3,7 +3,12 @@ ios/purchases-common-build
 ios/PurchasesHybridCommon/Pods/
 *.bck
 fastlane/report.xml
+
 android/.composite-enable
+android/caches/
+android/daemon/
+android/wrapper/
+android/native
 
 *.iml
 .idea/modules.xml

@@ -8,6 +8,7 @@ import RevenueCat
 import StoreKit
 
 final class MockPurchases: PurchasesType {
+
     var cachedCustomerInfo: RevenueCat.CustomerInfo?
 
     var cachedOfferings: RevenueCat.Offerings?
@@ -103,6 +104,18 @@ final class MockPurchases: PurchasesType {
         invokedOfferingsCount += 1
         invokedOfferingsParameters = (completion, ())
         invokedOfferingsParametersList.append((completion, ()))
+    }
+
+    var invokedSyncAttributesAndOfferingsIfNeeded = false
+    var invokedSyncAttributesAndOfferingsIfNeededCount = 0
+    var invokedSyncAttributesAndOfferingsIfNeededParameters: (completion: ((Offerings?, PublicError?) -> ()), Void)?
+    var invokedSyncAttributesAndOfferingsIfNeededParametersList = [(completion: ((Offerings?, PublicError?) -> ()), Void)]()
+
+    func syncAttributesAndOfferingsIfNeeded(completion: @escaping (RevenueCat.Offerings?, RevenueCat.PublicError?) -> Void) {
+        invokedSyncAttributesAndOfferingsIfNeeded = true
+        invokedSyncAttributesAndOfferingsIfNeededCount += 1
+        invokedSyncAttributesAndOfferingsIfNeededParameters = (completion, ())
+        invokedSyncAttributesAndOfferingsIfNeededParametersList.append((completion, ()))
     }
 
     var invokedProducts = false
@@ -543,6 +556,11 @@ extension MockPurchases {
         set { fatalError("Not mocked") }
     }
 
+    var purchasesAreCompletedBy: RevenueCat.PurchasesAreCompletedBy {
+        get { fatalError("Not mocked") }
+        set { fatalError("Not mocked") }
+    }
+
     var attribution: Attribution {
         get { fatalError("Not mocked") }
         set { fatalError("Not mocked") }
@@ -655,4 +673,7 @@ extension MockPurchases: PurchasesSwiftType {
         fatalError("Not mocked")
     }
 
+    func syncAttributesAndOfferingsIfNeeded() async throws -> RevenueCat.Offerings? {
+        fatalError("Not mocked")
+    }
 }

@@ -13,24 +13,26 @@
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
-    './android/build.gradle' => ['versionName "{x}"'],
+    './PurchasesHybridCommonUI.podspec' => ['s.version          = "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
-    './typescript/package.json' => ['"version": "{x}"']
+    './typescript/package.json' => ['"version": "{x}"'],
+    './ios/PurchasesHybridCommon/PurchasesHybridCommon/Constants.swift' => [' hybridCommonVersion = "{x}"']
 }
 PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
 files_with_version_number_without_prerelease_modifiers = {
     './ios/PurchasesHybridCommon/Info.plist' => PLIST_VERSION_PATTERNS,
     './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
 }
-POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'']
+POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
+    'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
     'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
 }
 
 files_to_update_android_dependency = {
-    'android/build.gradle' => ['ext.purchases_version = \'{x}\'']
+    'android/gradle/libs.versions.toml' => ['purchases = "{x}"']
 }
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
@@ -70,10 +72,7 @@ lane :automatic_bump do |options|
     UI.message('Skipping automatic bump since the next version doesn\'t include public facing changes')
     next
   end
-  if type_of_bump == :major
-    UI.message('Skipping automatic bump since the next version is a major release')
-    next
-  end
+
   bump(options)
 end
 
@@ -91,6 +90,29 @@ lane :github_release do |options|
     github_api_token: ENV["GITHUB_TOKEN"],
     changelog_latest_path: changelog_latest_path
   )
+end
+
+desc "Trigger update dependencies to latest GitHub releases"
+lane :trigger_update_dependencies do
+    trigger_action(action: "dependency-update")
+end
+
+desc "Trigger bump"
+lane :trigger_bump do
+    trigger_action(action: "bump")
+end
+
+desc "Check typescript library API changes"
+lane :check_typescript_api_changes do
+  update_typescript_api_report
+  sh("git diff --exit-code ../typescript/api-report/**")
+end
+
+desc "Update typescript library API report"
+lane :update_typescript_api_report do
+  Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+    sh("yarn && yarn build && yarn extract-api")
+  end
 end
 
 desc "Update dependencies to latest GitHub releases and opens a PR"
@@ -206,6 +228,32 @@ lane :tag_current_branch do |options|
   push_git_tags(tag: version_number)
 end
 
+private_lane :trigger_action do |options|
+    require 'rest-client'
+
+    # Prompt branch
+    default_branch = git_branch
+    branch = UI.input("Branch (defaults to #{default_branch}): ")
+    branch = default_branch if branch == ""
+
+    # Get CircleCI token
+    circle_token = ENV["CIRCLE_TOKEN"]
+    UI.user_error! "Please set the CIRCLE_TOKEN environment variable" unless circle_token
+
+    # Make request
+    headers = {"Circle-Token": circle_token, "Content-Type": "application/json", "Accept": "application/json"}
+    data = {parameters: {:action => options[:action]}, branch: branch}
+    url = "https://circleci.com/api/v2/project/github/RevenueCat/#{repo_name}/pipeline"
+
+    resp = RestClient.post url, data.to_json, headers
+
+    # Print workflow url
+    number = JSON.parse(resp.body)["number"]
+    workflow_url = "https://app.circleci.com/pipelines/github/RevenueCat/#{repo_name}/#{number}"
+
+    UI.important "Workflow: #{workflow_url}"
+end
+
 desc "Update purchases-ios dependency version"
 private_lane :update_ios_native_version do |options|
   new_version_number = options[:new_version]
@@ -314,9 +362,19 @@ lane :bump_hybrid_dependencies do |options|
 end
 
 platform :ios do
-  desc "Release to CocoaPods"
-  lane :push_pods do |options|
-    push_pods
+  desc "Release PurchasesHybridCommon to CocoaPods"
+  lane :push_pod_PHC do |options|
+    pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+  end
+
+  desc "Release PurchasesHybridCommonUI to CocoaPods"
+  lane :push_pod_PHCUI do |options|
+    pod_push(path: "PurchasesHybridCommonUI.podspec", synchronous: true)
+  end
+
+  desc "Lint Podspec"
+  lane :pod_lint do |options|
+    check_pods
   end
 
   desc "replace API KEY for integration tests"
@@ -344,7 +402,7 @@ platform :android do
     gradleProperties = {
       "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
       "signing.password" => ENV['GPG_SIGNING_KEY_PW'],
-      "signing.secretKeyRingFile" => "./secring.gpg",
+      "signing.secretKeyRingFile" => "#{File.expand_path('android', get_root_folder)}/secring.gpg",
       "mavenCentralUsername" => ENV['SONATYPE_NEXUS_TOKEN_USERNAME'],
       "mavenCentralPassword" => ENV['SONATYPE_NEXUS_TOKEN_PASSWORD'],
       "RELEASE_SIGNING_ENABLED" => true
@@ -411,8 +469,20 @@ def current_version_number
   File.read("../.version").strip
 end
 
-def push_pods
-  pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+def check_pods
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommon.podspec',
+    platforms: 'ios,osx,tvos,visionos',
+    fail_fast: true
+  )
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommonUI.podspec',
+    include_podspecs: 'PurchasesHybridCommon.podspec',
+    platforms: 'ios,osx,tvos,visionos',
+    fail_fast: true
+  )
 end
 
 def is_snapshot_version?(version_name)
@@ -420,7 +490,7 @@ def is_snapshot_version?(version_name)
 end
 
 def parse_previous_android_native_version
-  parse_version_in_file(/(?<=ext\.purchases_version = ["'])(.*)(?=["'])/, "android/build.gradle")
+  parse_version_in_file(/(?<=purchases = ["'])(.*)(?=["'])/, "android/gradle/libs.versions.toml")
 end
 
 def parse_previous_ios_native_version

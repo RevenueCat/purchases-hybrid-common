@@ -18,7 +18,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: nil,
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
@@ -29,7 +29,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
@@ -42,7 +42,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
@@ -55,7 +55,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
@@ -67,7 +67,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",
@@ -81,7 +81,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 expect {
                     Purchases.configure(apiKey: "api key",
                                         appUserID: nil,
-                                        observerMode: false,
+                                        purchasesAreCompletedBy: .revenueCat,
                                         userDefaultsSuiteName: "test",
                                         platformFlavor: "hybrid-platform",
                                         platformFlavorVersion: "1.2.3",

@@ -53,7 +53,17 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality getOfferingsWithCompletionBlock:^(NSDictionary * _Nullable offerings,
                                                              RCErrorContainer * _Nullable error) {
     }];
+
+    [RCCommonFunctionality getCurrentOfferingForPlacement:@"" completionBlock:^(NSDictionary<NSString *,id> * _Nullable offering, RCErrorContainer * _Nullable error) {
+
+    }];
+
+    [RCCommonFunctionality syncAttributesAndOfferingsIfNeededWithCompletionBlock:^(NSDictionary<NSString *,id> * _Nullable offerings, RCErrorContainer * _Nullable error) {
+
+    }];
+
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
+    NSString *version __unused = RCCommonFunctionality.hybridCommonVersion;
 
     [RCCommonFunctionality purchaseProduct:@""
                    signedDiscountTimestamp:@""
@@ -62,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     [RCCommonFunctionality purchasePackage:@""
-                                  offering:@""
+                  presentedOfferingContext:@{}
                    signedDiscountTimestamp:@""
                            completionBlock:^(NSDictionary * _Nullable customerInfo,
                                              RCErrorContainer * _Nullable error) {
@@ -80,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     }];
 
-    [RCCommonFunctionality setFinishTransactions:NO];
+    [RCCommonFunctionality setPurchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat];
     [RCCommonFunctionality checkTrialOrIntroductoryPriceEligibility:@[@""]
                                                     completionBlock:^(NSDictionary<NSString *, NSObject *>
                                                                       * _Nonnull eligibilities) {
@@ -142,6 +152,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setMparticleID:nil];
     [RCCommonFunctionality setOnesignalID:@""];
     [RCCommonFunctionality setOnesignalID:nil];
+    [RCCommonFunctionality setOnesignalUserID:@""];
+    [RCCommonFunctionality setOnesignalUserID:nil];
     [RCCommonFunctionality setAirshipChannelID:@""];
     [RCCommonFunctionality setAirshipChannelID:nil];
     [RCCommonFunctionality setMediaSource:@""];

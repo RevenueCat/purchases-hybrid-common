@@ -35,6 +35,7 @@ import RevenueCat
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
     @objc public static var appUserID: String { Self.sharedInstance.appUserID }
     @objc public static var isAnonymous: Bool { Self.sharedInstance.isAnonymous }
+    @objc public static var hybridCommonVersion: String { Constants.hybridCommonVersion }
 
     @objc public static var proxyURLString: String? {
         get { Purchases.proxyURL?.absoluteString }
@@ -131,8 +132,8 @@ import RevenueCat
         Self.sharedInstance.attribution.enableAdServicesAttributionTokenCollection()
     }
 
-    @objc public static func setFinishTransactions(_ finishTransactions: Bool) {
-        Self.sharedInstance.finishTransactions = finishTransactions
+    @objc public static func setPurchasesAreCompletedBy(_ purchasesAreCompletedBy: PurchasesAreCompletedBy) {
+        Self.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
     }
 
     @objc public static func invalidateCustomerInfoCache() {
@@ -257,22 +258,7 @@ import RevenueCat
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: @Sendable (StoreTransaction?,
-                                         CustomerInfo?,
-                                         Error?,
-                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
-            if let error = error {
-                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
-            } else if let customerInfo = customerInfo,
-                      let transaction = transaction {
-                completion([
-                    "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
-                ], nil)
-            } else {
-                completion(nil, ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:]))
-            }
-        }
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         self.product(with: productIdentifier) { storeProduct in
             guard let storeProduct = storeProduct else {
@@ -298,30 +284,17 @@ import RevenueCat
         }
     }
 
-    @objc(purchasePackage:offering:signedDiscountTimestamp:completionBlock:)
+    @objc(purchasePackage:presentedOfferingContext:signedDiscountTimestamp:completionBlock:)
     static func purchase(package packageIdentifier: String,
-                         offeringIdentifier: String,
+                         presentedOfferingContext: [String: Any],
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion: @Sendable (StoreTransaction?,
-                                         CustomerInfo?,
-                                         Error?,
-                                         Bool) -> Void = { transaction, customerInfo, error, userCancelled in
-            if let error = error {
-                completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
-            } else if let customerInfo = customerInfo,
-                      let transaction = transaction {
-                completion([
-                    "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
-                ], nil)
-            } else {
-                let error = ErrorCode.unknownError as NSError
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
-            }
-        }
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
-        package(withIdentifier: packageIdentifier, offeringIdentifier: offeringIdentifier) { package in
+        Self.package(
+            withIdentifier: packageIdentifier,
+            presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
+        ) { package in
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -335,8 +308,8 @@ import RevenueCat
                         return
                     }
                     Self.sharedInstance.purchase(package: package,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
+                                                 promotionalOffer: promotionalOffer,
+                                                 completion: hybridCompletion)
                     return
                 }
 
@@ -350,18 +323,30 @@ import RevenueCat
     @objc(makeDeferredPurchase:completionBlock:)
     static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        startPurchase { transaction, customerInfo, error, userCancelled in
+        startPurchase(Self.createPurchaseCompletionBlock(completion: completion))
+    }
+
+    private static func createPurchaseCompletionBlock(
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) -> @Sendable (StoreTransaction?,
+                    CustomerInfo?,
+                    Error?,
+                    Bool) -> Void {
+        return { transaction, customerInfo, error, userCancelled in
             if let error = error {
                 completion(nil, Self.createErrorContainer(error: error, userCancelled: userCancelled))
             } else if let customerInfo = customerInfo,
                       let transaction = transaction {
                 completion([
                     "customerInfo": customerInfo.dictionary,
-                    "productIdentifier": transaction.productIdentifier
+                    "productIdentifier": transaction.productIdentifier,
+                    "transaction": transaction.dictionary
                 ], nil)
             } else {
-                let error = ErrorCode.unknownError as NSError
-                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                completion(
+                    nil,
+                    ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+                )
             }
         }
     }
@@ -423,6 +408,34 @@ import RevenueCat
         }
     }
 
+    @objc(getCurrentOfferingForPlacement:completionBlock:)
+    static func getCurrentOffering(
+        forPlacement placementIdentifier: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.getOfferings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                let offering = offerings?.currentOffering(forPlacement: placementIdentifier)
+                let dict = offering?.dictionary
+                completion(dict, nil)
+            }
+        }
+    }
+
+    @objc(syncAttributesAndOfferingsIfNeededWithCompletionBlock:)
+    static func syncAttributesAndOfferingsIfNeeded(completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.sharedInstance.syncAttributesAndOfferingsIfNeeded { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
 
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
     static func checkTrialOrIntroductoryPriceEligibility(
@@ -436,7 +449,6 @@ import RevenueCat
                 })
             }
         }
-
 
     @objc static func getProductInfo(_ productIds: [String], completionBlock: @escaping([[String: Any]]) -> Void) {
         Self.sharedInstance.getProducts(productIds) { products in
@@ -545,6 +557,9 @@ import RevenueCat
     @objc static func setOnesignalID(_ onesignalID: String?) {
         Self.sharedInstance.attribution.setOnesignalID(onesignalID)
     }
+    @objc static func setOnesignalUserID(_ onesignalUserID: String?) {
+        Self.sharedInstance.attribution.setOnesignalUserID(onesignalUserID)
+    }
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
         Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }
@@ -605,12 +620,50 @@ private extension CommonFunctionality {
         return Self.createErrorContainer(error: error, userCancelled: userCancelled)
     }
 
+    static func toPresentedOfferingContext(presentedOfferingContext: [String: Any?]?) -> PresentedOfferingContext? {
+        guard let presentedOfferingContext, let offeringIdentifier = presentedOfferingContext["offeringIdentifier"] as? String else {
+            return nil
+        }
+
+        let placementIdentifier = presentedOfferingContext["placementIdentifier"] as? String
+
+        let targetingContext: PresentedOfferingContext.TargetingContext?
+
+        if let dict = presentedOfferingContext["targetingContext"] as? [String: Any?],
+            let revision = dict["revision"] as? Int,
+            let ruleId = dict["ruleId"] as? String {
+            targetingContext = .init(revision: revision, ruleId: ruleId)
+        } else {
+            targetingContext = nil
+        }
+
+        return PresentedOfferingContext(
+            offeringIdentifier: offeringIdentifier,
+            placementIdentifier: placementIdentifier,
+            targetingContext: targetingContext
+        )
+    }
+
     static func package(withIdentifier packageIdentifier: String,
-                        offeringIdentifier: String,
+                        presentedOfferingContext: PresentedOfferingContext?,
                         completion: @escaping(Package?) -> Void) {
+        guard let presentedOfferingContext else {
+            return completion(nil)
+        }
+
         Self.sharedInstance.getOfferings { offerings, error in
-            let offering = offerings?.offering(identifier: offeringIdentifier)
-            let package = offering?.package(identifier: packageIdentifier)
+            let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
+            let foundPackage = offering?.package(identifier: packageIdentifier)
+
+            let package = foundPackage.flatMap { pkg in
+                Package(
+                    identifier: pkg.identifier,
+                    packageType: pkg.packageType,
+                    storeProduct: pkg.storeProduct,
+                    presentedOfferingContext: presentedOfferingContext
+                )
+            }
+
             completion(package)
         }
     }

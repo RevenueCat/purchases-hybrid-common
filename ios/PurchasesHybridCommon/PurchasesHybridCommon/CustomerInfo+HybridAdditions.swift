@@ -9,7 +9,7 @@
 import Foundation
 import RevenueCat
 
-internal extension CustomerInfo {
+public extension CustomerInfo {
 
     var dictionary: [String: Any] {
         let sortedProductIdentifiers = allPurchasedProductIdentifiers.sorted()

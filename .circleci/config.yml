@@ -2,8 +2,8 @@
 # https://circleci.com/docs/2.0/testing-ios/
 
 orbs:
-  android: circleci/android@1.0.3
-  revenuecat: revenuecat/sdks-common-config@2.2.0
+  android: circleci/android@2.4.0
+  revenuecat: revenuecat/sdks-common-config@3.0.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -11,13 +11,13 @@ version: 2.1
 
 aliases:
   base-ios-job: &base-ios-job
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     macos:
       xcode: << parameters.xcode_version >>
     parameters:
       xcode_version:
         type: string
-        default: 14.3.0
+        default: 15.2.0
     working_directory: ~/ios
     shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
@@ -25,8 +25,13 @@ aliases:
       tags:
         ignore:
           - /^.*-SNAPSHOT/
-          - latest
-          - /^.*-amazon*/
+      branches:
+        ignore: /.*/
+  stable-release-tags: &stable-release-tags
+    filters:
+      tags:
+        ignore:
+          - /^.*-.*$/
       branches:
         ignore: /.*/
   release-branches: &release-branches
@@ -108,9 +113,6 @@ jobs:
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 14 (16.4)
-      - run:
-          name: Run pod lint tests
-          command: pod lib lint --fail-fast
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -130,7 +132,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 15 (17.0.1)
+            SCAN_DEVICE: iPhone 15 (17.2)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -166,7 +168,7 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
-  deploy-ios:
+  deploy-ios-phc:
     <<: *base-ios-job
     steps:
       - checkout
@@ -174,14 +176,27 @@ jobs:
           cache-version: v1
       - trust-github-key
       - run:
-          name: Deploy new version to Cocoapods
-          command: bundle exec fastlane ios push_pods
+          name: Deploy PurchasesHybridCommon to Cocoapods
+          command: bundle exec fastlane ios push_pod_PHC
+          no_output_timeout: 30m
+
+  deploy-ios-phcui:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Deploy PurchasesHybridCommonUI to Cocoapods
+          command: bundle exec fastlane ios push_pod_PHCUI
           no_output_timeout: 30m
 
   detekt-android:
     executor:
       name: android/android-machine
       resource-class: large
+      tag: default
     working_directory: ~/purchases-hybrid-common/android
     shell: /bin/bash --login -o pipefail
     steps:
@@ -199,6 +214,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
+      tag: default
     working_directory: ~/purchases-hybrid-common/android
     steps:
       - checkout:
@@ -218,6 +234,7 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
+      tag: default
     steps:
       - checkout
       - install-sdkman
@@ -225,7 +242,7 @@ jobs:
           cache-version: v1
       - android/accept-licenses
       - restore_cache:
-          key: jars-{{ checksum "android/build.gradle" }}
+          key: jars-{{ checksum "android/hybridcommon/build.gradle.kts" }}
       - android/restore-build-cache
       - run:
           name: Deployment
@@ -233,7 +250,7 @@ jobs:
 
   deploy-typescript:
     docker:
-      - image: cimg/ruby:3.1.2-node
+      - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
@@ -245,7 +262,7 @@ jobs:
 
   deploy-typescript-esm:
     docker:
-      - image: cimg/ruby:3.1.2-node
+      - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
       - revenuecat/install-gem-unix-dependencies:
@@ -257,7 +274,7 @@ jobs:
 
   make-github-release:
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - attach_workspace:
@@ -267,10 +284,10 @@ jobs:
       - run:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
-  
+
   dependency-update:
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - attach_workspace:
@@ -282,10 +299,10 @@ jobs:
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
-  
+
   tag-release-branch:
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.3.0
     working_directory: ~/purchases-ios
     shell: /bin/bash --login -o pipefail
     steps:
@@ -294,13 +311,13 @@ jobs:
       - trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - run: 
+      - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
 
   release:
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - setup-git-credentials
@@ -313,7 +330,7 @@ jobs:
 
   trigger-dependent-updates:
     docker:
-      - image: cimg/ruby:3.1.2
+      - image: cimg/ruby:3.3.0
     steps:
       - checkout
       - setup-git-credentials
@@ -340,6 +357,10 @@ jobs:
           name: Kick off Capacitor automatic dependency update
           command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor
           when: always
+      - run:
+          name: Kick off KMP automatic dependency update
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-kmp
+          when: always
 
   typescript-lint:
     executor: node/default
@@ -353,15 +374,29 @@ jobs:
           command: yarn && yarn eslint
 
   typescript-apitests:
-    executor: node/default
-    working_directory: ~/purchases-hybrid-common/typescript
+    docker:
+      - image: cimg/ruby:3.3.0-node
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
+      - checkout
       - node/install:
           install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
       - run:
-          command: yarn && yarn build && yarn apitests
+          name: Check if API has changed
+          command: bundle exec fastlane check_typescript_api_changes
+
+  check-pods:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - trust-github-key
+      - run:
+          name: Lint Podspec
+          command: bundle exec fastlane ios pod_lint
+          no_output_timeout: 30m
 
 workflows:
   version: 2
@@ -370,10 +405,9 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
-      - test-ios-16:
-          xcode_version: '14.3.0'
-      - test-ios-17:
-          xcode_version: '15.0.0'
+      - test-ios-16
+      - test-ios-17
+      - check-pods
       - integration-test-ios
       - test-android
       - detekt-android
@@ -392,8 +426,12 @@ workflows:
           requires:
             - hold
           <<: *release-branches
-      - deploy-ios:
+      - deploy-ios-phc:
           <<: *release-tags
+      - deploy-ios-phcui:
+          <<: *release-tags
+          requires:
+            - deploy-ios-phc
       - deploy-android:
           <<: *release-tags
       - deploy-typescript:
@@ -403,15 +441,16 @@ workflows:
       - make-github-release:
           <<: *release-tags
           requires:
-            - deploy-ios
+            - deploy-ios-phc
+            - deploy-ios-phcui
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
       - trigger-dependent-updates:
-          <<: *release-tags
+          <<: *stable-release-tags
           requires:
             - make-github-release
-  
+
   dependency-update:
     when:
       or:

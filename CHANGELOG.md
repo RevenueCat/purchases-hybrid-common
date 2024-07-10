@@ -1,3 +1,261 @@
+## 11.1.1
+### Bugfixes
+* Add `DEFERRED` to typescript enum (#854) via Toni Rico (@tonidero)
+
+## 11.1.0
+### Dependency Updates
+* Bump Android 7.12.0 (#851) via Toni Rico (@tonidero)
+* [AUTOMATIC] iOS 4.43.1 => 4.43.2 (#849) via RevenueCat Git Bot (@RCGitBot)
+
+## 11.0.0
+### Breaking Changes
+* `purchasesAreCompletedBy`. Remove `observerMode`. iOS 4.43.0 => 4.43.1 (#845) via RevenueCat Git Bot (@RCGitBot)
+### Dependency Updates
+* Bump lefthook from 1.6.16 to 1.6.18 (#842) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.221.0 to 2.221.1 (#841) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Adds .aiexclude (#843) via JayShortway (@JayShortway)
+
+## 10.10.0
+### New Features
+* Exposes PHC version (#838) via JayShortway (@JayShortway)
+### Dependency Updates
+* Bump fastlane from 2.220.0 to 2.221.0 (#836) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `8ec0072` to `5f55466` (#829) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.14 to 1.6.16 (#832) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Adds KMP to trigger-dependent-updates (#833) via JayShortway (@JayShortway)
+
+## 10.9.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.42.0 => 4.43.0 Android 7.11.0 => 7.11.1 (#830) via RevenueCat Git Bot (@RCGitBot)
+
+## 10.8.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.41.2 => 4.42.0 Android 7.10.1 => 7.11.0 (#826) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.6.11 to 1.6.14 (#824) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.10 to 1.6.11 (#816) via dependabot[bot] (@dependabot[bot])
+* Bump rexml from 3.2.6 to 3.2.8 (#820) via dependabot[bot] (@dependabot[bot])
+
+## 10.7.0
+### New Features
+* Add support for new OneSignal `setOnesignalUserID` method for OneSignal 11+ (#817) via Toni Rico (@tonidero)
+
+## 10.6.2
+### Bugfixes
+* Add PrivacyInfo.xcprivacy (#814) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `dd5e21f` to `8ec0072` (#812) via dependabot[bot] (@dependabot[bot])
+
+## 10.6.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.41.1 => 4.41.2 (#810) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 7.10.0 => 7.10.1 (#808) via RevenueCat Git Bot (@RCGitBot)
+
+## 10.6.0
+### Dependency Updates
+* [AUTOMATIC] Android 7.9.0 => 7.10.0 (#806) via RevenueCat Git Bot (@RCGitBot)
+
+## 10.5.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.41.0 => 4.41.1 (#804) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `f88dcd4` to `dd5e21f` (#802) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add api-extractor to automate API tests (#796) via Toni Rico (@tonidero)
+
+## 10.5.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.40.1 => 4.41.0 Android 7.8.2 => 7.9.0 (#800) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `1e62420` to `f88dcd4` (#798) via dependabot[bot] (@dependabot[bot])
+
+## 10.4.2
+### Bugfixes
+* [EXTERNAL] fix(PaywallProxy): check if root view controller is already presenting (#792) via @MegaMaddin (#793) via Toni Rico (@tonidero)
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `8d4d9b1` to `1e62420` (#791) via dependabot[bot] (@dependabot[bot])
+
+## 10.4.1
+### Dependency Updates
+* Bump lefthook from 1.6.9 to 1.6.10 (#787) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.8 to 1.6.9 (#784) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.7 to 1.6.8 (#778) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add `shouldBlockTouchEvents` optional property to `presentPaywall` methods (#789) via Toni Rico (@tonidero)
+
+## 10.4.0
+### Dependency Updates
+* [AUTOMATIC] iOS 4.39.1 => 4.40.0 (#782) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane from 2.219.0 to 2.220.0 (#780) via dependabot[bot] (@dependabot[bot])
+
+## 10.3.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.39.0 => 4.39.1 Android 7.8.0 => 7.8.1 (#776) via RevenueCat Git Bot (@RCGitBot)
+
+## 10.3.1
+### Bugfixes
+* Fix compilation in xcode 14 (Swift 5.8) (#774) via Cesar de la Vega (@vegaro)
+
+## 10.3.0
+### New Features
+* Add font support to presentPaywall (#769) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] Android 7.7.2 => 7.8.0 (#770) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `9c82c7a` to `8d4d9b1` (#766) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.5 to 1.6.7 (#767) via dependabot[bot] (@dependabot[bot])
+
+## 10.2.0
+### New Features
+* Add `paywallViewControllerRequestedDismissal` (#746) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.38.1 => 4.39.0 Android 7.7.1 => 7.7.2 (#761) via RevenueCat Git Bot (@RCGitBot)
+
+## 10.1.0
+### New Features
+* Fix revision type in PresentedOfferingTargetingContext context and add API testers (#759) via Josh Holtz (@joshdholtz)
+### Other Changes
+* Update RELEASING.md (#757) via Cesar de la Vega (@vegaro)
+* Update CHANGELOG.md (#755) via Cesar de la Vega (@vegaro)
+
+## 10.0.0
+### Breaking Changes
+* Add targeting placements and custom attributes (#748) via Josh Holtz (@joshdholtz)
+
+## 9.9.0
+### Dependency Updates
+* [AUTOMATIC] Android 7.6.0 => 7.7.1 (#751) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.6.4 to 1.6.5 (#749) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.6.1 to 1.6.4 (#745) via dependabot[bot] (@dependabot[bot])
+
+## 9.8.0
+### New Features
+* Add `didStartRestore` (#734) via Cesar de la Vega (@vegaro)
+* Add `didStartPurchaseWithPackage` (#735) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.36.3 => 4.37.0 Android 7.5.2 => 7.6.0 (#738) via RevenueCat Git Bot (@RCGitBot)
+
+## 9.7.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.36.2 => 4.36.3 Android 7.5.1 => 7.5.2 (#736) via RevenueCat Git Bot (@RCGitBot)
+
+## 9.7.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.36.1 => 4.36.2 (#731) via RevenueCat Git Bot (@RCGitBot)
+### Other Changes
+* Add lanes to trigger dependency updates and bump (#729) via Cesar de la Vega (@vegaro)
+
+## 9.7.0
+### New Features
+* Add `paywallViewControllerDidStartPurchase` to wrapper delegate (#725) via Cesar de la Vega (@vegaro)
+### Bugfixes
+* Set delegate for PaywallViewController (#724) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.35.0 => 4.36.1 Android 7.5.0 => 7.5.1 (#728) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.15.1 to 1.15.2 (#722) via dependabot[bot] (@dependabot[bot])
+
+## 9.6.0
+### New Features
+* Add PaywallViewControllerDelegateWrapper (#706) via Cesar de la Vega (@vegaro)
+### Dependency Updates
+* [AUTOMATIC] Android 7.4.1 => 7.5.0 (#720) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.15.0 to 1.15.1 (#715) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* `PurchasesHybridCommon.podspec`: remove `SwiftUI` dependency (#718) via NachoSoto (@NachoSoto)
+
+## 9.5.0
+### RevenueCatUI
+* [AUTOMATIC] iOS 4.34.0 => 4.35.0 (#713) via RevenueCat Git Bot (@RCGitBot)
+### Dependency Updates
+* Bump danger from 9.4.2 to 9.4.3 (#711) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 4.33.0 => 4.34.0 (#707) via RevenueCat Git Bot (@RCGitBot)
+
+## 9.4.0
+### New Features
+* Create PaywallListenerWrapper and expose mappers (#704) via Cesar de la Vega (@vegaro)
+
+## 9.3.0
+### New Features
+* Add support for `visionOS` (#700) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.32.3 => 4.33.0 Android 7.4.0 => 7.4.1 (#701) via RevenueCat Git Bot (@RCGitBot)
+* Bump cocoapods from 1.14.3 to 1.15.0 (#694) via dependabot[bot] (@dependabot[bot])
+
+## 9.2.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.32.2 => 4.32.3 (#693) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `e6ba247` to `9c82c7a` (#695) via dependabot[bot] (@dependabot[bot])
+
+## 9.2.0
+### New Features
+* `MakePurchaseResult`: added transaction (#690) via NachoSoto (@NachoSoto)
+
+## 9.1.0
+### New Features
+* `Common`: purchase methods also return `StoreTransaction` (#686) via NachoSoto (@NachoSoto)
+* `CommonFunctionality`: `purchase` methods also return `StoreTransaction` (#685) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] Android 7.3.5 => 7.4.0 (#688) via RevenueCat Git Bot (@RCGitBot)
+
+## 9.0.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.32.1 => 4.32.2 (#683) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.6.0 to 1.6.1 (#681) via dependabot[bot] (@dependabot[bot])
+
+## 9.0.0
+### Breaking Changes
+* Separate `PurchasesHybridCommonUI` (#672) via NachoSoto (@NachoSoto)
+### Other Changes
+* `CircleCI`: don't skip major bumps (#679) via NachoSoto (@NachoSoto)
+
+## 8.12.0
+### RevenueCatUI
+* `Paywalls`: add methods for presenting paywalls with an offering identifier (Android) (#670) via Cesar de la Vega (@vegaro)
+* `Paywalls`: add methods for presenting paywalls with an offering identifier (iOS) (#675) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.32.0 => 4.32.1 (#674) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.5.7 to 1.6.0 (#671) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Update Android orb (#669) via Cesar de la Vega (@vegaro)
+
+## 8.11.2
+### RevenueCatUI
+* Fix getting `rootViewController` (#667) via Cesar de la Vega (@vegaro)
+### Other Changes
+* `CircleCI`: change jobs to use Apple Silicon (#665) via NachoSoto (@NachoSoto)
+* Fix `stable-release-tags` filter in config.yaml (#664) via Cesar de la Vega (@vegaro)
+
+## 8.11.1
+### Dependency Updates
+* [AUTOMATIC] Android 7.3.4 => 7.3.5 (#662) via RevenueCat Git Bot (@RCGitBot)
+
+## 8.11.0
+### RevenueCatUI
+* `Paywalls`: fix `UIApplication.keyWindow` deprecation warning (#656) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.9 => 4.32.0 Android 7.3.3 => 7.3.4 (#660) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.5.6 to 1.5.7 (#658) via dependabot[bot] (@dependabot[bot])
+
+## 8.10.1
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.8 => 4.31.9 Android 7.3.2 => 7.3.3 (#653) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 1.5.5 to 1.5.6 (#651) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Fix update native versions job after hybrid common android split (#652) via Toni Rico (@tonidero)
+* Update fastlane internal plugin (#650) via Toni Rico (@tonidero)
+
+## 8.10.0
+### RevenueCatUI
+* `RevenueCatUI` (#647) via NachoSoto (@NachoSoto)
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.7 => 4.31.8 (#645) via RevenueCat Git Bot (@RCGitBot)
+## 8.2.2
+### Dependency Updates
+* [AUTOMATIC] iOS 4.31.6 => 4.31.7 (#640) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 7.3.1 => 7.3.2 (#632) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane from 2.218.0 to 2.219.0 (#629) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.217.0 to 2.218.0 (#626) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* Add lefthook to configure a pre-push hook that runs detekt (#615) via Cesar de la Vega (@vegaro)
+
 ## 8.2.1
 ### Dependency Updates
 * [AUTOMATIC] Android 7.3.0 => 7.3.1 (#618) via RevenueCat Git Bot (@RCGitBot)
@@ -104,6 +362,14 @@
 * `CI`: run iOS 17 tests (#521) via NachoSoto (@NachoSoto)
 * URL(string:): add clarifying comment (#511) via Andy Boedo (@aboedo)
 * Add documentation for productType field in StoreProduct in typescript (#515) via Toni Rico (@tonidero)
+
+## 6.3.2
+### Dependency Updates
+* Bump android to 6.9.7
+
+## 6.3.1
+### Dependency Updates
+* Bump android to 6.9.6 (#708) via Toni Rico (@tonidero)
 
 ## 6.3.0
 ### New Features

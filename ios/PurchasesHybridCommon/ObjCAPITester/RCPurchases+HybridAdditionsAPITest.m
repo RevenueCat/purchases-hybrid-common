@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)testAPI {
     RCPurchases *purchases __unused = [RCPurchases configureWithAPIKey:@""
                                                              appUserID:@""
-                                                          observerMode:NO
+                                               purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
                                                  userDefaultsSuiteName:nil
                                                         platformFlavor:nil
                                                  platformFlavorVersion:@""
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                       verificationMode:@""];
     RCPurchases *purchases2 __unused = [RCPurchases configureWithAPIKey:@""
                                                               appUserID:@""
-                                                           observerMode:NO
+                                                purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
                                                   userDefaultsSuiteName:nil
                                                          platformFlavor:nil
                                                   platformFlavorVersion:@""

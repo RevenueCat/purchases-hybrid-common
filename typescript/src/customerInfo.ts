@@ -2,6 +2,7 @@ import { VERIFICATION_RESULT } from "./enums";
 
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
+ * @public
  */
 export interface PurchasesEntitlementInfo {
     /**
@@ -37,19 +38,19 @@ export interface PurchasesEntitlementInfo {
      */
     readonly originalPurchaseDateMillis: number;
     /**
-     * The expiration date for the entitlement in ISO8601, can be `null` for lifetime access. 
+     * The expiration date for the entitlement in ISO8601, can be `null` for lifetime access.
      * If the `periodType` is `trial`, this is the trial expiration date.
      */
     readonly expirationDate: string | null;
     /**
-     * The expiration date for the entitlement in milliseconds, can be `null` for lifetime access. 
-     * If the `periodType` is `trial`, this is the trial expiration date. 
+     * The expiration date for the entitlement in milliseconds, can be `null` for lifetime access.
+     * If the `periodType` is `trial`, this is the trial expiration date.
      */
     readonly expirationDateMillis: number | null;
     /**
      * The store where this entitlement was unlocked from.
      */
-    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "UNKNOWN_STORE";
+    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "UNKNOWN_STORE";
     /**
      * The product identifier that unlocked this entitlement
      */
@@ -65,31 +66,31 @@ export interface PurchasesEntitlementInfo {
     /**
      * The date an unsubscribe was detected in ISO8601 format. Can be `null`.
      *
-     * @note: Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
+     * Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
      */
     readonly unsubscribeDetectedAt: string | null;
     /**
      * The date an unsubscribe was detected in milliseconds. Can be `null`.
      *
-     * @note: Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
+     * Entitlement may still be active even if user has unsubscribed. Check the `isActive` property.
      */
     readonly unsubscribeDetectedAtMillis: number | null;
     /**
-     * The date a billing issue was detected in ISO8601 format. Can be `null` if there is no billing issue or an 
+     * The date a billing issue was detected in ISO8601 format. Can be `null` if there is no billing issue or an
      * issue has been resolved
      *
-     * @note: Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
+     * Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
      */
     readonly billingIssueDetectedAt: string | null;
     /**
-     * The date a billing issue was detected in milliseconds. Can be `null` if there is no billing issue or an 
+     * The date a billing issue was detected in milliseconds. Can be `null` if there is no billing issue or an
      * issue has been resolved
      *
-     * @note: Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
+     * Entitlement may still be active even if there is a billing issue. Check the `isActive` property.
      */
     readonly billingIssueDetectedAtMillis: number | null;
     /**
-     * Supported ownership types for an entitlement. 
+     * Supported ownership types for an entitlement.
      * PURCHASED if the purchase was made directly by this user.
      * FAMILY_SHARED if the purchase has been shared to this user by a family member.
      * UNKNOWN if the purchase has no or an unknown ownership type.
@@ -103,6 +104,7 @@ export interface PurchasesEntitlementInfo {
 
 /**
  * Contains all the entitlements associated to the user.
+ * @public
  */
 export interface PurchasesEntitlementInfos {
     /**
@@ -119,7 +121,10 @@ export interface PurchasesEntitlementInfos {
     readonly verification: VERIFICATION_RESULT;
 }
 
-
+/**
+ * Type containing all information regarding the customer
+ * @public
+ */
 export interface CustomerInfo {
     /**
      * Entitlements attached to this customer info
@@ -179,15 +184,17 @@ export interface CustomerInfo {
      * If there are multiple for different platforms, it will point to the device store.
      */
     readonly managementURL: string | null;
-
+    /**
+     * List of all non subscription transactions. Use this to fetch the history of
+     * non-subscription purchases
+     */
     readonly nonSubscriptionTransactions: PurchasesStoreTransaction[];
 }
 
 /**
- * List of all non subscription transactions. Use this to fetch the history of
- * non-subscription purchases
+ * Represents a non-subscription transaction in the Store.
+ * @public
  */
-
 export interface PurchasesStoreTransaction {
     /**
      * Id of the transaction.

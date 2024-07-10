@@ -11,11 +11,12 @@ import RevenueCat
 
 @objc public extension Purchases {
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:verificationMode:)
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          observerMode: Bool,
+                          purchasesAreCompletedBy: PurchasesAreCompletedBy,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -35,7 +36,7 @@ import RevenueCat
         if let appUserID = appUserID {
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
-        configurationBuilder = configurationBuilder.with(observerMode: observerMode)
+        configurationBuilder = configurationBuilder.with(purchasesAreCompletedBy: purchasesAreCompletedBy)
         if let userDefaults = userDefaults {
             configurationBuilder = configurationBuilder.with(userDefaults: userDefaults)
         }
@@ -69,11 +70,11 @@ import RevenueCat
     }
 
 
-    @objc(configureWithAPIKey:appUserID:observerMode:userDefaultsSuiteName:platformFlavor:platformFlavorVersion:
-            usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:usesStoreKit2IfAvailable:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
                           appUserID: String?,
-                          observerMode: Bool,
+                          purchasesAreCompletedBy: PurchasesAreCompletedBy,
                           userDefaultsSuiteName: String?,
                           platformFlavor: String?,
                           platformFlavorVersion: String?,
@@ -82,7 +83,7 @@ import RevenueCat
                           shouldShowInAppMessagesAutomatically: Bool = true) -> Purchases {
         return configure(apiKey: apiKey,
                          appUserID: appUserID,
-                         observerMode: observerMode,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
                          userDefaultsSuiteName: userDefaultsSuiteName,
                          platformFlavor: platformFlavor,
                          platformFlavorVersion: platformFlavorVersion,

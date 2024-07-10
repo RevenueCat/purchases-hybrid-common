@@ -9,14 +9,42 @@
 import Foundation
 import RevenueCat
 
-internal extension Package {
+public extension PresentedOfferingContext {
 
+    var dictionary: [String: Any] {
+        return [
+            "offeringIdentifier": self.offeringIdentifier,
+            "placementIdentifier": self.placementIdentifier ?? NSNull(),
+            "targetingContext": self.targetingContext?.dictionary ?? NSNull()
+        ]
+    }
+
+}
+
+public extension PresentedOfferingContext.TargetingContext {
+
+    var dictionary: [String: Any] {
+        return [
+            "revision": self.revision,
+            "ruleId": self.ruleId
+        ]
+    }
+
+}
+
+public extension Package {
+
+    var dictionary: [String: Any] {
+        return dictionary(offeringIdentifier)
+    }
+    
     func dictionary(_ offeringIdentifier: String) ->  [String: Any] {
         return [
             "identifier": identifier,
             "packageType": packageType.name,
             "product": storeProduct.rc_dictionary,
-            "offeringIdentifier": offeringIdentifier
+            "offeringIdentifier": offeringIdentifier,
+            "presentedOfferingContext": presentedOfferingContext.dictionary
         ]
     }
 
