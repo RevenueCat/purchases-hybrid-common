@@ -579,13 +579,10 @@ fun getPromotionalOffer(): ErrorContainer {
 // region private functions
 
 private fun String.toPurchasesAreCompletedBy(): PurchasesAreCompletedBy? {
-    return when (this) {
-        "REVENUECAT" -> PurchasesAreCompletedBy.REVENUECAT
-        "MY_APP" -> PurchasesAreCompletedBy.MY_APP
-        else -> {
-            Log.e("PurchasesHybridCommon", "Unrecognized PurchasesAreCompletedBy: $this")
-            null
-        }
+    return try {
+        enumValueOf<PurchasesAreCompletedBy>(this)
+    } catch (e: IllegalArgumentException) {
+        null
     }
 }
 
