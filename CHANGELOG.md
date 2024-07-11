@@ -1,3 +1,9 @@
+## 12.0.0
+### Breaking Changes
+* Update Android to v8 of the native SDK (#859) via Toni Rico (@tonidero)
+### Other Changes
+* Fix typescript API tests (#860) via Toni Rico (@tonidero)
+
 ## 11.1.1
 ### Bugfixes
 * Add `DEFERRED` to typescript enum (#854) via Toni Rico (@tonidero)
