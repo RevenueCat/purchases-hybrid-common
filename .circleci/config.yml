@@ -168,8 +168,6 @@ jobs:
       - store_artifacts:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
-      - store_artifacts:
-          path: /tmp/SnapshotArtifacts
 
   deploy-ios-phc:
     <<: *base-ios-job
