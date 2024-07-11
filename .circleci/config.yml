@@ -112,7 +112,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 15 Pro (17.5)
+            SCAN_DEVICE: iPhone 15 Pro (17.4)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
