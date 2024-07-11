@@ -43,7 +43,7 @@ class CommonApiTests {
                                       String type,
                                       String googleBasePlanId,
                                       String googleOldProductId,
-                                      Integer googleProrationMode,
+                                      Integer googleReplacementMode,
                                       Boolean googleIsPersonalizedPrice,
                                       Map<String, Object> presentedOfferingContext,
                                       OnResult onResult) {
@@ -53,7 +53,7 @@ class CommonApiTests {
                 type,
                 googleBasePlanId,
                 googleOldProductId,
-                googleProrationMode,
+                googleReplacementMode,
                 googleIsPersonalizedPrice,
                 presentedOfferingContext,
                 onResult
@@ -64,7 +64,7 @@ class CommonApiTests {
                                       String packageIdentifier,
                                       Map<String, Object> presentedOfferingContext,
                                       String googleOldProductId,
-                                      Integer googleProrationMode,
+                                      Integer googleReplacementMode,
                                       Boolean googleIsPersonalizedPrice,
                                       OnResult onResult) {
         CommonKt.purchasePackage(
@@ -72,7 +72,7 @@ class CommonApiTests {
                 packageIdentifier,
                 presentedOfferingContext,
                 googleOldProductId,
-                googleProrationMode,
+                googleReplacementMode,
                 googleIsPersonalizedPrice,
                 onResult
         );
@@ -82,7 +82,7 @@ class CommonApiTests {
                                                  String productIdentifier,
                                                  String optionIdentifier,
                                                  String googleOldProductId,
-                                                 Integer googleProrationMode,
+                                                 Integer googleReplacementMode,
                                                  Boolean googleIsPersonalizedPrice,
                                                  Map<String, Object> presentedOfferingContext,
                                                  OnResult onResult) {
@@ -91,7 +91,7 @@ class CommonApiTests {
                 productIdentifier,
                 optionIdentifier,
                 googleOldProductId,
-                googleProrationMode,
+                googleReplacementMode,
                 googleIsPersonalizedPrice,
                 presentedOfferingContext,
                 onResult
@@ -158,7 +158,7 @@ class CommonApiTests {
         boolean isAnonymous = CommonKt.isAnonymous();
     }
 
-    private void checkSetPurchasesAreCompletedBy(PurchasesAreCompletedBy purchasesAreCompletedBy) {
+    private void checkSetPurchasesAreCompletedBy(String purchasesAreCompletedBy) {
         CommonKt.setPurchasesAreCompletedBy(purchasesAreCompletedBy);
     }
 
@@ -183,12 +183,13 @@ class CommonApiTests {
     private void checkConfigure(Context context,
                                 String apiKey,
                                 String appUserId,
-                                PurchasesAreCompletedBy purchasesAreCompletedBy,
+                                String purchasesAreCompletedBy,
                                 PlatformInfo platformInfo,
                                 Store store,
                                 DangerousSettings dangerousSettings,
                                 Boolean shouldShowInAppMessagesAutomatically,
-                                String verificationMode
+                                String verificationMode,
+                                Boolean pendingTransactionsForPrepaidPlansEnabled
     ) {
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store);
@@ -211,7 +212,8 @@ class CommonApiTests {
                 store,
                 dangerousSettings,
                 shouldShowInAppMessagesAutomatically,
-                verificationMode);
+                verificationMode,
+                pendingTransactionsForPrepaidPlansEnabled);
     }
 
     private void checkGetPromotionalOffer() {
