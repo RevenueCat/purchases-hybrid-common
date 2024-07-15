@@ -19,6 +19,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
@@ -528,7 +529,7 @@ fun getAmazonLWAConsentStatus(onResult: OnResultAny<Boolean>) {
             when (it) {
                 AmazonLWAConsentStatus.CONSENTED -> true
                 AmazonLWAConsentStatus.UNAVAILABLE -> false
-            }
+            },
         )
     }, onError = {
         onResult.onError(it.map())
