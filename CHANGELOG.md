@@ -1,3 +1,6 @@
+## 11.2.0
+### Other Changes
+* Add method for checking Amazon LWA consent status via Mark Villacampa (@MarkVillacampa)
 ## 11.1.1
 ### Bugfixes
 * Add `DEFERRED` to typescript enum (#854) via Toni Rico (@tonidero)
