@@ -100,6 +100,51 @@ export interface PurchasesStoreProduct {
    */
   readonly priceString: string;
   /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a weekly recurrence.
+   * This means that, for example, if the period is monthly, the price will be 
+   * divided by 4. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerWeek: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a monthly recurrence.
+   * This means that, for example, if the period is annual, the price will be 
+   * divided by 12. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerMonth: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a yearly recurrence.
+   * This means that, for example, if the period is monthly, the price will be multiplied by
+   * 12. Note that this value may be an approximation. For Google subscriptions, this value
+   * will use the basePlan to calculate the value.
+   */
+  readonly pricePerYear: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a weekly recurrence. This means that, for example, if the period is monthly,
+   * the price will be divided by 4. It uses a currency formatter to format the price in the 
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerWeekString: string;
+    /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a monthly recurrence. This means that, for example, if the period is annual,
+   * the price will be divided by 12. It uses a currency formatter to format the price in the 
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+    readonly pricePerMonthString: string;
+      /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a yearly recurrence. This means that, for example, if the period is monthly,
+   * the price will be multiplied by 12. It uses a currency formatter to format the price in the
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerYearString: string;
+  /**
    * Currency code for price and original price.
    * Contains the currency code value of defaultOption for Google Play.
    */
