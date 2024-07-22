@@ -496,7 +496,7 @@ export enum PRORATION_MODE {
    * Replacement takes effect when the old plan expires, and the new price will
    * be charged at the same time.
    */
-  DEFERRED = 4,
+  DEFERRED = 6,
 
   /**
    * Replacement takes effect immediately, and the user is charged full price
@@ -586,6 +586,27 @@ export interface SubscriptionOption {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * For installment subscriptions, the details of the installment plan the customer commits to.
+   * Null for non-installment subscriptions.
+   * Installment plans are only available for Google Play subscriptions.
+   */
+  readonly installmentsInfo: InstallmentsInfo | null;
+}
+
+/**
+ * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ * @public
+ */
+export interface InstallmentsInfo {
+  /**
+   * Number of payments the customer commits to in order to purchase the subscription.
+   */
+  readonly commitmentPaymentsCount: number;
+  /**
+   * After the commitment payments are complete, the number of payments the user commits to upon a renewal.
+   */
+  readonly renewalCommitmentPaymentsCount: number;
 }
 
 /**

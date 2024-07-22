@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.models.InstallmentsInfo
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -222,6 +223,7 @@ private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct)
         "introPhase" to introPhase?.mapPricingPhase(),
         "presentedOfferingIdentifier" to presentedOfferingContext?.offeringIdentifier,
         "presentedOfferingContext" to presentedOfferingContext?.map(),
+        "installmentsInfo" to installmentsInfo?.map(),
     )
 }
 
@@ -240,5 +242,12 @@ private fun Price.mapPrice(): Map<String, Any?> {
         "formatted" to formatted,
         "amountMicros" to amountMicros,
         "currencyCode" to currencyCode,
+    )
+}
+
+private fun InstallmentsInfo.map(): Map<String, Any?> {
+    return mapOf(
+        "commitmentPaymentsCount" to commitmentPaymentsCount,
+        "renewalCommitmentPaymentsCount" to renewalCommitmentPaymentsCount,
     )
 }

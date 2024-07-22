@@ -1,4 +1,4 @@
-import { ENTITLEMENT_VERIFICATION_MODE } from "./enums";
+import { ENTITLEMENT_VERIFICATION_MODE, PURCHASES_ARE_COMPLETED_BY } from "./enums";
 
 /**
  * Holds parameters to initialize the SDK.
@@ -17,8 +17,15 @@ export interface PurchasesConfiguration {
    * An optional boolean. Set this to TRUE if you have your own IAP implementation and
    * want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have
    * to acknowledge the purchases yourself.
+   * @deprecated Use purchasesAreCompletedBy instead.
    */
   observerMode?: boolean;
+  /**
+   * Set this to MY_APP if you have your own IAP implementation and
+   * want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have
+   * to acknowledge the purchases yourself.
+   */
+  purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY,
   /**
    * An optional string. iOS-only, will be ignored for Android.
    * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
@@ -54,4 +61,11 @@ export interface PurchasesConfiguration {
    * See https://rev.cat/trusted-entitlements for more info.
    */
   entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+
+  /**
+   * Enable this setting if you want to allow pending purchases for prepaid subscriptions (only supported
+   * in Google Play). Note that entitlements are not granted until payment is done.
+   * Disabled by default.
+   */
+  pendingTransactionsForPrepaidPlansEnabled?: boolean;
 }
