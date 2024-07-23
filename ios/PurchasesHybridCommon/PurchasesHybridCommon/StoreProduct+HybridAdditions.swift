@@ -49,7 +49,7 @@ internal extension StoreProduct {
                 dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
             }
 
-            if #available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *) {
+            if #available(watchOS 6.2, *) {
                 if let subscriptionPeriod = self.subscriptionPeriod {
                     dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
                 }
