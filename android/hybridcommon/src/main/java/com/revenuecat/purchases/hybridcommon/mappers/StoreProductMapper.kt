@@ -15,18 +15,6 @@ val StoreProduct.priceString: String
     get() = this.price.formatted
 val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
-val StoreProduct.pricePerWeekAmountMicros: Long?
-    get() = this.pricePerWeek()?.amountMicros
-val StoreProduct.pricePerMonthAmountMicros: Long?
-    get() = this.pricePerMonth()?.amountMicros
-val StoreProduct.pricePerYearAmountMicros: Long?
-    get() = this.pricePerYear()?.amountMicros
-val StoreProduct.pricePerWeekString: String?
-    get() = this.pricePerWeek()?.formatted
-val StoreProduct.pricePerMonthString: String?
-    get() = this.pricePerMonth()?.formatted
-val StoreProduct.pricePerYearString: String?
-    get() = this.pricePerYear()?.formatted
 val StoreProduct.freeTrialPeriod: Period?
     get() = this.defaultOption?.freePhase?.billingPeriod
 val StoreProduct.freeTrialCycles: Int?
@@ -56,12 +44,12 @@ fun StoreProduct.map(): Map<String, Any?> =
         "currencyCode" to priceCurrencyCode,
         "introPrice" to mapIntroPrice(),
         "discounts" to null,
-        "pricePerWeek" to pricePerWeekAmountMicros,
-        "pricePerMonth" to pricePerMonthAmountMicros,
-        "pricePerYear" to pricePerYearAmountMicros,
-        "pricePerWeekString" to pricePerWeekString,
-        "pricePerMonthString" to pricePerMonthString,
-        "pricePerYearString" to pricePerYearString,
+        "pricePerWeek" to pricePerWeek()?.amountMicros,
+        "pricePerMonth" to pricePerMonth()?.amountMicros,
+        "pricePerYear" to pricePerYear()?.amountMicros,
+        "pricePerWeekString" to pricePerWeek()?.formatted,
+        "pricePerMonthString" to pricePerMonth()?.formatted,
+        "pricePerYearString" to pricePerYear()?.formatted,
         "productCategory" to mapProductCategory().value,
         "productType" to mapProductType(),
         "subscriptionPeriod" to period?.iso8601,
