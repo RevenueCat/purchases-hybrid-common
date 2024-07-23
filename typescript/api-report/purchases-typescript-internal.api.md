@@ -443,6 +443,12 @@ export interface PurchasesStoreProduct {
     // @deprecated
     readonly presentedOfferingIdentifier: string | null;
     readonly price: number;
+    readonly pricePerMonth: number;
+    readonly pricePerMonthString: string;
+    readonly pricePerWeek: number;
+    readonly pricePerWeekString: string;
+    readonly pricePerYear: number;
+    readonly pricePerYearString: string;
     readonly priceString: string;
     readonly productCategory: PRODUCT_CATEGORY | null;
     readonly productType: PRODUCT_TYPE;
