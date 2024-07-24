@@ -173,8 +173,9 @@ private class CommonApiTests {
         getCustomerInfo(onResult)
     }
 
-    fun checkSyncPurchases() {
+    fun checkSyncPurchases(onResult: OnResult) {
         syncPurchases()
+        syncPurchases(onResult)
     }
 
     fun checkIsAnonymous() {
