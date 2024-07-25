@@ -3,7 +3,6 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -62,7 +61,7 @@ private class CommonApiTests {
         type: String,
         googleBasePlanId: String?,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
@@ -73,7 +72,7 @@ private class CommonApiTests {
             type,
             googleBasePlanId,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
@@ -85,7 +84,7 @@ private class CommonApiTests {
         packageIdentifier: String,
         presentedOfferingContext: Map<String, Any?>,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult,
     ) {
@@ -94,7 +93,7 @@ private class CommonApiTests {
             packageIdentifier,
             presentedOfferingContext,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             onResult,
         )
@@ -105,7 +104,7 @@ private class CommonApiTests {
         productIdentifier: String,
         optionIdentifier: String,
         googleOldProductId: String?,
-        googleProrationMode: Int?,
+        googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
@@ -115,7 +114,7 @@ private class CommonApiTests {
             productIdentifier,
             optionIdentifier,
             googleOldProductId,
-            googleProrationMode,
+            googleReplacementMode,
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
@@ -181,7 +180,7 @@ private class CommonApiTests {
         val isAnonymous: Boolean = isAnonymous()
     }
 
-    fun checkSetPurchasesAreCompletedBy(purchasesAreCompletedBy: PurchasesAreCompletedBy) {
+    fun checkSetPurchasesAreCompletedBy(purchasesAreCompletedBy: String) {
         setPurchasesAreCompletedBy(purchasesAreCompletedBy)
     }
 
@@ -213,12 +212,13 @@ private class CommonApiTests {
         context: Context,
         apiKey: String,
         appUserID: String?,
-        purchasesAreCompletedBy: PurchasesAreCompletedBy,
+        purchasesAreCompletedBy: String?,
         platformInfo: PlatformInfo,
         store: Store,
         dangerousSettings: DangerousSettings,
         shouldShowInAppMessagesAutomatically: Boolean?,
         verificationMode: String?,
+        pendingTransactionsForPrepaidPlansEnabled: Boolean?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -242,6 +242,7 @@ private class CommonApiTests {
             dangerousSettings,
             shouldShowInAppMessagesAutomatically,
             verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
         )
     }
 

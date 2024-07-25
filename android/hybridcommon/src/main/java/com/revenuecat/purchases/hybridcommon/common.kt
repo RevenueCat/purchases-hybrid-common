@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import com.revenuecat.purchases.AmazonLWAConsentStatus
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
@@ -18,6 +19,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
@@ -27,7 +29,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
-import com.revenuecat.purchases.models.GoogleProrationMode
+import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.InAppMessageType
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
@@ -95,18 +97,18 @@ fun purchaseProduct(
     type: String,
     googleBasePlanId: String?,
     googleOldProductId: String?,
-    googleProrationMode: Int?,
+    googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
 ) {
-    val googleProrationMode = try {
-        getGoogleProrationMode(googleProrationMode)
-    } catch (e: InvalidProrationModeException) {
+    val googleReplacementMode = try {
+        getGoogleReplacementMode(googleReplacementModeInt)
+    } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchaseProduct.",
+                "Invalid google replacement mode passed to purchaseProduct.",
             ).map(),
         )
         return
@@ -144,8 +146,8 @@ fun purchaseProduct(
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
                     purchaseParams.oldProductId(googleOldProductId)
-                    if (googleProrationMode != null) {
-                        purchaseParams.googleProrationMode(googleProrationMode)
+                    if (googleReplacementMode != null) {
+                        purchaseParams.googleReplacementMode(googleReplacementMode)
                     }
                 }
 
@@ -203,17 +205,17 @@ fun purchasePackage(
     packageIdentifier: String,
     presentedOfferingContext: Map<String, Any?>,
     googleOldProductId: String?,
-    googleProrationMode: Int?,
+    googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult,
 ) {
-    val googleProrationMode = try {
-        getGoogleProrationMode(googleProrationMode)
-    } catch (e: InvalidProrationModeException) {
+    val googleReplacementMode = try {
+        getGoogleReplacementMode(googleReplacementModeInt)
+    } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchasePackage.",
+                "Invalid google replacement mode passed to purchasePackage.",
             ).map(),
         )
         return
@@ -246,8 +248,8 @@ fun purchasePackage(
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
                         purchaseParams.oldProductId(googleOldProductId)
-                        if (googleProrationMode != null) {
-                            purchaseParams.googleProrationMode(googleProrationMode)
+                        if (googleReplacementMode != null) {
+                            purchaseParams.googleReplacementMode(googleReplacementMode)
                         }
                     }
 
@@ -288,7 +290,7 @@ fun purchaseSubscriptionOption(
     productIdentifier: String,
     optionIdentifier: String,
     googleOldProductId: String?,
-    googleProrationMode: Int?,
+    googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
@@ -303,13 +305,13 @@ fun purchaseSubscriptionOption(
         return
     }
 
-    val googleProrationMode = try {
-        getGoogleProrationMode(googleProrationMode)
-    } catch (e: InvalidProrationModeException) {
+    val googleReplacementMode = try {
+        getGoogleReplacementMode(googleReplacementModeInt)
+    } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
                 PurchasesErrorCode.UnknownError,
-                "Invalid google proration mode passed to purchaseSubscriptionOption.",
+                "Invalid google replacement mode passed to purchaseSubscriptionOption.",
             ).map(),
         )
         return
@@ -336,8 +338,8 @@ fun purchaseSubscriptionOption(
                 // Product upgrade
                 googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
                     purchaseParams.oldProductId(it)
-                    if (googleProrationMode != null) {
-                        purchaseParams.googleProrationMode(googleProrationMode)
+                    if (googleReplacementMode != null) {
+                        purchaseParams.googleReplacementMode(googleReplacementMode)
                     }
                 }
 
@@ -476,9 +478,11 @@ fun isAnonymous(): Boolean {
 }
 
 fun setPurchasesAreCompletedBy(
-    purchasesAreCompletedBy: PurchasesAreCompletedBy,
+    purchasesAreCompletedBy: String,
 ) {
-    Purchases.sharedInstance.purchasesAreCompletedBy = purchasesAreCompletedBy
+    purchasesAreCompletedBy.toPurchasesAreCompletedBy()?.let {
+        Purchases.sharedInstance.purchasesAreCompletedBy = it
+    }
 }
 
 // Returns Unknown for all since it's not available in Android
@@ -519,6 +523,19 @@ fun canMakePayments(
     }
 }
 
+fun getAmazonLWAConsentStatus(onResult: OnResultAny<Boolean>) {
+    Purchases.sharedInstance.getAmazonLWAConsentStatusWith(onSuccess = {
+        onResult.onReceived(
+            when (it) {
+                AmazonLWAConsentStatus.CONSENTED -> true
+                AmazonLWAConsentStatus.UNAVAILABLE -> false
+            },
+        )
+    }, onError = {
+        onResult.onError(it.map())
+    })
+}
+
 @JvmOverloads
 fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InAppMessageType>? = null) {
     if (activity == null) {
@@ -538,12 +555,13 @@ fun configure(
     context: Context,
     apiKey: String,
     appUserID: String?,
-    purchasesAreCompletedBy: PurchasesAreCompletedBy? = null,
+    purchasesAreCompletedBy: String? = null,
     platformInfo: PlatformInfo,
     store: Store = Store.PLAY_STORE,
     dangerousSettings: DangerousSettings = DangerousSettings(autoSyncPurchases = true),
     shouldShowInAppMessagesAutomatically: Boolean? = null,
     verificationMode: String? = null,
+    pendingTransactionsForPrepaidPlansEnabled: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -552,7 +570,7 @@ fun configure(
         .store(store)
         .dangerousSettings(dangerousSettings)
         .apply {
-            purchasesAreCompletedBy?.let { purchasesAreCompletedBy(it) }
+            purchasesAreCompletedBy?.toPurchasesAreCompletedBy()?.let { purchasesAreCompletedBy(it) }
             shouldShowInAppMessagesAutomatically?.let { showInAppMessagesAutomatically(it) }
             verificationMode?.let { verificationMode ->
                 try {
@@ -561,6 +579,7 @@ fun configure(
                     warnLog("Attempted to configure with unknown verification mode: $verificationMode.")
                 }
             }
+            pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
         }.also { Purchases.configure(it.build()) }
 }
 
@@ -573,6 +592,14 @@ fun getPromotionalOffer(): ErrorContainer {
 }
 
 // region private functions
+
+private fun String.toPurchasesAreCompletedBy(): PurchasesAreCompletedBy? {
+    return try {
+        enumValueOf<PurchasesAreCompletedBy>(this)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
+}
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun mapStringToProductType(type: String): ProductType {
@@ -595,17 +622,17 @@ internal fun mapStringToProductType(type: String): ProductType {
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-internal class InvalidProrationModeException : Exception()
+internal class InvalidReplacementModeException : Exception()
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-@Throws(InvalidProrationModeException::class)
-internal fun getGoogleProrationMode(prorationModeInt: Int?): GoogleProrationMode? {
-    return prorationModeInt
+@Throws(InvalidReplacementModeException::class)
+internal fun getGoogleReplacementMode(replacementModeInt: Int?): GoogleReplacementMode? {
+    return replacementModeInt
         ?.let {
-            GoogleProrationMode.values().find { prorationMode ->
-                prorationMode.playBillingClientMode == it
+            GoogleReplacementMode.values().find { replacementMode ->
+                replacementMode.playBillingClientMode == it
             } ?: run {
-                throw InvalidProrationModeException()
+                throw InvalidReplacementModeException()
             }
         }
 }

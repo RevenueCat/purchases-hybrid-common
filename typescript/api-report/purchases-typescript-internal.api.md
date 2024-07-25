@@ -63,6 +63,12 @@ export enum IN_APP_MESSAGE_TYPE {
 }
 
 // @public
+export interface InstallmentsInfo {
+    readonly commitmentPaymentsCount: number;
+    readonly renewalCommitmentPaymentsCount: number;
+}
+
+// @public
 export enum INTRO_ELIGIBILITY_STATUS {
     INTRO_ELIGIBILITY_STATUS_ELIGIBLE = 2,
     INTRO_ELIGIBILITY_STATUS_INELIGIBLE = 1,
@@ -204,7 +210,7 @@ export enum PRODUCT_TYPE {
 
 // @public
 export enum PRORATION_MODE {
-    DEFERRED = 4,
+    DEFERRED = 6,
     IMMEDIATE_AND_CHARGE_FULL_PRICE = 5,
     IMMEDIATE_AND_CHARGE_PRORATED_PRICE = 2,
     IMMEDIATE_WITH_TIME_PRORATION = 1,
@@ -217,6 +223,12 @@ export enum PRORATION_MODE {
 export enum PURCHASE_TYPE {
     INAPP = "inapp",
     SUBS = "subs"
+}
+
+// @public
+export enum PURCHASES_ARE_COMPLETED_BY {
+    MY_APP = "MY_APP",
+    REVENUECAT = "REVENUECAT"
 }
 
 // @public
@@ -298,7 +310,10 @@ export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+    // @deprecated
     observerMode?: boolean;
+    pendingTransactionsForPrepaidPlansEnabled?: boolean;
+    purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
@@ -427,6 +442,12 @@ export interface PurchasesStoreProduct {
     // @deprecated
     readonly presentedOfferingIdentifier: string | null;
     readonly price: number;
+    readonly pricePerMonth: number;
+    readonly pricePerMonthString: string;
+    readonly pricePerWeek: number;
+    readonly pricePerWeekString: string;
+    readonly pricePerYear: number;
+    readonly pricePerYearString: string;
     readonly priceString: string;
     readonly productCategory: PRODUCT_CATEGORY | null;
     readonly productType: PRODUCT_TYPE;
@@ -483,6 +504,7 @@ export interface SubscriptionOption {
     readonly freePhase: PricingPhase | null;
     readonly fullPricePhase: PricingPhase | null;
     readonly id: string;
+    readonly installmentsInfo: InstallmentsInfo | null;
     readonly introPhase: PricingPhase | null;
     readonly isBasePlan: boolean;
     readonly isPrepaid: boolean;

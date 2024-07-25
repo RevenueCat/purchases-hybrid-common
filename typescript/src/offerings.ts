@@ -100,6 +100,51 @@ export interface PurchasesStoreProduct {
    */
   readonly priceString: string;
   /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a weekly recurrence.
+   * This means that, for example, if the period is monthly, the price will be 
+   * divided by 4. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerWeek: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a monthly recurrence.
+   * This means that, for example, if the period is annual, the price will be 
+   * divided by 12. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerMonth: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct in a yearly recurrence.
+   * This means that, for example, if the period is monthly, the price will be multiplied by
+   * 12. Note that this value may be an approximation. For Google subscriptions, this value
+   * will use the basePlan to calculate the value.
+   */
+  readonly pricePerYear: number;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a weekly recurrence. This means that, for example, if the period is monthly,
+   * the price will be divided by 4. It uses a currency formatter to format the price in the 
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerWeekString: string;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a monthly recurrence. This means that, for example, if the period is annual,
+   * the price will be divided by 12. It uses a currency formatter to format the price in the 
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerMonthString: string;
+  /**
+   * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
+   * locale in a yearly recurrence. This means that, for example, if the period is monthly,
+   * the price will be multiplied by 12. It uses a currency formatter to format the price in the
+   * given locale. Note that this value may be an approximation. For Google subscriptions,
+   * this value will use the basePlan to calculate the value.
+   */
+  readonly pricePerYearString: string;
+  /**
    * Currency code for price and original price.
    * Contains the currency code value of defaultOption for Google Play.
    */
@@ -496,7 +541,7 @@ export enum PRORATION_MODE {
    * Replacement takes effect when the old plan expires, and the new price will
    * be charged at the same time.
    */
-  DEFERRED = 4,
+  DEFERRED = 6,
 
   /**
    * Replacement takes effect immediately, and the user is charged full price
@@ -586,6 +631,27 @@ export interface SubscriptionOption {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * For installment subscriptions, the details of the installment plan the customer commits to.
+   * Null for non-installment subscriptions.
+   * Installment plans are only available for Google Play subscriptions.
+   */
+  readonly installmentsInfo: InstallmentsInfo | null;
+}
+
+/**
+ * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ * @public
+ */
+export interface InstallmentsInfo {
+  /**
+   * Number of payments the customer commits to in order to purchase the subscription.
+   */
+  readonly commitmentPaymentsCount: number;
+  /**
+   * After the commitment payments are complete, the number of payments the user commits to upon a renewal.
+   */
+  readonly renewalCommitmentPaymentsCount: number;
 }
 
 /**

@@ -10,6 +10,42 @@ import Foundation
 import RevenueCat
 import StoreKit
 
+@objc public extension StoreProduct {
+    
+    // Re-exports pricePerPeriod properties with different names to avoid recursion.
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerWeekAmount: NSDecimalNumber? {
+        return self.pricePerWeek
+    }
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerMonthAmount: NSDecimalNumber? {
+        return self.pricePerMonth
+    }
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerYearAmount: NSDecimalNumber? {
+        return self.pricePerYear
+    }
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerWeekString: String? {
+        return self.localizedPricePerWeek
+    }
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerMonthString: String? {
+        return self.localizedPricePerMonth
+    }
+
+    @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
+    @objc var pricePerYearString: String? {
+        return self.localizedPricePerYear
+    }
+
+}
+
 internal extension StoreProduct {
 
     var rc_dictionary: [String: Any] {
@@ -21,11 +57,24 @@ internal extension StoreProduct {
             "introPrice": NSNull(),
             "price": self.price,
             "priceString": self.localizedPriceString,
+            "pricePerWeek": NSNull(),
+            "pricePerMonth": NSNull(),
+            "pricePerYear": NSNull(),
+            "pricePerWeekString": NSNull(),
+            "pricePerMonthString": NSNull(),
+            "pricePerYearString": NSNull(),
             "productCategory": self.productCategoryString,
             "productType": self.productTypeString,
             "title": self.localizedTitle,
             "subscriptionPeriod": NSNull(),
         ]
+
+        dictionary["pricePerWeek"] = self.pricePerWeek
+        dictionary["pricePerMonth"] = self.pricePerMonth
+        dictionary["pricePerYear"] = self.pricePerYear
+        dictionary["pricePerWeekString"] = self.localizedPricePerWeek
+        dictionary["pricePerMonthString"] = self.localizedPricePerMonth
+        dictionary["pricePerYearString"] = self.localizedPricePerYear
 
         if let introductoryDiscount = self.introductoryDiscount {
             dictionary["introPrice"] = introductoryDiscount.rc_dictionary
@@ -36,7 +85,7 @@ internal extension StoreProduct {
         if let subscriptionPeriod = self.subscriptionPeriod {
             dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
         }
-
+        
         return dictionary
     }
 
