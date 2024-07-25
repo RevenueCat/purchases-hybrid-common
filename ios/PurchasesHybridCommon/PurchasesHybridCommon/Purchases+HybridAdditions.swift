@@ -37,16 +37,15 @@ import RevenueCat
             configurationBuilder = configurationBuilder.with(appUserID: appUserID)
         }
 
-        if let version = StoreKitVersion(name: storeKitVersion) {
-            configurationBuilder = configurationBuilder.with(
-                purchasesAreCompletedBy: purchasesAreCompletedBy,
-                storeKitVersion: version
-            )
-        }
+        let storeKitVersion = StoreKitVersion(name: storeKitVersion) ?? .default
+        configurationBuilder = configurationBuilder.with(storeKitVersion: storeKitVersion)
 
         if let purchasesAreCompletedBy = purchasesAreCompletedBy {
             if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy.fromString(purchasesAreCompletedBy) {
-                configurationBuilder = configurationBuilder.with(purchasesAreCompletedBy: actualPurchasesAreCompletedBy)
+                configurationBuilder = configurationBuilder.with(
+                    purchasesAreCompletedBy: actualPurchasesAreCompletedBy,
+                    storeKitVersion: storeKitVersion
+                )
             }
         }
 
