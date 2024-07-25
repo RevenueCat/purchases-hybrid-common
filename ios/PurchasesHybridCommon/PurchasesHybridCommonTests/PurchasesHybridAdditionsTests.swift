@@ -135,5 +135,51 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                         }.notTo(raiseException())
                     }
                 }
+
+        context("configure with PurchasesAreCompletedBy") {
+                    it("REVENUECAT") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil)
+                        }.notTo(raiseException())
+
+                        expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.revenueCat))
+                    }
+
+                    it("MY_APP") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "MY_APP",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "STOREKIT_2",
+                                                dangerousSettings: nil)
+                        }.notTo(raiseException())
+
+                        expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.myApp))
+                    }
+                    it("missing") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "STOREKIT_1",
+                                                dangerousSettings: nil)
+                        }.notTo(raiseException())
+
+                        expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.revenueCat))
+                    }
+                }
     }
 }
