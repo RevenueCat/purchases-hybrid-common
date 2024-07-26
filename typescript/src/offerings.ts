@@ -280,7 +280,7 @@ export interface PurchasesStoreProductDiscount {
   /**
    * Unit for the billing period of the discount, can be DAY, WEEK, MONTH or YEAR.
    */
-  readonly periodUnit: PERIOD_UNIT;
+  readonly periodUnit: string;
   /**
    * Number of units for the billing period of the discount.
    */
@@ -311,7 +311,7 @@ export interface PurchasesIntroPrice {
   /**
    * Unit for the billing period of the discount, can be DAY, WEEK, MONTH or YEAR.
    */
-  readonly periodUnit: PERIOD_UNIT;
+  readonly periodUnit: string;
   /**
    * Number of units for the billing period of the discount.
    */

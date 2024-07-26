@@ -376,7 +376,7 @@ export interface PurchasesIntroPrice {
     readonly cycles: number;
     readonly period: string;
     readonly periodNumberOfUnits: number;
-    readonly periodUnit: PERIOD_UNIT;
+    readonly periodUnit: string;
     readonly price: number;
     readonly priceString: string;
 }
@@ -462,7 +462,7 @@ export interface PurchasesStoreProductDiscount {
     readonly identifier: string;
     readonly period: string;
     readonly periodNumberOfUnits: number;
-    readonly periodUnit: PERIOD_UNIT;
+    readonly periodUnit: string;
     readonly price: number;
     readonly priceString: string;
 }
