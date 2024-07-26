@@ -105,15 +105,15 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(data)
     }
 
+    @available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, visionOS 1.0, *)
     func testPurchaseFailuresAreReportedCorrectly() async throws {
-        self.testSession.failTransactionsEnabled = true
-        self.testSession.failureError = .invalidSignature
+        try await self.testSession.setSimulatedError(.purchase(.purchaseNotAllowed), forAPI: .purchase)
 
         do {
             try await self.purchaseMonthlyOffering()
             fail("Expected error")
         } catch {
-            expect(error).to(matchError(ErrorCode.storeProblemError))
+            expect(error).to(matchError(ErrorCode.purchaseNotAllowedError))
         }
     }
 
