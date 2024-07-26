@@ -118,22 +118,6 @@ extension LogLevel {
     )
 }
 
-extension PurchasesAreCompletedBy {
-
-    static func fromString(_ purchasesAreCompletedByString: String) -> PurchasesAreCompletedBy? {
-        var purchasesAreCompletedBy: PurchasesAreCompletedBy? = nil
-        if purchasesAreCompletedByString == "MY_APP" {
-            purchasesAreCompletedBy = .myApp
-        } else if purchasesAreCompletedByString == "REVENUECAT" {
-            purchasesAreCompletedBy = .revenueCat
-        } else {
-            NSLog("Error: Unrecognized purchasesAreCompletedBy \(purchasesAreCompletedByString)")
-        }
-        return purchasesAreCompletedBy
-    }
-
-}
-
 // MARK: - Deprecations
 
 protocol ConfigurationBuilderDeprecatable {
