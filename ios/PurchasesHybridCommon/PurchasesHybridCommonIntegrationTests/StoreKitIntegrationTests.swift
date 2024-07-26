@@ -29,31 +29,6 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
 
     override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
-    private var testSession: SKTestSession!
-
-    override func setUp() async throws {
-        self.testSession = try SKTestSession(configurationFileNamed: Constants.storeKitConfigFileName)
-        self.testSession.resetToDefaultState()
-        self.testSession.disableDialogs = true
-        self.testSession.clearTransactions()
-        if #available(iOS 15.2, *) {
-            self.testSession.timeRate = .monthlyRenewalEveryThirtySeconds
-        } else {
-            self.testSession.timeRate = .oneSecondIsOneDay
-        }
-
-        // Initialize `Purchases` *after* the fresh new session has been created
-        // (and transactions has been cleared), to avoid the SDK posting receipts from
-        // a previous test.
-        try await super.setUp()
-
-        // SDK initialization begins with an initial request to offerings
-        // Which results in a get-create of the initial anonymous user.
-        // To avoid race conditions with when this request finishes and make all tests deterministic
-        // this waits for that request to finish.
-        _ = try await CommonFunctionality.offerings()
-    }
-
     func testRecordPurchase() async throws {
         guard let product = try await Product.products(for: [Self.productIdentifier]).first else {
             fail("The product to purchase should not be nil.")
@@ -90,34 +65,10 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
 
 class StoreKit1IntegrationTests: BaseIntegrationTests {
 
-    private var testSession: SKTestSession!
 
     override class func setUp() {
         // Uncomment this to re-record snapshots if necessary:
         // isRecording = true
-    }
-
-    override func setUp() async throws {
-        self.testSession = try SKTestSession(configurationFileNamed: Constants.storeKitConfigFileName)
-        self.testSession.resetToDefaultState()
-        self.testSession.disableDialogs = true
-        self.testSession.clearTransactions()
-        if #available(iOS 15.2, *) {
-            self.testSession.timeRate = .monthlyRenewalEveryThirtySeconds
-        } else {
-            self.testSession.timeRate = .oneSecondIsOneDay
-        }
-
-        // Initialize `Purchases` *after* the fresh new session has been created
-        // (and transactions has been cleared), to avoid the SDK posting receipts from
-        // a previous test.
-        try await super.setUp()
-
-        // SDK initialization begins with an initial request to offerings
-        // Which results in a get-create of the initial anonymous user.
-        // To avoid race conditions with when this request finishes and make all tests deterministic
-        // this waits for that request to finish.
-        _ = try await CommonFunctionality.offerings()
     }
 
     override class var storeKitVersion: StoreKitVersion {
