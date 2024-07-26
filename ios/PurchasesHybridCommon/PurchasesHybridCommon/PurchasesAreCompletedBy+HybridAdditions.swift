@@ -11,16 +11,13 @@ import RevenueCat
 
 public extension PurchasesAreCompletedBy {
 
-    static func fromString(_ purchasesAreCompletedByString: String) -> PurchasesAreCompletedBy? {
-        var purchasesAreCompletedBy: PurchasesAreCompletedBy? = nil
-        if purchasesAreCompletedByString == "MY_APP" {
-            purchasesAreCompletedBy = .myApp
-        } else if purchasesAreCompletedByString == "REVENUECAT" {
-            purchasesAreCompletedBy = .revenueCat
+    init?(name: String) {
+        if let mode = Self.valuesByName[name] {
+            self = mode
         } else {
-            NSLog("Error: Unrecognized purchasesAreCompletedBy \(purchasesAreCompletedByString)")
+            NSLog("Error: Unrecognized purchasesAreCompletedBy \(name)")
+            return nil
         }
-        return purchasesAreCompletedBy
     }
 
     var name: String {
@@ -29,4 +26,10 @@ public extension PurchasesAreCompletedBy {
         case .revenueCat: return "REVENUECAT"
         }
     }
+
+    private static let valuesByName: [String: Self] = [
+        Self.myApp.name: Self.myApp,
+        Self.revenueCat.name: Self.revenueCat,
+    ]
+
 }

@@ -128,7 +128,7 @@ import RevenueCat
     }
 
     @objc public static func setPurchasesAreCompletedBy(_ purchasesAreCompletedBy: String) {
-        if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy.fromString(purchasesAreCompletedBy) {
+        if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy(name: purchasesAreCompletedBy) {
             Self.sharedInstance.purchasesAreCompletedBy = actualPurchasesAreCompletedBy
         }
     }

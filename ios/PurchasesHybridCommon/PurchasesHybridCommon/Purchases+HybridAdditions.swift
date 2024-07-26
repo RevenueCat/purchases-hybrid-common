@@ -41,7 +41,7 @@ import RevenueCat
         configurationBuilder = configurationBuilder.with(storeKitVersion: storeKitVersion)
 
         if let purchasesAreCompletedBy = purchasesAreCompletedBy {
-            if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy.fromString(purchasesAreCompletedBy) {
+            if let actualPurchasesAreCompletedBy = PurchasesAreCompletedBy(name: purchasesAreCompletedBy) {
                 configurationBuilder = configurationBuilder.with(
                     purchasesAreCompletedBy: actualPurchasesAreCompletedBy,
                     storeKitVersion: storeKitVersion
