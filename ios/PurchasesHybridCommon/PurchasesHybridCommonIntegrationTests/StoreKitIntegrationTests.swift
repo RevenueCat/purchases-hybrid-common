@@ -30,7 +30,10 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
     override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
     func testRecordPurchase() async throws {
-        _ = try await Product.products(for: [Self.productIdentifier]).first?.purchase()
+        let product = try await Product.products(for: [Self.productIdentifier]).first
+        expect(product).toNot(beNil(), description: "The product that we're going to purchase should not be nil.")
+        let purchaseResult = try await product?.purchase()
+        expect(purchaseResult).toNot(beNil(), description: "The purchase result should not be nil.")
 
         let (dict, error) = try await withCheckedThrowingContinuation { continuation in
             CommonFunctionality.recordPurchase(productID: Self.productIdentifier) { (dict, error) in
@@ -38,7 +41,7 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
             }
 
         }
-        expect(error).to(beNil())
+        expect(error).to(beNil(), description: "The error returned by recordPurchase() should be nil.")
         var unwrappedDict = try XCTUnwrap(dict)
         removeDates(&unwrappedDict)
         await self.assertSnapshot(unwrappedDict)
