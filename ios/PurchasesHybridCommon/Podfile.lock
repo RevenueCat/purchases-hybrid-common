@@ -1,15 +1,15 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.2.1)
-  - RevenueCatUI (5.2.1):
-    - RevenueCat (= 5.2.1)
+  - RevenueCat (5.2.2)
+  - RevenueCatUI (5.2.2):
+    - RevenueCat (= 5.2.2)
 
 DEPENDENCIES:
   - Nimble
   - Quick (= 5.0.1)
-  - RevenueCat (= 5.2.1)
-  - RevenueCatUI (= 5.2.1)
+  - RevenueCat (= 5.2.2)
+  - RevenueCatUI (= 5.2.2)
 
 SPEC REPOS:
   trunk:
@@ -21,9 +21,9 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 444148ed7ed609bb6fd48aa4a131d0dd5b073d18
-  RevenueCatUI: 544321ea2311c204218f637e573ec7fe7fb493e6
+  RevenueCat: ba985d80069c1c4b9c9e0763f1852f2a0bdcc2d6
+  RevenueCatUI: a5eec63e40eed0a5096af44c1259337b01959a13
 
-PODFILE CHECKSUM: fd4e9a5424d1732f4d4ac4fef7632f965c9c505f
+PODFILE CHECKSUM: 5f46d5c9c9c707051d8463043317b8b7552261aa
 
 COCOAPODS: 1.15.2
