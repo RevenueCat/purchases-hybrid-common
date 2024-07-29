@@ -38,12 +38,12 @@ export interface PurchasesConfiguration {
   userDefaultsSuiteName?: string;
   /**
    * iOS-only, will be ignored for Android.
-   * Default is STOREKIT_2.
+   * Currently, the DEFAULT value uses StoreKit 2.
    *
    * - Warning: Make sure you have an In-App Purchase Key configured in your app.
    * Please see https://rev.cat/in-app-purchase-key-configuration for more info.
    *
-   * - Note: StoreKit 2 is only available on iOS 15+. StoreKit 1 will be used for previous iOS versions
+   * - Note: StoreKit 2 is only available on iOS 16+. StoreKit 1 will be used for previous iOS versions
    * regardless of this setting.
    */
   storeKitVersion?: STOREKIT_VERSION;
