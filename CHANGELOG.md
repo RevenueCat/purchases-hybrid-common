@@ -1,6 +1,7 @@
 ## 12.0.0
 ### Breaking Changes
 * Update Android to v8 of the native SDK (#859) via Toni Rico (@tonidero)
+* Update iOS to v5.2.2 of the native SDK (#858) via Will Taylor (@fire-at-will)
 ### New Features
 * add pricePerPeriod properties (#621) via Andy Boedo (@aboedo)
 * Amazon: Add getAmazonLWAConsentStatus method to support Quick Subscribe (#779) via Mark Villacampa (@MarkVillacampa)
