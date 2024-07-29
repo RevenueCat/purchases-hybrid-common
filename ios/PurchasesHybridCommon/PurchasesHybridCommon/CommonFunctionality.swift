@@ -589,20 +589,6 @@ import RevenueCat
 
 }
 
-// MARK: - Obsoletions
-@objc public extension CommonFunctionality {
-
-    // Obsoleted in purchases-ios 5.0.0
-    @available(iOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @available(watchOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @available(macOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @available(tvOS, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @available(swift, obsoleted: 1, message: "Use enableAdServicesAttributionTokenCollection() instead")
-    @objc static func setAutomaticAppleSearchAdsAttributionCollection(_ enabled: Bool) {
-        fatalError()
-    }
-}
-
 // MARK: Campaign parameters
 @objc public extension CommonFunctionality {
 
