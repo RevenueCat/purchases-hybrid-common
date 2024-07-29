@@ -38,7 +38,9 @@ export interface PurchasesConfiguration {
   userDefaultsSuiteName?: string;
   /**
    * iOS-only, will be ignored for Android.
-   * Currently, the DEFAULT value uses StoreKit 2.
+   *
+   * By selecting the DEFAULT value, RevenueCat will automatically select the most appropriate StoreKit version
+   * for the app's runtime environment.
    *
    * - Warning: Make sure you have an In-App Purchase Key configured in your app.
    * Please see https://rev.cat/in-app-purchase-key-configuration for more info.
