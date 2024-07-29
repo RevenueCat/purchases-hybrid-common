@@ -154,6 +154,7 @@ jobs:
           command: bundle exec fastlane scan --result_bundle=true --testplan=CI
           working_directory: ios/PurchasesHybridCommon
           environment:
+            SCAN_DEVICE: iPhone 15 (17.2)
             SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
       - run:
           name: Compress result bundle

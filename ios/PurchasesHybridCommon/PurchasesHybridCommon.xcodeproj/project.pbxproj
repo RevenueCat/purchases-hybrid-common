@@ -67,7 +67,11 @@
 		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
 		E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */; };
 		F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */; };
+		FD1425A52C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */; };
+		FD1425A72C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */; };
 		FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */; };
+		FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */; };
+		FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -200,7 +204,11 @@
 		E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2409E9D9C93AB9FB319B32F /* Pods-ObjCAPITester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjCAPITester.debug.xcconfig"; path = "Target Support Files/Pods-ObjCAPITester/Pods-ObjCAPITester.debug.xcconfig"; sourceTree = "<group>"; };
 		EC917227AAA9D46865C0C01D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreKitVersion+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitVersionHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+TestExtensions.swift"; sourceTree = "<group>"; };
+		FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchasesAreCompletedBy+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesAreCompletedByHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -298,6 +306,8 @@
 				FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */,
 				FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */,
 				35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */,
+				FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */,
+				FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -354,6 +364,8 @@
 				2D900DA0280769FC00676D73 /* CustomerInfo+HybridAdditions.swift */,
 				2DED033B280F5759009C5D65 /* CommonFunctionality.swift */,
 				2DD3D1822810A7F400A19EC6 /* FatalErrorUtil.swift */,
+				FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */,
+				FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -850,6 +862,7 @@
 			files = (
 				2DD3D18E2810AF5A00A19EC6 /* CustomerInfo+HybridAdditions.swift in Sources */,
 				77D5E72A2C233E2C002ECC77 /* Constants.swift in Sources */,
+				FD1425A52C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift in Sources */,
 				2DD3D1882810AF5A00A19EC6 /* StoreProductDiscount+HybridAdditions.swift in Sources */,
 				2DD3D1902810AF5A00A19EC6 /* StoreProduct+HybridAdditions.swift in Sources */,
 				4FBD2DA72A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift in Sources */,
@@ -861,6 +874,7 @@
 				2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */,
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
 				2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */,
+				FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */,
 				2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */,
 				2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */,
 				57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */,
@@ -889,6 +903,7 @@
 				2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */,
 				2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */,
 				35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */,
+				FD1425A72C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift in Sources */,
 				2D44524124916501006AA26F /* PurchasesHybridCommonTests.swift in Sources */,
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
 				FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */,
@@ -896,6 +911,7 @@
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
+				FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */,
 				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -982,6 +998,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -996,6 +1013,7 @@
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1018,6 +1036,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1031,6 +1050,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1055,7 +1075,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1070,7 +1090,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
@@ -1095,7 +1115,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1110,7 +1130,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
@@ -1126,7 +1146,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1152,7 +1172,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1307,6 +1327,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1320,6 +1341,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1342,6 +1364,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1354,6 +1377,7 @@
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				TVOS_DEPLOYMENT_TARGET = 13.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

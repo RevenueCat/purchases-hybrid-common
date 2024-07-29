@@ -1,38 +1,38 @@
 # Uncomment the next line to define a global platform for your project
 
 target 'PurchasesHybridCommon' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.43.2'
+  pod 'RevenueCat', '5.2.2'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
-    pod 'Quick'
-    pod 'Nimble'
+    pod 'Quick', '5.0.1'
+    pod 'Nimble', '10.0.0'
   end
 
   target 'PurchasesHybridCommonIntegrationTests' do
     # Pods for testing
-    pod 'Quick'
-    pod 'Nimble'
+    pod 'Quick', '5.0.1'
+    pod 'Nimble', '10.0.0'
   end
 
 end
 
 target 'PurchasesHybridCommonUI' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.43.2'
-  pod 'RevenueCatUI', '4.43.2'
+  pod 'RevenueCat', '5.2.2'
+  pod 'RevenueCatUI', '5.2.2'
 
 end
 
 target 'ObjCAPITester' do
-  platform :ios, '11.0'
+  platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '4.43.2'
-  pod 'RevenueCatUI', '4.43.2'
+  pod 'RevenueCat', '5.2.2'
+  pod 'RevenueCatUI', '5.2.2'
 end

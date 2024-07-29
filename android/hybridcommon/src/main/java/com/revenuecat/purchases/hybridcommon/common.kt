@@ -37,6 +37,7 @@ import com.revenuecat.purchases.models.googleProduct
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
+import com.revenuecat.purchases.syncPurchasesWith
 import java.net.URL
 
 @Deprecated(
@@ -471,6 +472,14 @@ fun getCustomerInfo(
 
 fun syncPurchases() {
     Purchases.sharedInstance.syncPurchases()
+}
+
+fun syncPurchases(
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.syncPurchasesWith(onError = { onResult.onError(it.map()) }) {
+        onResult.onReceived(it.map())
+    }
 }
 
 fun isAnonymous(): Boolean {

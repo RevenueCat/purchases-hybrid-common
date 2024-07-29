@@ -42,13 +42,6 @@ class PurchasesHybridCommonTests: QuickSpec {
             Logger.internalLogHandler = Logger.defaultLogHandler
         }
 
-        context("automaticAppleSearchAdsAttributionCollection") {
-            it("sets value") {
-                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == false
-                CommonFunctionality.setAutomaticAppleSearchAdsAttributionCollection(true)
-                expect(Purchases.automaticAppleSearchAdsAttributionCollection) == true
-            }
-        }
 
         context("proxy url string") {
             it("parses the string and sets the url if valid") {

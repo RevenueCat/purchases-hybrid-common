@@ -69,28 +69,23 @@ internal extension StoreProduct {
             "subscriptionPeriod": NSNull(),
         ]
 
-        if #available(iOS 11.2, tvOS 11.2, macOS 10.13.2, *) {
-            dictionary["pricePerWeek"] = self.pricePerWeek
-            dictionary["pricePerMonth"] = self.pricePerMonth
-            dictionary["pricePerYear"] = self.pricePerYear
-            dictionary["pricePerWeekString"] = self.localizedPricePerWeek
-            dictionary["pricePerMonthString"] = self.localizedPricePerMonth
-            dictionary["pricePerYearString"] = self.localizedPricePerYear
+        dictionary["pricePerWeek"] = self.pricePerWeek
+        dictionary["pricePerMonth"] = self.pricePerMonth
+        dictionary["pricePerYear"] = self.pricePerYear
+        dictionary["pricePerWeekString"] = self.localizedPricePerWeek
+        dictionary["pricePerMonthString"] = self.localizedPricePerMonth
+        dictionary["pricePerYearString"] = self.localizedPricePerYear
 
-            if let introductoryDiscount = self.introductoryDiscount {
-                dictionary["introPrice"] = introductoryDiscount.rc_dictionary
-            }
-
-            if #available(iOS 12.2, tvOS 12.2, macOS 10.14.4, *) {
-                dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
-            }
-
-            if #available(watchOS 6.2, *) {
-                if let subscriptionPeriod = self.subscriptionPeriod {
-                    dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
-                }
-            }
+        if let introductoryDiscount = self.introductoryDiscount {
+            dictionary["introPrice"] = introductoryDiscount.rc_dictionary
         }
+
+        dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
+
+        if let subscriptionPeriod = self.subscriptionPeriod {
+            dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
+        }
+        
         return dictionary
     }
 

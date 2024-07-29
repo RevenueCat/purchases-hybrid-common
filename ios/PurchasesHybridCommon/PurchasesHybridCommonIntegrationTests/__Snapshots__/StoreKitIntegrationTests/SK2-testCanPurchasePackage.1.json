@@ -15,7 +15,7 @@
           "isActive" : true,
           "isSandbox" : true,
           "ownershipType" : "PURCHASED",
-          "periodType" : "INTRO",
+          "periodType" : "TRIAL",
           "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "productPlanIdentifier" : null,
           "store" : "APP_STORE",
@@ -33,7 +33,7 @@
           "isActive" : true,
           "isSandbox" : true,
           "ownershipType" : "PURCHASED",
-          "periodType" : "INTRO",
+          "periodType" : "TRIAL",
           "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
           "productPlanIdentifier" : null,
           "store" : "APP_STORE",
@@ -49,7 +49,7 @@
     "nonSubscriptionTransactions" : [
 
     ],
-    "originalApplicationVersion" : "1.0"
+    "originalApplicationVersion" : "1"
   },
   "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
   "transaction" : {

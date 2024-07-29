@@ -65,7 +65,7 @@ export enum REFUND_REQUEST_STATUS {
   /**
    * There was an error with the request. See message for more details.
    */
-  ERROR
+  ERROR,
 }
 
 /**
@@ -77,7 +77,7 @@ export enum LOG_LEVEL {
   DEBUG = "DEBUG",
   INFO = "INFO",
   WARN = "WARN",
-  ERROR = "ERROR"
+  ERROR = "ERROR",
 }
 
 /**
@@ -103,7 +103,7 @@ export enum IN_APP_MESSAGE_TYPE {
   /**
    * iOS-only. StoreKit generic messages.
    */
-  GENERIC = 2
+  GENERIC = 2,
 }
 
 /**
@@ -117,15 +117,15 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
   DISABLED = "DISABLED",
 
   /**
-     * Enable entitlement verification.
-     *
-     * If verification fails, this will be indicated with [VerificationResult.FAILED] in
-     * the [EntitlementInfos.verification] and [EntitlementInfo.verification] properties but parsing will not fail
-     * (i.e. Entitlements will still be granted).
-     *
-     * This can be useful if you want to handle verification failures to display an error/warning to the user
-     * or to track this situation but still grant access.
-     */
+   * Enable entitlement verification.
+   *
+   * If verification fails, this will be indicated with [VerificationResult.FAILED] in
+   * the [EntitlementInfos.verification] and [EntitlementInfo.verification] properties but parsing will not fail
+   * (i.e. Entitlements will still be granted).
+   *
+   * This can be useful if you want to handle verification failures to display an error/warning to the user
+   * or to track this situation but still grant access.
+   */
   INFORMATIONAL = "INFORMATIONAL",
 
   // Add ENFORCED mode once we're ready to ship it.
@@ -145,27 +145,27 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
  * @public
  */
 export enum VERIFICATION_RESULT {
-    /**
-     * No verification was done.
-     *
-     * This value is returned when verification is not enabled in PurchasesConfiguration
-     */
-    NOT_REQUESTED = "NOT_REQUESTED",
+  /**
+   * No verification was done.
+   *
+   * This value is returned when verification is not enabled in PurchasesConfiguration
+   */
+  NOT_REQUESTED = "NOT_REQUESTED",
 
-    /**
-     * Verification with our server was performed successfully.
-     */
-    VERIFIED = "VERIFIED",
+  /**
+   * Verification with our server was performed successfully.
+   */
+  VERIFIED = "VERIFIED",
 
-    /**
-     * Verification failed, possibly due to a MiTM attack.
-     */
-    FAILED = "FAILED",
+  /**
+   * Verification failed, possibly due to a MiTM attack.
+   */
+  FAILED = "FAILED",
 
-    /**
-     * Verification was performed on device.
-     */
-    VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE",
+  /**
+   * Verification was performed on device.
+   */
+  VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE",
 }
 
 /**
@@ -202,6 +202,29 @@ export enum PAYWALL_RESULT {
 }
 
 /**
+ * Defines which version of StoreKit may be used
+ * @public
+ */
+export enum STOREKIT_VERSION {
+  /**
+   * Always use StoreKit 1.
+   */
+  STOREKIT_1 = "STOREKIT_1",
+
+  /**
+   * Always use StoreKit 2 (StoreKit 1 will be used if StoreKit 2 is not available in the current device.)
+   * - Warning: Make sure you have an In-App Purchase Key configured in your app.
+   * Please see https://rev.cat/in-app-purchase-key-configuration for more info.
+   */
+  STOREKIT_2 = "STOREKIT_2",
+
+  /**
+   * Let RevenueCat use the most appropiate version of StoreKit
+   */
+  DEFAULT = "DEFAULT",
+}
+
+/**
  * Modes for completing the purchase process.
  * @public
  */
@@ -219,5 +242,5 @@ export enum PURCHASES_ARE_COMPLETED_BY {
   /**
    * RevenueCat will automatically acknowledge verified purchases. No action is required by you.
    */
-  REVENUECAT = "REVENUECAT"
+  REVENUECAT = "REVENUECAT",
 }

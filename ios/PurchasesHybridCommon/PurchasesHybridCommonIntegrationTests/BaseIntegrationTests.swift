@@ -6,18 +6,39 @@
 //  Copyright © 2022 RevenueCat. All rights reserved.
 //
 
+import PurchasesHybridCommon
+
 @testable import RevenueCat
 import SnapshotTesting
+import StoreKitTest
 import XCTest
 
 class BaseIntegrationTests: XCTestCase {
 
-    class var storeKit2Setting: StoreKit2Setting {
+    class var storeKitVersion: StoreKitVersion {
         return .default
     }
 
+    class var purchasesAreCompletedBy: PurchasesAreCompletedBy {
+        return .revenueCat
+    }
+
+    static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+
+    internal var testSession: SKTestSession!
+
     override func setUp() async throws {
         try await super.setUp()
+
+        self.testSession = try SKTestSession(configurationFileNamed: Constants.storeKitConfigFileName)
+        self.testSession.resetToDefaultState()
+        self.testSession.disableDialogs = true
+        self.testSession.clearTransactions()
+        if #available(iOS 15.2, *) {
+            self.testSession.timeRate = .monthlyRenewalEveryThirtySeconds
+        } else {
+            self.testSession.timeRate = .oneSecondIsOneDay
+        }
 
         // Avoid continuing with potentially bad data after a failed assertion
         // Unless snapshots are being recorded, since we need to record the entire test
@@ -36,13 +57,38 @@ class BaseIntegrationTests: XCTestCase {
         }
 
         self.clearReceiptIfExists()
+
+        // Initialize `Purchases` *after* the fresh new session has been created
+        // (and transactions has been cleared), to avoid the SDK posting receipts from
+        // a previous test.
         self.configurePurchases()
+
+        // SDK initialization begins with an initial request to offerings
+        // Which results in a get-create of the initial anonymous user.
+        // To avoid race conditions with when this request finishes and make all tests deterministic
+        // this waits for that request to finish.
+        _ = try await CommonFunctionality.offerings()
     }
 
     override func tearDown() {
         Purchases.clearSingleton()
 
         super.tearDown()
+    }
+
+    @MainActor
+    func assertSnapshot(
+        _ value: Any,
+        testName: String = #function,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let name = "\(Self.storeKitVersion.testSuffix)-\(testName)"
+        SnapshotTesting.assertSnapshot(matching: value,
+                                       as: .json,
+                                       file: file,
+                                       testName: name,
+                                       line: line)
     }
 
 }
@@ -65,11 +111,11 @@ private extension BaseIntegrationTests {
         _ = Purchases.configure(
             apiKey: Constants.apiKey,
             appUserID: nil,
-            purchasesAreCompletedBy: "REVENUECAT",
+            purchasesAreCompletedBy: Self.purchasesAreCompletedBy.name,
             userDefaultsSuiteName: Constants.userDefaultsSuiteName,
             platformFlavor: nil,
             platformFlavorVersion: nil,
-            usesStoreKit2IfAvailable: Self.storeKit2Setting == .enabledForCompatibleDevices,
+            storeKitVersion: Self.storeKitVersion.name,
             dangerousSettings: self.dangerousSettings
         )
         Purchases.logLevel = .debug

@@ -124,7 +124,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testDeprecatedAPI {
     [RCCommonFunctionality setAllowSharingStoreAccount:NO];
-    [RCCommonFunctionality setAutomaticAppleSearchAdsAttributionCollection:YES];
     
     if (@available(iOS 14.3, *)) {
         [RCCommonFunctionality enableAdServicesAttributionTokenCollection];

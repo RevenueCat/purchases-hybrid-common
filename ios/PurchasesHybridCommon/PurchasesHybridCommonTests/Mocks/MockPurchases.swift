@@ -676,4 +676,11 @@ extension MockPurchases: PurchasesSwiftType {
     func syncAttributesAndOfferingsIfNeeded() async throws -> RevenueCat.Offerings? {
         fatalError("Not mocked")
     }
+
+    @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
+    func recordPurchase(
+        _ purchaseResult: Product.PurchaseResult
+    ) async throws -> RevenueCat.StoreTransaction? {
+        fatalError("Not mocked")
+    }
 }

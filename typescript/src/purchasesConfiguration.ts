@@ -1,4 +1,8 @@
-import { ENTITLEMENT_VERIFICATION_MODE, PURCHASES_ARE_COMPLETED_BY } from "./enums";
+import {
+  ENTITLEMENT_VERIFICATION_MODE,
+  STOREKIT_VERSION,
+  PURCHASES_ARE_COMPLETED_BY,
+} from "./enums";
 
 /**
  * Holds parameters to initialize the SDK.
@@ -25,7 +29,7 @@ export interface PurchasesConfiguration {
    * want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have
    * to acknowledge the purchases yourself.
    */
-  purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY,
+  purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
   /**
    * An optional string. iOS-only, will be ignored for Android.
    * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
@@ -34,16 +38,17 @@ export interface PurchasesConfiguration {
   userDefaultsSuiteName?: string;
   /**
    * iOS-only, will be ignored for Android.
-   * Set this to TRUE to enable StoreKit2.
-   * Default is FALSE.
    *
-   * @deprecated RevenueCat currently uses StoreKit 1 for purchases, as its stability in production scenarios has
-   * proven to be more performant than StoreKit 2.
-   * We're collecting more data on the best approach, but StoreKit 1 vs StoreKit 2 is an implementation detail
-   * that you shouldn't need to care about.
-   * We recommend not using this parameter, letting RevenueCat decide for you which StoreKit implementation to use.
+   * By selecting the DEFAULT value, RevenueCat will automatically select the most appropriate StoreKit version
+   * for the app's runtime environment.
+   *
+   * - Warning: Make sure you have an In-App Purchase Key configured in your app.
+   * Please see https://rev.cat/in-app-purchase-key-configuration for more info.
+   *
+   * - Note: StoreKit 2 is only available on iOS 16+. StoreKit 1 will be used for previous iOS versions
+   * regardless of this setting.
    */
-  usesStoreKit2IfAvailable?: boolean;
+  storeKitVersion?: STOREKIT_VERSION;
   /**
    * An optional boolean. Android only. Required to configure the plugin to be used in the Amazon Appstore.
    */

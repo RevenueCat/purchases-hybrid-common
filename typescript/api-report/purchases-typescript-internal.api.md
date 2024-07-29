@@ -315,10 +315,9 @@ export interface PurchasesConfiguration {
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
     shouldShowInAppMessagesAutomatically?: boolean;
+    storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
     userDefaultsSuiteName?: string;
-    // @deprecated
-    usesStoreKit2IfAvailable?: boolean;
 }
 
 // @public
@@ -491,6 +490,13 @@ export enum REFUND_REQUEST_STATUS {
 
 // @public
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => void;
+
+// @public
+export enum STOREKIT_VERSION {
+    DEFAULT = "DEFAULT",
+    STOREKIT_1 = "STOREKIT_1",
+    STOREKIT_2 = "STOREKIT_2"
+}
 
 // @public
 export interface SubscriptionOption {

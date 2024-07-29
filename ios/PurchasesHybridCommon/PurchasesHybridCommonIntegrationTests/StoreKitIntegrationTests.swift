@@ -17,44 +17,62 @@ import XCTest
 
 class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
-    override class var storeKit2Setting: StoreKit2Setting { return .enabledForCompatibleDevices }
+    override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
 
+}
+
+class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
+
+    override class var purchasesAreCompletedBy: PurchasesAreCompletedBy {
+        return .myApp
+    }
+
+    override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
+
+    func testRecordPurchase() async throws {
+        guard let product = try await Product.products(for: [Self.productIdentifier]).first else {
+            fail("The product to purchase should not be nil.")
+            return
+        }
+        let purchaseResult = try await product.purchase()
+        expect(purchaseResult).toNot(beNil(), description: "The purchase result should not be nil.")
+
+        let (dict, error) = try await withCheckedThrowingContinuation { continuation in
+            CommonFunctionality.recordPurchase(productID: Self.productIdentifier) { (dict, error) in
+                continuation.resume(returning: (dict, error))
+            }
+
+        }
+        expect(error).to(
+            beNil(),
+            description: "The error returned by recordPurchase() should be nil, got \(error.debugDescription)."
+        )
+        var unwrappedDict = try XCTUnwrap(dict)
+        removeDates(&unwrappedDict)
+        await self.assertSnapshot(unwrappedDict)
+    }
+
+    func testHandleObserverModeTransactionMissingTransaction() async throws {
+        let (dict, error) = try await withCheckedThrowingContinuation { continuation in
+            CommonFunctionality.recordPurchase(productID: "invalid_product_id") { (dict, error) in
+                continuation.resume(returning: (dict, error))
+            }
+        }
+        expect(error?.error).to(matchError(ErrorCode.unknownError))
+        expect(dict).to(beNil())
+    }
 }
 
 class StoreKit1IntegrationTests: BaseIntegrationTests {
 
-    private var testSession: SKTestSession!
 
     override class func setUp() {
         // Uncomment this to re-record snapshots if necessary:
         // isRecording = true
     }
 
-    override func setUp() async throws {
-        self.testSession = try SKTestSession(configurationFileNamed: Constants.storeKitConfigFileName)
-        self.testSession.resetToDefaultState()
-        self.testSession.disableDialogs = true
-        self.testSession.clearTransactions()
-        if #available(iOS 15.2, *) {
-            self.testSession.timeRate = .monthlyRenewalEveryThirtySeconds
-        } else {
-            self.testSession.timeRate = .oneSecondIsOneDay
-        }
-
-        // Initialize `Purchases` *after* the fresh new session has been created
-        // (and transactions has been cleared), to avoid the SDK posting receipts from
-        // a previous test.
-        try await super.setUp()
-
-        // SDK initialization begins with an initial request to offerings
-        // Which results in a get-create of the initial anonymous user.
-        // To avoid race conditions with when this request finishes and make all tests deterministic
-        // this waits for that request to finish.
-        _ = try await CommonFunctionality.offerings()
-    }
-
-    override class var storeKit2Setting: StoreKit2Setting {
-        return .disabled
+    override class var storeKitVersion: StoreKitVersion {
+        return .storeKit1
     }
 
     func testCanGetOfferings() async throws {
@@ -87,15 +105,15 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(data)
     }
 
+    @available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, visionOS 1.0, *)
     func testPurchaseFailuresAreReportedCorrectly() async throws {
-        self.testSession.failTransactionsEnabled = true
-        self.testSession.failureError = .invalidSignature
+        try await self.testSession.setSimulatedError(.purchase(.purchaseNotAllowed), forAPI: .purchase)
 
         do {
             try await self.purchaseMonthlyOffering()
             fail("Expected error")
         } catch {
-            expect(error).to(matchError(ErrorCode.invalidPromotionalOfferError))
+            expect(error).to(matchError(ErrorCode.purchaseNotAllowedError))
         }
     }
 
@@ -116,7 +134,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     }
 
     func testTrialOrIntroductoryPriceEligibility() async throws {
-        if Self.storeKit2Setting == .disabled {
+        if Self.storeKitVersion == .storeKit1 {
             // SK1 implementation relies on the receipt being loaded already.
             // See `TrialOrIntroPriceEligibilityChecker.sk1CheckEligibility`
             _ = try await CommonFunctionality.restorePurchases()
@@ -174,27 +192,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
 
 private extension StoreKit1IntegrationTests {
 
-    @MainActor
-    func assertSnapshot(
-        _ value: Any,
-        testName: String = #function,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) {
-        let name = "\(Self.storeKit2Setting.testSuffix)-\(testName)"
-        SnapshotTesting.assertSnapshot(matching: value,
-                                       as: .json,
-                                       file: file,
-                                       testName: name,
-                                       line: line)
-    }
-
-}
-
-private extension StoreKit1IntegrationTests {
-
     static let entitlementIdentifier = "premium"
-    static let productIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
 
     static let discountIdentifier = "com.revenuecat.purchases_hybrid_common.monthly_19.99.discount"
 
@@ -239,12 +237,12 @@ private extension StoreKit1IntegrationTests {
 
 }
 
-private extension StoreKit2Setting {
+internal extension StoreKitVersion {
 
     var testSuffix: String {
         switch self {
-        case .disabled, .enabledOnlyForOptimizations: return "SK1"
-        case .enabledForCompatibleDevices: return "SK2"
+        case .storeKit1: return "SK1"
+        case .storeKit2: return "SK2"
         }
     }
 
