@@ -228,7 +228,7 @@ export enum STOREKIT_VERSION {
  * Modes for completing the purchase process.
  * @public
  */
-export enum PURCHASES_ARE_COMPLETED_BY_VALUE {
+export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
   /**
    * RevenueCat will **not** automatically acknowledge any purchases. You will have to do so manually.
    *
@@ -245,11 +245,44 @@ export enum PURCHASES_ARE_COMPLETED_BY_VALUE {
   REVENUECAT = "REVENUECAT",
 }
 
+/**
+ * Configuration option that specifies that your app will complete purchases.
+ * @public
+ */
 export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
-  type: PURCHASES_ARE_COMPLETED_BY_VALUE.MY_APP;
+  type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP;
+
+  /**
+   * The version of StoreKit that your app is using to make purchases. This value is ignored
+   * on Android, so if your app is Android-only, you may provide any value.
+   */
   storeKitVersion: STOREKIT_VERSION;
 };
 
+/**
+ * Allows you to specify whether you want RevenueCat to complete your app's purchases
+ * or if your app will do so.
+ *
+ * You can configure RevenueCat to complete your purchases like so:
+ * ```typescript
+ * Purchases.configure({
+ *  apiKey: "123",
+ *  purchasesAreCompletedBy: PURCHASES_ARE_COMPLETED_BY.MY_APP,
+ * });
+ * ```
+ *
+ * You can specify that purchase are completed by your app like so:
+ * ```typescript
+ * Purchases.configure({
+ *  apiKey: "123",
+ *  purchasesAreCompletedBy: {
+ *    type: PURCHASES_ARE_COMPLETED_BY.MY_APP,
+ *    storeKitVersion: STOREKIT_VERSION.STOREKIT_1
+ *  },
+ * });
+ * ```
+ * @public
+ */
 export type PURCHASES_ARE_COMPLETED_BY =
-  | PURCHASES_ARE_COMPLETED_BY_VALUE.REVENUECAT
+  | PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT
   | PURCHASES_ARE_COMPLETED_BY_MY_APP;
