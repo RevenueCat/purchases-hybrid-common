@@ -226,15 +226,6 @@ export enum PURCHASE_TYPE {
 }
 
 // @public
-export type PURCHASES_ARE_COMPLETED_BY = PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT | PURCHASES_ARE_COMPLETED_BY_MY_APP;
-
-// @public
-export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
-    type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP;
-    storeKitVersion: STOREKIT_VERSION;
-};
-
-// @public
 export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
     MY_APP = "MY_APP",
     REVENUECAT = "REVENUECAT"
@@ -315,12 +306,21 @@ export enum PURCHASES_ERROR_CODE {
 }
 
 // @public
+export type PurchasesAreCompletedBy = PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT | PurchasesAreCompletedByMyApp;
+
+// @public
+export type PurchasesAreCompletedByMyApp = {
+    type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP;
+    storeKitVersion: STOREKIT_VERSION;
+};
+
+// @public
 export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
-    purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
+    purchasesAreCompletedBy?: PurchasesAreCompletedBy;
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;

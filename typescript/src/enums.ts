@@ -249,7 +249,7 @@ export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
  * Configuration option that specifies that your app will complete purchases.
  * @public
  */
-export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
+export type PurchasesAreCompletedByMyApp = {
   type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP;
 
   /**
@@ -283,6 +283,6 @@ export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
  * ```
  * @public
  */
-export type PURCHASES_ARE_COMPLETED_BY =
+export type PurchasesAreCompletedBy =
   | PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT
-  | PURCHASES_ARE_COMPLETED_BY_MY_APP;
+  | PurchasesAreCompletedByMyApp;
