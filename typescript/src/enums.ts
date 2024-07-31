@@ -267,7 +267,7 @@ export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
  * ```typescript
  * Purchases.configure({
  *  apiKey: "123",
- *  purchasesAreCompletedBy: PURCHASES_ARE_COMPLETED_BY.MY_APP,
+ *  purchasesAreCompletedBy: PURCHASES_ARE_COMPLETED_BY.REVENUECAT,
  * });
  * ```
  *
