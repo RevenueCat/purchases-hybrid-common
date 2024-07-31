@@ -226,7 +226,16 @@ export enum PURCHASE_TYPE {
 }
 
 // @public
-export enum PURCHASES_ARE_COMPLETED_BY {
+export type PURCHASES_ARE_COMPLETED_BY = PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT | PURCHASES_ARE_COMPLETED_BY_MY_APP;
+
+// @public
+export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
+    type: PURCHASES_ARE_COMPLETED_BY_TYPE.MY_APP;
+    storeKitVersion: STOREKIT_VERSION;
+};
+
+// @public
+export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
     MY_APP = "MY_APP",
     REVENUECAT = "REVENUECAT"
 }
@@ -310,8 +319,6 @@ export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
-    // @deprecated
-    observerMode?: boolean;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
     shouldShowInAppMessagesAutomatically?: boolean;
