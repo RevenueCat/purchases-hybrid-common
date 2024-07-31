@@ -18,9 +18,12 @@ export interface PurchasesConfiguration {
    */
   appUserID?: string | null;
   /**
-   * Set this to MY_APP if you have your own IAP implementation and
-   * want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have
-   * to acknowledge the purchases yourself.
+   * Set this to MY_APP and provide a STOREKIT_VERSION if you have your own IAP implementation and
+   * want to only use RevenueCat's backend. Defaults to PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT.
+   *
+   * If you are on Android and setting this to MY_APP, will have to acknowledge the purchases yourself.
+   * If your app is only on Android, you may specify any StoreKit version, as it is ignored by the
+   * Android SDK.
    */
   purchasesAreCompletedBy?: PurchasesAreCompletedBy;
   /**
