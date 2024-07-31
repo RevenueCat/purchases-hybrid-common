@@ -1,3 +1,9 @@
+## 13.0.0
+### Breaking Changes
+* Require STOREKIT_VERSION when PURCHASES_ARE_COMPLETED_BY is MY_APP (#884) via Will Taylor (@fire-at-will)
+### Dependency Updates
+* Bump fastlane from 2.221.1 to 2.222.0 (#880) via dependabot[bot] (@dependabot[bot])
+
 ## 12.0.0
 ### Breaking Changes
 * Update Android to v8 of the native SDK (#859) via Toni Rico (@tonidero)
