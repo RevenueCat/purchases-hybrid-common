@@ -1,7 +1,7 @@
 import {
   ENTITLEMENT_VERIFICATION_MODE,
   STOREKIT_VERSION,
-  PURCHASES_ARE_COMPLETED_BY,
+  PurchasesAreCompletedBy,
 } from "./enums";
 
 /**
@@ -18,18 +18,14 @@ export interface PurchasesConfiguration {
    */
   appUserID?: string | null;
   /**
-   * An optional boolean. Set this to TRUE if you have your own IAP implementation and
-   * want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have
-   * to acknowledge the purchases yourself.
-   * @deprecated Use purchasesAreCompletedBy instead.
+   * Set this to MY_APP and provide a STOREKIT_VERSION if you have your own IAP implementation and
+   * want to only use RevenueCat's backend. Defaults to PURCHASES_ARE_COMPLETED_BY_TYPE.REVENUECAT.
+   *
+   * If you are on Android and setting this to MY_APP, will have to acknowledge the purchases yourself.
+   * If your app is only on Android, you may specify any StoreKit version, as it is ignored by the
+   * Android SDK.
    */
-  observerMode?: boolean;
-  /**
-   * Set this to MY_APP if you have your own IAP implementation and
-   * want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have
-   * to acknowledge the purchases yourself.
-   */
-  purchasesAreCompletedBy?: PURCHASES_ARE_COMPLETED_BY;
+  purchasesAreCompletedBy?: PurchasesAreCompletedBy;
   /**
    * An optional string. iOS-only, will be ignored for Android.
    * Set this if you would like the RevenueCat SDK to store its preferences in a different NSUserDefaults
