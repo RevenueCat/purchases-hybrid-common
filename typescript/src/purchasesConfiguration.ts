@@ -18,13 +18,6 @@ export interface PurchasesConfiguration {
    */
   appUserID?: string | null;
   /**
-   * An optional boolean. Set this to TRUE if you have your own IAP implementation and
-   * want to use only RevenueCat's backend. Default is FALSE. If you are on Android and setting this to ON, you will have
-   * to acknowledge the purchases yourself.
-   * @deprecated Use purchasesAreCompletedBy instead.
-   */
-  observerMode?: boolean;
-  /**
    * Set this to MY_APP if you have your own IAP implementation and
    * want to use only RevenueCat's backend. Default is REVENUECAT. If you are on Android and setting this to MY_APP, you will have
    * to acknowledge the purchases yourself.

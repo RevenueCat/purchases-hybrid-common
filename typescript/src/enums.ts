@@ -228,7 +228,7 @@ export enum STOREKIT_VERSION {
  * Modes for completing the purchase process.
  * @public
  */
-export enum PURCHASES_ARE_COMPLETED_BY {
+export enum PURCHASES_ARE_COMPLETED_BY_VALUE {
   /**
    * RevenueCat will **not** automatically acknowledge any purchases. You will have to do so manually.
    *
@@ -244,3 +244,12 @@ export enum PURCHASES_ARE_COMPLETED_BY {
    */
   REVENUECAT = "REVENUECAT",
 }
+
+export type PURCHASES_ARE_COMPLETED_BY_MY_APP = {
+  type: PURCHASES_ARE_COMPLETED_BY_VALUE.MY_APP;
+  storeKitVersion: STOREKIT_VERSION;
+};
+
+export type PURCHASES_ARE_COMPLETED_BY =
+  | PURCHASES_ARE_COMPLETED_BY_VALUE.REVENUECAT
+  | PURCHASES_ARE_COMPLETED_BY_MY_APP;
