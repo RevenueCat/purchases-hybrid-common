@@ -1,3 +1,7 @@
+## 13.0.2
+### Other Changes
+* StoreKitVersion Docstring Typo Fix (#894) via Will Taylor (@fire-at-will)
+
 ## 13.0.1
 ### Dependency Updates
 * [AUTOMATIC] iOS 5.2.2 => 5.2.3 Android 8.3.1 => 8.4.0 (#890) via RevenueCat Git Bot (@RCGitBot)
