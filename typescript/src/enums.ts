@@ -219,7 +219,7 @@ export enum STOREKIT_VERSION {
   STOREKIT_2 = "STOREKIT_2",
 
   /**
-   * Let RevenueCat use the most appropiate version of StoreKit
+   * Let RevenueCat use the most appropriate version of StoreKit
    */
   DEFAULT = "DEFAULT",
 }
