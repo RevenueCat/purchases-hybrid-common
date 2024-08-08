@@ -1,7 +1,3 @@
-### Breaking Changes
-
-- Require STOREKIT_VERSION when PURCHASES_ARE_COMPLETED_BY is MY_APP (#884) via Will Taylor (@fire-at-will)
-
 ### Dependency Updates
-
-- Bump fastlane from 2.221.1 to 2.222.0 (#880) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] iOS 5.2.2 => 5.2.3 Android 8.3.1 => 8.4.0 (#890) via RevenueCat Git Bot (@RCGitBot)
+* Bump danger from 9.4.3 to 9.5.0 (#888) via dependabot[bot] (@dependabot[bot])
