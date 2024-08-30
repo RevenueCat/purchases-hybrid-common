@@ -1,3 +1,8 @@
+## 13.2.0
+### Dependency Updates
+* [AUTOMATIC] Android 8.6.0 => 8.7.0 (#906) via RevenueCat Git Bot (@RCGitBot)
+* Bump rexml from 3.3.3 to 3.3.6 (#905) via dependabot[bot] (@dependabot[bot])
+
 ## 13.1.0
 ### Dependency Updates
 * iOS 5.2.3 => 5.3.0 Android 8.4.0 => 8.6.0 (#903) via Toni Rico (@tonidero)
