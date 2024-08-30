@@ -1,8 +1,5 @@
 ### Dependency Updates
-* iOS 5.2.3 => 5.3.0 Android 8.4.0 => 8.6.0 (#903) via Toni Rico (@tonidero)
-* Bump lefthook from 1.7.12 to 1.7.14 (#899) via dependabot[bot] (@dependabot[bot])
-* Bump lefthook from 1.6.18 to 1.7.12 (#896) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane-plugin-revenuecat_internal from `d5f0742` to `4c4b8ce` (#897) via dependabot[bot] (@dependabot[bot])
-* Bump rexml from 3.2.9 to 3.3.3 (#893) via dependabot[bot] (@dependabot[bot])
-### Other Changes
-* StoreKitVersion Docstring Typo Fix (#894) via Will Taylor (@fire-at-will)
+* [AUTOMATIC] iOS 5.3.0 => 5.3.1 (#909) via RevenueCat Git Bot (@RCGitBot)
+* Bump fastlane-plugin-revenuecat_internal from `4c4b8ce` to `85e1c83` (#901) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] Android 8.6.0 => 8.7.0 (#906) via RevenueCat Git Bot (@RCGitBot)
+* Bump rexml from 3.3.3 to 3.3.6 (#905) via dependabot[bot] (@dependabot[bot])
