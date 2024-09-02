@@ -10,6 +10,16 @@ import Foundation
 import StoreKit
 import RevenueCat
 
+@objc public extension StoreProductDiscount {
+    
+    // Re-exports price property with a different name to avoid recursion.
+
+    @objc var priceAmount: NSDecimalNumber {
+        return self.priceDecimalNumber
+    }
+
+}
+
 internal extension StoreProductDiscount {
 
     var rc_currencyCode: String? {
