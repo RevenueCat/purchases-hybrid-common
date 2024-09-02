@@ -14,7 +14,7 @@ import StoreKit
     
     // Re-exports price properties with different names to avoid recursion.
 
-    @objc(price) var priceAmount: NSDecimalNumber {
+    @objc var priceAmount: NSDecimalNumber {
         return self.priceDecimalNumber
     }
 

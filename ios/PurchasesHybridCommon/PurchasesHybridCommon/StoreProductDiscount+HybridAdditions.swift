@@ -14,7 +14,7 @@ import RevenueCat
     
     // Re-exports price property with a different name to avoid recursion.
 
-    @objc(price) var priceAmount: NSDecimalNumber {
+    @objc var priceAmount: NSDecimalNumber {
         return self.priceDecimalNumber
     }
 
