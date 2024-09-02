@@ -12,7 +12,11 @@ import StoreKit
 
 @objc public extension StoreProduct {
     
-    // Re-exports pricePerPeriod properties with different names to avoid recursion.
+    // Re-exports price properties with different names to avoid recursion.
+
+    @objc(price) var priceAmount: NSDecimalNumber {
+        return self.priceDecimalNumber
+    }
 
     @available(iOS 11.2, macOS 10.13.2, tvOS 11.2, watchOS 6.2, *)
     @objc var pricePerWeekAmount: NSDecimalNumber? {
