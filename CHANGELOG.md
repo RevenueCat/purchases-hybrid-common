@@ -1,3 +1,7 @@
+## 13.2.1
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `85e1c83` to `5140dbc` (#914) via dependabot[bot] (@dependabot[bot])
+
 ## 13.2.0
 ### Dependency Updates
 * Bump lefthook from 1.7.14 to 1.7.15 (#912) via dependabot[bot] (@dependabot[bot])
