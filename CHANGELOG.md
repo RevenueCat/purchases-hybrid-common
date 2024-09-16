@@ -1,3 +1,10 @@
+## 13.2.1
+### Dependency Updates
+* Bump fastlane-plugin-revenuecat_internal from `85e1c83` to `5140dbc` (#914) via dependabot[bot] (@dependabot[bot])
+### Other Changes
+* [AUTOMATIC] iOS 5.3.2 => 5.3.3 Android 8.7.1 => 8.7.2 (#918) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.3.1 => 5.3.2 Android 8.7.0 => 8.7.1 (#916) via RevenueCat Git Bot (@RCGitBot)
+
 ## 13.2.0
 ### Dependency Updates
 * Bump lefthook from 1.7.14 to 1.7.15 (#912) via dependabot[bot] (@dependabot[bot])
