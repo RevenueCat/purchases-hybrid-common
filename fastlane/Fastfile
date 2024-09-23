@@ -24,11 +24,13 @@ files_with_version_number_without_prerelease_modifiers = {
     './ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Info.plist' => PLIST_VERSION_PATTERNS,
 }
 POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
+SPM_VERSION_PATTERNS = ['.package(url: "https://github.com/RevenueCat/purchases-ios-spm", exact: "{x}"),']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
     'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
+    'Package.swift' => SPM_VERSION_PATTERNS,
 }
 
 files_to_update_android_dependency = {
