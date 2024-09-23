@@ -25,12 +25,14 @@ files_with_version_number_without_prerelease_modifiers = {
 }
 POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 SPM_VERSION_PATTERNS = ['.package(url: "https://github.com/RevenueCat/purchases-ios-spm", exact: "{x}"),']
+SPM_RESOLVED_VERSION_PATTERNS = ['        "version" : "{x}"']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
     'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
     'Package.swift' => SPM_VERSION_PATTERNS,
+    'Package.resolved' => SPM_RESOLVED_VERSION_PATTERNS,
 }
 
 files_to_update_android_dependency = {
@@ -266,6 +268,16 @@ private_lane :update_ios_native_version do |options|
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
     files_to_update: files_to_update_ios_dependency
+  )
+
+  # Updating the commit hash in Package.resolved.
+  ios_spm_repository = "https://github.com/RevenueCat/purchases-ios-spm"
+  previous_commit_hash = get_commit_hash_for_tag(ios_spm_repository, previous_version_number)
+  new_commit_hash = get_commit_hash_for_tag(ios_spm_repository, new_version_number)
+  replace_text_in_files(
+    previous_text: previous_commit_hash,
+    new_text: new_commit_hash,
+    paths_of_files_to_update: ["Package.resolved"]
   )
 end
 
@@ -536,4 +548,8 @@ def detect_bump_type(a, b)
   else
     return :major
   end
+end
+
+def get_commit_hash_for_tag(repository, tag)
+  sh("git ls-remote --tags #{repository} | grep refs/tags/#{tag}^{} | cut -f 1 | tr -d '\n'")
 end
