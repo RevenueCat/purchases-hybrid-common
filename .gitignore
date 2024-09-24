@@ -3,6 +3,8 @@ ios/purchases-common-build
 ios/PurchasesHybridCommon/Pods/
 *.bck
 fastlane/report.xml
+.build
+**/xcuserdata/
 
 android/.composite-enable
 android/caches/
