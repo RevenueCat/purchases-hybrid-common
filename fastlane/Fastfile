@@ -186,9 +186,9 @@ lane :open_pr_upgrading_dependencies do |options|
 
     message = "[AUTOMATIC] #{message_ios}#{message_android}".strip
 
-    labels = ["dependencies"]
+    labels = ["pr:dependencies"]
     if type_of_bump_ios == :minor || type_of_bump_android == :minor
-      labels << "minor"
+      labels << "pr:force_minor"
     end
 
     create_pull_request(
