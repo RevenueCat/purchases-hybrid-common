@@ -52,7 +52,7 @@ internal class ConfiguringUnitTests {
         )
         assertConfiguration(
             purchasesConfigurationSlot,
-            expectedContext = mockContext,
+            expectedContext = mockApplicationContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
             expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
@@ -71,7 +71,7 @@ internal class ConfiguringUnitTests {
         )
         assertConfiguration(
             purchasesConfigurationSlot,
-            expectedContext = mockContext,
+            expectedContext = mockApplicationContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
             expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP,
@@ -90,7 +90,7 @@ internal class ConfiguringUnitTests {
         )
         assertConfiguration(
             purchasesConfigurationSlot,
-            expectedContext = mockContext,
+            expectedContext = mockApplicationContext,
             expectedApiKey = "api_key",
             expectedAppUserID = "appUserID",
             expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
@@ -108,7 +108,7 @@ internal class ConfiguringUnitTests {
         )
         assertConfiguration(
             purchasesConfigurationSlot,
-            expectedContext = mockContext,
+            expectedContext = mockApplicationContext,
             expectedApiKey = "api_key",
             expectedAppUserID = null,
             expectedPurchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT,
