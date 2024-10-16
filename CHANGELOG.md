@@ -1,3 +1,8 @@
+## 13.6.0
+## RevenueCat SDK
+### ✨ New Features
+* Adds `Offerings.currentOfferingForPlacement()` (#938) via JayShortway (@JayShortway)
+
 ## 13.5.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
