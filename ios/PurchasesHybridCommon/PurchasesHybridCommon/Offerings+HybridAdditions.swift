@@ -13,7 +13,7 @@ import RevenueCat
     
     // Re-exports currentOfferingForPlacement function for use in hybrids.
 
-    @objc func currentOfferingForPlacement(placementIdentifier: String) -> Offering? {
+    @objc func currentOfferingForPlacement(_ placementIdentifier: String) -> Offering? {
         return self.currentOffering(forPlacement: placementIdentifier)
     }
 
