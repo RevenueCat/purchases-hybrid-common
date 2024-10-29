@@ -181,5 +181,4 @@ internal class StoreProductIntroPriceMapperTests {
         )
         assertThat(expected).isEqualTo(received)
     }
-
 }
