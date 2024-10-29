@@ -1,3 +1,3 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Adds `Offerings.currentOfferingForPlacement()` (#938) via JayShortway (@JayShortway)
+* Support SK win-back offer messages (#947) via Will Taylor (@fire-at-will)

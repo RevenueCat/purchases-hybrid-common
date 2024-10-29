@@ -1,3 +1,8 @@
+## 13.7.0
+## RevenueCat SDK
+### ✨ New Features
+* Support SK win-back offer messages (#947) via Will Taylor (@fire-at-will)
+
 ## 13.6.0
 ## RevenueCat SDK
 ### ✨ New Features
