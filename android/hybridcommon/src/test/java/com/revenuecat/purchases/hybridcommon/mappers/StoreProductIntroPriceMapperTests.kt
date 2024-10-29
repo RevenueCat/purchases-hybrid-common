@@ -166,7 +166,7 @@ internal class StoreProductIntroPriceMapperTests {
     }
 
     @Test
-    fun `when mapping a AmazonStoreProduct with free trial nor introductory price, intro price contains the free trial`() {
+    fun `when mapping a AmazonStoreProduct with free trial nor introductory price, introPrice has the free trial`() {
         val mockAmazonStoreProduct = mockk<AmazonStoreProduct>(relaxed = true)
         every { mockAmazonStoreProduct.priceCurrencyCode } returns "USD"
         every { mockAmazonStoreProduct.freeTrialPeriod } returns Period(1, Period.Unit.DAY, "P1D")
