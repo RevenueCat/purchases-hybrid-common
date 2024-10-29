@@ -104,6 +104,12 @@ export enum IN_APP_MESSAGE_TYPE {
    * iOS-only. StoreKit generic messages.
    */
   GENERIC = 2,
+
+  /**
+   * iOS-only. This message will show if the subscriber is eligible for an iOS win-back
+   * offer and will allow the subscriber to redeem the offer.
+   */
+  WIN_BACK_OFFER = 3,
 }
 
 /**

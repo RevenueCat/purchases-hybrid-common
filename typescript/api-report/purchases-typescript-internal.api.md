@@ -59,7 +59,8 @@ export interface GoogleProductChangeInfo {
 export enum IN_APP_MESSAGE_TYPE {
     BILLING_ISSUE = 0,
     GENERIC = 2,
-    PRICE_INCREASE_CONSENT = 1
+    PRICE_INCREASE_CONSENT = 1,
+    WIN_BACK_OFFER = 3
 }
 
 // @public
