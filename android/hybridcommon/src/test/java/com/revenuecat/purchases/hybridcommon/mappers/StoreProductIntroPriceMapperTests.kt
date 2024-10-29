@@ -1,5 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
+import com.revenuecat.purchases.amazon.AmazonStoreProduct
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
@@ -93,10 +94,10 @@ internal class StoreProductIntroPriceMapperTests {
     inner class MappingIntroPrice {
         @BeforeEach
         fun beforeEachTest() {
-            every { mockStoreProduct.freeTrialPeriod?.iso8601 } returns null
-            every { mockStoreProduct.introductoryPriceAmountMicros } returns 10_000_000
-            every { mockStoreProduct.introductoryPrice } returns "$10.00"
-            every { mockStoreProduct.introductoryPriceCycles } returns 2
+            every { mockStoreProduct.googleFreeTrialPeriod?.iso8601 } returns null
+            every { mockStoreProduct.googleIntroductoryPriceAmountMicros } returns 10_000_000
+            every { mockStoreProduct.googleIntroductoryPrice } returns "$10.00"
+            every { mockStoreProduct.googleIntroductoryPriceCycles } returns 2
         }
 
         private val expectedCommon = mapOf(
@@ -107,8 +108,8 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 7 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns null
-            every { mockStoreProduct.introductoryPricePeriod } returns Period(7, Period.Unit.DAY, "P7D")
+            every { mockStoreProduct.googleFreeTrialPeriod } returns null
+            every { mockStoreProduct.googleIntroductoryPricePeriod } returns Period(7, Period.Unit.DAY, "P7D")
             received = mockStoreProduct.mapIntroPrice()
             val expected = mapOf(
                 "period" to "P7D",
@@ -120,8 +121,8 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 1 month, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns null
-            every { mockStoreProduct.introductoryPricePeriod } returns Period(1, Period.Unit.MONTH, "P1M")
+            every { mockStoreProduct.googleFreeTrialPeriod } returns null
+            every { mockStoreProduct.googleIntroductoryPricePeriod } returns Period(1, Period.Unit.MONTH, "P1M")
             received = mockStoreProduct.mapIntroPrice()
 
             val expected = mapOf(
@@ -134,8 +135,8 @@ internal class StoreProductIntroPriceMapperTests {
 
         @Test
         fun `of 0 days, the map has the correct intro price values`() {
-            every { mockStoreProduct.freeTrialPeriod } returns null
-            every { mockStoreProduct.introductoryPricePeriod } returns Period(0, Period.Unit.DAY, "P0D")
+            every { mockStoreProduct.googleFreeTrialPeriod } returns null
+            every { mockStoreProduct.googleIntroductoryPricePeriod } returns Period(0, Period.Unit.DAY, "P0D")
             received = mockStoreProduct.mapIntroPrice()
 
             val expected = mapOf(
@@ -149,9 +150,35 @@ internal class StoreProductIntroPriceMapperTests {
 
     @Test
     fun `when mapping a StoreProduct with no free trial nor introductory price, intro price is null`() {
-        every { mockStoreProduct.freeTrialPeriod } returns null
-        every { mockStoreProduct.introductoryPrice } returns null
+        every { mockStoreProduct.googleFreeTrialPeriod } returns null
+        every { mockStoreProduct.googleIntroductoryPrice } returns null
         received = mockStoreProduct.mapIntroPrice()
         assertThat(received).isEqualTo(null)
+    }
+
+    @Test
+    fun `when mapping a AmazonStoreProduct with no free trial nor introductory price, intro price is null`() {
+        val mockAmazonStoreProduct = mockk<AmazonStoreProduct>(relaxed = true)
+
+        every { mockAmazonStoreProduct.freeTrialPeriod } returns null
+        received = mockAmazonStoreProduct.mapIntroPrice()
+        assertThat(received).isEqualTo(null)
+    }
+
+    @Test
+    fun `when mapping a AmazonStoreProduct with free trial nor introductory price, introPrice has the free trial`() {
+        val mockAmazonStoreProduct = mockk<AmazonStoreProduct>(relaxed = true)
+        every { mockAmazonStoreProduct.priceCurrencyCode } returns "USD"
+        every { mockAmazonStoreProduct.freeTrialPeriod } returns Period(1, Period.Unit.DAY, "P1D")
+        received = mockAmazonStoreProduct.mapIntroPrice()
+        val expected = mapOf(
+            "cycles" to 1,
+            "period" to "P1D",
+            "periodUnit" to "DAY",
+            "periodNumberOfUnits" to 1,
+            "price" to 0,
+            "priceString" to "$0.00",
+        )
+        assertThat(expected).isEqualTo(received)
     }
 }
