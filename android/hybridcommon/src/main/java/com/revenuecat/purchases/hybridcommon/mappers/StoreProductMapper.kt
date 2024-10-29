@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.amazon.AmazonStoreProduct
 import com.revenuecat.purchases.models.InstallmentsInfo
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
@@ -15,21 +16,22 @@ val StoreProduct.priceString: String
     get() = this.price.formatted
 val StoreProduct.priceCurrencyCode: String
     get() = this.price.currencyCode
-val StoreProduct.freeTrialPeriod: Period?
+
+val StoreProduct.googleFreeTrialPeriod: Period?
     get() = this.defaultOption?.freePhase?.billingPeriod
-val StoreProduct.freeTrialCycles: Int?
+val StoreProduct.googleFreeTrialCycles: Int?
     get() = this.defaultOption?.freePhase?.billingCycleCount
 
-private val StoreProduct.introductoryPhase: PricingPhase?
+private val StoreProduct.googleIntroductoryPhase: PricingPhase?
     get() = this.defaultOption?.introPhase
-val StoreProduct.introductoryPrice: String?
-    get() = this.introductoryPhase?.price?.formatted
-val StoreProduct.introductoryPricePeriod: Period?
-    get() = this.introductoryPhase?.billingPeriod
-val StoreProduct.introductoryPriceAmountMicros: Long
-    get() = this.introductoryPhase?.price?.amountMicros ?: 0
-val StoreProduct.introductoryPriceCycles: Int
-    get() = this.introductoryPhase?.billingCycleCount ?: 0
+val StoreProduct.googleIntroductoryPrice: String?
+    get() = this.googleIntroductoryPhase?.price?.formatted
+val StoreProduct.googleIntroductoryPricePeriod: Period?
+    get() = this.googleIntroductoryPhase?.billingPeriod
+val StoreProduct.googleIntroductoryPriceAmountMicros: Long
+    get() = this.googleIntroductoryPhase?.price?.amountMicros ?: 0
+val StoreProduct.googleIntroductoryPriceCycles: Int
+    get() = this.googleIntroductoryPhase?.billingCycleCount ?: 0
 
 private const val DAYS_PER_WEEK = 7
 private const val MICROS_CONVERSION_METRIC = 1_000_000.0
@@ -102,37 +104,47 @@ internal fun StoreProduct.mapProductType(): String {
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal fun StoreProduct.mapIntroPrice(): Map<String, Any?>? {
-    return when {
-        freeTrialPeriod != null -> {
-            // Check freeTrialPeriod first to give priority to trials
-            // Format using device locale. iOS will format using App Store locale, but there's no way
-            // to figure out how the price in the SKUDetails is being formatted.
-            freeTrialPeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
-                mapOf(
-                    "price" to 0,
-                    "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
-                    "period" to freeTrialPeriod?.iso8601,
-                    "cycles" to (freeTrialCycles ?: 1),
-                ) + periodFields
-            }
+    return when (this) {
+        is AmazonStoreProduct -> freeTrialPeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
+            mapOf(
+                "price" to 0,
+                "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
+                "period" to freeTrialPeriod?.iso8601,
+                "cycles" to 1,
+            ) + periodFields
         }
-        introductoryPrice != null -> {
-            introductoryPricePeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
-                mapOf(
-                    "price" to introductoryPriceAmountMicros / MICROS_CONVERSION_METRIC,
-                    "priceString" to introductoryPrice,
-                    "period" to introductoryPricePeriod?.iso8601,
-                    "cycles" to introductoryPriceCycles,
-                ) + periodFields
+        else -> when {
+            googleFreeTrialPeriod != null -> {
+                // Check freeTrialPeriod first to give priority to trials
+                // Format using device locale. iOS will format using App Store locale, but there's no way
+                // to figure out how the price in the SKUDetails is being formatted.
+                googleFreeTrialPeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
+                    mapOf(
+                        "price" to 0,
+                        "priceString" to formatUsingDeviceLocale(priceCurrencyCode, 0),
+                        "period" to googleFreeTrialPeriod?.iso8601,
+                        "cycles" to (googleFreeTrialCycles ?: 1),
+                    ) + periodFields
+                }
             }
-        }
-        else -> {
-            null
+            googleIntroductoryPrice != null -> {
+                googleIntroductoryPricePeriod?.mapPeriodForStoreProduct()?.let { periodFields ->
+                    mapOf(
+                        "price" to googleIntroductoryPriceAmountMicros / MICROS_CONVERSION_METRIC,
+                        "priceString" to googleIntroductoryPrice,
+                        "period" to googleIntroductoryPricePeriod?.iso8601,
+                        "cycles" to googleIntroductoryPriceCycles,
+                    ) + periodFields
+                }
+            }
+            else -> {
+                null
+            }
         }
     }
 }
 
-private fun Period.mapPeriodForStoreProduct(): Map<String, Any?>? {
+private fun Period.mapPeriodForStoreProduct(): Map<String, Any?> {
     return when (this.unit) {
         Period.Unit.DAY -> mapOf(
             "periodUnit" to "DAY",
