@@ -256,7 +256,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (1.8.1)
+    lefthook (1.8.2)
     logger (1.6.1)
     mime-types (3.6.0)
       logger
