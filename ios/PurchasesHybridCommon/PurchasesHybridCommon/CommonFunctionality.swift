@@ -306,11 +306,9 @@ import RevenueCat
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    let purchaseParams = PurchaseParams.Builder(package: package)
-                        .with(promotionalOffer: promotionalOffer)
-                        .build()
-
-                    Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                    Self.sharedInstance.purchase(package: package,
+                                                 promotionalOffer: promotionalOffer,
+                                                 completion: hybridCompletion)
                     return
                 }
             }
