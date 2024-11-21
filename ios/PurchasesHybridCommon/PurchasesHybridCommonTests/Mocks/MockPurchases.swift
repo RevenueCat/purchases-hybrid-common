@@ -262,6 +262,41 @@ final class MockPurchases: PurchasesType {
         invokedPurchasePackageWithPromotionalOfferParametersList.append((package, promotionalOffer, completion))
     }
 
+    var invokedPurchaseParamsCompletion = false
+    var invokedPurchaseParamsCompletionCount = 0
+    var invokedPurchaseParamsCompletionParameters: (params: PurchaseParams, completion: PurchaseCompletedBlock)?
+    var invokedPurchaseParamsCompletionParametersList: [(params: PurchaseParams, completion: PurchaseCompletedBlock)] = []
+    func purchase(
+        _ params: PurchaseParams,
+        completion: @escaping PurchaseCompletedBlock
+    ) {
+        invokedPurchaseParamsCompletion = true
+        invokedPurchaseParamsCompletionCount += 1
+        invokedPurchaseParamsCompletionParameters = (params, completion)
+        invokedPurchaseParamsCompletionParametersList.append((params, completion))
+    }
+
+    var invokedEligibleWinBackOffersCompletion = false
+    var invokedEligibleWinBackOffersCompletionCount = 0
+    var invokedEligibleWinBackOffersCompletionParameters: (
+        product: StoreProduct,
+        completion: ([WinBackOffer]?, PublicError?) -> Void
+    )?
+    var invokedEligibleWinBackOffersCompletionParametersList: [(
+        product: StoreProduct,
+        completion: ([WinBackOffer]?, PublicError?) -> Void
+    )] = []
+    @available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
+    func eligibleWinBackOffers(
+        forProduct product: StoreProduct,
+        completion: @escaping @Sendable ([WinBackOffer]?, PublicError?) -> Void
+    ) {
+        invokedEligibleWinBackOffersCompletion = true
+        invokedEligibleWinBackOffersCompletionCount += 1
+        invokedEligibleWinBackOffersCompletionParameters = (product, completion)
+        invokedEligibleWinBackOffersCompletionParametersList.append((product, completion))
+    }
+
     var invokedInvalidateCustomerInfoCache = false
     var invokedInvalidateCustomerInfoCacheCount = 0
 
@@ -681,6 +716,17 @@ extension MockPurchases: PurchasesSwiftType {
     func recordPurchase(
         _ purchaseResult: Product.PurchaseResult
     ) async throws -> RevenueCat.StoreTransaction? {
+        fatalError("Not mocked")
+    }
+
+    @available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
+    func eligibleWinBackOffers(forProduct product: RevenueCat.StoreProduct) async throws -> [RevenueCat.WinBackOffer] {
+        fatalError("Not mocked")
+    }
+
+    func purchase(
+        _ params: PurchaseParams
+    ) async throws -> PurchaseResultData {
         fatalError("Not mocked")
     }
 }
