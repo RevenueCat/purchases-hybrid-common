@@ -317,78 +317,6 @@ import RevenueCat
 
     }
 
-    // MARK: - Purchasing with Win-Back Offers
-    @objc(purchaseProduct:winBackOfferID:completionBlock:)
-    static func purchase(product productIdentifier: String,
-                         winBackOfferID: String,
-                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
-
-        self.product(with: productIdentifier) { storeProduct in
-            guard let storeProduct = storeProduct else {
-                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
-                return
-            }
-
-            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
-                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
-                    completion(
-                        nil,
-                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
-                    )
-                    return
-                }
-
-                let purchaseParams = PurchaseParams.Builder(product: storeProduct)
-                    .with(winBackOffer: winBackOffer)
-                    .build()
-
-                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
-                return
-            }
-
-            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
-        }
-    }
-
-    @objc(purchasePackage:presentedOfferingContext:winBackOfferID:completionBlock:)
-    static func purchase(package packageIdentifier: String,
-                         presentedOfferingContext: [String: Any],
-                         winBackOfferID: String,
-                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
-
-        Self.package(
-            withIdentifier: packageIdentifier,
-            presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package in
-            guard let package = package else {
-                let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
-                completion(nil, error)
-                return
-            }
-
-            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
-                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
-                    completion(
-                        nil,
-                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
-                    )
-                    return
-                }
-
-                let purchaseParams = PurchaseParams.Builder(package: package)
-                    .with(winBackOffer: winBackOffer)
-                    .build()
-
-                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
-                return
-            }
-
-            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
-        }
-    }
-
     @objc(makeDeferredPurchase:completionBlock:)
     static func makeDeferredPurchase(_ startPurchase: StartPurchaseBlock,
                                      completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
@@ -745,6 +673,77 @@ import RevenueCat
 
                 completion(winBackDictionaries, nil)
             }
+        }
+    }
+
+    @objc(purchaseProduct:winBackOfferID:completionBlock:)
+    static func purchase(product productIdentifier: String,
+                         winBackOfferID: String,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+
+        self.product(with: productIdentifier) { storeProduct in
+            guard let storeProduct = storeProduct else {
+                completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                return
+            }
+
+            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
+                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
+                    completion(
+                        nil,
+                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
+                    )
+                    return
+                }
+
+                let purchaseParams = PurchaseParams.Builder(product: storeProduct)
+                    .with(winBackOffer: winBackOffer)
+                    .build()
+
+                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                return
+            }
+
+            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
+        }
+    }
+
+    @objc(purchasePackage:presentedOfferingContext:winBackOfferID:completionBlock:)
+    static func purchase(package packageIdentifier: String,
+                         presentedOfferingContext: [String: Any],
+                         winBackOfferID: String,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+
+        Self.package(
+            withIdentifier: packageIdentifier,
+            presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
+        ) { package in
+            guard let package = package else {
+                let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
+                completion(nil, error)
+                return
+            }
+
+            if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
+                guard let winBackOffer: WinBackOffer = self.winBackOffersByID[winBackOfferID] else {
+                    completion(
+                        nil,
+                        productNotFoundError(description: "Couldn't find win-back offer.", userCancelled: false)
+                    )
+                    return
+                }
+
+                let purchaseParams = PurchaseParams.Builder(package: package)
+                    .with(winBackOffer: winBackOffer)
+                    .build()
+
+                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                return
+            }
+
+            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
         }
     }
 }
