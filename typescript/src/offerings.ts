@@ -101,14 +101,14 @@ export interface PurchasesStoreProduct {
   readonly priceString: string;
   /**
    * Null for INAPP products. The price of the PurchasesStoreProduct in a weekly recurrence.
-   * This means that, for example, if the period is monthly, the price will be 
+   * This means that, for example, if the period is monthly, the price will be
    * divided by 4. Note that this value may be an approximation. For Google subscriptions,
    * this value will use the basePlan to calculate the value.
    */
   readonly pricePerWeek: number;
   /**
    * Null for INAPP products. The price of the PurchasesStoreProduct in a monthly recurrence.
-   * This means that, for example, if the period is annual, the price will be 
+   * This means that, for example, if the period is annual, the price will be
    * divided by 12. Note that this value may be an approximation. For Google subscriptions,
    * this value will use the basePlan to calculate the value.
    */
@@ -123,7 +123,7 @@ export interface PurchasesStoreProduct {
   /**
    * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
    * locale in a weekly recurrence. This means that, for example, if the period is monthly,
-   * the price will be divided by 4. It uses a currency formatter to format the price in the 
+   * the price will be divided by 4. It uses a currency formatter to format the price in the
    * given locale. Note that this value may be an approximation. For Google subscriptions,
    * this value will use the basePlan to calculate the value.
    */
@@ -131,7 +131,7 @@ export interface PurchasesStoreProduct {
   /**
    * Null for INAPP products. The price of the PurchasesStoreProduct formatted for the current
    * locale in a monthly recurrence. This means that, for example, if the period is annual,
-   * the price will be divided by 12. It uses a currency formatter to format the price in the 
+   * the price will be divided by 12. It uses a currency formatter to format the price in the
    * given locale. Note that this value may be an approximation. For Google subscriptions,
    * this value will use the basePlan to calculate the value.
    */
@@ -510,6 +510,12 @@ export interface PurchasesPromotionalOffer {
   readonly signature: string;
   readonly timestamp: number;
 }
+
+/**
+ * Holds the information about a Win-Back Offer in Apple's App Store.
+ * @public
+ */
+export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {}
 
 /**
  * Enum with possible proration modes in a subscription upgrade or downgrade in the Play Store. Used only for Google.
