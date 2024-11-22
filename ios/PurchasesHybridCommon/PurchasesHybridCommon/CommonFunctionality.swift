@@ -693,8 +693,8 @@ import RevenueCat
     /// - Parameters:
     ///   - productIdentifier: The identifier of the product to fetch win-back offers for.
     ///   - completion: A closure that receives an array of win-back offer dictionaries or an error container if something went wrong.
-    @objc(winBackOffersForProductIdentifier:completionBlock:)
-    static func winBackOffers(
+    @objc(eligibleWinBackOffersForProductIdentifier:completionBlock:)
+    static func eligibleWinBackOffers(
         for productIdentifier: String,
         completion: @escaping ([[String: Any]]?, ErrorContainer?) -> Void
     ) {

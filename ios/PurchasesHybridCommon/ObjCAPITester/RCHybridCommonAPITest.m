@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     // Win-Back Offers
-    [RCCommonFunctionality winBackOffersForProductIdentifier:@"" completionBlock:^(NSArray<NSDictionary *> * _Nullable offers, RCErrorContainer * _Nullable error) {
+    [RCCommonFunctionality eligibleWinBackOffersForProductIdentifier:@"" completionBlock:^(NSArray<NSDictionary *> * _Nullable offers, RCErrorContainer * _Nullable error) {
     }];
 
     [RCCommonFunctionality purchaseProduct:@""
