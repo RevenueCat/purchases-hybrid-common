@@ -78,6 +78,23 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
+    // Win-Back Offers
+    [RCCommonFunctionality eligibleWinBackOffersForProductIdentifier:@"" completionBlock:^(NSArray<NSDictionary *> * _Nullable offers, RCErrorContainer * _Nullable error) {
+    }];
+
+    [RCCommonFunctionality purchaseProduct:@""
+                            winBackOfferID:@""
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
+    }];
+
+    [RCCommonFunctionality purchasePackage:@""
+                  presentedOfferingContext:@{}
+                            winBackOfferID:@""
+                           completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                             RCErrorContainer * _Nullable error) {
+    }];
+
     [RCCommonFunctionality makeDeferredPurchase:^(void (^ _Nonnull startDeferredPurchase)
                                                   (RCStoreTransaction * _Nullable storeTransaction,
                                                    RCCustomerInfo * _Nullable customerInfo,

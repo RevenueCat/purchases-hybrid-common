@@ -483,6 +483,10 @@ export interface PurchasesStoreTransaction {
 }
 
 // @public
+export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {
+}
+
+// @public
 export enum RECURRENCE_MODE {
     FINITE_RECURRING = 2,
     INFINITE_RECURRING = 1,

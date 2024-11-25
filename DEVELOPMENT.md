@@ -26,3 +26,12 @@ In the  `android` directory run:
 ```
 
 Then "Sync Project with Gradle files" in Android Studio
+
+# Typescript
+
+## Update the Typescript API Report
+In the `/typescript` directory:
+
+```bash
+yarn build && yarn extract-api
+```
