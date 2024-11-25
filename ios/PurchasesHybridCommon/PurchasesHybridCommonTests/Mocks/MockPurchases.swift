@@ -276,13 +276,13 @@ final class MockPurchases: PurchasesType {
         invokedPurchaseParamsCompletionParametersList.append((params, completion))
     }
 
-    var invokedEligibleWinBackOffersCompletion = false
-    var invokedEligibleWinBackOffersCompletionCount = 0
-    var invokedEligibleWinBackOffersCompletionParameters: (
+    var invokedEligibleWinBackOffersForProductCompletion = false
+    var invokedEligibleWinBackOffersForProductCompletionCount = 0
+    var invokedEligibleWinBackOffersForProductCompletionParameters: (
         product: StoreProduct,
         completion: ([WinBackOffer]?, PublicError?) -> Void
     )?
-    var invokedEligibleWinBackOffersCompletionParametersList: [(
+    var invokedEligibleWinBackOffersForProductCompletionParametersList: [(
         product: StoreProduct,
         completion: ([WinBackOffer]?, PublicError?) -> Void
     )] = []
@@ -291,10 +291,49 @@ final class MockPurchases: PurchasesType {
         forProduct product: StoreProduct,
         completion: @escaping @Sendable ([WinBackOffer]?, PublicError?) -> Void
     ) {
-        invokedEligibleWinBackOffersCompletion = true
-        invokedEligibleWinBackOffersCompletionCount += 1
-        invokedEligibleWinBackOffersCompletionParameters = (product, completion)
-        invokedEligibleWinBackOffersCompletionParametersList.append((product, completion))
+        invokedEligibleWinBackOffersForProductCompletion = true
+        invokedEligibleWinBackOffersForProductCompletionCount += 1
+        invokedEligibleWinBackOffersForProductCompletionParameters = (product, completion)
+        invokedEligibleWinBackOffersForProductCompletionParametersList.append((product, completion))
+    }
+
+    var invokedEligibleWinBackOffersForPackageCompletion = false
+    var invokedEligibleWinBackOffersForPackageCompletionCount = 0
+    var invokedEligibleWinBackOffersForPackageCompletionParameters: (
+        package: Package,
+        completion: ([WinBackOffer]?, PublicError?) -> Void
+    )?
+    var invokedEligibleWinBackOffersForPackageCompletionParametersList: [(
+        package: Package,
+        completion: ([WinBackOffer]?, PublicError?) -> Void
+    )] = []
+    func eligibleWinBackOffers(
+        forPackage package: RevenueCat.Package,
+        completion: @escaping @Sendable ([RevenueCat.WinBackOffer]?,
+        RevenueCat.PublicError?) -> Void
+    ) {
+        invokedEligibleWinBackOffersForPackageCompletion = true
+        invokedEligibleWinBackOffersForPackageCompletionCount += 1
+        invokedEligibleWinBackOffersForPackageCompletionParameters = (package, completion)
+        invokedEligibleWinBackOffersForPackageCompletionParametersList.append((package, completion))
+    }
+
+    var invokedRedeemWebPurchase = false
+    var invokedRedeemWebPurchaseCount = 0
+    var invokedRedeemWebPurchaseParameters: (
+        webPurchaseRedemption: WebPurchaseRedemption,
+        completion: (CustomerInfo?, PublicError?) -> Void)?
+    var invokedRedeemWebPurchaseParametersList: [
+        (webPurchaseRedemption: WebPurchaseRedemption, completion: (CustomerInfo?, PublicError?) -> Void)
+    ] = []
+    func redeemWebPurchase(
+        webPurchaseRedemption: WebPurchaseRedemption,
+        completion: @escaping (CustomerInfo?, PublicError?) -> Void
+    ) {
+        invokedRedeemWebPurchase = true
+        invokedRedeemWebPurchaseCount += 1
+        invokedRedeemWebPurchaseParameters = (webPurchaseRedemption, completion)
+        invokedRedeemWebPurchaseParametersList.append((webPurchaseRedemption, completion))
     }
 
     var invokedInvalidateCustomerInfoCache = false
@@ -610,7 +649,6 @@ extension MockPurchases {
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)
 extension MockPurchases: PurchasesSwiftType {
-    
     var customerInfoStream: AsyncStream<CustomerInfo> {
         fatalError("This method is not mocked")
     }
@@ -724,9 +762,18 @@ extension MockPurchases: PurchasesSwiftType {
         fatalError("Not mocked")
     }
 
+    @available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
+    func eligibleWinBackOffers(forPackage package: Package) async throws -> [WinBackOffer] {
+        fatalError("Not mocked")
+    }
+
     func purchase(
         _ params: PurchaseParams
     ) async throws -> PurchaseResultData {
+        fatalError("Not mocked")
+    }
+
+    func redeemWebPurchase(_ webPurchaseRedemption: WebPurchaseRedemption) async -> WebPurchaseRedemptionResult {
         fatalError("Not mocked")
     }
 }
