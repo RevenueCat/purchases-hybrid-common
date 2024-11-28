@@ -28,12 +28,20 @@ fun setCleverTapID(cleverTapID: String?) {
     Purchases.sharedInstance.setCleverTapID(cleverTapID)
 }
 
+fun setKochavaDeviceID(kochavaDeviceID: String?) {
+    Purchases.sharedInstance.setKochavaDeviceID(kochavaDeviceID)
+}
+
 fun setMixpanelDistinctID(mixpanelDistinctID: String?) {
     Purchases.sharedInstance.setMixpanelDistinctID(mixpanelDistinctID)
 }
 
 fun setFirebaseAppInstanceID(firebaseAppInstanceID: String?) {
     Purchases.sharedInstance.setFirebaseAppInstanceID(firebaseAppInstanceID)
+}
+
+fun setTenjinAnalyticsInstallationID(tenjinAnalyticsInstallationID: String?) {
+    Purchases.sharedInstance.setTenjinAnalyticsInstallationID(tenjinAnalyticsInstallationID)
 }
 
 fun setOnesignalID(onesignalID: String?) {
