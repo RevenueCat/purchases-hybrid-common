@@ -6,6 +6,7 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 class SubscriberAttributesApiTests {
+
     // region Attribution IDs
 
     private void checkCollectDeviceIdentifiers() {
@@ -35,6 +36,16 @@ class SubscriberAttributesApiTests {
 
     private void checkSetAirshipChannelID(String id) {
         SubscriberAttributesKt.setAirshipChannelID(id);
+    }
+
+    private void checkTenjinInstallationID() {
+        SubscriberAttributesKt.setTenjinAnalyticsInstallationID("tenjin_installation_id");
+        SubscriberAttributesKt.setTenjinAnalyticsInstallationID(null);
+    }
+
+    private void checkKochavaDeviceID() {
+        SubscriberAttributesKt.setKochavaDeviceID("kochava_device_id");
+        SubscriberAttributesKt.setKochavaDeviceID(null);
     }
 
     // endregion

@@ -577,6 +577,12 @@ import RevenueCat
     @objc static func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
         Self.sharedInstance.attribution.setFirebaseAppInstanceID(firebaseAppInstanceID)
     }
+    @objc static func setTenjinAnalyticsInstallationID(_ tenjinAnalyticsInstallationID: String?) {
+        Self.sharedInstance.attribution.setTenjinAnalyticsInstallationID(tenjinAnalyticsInstallationID)
+    }
+    @objc static func setKochavaDeviceID(_ kochavaDeviceID: String?) {
+        Self.sharedInstance.attribution.setKochavaDeviceID(kochavaDeviceID)
+    }
     @objc static func setOnesignalID(_ onesignalID: String?) {
         Self.sharedInstance.attribution.setOnesignalID(onesignalID)
     }
