@@ -1,3 +1,5 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Expose fetching & redeeming win-backs on custom paywalls to hybrids (#968) via Will Taylor (@fire-at-will)
+* Add methods to set Tenjin and Kochava integration IDs (#974) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.10.0 => 5.12.0 (#973) via Will Taylor (@fire-at-will)
