@@ -287,15 +287,14 @@ jobs:
           command: bundle exec fastlane github_release_current
 
   dependency-update:
-    docker:
-      - image: cimg/ruby:3.3.0
+    <<: *base-ios-job
     steps:
       - checkout
       - attach_workspace:
           at: .
       - setup-git-credentials
       - trust-github-key
-      - revenuecat/install-gem-unix-dependencies:
+      - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - run:
           name: Update dependencies to latest versions
