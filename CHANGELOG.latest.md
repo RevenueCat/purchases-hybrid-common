@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Expose fetching & redeeming win-backs on custom paywalls to hybrids (#968) via Will Taylor (@fire-at-will)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.12.0 => 5.12.1 (#980) via RevenueCat Git Bot (@RCGitBot)
