@@ -413,7 +413,6 @@ workflows:
       - detekt-android
       - typescript-lint
       - typescript-apitests
-      - dependency-update
 
   deploy:
     when:
