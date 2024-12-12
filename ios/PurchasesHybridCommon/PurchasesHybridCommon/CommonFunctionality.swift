@@ -754,6 +754,56 @@ import RevenueCat
     }
 }
 
+// MARK: - Redemption links
+@objc public extension CommonFunctionality {
+
+    @objc(isWebPurchaseRedemptionURL:)
+    static func isWebPurchaseRedemptionURL(urlString: String) -> Bool {
+        guard let url = URL(string: urlString) else { return false }
+
+        return url.asWebPurchaseRedemption != nil
+    }
+
+    static func redeemWebPurchase(urlString: String,
+                                  completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        guard let url = URL(string: urlString), let webPurchaseRedemption = url.asWebPurchaseRedemption else {
+            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            return
+        }
+
+        _ = Task<Void, Never> {
+            let result = await Self.sharedInstance.redeemWebPurchase(webPurchaseRedemption)
+            var resultMap: [String: Any] = ["result": result.resultName]
+            switch (result) {
+            case let .success(customerInfo):
+                resultMap["customerInfo"] = customerInfo.dictionary
+            case let .error(error):
+                resultMap["error"] = Self.createErrorContainer(error: error)
+            case let .expired(obfuscatedEmail):
+                resultMap["obfuscatedEmail"] = obfuscatedEmail
+            case .alreadyRedeemed, .invalidToken:
+                // Do nothing
+                break
+            }
+            completion(resultMap, nil)
+        }
+    }
+
+}
+
+private extension WebPurchaseRedemptionResult {
+
+    var resultName: String {
+        switch self {
+        case .success: return "SUCCESS"
+        case .error: return "ERROR"
+        case .alreadyRedeemed: return "ALREADY_REDEEMED"
+        case .invalidToken: return "INVALID_TOKEN"
+        case .expired: return "EXPIRED"
+        }
+    }
+}
+
 private extension CommonFunctionality {
 
     static func customerInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
