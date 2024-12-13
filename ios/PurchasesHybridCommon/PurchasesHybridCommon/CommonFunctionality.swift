@@ -764,8 +764,8 @@ import RevenueCat
         return url.asWebPurchaseRedemption != nil
     }
 
-    static func redeemWebPurchase(urlString: String,
-                                  completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+    @objc static func redeemWebPurchase(urlString: String,
+                                        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         guard let url = URL(string: urlString), let webPurchaseRedemption = url.asWebPurchaseRedemption else {
             completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
             return
