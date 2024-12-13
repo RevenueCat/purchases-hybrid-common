@@ -621,7 +621,7 @@ fun redeemWebPurchase(
             ErrorContainer(
                 PurchasesErrorCode.UnsupportedError.code,
                 "Invalid URL for web purchase redemption",
-                emptyMap()
+                emptyMap(),
             ),
         )
         return
@@ -629,7 +629,7 @@ fun redeemWebPurchase(
 
     Purchases.sharedInstance.redeemWebPurchase(webPurchaseRedemption) { result ->
         val resultMap: MutableMap<String, Any> = mutableMapOf(
-            "result" to result.toResultName()
+            "result" to result.toResultName(),
         )
         when (result) {
             is RedeemWebPurchaseListener.Result.Success -> {
@@ -642,7 +642,8 @@ fun redeemWebPurchase(
                 resultMap["obfuscatedEmail"] = result.obfuscatedEmail
             }
             RedeemWebPurchaseListener.Result.AlreadyRedeemed,
-            RedeemWebPurchaseListener.Result.InvalidToken -> {
+            RedeemWebPurchaseListener.Result.InvalidToken,
+            -> {
                 // Do nothing
             }
         }
