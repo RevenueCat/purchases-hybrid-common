@@ -781,7 +781,7 @@ import RevenueCat
                 resultMap["error"] = Self.createErrorContainer(error: error)
             case let .expired(obfuscatedEmail):
                 resultMap["obfuscatedEmail"] = obfuscatedEmail
-            case .alreadyRedeemed, .invalidToken:
+            case .purchaseBelongsToOtherUser, .invalidToken:
                 // Do nothing
                 break
             }
@@ -797,7 +797,7 @@ private extension WebPurchaseRedemptionResult {
         switch self {
         case .success: return "SUCCESS"
         case .error: return "ERROR"
-        case .alreadyRedeemed: return "ALREADY_REDEEMED"
+        case .purchaseBelongsToOtherUser: return "PURCHASE_BELONGS_TO_OTHER_USER"
         case .invalidToken: return "INVALID_TOKEN"
         case .expired: return "EXPIRED"
         }

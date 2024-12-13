@@ -641,7 +641,7 @@ fun redeemWebPurchase(
             is RedeemWebPurchaseListener.Result.Expired -> {
                 resultMap["obfuscatedEmail"] = result.obfuscatedEmail
             }
-            RedeemWebPurchaseListener.Result.AlreadyRedeemed,
+            RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser,
             RedeemWebPurchaseListener.Result.InvalidToken,
             -> {
                 // Do nothing
@@ -658,7 +658,7 @@ private fun RedeemWebPurchaseListener.Result.toResultName(): String {
     return when (this) {
         is RedeemWebPurchaseListener.Result.Success -> "SUCCESS"
         is RedeemWebPurchaseListener.Result.Error -> "ERROR"
-        RedeemWebPurchaseListener.Result.AlreadyRedeemed -> "ALREADY_REDEEMED"
+        RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser -> "PURCHASE_BELONGS_TO_OTHER_USER"
         RedeemWebPurchaseListener.Result.InvalidToken -> "INVALID_TOKEN"
         is RedeemWebPurchaseListener.Result.Expired -> "EXPIRED"
     }
