@@ -4,3 +4,4 @@ export * from './offerings';
 export * from './enums';
 export * from './purchasesConfiguration';
 export * from './callbackTypes';
+export * from './webRedemption';

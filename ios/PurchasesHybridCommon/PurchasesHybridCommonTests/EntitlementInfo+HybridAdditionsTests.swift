@@ -65,7 +65,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
             entitlement: .init(productIdentifier: "productId", rawData: self.mockEntitlementData),
             subscription: .init(
                 periodType: .normal,
-                purchaseDate: nil,
+                purchaseDate: Date(),
                 originalPurchaseDate: nil,
                 expiresDate: nil,
                 store: store,

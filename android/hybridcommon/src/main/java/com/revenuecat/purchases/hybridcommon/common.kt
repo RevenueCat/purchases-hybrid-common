@@ -2,12 +2,15 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.AmazonLWAConsentStatus
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
@@ -18,6 +21,7 @@ import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
@@ -26,6 +30,7 @@ import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
@@ -600,7 +605,77 @@ fun getPromotionalOffer(): ErrorContainer {
     )
 }
 
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun isWebPurchaseRedemptionURL(urlString: String): Boolean {
+    return urlString.toWebPurchaseRedemption() != null
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun redeemWebPurchase(
+    urlString: String,
+    onResult: OnResult,
+) {
+    val webPurchaseRedemption: WebPurchaseRedemption? = urlString.toWebPurchaseRedemption()
+    if (webPurchaseRedemption == null) {
+        onResult.onError(
+            ErrorContainer(
+                PurchasesErrorCode.UnsupportedError.code,
+                "Invalid URL for web purchase redemption",
+                emptyMap(),
+            ),
+        )
+        return
+    }
+
+    Purchases.sharedInstance.redeemWebPurchase(webPurchaseRedemption) { result ->
+        val resultMap: MutableMap<String, Any> = mutableMapOf(
+            "result" to result.toResultName(),
+        )
+        when (result) {
+            is RedeemWebPurchaseListener.Result.Success -> {
+                resultMap["customerInfo"] = result.customerInfo.map()
+            }
+            is RedeemWebPurchaseListener.Result.Error -> {
+                resultMap["error"] = result.error.map()
+            }
+            is RedeemWebPurchaseListener.Result.Expired -> {
+                resultMap["obfuscatedEmail"] = result.obfuscatedEmail
+            }
+            RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser,
+            RedeemWebPurchaseListener.Result.InvalidToken,
+            -> {
+                // Do nothing
+            }
+        }
+        onResult.onReceived(resultMap)
+    }
+}
+
 // region private functions
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+private fun RedeemWebPurchaseListener.Result.toResultName(): String {
+    return when (this) {
+        is RedeemWebPurchaseListener.Result.Success -> "SUCCESS"
+        is RedeemWebPurchaseListener.Result.Error -> "ERROR"
+        RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser -> "PURCHASE_BELONGS_TO_OTHER_USER"
+        RedeemWebPurchaseListener.Result.InvalidToken -> "INVALID_TOKEN"
+        is RedeemWebPurchaseListener.Result.Expired -> "EXPIRED"
+    }
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+private fun String.toWebPurchaseRedemption(): WebPurchaseRedemption? {
+    try {
+        // Replace this with parseAsWebPurchaseRedemption overload
+        // accepting strings once it's available.
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(this))
+        return Purchases.parseAsWebPurchaseRedemption(intent)
+    } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
+        errorLog("Error parsing WebPurchaseRedemption from URL: $this. Error: $e")
+        return null
+    }
+}
 
 private fun String.toPurchasesAreCompletedBy(): PurchasesAreCompletedBy? {
     return try {

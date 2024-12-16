@@ -557,6 +557,36 @@ export enum VERIFICATION_RESULT {
     VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE"
 }
 
+// @public
+export type WebPurchaseRedemption = {
+    redemptionLink: string;
+};
+
+// @public
+export type WebPurchaseRedemptionResult = {
+    result: WebPurchaseRedemptionResultType.SUCCESS;
+    customerInfo: CustomerInfo;
+} | {
+    result: WebPurchaseRedemptionResultType.ERROR;
+    error: PurchasesError;
+} | {
+    result: WebPurchaseRedemptionResultType.PURCHASE_BELONGS_TO_OTHER_USER;
+} | {
+    result: WebPurchaseRedemptionResultType.INVALID_TOKEN;
+} | {
+    result: WebPurchaseRedemptionResultType.EXPIRED;
+    obfuscatedEmail: string;
+};
+
+// @public
+export enum WebPurchaseRedemptionResultType {
+    ERROR = "ERROR",
+    EXPIRED = "EXPIRED",
+    INVALID_TOKEN = "INVALID_TOKEN",
+    PURCHASE_BELONGS_TO_OTHER_USER = "PURCHASE_BELONGS_TO_OTHER_USER",
+    SUCCESS = "SUCCESS"
+}
+
 // (No @packageDocumentation comment for this package)
 
 ```
