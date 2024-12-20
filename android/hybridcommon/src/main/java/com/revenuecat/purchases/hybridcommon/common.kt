@@ -576,6 +576,7 @@ fun configure(
     shouldShowInAppMessagesAutomatically: Boolean? = null,
     verificationMode: String? = null,
     pendingTransactionsForPrepaidPlansEnabled: Boolean? = null,
+    diagnosticsEnabled: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -594,6 +595,7 @@ fun configure(
                 }
             }
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
+            diagnosticsEnabled?.let { diagnosticsEnabled(it) }
         }.also { Purchases.configure(it.build()) }
 }
 

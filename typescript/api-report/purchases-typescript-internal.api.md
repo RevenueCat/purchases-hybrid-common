@@ -319,6 +319,7 @@ export type PurchasesAreCompletedByMyApp = {
 export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
+    diagnosticsEnabled?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     purchasesAreCompletedBy?: PurchasesAreCompletedBy;

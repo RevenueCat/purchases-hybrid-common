@@ -189,7 +189,8 @@ class CommonApiTests {
                                 DangerousSettings dangerousSettings,
                                 Boolean shouldShowInAppMessagesAutomatically,
                                 String verificationMode,
-                                Boolean pendingTransactionsForPrepaidPlansEnabled
+                                Boolean pendingTransactionsForPrepaidPlansEnabled,
+                                Boolean diagnosticsEnabled
     ) {
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store);
@@ -213,7 +214,8 @@ class CommonApiTests {
                 dangerousSettings,
                 shouldShowInAppMessagesAutomatically,
                 verificationMode,
-                pendingTransactionsForPrepaidPlansEnabled);
+                pendingTransactionsForPrepaidPlansEnabled,
+                diagnosticsEnabled);
     }
 
     private void checkGetPromotionalOffer() {

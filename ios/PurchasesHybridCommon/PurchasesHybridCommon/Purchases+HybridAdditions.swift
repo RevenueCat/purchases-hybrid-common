@@ -13,7 +13,7 @@ import RevenueCat
 
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
-            verificationMode:)
+            verificationMode:diagnosticsEnabled:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -23,7 +23,8 @@ import RevenueCat
                           storeKitVersion: String = "DEFAULT",
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
-                          verificationMode: String?) -> Purchases {
+                          verificationMode: String?,
+                          diagnosticsEnabled: Bool = false) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -62,6 +63,10 @@ import RevenueCat
         configurationBuilder = configurationBuilder.with(showStoreMessagesAutomatically:
                                                             shouldShowInAppMessagesAutomatically)
 
+        if #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) {
+            configurationBuilder = configurationBuilder.with(diagnosticsEnabled: diagnosticsEnabled)
+        }
+
         if let verificationMode {
             if let mode = Configuration.EntitlementVerificationMode(name: verificationMode) {
                 if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *) {
@@ -78,7 +83,34 @@ import RevenueCat
         return purchases
     }
 
+    @available(*, deprecated, message: "Use the full configure method instead")
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          purchasesAreCompletedBy: String?,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          storeKitVersion: String = "DEFAULT",
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String?) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         storeKitVersion: storeKitVersion,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: verificationMode,
+                         diagnosticsEnabled: false)
+    }
 
+    @available(*, deprecated, message: "Use the full configure method instead")
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:)
     static func configure(apiKey: String,
