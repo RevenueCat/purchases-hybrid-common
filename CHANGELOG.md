@@ -1,3 +1,8 @@
+## 13.14.0
+## RevenueCat SDK
+### ✨ New Features
+* Add diagnostics support (#995) via Toni Rico (@tonidero)
+
 ## 13.13.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes

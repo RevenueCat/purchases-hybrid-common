@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Updates `Package.swift` and `Package.resolved` (#997) via JayShortway (@JayShortway)
+### ✨ New Features
+* Add diagnostics support (#995) via Toni Rico (@tonidero)
