@@ -1,3 +1,8 @@
+## 13.13.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Updates `Package.swift` and `Package.resolved` (#997) via JayShortway (@JayShortway)
+
 ## 13.13.0
 ## RevenueCat SDK
 ### ✨ New Features
