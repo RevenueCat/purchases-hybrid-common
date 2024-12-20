@@ -220,6 +220,7 @@ private class CommonApiTests {
         shouldShowInAppMessagesAutomatically: Boolean?,
         verificationMode: String?,
         pendingTransactionsForPrepaidPlansEnabled: Boolean?,
+        diagnosticsEnabled: Boolean?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -244,6 +245,7 @@ private class CommonApiTests {
             shouldShowInAppMessagesAutomatically,
             verificationMode,
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
         )
     }
 

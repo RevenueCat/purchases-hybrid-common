@@ -69,4 +69,12 @@ export interface PurchasesConfiguration {
    * Disabled by default.
    */
   pendingTransactionsForPrepaidPlansEnabled?: boolean;
+
+  /**
+   * Enabling diagnostics will send some performance and debugging information from the SDK to our servers.
+   * Examples of this information include response times, cache hits or error codes.
+   * No personal identifiable information will be collected.
+   * The default value is false.
+   */
+  diagnosticsEnabled?: boolean;
 }
