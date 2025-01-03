@@ -757,6 +757,13 @@ import RevenueCat
 // MARK: - Redemption links
 @objc public extension CommonFunctionality {
 
+    @objc static func parseAsWebPurchaseRedemption(urlString: String) -> WebPurchaseRedemption? {
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+        return url.asWebPurchaseRedemption
+    }
+
     @objc(isWebPurchaseRedemptionURL:)
     static func isWebPurchaseRedemptionURL(urlString: String) -> Bool {
         guard let url = URL(string: urlString) else { return false }
