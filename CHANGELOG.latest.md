@@ -1,3 +1,6 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Add diagnostics support (#995) via Toni Rico (@tonidero)
+* Add `parseAsWebPurchaseRedemption` API to iOS (#1004) via Toni Rico (@tonidero)
+
+### 🔄 Other Changes
+* Update docstring for diagnostics to clarify meaning (#1001) via Toni Rico (@tonidero)
