@@ -144,3 +144,7 @@ public class WillsBaseClass: NSObject {
         }
     }
 }
+
+// Empty extension to make the Builder accessible from Objective-C and KMP
+@objc
+public extension PurchaseParams.Builder { }
