@@ -148,6 +148,6 @@ import RevenueCat
 // Empty extension to make the Builder accessible from Objective-C and KMP
 @objc
 public extension PurchaseParams.Builder {
-//    @objc
-//    func dummyFunction() { }
+    @objc
+    func dummyFunction() { }
 }
