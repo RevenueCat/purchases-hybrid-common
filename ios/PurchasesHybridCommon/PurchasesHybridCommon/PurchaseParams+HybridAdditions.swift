@@ -40,3 +40,19 @@ extension PurchaseParams {
     }
 }
 
+@objc
+public class WillsBaseClass: NSObject {
+
+    @objc
+    public func hello() {
+        print("Hello")
+    }
+
+    @objc
+    public class WillsNestedClass: NSObject {
+        @objc
+        public func world() {
+            print("World")
+        }
+    }
+}
