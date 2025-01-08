@@ -58,7 +58,7 @@ public class WillsBaseClass: NSObject {
 }
 
 
-@objc(WillsPurchaseParams) public final class WillsPurchaseParams: NSObject, Sendable {
+@objc(WillsPurchaseParams2) public final class WillsPurchaseParams: NSObject, Sendable {
 
     let package: Package?
     let product: StoreProduct?
@@ -147,4 +147,7 @@ public class WillsBaseClass: NSObject {
 
 // Empty extension to make the Builder accessible from Objective-C and KMP
 @objc
-public extension PurchaseParams.Builder { }
+public extension PurchaseParams.Builder {
+    @objc
+    public func dummyFunction() { }
+}
