@@ -12,7 +12,7 @@ import RevenueCat
 @objc
 public extension PurchaseParams.Builder {
 
-    // For some reason, PurchaseParams.Builder isn't exposed as a part of the PHC's public API to KMP by default.
+    // PurchaseParams.Builder isn't exposed as a part of the PHC's public API to KMP by default.
     // We can expose it by adding this function to the PurchaseParams.Builder class. This function is intentionally a no-op
     // and shouldn't be called anywhere but also shouldn't be removed without ensuring that the PurchaseParams.Builder
     // class is exposed to KMP in some other way.
