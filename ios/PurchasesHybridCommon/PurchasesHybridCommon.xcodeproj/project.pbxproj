@@ -69,11 +69,13 @@
 		F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */; };
 		FD1425A52C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */; };
 		FD1425A72C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */; };
+		FD277EC82D2D7A4800E392B7 /* PurchaseParams+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD277EC72D2D7A4800E392B7 /* PurchaseParams+HybridAdditions.swift */; };
 		FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */; };
 		FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */; };
 		FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */; };
 		FD5EB01F2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
+		FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -207,11 +209,13 @@
 		EC917227AAA9D46865C0C01D /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreKitVersion+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitVersionHybridAdditionsTests.swift; sourceTree = "<group>"; };
+		FD277EC72D2D7A4800E392B7 /* PurchaseParams+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchaseParams+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD31DE762841420000C0CA3A /* CustomerInfo+TestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+TestExtensions.swift"; sourceTree = "<group>"; };
 		FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PurchasesAreCompletedBy+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesAreCompletedByHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WinBackOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSAPIAvailabilityChecker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +350,7 @@
 		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
 			isa = PBXGroup;
 			children = (
+				FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */,
 				35B0D31E2BEA4ABF000CDE3F /* PrivacyInfo.xcprivacy */,
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */,
@@ -369,6 +374,7 @@
 				FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */,
 				FD3652DE2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift */,
 				FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */,
+				FD277EC72D2D7A4800E392B7 /* PurchaseParams+HybridAdditions.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -879,10 +885,12 @@
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
 				2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */,
 				FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */,
+				FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */,
 				2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */,
 				2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */,
 				57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */,
 				2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */,
+				FD277EC82D2D7A4800E392B7 /* PurchaseParams+HybridAdditions.swift in Sources */,
 				2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
