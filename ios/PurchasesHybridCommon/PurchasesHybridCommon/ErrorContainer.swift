@@ -27,8 +27,8 @@ import RevenueCat
 
         info["underlyingErrorMessage"] = underlyingErrorMessage ?? ""
 
-        if let storeKitError = self.findStoreKitErrorCodeIfAny(nsError) {
-            info["storeKitError"] = [
+        if let storeKitError = ErrorContainer.findStoreKitErrorCodeIfAny(nsError) {
+            info["storeError"] = [
                 "code": storeKitError.code,
                 "domain": storeKitError.domain,
                 "message": storeKitError.localizedDescription
@@ -62,11 +62,11 @@ import RevenueCat
         self.info = info
     }
 
-    private func findStoreKitErrorCodeIfAny(_ error: Error) -> NSError? {
+    private static func findStoreKitErrorCodeIfAny(_ error: Error) -> NSError? {
         var currentError: NSError? = error as NSError
         var storeKitError: NSError?
         while let underlyingNSError = currentError?.userInfo[NSUnderlyingErrorKey] as? NSError {
-            if underlyingNSError.domain == "StoreKit.StoreKitError" {
+            if !underlyingNSError.domain.starts(with: "RevenueCat") {
                 storeKitError = underlyingNSError
                 break
             } else {
