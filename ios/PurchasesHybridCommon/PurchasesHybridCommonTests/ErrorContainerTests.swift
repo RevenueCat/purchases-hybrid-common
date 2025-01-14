@@ -104,5 +104,25 @@ class ErrorContainerTests: QuickSpec {
                 expect((errorContainer.error as NSError).userInfo["readable_error_code"] as? String) == readableErrorKey
             }
         }
+
+        context("store error") {
+            it("info dictionary contains the store error if found") {
+                let skError = NSError(
+                    domain: SKErrorDomain,
+                    code: 2,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "underlying error message",
+                    ]
+                )
+                let error = ErrorUtils.purchasesError(withSKError: skError)
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+
+                let storeError = errorContainer.info["storeError"] as? [String: Any]
+                expect(storeError).toNot(beNil())
+                expect(storeError!["code"] as? Int) == 2
+                expect(storeError!["domain"] as? String) == "SKErrorDomain"
+                expect(storeError!["message"] as? String) == "underlying error message"
+            }
+        }
     }
 }

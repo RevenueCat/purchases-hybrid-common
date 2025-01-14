@@ -27,6 +27,14 @@ import RevenueCat
 
         info["underlyingErrorMessage"] = underlyingErrorMessage ?? ""
 
+        if let storeKitError = ErrorContainer.findStoreKitErrorCodeIfAny(nsError) {
+            info["storeError"] = [
+                "code": storeKitError.code,
+                "domain": storeKitError.domain,
+                "message": storeKitError.localizedDescription
+            ]
+        }
+
         // todo: remove "readable_error_code" and instead send whole user info instead
         // also: code name is already exposed as error.code
         if let readableErrorCode = nsError.userInfo["readable_error_code"] {
@@ -52,5 +60,19 @@ import RevenueCat
         self.error = nsError
 
         self.info = info
+    }
+
+    private static func findStoreKitErrorCodeIfAny(_ error: Error) -> NSError? {
+        var currentError: NSError? = error as NSError
+        var storeKitError: NSError?
+        while let underlyingNSError = currentError?.userInfo[NSUnderlyingErrorKey] as? NSError {
+            if !underlyingNSError.domain.starts(with: "RevenueCat") {
+                storeKitError = underlyingNSError
+                break
+            } else {
+                currentError = underlyingNSError
+            }
+        }
+        return storeKitError
     }
 }
