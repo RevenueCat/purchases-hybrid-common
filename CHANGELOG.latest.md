@@ -1,6 +1,6 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add `parseAsWebPurchaseRedemption` API to iOS (#1004) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.14.0 => 5.14.5 Android 8.10.5 => 8.10.8 (#1010) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Update docstring for diagnostics to clarify meaning (#1001) via Toni Rico (@tonidero)
+* Expose storeError for iOS if any (#1011) via Toni Rico (@tonidero)
