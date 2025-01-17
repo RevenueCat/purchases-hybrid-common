@@ -2,9 +2,11 @@ package com.revenuecat.purchases.hybridcommon.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
@@ -94,6 +96,18 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // This should normally never happen, but just in case, we don't want to try to present the paywall
+        // if the SDK is not configured.
+        if (!Purchases.isConfigured) {
+            Log.e(
+                "PaywallFragment",
+                "Purchases is not configured. " +
+                    "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
+            )
+            removeFragment()
+            return
+        }
+
         launcher = PaywallActivityLauncher(
             this,
             this,
@@ -108,6 +122,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     override fun onActivityResult(result: PaywallResult) {
         viewModel.paywallResultListener?.onPaywallResult(result)
         viewModel.paywallResultListener?.onPaywallResult(result.name)
+        removeFragment()
+    }
+
+    private fun removeFragment() {
+        parentFragmentManager.beginTransaction().remove(this).commit()
     }
 
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
@@ -119,6 +138,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
                 if (!wasDisplayed) {
                     viewModel.paywallResultListener?.onPaywallResult(notPresentedPaywallResult)
+                    removeFragment()
                 }
             }
         }
