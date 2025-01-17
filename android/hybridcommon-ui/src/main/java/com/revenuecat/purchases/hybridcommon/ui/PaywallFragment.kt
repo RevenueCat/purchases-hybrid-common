@@ -99,7 +99,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         // This should normally never happen, but just in case, we don't want to try to present the paywall
         // if the SDK is not configured.
         if (!Purchases.isConfigured) {
-            Log.e("PaywallFragment", "Purchases is not configured. Make sure to call Purchases.configure() before launching the paywall. Dismissing.")
+            Log.e(
+                "PaywallFragment",
+                "Purchases is not configured. " +
+                    "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
+            )
             removeFragment()
             return
         }
