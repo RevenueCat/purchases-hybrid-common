@@ -74,6 +74,7 @@
 		FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */; };
 		FD5EB01F2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
+		FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +213,7 @@
 		FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesAreCompletedByHybridAdditionsTests.swift; sourceTree = "<group>"; };
 		FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WinBackOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSAPIAvailabilityChecker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +348,7 @@
 		2DD4B8BB24377B470070344F /* PurchasesHybridCommon */ = {
 			isa = PBXGroup;
 			children = (
+				FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */,
 				35B0D31E2BEA4ABF000CDE3F /* PrivacyInfo.xcprivacy */,
 				2D6E330B2450F5880022A971 /* PurchasesHybridCommon.h */,
 				2D7749C4280706BB00F70FFA /* NSDate+HybridAdditions.swift */,
@@ -879,6 +882,7 @@
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
 				2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */,
 				FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */,
+				FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */,
 				2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */,
 				2DD3D1932810AF5A00A19EC6 /* Offerings+HybridAdditions.swift in Sources */,
 				57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */,
