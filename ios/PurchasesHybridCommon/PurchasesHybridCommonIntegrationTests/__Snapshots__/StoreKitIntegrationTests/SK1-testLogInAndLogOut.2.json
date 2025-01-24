@@ -12,7 +12,7 @@
     "all" : {
 
     },
-    "verification" : "NOT_REQUESTED"
+    "verification" : "VERIFIED"
   },
   "latestExpirationDate" : null,
   "latestExpirationDateMillis" : null,
