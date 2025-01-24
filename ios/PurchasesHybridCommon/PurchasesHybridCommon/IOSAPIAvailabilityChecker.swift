@@ -27,7 +27,8 @@ public final class IOSAPIAvailabilityChecker: NSObject {
     
     /// Determines if the enableAdServicesAttributionTokenCollection API is available on the current device.
     ///
-    /// - Returns: `true` if the enableAdServicesAttributionTokenCollection API is available, `false` otherwise.
+    /// - Returns: `true` if the ``CommonFunctionality/enableAdServicesAttributionTokenCollection()`` API is available,
+    /// `false` otherwise.
     @objc
     public func isEnableAdServicesAttributionTokenCollectionAPIAvailable() -> Bool {
         #if os(tvOS) || os(watchOS)
