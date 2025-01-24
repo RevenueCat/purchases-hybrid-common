@@ -276,6 +276,17 @@ final class MockPurchases: PurchasesType {
         invokedPurchaseParamsCompletionParametersList.append((params, completion))
     }
 
+    var invokedPurchaseWithParamsCompletion = false
+    var invokedPurchaseWithParamsCompletionCount = 0
+    var invokedPurchaseWithParamsCompletionParameters: (params: PurchaseParams, completion: PurchaseCompletedBlock)?
+    var invokedPurchaseWithParamsCompletionParametersList: [(params: PurchaseParams, completion: PurchaseCompletedBlock)] = []
+    func purchaseWithParams(_ params: RevenueCat.PurchaseParams, completion: @escaping RevenueCat.PurchaseCompletedBlock) {
+        invokedPurchaseWithParamsCompletion = true
+        invokedPurchaseWithParamsCompletionCount += 1
+        invokedPurchaseWithParamsCompletionParameters = (params, completion)
+        invokedPurchaseWithParamsCompletionParametersList.append((params, completion))
+    }
+
     var invokedEligibleWinBackOffersForProductCompletion = false
     var invokedEligibleWinBackOffersForProductCompletionCount = 0
     var invokedEligibleWinBackOffersForProductCompletionParameters: (

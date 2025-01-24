@@ -139,7 +139,7 @@ internal class ConfiguringUnitTests {
             platformInfo = expectedPlatformInfo,
             verificationMode = null,
         )
-        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
+        assertEquals(EntitlementVerificationMode.INFORMATIONAL, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
@@ -179,7 +179,7 @@ internal class ConfiguringUnitTests {
             verificationMode = "ENFORCED",
         )
         // Enforced is not available yet
-        assertEquals(EntitlementVerificationMode.DISABLED, purchasesConfigurationSlot.captured.verificationMode)
+        assertEquals(EntitlementVerificationMode.INFORMATIONAL, purchasesConfigurationSlot.captured.verificationMode)
     }
 
     @Test
