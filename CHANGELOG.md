@@ -1,3 +1,11 @@
+## 13.16.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.14.5 => 5.15.0 Android 8.10.8 => 8.11.0 (#1024) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Introduce IOSAPIAvailabilityChecker for KMP (#1008) via Will Taylor (@fire-at-will)
+
 ## 13.15.2
 ## RevenueCat SDK
 ### 🐞 Bugfixes
