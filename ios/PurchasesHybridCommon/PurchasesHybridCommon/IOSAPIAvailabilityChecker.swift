@@ -24,5 +24,20 @@ public final class IOSAPIAvailabilityChecker: NSObject {
             return false
         }
     }
+    
+    /// Determines if the enableAdServicesAttributionTokenCollection API is available on the current device.
+    ///
+    /// - Returns: `true` if the enableAdServicesAttributionTokenCollection API is available, `false` otherwise.
+    @objc
+    public func isEnableAdServicesAttributionTokenCollectionAPIAvailable() -> Bool {
+        #if os(tvOS) || os(watchOS)
+            return false
+        #endif
+        if #available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *) {
+            return true
+        } else {
+            return false
+        }
+    }
 
 }
