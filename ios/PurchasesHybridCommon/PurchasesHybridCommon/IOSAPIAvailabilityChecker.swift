@@ -6,6 +6,8 @@
 //  Copyright © 2025 RevenueCat. All rights reserved.
 //
 
+import Foundation
+
 /// A utility class that checks the availability of iOS-specific APIs based on the operating system version.
 @objc
 public final class IOSAPIAvailabilityChecker: NSObject {
