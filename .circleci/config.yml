@@ -441,8 +441,6 @@ workflows:
       - make-github-release:
           <<: *release-tags
           requires:
-            - deploy-ios-phc
-            - deploy-ios-phcui
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
