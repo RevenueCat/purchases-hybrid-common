@@ -1,3 +1,8 @@
+## 13.16.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Expose iOS PurchaseParamsBuilder API to KMP (#1028) via Will Taylor (@fire-at-will)
+
 ## 13.16.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
