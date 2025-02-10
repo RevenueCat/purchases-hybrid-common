@@ -1,3 +1,7 @@
+## 13.17.1
+### 🔄 Other Changes
+* Adds `IntroEligibility` to public API surface (#1037) via JayShortway (@JayShortway)
+
 ## 13.17.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
