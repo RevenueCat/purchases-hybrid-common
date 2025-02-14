@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.net.Uri
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
@@ -59,6 +60,8 @@ internal class CustomerInfoMappersTests {
             "productid",
             "productid",
             Date(),
+            "storeTransactionId",
+            Store.PLAY_STORE,
         )
         every { mockCustomerInfo.nonSubscriptionTransactions } returns listOf(transaction)
 
