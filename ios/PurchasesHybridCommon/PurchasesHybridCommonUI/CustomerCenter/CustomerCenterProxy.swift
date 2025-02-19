@@ -2,7 +2,7 @@
 //  CustomerCenterProxy.swift
 //
 
-#if !os(macOS) && !os(tvOS) && !os(watchOS)
+#if os(iOS)
 
 import Foundation
 import PurchasesHybridCommon
@@ -14,6 +14,7 @@ import UIKit
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
+@available(visionOS, unavailable)
 @objc
 public class CustomerCenterProxy: NSObject {
 
