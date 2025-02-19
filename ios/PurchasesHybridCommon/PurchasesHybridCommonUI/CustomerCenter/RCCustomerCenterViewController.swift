@@ -18,6 +18,7 @@ import SwiftUI
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
+@available(visionOS, unavailable)
 final class RCCustomerCenterViewController: UIViewController {
 
     /// Create a view controller to handle common customer support tasks
@@ -60,12 +61,9 @@ final class RCCustomerCenterViewController: UIViewController {
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
+@available(visionOS, unavailable)
 private extension RCCustomerCenterViewController {
 
-    @available(iOS 15.0, *)
-    @available(macOS, unavailable)
-    @available(tvOS, unavailable)
-    @available(watchOS, unavailable)
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView()
 
