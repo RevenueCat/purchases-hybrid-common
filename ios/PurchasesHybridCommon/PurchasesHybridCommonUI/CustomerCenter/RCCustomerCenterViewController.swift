@@ -5,7 +5,7 @@
 //  Created by Facundo Menzella on 17/2/25.
 //
 
-#if !os(macOS) && !os(tvOS) && !os(watchOS)
+#if os(iOS)
 
 import Foundation
 import PurchasesHybridCommon
@@ -62,6 +62,10 @@ final class RCCustomerCenterViewController: UIViewController {
 @available(watchOS, unavailable)
 private extension RCCustomerCenterViewController {
 
+    @available(iOS 15.0, *)
+    @available(macOS, unavailable)
+    @available(tvOS, unavailable)
+    @available(watchOS, unavailable)
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView()
 
@@ -69,7 +73,7 @@ private extension RCCustomerCenterViewController {
 
         // make the background of the container clear so that if there are cutouts, they don't get
         // overridden by the hostingController's view's background.
-        controller.view.backgroundColor = .clear
+        controller.view.backgroundColor = UIColor.clear
         controller.view.translatesAutoresizingMaskIntoConstraints = false
 
         return controller
