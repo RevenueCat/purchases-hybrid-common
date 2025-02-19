@@ -18,8 +18,7 @@ import SwiftUI
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-@objcMembers
-class RCCustomerCenterViewController: UIViewController {
+final class RCCustomerCenterViewController: UIViewController {
 
     /// Create a view controller to handle common customer support tasks
     /// - Parameters:

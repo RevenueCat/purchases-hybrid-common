@@ -14,7 +14,7 @@ import UIKit
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-@objcMembers
+@objc
 public class CustomerCenterProxy: NSObject {
 
     @objc
@@ -24,7 +24,7 @@ public class CustomerCenterProxy: NSObject {
         )
     }
 
-    public func present() {
+    @objc public func present() {
         guard let rootController = Self.rootViewController else {
             return
         }
