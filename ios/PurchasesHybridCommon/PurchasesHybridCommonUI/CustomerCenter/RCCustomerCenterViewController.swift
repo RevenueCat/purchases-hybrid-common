@@ -18,7 +18,7 @@ import SwiftUI
 @available(macOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-@objc
+@objcMembers
 class RCCustomerCenterViewController: UIViewController {
 
     /// Create a view controller to handle common customer support tasks
@@ -34,51 +34,32 @@ class RCCustomerCenterViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.hostingController == nil {
-            self.hostingController = self.createHostingController()
-        }
+        let vc = createHostingController()
+
+        addChild(vc)
+
+        view.subviews.forEach { $0.removeFromSuperview() }
+
+        view.addSubview(vc.view)
+        vc.didMove(toParent: self)
+
+        NSLayoutConstraint.activate([
+            vc.view.topAnchor.constraint(equalTo: view.topAnchor),
+            vc.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            vc.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            vc.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     @available(*, unavailable, message: "Use init(customerCenterActionHandler:mode:) instead.")
     required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - Private
-
-    private var hostingController: UIViewController? {
-        willSet {
-            guard let oldController = self.hostingController else { return }
-
-            oldController.willMove(toParent: nil)
-            oldController.view.removeFromSuperview()
-            oldController.removeFromParent()
-        }
-
-        didSet {
-            guard let newController = self.hostingController else { return }
-
-            self.addChild(newController)
-
-            self.view.subviews.forEach { $0.removeFromSuperview() }
-
-            self.view.addSubview(newController.view)
-            newController.didMove(toParent: self)
-
-            NSLayoutConstraint.activate([
-                newController.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-                newController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-                newController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                newController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-            ])
-        }
-    }
 }
 
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, *)
 private extension RCCustomerCenterViewController {
 
-    // swiftlint:disable:next function_body_length
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView()
 

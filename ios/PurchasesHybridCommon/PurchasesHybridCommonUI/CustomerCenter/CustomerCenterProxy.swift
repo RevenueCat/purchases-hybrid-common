@@ -11,6 +11,9 @@ import RevenueCatUI
 import UIKit
 
 @available(iOS 15.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
 @objcMembers
 public class CustomerCenterProxy: NSObject {
 
