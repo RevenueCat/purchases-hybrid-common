@@ -6,7 +6,7 @@
 //  Copyright © 2025 RevenueCat. All rights reserved.
 //
 
-#if canImport(UIKit) && !os(tvOS) && !os(watchOS)
+#if os(iOS)
 
 import Foundation
 import RevenueCat
