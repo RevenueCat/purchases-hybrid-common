@@ -26,7 +26,7 @@ public class CustomerCenterProxy: NSObject {
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
     
     @objc public func present(
-        resultHandler: @escaping (String) -> Void
+        resultHandler: @escaping () -> Void
     ) {
         guard let rootController = Self.rootViewController else {
             return
@@ -42,7 +42,7 @@ public class CustomerCenterProxy: NSObject {
 
     // MARK: - Private
 
-    private var resultByVC: [CustomerCenterUIViewController: ((String) -> Void)] = [:]
+    private var resultByVC: [CustomerCenterUIViewController: (() -> Void)] = [:]
 }
 
 @available(iOS 15.0, *)
@@ -54,8 +54,8 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
 
     public func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController) {
         self.delegate?.customerCenterViewControllerWasDismissed?(controller)
-        guard let (resultHandler) = self.resultByVC.removeValue(forKey: controller) else { return }
-        resultHandler("customerCenterViewControllerWasDismissed")
+        guard let resultHandler = self.resultByVC.removeValue(forKey: controller) else { return }
+        resultHandler()
     }
 }
 
