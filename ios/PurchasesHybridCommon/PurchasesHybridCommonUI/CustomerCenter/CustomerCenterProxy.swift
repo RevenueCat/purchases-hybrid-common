@@ -55,24 +55,7 @@ private extension CustomerCenterProxy {
     func createCustomerCenterViewController() -> CustomerCenterViewController {
         // customerCenterActionHandler = nil for now, till we implement proper callbacks
         return CustomerCenterViewController(
-            customerCenterActionHandler: { action in
-                switch action {
-                case let .feedbackSurveyCompleted(feedbackSurveyOptionId):
-                    break
-                case let .refundRequestCompleted(refundRequestStatus):
-                    break
-                case let .refundRequestStarted(productId):
-                    break
-                case let .restoreCompleted(customerInfo):
-                    break
-                case let .restoreFailed(error):
-                    break
-                case .restoreStarted:
-                    break
-                case .showingManageSubscriptions:
-                    break
-                }
-            }
+            customerCenterActionHandler: nil
         )
     }
 }
