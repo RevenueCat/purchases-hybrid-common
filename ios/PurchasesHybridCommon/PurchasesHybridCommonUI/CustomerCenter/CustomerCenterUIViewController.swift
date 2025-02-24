@@ -20,8 +20,11 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
-public final class CustomerCenterViewController: UIViewController {
+public final class CustomerCenterUIViewController: UIViewController {
 
+    /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
+    
     /// Create a view controller to handle common customer support tasks
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
@@ -52,6 +55,13 @@ public final class CustomerCenterViewController: UIViewController {
         ])
     }
 
+    public override func viewDidDisappear(_ animated: Bool) {
+        if self.isBeingDismissed {
+            self.delegate?.customerCenterViewControllerWasDismissed?(self)
+        }
+        super.viewDidDisappear(animated)
+    }
+
     @available(*, unavailable, message: "Use init(customerCenterActionHandler:mode:) instead.")
     required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -63,7 +73,7 @@ public final class CustomerCenterViewController: UIViewController {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
-extension CustomerCenterViewController {
+extension CustomerCenterUIViewController {
 
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView()

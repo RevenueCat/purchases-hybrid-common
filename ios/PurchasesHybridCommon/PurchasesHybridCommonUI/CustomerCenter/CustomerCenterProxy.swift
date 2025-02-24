@@ -21,17 +21,41 @@ import UIKit
 @available(visionOS, unavailable)
 @objc
 public class CustomerCenterProxy: NSObject {
+
+    /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
     
-    @objc public func present() {
+    @objc public func present(
+        resultHandler: @escaping (String) -> Void
+    ) {
         guard let rootController = Self.rootViewController else {
             return
         }
-
         let vc = createCustomerCenterViewController()
+        resultByVC[vc] = resultHandler
+
         vc.modalPresentationStyle = .overCurrentContext
         vc.view.backgroundColor = .clear
 
         rootController.present(vc, animated: true)
+    }
+
+    // MARK: - Private
+
+    private var resultByVC: [CustomerCenterUIViewController: ((String) -> Void)] = [:]
+}
+
+@available(iOS 15.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+@available(visionOS, unavailable)
+extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
+
+    public func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController) {
+        self.delegate?.customerCenterViewControllerWasDismissed?(controller)
+        guard let (resultHandler) = self.resultByVC.removeValue(forKey: controller) else { return }
+        resultHandler("customerCenterViewControllerWasDismissed")
     }
 }
 
@@ -52,11 +76,14 @@ private extension CustomerCenterProxy {
         return windowScene.keyWindow?.rootViewController
     }
 
-    func createCustomerCenterViewController() -> CustomerCenterViewController {
+    func createCustomerCenterViewController() -> CustomerCenterUIViewController {
         // customerCenterActionHandler = nil for now, till we implement proper callbacks
-        return CustomerCenterViewController(
+        let vc =  CustomerCenterUIViewController(
             customerCenterActionHandler: nil
         )
+        vc.delegate = self
+
+        return vc
     }
 }
 
