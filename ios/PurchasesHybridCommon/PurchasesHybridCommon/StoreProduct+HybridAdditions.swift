@@ -93,7 +93,7 @@ internal extension StoreProduct {
         return dictionary
     }
 
-    static func rc_normalized(subscriptionPeriod: SubscriptionPeriod) -> String {
+    static func rc_normalized(subscriptionPeriod: RevenueCat.SubscriptionPeriod) -> String {
         let unitString: String
         switch subscriptionPeriod.unit {
         case .day:
@@ -110,7 +110,7 @@ internal extension StoreProduct {
         return "P\(subscriptionPeriod.value)\(unitString)"
     }
 
-    static func rc_normalized(subscriptionPeriodUnit: SubscriptionPeriod.Unit) -> String {
+    static func rc_normalized(subscriptionPeriodUnit: RevenueCat.SubscriptionPeriod.Unit) -> String {
         switch subscriptionPeriodUnit {
         case .day:
             return "DAY"

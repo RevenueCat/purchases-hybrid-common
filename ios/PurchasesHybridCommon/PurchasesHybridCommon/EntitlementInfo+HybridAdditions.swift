@@ -48,6 +48,8 @@ private extension EntitlementInfo {
             return "NORMAL"
         case .trial:
             return "TRIAL"
+        case .prepaid:
+            return "PREPAID"
         @unknown default:
             return "UNKNOWN"
         }
