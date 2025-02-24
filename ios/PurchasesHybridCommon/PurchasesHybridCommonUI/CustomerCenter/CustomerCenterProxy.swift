@@ -18,13 +18,6 @@ import UIKit
 @objc
 public class CustomerCenterProxy: NSObject {
 
-    @objc
-    func createCustomerCenterViewController() -> RCCustomerCenterViewController {
-        return RCCustomerCenterViewController(
-            customerCenterActionHandler: nil
-        )
-    }
-
     @objc public func present() {
         guard let rootController = Self.rootViewController else {
             return
@@ -37,7 +30,17 @@ public class CustomerCenterProxy: NSObject {
         rootController.present(vc, animated: true)
     }
 
-    private static var rootViewController: UIViewController? {
+
+}
+
+@available(iOS 15.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+@available(visionOS, unavailable)
+private extension CustomerCenterProxy {
+
+    static var rootViewController: UIViewController? {
         let scene = UIApplication
             .shared
             .connectedScenes
@@ -45,6 +48,12 @@ public class CustomerCenterProxy: NSObject {
 
         guard let windowScene = scene as? UIWindowScene else { return nil }
         return windowScene.keyWindow?.rootViewController
+    }
+
+    func createCustomerCenterViewController() -> RCCustomerCenterViewController {
+        return RCCustomerCenterViewController(
+            customerCenterActionHandler: nil
+        )
     }
 }
 
