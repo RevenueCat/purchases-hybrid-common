@@ -1,5 +1,9 @@
 //
 //  CustomerCenterProxy.swift
+//  PurchasesHybridCommon
+//
+//  Created by Facundo Menzella on 17/2/25.
+//  Copyright © 2025 RevenueCat. All rights reserved.
 //
 
 #if os(iOS)
@@ -18,19 +22,20 @@ import UIKit
 @objc
 public class CustomerCenterProxy: NSObject {
 
+    public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
+
     @objc public func present() {
         guard let rootController = Self.rootViewController else {
             return
         }
 
         let vc = createCustomerCenterViewController()
+        vc.delegate = delegate
         vc.modalPresentationStyle = .overCurrentContext
         vc.view.backgroundColor = .clear
 
         rootController.present(vc, animated: true)
     }
-
-
 }
 
 @available(iOS 15.0, *)
@@ -50,10 +55,27 @@ private extension CustomerCenterProxy {
         return windowScene.keyWindow?.rootViewController
     }
 
-    func createCustomerCenterViewController() -> RCCustomerCenterViewController {
+    func createCustomerCenterViewController() -> CustomerCenterViewController {
         // customerCenterActionHandler = nil for now, till we implement proper callbacks
-        return RCCustomerCenterViewController(
-            customerCenterActionHandler: nil
+        return CustomerCenterViewController(
+            customerCenterActionHandler: { action in
+                switch action {
+                case let .feedbackSurveyCompleted(feedbackSurveyOptionId):
+                    break
+                case let .refundRequestCompleted(refundRequestStatus):
+                    break
+                case let .refundRequestStarted(productId):
+                    break
+                case let .restoreCompleted(customerInfo):
+                    break
+                case let .restoreFailed(error):
+                    break
+                case .restoreStarted:
+                    break
+                case .showingManageSubscriptions:
+                    break
+                }
+            }
         )
     }
 }

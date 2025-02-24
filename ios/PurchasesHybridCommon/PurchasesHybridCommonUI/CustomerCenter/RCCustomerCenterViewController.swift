@@ -1,8 +1,9 @@
 //
-//  RCCustomerCenterViewController.swift
-//  Pods
+//  CustomerCenterViewController.swift
+//  PurchasesHybridCommon
 //
 //  Created by Facundo Menzella on 17/2/25.
+//  Copyright © 2025 RevenueCat. All rights reserved.
 //
 
 #if os(iOS)
@@ -19,13 +20,15 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
-final class RCCustomerCenterViewController: UIViewController {
+public final class CustomerCenterViewController: UIViewController {
+
+    weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
     /// Create a view controller to handle common customer support tasks
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
     ///   from the Customer Center.
-    public init(
+    init(
         customerCenterActionHandler: CustomerCenterActionHandler? = nil
     ) {
         super.init(nibName: nil, bundle: nil)
@@ -62,7 +65,7 @@ final class RCCustomerCenterViewController: UIViewController {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
-private extension RCCustomerCenterViewController {
+extension CustomerCenterViewController {
 
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView()
