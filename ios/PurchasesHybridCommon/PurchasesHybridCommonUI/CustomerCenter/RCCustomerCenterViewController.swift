@@ -22,8 +22,6 @@ import SwiftUI
 @available(visionOS, unavailable)
 public final class CustomerCenterViewController: UIViewController {
 
-    weak var delegate: CustomerCenterViewControllerDelegateWrapper?
-
     /// Create a view controller to handle common customer support tasks
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions

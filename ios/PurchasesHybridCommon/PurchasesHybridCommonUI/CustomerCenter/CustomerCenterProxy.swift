@@ -21,16 +21,13 @@ import UIKit
 @available(visionOS, unavailable)
 @objc
 public class CustomerCenterProxy: NSObject {
-
-    public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
-
+    
     @objc public func present() {
         guard let rootController = Self.rootViewController else {
             return
         }
 
         let vc = createCustomerCenterViewController()
-        vc.delegate = delegate
         vc.modalPresentationStyle = .overCurrentContext
         vc.view.backgroundColor = .clear
 
