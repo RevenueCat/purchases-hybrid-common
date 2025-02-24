@@ -51,6 +51,7 @@ private extension CustomerCenterProxy {
     }
 
     func createCustomerCenterViewController() -> RCCustomerCenterViewController {
+        // customerCenterActionHandler = nil for now, till we implement proper callbacks
         return RCCustomerCenterViewController(
             customerCenterActionHandler: nil
         )
