@@ -1,3 +1,6 @@
-## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.12.0 => 8.12.2 (#1044) via RevenueCat Git Bot (@RCGitBot)
+## RevenueCatUI SDK
+### ✨ New Features
+* feat: Introduce CustomerCenterProxy (#1046) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Revert "[AUTOMATIC] Release/13.20.0 (#1057)" (#1059) via Facundo Menzella (@facumenzella)
