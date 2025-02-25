@@ -1,3 +1,8 @@
+## 13.20.0
+## RevenueCatUI SDK
+### ✨ New Features
+* feat: Introduce CustomerCenterProxy (#1046) via Facundo Menzella (@facumenzella)
+
 ## 13.19.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
