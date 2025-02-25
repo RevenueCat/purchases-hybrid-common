@@ -16,6 +16,7 @@ android/native
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+.idea/caches/**
 .gradle/
 
 fastlane/.env
