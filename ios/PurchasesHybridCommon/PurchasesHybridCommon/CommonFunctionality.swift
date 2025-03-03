@@ -205,8 +205,15 @@ import RevenueCat
     @available(watchOS, unavailable)
     @available(tvOS, unavailable)
     @objc(showManageSubscriptions:)
-    static func showManageSubscriptions() async throws {
-        try await Purchases.shared.showManageSubscriptions()
+    static func showManageSubscriptions(completion: @escaping (ErrorContainer?) -> Void) {
+        _ = Task<Void, Never> {
+            do {
+                try await Self.sharedInstance.showManageSubscriptions()
+                completion(nil)
+            } catch {
+                completion(Self.createErrorContainer(error: error))
+            }
+        }
     }
 }
 
