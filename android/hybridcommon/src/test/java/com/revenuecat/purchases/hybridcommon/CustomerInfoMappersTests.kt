@@ -101,7 +101,7 @@ internal class CustomerInfoMappersTests {
                 refundedAt = mockDate,
                 storeTransactionId = "storeTransactionId",
                 requestDate = mockDate,
-            )
+            ),
         )
 
         val map = mockCustomerInfo.map()
