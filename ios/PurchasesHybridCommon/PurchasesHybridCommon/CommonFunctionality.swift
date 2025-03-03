@@ -198,6 +198,29 @@ import RevenueCat
 
 }
 
+#if os(iOS) || os(macOS) || VISION_OS
+
+// MARK: Manage subscriptions
+@objc public extension CommonFunctionality {
+
+    @available(iOS 13.0, macOS 10.15, *)
+    @available(watchOS, unavailable)
+    @available(tvOS, unavailable)
+    @objc(showManageSubscriptions:)
+    static func showManageSubscriptions(completion: @escaping (ErrorContainer?) -> Void) {
+        _ = Task<Void, Never> {
+            do {
+                try await Self.sharedInstance.showManageSubscriptions()
+                completion(nil)
+            } catch {
+                completion(Self.createErrorContainer(error: error))
+            }
+        }
+    }
+}
+
+#endif
+
 // MARK: In app messages
 @objc public extension CommonFunctionality {
 
