@@ -29,7 +29,7 @@ public final class CustomerCenterUIViewController: UIViewController {
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
     ///   from the Customer Center.
-    init(
+    public init(
         customerCenterActionHandler: CustomerCenterActionHandler? = nil
     ) {
         super.init(nibName: nil, bundle: nil)
