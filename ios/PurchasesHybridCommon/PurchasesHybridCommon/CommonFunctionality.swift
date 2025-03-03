@@ -198,6 +198,8 @@ import RevenueCat
 
 }
 
+#if os(iOS) || os(macOS) || VISION_OS
+
 // MARK: Manage subscriptions
 @objc public extension CommonFunctionality {
 
@@ -216,6 +218,8 @@ import RevenueCat
         }
     }
 }
+
+#endif
 
 // MARK: In app messages
 @objc public extension CommonFunctionality {
