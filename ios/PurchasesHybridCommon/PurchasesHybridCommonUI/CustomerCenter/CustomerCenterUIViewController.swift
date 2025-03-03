@@ -24,7 +24,11 @@ public final class CustomerCenterUIViewController: UIViewController {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
-    
+
+    public init() {
+       self.init(customerCenterActionHandler: nil)
+    }
+      
     /// Create a view controller to handle common customer support tasks
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
