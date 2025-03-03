@@ -23,4 +23,5 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "originalPurchaseDate" to originalPurchaseDate?.toIso8601(),
         "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis(),
         "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() },
+        "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
     )

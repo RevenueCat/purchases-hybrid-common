@@ -50,6 +50,7 @@ public extension CustomerInfo {
             "originalPurchaseDateMillis": originalPurchaseDate?.rc_millisecondsSince1970AsDouble() ?? NSNull(),
             "managementURL": managementURL?.absoluteString ?? NSNull(),
             "nonSubscriptionTransactions": nonSubscriptions.map { $0.dictionary },
+            "subscriptionsByProductIdentifier": subscriptionsByProductIdentifier.mapValues { $0.dictionary }
         ]
     }
 
