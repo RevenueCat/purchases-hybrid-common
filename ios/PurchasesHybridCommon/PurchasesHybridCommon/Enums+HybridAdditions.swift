@@ -1,9 +1,9 @@
 //
-//  EntitlementInfo+HybridAdditions.swift
+//  Enum+HybridAdditions.swift
 //  PurchasesHybridCommon
 //
-//  Created by Andrés Boedo on 4/13/22.
-//  Copyright © 2022 RevenueCat. All rights reserved.
+//  Created by Toni Rico on 3/3/25.
+//  Copyright © 2025 RevenueCat. All rights reserved.
 //
 
 import Foundation
