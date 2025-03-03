@@ -198,6 +198,18 @@ import RevenueCat
 
 }
 
+// MARK: Manage subscriptions
+@objc public extension CommonFunctionality {
+
+    @available(watchOS, unavailable)
+    @available(tvOS, unavailable)
+    @available(iOS 13.0, macOS 10.15, *)
+    @objc(showManageSubscriptions:)
+    static func showManageSubscriptions() async throws {
+        try await Purchases.shared.showManageSubscriptions()
+    }
+}
+
 // MARK: In app messages
 @objc public extension CommonFunctionality {
 
