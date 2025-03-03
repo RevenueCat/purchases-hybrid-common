@@ -1,3 +1,8 @@
+## 13.22.0
+## RevenueCat SDK
+### ✨ New Features
+* [EXTERNAL] feat(ios): expose showManageSubscriptions (#1064) by @dylancom (#1065) via Toni Rico (@tonidero)
+
 ## 13.21.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
