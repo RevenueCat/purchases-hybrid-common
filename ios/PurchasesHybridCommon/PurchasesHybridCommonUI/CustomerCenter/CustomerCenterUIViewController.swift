@@ -28,8 +28,8 @@ public final class CustomerCenterUIViewController: UIViewController {
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
     @objc
-    public convenience init(delegate: CustomerCenterViewControllerDelegateWrapper?) {
-        self.init(customerCenterActionHandler: nil)
+    public init(delegate: CustomerCenterViewControllerDelegateWrapper?) {
+        super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
     }
       
@@ -37,7 +37,7 @@ public final class CustomerCenterUIViewController: UIViewController {
     /// - Parameters:
     ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
     ///   from the Customer Center.
-    public init(
+    init(
         customerCenterActionHandler: CustomerCenterActionHandler? = nil
     ) {
         super.init(nibName: nil, bundle: nil)
