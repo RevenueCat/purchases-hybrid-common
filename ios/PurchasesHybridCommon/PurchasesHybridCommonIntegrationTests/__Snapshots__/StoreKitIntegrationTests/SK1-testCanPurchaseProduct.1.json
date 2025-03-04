@@ -49,7 +49,24 @@
     "nonSubscriptionTransactions" : [
 
     ],
-    "originalApplicationVersion" : "1.0"
+    "originalApplicationVersion" : "1.0",
+    "subscriptionsByProductIdentifier" : {
+      "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro" : {
+        "billingIssuesDetectedAt" : null,
+        "gracePeriodExpiresDate" : null,
+        "isActive" : true,
+        "isSandbox" : true,
+        "ownershipType" : "PURCHASED",
+        "periodType" : "INTRO",
+        "price" : null,
+        "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+        "refundedAt" : null,
+        "store" : "APP_STORE",
+        "storeTransactionId" : "0",
+        "unsubscribeDetectedAt" : null,
+        "willRenew" : true
+      }
+    }
   },
   "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
   "transaction" : {

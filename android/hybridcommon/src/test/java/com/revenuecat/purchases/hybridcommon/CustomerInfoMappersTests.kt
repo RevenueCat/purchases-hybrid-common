@@ -2,7 +2,10 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.net.Uri
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.OwnershipType
+import com.revenuecat.purchases.PeriodType
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.SubscriptionInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
@@ -77,5 +80,48 @@ internal class CustomerInfoMappersTests {
         assertThat(transactionDictionary["productId"]).isEqualTo(transaction.productIdentifier)
         assertThat(transactionDictionary["purchaseDateMillis"]).isEqualTo(transaction.purchaseDate.toMillis())
         assertThat(transactionDictionary["purchaseDate"]).isEqualTo(transaction.purchaseDate.toIso8601())
+    }
+
+    @Test
+    fun `a CustomerInfo with SubscriptionInfo, should map to a non empty map of subscription infos`() {
+        val mockDate = Date()
+        every { mockCustomerInfo.subscriptionsByProductIdentifier } returns mapOf(
+            "productIdentifier" to SubscriptionInfo(
+                productIdentifier = "productIdentifier",
+                purchaseDate = mockDate,
+                originalPurchaseDate = mockDate,
+                expiresDate = mockDate,
+                store = Store.PLAY_STORE,
+                unsubscribeDetectedAt = mockDate,
+                isSandbox = true,
+                billingIssuesDetectedAt = mockDate,
+                gracePeriodExpiresDate = mockDate,
+                ownershipType = OwnershipType.PURCHASED,
+                periodType = PeriodType.NORMAL,
+                refundedAt = mockDate,
+                storeTransactionId = "storeTransactionId",
+                requestDate = mockDate,
+            ),
+        )
+
+        val map = mockCustomerInfo.map()
+        val mappedSubscriptionInfos = map["subscriptionsByProductIdentifier"] as Map<*, *>
+        assertThat(mappedSubscriptionInfos).hasSize(1)
+        val mappedSubscriptionInfo = mappedSubscriptionInfos["productIdentifier"] as Map<*, *>
+        assertThat(mappedSubscriptionInfo["productIdentifier"]).isEqualTo("productIdentifier")
+        assertThat(mappedSubscriptionInfo["purchaseDate"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["originalPurchaseDate"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["expiresDate"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["store"]).isEqualTo("PLAY_STORE")
+        assertThat(mappedSubscriptionInfo["unsubscribeDetectedAt"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["isSandbox"]).isEqualTo(true)
+        assertThat(mappedSubscriptionInfo["billingIssuesDetectedAt"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["gracePeriodExpiresDate"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["ownershipType"]).isEqualTo("PURCHASED")
+        assertThat(mappedSubscriptionInfo["periodType"]).isEqualTo("NORMAL")
+        assertThat(mappedSubscriptionInfo["refundedAt"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["storeTransactionId"]).isEqualTo("storeTransactionId")
+        assertThat(mappedSubscriptionInfo["isActive"]).isEqualTo(false)
+        assertThat(mappedSubscriptionInfo["willRenew"]).isEqualTo(false)
     }
 }
