@@ -25,7 +25,7 @@ internal extension SubscriptionInfo {
             "isSandbox": isSandbox,
             "unsubscribeDetectedAt": unsubscribeDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
             "billingIssuesDetectedAt": billingIssuesDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
-            "gracePeriodExpiresDate": billingIssuesDetectedAt?.rc_formattedAsISO8601() ?? NSNull(),
+            "gracePeriodExpiresDate": gracePeriodExpiresDate?.rc_formattedAsISO8601() ?? NSNull(),
             "ownershipType": ownershipType.ownershipTypeString,
             "periodType": periodType.periodTypeString,
             "refundedAt": refundedAt?.rc_formattedAsISO8601() ?? NSNull(),
