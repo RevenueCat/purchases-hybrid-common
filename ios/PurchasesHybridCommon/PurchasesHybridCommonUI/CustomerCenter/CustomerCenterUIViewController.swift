@@ -28,8 +28,15 @@ public final class CustomerCenterUIViewController: UIViewController {
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
     @objc
-    public init(delegate: CustomerCenterViewControllerDelegateWrapper?) {
+    public var onCloseHandler: (() -> Void)?
+
+    @objc
+    public init(
+        delegate: CustomerCenterViewControllerDelegateWrapper?,
+        onCloseHandler: (() -> Void)? = nil
+    ) {
         super.init(nibName: nil, bundle: nil)
+        self.onCloseHandler = onCloseHandler
         self.delegate = delegate
     }
       
@@ -84,7 +91,10 @@ public final class CustomerCenterUIViewController: UIViewController {
 extension CustomerCenterUIViewController {
 
     func createHostingController() -> UIViewController {
-        let view = CustomerCenterView()
+        let view = CustomerCenterView(
+            customerCenterActionHandler: nil,
+            navigationOptions: .default
+        )
 
         let controller = UIHostingController(rootView: view)
 
