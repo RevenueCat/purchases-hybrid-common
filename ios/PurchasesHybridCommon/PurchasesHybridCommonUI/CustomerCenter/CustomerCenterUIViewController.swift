@@ -20,6 +20,7 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
+@objc
 public final class CustomerCenterUIViewController: UIViewController {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
