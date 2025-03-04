@@ -1,6 +1,8 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.12.2 => 8.13.0 (#1062) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* Add `subscriptionsByProductIdentifier` map of SubscriptionInfo by productId to CustomerInfo (#1067) via Toni Rico (@tonidero)
+* [EXTERNAL] feat(ios): expose showManageSubscriptions (#1064) by @dylancom (#1065) via Toni Rico (@tonidero)
 
 ### 🔄 Other Changes
-* chore: Ignore idea caches (#1049) via Facundo Menzella (@facumenzella)
+* Bump lefthook from 1.10.10 to 1.11.0 (#1056) via dependabot[bot] (@dependabot[bot])
+* Bump nokogiri from 1.17.1 to 1.18.3 (#1048) via dependabot[bot] (@dependabot[bot])
