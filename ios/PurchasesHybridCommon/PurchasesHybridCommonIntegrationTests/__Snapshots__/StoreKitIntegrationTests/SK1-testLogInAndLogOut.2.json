@@ -22,5 +22,8 @@
   ],
   "originalApplicationVersion" : null,
   "originalPurchaseDate" : null,
-  "originalPurchaseDateMillis" : null
+  "originalPurchaseDateMillis" : null,
+  "subscriptionsByProductIdentifier" : {
+
+  }
 }
