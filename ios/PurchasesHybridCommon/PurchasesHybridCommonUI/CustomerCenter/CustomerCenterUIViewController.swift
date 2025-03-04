@@ -25,7 +25,7 @@ public final class CustomerCenterUIViewController: UIViewController {
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
-    public init() {
+    public convenience init() {
        self.init(customerCenterActionHandler: nil)
     }
       
