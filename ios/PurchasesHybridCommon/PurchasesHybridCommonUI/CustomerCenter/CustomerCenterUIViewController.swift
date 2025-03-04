@@ -23,10 +23,13 @@ import SwiftUI
 public final class CustomerCenterUIViewController: UIViewController {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
-    public convenience init() {
-       self.init(customerCenterActionHandler: nil)
+    @objc
+    public convenience init(delegate: CustomerCenterViewControllerDelegateWrapper?) {
+        self.init(customerCenterActionHandler: nil)
+        self.delegate = delegate
     }
       
     /// Create a view controller to handle common customer support tasks
