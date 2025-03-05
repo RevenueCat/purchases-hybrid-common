@@ -31,13 +31,8 @@ public final class CustomerCenterUIViewController: UIViewController {
     public var onCloseHandler: (() -> Void)?
 
     @objc
-    public init(
-        delegate: CustomerCenterViewControllerDelegateWrapper?,
-        onCloseHandler: (() -> Void)? = nil
-    ) {
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        self.onCloseHandler = onCloseHandler
-        self.delegate = delegate
     }
       
     /// Create a view controller to handle common customer support tasks
@@ -93,7 +88,9 @@ extension CustomerCenterUIViewController {
     func createHostingController() -> UIViewController {
         let view = CustomerCenterView(
             customerCenterActionHandler: nil,
-            navigationOptions: .default
+            navigationOptions: CustomerCenterNavigationOptions(
+                onCloseHandler: onCloseHandler
+            )
         )
 
         let controller = UIHostingController(rootView: view)
