@@ -4,6 +4,8 @@ target 'PurchasesHybridCommon' do
   platform :ios, '13.0'
   use_frameworks!
 
+  pod 'RevenueCat', '5.19.0'
+
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
     pod 'Quick', '5.0.1'
