@@ -32,6 +32,9 @@ export interface CustomerInfo {
     readonly originalAppUserId: string;
     readonly originalPurchaseDate: string | null;
     readonly requestDate: string;
+    readonly subscriptionsByProductIdentifier: {
+        [key: string]: PurchasesSubscriptionInfo;
+    };
 }
 
 // @public

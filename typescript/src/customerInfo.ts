@@ -208,6 +208,11 @@ export interface CustomerInfo {
      * non-subscription purchases
      */
     readonly nonSubscriptionTransactions: PurchasesStoreTransaction[];
+
+    /**
+     * Information about the customer's subscriptions for each product identifier.
+     */
+    readonly subscriptionsByProductIdentifier: { [key: string]: PurchasesSubscriptionInfo };
 }
 
 /**
