@@ -31,19 +31,19 @@ public final class CustomerCenterUIViewController: UIViewController {
     public var onCloseHandler: (() -> Void)?
 
     @objc
-    public init() {
+    public required init() {
         super.init(nibName: nil, bundle: nil)
     }
       
-    /// Create a view controller to handle common customer support tasks
-    /// - Parameters:
-    ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
-    ///   from the Customer Center.
-    init(
-        customerCenterActionHandler: CustomerCenterActionHandler? = nil
-    ) {
-        super.init(nibName: nil, bundle: nil)
-    }
+//    /// Create a view controller to handle common customer support tasks
+//    /// - Parameters:
+//    ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
+//    ///   from the Customer Center.
+//    init(
+//        customerCenterActionHandler: CustomerCenterActionHandler? = nil
+//    ) {
+//        super.init(nibName: nil, bundle: nil)
+//    }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
