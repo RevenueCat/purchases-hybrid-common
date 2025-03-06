@@ -1,33 +1,29 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.19.0-SNAPSHOT)
-  - RevenueCatUI (5.19.0-SNAPSHOT):
-    - RevenueCat (= 5.19.0-SNAPSHOT)
+  - RevenueCat (5.19.0)
+  - RevenueCatUI (5.19.0):
+    - RevenueCat (= 5.19.0)
 
 DEPENDENCIES:
   - Nimble (= 10.0.0)
   - Quick (= 5.0.1)
-  - RevenueCat (from `/Users/facundomenzella/Developer/rc/purchases-ios`)
-  - RevenueCatUI (from `/Users/facundomenzella/Developer/rc/purchases-ios`)
+  - RevenueCat (= 5.19.0)
+  - RevenueCatUI (= 5.19.0)
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-
-EXTERNAL SOURCES:
-  RevenueCat:
-    :path: "/Users/facundomenzella/Developer/rc/purchases-ios"
-  RevenueCatUI:
-    :path: "/Users/facundomenzella/Developer/rc/purchases-ios"
+    - RevenueCat
+    - RevenueCatUI
 
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 026dab6d2a34b09a9c887000de0a95c4f3b26e3b
-  RevenueCatUI: 1b77909feefc35cc95b5deaf8c553214e40d2342
+  RevenueCat: 4be87c151dff652d2a5b7af46073db11f01ad93f
+  RevenueCatUI: 79372219c99e2d08eed0a0607004ca0872a17fd5
 
-PODFILE CHECKSUM: 216d72230b5ddc68a36035398dd0a24ffae19787
+PODFILE CHECKSUM: 55e3b37dd0e87d5c24f6c0da46a44a7c7a2e8133
 
 COCOAPODS: 1.16.2
