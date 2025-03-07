@@ -27,6 +27,7 @@ public final class CustomerCenterUIViewController: UIViewController {
     @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
 
+    /// Handler for when the navigation close button is tapped
     @objc
     public var onCloseHandler: (() -> Void)?
 
@@ -62,11 +63,13 @@ public final class CustomerCenterUIViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
 
-    @available(*, unavailable, message: "Use init(customerCenterActionHandler:mode:) instead.")
+    @available(*, unavailable, message: "Use init() and set delegate after initialization")
     required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+// MARK: - Hosting Controller Creation
 
 @available(iOS 15.0, *)
 @available(macOS, unavailable)
@@ -76,20 +79,55 @@ public final class CustomerCenterUIViewController: UIViewController {
 extension CustomerCenterUIViewController {
 
     func createHostingController() -> UIViewController {
-        let view = CustomerCenterView(
-            customerCenterActionHandler: nil,
+        var view = CustomerCenterView(
             navigationOptions: CustomerCenterNavigationOptions(
                 onCloseHandler: onCloseHandler
             )
         )
-
+        
+        // Set up handlers that forward to delegate
+        view = view.onCustomerCenterRestoreStarted { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewControllerDidStartRestore?(self)
+        }
+        
+        view = view.onCustomerCenterRestoreCompleted { [weak self] customerInfo in
+            guard let self = self else { return }
+            let customerInfoDict = customerInfo.dictionary
+            self.delegate?.customerCenterViewController?(self, didFinishRestoringWith: customerInfoDict)
+        }
+        
+        view = view.onCustomerCenterRestoreFailed { [weak self] error in
+            guard let self = self else { return }
+            let errorDict = Purchases.getErrorDetails(error)
+            self.delegate?.customerCenterViewController?(self, didFailRestoringWith: errorDict)
+        }
+        
+        view = view.onCustomerCenterShowingManageSubscriptions { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewControllerDidShowManageSubscriptions?(self)
+        }
+        
+        view = view.onCustomerCenterRefundRequestStarted { [weak self] productID in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self, didStartRefundRequestForProductWithID: productID)
+        }
+        
+        view = view.onCustomerCenterRefundRequestCompleted { [weak self] status in
+            guard let self = self else { return }
+            let statusDict = ["refundRequestStatus": status.rawValue]
+            self.delegate?.customerCenterViewController?(self, didCompleteRefundRequestWithStatus: statusDict)
+        }
+        
+        view = view.onCustomerCenterFeedbackSurveyCompleted { [weak self] optionID in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self, didCompleteFeedbackSurveyWithOptionID: optionID)
+        }
+        
         let controller = UIHostingController(rootView: view)
-
-        // make the background of the container clear so that if there are cutouts, they don't get
-        // overridden by the hostingController's view's background.
         controller.view.backgroundColor = UIColor.clear
         controller.view.translatesAutoresizingMaskIntoConstraints = false
-
+        
         return controller
     }
 }
