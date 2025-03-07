@@ -26,7 +26,6 @@ target 'PurchasesHybridCommonUI' do
 
   pod 'RevenueCat', '5.19.0'
   pod 'RevenueCatUI', '5.19.0'
-
 end
 
 target 'ObjCAPITester' do
