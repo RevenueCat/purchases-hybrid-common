@@ -20,21 +20,21 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
+@objc
 public final class CustomerCenterUIViewController: UIViewController {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
-    
-    /// Create a view controller to handle common customer support tasks
-    /// - Parameters:
-    ///   - customerCenterActionHandler: An optional `CustomerCenterActionHandler` to handle actions
-    ///   from the Customer Center.
-    init(
-        customerCenterActionHandler: CustomerCenterActionHandler? = nil
-    ) {
+
+    @objc
+    public var onCloseHandler: (() -> Void)?
+
+    @objc
+    public required init() {
         super.init(nibName: nil, bundle: nil)
     }
-
+      
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -76,7 +76,12 @@ public final class CustomerCenterUIViewController: UIViewController {
 extension CustomerCenterUIViewController {
 
     func createHostingController() -> UIViewController {
-        let view = CustomerCenterView()
+        let view = CustomerCenterView(
+            customerCenterActionHandler: nil,
+            navigationOptions: CustomerCenterNavigationOptions(
+                onCloseHandler: onCloseHandler
+            )
+        )
 
         let controller = UIHostingController(rootView: view)
 
