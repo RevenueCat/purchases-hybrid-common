@@ -23,6 +23,7 @@ import UIKit
 public class CustomerCenterProxy: NSObject {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
     
     @objc public func present(
