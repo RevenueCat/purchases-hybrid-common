@@ -58,6 +58,39 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
         guard let resultHandler = self.resultByVC.removeValue(forKey: controller) else { return }
         resultHandler()
     }
+    
+    public func customerCenterViewControllerDidStartRestore(_ controller: CustomerCenterUIViewController) {
+        self.delegate?.customerCenterViewControllerDidStartRestore?(controller)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didFinishRestoringWith customerInfoDictionary: [String: Any]) {
+        self.delegate?.customerCenterViewController?(controller, didFinishRestoringWith: customerInfoDictionary)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didFailRestoringWith errorDictionary: [String: Any]) {
+        self.delegate?.customerCenterViewController?(controller, didFailRestoringWith: errorDictionary)
+    }
+    
+    public func customerCenterViewControllerDidShowManageSubscriptions(_ controller: CustomerCenterUIViewController) {
+        self.delegate?.customerCenterViewControllerDidShowManageSubscriptions?(controller)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didStartRefundRequestForProductWithID productID: String) {
+        self.delegate?.customerCenterViewController?(controller, didStartRefundRequestForProductWithID: productID)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didCompleteRefundRequestWithStatus statusDictionary: [String: Any]) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestWithStatus: statusDictionary)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didCompleteFeedbackSurveyWithOptionID optionID: String) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteFeedbackSurveyWithOptionID: optionID)
+    }
 }
 
 @available(iOS 15.0, *)

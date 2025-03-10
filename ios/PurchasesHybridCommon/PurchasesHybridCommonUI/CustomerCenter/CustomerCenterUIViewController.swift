@@ -79,32 +79,40 @@ public final class CustomerCenterUIViewController: UIViewController {
 extension CustomerCenterUIViewController {
 
     func createHostingController() -> UIViewController {
-        var view = CustomerCenterView(
+        // Create the SwiftUI view with handlers that forward to the delegate
+        let view = CustomerCenterView(
             navigationOptions: CustomerCenterNavigationOptions(
                 onCloseHandler: onCloseHandler
             )
-        ).onCustomerCenterRestoreStarted { [weak self] in
+        )
+        .onCustomerCenterRestoreStarted { [weak self] in
             guard let self = self else { return }
             self.delegate?.customerCenterViewControllerDidStartRestore?(self)
-        }.onCustomerCenterRestoreCompleted { [weak self] customerInfo in
+        }
+        .onCustomerCenterRestoreCompleted { [weak self] customerInfo in
             guard let self = self else { return }
             let customerInfoDict = customerInfo.dictionary
             self.delegate?.customerCenterViewController?(self, didFinishRestoringWith: customerInfoDict)
-        }.onCustomerCenterRestoreFailed { [weak self] error in
+        }
+        .onCustomerCenterRestoreFailed { [weak self] error in
             guard let self = self else { return }
             let errorContainer = ErrorContainer(error: error, extraPayload: [:])
             self.delegate?.customerCenterViewController?(self, didFailRestoringWith: errorContainer.info)
-        }.onCustomerCenterShowingManageSubscriptions { [weak self] in
+        }
+        .onCustomerCenterShowingManageSubscriptions { [weak self] in
             guard let self = self else { return }
             self.delegate?.customerCenterViewControllerDidShowManageSubscriptions?(self)
-        }.onCustomerCenterRefundRequestStarted { [weak self] productID in
+        }
+        .onCustomerCenterRefundRequestStarted { [weak self] productID in
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didStartRefundRequestForProductWithID: productID)
-        }.onCustomerCenterRefundRequestCompleted { [weak self] status in
+        }
+        .onCustomerCenterRefundRequestCompleted { [weak self] status in
             guard let self = self else { return }
             let statusDict = ["refundRequestStatus": status.rawValue]
             self.delegate?.customerCenterViewController?(self, didCompleteRefundRequestWithStatus: statusDict)
-        }.onCustomerCenterFeedbackSurveyCompleted { [weak self] optionID in
+        }
+        .onCustomerCenterFeedbackSurveyCompleted { [weak self] optionID in
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didCompleteFeedbackSurveyWithOptionID: optionID)
         }
