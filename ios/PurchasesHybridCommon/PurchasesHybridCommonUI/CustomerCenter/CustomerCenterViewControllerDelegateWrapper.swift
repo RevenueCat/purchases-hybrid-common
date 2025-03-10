@@ -45,9 +45,9 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
                                             didStartRefundRequestForProductWithID productID: String)
     
     /// Notifies that a refund request has completed in the Customer Center.
-    @objc(customerCenterViewController:didCompleteRefundRequestWithStatusDictionary:)
+    @objc(customerCenterViewController:didCompleteRefundRequestWithStatus:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                            didCompleteRefundRequestWithStatus statusDictionary: [String: Any])
+                                            didCompleteRefundRequestWithStatus status: String)
     
     /// Notifies that a feedback survey has been completed in the Customer Center.
     @objc(customerCenterViewController:didCompleteFeedbackSurveyWithOptionID:)

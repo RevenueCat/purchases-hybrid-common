@@ -109,8 +109,7 @@ extension CustomerCenterUIViewController {
         }
         .onCustomerCenterRefundRequestCompleted { [weak self] status in
             guard let self = self else { return }
-            let statusDict = ["refundRequestStatus": status.rawValue]
-            self.delegate?.customerCenterViewController?(self, didCompleteRefundRequestWithStatus: statusDict)
+            self.delegate?.customerCenterViewController?(self, didCompleteRefundRequestWithStatus: status.name)
         }
         .onCustomerCenterFeedbackSurveyCompleted { [weak self] optionID in
             guard let self = self else { return }
