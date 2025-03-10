@@ -83,8 +83,8 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
     }
     
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                             didCompleteRefundRequestWithStatus statusDictionary: [String: Any]) {
-        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestWithStatus: statusDictionary)
+                                             didCompleteRefundRequestWithStatus status: String) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestWithStatus: status)
     }
     
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
