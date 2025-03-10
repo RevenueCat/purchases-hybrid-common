@@ -8,7 +8,7 @@
 
 import RevenueCat
 
-extension RefundRequestStatus {
+public extension RefundRequestStatus {
 
     var name: String {
         switch self {
