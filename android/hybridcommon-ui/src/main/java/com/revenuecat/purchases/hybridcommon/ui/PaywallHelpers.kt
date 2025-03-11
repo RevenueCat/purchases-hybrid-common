@@ -2,7 +2,6 @@ package com.revenuecat.purchases.hybridcommon.ui
 
 import androidx.fragment.app.FragmentActivity
 import com.revenuecat.purchases.Offering
-import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
 @JvmOverloads
@@ -31,7 +30,6 @@ fun presentPaywallFromFragment(
     )
 }
 
-@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 fun presentPaywallFromFragment(
     fragment: FragmentActivity,
     options: PresentPaywallOptions,
@@ -55,7 +53,6 @@ fun presentPaywallFromFragment(
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 data class PresentPaywallOptions @JvmOverloads constructor(
     val paywallSource: PaywallSource = PaywallSource.DefaultOffering,
     val requiredEntitlementIdentifier: String? = null,
