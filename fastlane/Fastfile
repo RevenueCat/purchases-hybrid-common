@@ -378,12 +378,12 @@ end
 platform :ios do
   desc "Release PurchasesHybridCommon to CocoaPods"
   lane :push_pod_PHC do |options|
-    pod_push(path: "PurchasesHybridCommon.podspec", synchronous: true)
+    pod_push_with_error_handling(path: "PurchasesHybridCommon.podspec", synchronous: true)
   end
 
   desc "Release PurchasesHybridCommonUI to CocoaPods"
   lane :push_pod_PHCUI do |options|
-    pod_push(path: "PurchasesHybridCommonUI.podspec", synchronous: true)
+    pod_push_with_error_handling(path: "PurchasesHybridCommonUI.podspec", synchronous: true)
   end
 
   desc "Lint Podspec"
