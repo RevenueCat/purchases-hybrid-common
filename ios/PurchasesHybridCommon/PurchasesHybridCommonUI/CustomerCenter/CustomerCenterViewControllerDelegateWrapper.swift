@@ -22,9 +22,8 @@ import RevenueCatUI
 public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
 
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
-    @objc(paywallViewControllerWasDismissed:)
+    @objc(customerCenterViewControllerWasDismissed:)
     optional func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController)
-
 
 }
 

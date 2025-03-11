@@ -77,10 +77,7 @@ private extension CustomerCenterProxy {
     }
 
     func createCustomerCenterViewController() -> CustomerCenterUIViewController {
-        // customerCenterActionHandler = nil for now, till we implement proper callbacks
-        let vc =  CustomerCenterUIViewController(
-            customerCenterActionHandler: nil
-        )
+        let vc = CustomerCenterUIViewController()
         vc.delegate = self
 
         return vc
