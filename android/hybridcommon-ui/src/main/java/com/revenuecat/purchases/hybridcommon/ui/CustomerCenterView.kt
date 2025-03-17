@@ -1,4 +1,4 @@
-package com.revenuecat.purchases.ui.revenuecatui.views
+package com.revenuecat.purchases.hybridcommon.ui
 
 import android.content.Context
 import android.util.AttributeSet
