@@ -59,7 +59,7 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
     @objc(customerCenterViewController:didSelectCustomerCenterManagementOption:withURL:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
                                                didSelectCustomerCenterManagementOption optionID: String,
-                                               withURL url: URL?)
+                                               withURL url: String?)
     
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
     @objc(customerCenterViewControllerWasDismissed:)

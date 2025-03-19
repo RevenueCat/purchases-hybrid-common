@@ -122,7 +122,7 @@ extension CustomerCenterUIViewController {
             if let customUrl = action as? CustomerCenterManagementOption.CustomUrl {
                 self.delegate?.customerCenterViewController?(self,
                                                              didSelectCustomerCenterManagementOption: action.name,
-                                                             withURL: customUrl.url)
+                                                             withURL: customUrl.url.absoluteString)
             } else {
                 self.delegate?.customerCenterViewController?(self,
                                                              didSelectCustomerCenterManagementOption: action.name,

@@ -90,7 +90,7 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
     
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
                                              didSelectCustomerCenterManagementOption optionID: String,
-                                             withURL url: URL?) {
+                                             withURL url: String?) {
         self.delegate?.customerCenterViewController?(controller, didSelectCustomerCenterManagementOption: optionID, withURL: url)
     }
     
