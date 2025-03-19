@@ -6,6 +6,7 @@ import com.revenuecat.purchases.customercenter.CustomerCenterListener
 import com.revenuecat.purchases.customercenter.CustomerCenterManagementOption
 import com.revenuecat.purchases.hybridcommon.mappers.map
 
+@SuppressWarnings("TooManyFunctions")
 abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
 
     override fun onFeedbackSurveyCompleted(feedbackSurveyOptionId: String) {
@@ -30,9 +31,9 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
 
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
         if (action is CustomerCenterManagementOption.CustomUrl) {
-            this.onManagementOptionSelectedWrapper(action.name, action.uri.toString())
+            this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
         } else {
-            this.onManagementOptionSelectedWrapper(action.name, null)
+            this.onManagementOptionSelectedWrapper(action.optionName, null)
         }
     }
 
@@ -44,7 +45,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
 }
 
-private val CustomerCenterManagementOption.name: String
+private val CustomerCenterManagementOption.optionName: String
     get() {
         return when (this) {
             is CustomerCenterManagementOption.Cancel -> "cancel"
