@@ -107,21 +107,62 @@ extension CustomerCenterUIViewController {
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didStartRefundRequestForProductWithID: productID)
         }
-        .onCustomerCenterRefundRequestCompleted { [weak self] status in
+        .onCustomerCenterRefundRequestCompleted { [weak self] (productID, status) in
             guard let self = self else { return }
-            self.delegate?.customerCenterViewController?(self, didCompleteRefundRequestWithStatus: status.name)
+            self.delegate?.customerCenterViewController?(self,
+                                                         didCompleteRefundRequestForProductWithID: productID,
+                                                         withStatus: status.name)
         }
         .onCustomerCenterFeedbackSurveyCompleted { [weak self] optionID in
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didCompleteFeedbackSurveyWithOptionID: optionID)
         }
+        .onCustomerCenterManagementOptionSelected { [weak self] action in
+            guard let self = self else { return }
+            if let customUrl = action as? CustomerCenterManagementOption.CustomUrl {
+                self.delegate?.customerCenterViewController?(self,
+                                                             didSelectCustomerCenterManagementOption: action.name,
+                                                             withURL: customUrl.url)
+            } else {
+                self.delegate?.customerCenterViewController?(self,
+                                                             didSelectCustomerCenterManagementOption: action.name,
+                                                             withURL: nil)
+            }
+        }
         
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = UIColor.clear
         controller.view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         return controller
     }
+}
+
+// MARK: - CustomerCenterManagementOption Name Extension
+@available(iOS 15.0, *)
+@available(macOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+@available(visionOS, unavailable)
+extension CustomerCenterActionable {
+    
+    var name: String {
+        switch self {
+        case is CustomerCenterManagementOption.Cancel:
+            return "cancel"
+        case is CustomerCenterManagementOption.CustomUrl:
+            return "custom_url"
+        case is CustomerCenterManagementOption.MissingPurchase:
+            return "missing_purchase"
+        case is CustomerCenterManagementOption.RefundRequest:
+            return "refund_request"
+        case is CustomerCenterManagementOption.ChangePlans:
+            return "change_plans"
+        default:
+            return "unknown"
+        }
+    }
+    
 }
 
 #endif

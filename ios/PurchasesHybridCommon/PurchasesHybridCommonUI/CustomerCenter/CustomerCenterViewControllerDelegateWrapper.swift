@@ -20,7 +20,7 @@ import RevenueCatUI
 @available(visionOS, unavailable)
 @objc(RCCustomerCenterViewControllerDelegateWrapper)
 public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
-
+    
     /// Notifies that a restore operation has started in the Customer Center.
     @objc(customerCenterViewControllerDidStartRestore:)
     optional func customerCenterViewControllerDidStartRestore(_ controller: CustomerCenterUIViewController)
@@ -28,12 +28,12 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
     /// Notifies that a restore operation has completed successfully in the Customer Center.
     @objc(customerCenterViewController:didFinishRestoringWithCustomerInfoDictionary:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                             didFinishRestoringWith customerInfoDictionary: [String: Any])
+                                               didFinishRestoringWith customerInfoDictionary: [String: Any])
     
     /// Notifies that a restore operation has failed in the Customer Center.
     @objc(customerCenterViewController:didFailRestoringWithErrorDictionary:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                            didFailRestoringWith errorDictionary: [String: Any])
+                                               didFailRestoringWith errorDictionary: [String: Any])
     
     /// Notifies that the user is navigating to manage subscriptions in the Customer Center.
     @objc(customerCenterViewControllerDidShowManageSubscriptions:)
@@ -42,22 +42,29 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
     /// Notifies that a refund request has started in the Customer Center.
     @objc(customerCenterViewController:didStartRefundRequestForProductWithID:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                            didStartRefundRequestForProductWithID productID: String)
+                                               didStartRefundRequestForProductWithID productID: String)
     
     /// Notifies that a refund request has completed in the Customer Center.
-    @objc(customerCenterViewController:didCompleteRefundRequestWithStatus:)
+    @objc(customerCenterViewController:didCompleteRefundRequestForProductWithID:withStatus:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                            didCompleteRefundRequestWithStatus status: String)
+                                               didCompleteRefundRequestForProductWithID productId: String,
+                                               withStatus status: String)
     
     /// Notifies that a feedback survey has been completed in the Customer Center.
     @objc(customerCenterViewController:didCompleteFeedbackSurveyWithOptionID:)
     optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                            didCompleteFeedbackSurveyWithOptionID optionID: String)
+                                               didCompleteFeedbackSurveyWithOptionID optionID: String)
+    
+    /// Notifies that a management option has been selected in the Customer Center.
+    @objc(customerCenterViewController:didSelectCustomerCenterManagementOption:withURL:)
+    optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                               didSelectCustomerCenterManagementOption optionID: String,
+                                               withURL url: URL?)
     
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
     @objc(customerCenterViewControllerWasDismissed:)
     optional func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController)
-
+    
 }
 
 #endif
