@@ -1,10 +1,9 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Create `CustomerCenterListenerWrapper` (#1076) via Cesar de la Vega (@vegaro)
+* Add more events to iOS `CustomerCenterViewControllerDelegateWrapper` (#1084) via Cesar de la Vega (@vegaro)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.13.0 => 8.14.1 (#1086) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 8.14.1 => 8.14.2 (#1090) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* chore: test pod_push_with_error_handling for new pods (#1081) via Facundo Menzella (@facumenzella)
-* Bump lefthook from 1.11.0 to 1.11.3 (#1082) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane-plugin-revenuecat_internal from `177d985` to `05ef095` (#1083) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.226.0 to 2.227.0 (#1089) via dependabot[bot] (@dependabot[bot])
+* Add automatic changes on `.idea` files (#1077) via Cesar de la Vega (@vegaro)
