@@ -83,8 +83,15 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
     }
     
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
-                                             didCompleteRefundRequestWithStatus status: String) {
-        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestWithStatus: status)
+                                             didCompleteRefundRequestForProductWithID productId: String,
+                                             withStatus status: String) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestForProductWithID: productId, withStatus: status)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didSelectCustomerCenterManagementOption optionID: String,
+                                             withURL url: URL?) {
+        self.delegate?.customerCenterViewController?(controller, didSelectCustomerCenterManagementOption: optionID, withURL: url)
     }
     
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
