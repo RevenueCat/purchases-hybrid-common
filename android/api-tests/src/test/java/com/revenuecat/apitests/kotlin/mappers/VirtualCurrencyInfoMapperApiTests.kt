@@ -1,6 +1,5 @@
 package com.revenuecat.apitests.kotlin.mappers
 
-import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.VirtualCurrencyInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
