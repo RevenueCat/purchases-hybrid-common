@@ -2,10 +2,12 @@ package com.revenuecat.purchases.hybridcommon
 
 import android.net.Uri
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.OwnershipType
 import com.revenuecat.purchases.PeriodType
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.SubscriptionInfo
+import com.revenuecat.purchases.VirtualCurrencyInfo
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
@@ -123,5 +125,36 @@ internal class CustomerInfoMappersTests {
         assertThat(mappedSubscriptionInfo["storeTransactionId"]).isEqualTo("storeTransactionId")
         assertThat(mappedSubscriptionInfo["isActive"]).isEqualTo(false)
         assertThat(mappedSubscriptionInfo["willRenew"]).isEqualTo(false)
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `a CustomerInfo with empty virtualCurrencies, should map to having an empty map of virtualCurrencies`() {
+        every { mockCustomerInfo.virtualCurrencies } returns emptyMap()
+        
+        val map = mockCustomerInfo.map()
+        val mappedVirtualCurrencies = map["virtualCurrencies"] as Map<*, *>
+        
+        assertThat(mappedVirtualCurrencies).isEmpty()
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `a CustomerInfo with virtualCurrencies, should map to having a non-empty map of virtualCurrencies`() {
+        val virtualCurrencyId = "REV_CAT"
+        val virtualCurrencyBalance = 100L
+        val mockVirtualCurrencyInfo = mockk<VirtualCurrencyInfo>()
+        every { mockVirtualCurrencyInfo.balance } returns virtualCurrencyBalance
+        
+        every { mockCustomerInfo.virtualCurrencies } returns mapOf(
+            virtualCurrencyId to mockVirtualCurrencyInfo
+        )
+
+        val map = mockCustomerInfo.map()
+        val mappedVirtualCurrencies = map["virtualCurrencies"] as Map<*, *>
+        
+        assertThat(mappedVirtualCurrencies).hasSize(1)
+        val mappedVirtualCurrency = mappedVirtualCurrencies[virtualCurrencyId] as Map<*, *>
+        assertThat(mappedVirtualCurrency["balance"]).isEqualTo(virtualCurrencyBalance)
     }
 }

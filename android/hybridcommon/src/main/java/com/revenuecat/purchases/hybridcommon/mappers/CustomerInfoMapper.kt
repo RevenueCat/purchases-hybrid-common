@@ -1,6 +1,10 @@
+@file:OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
+import com.revenuecat.purchases.VirtualCurrencyInfo
 
 fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
@@ -24,4 +28,6 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "originalPurchaseDateMillis" to originalPurchaseDate?.toMillis(),
         "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() },
         "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
+        "virtualCurrencies" to virtualCurrencies.mapValues { it.value.map() }
     )
+
