@@ -25,6 +25,9 @@
     "originalApplicationVersion" : "1.0",
     "subscriptionsByProductIdentifier" : {
 
+    },
+    "virtualCurrencies" : {
+
     }
   }
 }

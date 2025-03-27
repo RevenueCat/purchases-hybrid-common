@@ -25,5 +25,8 @@
   "originalPurchaseDateMillis" : null,
   "subscriptionsByProductIdentifier" : {
 
+  },
+  "virtualCurrencies" : {
+
   }
 }
