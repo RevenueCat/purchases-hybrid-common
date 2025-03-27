@@ -131,10 +131,10 @@ internal class CustomerInfoMappersTests {
     @Test
     fun `a CustomerInfo with empty virtualCurrencies, should map to having an empty map of virtualCurrencies`() {
         every { mockCustomerInfo.virtualCurrencies } returns emptyMap()
-        
+
         val map = mockCustomerInfo.map()
         val mappedVirtualCurrencies = map["virtualCurrencies"] as Map<*, *>
-        
+
         assertThat(mappedVirtualCurrencies).isEmpty()
     }
 
@@ -145,14 +145,14 @@ internal class CustomerInfoMappersTests {
         val virtualCurrencyBalance = 100L
         val mockVirtualCurrencyInfo = mockk<VirtualCurrencyInfo>()
         every { mockVirtualCurrencyInfo.balance } returns virtualCurrencyBalance
-        
+
         every { mockCustomerInfo.virtualCurrencies } returns mapOf(
-            virtualCurrencyId to mockVirtualCurrencyInfo
+            virtualCurrencyId to mockVirtualCurrencyInfo,
         )
 
         val map = mockCustomerInfo.map()
         val mappedVirtualCurrencies = map["virtualCurrencies"] as Map<*, *>
-        
+
         assertThat(mappedVirtualCurrencies).hasSize(1)
         val mappedVirtualCurrency = mappedVirtualCurrencies[virtualCurrencyId] as Map<*, *>
         assertThat(mappedVirtualCurrency["balance"]).isEqualTo(virtualCurrencyBalance)

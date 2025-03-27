@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
-import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.VirtualCurrencyInfo
 import io.mockk.every
 import io.mockk.mockk
@@ -24,12 +23,11 @@ class VirtualCurrencyInfoMapperTests {
 
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     fun generateMockVirtualCurrencyInfo(
-        balance: Long = 100L
+        balance: Long = 100L,
     ): VirtualCurrencyInfo {
         val mockVirtualCurrencyInfo = mockk<VirtualCurrencyInfo>()
         every { mockVirtualCurrencyInfo.balance } returns balance
 
         return mockVirtualCurrencyInfo
     }
-
 }

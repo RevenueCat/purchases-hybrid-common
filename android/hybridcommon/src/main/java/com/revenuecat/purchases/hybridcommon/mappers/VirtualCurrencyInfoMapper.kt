@@ -6,5 +6,5 @@ import com.revenuecat.purchases.VirtualCurrencyInfo
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun VirtualCurrencyInfo.map(): Map<String, Any?> =
     mapOf(
-        "balance" to balance
+        "balance" to balance,
     )
