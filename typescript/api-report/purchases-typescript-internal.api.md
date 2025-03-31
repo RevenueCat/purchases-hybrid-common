@@ -516,7 +516,7 @@ export interface PurchasesSubscriptionInfo {
 
 // @public
 export interface PurchasesVirtualCurrencyInfo {
-    readonly balance: bigint;
+    readonly balance: number;
 }
 
 // @public

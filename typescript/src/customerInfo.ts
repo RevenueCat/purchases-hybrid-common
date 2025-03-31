@@ -328,5 +328,5 @@ export interface PurchasesVirtualCurrencyInfo {
     /**
      * The current balance of the virtual currency.
      */
-    readonly balance: bigint;
+    readonly balance: number;
 }
