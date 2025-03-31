@@ -123,6 +123,60 @@ class CustomerInfoHybridAdditionsTests: QuickSpec {
                     let nonSubscriptionTransactions = dictionary["nonSubscriptionTransactions"] as? Array<Any>
                     expect(nonSubscriptionTransactions?.count) == 0
                 }
+                it("contains the virtualCurrencies when it exists") {
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
+                        """
+                        {
+                            "request_date": "2019-08-16T10:30:42Z",
+                            "subscriber": {
+                                "first_seen": "2019-07-17T00:05:54Z",
+                                "management_url": "https://revenuecat.com",
+                                "original_app_user_id": "",
+                                "subscriptions": {},
+                                "other_purchases": {},
+                                "virtual_currencies": {
+                                    "RC_COIN": {
+                                        "balance": 100
+                                    }
+                                }
+                            }
+                        }
+                        """
+                    )
+
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
+                    guard let vcDictionary = dictionary["virtualCurrencies"] as? [String: [String: Any]] else {
+                        fail("Virtual currencies dictionary not found")
+                        return
+                    }
+                    expect(vcDictionary.count).to(equal(1))
+                    expect(vcDictionary["RC_COIN"]?["balance"]).toNot(beNil())
+                    expect(vcDictionary["RC_COIN"]?["balance"] as? Int64).to(equal(100))
+                }
+                it ("contains an empty dictionary when the virtual currencies dictionary doesn't exist") {
+                    let mockCustomerInfo = try CustomerInfo.fromJSON(
+                        """
+                        {
+                            "request_date": "2019-08-16T10:30:42Z",
+                            "subscriber": {
+                                "first_seen": "2019-07-17T00:05:54Z",
+                                "original_app_user_id": "",
+                                "subscriptions": {},
+                                "other_purchases": {}
+                            }
+                        }
+                        """
+                    )
+
+                    let dictionary = CommonFunctionality.encode(customerInfo: mockCustomerInfo)
+                    guard let vcDictionary = dictionary["virtualCurrencies"] as? [String: [String: Any]] else {
+                        fail("Virtual currencies dictionary not found")
+                        return
+                    }
+
+                    expect(vcDictionary).toNot(beNil())
+                    expect(vcDictionary.count).to(equal(0))
+                }
             }
         }
     }

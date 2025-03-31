@@ -213,6 +213,12 @@ export interface CustomerInfo {
      * Information about the customer's subscriptions for each product identifier.
      */
     readonly subscriptionsByProductIdentifier: { [key: string]: PurchasesSubscriptionInfo };
+
+    /**
+     * Information about the customer's virtual currencies contained in an object keyed
+     * by the virtual currency's code.
+     */
+    readonly virtualCurrencies: { [key: string]: PurchasesVirtualCurrencyInfo };
 }
 
 /**
@@ -310,4 +316,17 @@ export interface PurchasesSubscriptionInfo {
      * Whether the subscription will renew at the next billing period.
      */
     readonly willRenew: boolean;
+}
+
+/**
+ * Describes information about a virtual currency in the app.
+ * 
+ * Use this class to access information about a virtual currency, such as its current balance.
+ * @public
+ */
+export interface PurchasesVirtualCurrencyInfo {
+    /**
+     * The current balance of the virtual currency.
+     */
+    readonly balance: number;
 }

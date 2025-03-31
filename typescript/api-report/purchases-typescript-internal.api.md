@@ -35,6 +35,9 @@ export interface CustomerInfo {
     readonly subscriptionsByProductIdentifier: {
         [key: string]: PurchasesSubscriptionInfo;
     };
+    readonly virtualCurrencies: {
+        [key: string]: PurchasesVirtualCurrencyInfo;
+    };
 }
 
 // @public
@@ -509,6 +512,11 @@ export interface PurchasesSubscriptionInfo {
     readonly storeTransactionId: string | null;
     readonly unsubscribeDetectedAt: string | null;
     readonly willRenew: boolean;
+}
+
+// @public
+export interface PurchasesVirtualCurrencyInfo {
+    readonly balance: number;
 }
 
 // @public
