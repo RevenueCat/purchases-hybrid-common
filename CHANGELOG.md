@@ -1,3 +1,12 @@
+## 13.26.0-vc-beta.1
+## RevenueCat SDK
+
+### ✨ New Features
+
+Warning: The Virtual Currency features are currently in beta and may change without notice.
+
+- Expose Virtual Currency Balances (#1100) via Will Taylor (@fire-at-will)
+
 ## 13.26.0
 ## RevenueCat SDK
 ### ✨ New Features

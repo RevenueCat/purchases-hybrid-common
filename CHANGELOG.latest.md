@@ -1,9 +1,7 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add more events to iOS `CustomerCenterViewControllerDelegateWrapper` (#1084) via Cesar de la Vega (@vegaro)
-### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.14.1 => 8.14.2 (#1090) via RevenueCat Git Bot (@RCGitBot)
 
-### 🔄 Other Changes
-* Bump fastlane from 2.226.0 to 2.227.0 (#1089) via dependabot[bot] (@dependabot[bot])
-* Add automatic changes on `.idea` files (#1077) via Cesar de la Vega (@vegaro)
+### ✨ New Features
+
+Warning: The Virtual Currency features are currently in beta and may change without notice.
+
+- Expose Virtual Currency Balances (#1100) via Will Taylor (@fire-at-will)
