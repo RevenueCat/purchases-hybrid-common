@@ -9,6 +9,6 @@ private class VirtualCurrencyInfoMapperApiTests {
 
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     fun checkMap(virtualCurrencyInfo: VirtualCurrencyInfo) {
-        val map: Map<String, Any?> = virtualCurrencyInfo.map()
+        val map: Map<String, Any> = virtualCurrencyInfo.map()
     }
 }
