@@ -1,0 +1,29 @@
+{
+  "name": "purchases-js-hybrid-mappings",
+  "version": "1.0.6",
+  "description": "",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "author": "RevenueCat, Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevenueCat/purchases-hybrid-common.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RevenueCat/purchases-hybrid-common/issues"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@revenuecat/purchases-js": "1.0.6"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "private": false
+}
