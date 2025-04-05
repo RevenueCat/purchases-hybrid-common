@@ -412,6 +412,19 @@ jobs:
           name: Run web API tests
           command: bundle exec fastlane web test_js_mappings_api
 
+  web-lint:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - run:
+          name: Run web linter
+          command: bundle exec fastlane web lint_js_mappings
+
   check-pods:
     <<: *base-ios-job
     steps:
@@ -441,6 +454,7 @@ workflows:
       - typescript-apitests
       - web-tests
       - web-api-tests
+      - web-lint
 
   deploy:
     when:

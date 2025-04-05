@@ -21,7 +21,9 @@
     "test": "jest",
     "api-test": "npm run build && api-extractor run --local --verbose",
     "api-test:ci": "npm run build && api-extractor run --verbose",
-    "prepack": "npm run build && api-extractor run --local"
+    "prepack": "npm run build && api-extractor run --local",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
     "@revenuecat/purchases-js": "../../purchases-js"
@@ -29,6 +31,9 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.42.3",
     "@types/jest": "^29.5.14",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.5.3"

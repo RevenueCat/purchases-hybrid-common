@@ -460,6 +460,13 @@ platform :web do
       sh("yarn && yarn api-test:ci")
     end
   end
+
+  desc "Run linter for purchases-js-hybrid-mappings"
+  lane :lint_js_mappings do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn lint")
+    end
+  end
 end
 
 def make_typescript_package_esm
