@@ -58,7 +58,7 @@ describe('mapCustomerInfo', () => {
     });
   });
 
-  it('maps CustomerInfo with one of each type correctly', () => {
+  it('maps CustomerInfo with subs and non subs purchases correctly', () => {
     const purchaseDate = new Date('2024-01-15T12:00:00Z');
     const expirationDate = new Date('2024-02-15T12:00:00Z');
 
