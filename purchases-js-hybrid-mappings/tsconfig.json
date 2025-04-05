@@ -28,5 +28,6 @@
     "baseUrl": ".",
     "skipLibCheck": true
   },
-  "include": ["src", "tests"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.spec.ts", "tests"]
 }
