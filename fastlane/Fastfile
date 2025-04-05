@@ -439,9 +439,26 @@ platform :typescript do
     build_and_publish_typescript_package
   end
 
+  desc "Deploy typescript interfaces ESNext NPM package"
   lane :deploy_esm do |options|
     make_typescript_package_esm
     build_and_publish_typescript_package
+  end
+end
+
+platform :web do
+  desc "Run tests for purchases-js-hybrid-mappings"
+  lane :test_js_mappings do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn test")
+    end
+  end
+
+  desc "Run API tests for purchases-js-hybrid-mappings"
+  lane :test_js_mappings_api do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn api-test:ci")
+    end
   end
 end
 
