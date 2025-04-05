@@ -13,6 +13,8 @@ export class PurchasesCommon {
     }): PurchasesCommon;
     // (undocumented)
     getCustomerInfo(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    static getInstance(): PurchasesCommon;
 }
 
 // (No @packageDocumentation comment for this package)

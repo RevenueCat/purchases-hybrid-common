@@ -281,6 +281,38 @@
               "isOptional": false,
               "isAbstract": false,
               "name": "getCustomerInfo"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon.getInstance:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static getInstance(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PurchasesCommon",
+                  "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "getInstance"
             }
           ],
           "implementsTokenRanges": []

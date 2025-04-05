@@ -1,9 +1,11 @@
 import {Purchases} from "@revenuecat/purchases-js";
 import {mapCustomerInfo} from "./mappers/customer_info_mapper";
+import {Logger} from "./utils/logger";
 
 export class PurchasesCommon {
 
-  private static instance: Purchases | null = null;
+  private static instance: PurchasesCommon | null = null;
+  private purchases: Purchases;
 
   static configure(
     configuration: {
@@ -11,22 +13,30 @@ export class PurchasesCommon {
       appUserId: string | undefined,
     }
   ): PurchasesCommon {
+    if (PurchasesCommon.instance) {
+      Logger.warn("PurchasesCommon.configure() called more than once. Previous configuration will be overwritten.");
+    }
     const purchasesInstance = Purchases.configure(
       configuration.apiKey,
       configuration.appUserId || Purchases.generateRevenueCatAnonymousAppUserId(),
     )
-    return new PurchasesCommon(purchasesInstance);
+    PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
+    return PurchasesCommon.instance;
+  }
+
+  static getInstance(): PurchasesCommon {
+    if (!PurchasesCommon.instance) {
+      throw new Error("Purchases not configured. Call configure() first.");
+    }
+    return PurchasesCommon.instance;
   }
 
   private constructor(purchasesInstance: Purchases) {
-    PurchasesCommon.instance = purchasesInstance;
+    this.purchases = purchasesInstance;
   }
 
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
-    if (!PurchasesCommon.instance) {
-      throw new Error("Purchases not configured");
-    }
-    const customerInfo = await PurchasesCommon.instance.getCustomerInfo();
+    const customerInfo = await this.purchases.getCustomerInfo();
     return mapCustomerInfo(customerInfo);
   }
 }

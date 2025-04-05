@@ -1,7 +1,7 @@
 {
   "name": "purchases-js-hybrid-mappings",
   "version": "1.0.6",
-  "description": "",
+  "description": "RevenueCat's JavaScript hybrid mappings for purchases-js",
   "main": "dist/index.js",
   "type": "module",
   "files": [
@@ -31,12 +31,12 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.42.3",
     "@types/jest": "^29.5.14",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.5.3"
+    "typescript": "~5.3.3"
   },
   "private": false
 }

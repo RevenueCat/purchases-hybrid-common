@@ -7,7 +7,7 @@ import {
 } from "@revenuecat/purchases-js";
 
 export function mapCustomerInfo(customerInfo: CustomerInfo): Record<string, unknown> {
-  const validDates = Object.values(customerInfo.allExpirationDatesByProduct).filter((date) => date !== null);
+  const validDates = Object.values(customerInfo.allExpirationDatesByProduct).filter((date): date is Date => date !== null);
   const latestExpirationDate = validDates.length > 0 ? new Date(Math.max(...validDates.map((date) => date.getTime()))) : null;
 
   return {
