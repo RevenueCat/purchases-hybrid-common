@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Source and test files
+src/
+tests/
+*.test.*
+*.test.d.ts
+__tests__/
+__mocks__/
+coverage/
+
+# Development configs
+*.env*
+tsconfig.json
+jest.config.js
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Version control
+.git/
+.gitignore
+.npmignore
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Build artifacts
+*.map
+*.tsbuildinfo
+temp/
+api-report/
+
+# Documentation
+*.md
+!README.md
+!LICENSE.md
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

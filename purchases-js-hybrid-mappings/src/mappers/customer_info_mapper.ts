@@ -1,4 +1,10 @@
-import {CustomerInfo, EntitlementInfo, EntitlementInfos, PeriodType} from "@revenuecat/purchases-js";
+import {
+  CustomerInfo,
+  EntitlementInfo,
+  EntitlementInfos,
+  NonSubscriptionTransaction,
+  PeriodType, SubscriptionInfo
+} from "@revenuecat/purchases-js";
 
 export function mapCustomerInfo(customerInfo: CustomerInfo): Record<string, unknown> {
   const validDates = Object.values(customerInfo.allExpirationDatesByProduct).filter((date) => date !== null);
@@ -31,8 +37,8 @@ export function mapCustomerInfo(customerInfo: CustomerInfo): Record<string, unkn
     "managementURL": customerInfo.managementURL,
     "originalPurchaseDate": customerInfo.originalPurchaseDate ? customerInfo.originalPurchaseDate.toISOString() : null,
     "originalPurchaseDateMillis": customerInfo.originalPurchaseDate ? customerInfo.originalPurchaseDate.getTime() : null,
-    "nonSubscriptionTransactions": {}, // TODO
-    "subscriptionsByProductIdentifier": {} // TODO
+    "nonSubscriptionTransactions": mapNonSubscriptionTransactions(customerInfo.nonSubscriptionTransactions),
+    "subscriptionsByProductIdentifier": mapSubscriptionInfos(customerInfo.subscriptionsByProductIdentifier),
   };
 }
 
@@ -62,15 +68,51 @@ function mapEntitlementInfo(entitlementInfo: EntitlementInfo): Record<string, un
     "expirationDateMillis": entitlementInfo.expirationDate ? entitlementInfo.expirationDate.getTime() : null,
     "store": entitlementInfo.store,
     "productIdentifier": entitlementInfo.productIdentifier,
-    "productPlanIdentifier": null, // TODO: ProductPlanIdentifier not yet available in JS SDK
+    "productPlanIdentifier": entitlementInfo.productPlanIdentifier,
     "isSandbox": entitlementInfo.isSandbox,
     "unsubscribeDetectedAt": entitlementInfo.unsubscribeDetectedAt ? entitlementInfo.unsubscribeDetectedAt.toISOString() : null,
     "unsubscribeDetectedAtMillis": entitlementInfo.unsubscribeDetectedAt ? entitlementInfo.unsubscribeDetectedAt.getTime() : null,
     "billingIssueDetectedAt": entitlementInfo.billingIssueDetectedAt ? entitlementInfo.billingIssueDetectedAt.toISOString() : null,
     "billingIssueDetectedAtMillis": entitlementInfo.billingIssueDetectedAt ? entitlementInfo.billingIssueDetectedAt.getTime() : null,
-    "ownershipType": "UNKNOWN", // TODO: OwnershipType not yet available in JS SDK,
+    "ownershipType": entitlementInfo.ownershipType,
     "verification": "NOT_REQUESTED", // TODO: Trusted entitlements not available in JS SDK
   };
+}
+
+function mapNonSubscriptionTransactions(nonSubscriptionTransactions: NonSubscriptionTransaction[]): Record<string, unknown>[] {
+  return nonSubscriptionTransactions.map((transaction) => {
+    return {
+      "transactionIdentifier": transaction.transactionIdentifier,
+      "revenueCatId": transaction.transactionIdentifier, // Deprecated: Use transactionIdentifier in this map instead
+      "productIdentifier": transaction.productIdentifier,
+      "productId": transaction.productIdentifier, // Deprecated: Use productIdentifier in this map instead
+      "purchaseDate": transaction.purchaseDate.toISOString(),
+      "purchaseDateMillis": transaction.purchaseDate.getTime(),
+      "store": transaction.store,
+    };
+  });
+}
+
+function mapSubscriptionInfos(subscriptionsByProductIdentifier: Record<string, SubscriptionInfo>): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(subscriptionsByProductIdentifier).map(([productId, subscriptionInfo]) => [productId, {
+      "productIdentifier": subscriptionInfo.productIdentifier,
+      "purchaseDate": subscriptionInfo.purchaseDate.toISOString(),
+      "originalPurchaseDate": subscriptionInfo.originalPurchaseDate ? subscriptionInfo.originalPurchaseDate.toISOString() : null,
+      "expiresDate": subscriptionInfo.expiresDate ? subscriptionInfo.expiresDate.toISOString() : null,
+      "store": subscriptionInfo.store,
+      "isSandbox": subscriptionInfo.isSandbox,
+      "unsubscribeDetectedAt": subscriptionInfo.unsubscribeDetectedAt ? subscriptionInfo.unsubscribeDetectedAt.toISOString() : null,
+      "billingIssuesDetectedAt": subscriptionInfo.billingIssuesDetectedAt ? subscriptionInfo.billingIssuesDetectedAt.toISOString() : null,
+      "gracePeriodExpiresDate": subscriptionInfo.gracePeriodExpiresDate ? subscriptionInfo.gracePeriodExpiresDate.toISOString() : null,
+      "ownershipType": subscriptionInfo.ownershipType,
+      "periodType": mapPeriodType(subscriptionInfo.periodType),
+      "refundedAt": subscriptionInfo.refundedAt ? subscriptionInfo.refundedAt.toISOString() : null,
+      "storeTransactionId": subscriptionInfo.storeTransactionId,
+      "isActive": subscriptionInfo.isActive,
+      "willRenew": subscriptionInfo.willRenew,
+    }])
+  )
 }
 
 function mapPeriodType(periodType: PeriodType): string {
