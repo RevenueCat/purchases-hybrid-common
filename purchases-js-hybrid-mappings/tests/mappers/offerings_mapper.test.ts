@@ -136,7 +136,7 @@ describe('mapOfferings', () => {
     };
 
     const price: Price = {
-      amount: 4.99,
+      amount: 499,
       amountMicros: 4990000,
       currency: 'USD',
       formattedPrice: '$4.99'
@@ -172,9 +172,9 @@ describe('mapOfferings', () => {
       periodDuration: periodDuration,
       cycleCount: 0,
       pricePerMonth: period.unit === PeriodUnit.Year ?
-        { amount: 0.42, amountMicros: 415833, currency: 'USD', formattedPrice: '$0.42' } : price,
+        { amount: 4158, amountMicros: 415833, currency: 'USD', formattedPrice: '$0.42' } : price,
       pricePerYear: period.unit === PeriodUnit.Month || period.unit === PeriodUnit.Week ?
-        { amount: 59.88, amountMicros: 59880000, currency: 'USD', formattedPrice: '$59.88' } : price,
+        { amount: 5988, amountMicros: 59880000, currency: 'USD', formattedPrice: '$59.88' } : price,
       pricePerWeek: {
         amount: period.unit === PeriodUnit.Month ? 1.15 : 0.10,
         amountMicros: period.unit === PeriodUnit.Month ? 1151538 : 96346,
