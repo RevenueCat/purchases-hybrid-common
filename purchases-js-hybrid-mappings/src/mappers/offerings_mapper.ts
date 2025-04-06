@@ -23,29 +23,14 @@ function mapOffering(offering: Offering): Record<string, unknown> {
     "serverDescription": offering.serverDescription,
     "metadata": offering.metadata,
     "availablePackages": offering.availablePackages.map(pkg => mapPackage(pkg)),
+    "lifetime": offering.lifetime ? mapPackage(offering.lifetime) : null,
+    "annual": offering.annual ? mapPackage(offering.annual) : null,
+    "sixMonth": offering.sixMonth ? mapPackage(offering.sixMonth) : null,
+    "threeMonth": offering.threeMonth ? mapPackage(offering.threeMonth) : null,
+    "twoMonth": offering.twoMonth ? mapPackage(offering.twoMonth) : null,
+    "monthly": offering.monthly ? mapPackage(offering.monthly) : null,
+    "weekly": offering.weekly ? mapPackage(offering.weekly) : null,
   };
-
-  if (offering.lifetime) {
-    result["lifetime"] = mapPackage(offering.lifetime);
-  }
-  if (offering.annual) {
-    result["annual"] = mapPackage(offering.annual);
-  }
-  if (offering.sixMonth) {
-    result["sixMonth"] = mapPackage(offering.sixMonth);
-  }
-  if (offering.threeMonth) {
-    result["threeMonth"] = mapPackage(offering.threeMonth);
-  }
-  if (offering.twoMonth) {
-    result["twoMonth"] = mapPackage(offering.twoMonth);
-  }
-  if (offering.monthly) {
-    result["monthly"] = mapPackage(offering.monthly);
-  }
-  if (offering.weekly) {
-    result["weekly"] = mapPackage(offering.weekly);
-  }
 
   return result;
 }

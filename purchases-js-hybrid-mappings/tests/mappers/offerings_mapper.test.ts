@@ -2,17 +2,17 @@ import {
   Offering,
   Offerings,
   Package,
+  PackageType,
   Period,
   PeriodUnit,
   PresentedOfferingContext,
-  PricingPhase,
   Price,
+  PricingPhase,
   Product,
   ProductType,
-  SubscriptionOption,
-  PackageType
+  SubscriptionOption
 } from "@revenuecat/purchases-js";
-import { mapOfferings } from "../../src/mappers/offerings_mapper";
+import {mapOfferings} from "../../src/mappers/offerings_mapper";
 
 describe('mapOfferings', () => {
   it('maps Offerings with minimum required properties correctly', () => {
@@ -47,6 +47,12 @@ describe('mapOfferings', () => {
       metadata: { key: 'value' },
       availablePackages: [],
       lifetime: null,
+      annual: null,
+      sixMonth: null,
+      threeMonth: null,
+      twoMonth: null,
+      monthly: null,
+      weekly: null,
     };
 
     expect(result).toEqual({
@@ -58,10 +64,10 @@ describe('mapOfferings', () => {
   });
 
   it('maps Offerings with more complete data correctly', () => {
-    const lifetimePackage = createFullPackage('lifetime_pkg', 'premium_offering', PackageType.Lifetime);
-    const annualPackage = createFullPackage('annual_pkg', 'premium_offering', PackageType.Annual);
-    const monthlyPackage = createFullPackage('monthly_pkg', 'premium_offering', PackageType.Monthly);
-    const weeklyPackage = createFullPackage('weekly_pkg', 'premium_offering', PackageType.Weekly);
+    const lifetimePackage = createPackage('lifetime_pkg', 'premium_offering', PackageType.Lifetime);
+    const annualPackage = createPackage('annual_pkg', 'premium_offering', PackageType.Annual);
+    const monthlyPackage = createPackage('monthly_pkg', 'premium_offering', PackageType.Monthly);
+    const weeklyPackage = createPackage('weekly_pkg', 'premium_offering', PackageType.Weekly);
     const fullOffering: Offering = {
       identifier: 'premium_offering',
       serverDescription: 'Premium offering description',
@@ -119,79 +125,7 @@ describe('mapOfferings', () => {
     });
   });
 
-  function createMinimalPackage(identifier: string, offeringId: string): Package {
-    const presentedOfferingContext: PresentedOfferingContext = {
-      offeringIdentifier: offeringId,
-      placementIdentifier: null,
-      targetingContext: null
-    };
-
-    const price: Price = {
-      amount: 99,
-      amountMicros: 990000,
-      currency: 'USD',
-      formattedPrice: '$0.99'
-    };
-
-    const period: Period = {
-      unit: PeriodUnit.Month,
-      number: 1
-    };
-
-    const basePricingPhase: PricingPhase = {
-      price: price,
-      period: period,
-      periodDuration: 'P1M',
-      cycleCount: 0,
-      pricePerMonth: price,
-      pricePerYear: {
-        amount: 1199,
-        amountMicros: 11988000,
-        currency: 'USD',
-        formattedPrice: '$11.99'
-      },
-      pricePerWeek: {
-        amount: 0.23,
-        amountMicros: 230769,
-        currency: 'USD',
-        formattedPrice: '$0.23'
-      }
-    };
-
-    const defaultOption: SubscriptionOption = {
-      id: 'default_option',
-      priceId: 'price_default',
-      base: basePricingPhase,
-      trial: null
-    };
-
-    const product: Product = {
-      identifier: `product_${identifier}`,
-      title: 'Basic Product',
-      displayName: 'Basic Product',
-      description: 'A basic product description',
-      productType: ProductType.Subscription,
-      currentPrice: price,
-      normalPeriodDuration: 'P1M',
-      subscriptionOptions: {},
-      defaultSubscriptionOption: defaultOption,
-      defaultNonSubscriptionOption: null,
-      defaultPurchaseOption: defaultOption,
-      presentedOfferingIdentifier: offeringId,
-      presentedOfferingContext: presentedOfferingContext
-    };
-
-    const rcPackage: Package = {
-      identifier: identifier,
-      packageType: PackageType.Monthly,
-      webBillingProduct: product,
-      rcBillingProduct: product,
-    }
-
-    return rcPackage;
-  }
-
-  function createFullPackage(identifier: string, offeringId: string, packageType: PackageType): Package {
+  function createPackage(identifier: string, offeringId: string, packageType: PackageType): Package {
     const presentedOfferingContext: PresentedOfferingContext = {
       offeringIdentifier: offeringId,
       placementIdentifier: 'main_page',
@@ -216,18 +150,20 @@ describe('mapOfferings', () => {
     };
 
     const isSubscription = packageType !== PackageType.Lifetime;
-    
-    const period = packageType === PackageType.Annual ? 
-      { unit: PeriodUnit.Year, number: 1 } : 
-      packageType === PackageType.Monthly ? 
-        { unit: PeriodUnit.Month, number: 1 } : 
-        packageType === PackageType.Weekly ? 
-          { unit: PeriodUnit.Week, number: 1 } : 
-          { unit: PeriodUnit.Month, number: 1 };
 
-    const periodDuration = packageType === PackageType.Annual ? 
-      'P1Y' : PackageType.Monthly ? 
-        'P1M' : PackageType.Weekly ? 
+    const monthlyPeriod: Period = { unit: PeriodUnit.Month, number: 1 };
+
+    const period: Period = packageType === PackageType.Annual
+      ? { unit: PeriodUnit.Year, number: 1 }
+      : packageType === PackageType.Monthly
+        ? monthlyPeriod
+        : packageType === PackageType.Weekly
+          ? { unit: PeriodUnit.Week, number: 1 }
+          : monthlyPeriod;
+
+    const periodDuration = packageType === PackageType.Annual ?
+      'P1Y' : PackageType.Monthly ?
+        'P1M' : PackageType.Weekly ?
           'P1W' : 'P1M';
 
     const basePricingPhase: PricingPhase = {
@@ -235,9 +171,9 @@ describe('mapOfferings', () => {
       period: period,
       periodDuration: periodDuration,
       cycleCount: 0,
-      pricePerMonth: period.unit === PeriodUnit.Year ? 
+      pricePerMonth: period.unit === PeriodUnit.Year ?
         { amount: 0.42, amountMicros: 415833, currency: 'USD', formattedPrice: '$0.42' } : price,
-      pricePerYear: period.unit === PeriodUnit.Month || period.unit === PeriodUnit.Week ? 
+      pricePerYear: period.unit === PeriodUnit.Month || period.unit === PeriodUnit.Week ?
         { amount: 59.88, amountMicros: 59880000, currency: 'USD', formattedPrice: '$59.88' } : price,
       pricePerWeek: {
         amount: period.unit === PeriodUnit.Month ? 1.15 : 0.10,
@@ -264,7 +200,7 @@ describe('mapOfferings', () => {
       trial: packageType !== PackageType.Lifetime ? trialPricingPhase : null
     };
 
-    const productType = packageType === PackageType.Lifetime ? 
+    const productType = packageType === PackageType.Lifetime ?
       ProductType.NonConsumable : ProductType.Subscription;
 
     const product: Product = {
@@ -283,13 +219,11 @@ describe('mapOfferings', () => {
       presentedOfferingContext: presentedOfferingContext
     };
 
-    const rcPackage: Package = {
+    return {
       identifier: identifier,
       packageType: packageType,
       webBillingProduct: product,
       rcBillingProduct: product
     };
-
-    return rcPackage;
   }
-}); 
+});
