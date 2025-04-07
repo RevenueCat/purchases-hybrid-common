@@ -465,7 +465,7 @@ platform :web do
   desc "Run linter for purchases-js-hybrid-mappings"
   lane :lint_js_mappings do |options|
     Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
-      sh("yarn && yarn lint")
+      sh("yarn && yarn format:check && yarn lint")
     end
   end
 end
