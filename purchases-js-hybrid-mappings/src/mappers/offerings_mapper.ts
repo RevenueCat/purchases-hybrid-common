@@ -22,7 +22,7 @@ export function mapOfferings(offerings: Offerings): Record<string, unknown> {
 }
 
 function mapOffering(offering: Offering): Record<string, unknown> {
-  const result: Record<string, unknown> = {
+  return {
     "identifier": offering.identifier,
     "serverDescription": offering.serverDescription,
     "metadata": offering.metadata,
@@ -35,8 +35,6 @@ function mapOffering(offering: Offering): Record<string, unknown> {
     "monthly": offering.monthly ? mapPackage(offering.monthly) : null,
     "weekly": offering.weekly ? mapPackage(offering.weekly) : null,
   };
-
-  return result;
 }
 
 function mapPackage(pkg: Package): Record<string, unknown> {
