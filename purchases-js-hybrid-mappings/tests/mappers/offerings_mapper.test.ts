@@ -10,7 +10,8 @@ import {
   PricingPhase,
   Product,
   ProductType,
-  SubscriptionOption
+  SubscriptionOption,
+  NonSubscriptionOption
 } from "@revenuecat/purchases-js";
 import {mapOfferings} from "../../src/mappers/offerings_mapper";
 
@@ -98,24 +99,438 @@ describe('mapOfferings', () => {
 
     const result = mapOfferings(fullOfferings);
 
+    const expectedPackageProduct = {
+      currencyCode: 'USD',
+      defaultOption: {
+        billingPeriod: {
+          iso8601: 'P1Y',
+          unit: 'YEAR',
+          value: 1
+        },
+        freePhase: {
+          billingCycleCount: 1,
+          billingPeriod: {
+            iso8601: 'P7D',
+            unit: 'DAY',
+            value: 7
+          },
+          offerPaymentMode: 'FREE_TRIAL',
+          price: {
+            amountMicros: 0,
+            currencyCode: 'USD',
+            formatted: 'Free'
+          },
+          recurrenceMode: 3
+        },
+        fullPricePhase: {
+          billingCycleCount: 0,
+          billingPeriod: {
+            iso8601: 'P1Y',
+            unit: 'YEAR',
+            value: 1
+          },
+          offerPaymentMode: null,
+          price: {
+            amountMicros: 4990000,
+            currencyCode: 'USD',
+            formatted: '$4.99'
+          },
+          recurrenceMode: 1
+        },
+        id: 'annual_pkg_default',
+        installmentsInfo: null,
+        introPhase: null,
+        isBasePlan: false,
+        isPrepaid: false,
+        presentedOfferingContext: {
+          offeringIdentifier: 'premium_offering',
+          placementIdentifier: 'main_page',
+          targetingContext: {
+            revision: 1,
+            ruleId: 'rule_123'
+          }
+        },
+        presentedOfferingIdentifier: 'premium_offering',
+        pricingPhases: [
+          {
+            billingCycleCount: 1,
+            billingPeriod: {
+              iso8601: 'P7D',
+              unit: 'DAY',
+              value: 7
+            },
+            offerPaymentMode: 'FREE_TRIAL',
+            price: {
+              amountMicros: 0,
+              currencyCode: 'USD',
+              formatted: 'Free'
+            },
+            recurrenceMode: 3
+          },
+          {
+            billingCycleCount: 0,
+            billingPeriod: {
+              iso8601: 'P1Y',
+              unit: 'YEAR',
+              value: 1
+            },
+            offerPaymentMode: null,
+            price: {
+              amountMicros: 4990000,
+              currencyCode: 'USD',
+              formatted: '$4.99'
+            },
+            recurrenceMode: 1
+          }
+        ],
+        productId: 'product_annual_pkg',
+        storeProductId: 'product_annual_pkg',
+        tags: []
+      },
+      description: 'A $rc_annual product with all features',
+      discounts: null,
+      identifier: 'product_annual_pkg',
+      introPrice: {
+        cycles: 1,
+        period: 'P7D',
+        periodNumberOfUnits: 7,
+        periodUnit: 'DAY',
+        price: 0,
+        priceString: 'Free'
+      },
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      presentedOfferingIdentifier: 'premium_offering',
+      price: 4.99,
+      pricePerMonth: 415833,
+      pricePerMonthString: '$0.42',
+      pricePerWeek: 96346,
+      pricePerWeekString: '$0.10',
+      pricePerYear: 4990000,
+      pricePerYearString: '$4.99',
+      priceString: '$4.99',
+      productCategory: 'SUBSCRIPTION',
+      productType: 'AUTO_RENEWABLE_SUBSCRIPTION',
+      subscriptionOptions: {},
+      subscriptionPeriod: 'P1Y',
+      title: '$rc_annual Product'
+    };
+
+    const expectedMonthlyProduct = {
+      ...expectedPackageProduct,
+      identifier: 'product_monthly_pkg',
+      description: 'A $rc_monthly product with all features',
+      defaultOption: {
+        billingPeriod: {
+          iso8601: 'P1M',
+          unit: 'MONTH',
+          value: 1
+        },
+        freePhase: {
+          billingCycleCount: 1,
+          billingPeriod: {
+            iso8601: 'P7D',
+            unit: 'DAY',
+            value: 7
+          },
+          offerPaymentMode: 'FREE_TRIAL',
+          price: {
+            amountMicros: 0,
+            currencyCode: 'USD',
+            formatted: 'Free'
+          },
+          recurrenceMode: 3
+        },
+        fullPricePhase: {
+          billingCycleCount: 0,
+          billingPeriod: {
+            iso8601: 'P1M',
+            unit: 'MONTH',
+            value: 1
+          },
+          offerPaymentMode: null,
+          price: {
+            amountMicros: 4990000,
+            currencyCode: 'USD',
+            formatted: '$4.99'
+          },
+          recurrenceMode: 1
+        },
+        id: 'monthly_pkg_default',
+        installmentsInfo: null,
+        introPhase: null,
+        isBasePlan: false,
+        isPrepaid: false,
+        presentedOfferingContext: {
+          offeringIdentifier: 'premium_offering',
+          placementIdentifier: 'main_page',
+          targetingContext: {
+            revision: 1,
+            ruleId: 'rule_123'
+          }
+        },
+        presentedOfferingIdentifier: 'premium_offering',
+        pricingPhases: [
+          {
+            billingCycleCount: 1,
+            billingPeriod: {
+              iso8601: 'P7D',
+              unit: 'DAY',
+              value: 7
+            },
+            offerPaymentMode: 'FREE_TRIAL',
+            price: {
+              amountMicros: 0,
+              currencyCode: 'USD',
+              formatted: 'Free'
+            },
+            recurrenceMode: 3
+          },
+          {
+            billingCycleCount: 0,
+            billingPeriod: {
+              iso8601: 'P1M',
+              unit: 'MONTH',
+              value: 1
+            },
+            offerPaymentMode: null,
+            price: {
+              amountMicros: 4990000,
+              currencyCode: 'USD',
+              formatted: '$4.99'
+            },
+            recurrenceMode: 1
+          }
+        ],
+        productId: 'product_monthly_pkg',
+        storeProductId: 'product_monthly_pkg',
+        tags: []
+      },
+      pricePerMonth: 4990000,
+      pricePerMonthString: '$4.99',
+      pricePerWeek: 1151538,
+      pricePerWeekString: '$1.15',
+      pricePerYear: 59880000,
+      pricePerYearString: '$59.88',
+      subscriptionPeriod: 'P1M',
+      title: '$rc_monthly Product'
+    };
+
+    const expectedWeeklyProduct = {
+      ...expectedPackageProduct,
+      identifier: 'product_weekly_pkg',
+      description: 'A $rc_weekly product with all features',
+      defaultOption: {
+        billingPeriod: {
+          iso8601: 'P1W',
+          unit: 'DAY',
+          value: 7
+        },
+        freePhase: {
+          billingCycleCount: 1,
+          billingPeriod: {
+            iso8601: 'P7D',
+            unit: 'DAY',
+            value: 7
+          },
+          offerPaymentMode: 'FREE_TRIAL',
+          price: {
+            amountMicros: 0,
+            currencyCode: 'USD',
+            formatted: 'Free'
+          },
+          recurrenceMode: 3
+        },
+        fullPricePhase: {
+          billingCycleCount: 0,
+          billingPeriod: {
+            iso8601: 'P1W',
+            unit: 'DAY',
+            value: 7
+          },
+          offerPaymentMode: null,
+          price: {
+            amountMicros: 4990000,
+            currencyCode: 'USD',
+            formatted: '$4.99'
+          },
+          recurrenceMode: 1
+        },
+        id: 'weekly_pkg_default',
+        installmentsInfo: null,
+        introPhase: null,
+        isBasePlan: false,
+        isPrepaid: false,
+        presentedOfferingContext: {
+          offeringIdentifier: 'premium_offering',
+          placementIdentifier: 'main_page',
+          targetingContext: {
+            revision: 1,
+            ruleId: 'rule_123'
+          }
+        },
+        presentedOfferingIdentifier: 'premium_offering',
+        pricingPhases: [
+          {
+            billingCycleCount: 1,
+            billingPeriod: {
+              iso8601: 'P7D',
+              unit: 'DAY',
+              value: 7
+            },
+            offerPaymentMode: 'FREE_TRIAL',
+            price: {
+              amountMicros: 0,
+              currencyCode: 'USD',
+              formatted: 'Free'
+            },
+            recurrenceMode: 3
+          },
+          {
+            billingCycleCount: 0,
+            billingPeriod: {
+              iso8601: 'P1W',
+              unit: 'DAY',
+              value: 7
+            },
+            offerPaymentMode: null,
+            price: {
+              amountMicros: 4990000,
+              currencyCode: 'USD',
+              formatted: '$4.99'
+            },
+            recurrenceMode: 1
+          }
+        ],
+        productId: 'product_weekly_pkg',
+        storeProductId: 'product_weekly_pkg',
+        tags: []
+      },
+      pricePerMonth: 4990000,
+      pricePerMonthString: '$4.99',
+      pricePerWeek: 96346,
+      pricePerWeekString: '$0.10',
+      pricePerYear: 59880000,
+      pricePerYearString: '$59.88',
+      subscriptionPeriod: 'P1W',
+      title: '$rc_weekly Product'
+    };
+
+    const expectedLifetimeProduct = {
+      currencyCode: 'USD',
+      defaultOption: null,
+      description: 'A $rc_lifetime product with all features',
+      discounts: null,
+      identifier: 'product_lifetime_pkg',
+      introPrice: null,
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      presentedOfferingIdentifier: 'premium_offering',
+      price: 4.99,
+      pricePerMonth: null,
+      pricePerMonthString: null,
+      pricePerWeek: null,
+      pricePerWeekString: null,
+      pricePerYear: null,
+      pricePerYearString: null,
+      priceString: '$4.99',
+      productCategory: 'NON_SUBSCRIPTION',
+      productType: 'NON_CONSUMABLE',
+      subscriptionOptions: {},
+      subscriptionPeriod: null,
+      title: '$rc_lifetime Product'
+    };
+
+    const expectedAnnualPackage = {
+      identifier: 'annual_pkg',
+      offeringIdentifier: 'premium_offering',
+      packageType: 'ANNUAL',
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      product: expectedPackageProduct
+    };
+
+    const expectedMonthlyPackage = {
+      identifier: 'monthly_pkg',
+      offeringIdentifier: 'premium_offering',
+      packageType: 'MONTHLY',
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      product: expectedMonthlyProduct
+    };
+
+    const expectedWeeklyPackage = {
+      identifier: 'weekly_pkg',
+      offeringIdentifier: 'premium_offering',
+      packageType: 'WEEKLY',
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      product: expectedWeeklyProduct
+    };
+
+    const expectedLifetimePackage = {
+      identifier: 'lifetime_pkg',
+      offeringIdentifier: 'premium_offering',
+      packageType: 'LIFETIME',
+      presentedOfferingContext: {
+        offeringIdentifier: 'premium_offering',
+        placementIdentifier: 'main_page',
+        targetingContext: {
+          revision: 1,
+          ruleId: 'rule_123'
+        }
+      },
+      product: expectedLifetimeProduct
+    };
+
     const expectedOffering = {
-        identifier: 'premium_offering',
-        serverDescription: 'Premium offering description',
-        metadata: { tier: 'premium', featured: true },
-        availablePackages: expect.arrayContaining([
-            expect.objectContaining({ identifier: 'annual_pkg' }),
-            expect.objectContaining({ identifier: 'monthly_pkg' }),
-            expect.objectContaining({ identifier: 'weekly_pkg' }),
-            expect.objectContaining({ identifier: 'lifetime_pkg' })
-        ]),
-        lifetime: expect.objectContaining({ identifier: 'lifetime_pkg' }),
-        annual: expect.objectContaining({ identifier: 'annual_pkg' }),
-        sixMonth: expect.objectContaining({ identifier: 'six_month_pkg' }),
-        threeMonth: expect.objectContaining({ identifier: 'three_month_pkg' }),
-        twoMonth: expect.objectContaining({ identifier: 'two_month_pkg' }),
-        monthly: expect.objectContaining({ identifier: 'monthly_pkg' }),
-        weekly: expect.objectContaining({ identifier: 'weekly_pkg' })
-    }
+      identifier: 'premium_offering',
+      serverDescription: 'Premium offering description',
+      metadata: { tier: 'premium', featured: true },
+      availablePackages: [
+        expectedAnnualPackage,
+        expectedMonthlyPackage,
+        expectedWeeklyPackage,
+        expectedLifetimePackage
+      ],
+      lifetime: expectedLifetimePackage,
+      annual: expectedAnnualPackage,
+      sixMonth: null,
+      threeMonth: null,
+      twoMonth: null,
+      monthly: expectedMonthlyPackage,
+      weekly: expectedWeeklyPackage
+    };
 
     expect(result).toEqual({
       all: {
@@ -193,12 +608,17 @@ describe('mapOfferings', () => {
       pricePerWeek: trialPrice
     };
 
-    const defaultOption: SubscriptionOption = {
+    const defaultOption = isSubscription ? {
       id: `${identifier}_default`,
       priceId: `price_${identifier}`,
       base: basePricingPhase,
-      trial: packageType !== PackageType.Lifetime ? trialPricingPhase : null
-    };
+      trial: trialPricingPhase
+    } as SubscriptionOption : {
+      id: `${identifier}_default`,
+      priceId: `price_${identifier}`,
+      price: price,
+      basePrice: price
+    } as NonSubscriptionOption;
 
     const productType = packageType === PackageType.Lifetime ?
       ProductType.NonConsumable : ProductType.Subscription;
@@ -212,8 +632,8 @@ describe('mapOfferings', () => {
       currentPrice: price,
       normalPeriodDuration: isSubscription ? periodDuration : null,
       subscriptionOptions: {},
-      defaultSubscriptionOption: isSubscription ? defaultOption : null,
-      defaultNonSubscriptionOption: null,
+      defaultSubscriptionOption: isSubscription ? defaultOption as SubscriptionOption : null,
+      defaultNonSubscriptionOption: !isSubscription ? defaultOption as NonSubscriptionOption : null,
       defaultPurchaseOption: defaultOption,
       presentedOfferingIdentifier: offeringId,
       presentedOfferingContext: presentedOfferingContext
