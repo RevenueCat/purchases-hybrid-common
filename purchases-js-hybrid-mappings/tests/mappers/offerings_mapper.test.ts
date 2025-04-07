@@ -162,8 +162,8 @@ describe('mapOfferings', () => {
           : monthlyPeriod;
 
     const periodDuration = packageType === PackageType.Annual ?
-      'P1Y' : PackageType.Monthly ?
-        'P1M' : PackageType.Weekly ?
+      'P1Y' : packageType === PackageType.Monthly ?
+        'P1M' : packageType === PackageType.Weekly ?
           'P1W' : 'P1M';
 
     const basePricingPhase: PricingPhase = {
