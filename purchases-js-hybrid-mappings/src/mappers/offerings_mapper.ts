@@ -1,8 +1,12 @@
 import {
   Offering,
   Offerings,
-  Package, Period, PeriodUnit,
-  PresentedOfferingContext, PricingPhase,
+  Package,
+  PackageType,
+  Period,
+  PeriodUnit,
+  PresentedOfferingContext,
+  PricingPhase,
   Product,
   ProductType,
   SubscriptionOption
@@ -229,23 +233,23 @@ function mapProductType(productType: ProductType): string {
   }
 }
 
-function mapPackageType(packageType: string): string {
+function mapPackageType(packageType: PackageType): string {
   switch (packageType) {
-    case "custom":
+    case PackageType.Custom:
       return "CUSTOM";
-    case "lifetime":
+    case PackageType.Lifetime:
       return "LIFETIME";
-    case "annual":
+    case PackageType.Annual:
       return "ANNUAL";
-    case "six_month":
+    case PackageType.SixMonth:
       return "SIX_MONTH";
-    case "three_month":
+    case PackageType.ThreeMonth:
       return "THREE_MONTH";
-    case "two_month":
+    case PackageType.TwoMonth:
       return "TWO_MONTH";
-    case "monthly":
+    case PackageType.Monthly:
       return "MONTHLY";
-    case "weekly":
+    case PackageType.Weekly:
       return "WEEKLY";
     default:
       return "UNKNOWN";
