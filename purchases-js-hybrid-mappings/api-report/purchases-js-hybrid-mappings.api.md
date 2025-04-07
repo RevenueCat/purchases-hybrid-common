@@ -15,6 +15,8 @@ export class PurchasesCommon {
     getCustomerInfo(): Promise<Record<string, unknown>>;
     // (undocumented)
     static getInstance(): PurchasesCommon;
+    // (undocumented)
+    getOfferings(): Promise<Record<string, unknown>>;
 }
 
 // (No @packageDocumentation comment for this package)

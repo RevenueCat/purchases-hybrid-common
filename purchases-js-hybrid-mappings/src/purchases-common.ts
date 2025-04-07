@@ -1,5 +1,6 @@
 import {Purchases} from "@revenuecat/purchases-js";
 import {mapCustomerInfo} from "./mappers/customer_info_mapper";
+import {mapOfferings} from "./mappers/offerings_mapper";
 import {Logger} from "./utils/logger";
 
 export class PurchasesCommon {
@@ -38,5 +39,10 @@ export class PurchasesCommon {
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
     const customerInfo = await this.purchases.getCustomerInfo();
     return mapCustomerInfo(customerInfo);
+  }
+
+  public async getOfferings(): Promise<Record<string, unknown>> {
+    const offerings = await this.purchases.getOfferings();
+    return mapOfferings(offerings);
   }
 }
