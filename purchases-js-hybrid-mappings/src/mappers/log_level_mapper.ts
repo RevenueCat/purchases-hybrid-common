@@ -1,5 +1,5 @@
 import { LogLevel } from '@revenuecat/purchases-js';
-import { Logger } from 'src/utils/logger';
+import { Logger } from '../utils/logger';
 
 export function mapLogLevel(logLevel: string): LogLevel | null {
   const upperCaseLogLevel = logLevel.toUpperCase();
