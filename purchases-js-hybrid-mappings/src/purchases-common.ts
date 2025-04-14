@@ -47,10 +47,7 @@ export class PurchasesCommon {
       const customerInfo = await this.purchases.getCustomerInfo();
       return mapCustomerInfo(customerInfo);
     } catch (error) {
-      if (error instanceof PurchasesError) {
-        this.handleError(error);
-      }
-      throw error;
+      this.handleError(error);
     }
   }
 
@@ -59,10 +56,7 @@ export class PurchasesCommon {
       const offerings = await this.purchases.getOfferings();
       return mapOfferings(offerings);
     } catch (error) {
-      if (error instanceof PurchasesError) {
-        this.handleError(error);
-      }
-      throw error;
+      this.handleError(error);
     }
   }
 
@@ -71,7 +65,7 @@ export class PurchasesCommon {
       const customerInfo = await this.purchases.changeUser(appUserId);
       return mapCustomerInfo(customerInfo);
     } catch (error) {
-      this.handleError(error as PurchasesError);
+      this.handleError(error);
     }
   }
 
@@ -82,11 +76,14 @@ export class PurchasesCommon {
       );
       return mapCustomerInfo(customerInfo);
     } catch (error) {
-      this.handleError(error as PurchasesError);
+      this.handleError(error);
     }
   }
 
-  private handleError(error: PurchasesError): never {
-    throw mapPurchasesError(error);
+  private handleError(error: unknown): never {
+    if (error instanceof PurchasesError) {
+      throw mapPurchasesError(error);
+    }
+    throw error;
   }
 }
