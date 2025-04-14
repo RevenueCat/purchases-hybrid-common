@@ -125,7 +125,10 @@ export class PurchasesCommon {
       if (!rcPackage) {
         const purchasesError = new PurchasesError(
           ErrorCode.PurchaseInvalidError,
-          'Need to provide a valid package identifier',
+          'Could not find package with id: ' +
+            purchaseParams.packageIdentifier +
+            ' in offering with id: ' +
+            presentedOfferingIdentifier,
         );
         this.handleError(purchasesError);
       }
