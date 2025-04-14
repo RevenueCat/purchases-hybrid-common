@@ -23,6 +23,15 @@ export class PurchasesCommon {
     logIn(appUserId: string): Promise<Record<string, unknown>>;
     // (undocumented)
     logOut(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    purchasePackage(purchaseParams: {
+        packageIdentifier: string;
+        presentedOfferingContext: Record<string, unknown>;
+        optionIdentifier?: string;
+        customerEmail?: string;
+        selectedLocale?: string;
+        defaultLocale?: string;
+    }): Promise<Record<string, unknown>>;
 }
 
 // (No @packageDocumentation comment for this package)
