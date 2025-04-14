@@ -21,7 +21,7 @@ export function mapOfferings(offerings: Offerings): Record<string, unknown> {
   };
 }
 
-function mapOffering(offering: Offering): Record<string, unknown> {
+export function mapOffering(offering: Offering): Record<string, unknown> {
   return {
     identifier: offering.identifier,
     serverDescription: offering.serverDescription,

@@ -14,11 +14,17 @@ export class PurchasesCommon {
         flavorVersion: string;
     }): PurchasesCommon;
     // (undocumented)
+    getAppUserId(): string;
+    // (undocumented)
+    getCurrentOfferingForPlacement(placementIdentifier: string): Promise<Record<string, unknown> | null>;
+    // (undocumented)
     getCustomerInfo(): Promise<Record<string, unknown>>;
     // (undocumented)
     static getInstance(): PurchasesCommon;
     // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    isSandbox(): boolean;
     // (undocumented)
     logIn(appUserId: string): Promise<Record<string, unknown>>;
     // (undocumented)
@@ -32,6 +38,8 @@ export class PurchasesCommon {
         selectedLocale?: string;
         defaultLocale?: string;
     }): Promise<Record<string, unknown>>;
+    // (undocumented)
+    static setLogLevel(logLevel: string): void;
 }
 
 // (No @packageDocumentation comment for this package)
