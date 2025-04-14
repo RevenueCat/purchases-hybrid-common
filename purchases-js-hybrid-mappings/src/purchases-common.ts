@@ -11,12 +11,18 @@ export class PurchasesCommon {
   static configure(configuration: {
     apiKey: string;
     appUserId: string | undefined;
+    flavor: string;
+    flavorVersion: string;
   }): PurchasesCommon {
     if (PurchasesCommon.instance) {
       Logger.warn(
         'PurchasesCommon.configure() called more than once. Previous configuration will be overwritten.',
       );
     }
+    Purchases.setPlatformInfo({
+      flavor: configuration.flavor,
+      version: configuration.flavorVersion,
+    });
     const purchasesInstance = Purchases.configure(
       configuration.apiKey,
       configuration.appUserId || Purchases.generateRevenueCatAnonymousAppUserId(),
@@ -57,6 +63,26 @@ export class PurchasesCommon {
         this.handleError(error);
       }
       throw error;
+    }
+  }
+
+  public async logIn(appUserId: string): Promise<Record<string, unknown>> {
+    try {
+      const customerInfo = await this.purchases.changeUser(appUserId);
+      return mapCustomerInfo(customerInfo);
+    } catch (error) {
+      this.handleError(error as PurchasesError);
+    }
+  }
+
+  public async logOut(): Promise<Record<string, unknown>> {
+    try {
+      const customerInfo = await this.purchases.changeUser(
+        Purchases.generateRevenueCatAnonymousAppUserId(),
+      );
+      return mapCustomerInfo(customerInfo);
+    } catch (error) {
+      this.handleError(error as PurchasesError);
     }
   }
 
