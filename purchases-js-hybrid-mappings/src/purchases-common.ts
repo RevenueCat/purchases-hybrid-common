@@ -11,12 +11,18 @@ export class PurchasesCommon {
   static configure(configuration: {
     apiKey: string;
     appUserId: string | undefined;
+    flavor: string;
+    flavorVersion: string;
   }): PurchasesCommon {
     if (PurchasesCommon.instance) {
       Logger.warn(
         'PurchasesCommon.configure() called more than once. Previous configuration will be overwritten.',
       );
     }
+    Purchases.setPlatformInfo({
+      flavor: configuration.flavor,
+      version: configuration.flavorVersion,
+    });
     const purchasesInstance = Purchases.configure(
       configuration.apiKey,
       configuration.appUserId || Purchases.generateRevenueCatAnonymousAppUserId(),
@@ -41,10 +47,7 @@ export class PurchasesCommon {
       const customerInfo = await this.purchases.getCustomerInfo();
       return mapCustomerInfo(customerInfo);
     } catch (error) {
-      if (error instanceof PurchasesError) {
-        this.handleError(error);
-      }
-      throw error;
+      this.handleError(error);
     }
   }
 
@@ -53,14 +56,34 @@ export class PurchasesCommon {
       const offerings = await this.purchases.getOfferings();
       return mapOfferings(offerings);
     } catch (error) {
-      if (error instanceof PurchasesError) {
-        this.handleError(error);
-      }
-      throw error;
+      this.handleError(error);
     }
   }
 
-  private handleError(error: PurchasesError): never {
-    throw mapPurchasesError(error);
+  public async logIn(appUserId: string): Promise<Record<string, unknown>> {
+    try {
+      const customerInfo = await this.purchases.changeUser(appUserId);
+      return mapCustomerInfo(customerInfo);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async logOut(): Promise<Record<string, unknown>> {
+    try {
+      const customerInfo = await this.purchases.changeUser(
+        Purchases.generateRevenueCatAnonymousAppUserId(),
+      );
+      return mapCustomerInfo(customerInfo);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  private handleError(error: unknown): never {
+    if (error instanceof PurchasesError) {
+      throw mapPurchasesError(error);
+    }
+    throw error;
   }
 }

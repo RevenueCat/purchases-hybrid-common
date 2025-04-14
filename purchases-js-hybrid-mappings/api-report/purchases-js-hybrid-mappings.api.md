@@ -10,6 +10,8 @@ export class PurchasesCommon {
     static configure(configuration: {
         apiKey: string;
         appUserId: string | undefined;
+        flavor: string;
+        flavorVersion: string;
     }): PurchasesCommon;
     // (undocumented)
     getCustomerInfo(): Promise<Record<string, unknown>>;
@@ -17,6 +19,10 @@ export class PurchasesCommon {
     static getInstance(): PurchasesCommon;
     // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    logIn(appUserId: string): Promise<Record<string, unknown>>;
+    // (undocumented)
+    logOut(): Promise<Record<string, unknown>>;
 }
 
 // (No @packageDocumentation comment for this package)

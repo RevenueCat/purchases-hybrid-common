@@ -25,7 +25,8 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\""
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "allchecks": "npm run format && npm run lint:fix && npm run api-test && npm run test"
   },
   "dependencies": {
     "@revenuecat/purchases-js": "^1.1.0"
