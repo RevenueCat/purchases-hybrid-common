@@ -16,6 +16,7 @@ files_with_version_number = {
     './PurchasesHybridCommonUI.podspec' => ['s.version          = "{x}"'],
     './android/gradle.properties' => ['VERSION_NAME={x}'],
     './typescript/package.json' => ['"version": "{x}"'],
+    './purchases-js-hybrid-mappings/package.json' => ['"version": "{x}"'],
     './ios/PurchasesHybridCommon/PurchasesHybridCommon/Constants.swift' => [' hybridCommonVersion = "{x}"']
 }
 PLIST_VERSION_PATTERNS = ["<key>CFBundleShortVersionString</key>\n\t<string>{x}</string>",]
@@ -439,9 +440,33 @@ platform :typescript do
     build_and_publish_typescript_package
   end
 
+  desc "Deploy typescript interfaces ESNext NPM package"
   lane :deploy_esm do |options|
     make_typescript_package_esm
     build_and_publish_typescript_package
+  end
+end
+
+platform :web do
+  desc "Run tests for purchases-js-hybrid-mappings"
+  lane :test_js_mappings do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn test")
+    end
+  end
+
+  desc "Run API tests for purchases-js-hybrid-mappings"
+  lane :test_js_mappings_api do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn api-test:ci")
+    end
+  end
+
+  desc "Run linter for purchases-js-hybrid-mappings"
+  lane :lint_js_mappings do |options|
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn && yarn lint")
+    end
   end
 end
 
