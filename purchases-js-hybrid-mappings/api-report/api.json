@@ -179,10 +179,10 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare class PurchasesCommon "
+              "text": "declare class PurchasesCommon "
             }
           ],
-          "fileUrlPath": "src/purchases-common.ts",
+          "fileUrlPath": "dist/index.d.ts",
           "releaseTag": "Public",
           "isAbstract": false,
           "name": "PurchasesCommon",
