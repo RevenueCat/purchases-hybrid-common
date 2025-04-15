@@ -388,6 +388,8 @@ fun purchaseSubscriptionOption(
 
 fun getAppUserID() = Purchases.sharedInstance.appUserID
 
+fun getStorefrontCountryCode() = Purchases.sharedInstance.storefrontCountryCode
+
 fun restorePurchases(
     onResult: OnResult,
 ) {
