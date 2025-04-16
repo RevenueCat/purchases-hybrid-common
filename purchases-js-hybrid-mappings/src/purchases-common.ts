@@ -1,6 +1,8 @@
 import {
   ErrorCode,
   Offering,
+  Offerings,
+  Package,
   PurchaseOption,
   PurchaseParams,
   PurchaseResult,
@@ -16,6 +18,8 @@ import { mapPurchaseResult } from './mappers/purchase_result_mapper';
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
   private purchases: Purchases;
+
+  private offeringsCache: Offerings | null = null;
 
   static configure(configuration: {
     apiKey: string;
@@ -63,6 +67,7 @@ export class PurchasesCommon {
   public async getOfferings(): Promise<Record<string, unknown>> {
     try {
       const offerings = await this.purchases.getOfferings();
+      this.offeringsCache = offerings;
       return mapOfferings(offerings);
     } catch (error) {
       this.handleError(error);
@@ -107,31 +112,10 @@ export class PurchasesCommon {
       this.handleError(purchasesError);
     }
     try {
-      const offerings = await this.purchases.getOfferings();
-      const offering: Offering = offerings.all[presentedOfferingIdentifier];
-      if (!offering) {
-        const purchasesError = new PurchasesError(
-          ErrorCode.PurchaseInvalidError,
-          'Could not find offering with identifier: ' +
-            presentedOfferingIdentifier +
-            '. Found offering ids: ' +
-            Object.keys(offerings.all).join(', '),
-        );
-        this.handleError(purchasesError);
-      }
-      const rcPackage = offering.availablePackages.find(
-        currentPackage => currentPackage.identifier === purchaseParams.packageIdentifier,
+      const rcPackage = await this.findPackageToPurchase(
+        purchaseParams.packageIdentifier,
+        presentedOfferingIdentifier,
       );
-      if (!rcPackage) {
-        const purchasesError = new PurchasesError(
-          ErrorCode.PurchaseInvalidError,
-          'Could not find package with id: ' +
-            purchaseParams.packageIdentifier +
-            ' in offering with id: ' +
-            presentedOfferingIdentifier,
-        );
-        this.handleError(purchasesError);
-      }
       let nativePurchaseOption: PurchaseOption | null = null;
       if (purchaseParams.optionIdentifier) {
         const product = rcPackage.webBillingProduct;
@@ -160,6 +144,54 @@ export class PurchasesCommon {
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  private async findPackageToPurchase(
+    packageIdentifier: string,
+    offeringIdentifier: string,
+  ): Promise<Package> {
+    let rcPackage: Package | null = null;
+    if (this.offeringsCache?.all[offeringIdentifier]) {
+      const offering = this.offeringsCache.all[offeringIdentifier];
+      rcPackage =
+        offering.availablePackages.find(
+          currentPackage => currentPackage.identifier === packageIdentifier,
+        ) ?? null;
+    }
+    if (!rcPackage) {
+      try {
+        const offerings = await this.purchases.getOfferings();
+        const offering: Offering = offerings.all[offeringIdentifier];
+        if (!offering) {
+          const purchasesError = new PurchasesError(
+            ErrorCode.PurchaseInvalidError,
+            'Could not find offering with identifier: ' +
+              offeringIdentifier +
+              '. Found offering ids: ' +
+              Object.keys(offerings.all).join(', '),
+          );
+          this.handleError(purchasesError);
+        }
+        rcPackage =
+          offering.availablePackages.find(
+            currentPackage => currentPackage.identifier === packageIdentifier,
+          ) ?? null;
+      } catch (error) {
+        this.handleError(error);
+      }
+      if (!rcPackage) {
+        const purchasesError = new PurchasesError(
+          ErrorCode.PurchaseInvalidError,
+          'Could not find package with id: ' +
+            packageIdentifier +
+            ' in offering with id: ' +
+            offeringIdentifier,
+        );
+        this.handleError(purchasesError);
+      }
+    }
+
+    return rcPackage;
   }
 
   private handleError(error: unknown): never {

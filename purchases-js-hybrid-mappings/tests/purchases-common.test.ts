@@ -258,6 +258,36 @@ describe('PurchasesCommon', () => {
       });
     });
 
+    it('should use cached offering if it exists', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering
+      });
+      mockPurchasesInstance.purchase.mockResolvedValue(mockPurchaseResult);
+
+      const purchaseParams = {
+        packageIdentifier: 'test_package',
+        presentedOfferingContext: { offeringIdentifier: 'test_offering' },
+        customerEmail: 'test@example.com'
+      };
+
+      expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(0);
+
+      await purchasesCommon.getOfferings();
+
+      expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(1);
+
+      const result = await purchasesCommon.purchasePackage(purchaseParams);
+
+      expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(1);
+      expect(result).toBeDefined();
+      expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
+        rcPackage: mockOffering.availablePackages[0],
+        purchaseOption: null,
+        customerEmail: 'test@example.com'
+      });
+    });
+
     it('should handle purchase errors', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
