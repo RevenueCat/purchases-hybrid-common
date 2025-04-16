@@ -1,5 +1,5 @@
 {
-  "name": "purchases-js-hybrid-mappings",
+  "name": "@revenuecat/purchases-js-hybrid-mappings",
   "version": "13.28.1",
   "description": "RevenueCat's JavaScript hybrid mappings for purchases-js",
   "main": "dist/index.js",
