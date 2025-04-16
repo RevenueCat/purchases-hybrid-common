@@ -161,20 +161,20 @@
     }
   },
   "kind": "Package",
-  "canonicalReference": "purchases-js-hybrid-mappings!",
+  "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!",
   "docComment": "",
-  "name": "purchases-js-hybrid-mappings",
+  "name": "@revenuecat/purchases-js-hybrid-mappings",
   "preserveMemberOrder": false,
   "members": [
     {
       "kind": "EntryPoint",
-      "canonicalReference": "purchases-js-hybrid-mappings!",
+      "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!",
       "name": "",
       "preserveMemberOrder": false,
       "members": [
         {
           "kind": "Class",
-          "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon:class",
+          "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon:class",
           "docComment": "",
           "excerptTokens": [
             {
@@ -190,7 +190,7 @@
           "members": [
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon.configure:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.configure:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -208,7 +208,7 @@
                 {
                   "kind": "Reference",
                   "text": "PurchasesCommon",
-                  "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon:class"
+                  "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon:class"
                 },
                 {
                   "kind": "Content",
@@ -239,7 +239,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#getAppUserId:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getAppUserId:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -270,7 +270,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#getCurrentOfferingForPlacement:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getCurrentOfferingForPlacement:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -332,7 +332,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#getCustomerInfo:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getCustomerInfo:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -377,7 +377,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon.getInstance:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.getInstance:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -387,7 +387,7 @@
                 {
                   "kind": "Reference",
                   "text": "PurchasesCommon",
-                  "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon:class"
+                  "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon:class"
                 },
                 {
                   "kind": "Content",
@@ -409,7 +409,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#getOfferings:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getOfferings:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -454,7 +454,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#isSandbox:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#isSandbox:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -485,7 +485,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#logIn:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#logIn:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -547,7 +547,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#logOut:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#logOut:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -592,7 +592,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon#purchasePackage:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#purchasePackage:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
@@ -663,7 +663,7 @@
             },
             {
               "kind": "Method",
-              "canonicalReference": "purchases-js-hybrid-mappings!PurchasesCommon.setLogLevel:member(1)",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.setLogLevel:member(1)",
               "docComment": "",
               "excerptTokens": [
                 {
