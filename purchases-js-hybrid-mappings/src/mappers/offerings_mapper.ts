@@ -25,7 +25,7 @@ export function mapOffering(offering: Offering): Record<string, unknown> {
   return {
     identifier: offering.identifier,
     serverDescription: offering.serverDescription,
-    metadata: offering.metadata,
+    metadata: offering.metadata ?? {},
     availablePackages: offering.availablePackages.map(pkg => mapPackage(pkg)),
     lifetime: offering.lifetime ? mapPackage(offering.lifetime) : null,
     annual: offering.annual ? mapPackage(offering.annual) : null,
@@ -53,7 +53,7 @@ function mapProduct(product: Product): Record<string, unknown> {
   const defaultOptionBasePricingPhase = product.defaultSubscriptionOption?.base;
   return {
     identifier: product.identifier,
-    description: product.description,
+    description: product.description ?? '',
     title: product.title,
     price: product.currentPrice.amountMicros / 1_000_000,
     priceString: product.currentPrice.formattedPrice,
@@ -72,14 +72,12 @@ function mapProduct(product: Product): Record<string, unknown> {
     defaultOption: product.defaultSubscriptionOption
       ? mapSubscriptionOption(product.defaultSubscriptionOption, product)
       : null,
-    subscriptionOptions: product.subscriptionOptions.isEmpty
-      ? null
-      : Object.fromEntries(
-          Object.entries(product.subscriptionOptions).map(([key, value]) => [
-            key,
-            mapSubscriptionOption(value, product),
-          ]),
-        ),
+    subscriptionOptions:
+      product.productType === ProductType.Subscription
+        ? Object.values(product.subscriptionOptions).map(subscriptionOption =>
+            mapSubscriptionOption(subscriptionOption, product),
+          )
+        : null,
     presentedOfferingIdentifier: product.presentedOfferingContext.offeringIdentifier,
     presentedOfferingContext: mapPresentedOfferingContext(product.presentedOfferingContext),
   };
@@ -93,7 +91,7 @@ function mapIntroPrice(product: Product): Record<string, unknown> | null {
 
   return {
     price: 0,
-    priceString: trialPhase.price?.formattedPrice,
+    priceString: trialPhase.price?.formattedPrice ?? '0.00', // TODO: Improve how we get a formatted price for trials
     period: trialPhase.periodDuration,
     cycles: trialPhase.cycleCount,
     ...mapPeriodForStoreProduct(trialPhase.period),
