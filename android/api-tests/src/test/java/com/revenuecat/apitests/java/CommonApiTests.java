@@ -98,6 +98,16 @@ class CommonApiTests {
         );
     }
 
+    private void checkGetStorefront() {
+        CommonKt.getStorefront(new Function1<Map<String, ? extends Object>, Unit>() {
+            @Override
+            public Unit invoke(Map<String, ?> stringMap) {
+                return null;
+            }
+        });
+        CommonKt.getStorefront(stringMap -> null);
+    }
+
     private void checkGetAppUserId() {
         String appUserId = CommonKt.getAppUserID();
     }
