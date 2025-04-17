@@ -257,7 +257,7 @@ internal class CommonKtTests {
         Assertions.assertThat(receivedStorefront).isEqualTo(mapOf("countryCode" to "USA"))
         verify(exactly = 1) { mockPurchases.getStorefrontCountryCode(any()) }
 
-        // Calling with a failur return value returns null
+        // Calling with a failure return value returns null
         getStorefront {
             receivedStorefront = it
         }
