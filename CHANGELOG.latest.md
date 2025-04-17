@@ -1,7 +1,10 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.20.3 => 5.21.0 (#1111) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.21.0 => 5.21.2 Android 8.16.0 => 8.16.1 (#1121) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `05ef095` to `9a29f63` (#1096) via dependabot[bot] (@dependabot[bot])
-* Bump lefthook from 1.11.3 to 1.11.6 (#1102) via dependabot[bot] (@dependabot[bot])
+* [purchases-js-hybrid-mappings] Add login/logout functions and set PlatformInfo (#1115) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mapping] Add mapping for errors and run prettier in the library (#1109) via Toni Rico (@tonidero)
+* Add offerings mapping purchases js hybrid mappings (#1106) via Toni Rico (@tonidero)
+* Create `purchases-js-hybrid-mappings` module with `CustomerInfo` model mappings (#1104) via Toni Rico (@tonidero)
+* Bump fastlane from 2.227.0 to 2.227.1 (#1114) via dependabot[bot] (@dependabot[bot])

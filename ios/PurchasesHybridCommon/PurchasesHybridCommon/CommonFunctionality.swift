@@ -138,6 +138,16 @@ import RevenueCat
         Self.sharedInstance.invalidateCustomerInfoCache()
     }
 
+    @objc public static func getStorefront(completion: @escaping ([String: Any]?) -> Void) {
+        Self.sharedInstance.getStorefront { storefront in
+            var storefrontMap: [String: Any]? = nil
+            if let storefront = storefront {
+                storefrontMap = ["identifier": storefront.identifier, "countryCode": storefront.countryCode]
+            }
+            completion(storefrontMap)
+        }
+    }
+
 #if os(iOS)
     @available(iOS 14.0, *)
     @available(tvOS, unavailable)
