@@ -34,6 +34,33 @@ final class MockPurchases: PurchasesType {
         return stubbedIsAnonymous
     }
 
+    var invokedStoreFrontCountryCodeGetter = false
+    var invokedStoreFrontCountryCodeGetterCount = 0
+    var stubbedStoreFrontCountryCode: String? = nil
+    var storeFrontCountryCode: String? {
+        invokedStoreFrontCountryCodeGetter = true
+        invokedStoreFrontCountryCodeGetterCount += 1
+        return stubbedStoreFrontCountryCode
+    }
+
+    var invokedGetStorefront = false
+    var invokedGetStorefrontCount = 0
+    var invokedGetStorefrontParametersList: [(RevenueCat.GetStorefrontBlock)] = []
+    func getStorefront(completion: @escaping RevenueCat.GetStorefrontBlock) {
+        invokedGetStorefront = true
+        invokedGetStorefrontCount += 1
+        invokedGetStorefrontParametersList.append(completion)
+    }
+
+    var invokedGetStorefrontAsync = false
+    var invokedGetStorefrontAsyncCount = 0
+    var stubbedGetStorefrontAsyncResult: RevenueCat.Storefront? = nil
+    func getStorefront() async -> RevenueCat.Storefront? {
+        invokedGetStorefrontAsync = true
+        invokedGetStorefrontAsyncCount += 1
+        return stubbedGetStorefrontAsyncResult
+    }
+
     var invokedLogInPublicError = false
     var invokedLogInCount = 0
     var invokedLogInParameters: (appUserID: String, Void)?
