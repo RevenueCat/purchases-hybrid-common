@@ -1,5 +1,6 @@
 import {
   ErrorCode,
+  HttpConfig,
   Offering,
   Offerings,
   Package,
@@ -18,6 +19,8 @@ import { mapLogLevel } from './mappers/log_level_mapper';
 
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
+  private static proxyUrl: string | null = null;
+
   private purchases: Purchases;
 
   private offeringsCache: Offerings | null = null;
@@ -37,9 +40,14 @@ export class PurchasesCommon {
       flavor: configuration.flavor,
       version: configuration.flavorVersion,
     });
+    let httpConfig: HttpConfig | undefined = undefined;
+    if (PurchasesCommon.proxyUrl) {
+      httpConfig = { proxyURL: PurchasesCommon.proxyUrl };
+    }
     const purchasesInstance = Purchases.configure(
       configuration.apiKey,
       configuration.appUserId || Purchases.generateRevenueCatAnonymousAppUserId(),
+      httpConfig,
     );
     PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
     return PurchasesCommon.instance;
@@ -59,6 +67,16 @@ export class PurchasesCommon {
     }
   }
 
+  static isConfigured(): boolean {
+    return Purchases.isConfigured();
+  }
+
+  static setProxyUrl(proxyUrl: string): void {
+    if (PurchasesCommon.proxyUrl !== proxyUrl) {
+      PurchasesCommon.proxyUrl = proxyUrl;
+    }
+  }
+
   private constructor(purchasesInstance: Purchases) {
     this.purchases = purchasesInstance;
   }
@@ -69,6 +87,10 @@ export class PurchasesCommon {
 
   public isSandbox(): boolean {
     return this.purchases.isSandbox();
+  }
+
+  public isAnonymous(): boolean {
+    return this.purchases.isAnonymous();
   }
 
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
