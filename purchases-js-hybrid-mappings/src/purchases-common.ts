@@ -10,10 +10,11 @@ import {
   PurchasesError,
 } from '@revenuecat/purchases-js';
 import { mapCustomerInfo } from './mappers/customer_info_mapper';
-import { mapOfferings } from './mappers/offerings_mapper';
+import { mapOffering, mapOfferings } from './mappers/offerings_mapper';
 import { Logger } from './utils/logger';
 import { mapPurchasesError } from './mappers/purchases_error_mapper';
 import { mapPurchaseResult } from './mappers/purchase_result_mapper';
+import { mapLogLevel } from './mappers/log_level_mapper';
 
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
@@ -51,8 +52,23 @@ export class PurchasesCommon {
     return PurchasesCommon.instance;
   }
 
+  static setLogLevel(logLevel: string): void {
+    const logLevelEnum = mapLogLevel(logLevel);
+    if (logLevelEnum) {
+      Purchases.setLogLevel(logLevelEnum);
+    }
+  }
+
   private constructor(purchasesInstance: Purchases) {
     this.purchases = purchasesInstance;
+  }
+
+  public getAppUserId(): string {
+    return this.purchases.getAppUserId();
+  }
+
+  public isSandbox(): boolean {
+    return this.purchases.isSandbox();
   }
 
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
@@ -69,6 +85,17 @@ export class PurchasesCommon {
       const offerings = await this.purchases.getOfferings();
       this.offeringsCache = offerings;
       return mapOfferings(offerings);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async getCurrentOfferingForPlacement(
+    placementIdentifier: string,
+  ): Promise<Record<string, unknown> | null> {
+    try {
+      const offering = await this.purchases.getCurrentOfferingForPlacement(placementIdentifier);
+      return offering ? mapOffering(offering) : null;
     } catch (error) {
       this.handleError(error);
     }
