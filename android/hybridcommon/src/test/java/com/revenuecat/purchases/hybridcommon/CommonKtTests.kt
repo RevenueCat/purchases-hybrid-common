@@ -23,6 +23,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
+import com.revenuecat.purchases.interfaces.GetStorefrontCallback
 import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
@@ -48,6 +49,7 @@ import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
@@ -229,6 +231,40 @@ internal class CommonKtTests {
         verify(exactly = 1) {
             onResultAny.onError(any())
         }
+    }
+
+    @Test
+    fun `calling getStorefront correctly passes call to Purchases`() {
+        val callback = slot<GetStorefrontCallback>()
+        every { mockPurchases.getStorefrontCountryCode(capture(callback)) } just Runs
+
+        var receivedStorefront: Map<String, *>? = null
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        // Calling with a success return value returns value correctly
+        getStorefront {
+            receivedStorefront = it
+        }
+        callback.captured.onReceived("USA")
+
+        Assertions.assertThat(receivedStorefront).isEqualTo(mapOf("countryCode" to "USA"))
+        verify(exactly = 1) { mockPurchases.getStorefrontCountryCode(any()) }
+
+        // Calling with a failur return value returns null
+        getStorefront {
+            receivedStorefront = it
+        }
+        callback.captured.onError(PurchasesError(PurchasesErrorCode.UnknownError))
+
+        Assertions.assertThat(receivedStorefront).isEqualTo(null)
+        verify(exactly = 2) { mockPurchases.getStorefrontCountryCode(any()) }
     }
 
     @Test

@@ -34,10 +34,6 @@ import RevenueCat
 
     @objc public static var simulatesAskToBuyInSandbox: Bool = false
     @objc public static var appUserID: String { Self.sharedInstance.appUserID }
-    @objc public static var storefrontCountryCode: String? {
-        // Doing this cast temporarily until the property has been added to the PurchasesType protocol
-        (Self.sharedInstance as? Purchases)?.storeFrontCountryCode
-    }
     @objc public static var isAnonymous: Bool { Self.sharedInstance.isAnonymous }
     @objc public static var hybridCommonVersion: String { Constants.hybridCommonVersion }
 
@@ -140,6 +136,16 @@ import RevenueCat
 
     @objc public static func invalidateCustomerInfoCache() {
         Self.sharedInstance.invalidateCustomerInfoCache()
+    }
+
+    @objc public static func getStorefront(completion: @escaping ([String: Any]?) -> Void) {
+        Self.sharedInstance.getStorefront { storefront in
+            var storefrontMap: [String: Any]? = nil
+            if let storefront = storefront {
+                storefrontMap = ["identifier": storefront.identifier, "countryCode": storefront.countryCode]
+            }
+            completion(storefrontMap)
+        }
     }
 
 #if os(iOS)

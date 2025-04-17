@@ -18,7 +18,7 @@ import com.revenuecat.purchases.hybridcommon.getOfferings
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
 import com.revenuecat.purchases.hybridcommon.getProxyURLString
-import com.revenuecat.purchases.hybridcommon.getStorefrontCountryCode
+import com.revenuecat.purchases.hybridcommon.getStorefront
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache
 import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
@@ -126,8 +126,8 @@ private class CommonApiTests {
         val appUserId: String = getAppUserID()
     }
 
-    fun checkStorefrontCountryCode() {
-        val storefrontCountryCode: String? = getStorefrontCountryCode()
+    fun checkStorefrontCountryCode(callback: (Map<String, Any>?) -> Unit) {
+        getStorefront(callback)
     }
 
     fun checkRestorePurchases(onResult: OnResult) {

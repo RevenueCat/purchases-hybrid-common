@@ -27,6 +27,7 @@ import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
+import com.revenuecat.purchases.getStorefrontCountryCodeWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -388,7 +389,12 @@ fun purchaseSubscriptionOption(
 
 fun getAppUserID() = Purchases.sharedInstance.appUserID
 
-fun getStorefrontCountryCode() = Purchases.sharedInstance.storefrontCountryCode
+fun getStorefront(
+    callback: (Map<String, Any>?) -> Unit,
+) = Purchases.sharedInstance.getStorefrontCountryCodeWith(
+    onError = { callback(null) },
+    onSuccess = { callback(mapOf("countryCode" to it)) },
+)
 
 fun restorePurchases(
     onResult: OnResult,

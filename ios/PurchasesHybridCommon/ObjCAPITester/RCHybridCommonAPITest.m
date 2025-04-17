@@ -33,7 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     NSString *appUserID __unused = [RCCommonFunctionality appUserID];
-    NSString *storefrontCountryCode __unused = [RCCommonFunctionality storefrontCountryCode];
+    [RCCommonFunctionality getStorefrontWithCompletion:^(NSDictionary<NSString *,id> * _Nullable storefront) {
+    }];
     [RCCommonFunctionality logInWithAppUserID:@""
                               completionBlock:^(NSDictionary * _Nullable customerInfo,
                                                 RCErrorContainer * _Nullable error) {
