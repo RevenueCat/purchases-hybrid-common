@@ -148,6 +148,14 @@ export class PurchasesCommon {
     }
   }
 
+  public async close(): Promise<void> {
+    try {
+      this.purchases.close();
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
   public async purchasePackage(purchaseParams: {
     packageIdentifier: string;
     presentedOfferingContext: Record<string, unknown>;
