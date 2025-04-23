@@ -323,7 +323,7 @@ private_lane :update_js_native_version do |options|
     platform_name: "JS",
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
-    files_to_update: files_to_update_android_dependency
+    files_to_update: files_to_update_js_dependency
   )
 end
 
