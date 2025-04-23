@@ -314,7 +314,7 @@ private_lane :update_android_native_version do |options|
   )
 end
 
-desc "Update purchases-android dependency version"
+desc "Update purchases-js dependency version"
 private_lane :update_js_native_version do |options|
   new_version_number = options[:new_version]
   previous_version_number = options[:current_version]
