@@ -39,6 +39,9 @@ files_to_update_ios_dependency = {
 files_to_update_android_dependency = {
     'android/gradle/libs.versions.toml' => ['purchases = "{x}"']
 }
+files_to_update_js_dependency = {
+    'purchases-js-hybrid-mappings/package.json' => ['"@revenuecat/purchases-js": "{x}"']
+}
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
 changelog_path = './CHANGELOG.md'
@@ -305,6 +308,19 @@ private_lane :update_android_native_version do |options|
 
   update_native_version(
     platform_name: "Android",
+    new_version_number: new_version_number,
+    previous_version_number: previous_version_number,
+    files_to_update: files_to_update_android_dependency
+  )
+end
+
+desc "Update purchases-android dependency version"
+private_lane :update_js_native_version do |options|
+  new_version_number = options[:new_version]
+  previous_version_number = options[:current_version]
+
+  update_native_version(
+    platform_name: "JS",
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
     files_to_update: files_to_update_android_dependency
