@@ -7,6 +7,8 @@
 // @public (undocumented)
 export class PurchasesCommon {
     // (undocumented)
+    close(): Promise<void>;
+    // (undocumented)
     static configure(configuration: {
         apiKey: string;
         appUserId: string | undefined;
