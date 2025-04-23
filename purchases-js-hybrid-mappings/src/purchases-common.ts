@@ -126,7 +126,12 @@ export class PurchasesCommon {
   public async logIn(appUserId: string): Promise<Record<string, unknown>> {
     try {
       const customerInfo = await this.purchases.changeUser(appUserId);
-      return mapCustomerInfo(customerInfo);
+      return {
+        customerInfo: mapCustomerInfo(customerInfo),
+        // TODO: In Web, we don't have a logIn method, which provides the information on whether the user was created
+        // or not. For now, hardcoding this data to false
+        created: false,
+      };
     } catch (error) {
       this.handleError(error);
     }
@@ -138,6 +143,14 @@ export class PurchasesCommon {
         Purchases.generateRevenueCatAnonymousAppUserId(),
       );
       return mapCustomerInfo(customerInfo);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async close(): Promise<void> {
+    try {
+      this.purchases.close();
     } catch (error) {
       this.handleError(error);
     }
