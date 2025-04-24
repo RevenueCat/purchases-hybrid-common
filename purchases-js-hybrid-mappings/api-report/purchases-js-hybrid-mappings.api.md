@@ -7,6 +7,8 @@
 // @public (undocumented)
 export class PurchasesCommon {
     // (undocumented)
+    close(): Promise<void>;
+    // (undocumented)
     static configure(configuration: {
         apiKey: string;
         appUserId: string | undefined;
@@ -24,6 +26,10 @@ export class PurchasesCommon {
     // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
     // (undocumented)
+    isAnonymous(): boolean;
+    // (undocumented)
+    static isConfigured(): boolean;
+    // (undocumented)
     isSandbox(): boolean;
     // (undocumented)
     logIn(appUserId: string): Promise<Record<string, unknown>>;
@@ -40,6 +46,8 @@ export class PurchasesCommon {
     }): Promise<Record<string, unknown>>;
     // (undocumented)
     static setLogLevel(logLevel: string): void;
+    // (undocumented)
+    static setProxyUrl(proxyUrl: string): void;
 }
 
 // (No @packageDocumentation comment for this package)

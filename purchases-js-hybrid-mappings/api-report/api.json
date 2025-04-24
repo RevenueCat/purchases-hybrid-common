@@ -182,12 +182,48 @@
               "text": "declare class PurchasesCommon "
             }
           ],
-          "fileUrlPath": "dist/index.d.ts",
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "isAbstract": false,
           "name": "PurchasesCommon",
           "preserveMemberOrder": false,
           "members": [
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#close:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "close(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<void>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "close"
+            },
             {
               "kind": "Method",
               "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.configure:member(1)",
@@ -454,6 +490,68 @@
             },
             {
               "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#isAnonymous:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "isAnonymous(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "isAnonymous"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.isConfigured:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static isConfigured(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "boolean"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "isConfigured"
+            },
+            {
+              "kind": "Method",
               "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#isSandbox:member(1)",
               "docComment": "",
               "excerptTokens": [
@@ -708,6 +806,54 @@
               "isOptional": false,
               "isAbstract": false,
               "name": "setLogLevel"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.setProxyUrl:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static setProxyUrl(proxyUrl: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "string"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "proxyUrl",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                }
+              ],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "setProxyUrl"
             }
           ],
           "implementsTokenRanges": []

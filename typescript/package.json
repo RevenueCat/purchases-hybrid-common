@@ -7,8 +7,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index",
   "files": [
-    "dist",
-    "tsconfig.json"
+    "dist"
   ],
   "scripts": {
     "apitests": "tsc --p apitesters/",
