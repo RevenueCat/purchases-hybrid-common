@@ -39,6 +39,9 @@ files_to_update_ios_dependency = {
 files_to_update_android_dependency = {
     'android/gradle/libs.versions.toml' => ['purchases = "{x}"']
 }
+files_to_update_js_dependency = {
+    'purchases-js-hybrid-mappings/package.json' => ['"@revenuecat/purchases-js": "{x}"']
+}
 repo_name = 'purchases-hybrid-common'
 changelog_latest_path = './CHANGELOG.latest.md'
 changelog_path = './CHANGELOG.md'
@@ -128,13 +131,16 @@ lane :open_pr_upgrading_dependencies do |options|
 
   current_ios_version = parse_previous_ios_native_version
   current_android_version = parse_previous_android_native_version
+  current_js_version = parse_previous_js_version
 
   new_versions = update_native_dependencies_to_latest
   new_ios_version = new_versions[:new_ios_version]
   new_android_version = new_versions[:new_android_version]
+  new_js_version = new_versions[:new_js_version]
 
   type_of_bump_ios = detect_bump_type(current_ios_version, new_ios_version)
   type_of_bump_android = detect_bump_type(current_android_version, new_android_version)
+  type_of_bump_js = detect_bump_type(current_js_version, new_js_version)
 
   repo_status = sh("git status --porcelain")
 
@@ -150,16 +156,21 @@ lane :open_pr_upgrading_dependencies do |options|
     UI.message("ℹ️  Nothing more to do since dry_run: true.")
     if type_of_bump_ios != :none
       UI.message("ℹ️  New iOS dependency version is #{new_ios_version}")
-     end
+    end
     if type_of_bump_android != :none
       UI.message("ℹ️  New Android dependency version is #{new_android_version}")
-     end
+    end
+    if type_of_bump_js != :none
+      UI.message("ℹ️  New JS dependency version is #{new_js_version}")
+    end
     reset_git_repo
   else
     branch_ios = ""
     branch_android = ""
+    branch_js = ""
     message_ios = ""
     message_android = ""
+    message_js = ""
 
     if type_of_bump_ios != :none
       branch_ios = "-ios-#{new_ios_version}"
@@ -169,8 +180,12 @@ lane :open_pr_upgrading_dependencies do |options|
       branch_android = "-android-#{new_android_version}"
       message_android = "Android #{current_android_version} => #{new_android_version} "
     end
+    if type_of_bump_js != :none
+      branch_js = "-js-#{new_js_version}"
+      message_js = "JS #{current_js_version} => #{new_js_version} "
+    end
 
-    branch = "update#{branch_ios}#{branch_android}"
+    branch = "update#{branch_ios}#{branch_android}#{branch_js}"
 
     sh("git stash")
     sh("git checkout -b #{branch} origin/main")
@@ -185,10 +200,10 @@ lane :open_pr_upgrading_dependencies do |options|
       remote_branch: branch
     )
 
-    message = "[AUTOMATIC] #{message_ios}#{message_android}".strip
+    message = "[AUTOMATIC] #{message_ios}#{message_android}#{message_js}".strip
 
     labels = ["pr:dependencies"]
-    if type_of_bump_ios == :minor || type_of_bump_android == :minor
+    if type_of_bump_ios == :minor || type_of_bump_android == :minor || type_of_bump_js == :minor
       labels << "pr:force_minor"
     end
 
@@ -212,14 +227,18 @@ lane :update_native_dependencies_to_latest do |options|
   current_android_version = parse_previous_android_native_version
   latest_android_release = get_latest_github_release_within_same_major(repo_name: "purchases-android", current_version: current_android_version)
 
+  current_js_version = parse_previous_js_version
+  latest_js_release = get_latest_github_release_within_same_major(repo_name: "purchases-js", current_version: current_js_version)
+
   update_ios_native_version(new_version: latest_ios_release, current_version: current_ios_version)
   update_android_native_version(new_version: latest_android_release, current_version: current_android_version)
-
+  update_js_native_version(new_version: latest_js_release, current_version: current_js_version)
   run_pod_install
 
   new_versions = {
     new_ios_version: latest_ios_release,
-    new_android_version: latest_android_release
+    new_android_version: latest_android_release,
+    new_js_version: latest_js_release
   }
   new_versions
 end
@@ -292,6 +311,19 @@ private_lane :update_android_native_version do |options|
     new_version_number: new_version_number,
     previous_version_number: previous_version_number,
     files_to_update: files_to_update_android_dependency
+  )
+end
+
+desc "Update purchases-js dependency version"
+private_lane :update_js_native_version do |options|
+  new_version_number = options[:new_version]
+  previous_version_number = options[:current_version]
+
+  update_native_version(
+    platform_name: "JS",
+    new_version_number: new_version_number,
+    previous_version_number: previous_version_number,
+    files_to_update: files_to_update_js_dependency
   )
 end
 
@@ -534,6 +566,10 @@ end
 
 def parse_previous_ios_native_version
   parse_version_in_file(/(?<=s\.dependency ["']RevenueCat["'], ["'])(.*)(?=["'])/, "PurchasesHybridCommon.podspec")
+end
+
+def parse_previous_js_version
+  parse_version_in_file(/(?<="@revenuecat\/purchases-js": ["'])(.*)(?=["'])/, "purchases-js-hybrid-mappings/package.json")
 end
 
 def parse_version_in_file(pattern, path)
