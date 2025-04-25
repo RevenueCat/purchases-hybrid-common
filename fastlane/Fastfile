@@ -469,13 +469,13 @@ end
 platform :typescript do
   desc "Deploy npm package to npm.js"
   lane :deploy do |options|
-    build_and_publish_typescript_package
+    build_and_publish_npm_package("typescript")
   end
 
   desc "Deploy typescript interfaces ESNext NPM package"
   lane :deploy_esm do |options|
     make_typescript_package_esm
-    build_and_publish_typescript_package
+    build_and_publish_npm_package("typescript")
   end
 end
 
@@ -500,6 +500,11 @@ platform :web do
       sh("yarn && yarn format:check && yarn lint")
     end
   end
+
+  desc "Deploy purchases-js-hybrid-mappings to npm.js"
+  lane :deploy_js_mappings do |options|
+    build_and_publish_npm_package("purchases-js-hybrid-mappings")
+  end
 end
 
 def make_typescript_package_esm
@@ -515,7 +520,7 @@ def make_typescript_package_esm
   )
 end
 
-def build_and_publish_typescript_package
+def build_and_publish_npm_package(folder)
   version_number = current_version_number
   is_prerelease = Gem::Version.new(version_number).prerelease?
 
@@ -530,7 +535,7 @@ def build_and_publish_typescript_package
     is_prerelease ? '--tag next' : nil
   ].compact
 
-  Dir.chdir(File.expand_path('typescript', get_root_folder)) do
+  Dir.chdir(File.expand_path(folder, get_root_folder)) do
     sh(build_args)
     sh(publish_args)
   end

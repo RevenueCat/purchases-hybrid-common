@@ -90,6 +90,9 @@ commands:
       - run:
           name: Copy npmrc sample file to final location
           command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
+      - run:
+          name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
+          command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
 
   install-cocoapods:
     steps:
@@ -272,6 +275,18 @@ jobs:
       - run:
           name: Deploy typescript interfaces ESNext NPM package
           command: bundle exec fastlane typescript deploy_esm
+
+  deploy-js-mappings:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - copy-npm-rc
+      - run:
+          name: Deploy js-mappings NPM package
+          command: bundle exec fastlane web deploy_js_mappings
 
   make-github-release:
     docker:
@@ -480,12 +495,15 @@ workflows:
           <<: *release-tags
       - deploy-typescript-esm:
           <<: *release-tags
+      - deploy-js-mappings:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
+            - deploy-js-mappings
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:

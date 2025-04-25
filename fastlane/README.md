@@ -217,6 +217,14 @@ Run API tests for purchases-js-hybrid-mappings
 
 Run linter for purchases-js-hybrid-mappings
 
+### web deploy_js_mappings
+
+```sh
+[bundle exec] fastlane web deploy_js_mappings
+```
+
+Deploy purchases-js-hybrid-mappings to npm.js
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
