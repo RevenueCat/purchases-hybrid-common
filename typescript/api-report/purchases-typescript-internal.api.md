@@ -394,7 +394,7 @@ export interface PurchasesIntroPrice {
     readonly cycles: number;
     readonly period: string;
     readonly periodNumberOfUnits: number;
-    readonly periodUnit: string;
+    readonly periodUnit: "DAY" | "WEEK" | "MONTH" | "YEAR";
     readonly price: number;
     readonly priceString: string;
 }
