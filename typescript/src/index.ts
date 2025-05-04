@@ -5,3 +5,4 @@ export * from './enums';
 export * from './purchasesConfiguration';
 export * from './callbackTypes';
 export * from './webRedemption';
+export * from './storefront';

@@ -536,6 +536,11 @@ export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promis
 export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "UNKNOWN_STORE";
 
 // @public
+export interface Storefront {
+    readonly countryCode: string;
+}
+
+// @public
 export enum STOREKIT_VERSION {
     DEFAULT = "DEFAULT",
     STOREKIT_1 = "STOREKIT_1",
