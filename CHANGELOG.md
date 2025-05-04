@@ -1,3 +1,8 @@
+## 13.30.0
+## RevenueCat SDK
+### ✨ New Features
+* Add `Storefront` type to typescript interfaces (#1138) via Toni Rico (@tonidero)
+
 ## 13.29.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
