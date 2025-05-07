@@ -914,7 +914,8 @@ private extension CommonFunctionality {
                     identifier: pkg.identifier,
                     packageType: pkg.packageType,
                     storeProduct: pkg.storeProduct,
-                    presentedOfferingContext: presentedOfferingContext
+                    presentedOfferingContext: presentedOfferingContext,
+                    webCheckoutUrl: pkg.webCheckoutUrl
                 )
             }
 

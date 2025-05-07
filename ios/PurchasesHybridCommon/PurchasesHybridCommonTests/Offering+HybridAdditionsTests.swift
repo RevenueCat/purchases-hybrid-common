@@ -27,9 +27,11 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
                                 identifier: "annual",
                                 packageType: .annual,
                                 storeProduct: TestStoreProduct().toStoreProduct(),
-                                offeringIdentifier: "default"
+                                offeringIdentifier: "default",
+                                webCheckoutUrl: nil
                             )
-                        ]
+                        ],
+                        webCheckoutUrl: nil
                     )
 
                     let dictionary = mockOffering.dictionary
@@ -55,9 +57,11 @@ class OfferingInfoHybridAdditionsTests: QuickSpec {
                                 identifier: "annual",
                                 packageType: .annual,
                                 storeProduct: TestStoreProduct().toStoreProduct(),
-                                offeringIdentifier: "default"
+                                offeringIdentifier: "default",
+                                webCheckoutUrl: nil
                             )
-                        ]
+                        ],
+                        webCheckoutUrl: nil
                     )
 
                     let dictionary = mockOffering.dictionary
