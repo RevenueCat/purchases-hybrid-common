@@ -1,3 +1,8 @@
+## 13.32.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Store `appUserId` in `localStorage` for web hybrid support (#1147) via Toni Rico (@tonidero)
+
 ## 13.32.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
