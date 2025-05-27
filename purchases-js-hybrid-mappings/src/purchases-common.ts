@@ -20,6 +20,7 @@ import { mapLogLevel } from './mappers/log_level_mapper';
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
   private static proxyUrl: string | null = null;
+  private static readonly STORAGE_KEY = 'revenuecat_user_id';
 
   private purchases: Purchases;
 
@@ -40,15 +41,36 @@ export class PurchasesCommon {
       flavor: configuration.flavor,
       version: configuration.flavorVersion,
     });
+
+    let appUserId: string;
+    if (configuration.appUserId !== undefined) {
+      appUserId = configuration.appUserId;
+      // Store the user ID in localStorage when explicitly provided
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(PurchasesCommon.STORAGE_KEY, appUserId);
+      }
+    } else {
+      // Try to get user ID from localStorage
+      if (typeof window !== 'undefined') {
+        const storedUserId = localStorage.getItem(PurchasesCommon.STORAGE_KEY);
+        if (storedUserId) {
+          appUserId = storedUserId;
+        } else {
+          appUserId = Purchases.generateRevenueCatAnonymousAppUserId();
+          // Store the generated anonymous user ID
+          localStorage.setItem(PurchasesCommon.STORAGE_KEY, appUserId);
+        }
+      } else {
+        appUserId = Purchases.generateRevenueCatAnonymousAppUserId();
+      }
+    }
+
     let httpConfig: HttpConfig | undefined = undefined;
     if (PurchasesCommon.proxyUrl) {
       httpConfig = { proxyURL: PurchasesCommon.proxyUrl };
     }
-    const purchasesInstance = Purchases.configure(
-      configuration.apiKey,
-      configuration.appUserId || Purchases.generateRevenueCatAnonymousAppUserId(),
-      httpConfig,
-    );
+
+    const purchasesInstance = Purchases.configure(configuration.apiKey, appUserId, httpConfig);
     PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
     return PurchasesCommon.instance;
   }

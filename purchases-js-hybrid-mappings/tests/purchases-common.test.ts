@@ -16,6 +16,7 @@ describe('PurchasesCommon', () => {
     preload: jest.fn(),
     getAppUserId: jest.fn(),
     isSandbox: jest.fn(),
+    isAnonymous: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
@@ -105,6 +106,14 @@ describe('PurchasesCommon', () => {
     operationSessionId: 'test_session_id'
   };
 
+  // Mock localStorage
+  const mockLocalStorage = {
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    removeItem: jest.fn(),
+    clear: jest.fn(),
+  };
+
   beforeEach(() => {
     if (Purchases.isConfigured()) {
       Purchases.getSharedInstance().close();
@@ -113,15 +122,141 @@ describe('PurchasesCommon', () => {
     jest.spyOn(Purchases, 'configure').mockReturnValue(mockPurchasesInstance);
     jest.spyOn(Purchases, 'setPlatformInfo').mockImplementation(() => {});
     jest.spyOn(Purchases, 'generateRevenueCatAnonymousAppUserId').mockReturnValue('anonymous_id');
-    purchasesCommon = PurchasesCommon.configure({
-      apiKey: 'test_api_key',
-      appUserId: 'test_user_id',
-      flavor: 'test_flavor',
-      flavorVersion: '1.0.0'
+
+    // Setup localStorage and window mocks using Object.defineProperty
+    Object.defineProperty(global, 'localStorage', {
+      value: mockLocalStorage,
+      writable: true,
+      configurable: true
+    });
+    Object.defineProperty(global, 'window', {
+      value: { localStorage: mockLocalStorage },
+      writable: true,
+      configurable: true
+    });
+  });
+
+  afterEach(() => {
+    // Clean up mocks using Object.defineProperty
+    Object.defineProperty(global, 'localStorage', {
+      value: undefined,
+      writable: true,
+      configurable: true
+    });
+    Object.defineProperty(global, 'window', {
+      value: undefined,
+      writable: true,
+      configurable: true
+    });
+  });
+
+  describe('configure', () => {
+    beforeEach(() => {
+      // Close any existing instance to ensure a clean state
+      if (PurchasesCommon.isConfigured()) {
+        PurchasesCommon.getInstance().close();
+      }
+    });
+
+    it('should use provided appUserId and store it in localStorage', () => {
+      const appUserId = 'test_user_id';
+      PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId,
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+
+      expect(Purchases.configure).toHaveBeenCalledWith(
+        'test_api_key',
+        appUserId,
+        undefined
+      );
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+        'revenuecat_user_id',
+        appUserId
+      );
+    });
+
+    it('should use stored userId from localStorage when appUserId is undefined', () => {
+      const storedUserId = 'stored_user_id';
+      mockLocalStorage.getItem.mockReturnValue(storedUserId);
+
+      PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: undefined,
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+
+      expect(Purchases.configure).toHaveBeenCalledWith(
+        'test_api_key',
+        storedUserId,
+        undefined
+      );
+      expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
+    });
+
+    it('should generate and store anonymous userId when no userId is provided or stored', () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+
+      PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: undefined,
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+
+      expect(Purchases.configure).toHaveBeenCalledWith(
+        'test_api_key',
+        'anonymous_id',
+        undefined
+      );
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+        'revenuecat_user_id',
+        'anonymous_id'
+      );
+    });
+
+    it('should handle non-browser environment gracefully', () => {
+      // Remove both window and localStorage to simulate non-browser environment
+      Object.defineProperty(global, 'localStorage', {
+        value: undefined,
+        writable: true,
+        configurable: true
+      });
+      Object.defineProperty(global, 'window', {
+        value: undefined,
+        writable: true,
+        configurable: true
+      });
+
+      PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: undefined,
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+
+      expect(Purchases.configure).toHaveBeenCalledWith(
+        'test_api_key',
+        'anonymous_id',
+        undefined
+      );
     });
   });
 
   describe('purchasePackage', () => {
+    beforeEach(() => {
+      // Initialize purchasesCommon for purchase tests
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+    });
+
     it('should throw error when offering identifier is invalid', async () => {
       const purchaseParams = {
         packageIdentifier: 'test_package',
