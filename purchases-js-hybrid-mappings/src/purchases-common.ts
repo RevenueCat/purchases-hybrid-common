@@ -45,11 +45,11 @@ export class PurchasesCommon {
     let appUserId: string;
     if (configuration.appUserId !== undefined) {
       appUserId = configuration.appUserId;
-      if (typeof window !== 'undefined') {
+      if (typeof localStorage !== 'undefined') {
         localStorage.setItem(PurchasesCommon.APP_USER_ID_STORAGE_KEY, appUserId);
       }
     } else {
-      if (typeof window !== 'undefined') {
+      if (typeof localStorage !== 'undefined') {
         const storedUserId = localStorage.getItem(PurchasesCommon.APP_USER_ID_STORAGE_KEY);
         if (storedUserId) {
           appUserId = storedUserId;

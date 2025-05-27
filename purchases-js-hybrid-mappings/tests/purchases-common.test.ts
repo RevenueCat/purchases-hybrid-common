@@ -127,20 +127,10 @@ describe('PurchasesCommon', () => {
       writable: true,
       configurable: true
     });
-    Object.defineProperty(global, 'window', {
-      value: { localStorage: mockLocalStorage },
-      writable: true,
-      configurable: true
-    });
   });
 
   afterEach(() => {
     Object.defineProperty(global, 'localStorage', {
-      value: undefined,
-      writable: true,
-      configurable: true
-    });
-    Object.defineProperty(global, 'window', {
       value: undefined,
       writable: true,
       configurable: true
@@ -208,14 +198,9 @@ describe('PurchasesCommon', () => {
       );
     });
 
-    it('should handle non-browser environment gracefully', () => {
-      // Remove both window and localStorage to simulate non-browser environment
+    it('should handle environment without localStorage gracefully', () => {
+      // Remove localStorage to simulate environment without storage
       Object.defineProperty(global, 'localStorage', {
-        value: undefined,
-        writable: true,
-        configurable: true
-      });
-      Object.defineProperty(global, 'window', {
         value: undefined,
         writable: true,
         configurable: true
