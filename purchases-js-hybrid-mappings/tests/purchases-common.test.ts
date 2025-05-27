@@ -106,7 +106,6 @@ describe('PurchasesCommon', () => {
     operationSessionId: 'test_session_id'
   };
 
-  // Mock localStorage
   const mockLocalStorage = {
     getItem: jest.fn(),
     setItem: jest.fn(),
@@ -123,7 +122,6 @@ describe('PurchasesCommon', () => {
     jest.spyOn(Purchases, 'setPlatformInfo').mockImplementation(() => {});
     jest.spyOn(Purchases, 'generateRevenueCatAnonymousAppUserId').mockReturnValue('anonymous_id');
 
-    // Setup localStorage and window mocks using Object.defineProperty
     Object.defineProperty(global, 'localStorage', {
       value: mockLocalStorage,
       writable: true,
@@ -137,7 +135,6 @@ describe('PurchasesCommon', () => {
   });
 
   afterEach(() => {
-    // Clean up mocks using Object.defineProperty
     Object.defineProperty(global, 'localStorage', {
       value: undefined,
       writable: true,
@@ -151,13 +148,6 @@ describe('PurchasesCommon', () => {
   });
 
   describe('configure', () => {
-    beforeEach(() => {
-      // Close any existing instance to ensure a clean state
-      if (PurchasesCommon.isConfigured()) {
-        PurchasesCommon.getInstance().close();
-      }
-    });
-
     it('should use provided appUserId and store it in localStorage', () => {
       const appUserId = 'test_user_id';
       PurchasesCommon.configure({
@@ -248,7 +238,6 @@ describe('PurchasesCommon', () => {
 
   describe('purchasePackage', () => {
     beforeEach(() => {
-      // Initialize purchasesCommon for purchase tests
       purchasesCommon = PurchasesCommon.configure({
         apiKey: 'test_api_key',
         appUserId: 'test_user_id',
