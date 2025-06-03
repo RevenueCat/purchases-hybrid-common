@@ -67,7 +67,7 @@ internal extension Store {
             return "RC_BILLING"
         case .external:
             return "EXTERNAL"
-        case .paddle
+        case .paddle:
             return "PADDLE"
         @unknown default:
             return "UNKNOWN_STORE"
