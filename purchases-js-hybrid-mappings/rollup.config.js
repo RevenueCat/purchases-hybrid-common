@@ -11,13 +11,15 @@ export default defineConfig([
       {
         file: 'dist/index.js',
         format: 'esm',
-        sourcemap: true
+        sourcemap: true,
+        inlineDynamicImports: true
       },
       {
         file: 'dist/index.umd.js',
         format: 'umd',
         name: 'PurchasesHybridMappings',
-        sourcemap: true
+        sourcemap: true,
+        inlineDynamicImports: true
       }
     ],
     plugins: [
