@@ -32,6 +32,9 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                         (.stripe, "STRIPE"),
                         (.promotional, "PROMOTIONAL"),
                         (.amazon, "AMAZON"),
+                        (.rcBilling, "RC_BILLING"),
+                        (.external, "EXTERNAL"),
+                        (.paddle, "PADDLE"),
                         (.unknownStore, "UNKNOWN_STORE")
                     ]
 
