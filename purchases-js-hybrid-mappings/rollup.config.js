@@ -11,11 +11,13 @@ export default defineConfig([
       {
         file: 'dist/index.js',
         format: 'esm',
+        inlineDynamicImports: true,
         sourcemap: true
       },
       {
         file: 'dist/index.umd.js',
         format: 'umd',
+        inlineDynamicImports: true,
         name: 'PurchasesHybridMappings',
         sourcemap: true
       }
@@ -47,4 +49,4 @@ export default defineConfig([
       })
     ]
   }
-]); 
+]);
