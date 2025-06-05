@@ -4,6 +4,7 @@ import {
   EntitlementInfos,
   NonSubscriptionTransaction,
   PeriodType,
+  Store,
   SubscriptionInfo,
 } from '@revenuecat/purchases-js';
 
@@ -105,7 +106,7 @@ function mapEntitlementInfo(entitlementInfo: EntitlementInfo): Record<string, un
     expirationDateMillis: entitlementInfo.expirationDate
       ? entitlementInfo.expirationDate.getTime()
       : null,
-    store: entitlementInfo.store,
+    store: mapStore(entitlementInfo.store),
     productIdentifier: entitlementInfo.productIdentifier,
     productPlanIdentifier: entitlementInfo.productPlanIdentifier,
     isSandbox: entitlementInfo.isSandbox,
@@ -137,7 +138,7 @@ function mapNonSubscriptionTransactions(
       productId: transaction.productIdentifier, // Deprecated: Use productIdentifier in this map instead
       purchaseDate: transaction.purchaseDate.toISOString(),
       purchaseDateMillis: transaction.purchaseDate.getTime(),
-      store: transaction.store,
+      store: mapStore(transaction.store),
     };
   });
 }
@@ -157,7 +158,7 @@ function mapSubscriptionInfos(
         expiresDate: subscriptionInfo.expiresDate
           ? subscriptionInfo.expiresDate.toISOString()
           : null,
-        store: subscriptionInfo.store,
+        store: mapStore(subscriptionInfo.store),
         isSandbox: subscriptionInfo.isSandbox,
         unsubscribeDetectedAt: subscriptionInfo.unsubscribeDetectedAt
           ? subscriptionInfo.unsubscribeDetectedAt.toISOString()
@@ -177,6 +178,29 @@ function mapSubscriptionInfos(
       },
     ]),
   );
+}
+
+function mapStore(store: Store): string {
+  switch (store) {
+    case 'app_store':
+      return 'APP_STORE';
+    case 'mac_app_store':
+      return 'MAC_APP_STORE';
+    case 'play_store':
+      return 'PLAY_STORE';
+    case 'stripe':
+      return 'STRIPE';
+    case 'promotional':
+      return 'PROMOTIONAL';
+    case 'amazon':
+      return 'AMAZON';
+    case 'rc_billing':
+      return 'RC_BILLING';
+    case 'paddle':
+      return 'PADDLE';
+    case 'unknown':
+      return 'UNKNOWN';
+  }
 }
 
 function mapPeriodType(periodType: PeriodType): string {
