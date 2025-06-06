@@ -5,7 +5,7 @@ import { VERIFICATION_RESULT } from "./enums";
  * The supported stores for purchases.
  * @public
  */
-export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "UNKNOWN_STORE";
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "UNKNOWN_STORE";
 
 /**
  * The supported ownership types for an entitlement.

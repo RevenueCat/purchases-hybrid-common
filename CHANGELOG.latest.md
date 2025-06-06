@@ -1,6 +1,5 @@
 ## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix purchases-js Store mapping (#1155) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.22.2 => 5.23.0 (#1141) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* Bump fastlane from 2.227.1 to 2.227.2 (#1140) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] Android 8.19.0 => 8.19.1 JS 1.3.0 => 1.5.0 (#1153) via RevenueCat Git Bot (@RCGitBot)

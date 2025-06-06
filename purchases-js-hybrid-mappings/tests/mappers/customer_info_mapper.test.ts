@@ -147,7 +147,7 @@ describe('mapCustomerInfo', () => {
             originalPurchaseDateMillis: purchaseDate.getTime(),
             expirationDate: expirationDate.toISOString(),
             expirationDateMillis: expirationDate.getTime(),
-            store: 'app_store',
+            store: 'APP_STORE',
             productIdentifier: 'com.test.premium',
             productPlanIdentifier: 'plan_123',
             isSandbox: false,
@@ -171,7 +171,7 @@ describe('mapCustomerInfo', () => {
             originalPurchaseDateMillis: purchaseDate.getTime(),
             expirationDate: expirationDate.toISOString(),
             expirationDateMillis: expirationDate.getTime(),
-            store: 'app_store',
+            store: 'APP_STORE',
             productIdentifier: 'com.test.premium',
             productPlanIdentifier: 'plan_123',
             isSandbox: false,
@@ -219,7 +219,7 @@ describe('mapCustomerInfo', () => {
         productId: 'com.test.consumable',
         purchaseDate: purchaseDate.toISOString(),
         purchaseDateMillis: purchaseDate.getTime(),
-        store: 'app_store'
+        store: 'APP_STORE'
       }],
       subscriptionsByProductIdentifier: {
         'com.test.premium': {
@@ -227,7 +227,7 @@ describe('mapCustomerInfo', () => {
           purchaseDate: purchaseDate.toISOString(),
           originalPurchaseDate: purchaseDate.toISOString(),
           expiresDate: expirationDate.toISOString(),
-          store: 'app_store',
+          store: 'APP_STORE',
           isSandbox: false,
           unsubscribeDetectedAt: null,
           billingIssuesDetectedAt: null,
