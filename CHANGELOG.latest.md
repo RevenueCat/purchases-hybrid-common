@@ -1,5 +1,7 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Fix purchases-js Store mapping (#1155) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.19.0 => 8.19.1 JS 1.3.0 => 1.5.0 (#1153) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.27.0 => 5.27.1 (#1159) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.26.0 => 5.27.0 Android 8.19.1 => 8.19.2 (#1157) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 1.11.11 to 1.11.13 (#1143) via dependabot[bot] (@dependabot[bot])
