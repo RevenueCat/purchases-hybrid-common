@@ -90,6 +90,9 @@ commands:
       - run:
           name: Copy npmrc sample file to final location
           command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
+      - run:
+          name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
+          command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
 
   install-cocoapods:
     steps:
@@ -273,6 +276,18 @@ jobs:
           name: Deploy typescript interfaces ESNext NPM package
           command: bundle exec fastlane typescript deploy_esm
 
+  deploy-js-mappings:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - copy-npm-rc
+      - run:
+          name: Deploy js-mappings NPM package
+          command: bundle exec fastlane web deploy_js_mappings
+
   make-github-release:
     docker:
       - image: cimg/ruby:3.3.0
@@ -386,6 +401,45 @@ jobs:
           name: Check if API has changed
           command: bundle exec fastlane check_typescript_api_changes
 
+  web-tests:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - run:
+          name: Run web tests
+          command: bundle exec fastlane web test_js_mappings
+
+  web-api-tests:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - run:
+          name: Run web API tests
+          command: bundle exec fastlane web test_js_mappings_api
+
+  web-lint:
+    docker:
+      - image: cimg/ruby:3.3.0-node
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - revenuecat/install-gem-unix-dependencies:
+          cache-version: v1
+      - run:
+          name: Run web linter
+          command: bundle exec fastlane web lint_js_mappings
+
   check-pods:
     <<: *base-ios-job
     steps:
@@ -413,6 +467,9 @@ workflows:
       - detekt-android
       - typescript-lint
       - typescript-apitests
+      - web-tests
+      - web-api-tests
+      - web-lint
 
   deploy:
     when:
@@ -438,12 +495,15 @@ workflows:
           <<: *release-tags
       - deploy-typescript-esm:
           <<: *release-tags
+      - deploy-js-mappings:
+          <<: *release-tags
       - make-github-release:
           <<: *release-tags
           requires:
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
+            - deploy-js-mappings
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:

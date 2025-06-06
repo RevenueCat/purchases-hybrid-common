@@ -1,3 +1,153 @@
+## 13.35.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.27.0 => 5.27.1 (#1159) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.26.0 => 5.27.0 Android 8.19.1 => 8.19.2 (#1157) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 1.11.11 to 1.11.13 (#1143) via dependabot[bot] (@dependabot[bot])
+
+## 13.34.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix purchases-js Store mapping (#1155) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 8.19.0 => 8.19.1 JS 1.3.0 => 1.5.0 (#1153) via RevenueCat Git Bot (@RCGitBot)
+
+## 13.33.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Store `appUserId` in `localStorage` for web hybrid support (#1147) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.24.0 => 5.26.0 Android 8.17.1 => 8.19.0 (#1151) via RevenueCat Git Bot (@RCGitBot)
+
+## 13.32.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.23.0 => 5.24.0 JS 1.2.1 => 1.3.0 (#1144) via RevenueCat Git Bot (@RCGitBot)
+
+## 13.31.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.22.2 => 5.23.0 (#1141) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.227.1 to 2.227.2 (#1140) via dependabot[bot] (@dependabot[bot])
+
+## 13.30.0
+## RevenueCat SDK
+### ✨ New Features
+* Add `Storefront` type to typescript interfaces (#1138) via Toni Rico (@tonidero)
+
+## 13.29.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.22.0 => 5.22.2 Android 8.17.0 => 8.17.1 JS 1.2.0 => 1.2.1 (#1136) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add job to deploy `purchases-js-hybrid-mappings` (#1133) via Toni Rico (@tonidero)
+* Bump nokogiri from 1.18.7 to 1.18.8 (#1129) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.11.6 to 1.11.11 (#1128) via dependabot[bot] (@dependabot[bot])
+* Automate update of `purchases-js` in `purchases-js-hybrid-mappings` (#1132) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mappings] Fix `logIn` result mapping (#1130) via Toni Rico (@tonidero)
+* Do not include tsconfig in `purchases-typescript-internal` (#1131) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mappings] Finalize last APIs + export UMD files (#1127) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mappings] Add rollup to generate minified library outputs (#1120) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mappings] Add remaining APIs mappings (#1118) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mapping] Add `purchasePackage` function (#1116) via Toni Rico (@tonidero)
+
+## 13.29.0
+## RevenueCat SDK
+### ✨ New Features
+* Add `getStorefront` APIs (#1125) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.21.2 => 5.22.0 Android 8.16.1 => 8.17.0 (#1123) via RevenueCat Git Bot (@RCGitBot)
+
+## 13.28.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.21.0 => 5.21.2 Android 8.16.0 => 8.16.1 (#1121) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* [purchases-js-hybrid-mappings] Add login/logout functions and set PlatformInfo (#1115) via Toni Rico (@tonidero)
+* [purchases-js-hybrid-mapping] Add mapping for errors and run prettier in the library (#1109) via Toni Rico (@tonidero)
+* Add offerings mapping purchases js hybrid mappings (#1106) via Toni Rico (@tonidero)
+* Create `purchases-js-hybrid-mappings` module with `CustomerInfo` model mappings (#1104) via Toni Rico (@tonidero)
+* Bump fastlane from 2.227.0 to 2.227.1 (#1114) via dependabot[bot] (@dependabot[bot])
+
+## 13.28.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.20.3 => 5.21.0 (#1111) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `05ef095` to `9a29f63` (#1096) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.11.3 to 1.11.6 (#1102) via dependabot[bot] (@dependabot[bot])
+
+## 13.27.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.20.2 => 5.20.3 Android 8.15.1 => 8.16.0 (#1107) via RevenueCat Git Bot (@RCGitBot)
+
+## 13.26.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.20.0 => 5.20.2 Android 8.15.0 => 8.15.1 (#1101) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump nokogiri from 1.18.3 to 1.18.4 (#1097) via dependabot[bot] (@dependabot[bot])
+
+## 13.26.0
+## RevenueCat SDK
+### ✨ New Features
+* Add more events to iOS `CustomerCenterViewControllerDelegateWrapper` (#1084) via Cesar de la Vega (@vegaro)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 8.14.1 => 8.14.2 (#1090) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.226.0 to 2.227.0 (#1089) via dependabot[bot] (@dependabot[bot])
+* Add automatic changes on `.idea` files (#1077) via Cesar de la Vega (@vegaro)
+
+## 13.25.0
+## RevenueCat SDK
+### ✨ New Features
+* Create `CustomerCenterListenerWrapper` (#1076) via Cesar de la Vega (@vegaro)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 8.13.0 => 8.14.1 (#1086) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* chore: test pod_push_with_error_handling for new pods (#1081) via Facundo Menzella (@facumenzella)
+* Bump lefthook from 1.11.0 to 1.11.3 (#1082) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `177d985` to `05ef095` (#1083) via dependabot[bot] (@dependabot[bot])
+
+## 13.24.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Add missing onCloseHandler to CustomerCenterUIViewController for custom close (#1079) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Update detekt and enable autocorrect (#1078) via Cesar de la Vega (@vegaro)
+
+## 13.23.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Add `subscriptionsByProductIdentifier` to CustomerInfo in typescript interface (#1072) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.18.0 => 5.19.0 (#1074) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `4ee8579` to `177d985` (#1070) via dependabot[bot] (@dependabot[bot])
+
+## 13.22.0
+## RevenueCat SDK
+### ✨ New Features
+* Add `subscriptionsByProductIdentifier` map of SubscriptionInfo by productId to CustomerInfo (#1067) via Toni Rico (@tonidero)
+* [EXTERNAL] feat(ios): expose showManageSubscriptions (#1064) by @dylancom (#1065) via Toni Rico (@tonidero)
+
+### 🔄 Other Changes
+* Bump lefthook from 1.10.10 to 1.11.0 (#1056) via dependabot[bot] (@dependabot[bot])
+* Bump nokogiri from 1.17.1 to 1.18.3 (#1048) via dependabot[bot] (@dependabot[bot])
+
 ## 13.21.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates

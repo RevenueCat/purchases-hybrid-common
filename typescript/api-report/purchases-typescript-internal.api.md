@@ -32,6 +32,9 @@ export interface CustomerInfo {
     readonly originalAppUserId: string;
     readonly originalPurchaseDate: string | null;
     readonly requestDate: string;
+    readonly subscriptionsByProductIdentifier: {
+        [key: string]: PurchasesSubscriptionInfo;
+    };
 }
 
 // @public
@@ -121,6 +124,9 @@ export enum OFFER_PAYMENT_MODE {
 }
 
 // @public
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+
+// @public
 export enum PACKAGE_TYPE {
     ANNUAL = "ANNUAL",
     CUSTOM = "CUSTOM",
@@ -162,6 +168,9 @@ export enum PERIOD_UNIT {
     // (undocumented)
     YEAR = "YEAR"
 }
+
+// @public
+export type PeriodType = "NORMAL" | "INTRO" | "TRIAL" | "PREPAID";
 
 // @public
 export interface PresentedOfferingContext {
@@ -342,11 +351,11 @@ export interface PurchasesEntitlementInfo {
     readonly latestPurchaseDateMillis: number;
     readonly originalPurchaseDate: string;
     readonly originalPurchaseDateMillis: number;
-    readonly ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN";
+    readonly ownershipType: OwnershipType;
     readonly periodType: string;
     readonly productIdentifier: string;
     readonly productPlanIdentifier: string | null;
-    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "UNKNOWN_STORE";
+    readonly store: Store;
     readonly unsubscribeDetectedAt: string | null;
     readonly unsubscribeDetectedAtMillis: number | null;
     readonly verification: VERIFICATION_RESULT;
@@ -484,6 +493,25 @@ export interface PurchasesStoreTransaction {
 }
 
 // @public
+export interface PurchasesSubscriptionInfo {
+    readonly billingIssuesDetectedAt: string | null;
+    readonly expiresDate: string | null;
+    readonly gracePeriodExpiresDate: string | null;
+    readonly isActive: boolean;
+    readonly isSandbox: boolean;
+    readonly originalPurchaseDate: string | null;
+    readonly ownershipType: OwnershipType;
+    readonly periodType: PeriodType;
+    readonly productIdentifier: string;
+    readonly purchaseDate: string;
+    readonly refundedAt: string | null;
+    readonly store: Store;
+    readonly storeTransactionId: string | null;
+    readonly unsubscribeDetectedAt: string | null;
+    readonly willRenew: boolean;
+}
+
+// @public
 export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {
 }
 
@@ -503,6 +531,14 @@ export enum REFUND_REQUEST_STATUS {
 
 // @public
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => void;
+
+// @public
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "UNKNOWN_STORE";
+
+// @public
+export interface Storefront {
+    readonly countryCode: string;
+}
 
 // @public
 export enum STOREKIT_VERSION {

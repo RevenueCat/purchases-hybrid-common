@@ -138,6 +138,16 @@ import RevenueCat
         Self.sharedInstance.invalidateCustomerInfoCache()
     }
 
+    @objc public static func getStorefront(completion: @escaping ([String: Any]?) -> Void) {
+        Self.sharedInstance.getStorefront { storefront in
+            var storefrontMap: [String: Any]? = nil
+            if let storefront = storefront {
+                storefrontMap = ["identifier": storefront.identifier, "countryCode": storefront.countryCode]
+            }
+            completion(storefrontMap)
+        }
+    }
+
 #if os(iOS)
     @available(iOS 14.0, *)
     @available(tvOS, unavailable)
@@ -197,6 +207,29 @@ import RevenueCat
 #endif
 
 }
+
+#if os(iOS) || os(macOS) || VISION_OS
+
+// MARK: Manage subscriptions
+@objc public extension CommonFunctionality {
+
+    @available(iOS 13.0, macOS 10.15, *)
+    @available(watchOS, unavailable)
+    @available(tvOS, unavailable)
+    @objc(showManageSubscriptions:)
+    static func showManageSubscriptions(completion: @escaping (ErrorContainer?) -> Void) {
+        _ = Task<Void, Never> {
+            do {
+                try await Self.sharedInstance.showManageSubscriptions()
+                completion(nil)
+            } catch {
+                completion(Self.createErrorContainer(error: error))
+            }
+        }
+    }
+}
+
+#endif
 
 // MARK: In app messages
 @objc public extension CommonFunctionality {
@@ -881,7 +914,8 @@ private extension CommonFunctionality {
                     identifier: pkg.identifier,
                     packageType: pkg.packageType,
                     storeProduct: pkg.storeProduct,
-                    presentedOfferingContext: presentedOfferingContext
+                    presentedOfferingContext: presentedOfferingContext,
+                    webCheckoutUrl: pkg.webCheckoutUrl
                 )
             }
 

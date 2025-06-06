@@ -1,5 +1,24 @@
 import { VERIFICATION_RESULT } from "./enums";
 
+
+/**
+ * The supported stores for purchases.
+ * @public
+ */
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "UNKNOWN_STORE";
+
+/**
+ * The supported ownership types for an entitlement.
+ * @public
+ */
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+
+/**
+ * The supported period types for an entitlement.
+ * @public
+ */
+export type PeriodType = "NORMAL" | "INTRO" | "TRIAL" | "PREPAID";
+
 /**
  * The EntitlementInfo object gives you access to all of the information about the status of a user entitlement.
  * @public
@@ -50,7 +69,7 @@ export interface PurchasesEntitlementInfo {
     /**
      * The store where this entitlement was unlocked from.
      */
-    readonly store: "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "UNKNOWN_STORE";
+    readonly store: Store;
     /**
      * The product identifier that unlocked this entitlement
      */
@@ -95,7 +114,7 @@ export interface PurchasesEntitlementInfo {
      * FAMILY_SHARED if the purchase has been shared to this user by a family member.
      * UNKNOWN if the purchase has no or an unknown ownership type.
      */
-    readonly ownershipType: "FAMILY_SHARED" | "PURCHASED" | "UNKNOWN";
+    readonly ownershipType: OwnershipType;
     /**
      * If entitlement verification was enabled, the result of that verification. If not, VerificationResult.NOT_REQUESTED
      */
@@ -189,6 +208,11 @@ export interface CustomerInfo {
      * non-subscription purchases
      */
     readonly nonSubscriptionTransactions: PurchasesStoreTransaction[];
+
+    /**
+     * Information about the customer's subscriptions for each product identifier.
+     */
+    readonly subscriptionsByProductIdentifier: { [key: string]: PurchasesSubscriptionInfo };
 }
 
 /**
@@ -208,4 +232,82 @@ export interface PurchasesStoreTransaction {
      * Purchase date of the transaction in ISO 8601 format.
      */
     purchaseDate: string;
+}
+
+/**
+ * Subscription purchases of the Customer.
+ * @public
+ */
+export interface PurchasesSubscriptionInfo {
+    /**
+     * The product identifier.
+     */
+    readonly productIdentifier: string;
+    /**
+     * Date when the last subscription period started.
+     */
+    readonly purchaseDate: string;
+    /**
+     * Date when this subscription first started. This property does not update with renewals.
+     * This property also does not update for product changes within a subscription group or
+     * re-subscriptions by lapsed subscribers.
+     */
+    readonly originalPurchaseDate: string | null;
+    /**
+     * Date when the subscription expires/expired
+     */
+    readonly expiresDate: string | null;
+    /**
+     * Store where the subscription was purchased.
+     */
+    readonly store: Store;
+    /**
+     * Date when RevenueCat detected that auto-renewal was turned off for this subscription.
+     * Note the subscription may still be active, check the `expiresDate` attribute.
+     */
+    readonly unsubscribeDetectedAt: string | null;
+    /**
+     * Whether or not the purchase was made in sandbox mode.
+     */
+    readonly isSandbox: boolean;
+    /**
+     * Date when RevenueCat detected any billing issues with this subscription.
+     * If and when the billing issue gets resolved, this field is set to nil.
+     */ 
+    readonly billingIssuesDetectedAt: string | null;
+    /**
+     * Date when any grace period for this subscription expires/expired.
+     * nil if the customer has never been in a grace period.
+     */
+    readonly gracePeriodExpiresDate: string | null; 
+    /**
+     * How the Customer received access to this subscription:
+     * - [OwnershipType.PURCHASED]: The customer bought the subscription.
+     * - [OwnershipType.FAMILY_SHARED]: The Customer has access to the product via their family.
+     */
+    readonly ownershipType: OwnershipType;
+    /**
+     * Type of the current subscription period:
+     * - [PeriodType.NORMAL]: The product is in a normal period (default)
+     * - [PeriodType.TRIAL]: The product is in a free trial period
+     * - [PeriodType.INTRO]: The product is in an introductory pricing period
+     * - [PeriodType.PREPAID]: The product is in a prepaid pricing period
+     */
+    readonly periodType: PeriodType;
+    /** 
+     * Date when RevenueCat detected a refund of this subscription.
+     */
+    readonly refundedAt: string | null;
+    /**
+     * The transaction id in the store of the subscription.
+     */
+    readonly storeTransactionId: string | null;
+    /**
+     * Whether the subscription is currently active.
+     */
+    readonly isActive: boolean;
+    /**
+     * Whether the subscription will renew at the next billing period.
+     */
+    readonly willRenew: boolean;
 }

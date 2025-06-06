@@ -5,10 +5,8 @@ import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.models.StoreTransaction
-import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.PaywallListener
 
-@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 abstract class PaywallListenerWrapper : PaywallListener {
 
     override fun onPurchaseStarted(rcPackage: Package) {

@@ -5,7 +5,6 @@ import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIP
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import java.util.concurrent.atomic.AtomicBoolean
 
-@OptIn(ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 interface PaywallResultListener {
     // Keeping for now to avoid a breaking change but will be unused.
     @Deprecated(

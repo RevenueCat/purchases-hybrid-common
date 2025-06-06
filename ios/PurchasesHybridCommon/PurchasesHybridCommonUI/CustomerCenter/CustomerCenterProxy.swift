@@ -23,6 +23,7 @@ import UIKit
 public class CustomerCenterProxy: NSObject {
 
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
+    @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
     
     @objc public func present(
@@ -57,6 +58,46 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
         guard let resultHandler = self.resultByVC.removeValue(forKey: controller) else { return }
         resultHandler()
     }
+    
+    public func customerCenterViewControllerDidStartRestore(_ controller: CustomerCenterUIViewController) {
+        self.delegate?.customerCenterViewControllerDidStartRestore?(controller)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didFinishRestoringWith customerInfoDictionary: [String: Any]) {
+        self.delegate?.customerCenterViewController?(controller, didFinishRestoringWith: customerInfoDictionary)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didFailRestoringWith errorDictionary: [String: Any]) {
+        self.delegate?.customerCenterViewController?(controller, didFailRestoringWith: errorDictionary)
+    }
+    
+    public func customerCenterViewControllerDidShowManageSubscriptions(_ controller: CustomerCenterUIViewController) {
+        self.delegate?.customerCenterViewControllerDidShowManageSubscriptions?(controller)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didStartRefundRequestForProductWithID productID: String) {
+        self.delegate?.customerCenterViewController?(controller, didStartRefundRequestForProductWithID: productID)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didCompleteRefundRequestForProductWithID productId: String,
+                                             withStatus status: String) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteRefundRequestForProductWithID: productId, withStatus: status)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didSelectCustomerCenterManagementOption optionID: String,
+                                             withURL url: String?) {
+        self.delegate?.customerCenterViewController?(controller, didSelectCustomerCenterManagementOption: optionID, withURL: url)
+    }
+    
+    public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                             didCompleteFeedbackSurveyWithOptionID optionID: String) {
+        self.delegate?.customerCenterViewController?(controller, didCompleteFeedbackSurveyWithOptionID: optionID)
+    }
 }
 
 @available(iOS 15.0, *)
@@ -77,10 +118,7 @@ private extension CustomerCenterProxy {
     }
 
     func createCustomerCenterViewController() -> CustomerCenterUIViewController {
-        // customerCenterActionHandler = nil for now, till we implement proper callbacks
-        let vc =  CustomerCenterUIViewController(
-            customerCenterActionHandler: nil
-        )
+        let vc = CustomerCenterUIViewController()
         vc.delegate = self
 
         return vc

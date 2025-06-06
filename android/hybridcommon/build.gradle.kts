@@ -14,6 +14,7 @@ dependencies {
 detekt {
     buildUponDefaultConfig = true
     baseline = file("config/detekt/detekt-baseline.xml")
+    autoCorrect = true
 }
 
 android {
