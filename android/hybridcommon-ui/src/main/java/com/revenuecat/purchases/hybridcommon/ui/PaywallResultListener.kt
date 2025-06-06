@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import androidx.annotation.CallSuper
-import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import java.util.concurrent.atomic.AtomicBoolean
 
