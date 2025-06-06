@@ -3,6 +3,7 @@ package com.revenuecat.apitests.kotlin
 import androidx.fragment.app.FragmentActivity
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
+import com.revenuecat.purchases.hybridcommon.ui.SingleFirePaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -17,6 +18,18 @@ private class PaywallApiTests {
             }
 
             override fun onPaywallResult(paywallResult: String) {
+            }
+        }
+    }
+
+    fun checkSingleFirePaywallResultListener() {
+        val listener: SingleFirePaywallResultListener = object : SingleFirePaywallResultListener() {
+            override fun onPaywallResult(paywallResult: PaywallResult) {
+                super.onPaywallResult(paywallResult)
+            }
+
+            override fun onPaywallResult(paywallResult: String) {
+                super.onPaywallResult(paywallResult)
             }
         }
     }
