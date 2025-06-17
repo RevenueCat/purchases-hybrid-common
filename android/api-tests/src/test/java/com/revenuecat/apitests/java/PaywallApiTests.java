@@ -31,19 +31,16 @@ class PaywallApiTests {
             Offering offering
     ) {
         PaywallHelpersKt.presentPaywallFromFragment(
-                fragmentActivity
+                fragmentActivity, listener
         );
         PaywallHelpersKt.presentPaywallFromFragment(
-                fragmentActivity, requiredEntitlementIdentifier
+                fragmentActivity, listener, requiredEntitlementIdentifier
         );
         PaywallHelpersKt.presentPaywallFromFragment(
-                fragmentActivity, requiredEntitlementIdentifier, listener
+                fragmentActivity, listener, requiredEntitlementIdentifier, shouldDisplayDismissButton
         );
         PaywallHelpersKt.presentPaywallFromFragment(
-                fragmentActivity, requiredEntitlementIdentifier, listener, shouldDisplayDismissButton
-        );
-        PaywallHelpersKt.presentPaywallFromFragment(
-                fragmentActivity, requiredEntitlementIdentifier, listener, shouldDisplayDismissButton, offering
+                fragmentActivity, listener, requiredEntitlementIdentifier, shouldDisplayDismissButton, offering
         );
     }
 }

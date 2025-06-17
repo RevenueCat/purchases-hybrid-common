@@ -22,30 +22,27 @@ private class PaywallApiTests {
     fun checkPresentPaywall(
         fragmentActivity: FragmentActivity,
         requiredEntitlementIdentifier: String?,
-        paywallResultListener: PaywallResultListener?,
+        paywallResultListener: PaywallResultListener,
         shouldDisplayDismissButton: Boolean?,
         offering: Offering?,
     ) {
         presentPaywallFromFragment(
-            fragment = fragmentActivity,
+            activity = fragmentActivity,
+            paywallResultListener = paywallResultListener,
         )
         presentPaywallFromFragment(
-            fragment = fragmentActivity,
-            requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-        )
-        presentPaywallFromFragment(
-            fragment = fragmentActivity,
+            activity = fragmentActivity,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
         )
         presentPaywallFromFragment(
-            fragment = fragmentActivity,
+            activity = fragmentActivity,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,
         )
         presentPaywallFromFragment(
-            fragment = fragmentActivity,
+            activity = fragmentActivity,
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,

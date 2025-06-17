@@ -13,14 +13,14 @@ import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
     ),
 )
 fun presentPaywallFromFragment(
-    fragment: FragmentActivity,
+    activity: FragmentActivity,
+    paywallResultListener: PaywallResultListener,
     requiredEntitlementIdentifier: String? = null,
-    paywallResultListener: PaywallResultListener? = null,
     shouldDisplayDismissButton: Boolean? = null,
     offering: Offering? = null,
 ) {
     presentPaywallFromFragment(
-        fragment,
+        activity,
         PresentPaywallOptions(
             requiredEntitlementIdentifier = requiredEntitlementIdentifier,
             paywallResultListener = paywallResultListener,
@@ -31,18 +31,26 @@ fun presentPaywallFromFragment(
 }
 
 fun presentPaywallFromFragment(
-    fragment: FragmentActivity,
+    activity: FragmentActivity,
     options: PresentPaywallOptions,
 ) {
     with(options) {
-        fragment
+        val requestKey = System.identityHashCode(paywallResultListener).toString()
+
+        activity.supportFragmentManager.setFragmentResultListener(requestKey, activity) { _, result ->
+            val paywallResult = result.getString(PaywallFragment.ResultKey.PAYWALL_RESULT.key)
+                ?: error("PaywallResult not found in result bundle.")
+            paywallResultListener.onPaywallResult(paywallResult)
+            activity.supportFragmentManager.clearFragmentResultListener(requestKey)
+        }
+
+        activity
             .supportFragmentManager
             .beginTransaction()
             .add(
                 PaywallFragment.newInstance(
-                    fragment,
+                    requestKey,
                     requiredEntitlementIdentifier,
-                    paywallResultListener,
                     shouldDisplayDismissButton,
                     paywallSource,
                     fontFamily,
@@ -54,9 +62,9 @@ fun presentPaywallFromFragment(
 }
 
 data class PresentPaywallOptions @JvmOverloads constructor(
+    val paywallResultListener: PaywallResultListener,
     val paywallSource: PaywallSource = PaywallSource.DefaultOffering,
     val requiredEntitlementIdentifier: String? = null,
-    val paywallResultListener: PaywallResultListener? = null,
     val shouldDisplayDismissButton: Boolean? = null,
     val fontFamily: PaywallFontFamily? = null,
 )
