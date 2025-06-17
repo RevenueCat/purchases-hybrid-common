@@ -4,8 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
@@ -15,8 +14,13 @@ import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProv
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
+    enum class ResultKey(val key: String) {
+        PAYWALL_RESULT("paywall_result"),
+    }
+
     companion object {
         enum class OptionKey(val key: String) {
+            REQUEST_KEY("requestKey"),
             REQUIRED_ENTITLEMENT_IDENTIFIER("requiredEntitlementIdentifier"),
             SHOULD_DISPLAY_DISMISS_BUTTON("shouldDisplayDismissButton"),
             OFFERING_IDENTIFIER("offeringIdentifier"),
@@ -29,17 +33,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         @Suppress("LongParameterList")
         @JvmStatic
         fun newInstance(
-            activity: FragmentActivity,
+            requestKey: String,
             requiredEntitlementIdentifier: String? = null,
-            paywallResultListener: PaywallResultListener? = null,
             shouldDisplayDismissButton: Boolean? = null,
             paywallSource: PaywallSource,
             fontFamily: PaywallFontFamily? = null,
         ): PaywallFragment {
-            val paywallFragmentViewModel = ViewModelProvider(activity)[PaywallFragmentViewModel::class.java]
-            paywallFragmentViewModel.paywallResultListener = paywallResultListener
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
+                    putString(OptionKey.REQUEST_KEY.key, requestKey)
                     putString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key, it) }
                     when (paywallSource) {
@@ -62,7 +64,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     private lateinit var launcher: PaywallActivityLauncher
-    private lateinit var viewModel: PaywallFragmentViewModel
+
+    private val requestKey: String
+        get() = arguments?.getString(OptionKey.REQUEST_KEY.key) ?: error("requestKey argument not provided")
 
     private val requiredEntitlementIdentifier: String?
         get() = arguments?.getString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key)
@@ -110,7 +114,6 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             this,
             this,
         )
-        viewModel = ViewModelProvider(requireActivity())[PaywallFragmentViewModel::class.java]
 
         requiredEntitlementIdentifier?.let { requiredEntitlementIdentifier ->
             launchPaywallIfNeeded(requiredEntitlementIdentifier)
@@ -118,8 +121,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     override fun onActivityResult(result: PaywallResult) {
-        viewModel.paywallResultListener?.onPaywallResult(result)
-        viewModel.paywallResultListener?.onPaywallResult(result.name)
+        setFragmentResult(result)
         removeFragment()
     }
 
@@ -135,7 +137,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val paywallDisplayCallback = object : PaywallDisplayCallback {
             override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
                 if (!wasDisplayed) {
-                    viewModel.paywallResultListener?.onPaywallResult(notPresentedPaywallResult)
+                    setFragmentResult(notPresentedPaywallResult)
                     removeFragment()
                 }
             }
@@ -197,4 +199,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             launcher.launch(fontProvider = fontProvider)
         }
     }
+
+    private fun setFragmentResult(paywallResult: PaywallResult) =
+        setFragmentResult(paywallResult = paywallResult.name)
+
+    private fun setFragmentResult(paywallResult: String) =
+        setFragmentResult(
+            requestKey = requestKey,
+            result = Bundle().apply {
+                putString(ResultKey.PAYWALL_RESULT.key, paywallResult)
+            },
+        )
 }
