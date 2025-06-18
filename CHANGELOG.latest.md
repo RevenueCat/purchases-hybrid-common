@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Avoids passing multiple `PaywallResult`s to a single `PaywallResultListener`. (#1165) via JayShortway (@JayShortway)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.28.1 => 5.29.0 (#1167) via RevenueCat Git Bot (@RCGitBot)
