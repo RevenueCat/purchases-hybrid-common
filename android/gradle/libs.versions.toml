@@ -1,6 +1,7 @@
 [versions]
 agp = "8.2.0"
 assertj-core = "3.22.0"
+coroutines = "1.6.4"
 fragmentKtx = "1.6.2"
 junit-jupiter = "5.8.2"
 kotlin = "1.7.21"
@@ -18,6 +19,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
 purchases-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }

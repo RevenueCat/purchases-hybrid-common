@@ -1,6 +1,9 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.utils.Iso8601Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.NumberFormat
@@ -43,6 +46,8 @@ fun JSONObject.convertToMap(): Map<String, String?> =
             key to this.getString(key)
         }
     }
+
+internal val mapperScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 internal fun Date.toMillis(): Long = this.time
 

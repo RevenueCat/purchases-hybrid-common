@@ -1,6 +1,7 @@
 package com.revenuecat.apitests.kotlin.mappers
 
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.models.StoreProduct
 
 @Suppress("unused", "UNUSED_VARIABLE")
@@ -11,5 +12,9 @@ private class StoreProductMapperApiTests {
 
     fun checkListMap(products: List<StoreProduct>) {
         val listOfMaps: List<Map<String, Any?>> = products.map()
+    }
+
+    fun checkListMapAsync(products: List<StoreProduct>, callback: (List<Map<String, Any?>>) -> Unit) {
+        val unit: Unit = products.mapAsync(callback)
     }
 }

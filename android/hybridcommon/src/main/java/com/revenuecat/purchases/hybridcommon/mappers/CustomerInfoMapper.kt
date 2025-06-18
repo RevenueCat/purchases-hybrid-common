@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.CustomerInfo
+import kotlinx.coroutines.launch
 
 fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
@@ -25,3 +26,9 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "nonSubscriptionTransactions" to nonSubscriptionTransactions.map { it.map() },
         "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
     )
+
+fun CustomerInfo.mapAsync(
+    callback: (Map<String, Any?>) -> Unit,
+) {
+    mapperScope.launch { callback(map()) }
+}

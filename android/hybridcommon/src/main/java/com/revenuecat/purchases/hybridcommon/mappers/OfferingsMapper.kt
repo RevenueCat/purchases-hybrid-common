@@ -4,12 +4,19 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
+import kotlinx.coroutines.launch
 
 fun Offerings.map(): Map<String, Any?> =
     mapOf(
         "all" to this.all.mapValues { it.value.map() },
         "current" to this.current?.map(),
     )
+
+fun Offerings.mapAsync(
+    callback: (Map<String, Any?>) -> Unit,
+) {
+    mapperScope.launch { callback(map()) }
+}
 
 fun Offering.map(): Map<String, Any?> =
     mapOf(
@@ -25,6 +32,12 @@ fun Offering.map(): Map<String, Any?> =
         "monthly" to monthly?.map(),
         "weekly" to weekly?.map(),
     )
+
+fun Offering.mapAsync(
+    callback: (Map<String, Any?>) -> Unit,
+) {
+    mapperScope.launch { callback(map()) }
+}
 
 fun Package.map(): Map<String, Any?> =
     mapOf(
