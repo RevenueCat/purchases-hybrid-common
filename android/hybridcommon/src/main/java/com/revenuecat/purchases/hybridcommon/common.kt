@@ -647,27 +647,37 @@ fun redeemWebPurchase(
     }
 
     Purchases.sharedInstance.redeemWebPurchase(webPurchaseRedemption) { result ->
-        val resultMap: MutableMap<String, Any> = mutableMapOf(
-            "result" to result.toResultName(),
-        )
         when (result) {
-            is RedeemWebPurchaseListener.Result.Success -> {
-                result.customerInfo.mapAsync { map ->
-                    resultMap["customerInfo"] = map
-                    onResult.onReceived(resultMap)
-                }
+            is RedeemWebPurchaseListener.Result.Success -> result.customerInfo.mapAsync { map ->
+                onResult.onReceived(
+                    mutableMapOf(
+                        "result" to result.toResultName(),
+                        "customerInfo" to map,
+                    ),
+                )
             }
-            is RedeemWebPurchaseListener.Result.Error -> {
-                resultMap["error"] = result.error.map()
-                onResult.onReceived(resultMap)
-            }
-            is RedeemWebPurchaseListener.Result.Expired -> {
-                resultMap["obfuscatedEmail"] = result.obfuscatedEmail
-                onResult.onReceived(resultMap)
-            }
+
+            is RedeemWebPurchaseListener.Result.Error -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                    "error" to result.error.map(),
+                ),
+            )
+
+            is RedeemWebPurchaseListener.Result.Expired -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                    "obfuscatedEmail" to result.obfuscatedEmail,
+                ),
+            )
+
             RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser,
             RedeemWebPurchaseListener.Result.InvalidToken,
-            -> onResult.onReceived(resultMap)
+            -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                ),
+            )
         }
     }
 }
