@@ -325,7 +325,7 @@ internal class CommonKtTests {
         logIn(appUserID = appUserID, onResult = onResult)
         logInCallback.captured.onReceived(mockInfo, mockCreated)
 
-        val mockInfoMap = mockInfo.map()
+        val mockInfoMap = mockInfo.mapBlocking()
 
         verify(exactly = 1) {
             onResult.onReceived(
@@ -416,7 +416,7 @@ internal class CommonKtTests {
 
         receiveCustomerInfoListener.captured.onReceived(mockInfo)
 
-        val mockInfoMap = mockInfo.map()
+        val mockInfoMap = mockInfo.mapBlocking()
         verify(exactly = 1) { onResult.onReceived(mockInfoMap) }
     }
 
@@ -1285,7 +1285,7 @@ internal class CommonKtTests {
         val mockStoreProduct = stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = emptyMap())
 
-        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(emptyMap<String, Any>(), mappedMetadata)
@@ -1308,7 +1308,7 @@ internal class CommonKtTests {
         val mockStoreProduct = stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = metadata)
 
-        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(metadata, mappedMetadata)
