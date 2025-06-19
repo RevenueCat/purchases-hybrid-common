@@ -21,6 +21,7 @@ import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
@@ -49,6 +50,8 @@ import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
@@ -79,6 +82,8 @@ internal class CommonKtTests {
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.store } returns Store.PLAY_STORE
+        @OptIn(ExperimentalCoroutinesApi::class)
+        overrideMapperDispatcher = UnconfinedTestDispatcher()
     }
 
     @Test
@@ -320,7 +325,7 @@ internal class CommonKtTests {
         logIn(appUserID = appUserID, onResult = onResult)
         logInCallback.captured.onReceived(mockInfo, mockCreated)
 
-        val mockInfoMap = mockInfo.map()
+        val mockInfoMap = mockInfo.mapBlocking()
 
         verify(exactly = 1) {
             onResult.onReceived(
@@ -411,7 +416,7 @@ internal class CommonKtTests {
 
         receiveCustomerInfoListener.captured.onReceived(mockInfo)
 
-        val mockInfoMap = mockInfo.map()
+        val mockInfoMap = mockInfo.mapBlocking()
         verify(exactly = 1) { onResult.onReceived(mockInfoMap) }
     }
 
@@ -1280,7 +1285,7 @@ internal class CommonKtTests {
         val mockStoreProduct = stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = emptyMap())
 
-        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(emptyMap<String, Any>(), mappedMetadata)
@@ -1303,7 +1308,7 @@ internal class CommonKtTests {
         val mockStoreProduct = stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = metadata)
 
-        val mappedOffering = offerings.map()["current"] as Map<*, *>
+        val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(metadata, mappedMetadata)

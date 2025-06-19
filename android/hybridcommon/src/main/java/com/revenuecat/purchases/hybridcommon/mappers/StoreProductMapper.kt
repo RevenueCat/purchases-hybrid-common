@@ -9,6 +9,7 @@ import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.SubscriptionOption
+import kotlinx.coroutines.launch
 
 val StoreProduct.priceAmountMicros: Long
     get() = this.price.amountMicros
@@ -61,7 +62,13 @@ fun StoreProduct.map(): Map<String, Any?> =
         "presentedOfferingContext" to presentedOfferingContext?.map(),
     )
 
-fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
+private fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
+
+fun List<StoreProduct>.mapAsync(
+    callback: (List<Map<String, Any?>>) -> Unit,
+) {
+    mapperScope.launch { callback(map()) }
+}
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal enum class MappedProductCategory(val value: String) {

@@ -49,7 +49,9 @@ android {
 dependencies {
     api(libs.purchases)
     api(libs.purchases.amazon)
+    implementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.assertj.core)
     testImplementation(libs.mockk)
