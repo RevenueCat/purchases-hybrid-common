@@ -3,7 +3,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 import com.revenuecat.purchases.CustomerInfo
 import kotlinx.coroutines.launch
 
-fun CustomerInfo.map(): Map<String, Any?> =
+private fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
         "entitlements" to entitlements.map(),
         "activeSubscriptions" to activeSubscriptions.toList(),

@@ -62,7 +62,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "presentedOfferingContext" to presentedOfferingContext?.map(),
     )
 
-fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
+private fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
 
 fun List<StoreProduct>.mapAsync(
     callback: (List<Map<String, Any?>>) -> Unit,

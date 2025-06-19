@@ -6,7 +6,7 @@ import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
 import kotlinx.coroutines.launch
 
-fun Offerings.map(): Map<String, Any?> =
+private fun Offerings.map(): Map<String, Any?> =
     mapOf(
         "all" to this.all.mapValues { it.value.map() },
         "current" to this.current?.map(),
@@ -18,7 +18,7 @@ fun Offerings.mapAsync(
     mapperScope.launch { callback(map()) }
 }
 
-fun Offering.map(): Map<String, Any?> =
+private fun Offering.map(): Map<String, Any?> =
     mapOf(
         "identifier" to identifier,
         "serverDescription" to serverDescription,
