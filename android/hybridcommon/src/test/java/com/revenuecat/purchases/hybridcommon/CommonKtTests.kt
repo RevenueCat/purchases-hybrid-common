@@ -21,6 +21,7 @@ import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
@@ -49,6 +50,8 @@ import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
@@ -79,6 +82,8 @@ internal class CommonKtTests {
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.store } returns Store.PLAY_STORE
+        @OptIn(ExperimentalCoroutinesApi::class)
+        overrideMapperDispatcher = UnconfinedTestDispatcher()
     }
 
     @Test
