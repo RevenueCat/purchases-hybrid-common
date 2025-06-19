@@ -10,10 +10,6 @@ private class StoreProductMapperApiTests {
         val map: Map<String, Any?> = product.map()
     }
 
-    fun checkListMap(products: List<StoreProduct>) {
-        val listOfMaps: List<Map<String, Any?>> = products.map()
-    }
-
     fun checkListMapAsync(products: List<StoreProduct>, callback: (List<Map<String, Any?>>) -> Unit) {
         val unit: Unit = products.mapAsync(callback)
     }
