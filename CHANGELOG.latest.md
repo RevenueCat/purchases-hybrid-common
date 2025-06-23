@@ -1,9 +1,5 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add more events to iOS `CustomerCenterViewControllerDelegateWrapper` (#1084) via Cesar de la Vega (@vegaro)
+### 🐞 Bugfixes
+* Store `appUserId` in `localStorage` for web hybrid support (#1147) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.14.1 => 8.14.2 (#1090) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* Bump fastlane from 2.226.0 to 2.227.0 (#1089) via dependabot[bot] (@dependabot[bot])
-* Add automatic changes on `.idea` files (#1077) via Cesar de la Vega (@vegaro)
+* [AUTOMATIC] iOS 5.24.0 => 5.26.0 Android 8.17.1 => 8.19.0 (#1151) via RevenueCat Git Bot (@RCGitBot)

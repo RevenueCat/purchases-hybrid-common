@@ -186,7 +186,44 @@ Deploy npm package to npm.js
 [bundle exec] fastlane typescript deploy_esm
 ```
 
+Deploy typescript interfaces ESNext NPM package
 
+----
+
+
+## web
+
+### web test_js_mappings
+
+```sh
+[bundle exec] fastlane web test_js_mappings
+```
+
+Run tests for purchases-js-hybrid-mappings
+
+### web test_js_mappings_api
+
+```sh
+[bundle exec] fastlane web test_js_mappings_api
+```
+
+Run API tests for purchases-js-hybrid-mappings
+
+### web lint_js_mappings
+
+```sh
+[bundle exec] fastlane web lint_js_mappings
+```
+
+Run linter for purchases-js-hybrid-mappings
+
+### web deploy_js_mappings
+
+```sh
+[bundle exec] fastlane web deploy_js_mappings
+```
+
+Deploy purchases-js-hybrid-mappings to npm.js
 
 ----
 
