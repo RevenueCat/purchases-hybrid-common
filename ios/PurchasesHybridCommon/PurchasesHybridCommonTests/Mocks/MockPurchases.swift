@@ -642,7 +642,7 @@ final class MockPurchases: PurchasesType {
     var invokedVirtualCurrencies = false
     var invokedVirtualCurrenciesCount = 0
     var virtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
-    func virtualCurrencies(completion: @escaping @Sendable (RevenueCat.VirtualCurrencies?, RevenueCat.PublicError?) -> Void) {
+    func virtualCurrencies(completion: @escaping @Sendable (RevenueCat.VirtualCurrencies?, PublicError?) -> Void) {
         self.invokedVirtualCurrencies = true
         self.invokedVirtualCurrenciesCount += 1
 
