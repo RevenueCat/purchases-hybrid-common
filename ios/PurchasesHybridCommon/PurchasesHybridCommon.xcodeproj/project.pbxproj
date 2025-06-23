@@ -83,8 +83,10 @@
 		FD5EB01F2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 		FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */; };
-		FDDD9C7F2D95D2D900E1CCDE /* VirtualCurrencyInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrencyInfo+HybridAdditions.swift */; };
-		FDDD9C812D95D36400E1CCDE /* VirtualCurrencyInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD9C802D95D36400E1CCDE /* VirtualCurrencyInfo+HybridAdditionsTests.swift */; };
+		FDB842662E09C760007DCB4C /* VirtualCurrencies+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB842652E09C760007DCB4C /* VirtualCurrencies+HybridAdditions.swift */; };
+		FDB842682E09C7C0007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB842672E09C7C0007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */; };
+		FDDD9C7F2D95D2D900E1CCDE /* VirtualCurrency+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrency+HybridAdditions.swift */; };
+		FDDD9C812D95D36400E1CCDE /* VirtualCurrency+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDDD9C802D95D36400E1CCDE /* VirtualCurrency+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,8 +234,10 @@
 		FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WinBackOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSAPIAvailabilityChecker.swift; sourceTree = "<group>"; };
-		FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrencyInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencyInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
-		FDDD9C802D95D36400E1CCDE /* VirtualCurrencyInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencyInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		FDB842652E09C760007DCB4C /* VirtualCurrencies+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FDB842672E09C7C0007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrency+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FDDD9C802D95D36400E1CCDE /* VirtualCurrency+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -332,7 +336,8 @@
 				35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */,
 				FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */,
 				FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */,
-				FDDD9C802D95D36400E1CCDE /* VirtualCurrencyInfo+HybridAdditionsTests.swift */,
+				FDDD9C802D95D36400E1CCDE /* VirtualCurrency+HybridAdditionsTests.swift */,
+				FDB842672E09C7C0007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -398,7 +403,8 @@
 				FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */,
 				FD178BD72D42BFE10000BE8E /* PurchaseParamsBuilder+HybridExtensions.swift */,
 				7720A9292D520021009EA43C /* IntroEligibility+HybridExtensions.swift */,
-				FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrencyInfo+HybridAdditions.swift */,
+				FDDD9C7E2D95D2D900E1CCDE /* VirtualCurrency+HybridAdditions.swift */,
+				FDB842652E09C760007DCB4C /* VirtualCurrencies+HybridAdditions.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -835,9 +841,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -896,9 +906,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -938,8 +952,9 @@
 				57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */,
 				2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */,
 				FD178BD82D42BFE10000BE8E /* PurchaseParamsBuilder+HybridExtensions.swift in Sources */,
-				FDDD9C7F2D95D2D900E1CCDE /* VirtualCurrencyInfo+HybridAdditions.swift in Sources */,
+				FDDD9C7F2D95D2D900E1CCDE /* VirtualCurrency+HybridAdditions.swift in Sources */,
 				2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */,
+				FDB842662E09C760007DCB4C /* VirtualCurrencies+HybridAdditions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,6 +976,7 @@
 				FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */,
 				2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */,
 				2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */,
+				FDB842682E09C7C0007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */,
 				2DD3D1852810A81F00A19EC6 /* XCTestCase+Expectations.swift in Sources */,
 				35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */,
 				FD1425A72C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift in Sources */,
@@ -968,7 +984,7 @@
 				2DC85B58246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift in Sources */,
 				FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */,
 				2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */,
-				FDDD9C812D95D36400E1CCDE /* VirtualCurrencyInfo+HybridAdditionsTests.swift in Sources */,
+				FDDD9C812D95D36400E1CCDE /* VirtualCurrency+HybridAdditionsTests.swift in Sources */,
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,

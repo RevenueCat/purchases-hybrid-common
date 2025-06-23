@@ -831,6 +831,31 @@ import RevenueCat
 
 }
 
+// MARK: - Virtual Currencies
+@objc public extension CommonFunctionality {
+
+    @objc static func virtualCurrencies(
+        completion: @escaping (VirtualCurrencies?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.virtualCurrencies { virtualCurrencies, error in
+            if let error = error {
+                completion(nil, Self.createErrorContainer(error: error))
+            } else if let virtualCurrencies = virtualCurrencies {
+                completion(virtualCurrencies, nil)
+            } else {
+                completion(
+                    nil,
+                    ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+                )
+            }
+        }
+    }
+
+    @objc static func invalidateVirtualCurrenciesCache() {
+        Self.sharedInstance.invalidateVirtualCurrenciesCache()
+    }
+}
+
 private extension WebPurchaseRedemptionResult {
 
     var resultName: String {
