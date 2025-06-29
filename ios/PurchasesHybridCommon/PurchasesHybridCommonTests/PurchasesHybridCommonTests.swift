@@ -373,5 +373,76 @@ class PurchasesHybridCommonTests: QuickSpec {
                 }
             }
         }
+
+        context("virtualCurrencies") {
+            it("calls Purchases.virtualCurrencies with VirtualCurrencies on success") {
+                var completionCallCount = 0
+                var completionVirtualCurrencies: VirtualCurrencies? = nil
+                var completionError: ErrorContainer? = nil
+
+                let expectedVirtualCurrencies = VirtualCurrencies(virtualCurrencies: [
+                    "COIN": VirtualCurrency(
+                        balance: 1,
+                        name: "Coin",
+                        code: "COIN",
+                        serverDescription: nil
+                    )
+                ])
+                mockPurchases.virtualCurrenciesStub = .success(expectedVirtualCurrencies)
+
+                CommonFunctionality.virtualCurrencies { virtualCurrencies, error in
+                    completionCallCount += 1
+                    completionVirtualCurrencies = virtualCurrencies
+                    completionError = error
+                }
+
+                expect(mockPurchases.invokedVirtualCurrencies).to(beTrue())
+                expect(mockPurchases.invokedVirtualCurrenciesCount).to(equal(1))
+                expect(completionCallCount).to(equal(1))
+                expect(completionVirtualCurrencies).to(equal(expectedVirtualCurrencies))
+                expect(completionError).to(beNil())
+            }
+        }
+
+        context("virtualCurrencies") {
+            it("calls Purchases.virtualCurrencies with ErrorContainer on error") {
+                var completionCallCount = 0
+                var completionVirtualCurrencies: VirtualCurrencies? = nil
+                var completionError: ErrorContainer? = nil
+
+                let mockError = NSError(domain: "revenuecat", code: 123)
+                let expectedErrorDict: NSDictionary = [
+                    "code": mockError.code,
+                    "message": mockError.localizedDescription,
+                    "underlyingErrorMessage": ""
+                ]
+                mockPurchases.virtualCurrenciesStub = .failure(mockError)
+
+                CommonFunctionality.virtualCurrencies { virtualCurrencies, error in
+                    completionCallCount += 1
+                    completionVirtualCurrencies = virtualCurrencies
+                    completionError = error
+                }
+
+                expect(mockPurchases.invokedVirtualCurrencies).to(beTrue())
+                expect(mockPurchases.invokedVirtualCurrenciesCount).to(equal(1))
+                expect(completionCallCount).to(equal(1))
+                expect(completionVirtualCurrencies).to(beNil())
+
+                let unwrappedReceivedError = try XCTUnwrap(completionError)
+                expect(unwrappedReceivedError.error as NSError) == mockError
+                expect(unwrappedReceivedError.code) == mockError.code
+                expect(unwrappedReceivedError.message) == mockError.localizedDescription
+                expect(unwrappedReceivedError.info as NSDictionary) == expectedErrorDict
+            }
+        }
+
+        context("invalidateVirtualCurrencyCache") {
+            it("calls Purchases.invalidateVirtualCurrencyCache") {
+                CommonFunctionality.invalidateVirtualCurrenciesCache()
+                expect(mockPurchases.invokedInvalidateVirtualCurrenciesCache).to(beTrue())
+                expect(mockPurchases.invokedInvalidateVirtualCurrenciesCacheCount).to(equal(1))
+            }
+        }
     }
 }

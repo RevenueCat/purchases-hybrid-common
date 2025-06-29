@@ -6,3 +6,4 @@ export * from './purchasesConfiguration';
 export * from './callbackTypes';
 export * from './webRedemption';
 export * from './storefront';
+export * from './virtualCurrency';

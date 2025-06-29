@@ -1,29 +1,43 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.29.0)
-  - RevenueCatUI (5.29.0):
-    - RevenueCat (= 5.29.0)
+  - RevenueCat (5.30.0-SNAPSHOT)
+  - RevenueCatUI (5.30.0-SNAPSHOT):
+    - RevenueCat (= 5.30.0-SNAPSHOT)
 
 DEPENDENCIES:
   - Nimble (= 10.0.0)
   - Quick (= 5.0.1)
-  - RevenueCat (= 5.29.0)
-  - RevenueCatUI (= 5.29.0)
+  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `break-vc-balances-out-of-customerInfo`)
+  - RevenueCatUI (from `https://github.com/RevenueCat/purchases-ios.git`, branch `break-vc-balances-out-of-customerInfo`)
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-    - RevenueCat
-    - RevenueCatUI
+
+EXTERNAL SOURCES:
+  RevenueCat:
+    :branch: break-vc-balances-out-of-customerInfo
+    :git: https://github.com/RevenueCat/purchases-ios.git
+  RevenueCatUI:
+    :branch: break-vc-balances-out-of-customerInfo
+    :git: https://github.com/RevenueCat/purchases-ios.git
+
+CHECKOUT OPTIONS:
+  RevenueCat:
+    :commit: 95a7096b5b700aee54b4275200b38667fc091079
+    :git: https://github.com/RevenueCat/purchases-ios.git
+  RevenueCatUI:
+    :commit: 95a7096b5b700aee54b4275200b38667fc091079
+    :git: https://github.com/RevenueCat/purchases-ios.git
 
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 5fa12c42c14b390dd2423897e925f407f474b8fa
-  RevenueCatUI: fd24e43324c5e3711e5b5cba18eadd0fe2f023d0
+  RevenueCat: 556bd77914e67da9e6dca055d32521c551075115
+  RevenueCatUI: 018c81e0e87743adbbc196f7ed72376d0bf31ef8
 
-PODFILE CHECKSUM: da5d4a44081b883676937d7f9e49086408742bda
+PODFILE CHECKSUM: a1ff92aae49584b4bc51232777cb334af0d9de68
 
 COCOAPODS: 1.16.2
