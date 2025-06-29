@@ -31,6 +31,7 @@ import com.revenuecat.purchases.getStorefrontCountryCodeWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
@@ -59,8 +60,8 @@ fun setAllowSharingAppStoreAccount(
 fun getOfferings(
     onResult: OnResult,
 ) {
-    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) { offerings ->
+        offerings.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -70,7 +71,12 @@ fun getCurrentOfferingForPlacement(
 ) {
     Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
         val offering = it.getCurrentOfferingForPlacement(placementIdentifier)
-        onResult.onReceived(offering?.map())
+
+        if (offering != null) {
+            offering.mapAsync { map -> onResult.onReceived(map) }
+        } else {
+            onResult.onReceived(null)
+        }
     }
 }
 
@@ -78,7 +84,7 @@ fun syncAttributesAndOfferingsIfNeeded(
     onResult: OnResult,
 ) {
     Purchases.sharedInstance.syncAttributesAndOfferingsIfNeededWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+        it.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -88,7 +94,7 @@ fun getProductInfo(
     onResult: OnResultList,
 ) {
     val onError: (PurchasesError) -> Unit = { onResult.onError(it.map()) }
-    val onReceived: (List<StoreProduct>) -> Unit = { onResult.onReceived(it.map()) }
+    val onReceived: (List<StoreProduct>) -> Unit = { it.mapAsync { list -> onResult.onReceived(list) } }
 
     if (mapStringToProductType(type) == ProductType.SUBS) {
         Purchases.sharedInstance.getProductsWith(productIDs, ProductType.SUBS, onError, onReceived)
@@ -399,8 +405,8 @@ fun getStorefront(
 fun restorePurchases(
     onResult: OnResult,
 ) {
-    Purchases.sharedInstance.restorePurchasesWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+    Purchases.sharedInstance.restorePurchasesWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
+        customerInfo.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -412,18 +418,21 @@ fun logIn(
         appUserID,
         onError = { onResult.onError(it.map()) },
         onSuccess = { customerInfo, created ->
-            val resultMap: Map<String, Any?> = mapOf(
-                "customerInfo" to customerInfo.map(),
-                "created" to created,
-            )
-            onResult.onReceived(resultMap)
+            customerInfo.mapAsync { map ->
+                val resultMap: Map<String, Any?> = mapOf(
+                    "customerInfo" to map,
+                    "created" to created,
+                )
+
+                onResult.onReceived(resultMap)
+            }
         },
     )
 }
 
 fun logOut(onResult: OnResult) {
-    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
+        customerInfo.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -478,8 +487,8 @@ fun getProxyURLString(): String? {
 fun getCustomerInfo(
     onResult: OnResult,
 ) {
-    Purchases.sharedInstance.getCustomerInfoWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+    Purchases.sharedInstance.getCustomerInfoWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
+        customerInfo.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -490,8 +499,8 @@ fun syncPurchases() {
 fun syncPurchases(
     onResult: OnResult,
 ) {
-    Purchases.sharedInstance.syncPurchasesWith(onError = { onResult.onError(it.map()) }) {
-        onResult.onReceived(it.map())
+    Purchases.sharedInstance.syncPurchasesWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
+        customerInfo.mapAsync { map -> onResult.onReceived(map) }
     }
 }
 
@@ -638,26 +647,38 @@ fun redeemWebPurchase(
     }
 
     Purchases.sharedInstance.redeemWebPurchase(webPurchaseRedemption) { result ->
-        val resultMap: MutableMap<String, Any> = mutableMapOf(
-            "result" to result.toResultName(),
-        )
         when (result) {
-            is RedeemWebPurchaseListener.Result.Success -> {
-                resultMap["customerInfo"] = result.customerInfo.map()
+            is RedeemWebPurchaseListener.Result.Success -> result.customerInfo.mapAsync { map ->
+                onResult.onReceived(
+                    mutableMapOf(
+                        "result" to result.toResultName(),
+                        "customerInfo" to map,
+                    ),
+                )
             }
-            is RedeemWebPurchaseListener.Result.Error -> {
-                resultMap["error"] = result.error.map()
-            }
-            is RedeemWebPurchaseListener.Result.Expired -> {
-                resultMap["obfuscatedEmail"] = result.obfuscatedEmail
-            }
+
+            is RedeemWebPurchaseListener.Result.Error -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                    "error" to result.error.map(),
+                ),
+            )
+
+            is RedeemWebPurchaseListener.Result.Expired -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                    "obfuscatedEmail" to result.obfuscatedEmail,
+                ),
+            )
+
             RedeemWebPurchaseListener.Result.PurchaseBelongsToOtherUser,
             RedeemWebPurchaseListener.Result.InvalidToken,
-            -> {
-                // Do nothing
-            }
+            -> onResult.onReceived(
+                mutableMapOf(
+                    "result" to result.toResultName(),
+                ),
+            )
         }
-        onResult.onReceived(resultMap)
     }
 }
 
@@ -738,13 +759,15 @@ private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boole
 private fun getPurchaseCompletedFunction(onResult: OnResult): (StoreTransaction?, CustomerInfo) -> Unit {
     return { transaction, customerInfo ->
         transaction?.let {
-            onResult.onReceived(
-                mapOf(
-                    "productIdentifier" to transaction.productIds[0],
-                    "customerInfo" to customerInfo.map(),
-                    "transaction" to transaction.map(),
-                ),
-            )
+            customerInfo.mapAsync { map ->
+                onResult.onReceived(
+                    mapOf(
+                        "productIdentifier" to transaction.productIds[0],
+                        "customerInfo" to map,
+                        "transaction" to transaction.map(),
+                    ),
+                )
+            }
         } ?: run {
             // TODO Figure out how to properly handle a null StoreTransaction (doing this for now
             onResult.onError(

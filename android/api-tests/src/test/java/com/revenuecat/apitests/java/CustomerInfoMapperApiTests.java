@@ -5,9 +5,12 @@ import com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt;
 
 import java.util.Map;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+
 @SuppressWarnings("unused")
 class CustomerInfoMapperApiTests {
-    private void checkMap(CustomerInfo customerInfo) {
-        Map<String, Object> map = CustomerInfoMapperKt.map(customerInfo);
+    private void checkMapAsync(CustomerInfo customerInfo, Function1<? super Map<String, ?>, Unit> callback) {
+        CustomerInfoMapperKt.mapAsync(customerInfo, callback);
     }
 }
