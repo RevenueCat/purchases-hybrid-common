@@ -1,3 +1,6 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Calls `setFragmentResultListener()` on the UI thread. (#1174) via JayShortway (@JayShortway)
+### 📦 Dependency Updates
+* [RENOVATE] Update build-dependencies (#1177) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Configure Renovate (#1176) via RevenueCat Git Bot (@RCGitBot)
