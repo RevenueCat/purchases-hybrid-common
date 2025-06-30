@@ -37,27 +37,29 @@ fun presentPaywallFromFragment(
     with(options) {
         val requestKey = System.identityHashCode(paywallResultListener).toString()
 
-        activity.supportFragmentManager.setFragmentResultListener(requestKey, activity) { _, result ->
-            val paywallResult = result.getString(PaywallFragment.ResultKey.PAYWALL_RESULT.key)
-                ?: error("PaywallResult not found in result bundle.")
-            paywallResultListener.onPaywallResult(paywallResult)
-            activity.supportFragmentManager.clearFragmentResultListener(requestKey)
-        }
+        activity.runOnUiThread {
+            activity.supportFragmentManager.setFragmentResultListener(requestKey, activity) { _, result ->
+                val paywallResult = result.getString(PaywallFragment.ResultKey.PAYWALL_RESULT.key)
+                    ?: error("PaywallResult not found in result bundle.")
+                paywallResultListener.onPaywallResult(paywallResult)
+                activity.supportFragmentManager.clearFragmentResultListener(requestKey)
+            }
 
-        activity
-            .supportFragmentManager
-            .beginTransaction()
-            .add(
-                PaywallFragment.newInstance(
-                    requestKey,
-                    requiredEntitlementIdentifier,
-                    shouldDisplayDismissButton,
-                    paywallSource,
-                    fontFamily,
-                ),
-                PaywallFragment.tag,
-            )
-            .commit()
+            activity
+                .supportFragmentManager
+                .beginTransaction()
+                .add(
+                    PaywallFragment.newInstance(
+                        requestKey,
+                        requiredEntitlementIdentifier,
+                        shouldDisplayDismissButton,
+                        paywallSource,
+                        fontFamily,
+                    ),
+                    PaywallFragment.tag,
+                )
+                .commit()
+        }
     }
 }
 

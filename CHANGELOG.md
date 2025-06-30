@@ -1,3 +1,13 @@
+## 13.38.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Calls `setFragmentResultListener()` on the UI thread. (#1174) via JayShortway (@JayShortway)
+
+## 13.38.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 8.19.2 => 8.20.0 JS 1.5.3 => 1.6.0 (#1170) via RevenueCat Git Bot (@RCGitBot)
+
 ## 13.37.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates

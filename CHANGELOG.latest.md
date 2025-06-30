@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.28.1 => 5.29.0 (#1167) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* Calls `setFragmentResultListener()` on the UI thread. (#1174) via JayShortway (@JayShortway)

@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-js-hybrid-mappings",
-  "version": "13.37.0",
+  "version": "13.38.1",
   "description": "RevenueCat's JavaScript hybrid mappings for purchases-js",
   "main": "dist/index.js",
   "browser": "dist/index.umd.js",
@@ -30,7 +30,7 @@
     "allchecks": "npm run format && npm run lint:fix && npm run api-test && npm run test"
   },
   "dependencies": {
-    "@revenuecat/purchases-js": "1.6.0"
+    "@revenuecat/purchases-js": "1.7.0"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.42.3",
