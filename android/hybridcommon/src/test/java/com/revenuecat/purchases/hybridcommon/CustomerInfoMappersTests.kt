@@ -6,7 +6,6 @@ import com.revenuecat.purchases.OwnershipType
 import com.revenuecat.purchases.PeriodType
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.SubscriptionInfo
-import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
 import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import com.revenuecat.purchases.models.Transaction
@@ -22,7 +21,7 @@ internal class CustomerInfoMappersTests {
     @Test
     fun `a CustomerInfo with a null managementURL, should map to a null managementURL`() {
         every { mockCustomerInfo.managementURL } returns null
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         assertThat(map["managementURL"]).isNull()
     }
 
@@ -32,7 +31,7 @@ internal class CustomerInfoMappersTests {
         val mockkUri = mockk<Uri>(relaxed = true)
         every { mockCustomerInfo.managementURL } returns mockkUri
         every { mockkUri.toString() } returns expected
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         assertThat(map["managementURL"]).isEqualTo(expected)
     }
 
@@ -41,7 +40,7 @@ internal class CustomerInfoMappersTests {
         val date = Date()
         every { mockCustomerInfo.originalPurchaseDate } returns date
 
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         assertThat(map["originalPurchaseDate"]).isEqualTo(date.toIso8601())
         assertThat(map["originalPurchaseDateMillis"]).isEqualTo(date.toMillis())
     }
@@ -49,7 +48,7 @@ internal class CustomerInfoMappersTests {
     @Test
     fun `a CustomerInfo with empty non subscriptions, should map to an empty array of non subscriptions`() {
         every { mockCustomerInfo.nonSubscriptionTransactions } returns emptyList()
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         val mappedNonSubscriptionTransactions: List<Any> =
             map["nonSubscriptionTransactions"] as List<Any>
         assertThat(mappedNonSubscriptionTransactions).isEmpty()
@@ -68,7 +67,7 @@ internal class CustomerInfoMappersTests {
         )
         every { mockCustomerInfo.nonSubscriptionTransactions } returns listOf(transaction)
 
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         val mappedNonSubscriptionTransactions: List<Any> =
             map["nonSubscriptionTransactions"] as List<Any>
         assertThat(mappedNonSubscriptionTransactions).isNotEmpty
@@ -104,7 +103,7 @@ internal class CustomerInfoMappersTests {
             ),
         )
 
-        val map = mockCustomerInfo.map()
+        val map = mockCustomerInfo.mapBlocking()
         val mappedSubscriptionInfos = map["subscriptionsByProductIdentifier"] as Map<*, *>
         assertThat(mappedSubscriptionInfos).hasSize(1)
         val mappedSubscriptionInfo = mappedSubscriptionInfos["productIdentifier"] as Map<*, *>
