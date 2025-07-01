@@ -1,3 +1,2 @@
-## RevenueCat SDK
-### 🐞 Bugfixes
-* Calls `setFragmentResultListener()` on the UI thread. (#1174) via JayShortway (@JayShortway)
+### 🔄 Other Changes
+* Adds the correct environment variables to `deploy-android` (#1184) via JayShortway (@JayShortway)
