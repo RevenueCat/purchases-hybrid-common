@@ -1,3 +1,2 @@
-## RevenueCat SDK
-### 🐞 Bugfixes
-* Calls `setFragmentResultListener()` on the UI thread. (#1174) via JayShortway (@JayShortway)
+### 🔄 Other Changes
+* Migrates publishing to Maven Central Portal. (#1182) via JayShortway (@JayShortway)
