@@ -491,6 +491,7 @@ workflows:
             - deploy-ios-phc
       - deploy-android:
           <<: *release-tags
+          context: maven-central-publishing
       - deploy-typescript:
           <<: *release-tags
       - deploy-typescript-esm:
