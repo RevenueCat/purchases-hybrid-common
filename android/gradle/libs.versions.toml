@@ -10,7 +10,7 @@ mockk = "1.12.8"
 purchases = "8.20.0"
 detekt = "1.23.6"
 android-junit5-version = "1.8.2.0"
-mavenPublish = "0.22.0"
+mavenPublish = "0.33.0"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj-core" }
