@@ -12,7 +12,9 @@ final class MockPurchases: PurchasesType {
     var cachedCustomerInfo: RevenueCat.CustomerInfo?
 
     var cachedOfferings: RevenueCat.Offerings?
-    
+
+    var cachedVirtualCurrencies: RevenueCat.VirtualCurrencies?
+
     var delegate: RevenueCat.PurchasesDelegate?
 
     init() {}
