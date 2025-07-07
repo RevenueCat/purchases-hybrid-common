@@ -847,10 +847,10 @@ private extension WebPurchaseRedemptionResult {
 // MARK: - Virtual Currencies
 @objc public extension CommonFunctionality {
 
-    @objc static func virtualCurrencies(
+    @objc static func getVirtualCurrencies(
         completion: @escaping (VirtualCurrencies?, ErrorContainer?) -> Void
     ) {
-        Self.sharedInstance.virtualCurrencies { virtualCurrencies, error in
+        Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
             if let error = error {
                 completion(nil, Self.createErrorContainer(error: error))
             } else if let virtualCurrencies = virtualCurrencies {
