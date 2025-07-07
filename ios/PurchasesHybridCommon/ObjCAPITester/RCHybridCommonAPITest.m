@@ -139,6 +139,12 @@ NS_ASSUME_NONNULL_BEGIN
 
     RCCustomerInfo *info;
     NSDictionary<NSString *, NSObject *> __unused *dictionary = [RCCommonFunctionality encodeCustomerInfo:info];
+
+    [RCCommonFunctionality getVirtualCurrenciesWithCompletion:^(
+                                                             RCVirtualCurrencies * _Nullable virtualCurrencies,
+                                                             RCErrorContainer * _Nullable errorContainer) {}];
+
+    [RCCommonFunctionality invalidateVirtualCurrenciesCache];
 }
 
 - (void)testDeprecatedAPI {

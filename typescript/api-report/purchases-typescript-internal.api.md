@@ -512,6 +512,21 @@ export interface PurchasesSubscriptionInfo {
 }
 
 // @public
+export interface PurchasesVirtualCurrencies {
+    readonly all: {
+        [key: string]: PurchasesVirtualCurrency;
+    };
+}
+
+// @public
+export interface PurchasesVirtualCurrency {
+    readonly balance: number;
+    readonly code: string;
+    readonly name: string;
+    readonly serverDescription: string | null;
+}
+
+// @public
 export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {
 }
 
