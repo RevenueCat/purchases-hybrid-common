@@ -641,14 +641,14 @@ final class MockPurchases: PurchasesType {
         invokedBeginRefundRequestForActiveEntitlementParameterList.append(completion)
     }
 
-    var invokedVirtualCurrencies = false
-    var invokedVirtualCurrenciesCount = 0
-    var virtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
-    func virtualCurrencies(completion: @escaping @Sendable (RevenueCat.VirtualCurrencies?, PublicError?) -> Void) {
-        self.invokedVirtualCurrencies = true
-        self.invokedVirtualCurrenciesCount += 1
+    var invokedGetVirtualCurrencies = false
+    var invokedGetVirtualCurrenciesCount = 0
+    var getVirtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
+    func getVirtualCurrencies(completion: @escaping @Sendable (RevenueCat.VirtualCurrencies?, PublicError?) -> Void) {
+        self.invokedGetVirtualCurrencies = true
+        self.invokedGetVirtualCurrenciesCount += 1
 
-        switch virtualCurrenciesStub {
+        switch getVirtualCurrenciesStub {
         case .success(let virtualCurrencies):
             completion(virtualCurrencies, nil)
         case .failure(let error):
