@@ -1,3 +1,7 @@
+## 14.0.2
+### 🔄 Other Changes
+* Adds the correct environment variables to `deploy-android` (#1184) via JayShortway (@JayShortway)
+
 ## 13.38.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes

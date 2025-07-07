@@ -5,6 +5,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.customercenter.CustomerCenterListener
 import com.revenuecat.purchases.customercenter.CustomerCenterManagementOption
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 
 @SuppressWarnings("TooManyFunctions")
 abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
@@ -14,7 +15,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     }
 
     override fun onRestoreCompleted(customerInfo: CustomerInfo) {
-        this.onRestoreCompletedWrapper(customerInfo = customerInfo.map())
+        customerInfo.mapAsync { map -> this.onRestoreCompletedWrapper(map) }
     }
 
     override fun onRestoreFailed(error: PurchasesError) {

@@ -1,15 +1,15 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.30.0-SNAPSHOT)
-  - RevenueCatUI (5.30.0-SNAPSHOT):
-    - RevenueCat (= 5.30.0-SNAPSHOT)
+  - RevenueCat (5.30.0)
+  - RevenueCatUI (5.30.0):
+    - RevenueCat (= 5.30.0)
 
 DEPENDENCIES:
   - Nimble (= 10.0.0)
   - Quick (= 5.0.1)
-  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `break-vc-balances-out-of-customerInfo`)
-  - RevenueCatUI (from `https://github.com/RevenueCat/purchases-ios.git`, branch `break-vc-balances-out-of-customerInfo`)
+  - RevenueCat (= 5.30.0)
+  - RevenueCatUI (= 5.30.0)
 
 SPEC REPOS:
   trunk:
@@ -35,9 +35,9 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 556bd77914e67da9e6dca055d32521c551075115
-  RevenueCatUI: 018c81e0e87743adbbc196f7ed72376d0bf31ef8
+  RevenueCat: 16058ecaa0b868e04cc7cf53a5de3fe0b96ca7d1
+  RevenueCatUI: 4fc22b69bc9fcec8bf37fb71396e7b31e819921b
 
-PODFILE CHECKSUM: a1ff92aae49584b4bc51232777cb334af0d9de68
+PODFILE CHECKSUM: e5edb7e3cd7e5b4d630587b209562bd7fd016442
 
 COCOAPODS: 1.16.2
