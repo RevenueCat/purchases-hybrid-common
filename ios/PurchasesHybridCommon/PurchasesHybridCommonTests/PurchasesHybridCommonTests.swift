@@ -374,8 +374,8 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
         }
 
-        context("virtualCurrencies") {
-            it("calls Purchases.virtualCurrencies with VirtualCurrencies on success") {
+        context("getVirtualCurrencies") {
+            it("calls Purchases.getVirtualCurrencies with VirtualCurrencies on success") {
                 var completionCallCount = 0
                 var completionVirtualCurrencies: VirtualCurrencies? = nil
                 var completionError: ErrorContainer? = nil
@@ -388,24 +388,22 @@ class PurchasesHybridCommonTests: QuickSpec {
                         serverDescription: nil
                     )
                 ])
-                mockPurchases.virtualCurrenciesStub = .success(expectedVirtualCurrencies)
+                mockPurchases.getVirtualCurrenciesStub = .success(expectedVirtualCurrencies)
 
-                CommonFunctionality.virtualCurrencies { virtualCurrencies, error in
+                CommonFunctionality.getVirtualCurrencies { virtualCurrencies, error in
                     completionCallCount += 1
                     completionVirtualCurrencies = virtualCurrencies
                     completionError = error
                 }
 
-                expect(mockPurchases.invokedVirtualCurrencies).to(beTrue())
-                expect(mockPurchases.invokedVirtualCurrenciesCount).to(equal(1))
+                expect(mockPurchases.invokedGetVirtualCurrencies).to(beTrue())
+                expect(mockPurchases.invokedGetVirtualCurrenciesCount).to(equal(1))
                 expect(completionCallCount).to(equal(1))
                 expect(completionVirtualCurrencies).to(equal(expectedVirtualCurrencies))
                 expect(completionError).to(beNil())
             }
-        }
 
-        context("virtualCurrencies") {
-            it("calls Purchases.virtualCurrencies with ErrorContainer on error") {
+            it("calls Purchases.getVirtualCurrencies with ErrorContainer on error") {
                 var completionCallCount = 0
                 var completionVirtualCurrencies: VirtualCurrencies? = nil
                 var completionError: ErrorContainer? = nil
@@ -416,16 +414,16 @@ class PurchasesHybridCommonTests: QuickSpec {
                     "message": mockError.localizedDescription,
                     "underlyingErrorMessage": ""
                 ]
-                mockPurchases.virtualCurrenciesStub = .failure(mockError)
+                mockPurchases.getVirtualCurrenciesStub = .failure(mockError)
 
-                CommonFunctionality.virtualCurrencies { virtualCurrencies, error in
+                CommonFunctionality.getVirtualCurrencies { virtualCurrencies, error in
                     completionCallCount += 1
                     completionVirtualCurrencies = virtualCurrencies
                     completionError = error
                 }
 
-                expect(mockPurchases.invokedVirtualCurrencies).to(beTrue())
-                expect(mockPurchases.invokedVirtualCurrenciesCount).to(equal(1))
+                expect(mockPurchases.invokedGetVirtualCurrencies).to(beTrue())
+                expect(mockPurchases.invokedGetVirtualCurrenciesCount).to(equal(1))
                 expect(completionCallCount).to(equal(1))
                 expect(completionVirtualCurrencies).to(beNil())
 
