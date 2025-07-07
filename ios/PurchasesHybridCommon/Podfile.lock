@@ -15,22 +15,8 @@ SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-
-EXTERNAL SOURCES:
-  RevenueCat:
-    :branch: break-vc-balances-out-of-customerInfo
-    :git: https://github.com/RevenueCat/purchases-ios.git
-  RevenueCatUI:
-    :branch: break-vc-balances-out-of-customerInfo
-    :git: https://github.com/RevenueCat/purchases-ios.git
-
-CHECKOUT OPTIONS:
-  RevenueCat:
-    :commit: 95a7096b5b700aee54b4275200b38667fc091079
-    :git: https://github.com/RevenueCat/purchases-ios.git
-  RevenueCatUI:
-    :commit: 95a7096b5b700aee54b4275200b38667fc091079
-    :git: https://github.com/RevenueCat/purchases-ios.git
+    - RevenueCat
+    - RevenueCatUI
 
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
