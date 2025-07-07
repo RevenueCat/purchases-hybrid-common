@@ -12,7 +12,9 @@ final class MockPurchases: PurchasesType {
     var cachedCustomerInfo: RevenueCat.CustomerInfo?
 
     var cachedOfferings: RevenueCat.Offerings?
-    
+
+    var cachedVirtualCurrencies: RevenueCat.VirtualCurrencies?
+
     var delegate: RevenueCat.PurchasesDelegate?
 
     init() {}
@@ -639,6 +641,27 @@ final class MockPurchases: PurchasesType {
         invokedBeginRefundRequestForActiveEntitlementParameterList.append(completion)
     }
 
+    var invokedGetVirtualCurrencies = false
+    var invokedGetVirtualCurrenciesCount = 0
+    var getVirtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
+    func getVirtualCurrencies(completion: @escaping @Sendable (RevenueCat.VirtualCurrencies?, PublicError?) -> Void) {
+        self.invokedGetVirtualCurrencies = true
+        self.invokedGetVirtualCurrenciesCount += 1
+
+        switch getVirtualCurrenciesStub {
+        case .success(let virtualCurrencies):
+            completion(virtualCurrencies, nil)
+        case .failure(let error):
+            completion(nil, error)
+        }
+    }
+
+    var invokedInvalidateVirtualCurrenciesCache = false
+    var invokedInvalidateVirtualCurrenciesCacheCount = 0
+    func invalidateVirtualCurrenciesCache() {
+        invokedInvalidateVirtualCurrenciesCache = true
+        invokedInvalidateVirtualCurrenciesCacheCount += 1
+    }
 }
 
 extension MockPurchases {
@@ -812,6 +835,10 @@ extension MockPurchases: PurchasesSwiftType {
     }
 
     func redeemWebPurchase(_ webPurchaseRedemption: WebPurchaseRedemption) async -> WebPurchaseRedemptionResult {
+        fatalError("Not mocked")
+    }
+
+    func virtualCurrencies() async throws -> RevenueCat.VirtualCurrencies {
         fatalError("Not mocked")
     }
 }

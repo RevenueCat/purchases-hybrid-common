@@ -83,6 +83,10 @@
 		FD5EB01F2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */; };
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 		FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */; };
+		FDB8426A2E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB842692E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift */; };
+		FDB8426C2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */; };
+		FDB8426E2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */; };
+		FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +234,10 @@
 		FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WinBackOffer+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntitlementInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		FDA322972D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOSAPIAvailabilityChecker.swift; sourceTree = "<group>"; };
+		FDB842692E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditions.swift"; sourceTree = "<group>"; };
+		FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +336,8 @@
 				35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */,
 				FD1425A62C3C4FEE00323B48 /* StoreKitVersionHybridAdditionsTests.swift */,
 				FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */,
+				FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */,
+				FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -393,6 +403,8 @@
 				FD5EB01E2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift */,
 				FD178BD72D42BFE10000BE8E /* PurchaseParamsBuilder+HybridExtensions.swift */,
 				7720A9292D520021009EA43C /* IntroEligibility+HybridExtensions.swift */,
+				FDB842692E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift */,
+				FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -924,6 +936,7 @@
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
 				2DD3D1942810AF5A00A19EC6 /* EntitlementInfos+HybridAdditions.swift in Sources */,
 				1EF418B12D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift in Sources */,
+				FDB8426A2E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift in Sources */,
 				FD3652DF2C53EFD400B513F6 /* PurchasesAreCompletedBy+HybridAdditions.swift in Sources */,
 				FDA322982D3035CC005233C8 /* IOSAPIAvailabilityChecker.swift in Sources */,
 				2DD3D1892810AF5A00A19EC6 /* Offering+HybridAdditions.swift in Sources */,
@@ -933,6 +946,7 @@
 				2DD3D1912810AF5A00A19EC6 /* NSDate+HybridAdditions.swift in Sources */,
 				FD178BD82D42BFE10000BE8E /* PurchaseParamsBuilder+HybridExtensions.swift in Sources */,
 				2DD3D18A2810AF5A00A19EC6 /* CommonFunctionality.swift in Sources */,
+				FDB8426C2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,6 +965,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDB8426E2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */,
 				FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */,
 				2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */,
 				2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */,
@@ -964,6 +979,7 @@
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
+				FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */,
 				FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */,
 				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
 			);
