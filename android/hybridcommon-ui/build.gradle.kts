@@ -39,6 +39,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        languageVersion = libs.versions.kotlinMinSupported.get()
+        apiVersion = libs.versions.kotlinMinSupported.get()
     }
 }
 
