@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.CustomerInfo
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
@@ -30,5 +31,8 @@ private fun CustomerInfo.map(): Map<String, Any?> =
 fun CustomerInfo.mapAsync(
     callback: (Map<String, Any?>) -> Unit,
 ) {
-    mapperScope.launch { callback(map()) }
+    mainScope.launch {
+        val map = withContext(mapperDispatcher) { map() }
+        callback(map)
+    }
 }
