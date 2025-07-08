@@ -182,6 +182,7 @@ import UIKit
 
         controller.delegate = self
         controller.modalPresentationStyle = .pageSheet
+        controller.view.backgroundColor = .systemBackground
 
         if let paywallResultHandler {
             self.resultByVC[controller] = (paywallResultHandler, .cancelled)
