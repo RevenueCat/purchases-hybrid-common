@@ -11,12 +11,30 @@ import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import com.revenuecat.purchases.models.Transaction
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.Date
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class CustomerInfoMappersTests {
     val mockCustomerInfo = mockk<CustomerInfo>(relaxed = true)
+
+    @BeforeEach
+    fun setup() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+    }
+
+    @AfterEach
+    fun teardown() {
+        Dispatchers.resetMain()
+    }
 
     @Test
     fun `a CustomerInfo with a null managementURL, should map to a null managementURL`() {

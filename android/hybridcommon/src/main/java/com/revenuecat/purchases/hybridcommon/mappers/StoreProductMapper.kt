@@ -10,6 +10,7 @@ import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.SubscriptionOption
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 val StoreProduct.priceAmountMicros: Long
     get() = this.price.amountMicros
@@ -67,7 +68,10 @@ private fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.ma
 fun List<StoreProduct>.mapAsync(
     callback: (List<Map<String, Any?>>) -> Unit,
 ) {
-    mapperScope.launch { callback(map()) }
+    mainScope.launch {
+        val map = withContext(mapperDispatcher) { map() }
+        callback(map)
+    }
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)

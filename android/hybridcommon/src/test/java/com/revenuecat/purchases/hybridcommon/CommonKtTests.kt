@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import com.android.billingclient.api.ProductDetails
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
@@ -50,9 +51,13 @@ import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
@@ -66,6 +71,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class CommonKtTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
@@ -82,8 +88,14 @@ internal class CommonKtTests {
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.store } returns Store.PLAY_STORE
-        @OptIn(ExperimentalCoroutinesApi::class)
-        overrideMapperDispatcher = UnconfinedTestDispatcher()
+        val testDispatcher = UnconfinedTestDispatcher()
+        overrideMapperDispatcher = testDispatcher
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @AfterEach
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -1314,6 +1326,7 @@ internal class CommonKtTests {
         assertEquals(metadata, mappedMetadata)
     }
 
+    @OptIn(InternalRevenueCatAPI::class)
     private fun getOfferings(
         mockStoreProduct: StoreProduct,
         metadata: Map<String, Any> = emptyMap(),

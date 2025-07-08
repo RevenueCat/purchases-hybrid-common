@@ -5,6 +5,7 @@ import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private fun Offerings.map(): Map<String, Any?> =
     mapOf(
@@ -15,7 +16,10 @@ private fun Offerings.map(): Map<String, Any?> =
 fun Offerings.mapAsync(
     callback: (Map<String, Any?>) -> Unit,
 ) {
-    mapperScope.launch { callback(map()) }
+    mainScope.launch {
+        val map = withContext(mapperDispatcher) { map() }
+        callback(map)
+    }
 }
 
 private fun Offering.map(): Map<String, Any?> =
@@ -36,7 +40,10 @@ private fun Offering.map(): Map<String, Any?> =
 fun Offering.mapAsync(
     callback: (Map<String, Any?>) -> Unit,
 ) {
-    mapperScope.launch { callback(map()) }
+    mainScope.launch {
+        val map = withContext(mapperDispatcher) { map() }
+        callback(map)
+    }
 }
 
 fun Package.map(): Map<String, Any?> =
