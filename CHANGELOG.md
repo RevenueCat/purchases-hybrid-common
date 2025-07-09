@@ -1,3 +1,8 @@
+## 14.1.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Marks per-period price fields as nullable (#1195) via JayShortway (@JayShortway)
+
 ## 14.1.0
 ## RevenueCat SDK
 ### 🐞 Bugfixes
