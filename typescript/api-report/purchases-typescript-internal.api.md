@@ -460,12 +460,12 @@ export interface PurchasesStoreProduct {
     // @deprecated
     readonly presentedOfferingIdentifier: string | null;
     readonly price: number;
-    readonly pricePerMonth: number;
-    readonly pricePerMonthString: string;
-    readonly pricePerWeek: number;
-    readonly pricePerWeekString: string;
-    readonly pricePerYear: number;
-    readonly pricePerYearString: string;
+    readonly pricePerMonth: number | null;
+    readonly pricePerMonthString: string | null;
+    readonly pricePerWeek: number | null;
+    readonly pricePerWeekString: string | null;
+    readonly pricePerYear: number | null;
+    readonly pricePerYearString: string | null;
     readonly priceString: string;
     readonly productCategory: PRODUCT_CATEGORY | null;
     readonly productType: PRODUCT_TYPE;
