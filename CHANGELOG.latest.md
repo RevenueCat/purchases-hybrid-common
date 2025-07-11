@@ -1,5 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Marks per-period price fields as nullable (#1195) via JayShortway (@JayShortway)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 8.21.0 => 8.22.0 (#1197) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency com.android.library to v8.11.1 (#1199) via RevenueCat Git Bot (@RCGitBot)
