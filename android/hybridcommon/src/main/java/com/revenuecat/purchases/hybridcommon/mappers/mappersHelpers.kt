@@ -4,7 +4,7 @@ import com.revenuecat.purchases.utils.Iso8601Utils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.MainScope
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.NumberFormat
@@ -49,17 +49,14 @@ fun JSONObject.convertToMap(): Map<String, String?> =
     }
 
 /**
- * If this is set before the first time [mapperScope] is accessed, it will be used as the dispatcher for mapping
+ * If this is set before the first time [mapperDispatcher] is accessed, it will be used as the dispatcher for mapping
  * operations. This is useful to override the dispatcher for testing purposes.
  */
 internal var overrideMapperDispatcher: CoroutineDispatcher? = null
 
-private val mapperDispatcher: CoroutineDispatcher by lazy { overrideMapperDispatcher ?: Dispatchers.Default }
+internal val mapperDispatcher: CoroutineDispatcher by lazy { overrideMapperDispatcher ?: Dispatchers.Default }
 
-internal val mapperScope by lazy { CoroutineScope(SupervisorJob() + mapperDispatcher) }
-
-internal fun mapperScope(dispatcher: CoroutineDispatcher = Dispatchers.Default): CoroutineScope =
-    CoroutineScope(SupervisorJob() + dispatcher)
+internal val mainScope: CoroutineScope = MainScope()
 
 internal fun Date.toMillis(): Long = this.time
 
