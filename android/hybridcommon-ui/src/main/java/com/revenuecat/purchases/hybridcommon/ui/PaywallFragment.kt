@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.hybridcommon.setCustomerInfoUpdateListener
+import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
@@ -106,8 +105,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         if (!Purchases.isConfigured) {
             Log.e(
                 "PaywallFragment",
-                "Purchases is not configured. " +
-                    "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
+                getString(R.string.paywall_purchases_not_configured),
             )
             removeFragment()
             return
@@ -117,7 +115,6 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             this,
             this,
         )
-        
         // Store the required entitlement identifier for auto-dismiss logic
         requiredEntitlementIdentifierForDismiss = requiredEntitlementIdentifier
 
@@ -127,13 +124,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 // Check if the required entitlement is now active
                 val entitlements = customerInfoMap["entitlements"] as? Map<String, Any>
                 val active = entitlements?.get("active") as? Map<String, Any>
-                
+
                 if (active?.containsKey(entitlementId) == true) {
                     // Auto-dismiss the paywall since the required entitlement is now active
-                    activity?.runOnUiThread {
-                        activity?.finish()
-                        removeFragment()
-                    }
+                    activity?.finish()
+                    removeFragment()
                 }
             }
         }
@@ -241,5 +236,4 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 putString(ResultKey.PAYWALL_RESULT.key, paywallResult)
             },
         )
-
 }

@@ -481,7 +481,7 @@ fun setLogHandlerWithOnResult(onResult: OnResult) {
 
 fun setCustomerInfoUpdateListener(listener: ((Map<String, Any?>) -> Unit)?) {
     customerInfoUpdateListener = listener
-    
+
     // If Purchases is already configured, set the listener immediately
     try {
         if (listener != null) {
@@ -491,8 +491,10 @@ fun setCustomerInfoUpdateListener(listener: ((Map<String, Any?>) -> Unit)?) {
         } else {
             Purchases.sharedInstance.updatedCustomerInfoListener = null
         }
-    } catch (e: Exception) {
+    } catch (e: UninitializedPropertyAccessException) {
         // Purchases might not be configured yet, listener will be set during configure()
+        // This is expected when the listener is set before Purchases.configure() is called
+        debugLog("Customer info listener will be set during configure: ${e.message}")
     }
 }
 
@@ -633,9 +635,9 @@ fun configure(
             }
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
-        }.also { 
+        }.also {
             Purchases.configure(it.build())
-            
+
             // Set up customer info update listener if one was provided
             customerInfoUpdateListener?.let { listener ->
                 Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
