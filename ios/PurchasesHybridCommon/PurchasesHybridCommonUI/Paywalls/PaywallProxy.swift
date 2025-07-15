@@ -30,6 +30,7 @@ import UIKit
 
     private var resultByVC: [PaywallViewController: (paywallResultHandler: (String) -> Void,
                                                      result: PaywallResult)] = [:]
+    private var entitlementMonitors: [PaywallViewController: String] = [:]
 
     @objc
     public func createPaywallView() -> PaywallViewController {
@@ -124,11 +125,13 @@ import UIKit
                 let customerInfo = try await Purchases.shared.customerInfo()
                 let shouldDisplay = !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
                 if shouldDisplay {
-                    self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                               content: content,
-                                               fontName: fontName,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                               paywallResultHandler: paywallResultHandler)
+                    let controller = self.createPaywallControllerForEntitlementCheck(displayCloseButton: displayCloseButton,
+                                                                                      content: content,
+                                                                                      fontName: fontName,
+                                                                                      shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                                                                      paywallResultHandler: paywallResultHandler)
+                    self.entitlementMonitors[controller] = requiredEntitlementIdentifier
+                    self.presentPaywallController(controller)
                 } else {
                     paywallResultHandler?(PaywallResult.notPresented.name)
                 }
@@ -215,6 +218,72 @@ import UIKit
             delegate.paywallViewControllerRequestedDismissal?(controller)
         }
     }
+    
+    private func createPaywallControllerForEntitlementCheck(displayCloseButton: Bool = false,
+                                                            content: Content = .defaultOffering,
+                                                            fontName: String? = nil,
+                                                            shouldBlockTouchEvents: Bool = false,
+                                                            paywallResultHandler: ((String) -> Void)? = nil) -> PaywallViewController {
+        let fontProvider: PaywallFontProvider
+        if let fontName = fontName {
+            fontProvider = CustomPaywallFontProvider(fontName: fontName)
+        } else {
+            fontProvider = DefaultPaywallFontProvider()
+        }
+        
+        let controller: PaywallViewController
+        switch content {
+        case let .offering(offering):
+            controller = PaywallViewController(offering: offering,
+                                               fonts: fontProvider,
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+        case let .offeringIdentifier(identifier):
+            controller = PaywallViewController(offeringIdentifier: identifier,
+                                               fonts: fontProvider,
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+        case .defaultOffering:
+            controller = PaywallViewController(fonts: fontProvider,
+                                               displayCloseButton: displayCloseButton,
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+        }
+        
+        controller.delegate = self
+        controller.modalPresentationStyle = .pageSheet
+        controller.view.backgroundColor = .systemBackground
+        
+        if let paywallResultHandler {
+            self.resultByVC[controller] = (paywallResultHandler, .cancelled)
+        }
+        
+        return controller
+    }
+    
+    private func presentPaywallController(_ controller: PaywallViewController) {
+        guard var rootController = Self.rootViewController else {
+            NSLog("Unable to find root UIViewController")
+            return
+        }
+        
+        // In case we are currently presenting a modal or any other
+        // view controller get to the top of the chain.
+        while (true) {
+            guard let presentedVC = rootController.presentedViewController else { break }
+            rootController = presentedVC
+        }
+        
+        rootController.present(controller, animated: true)
+    }
+    
+    private func checkEntitlementAndDismissIfNeeded(controller: PaywallViewController,
+                                                    requiredEntitlementIdentifier: String,
+                                                    customerInfo: CustomerInfo) {
+        let hasEntitlement = customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
+        if hasEntitlement {
+            controller.dismiss(animated: true)
+        }
+    }
 
 }
 
@@ -235,6 +304,13 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .purchased
         self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo.dictionary)
+        
+        // Check if entitlement was granted and auto-dismiss if needed
+        if let requiredEntitlementIdentifier = self.entitlementMonitors[controller] {
+            self.checkEntitlementAndDismissIfNeeded(controller: controller, 
+                                                    requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                                    customerInfo: customerInfo)
+        }
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
@@ -263,6 +339,13 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
         self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
+        
+        // Check if entitlement was granted and auto-dismiss if needed
+        if let requiredEntitlementIdentifier = self.entitlementMonitors[controller] {
+            self.checkEntitlementAndDismissIfNeeded(controller: controller, 
+                                                    requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                                    customerInfo: customerInfo)
+        }
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
@@ -273,6 +356,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerWasDismissed?(controller)
+        self.entitlementMonitors.removeValue(forKey: controller)
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
     }

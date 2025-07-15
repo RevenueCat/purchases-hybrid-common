@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
@@ -12,6 +14,7 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProvider
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
+import kotlinx.coroutines.launch
 
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     enum class ResultKey(val key: String) {
@@ -121,8 +124,19 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     override fun onActivityResult(result: PaywallResult) {
-        setFragmentResult(result)
-        removeFragment()
+        // Check if entitlement was granted and auto-dismiss if needed
+        when (result) {
+            is PaywallResult.Purchased -> {
+                checkEntitlementAndDismissIfNeeded(result.customerInfo)
+            }
+            is PaywallResult.Restored -> {
+                checkEntitlementAndDismissIfNeeded(result.customerInfo)
+            }
+            else -> {
+                setFragmentResult(result)
+                removeFragment()
+            }
+        }
     }
 
     private fun removeFragment() {
@@ -210,4 +224,34 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 putString(ResultKey.PAYWALL_RESULT.key, paywallResult)
             },
         )
+    
+    private fun checkEntitlementAndDismissIfNeeded(customerInfo: CustomerInfo) {
+        val requiredEntitlement = requiredEntitlementIdentifier
+        if (requiredEntitlement != null) {
+            val hasEntitlement = customerInfo.entitlements.active.containsKey(requiredEntitlement)
+            if (hasEntitlement) {
+                // Auto-dismiss the paywall since the required entitlement is now active
+                lifecycleScope.launch {
+                    try {
+                        // Force close the paywall activity
+                        activity?.finish()
+                        removeFragment()
+                    } catch (e: Exception) {
+                        Log.e("PaywallFragment", "Error auto-dismissing paywall: ${e.message}")
+                        // Fallback to normal result handling
+                        setFragmentResult(PaywallResult.Restored(customerInfo))
+                        removeFragment()
+                    }
+                }
+            } else {
+                // Entitlement not granted, handle normally
+                setFragmentResult(PaywallResult.Restored(customerInfo))
+                removeFragment()
+            }
+        } else {
+            // No required entitlement specified, handle normally
+            setFragmentResult(PaywallResult.Restored(customerInfo))
+            removeFragment()
+        }
+    }
 }
