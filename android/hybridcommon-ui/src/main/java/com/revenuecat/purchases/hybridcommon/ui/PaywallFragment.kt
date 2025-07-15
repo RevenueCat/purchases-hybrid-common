@@ -224,7 +224,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 putString(ResultKey.PAYWALL_RESULT.key, paywallResult)
             },
         )
-    
+
     private fun checkEntitlementAndDismissIfNeeded(customerInfo: CustomerInfo) {
         val requiredEntitlement = requiredEntitlementIdentifier
         if (requiredEntitlement != null) {
@@ -232,16 +232,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             if (hasEntitlement) {
                 // Auto-dismiss the paywall since the required entitlement is now active
                 lifecycleScope.launch {
-                    try {
-                        // Force close the paywall activity
-                        activity?.finish()
-                        removeFragment()
-                    } catch (e: Exception) {
-                        Log.e("PaywallFragment", "Error auto-dismissing paywall: ${e.message}")
-                        // Fallback to normal result handling
-                        setFragmentResult(PaywallResult.Restored(customerInfo))
-                        removeFragment()
-                    }
+                    // Force close the paywall activity
+                    activity?.finish()
+                    removeFragment()
                 }
             } else {
                 // Entitlement not granted, handle normally
