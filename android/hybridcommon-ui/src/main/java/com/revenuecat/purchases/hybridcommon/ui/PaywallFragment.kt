@@ -152,43 +152,8 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     override fun onActivityResult(result: PaywallResult) {
-        // Check if entitlement was granted and auto-dismiss if needed
-        when (result) {
-            is PaywallResult.Purchased -> {
-                checkEntitlementAndDismissIfNeeded(result.customerInfo) {
-                    setFragmentResult(result)
-                    removeFragment()
-                }
-            }
-            is PaywallResult.Restored -> {
-                checkEntitlementAndDismissIfNeeded(result.customerInfo) {
-                    setFragmentResult(result)
-                    removeFragment()
-                }
-            }
-            else -> {
-                setFragmentResult(result)
-                removeFragment()
-            }
-        }
-    }
-    
-    private fun checkEntitlementAndDismissIfNeeded(customerInfo: CustomerInfo, fallback: () -> Unit) {
-        val requiredEntitlement = requiredEntitlementIdentifierForDismiss
-        if (requiredEntitlement != null) {
-            val hasEntitlement = customerInfo.entitlements.active.containsKey(requiredEntitlement)
-            if (hasEntitlement) {
-                // Auto-dismiss the paywall since the required entitlement is now active
-                activity?.finish()
-                removeFragment()
-            } else {
-                // Entitlement not granted, handle normally
-                fallback()
-            }
-        } else {
-            // No required entitlement specified, handle normally
-            fallback()
-        }
+        setFragmentResult(result)
+        removeFragment()
     }
 
     private fun removeFragment() {
