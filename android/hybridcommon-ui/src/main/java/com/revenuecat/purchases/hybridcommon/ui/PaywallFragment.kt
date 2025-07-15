@@ -8,6 +8,7 @@ import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
+import com.revenuecat.purchases.hybridcommon.setCustomerInfoUpdateListener
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
@@ -120,9 +121,34 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         // Store the required entitlement identifier for auto-dismiss logic
         requiredEntitlementIdentifierForDismiss = requiredEntitlementIdentifier
 
+        // Set up customer info update listener to watch for entitlement changes
+        requiredEntitlementIdentifier?.let { entitlementId ->
+            setCustomerInfoUpdateListener { customerInfoMap ->
+                // Check if the required entitlement is now active
+                val entitlements = customerInfoMap["entitlements"] as? Map<String, Any>
+                val active = entitlements?.get("active") as? Map<String, Any>
+                
+                if (active?.containsKey(entitlementId) == true) {
+                    // Auto-dismiss the paywall since the required entitlement is now active
+                    activity?.runOnUiThread {
+                        activity?.finish()
+                        removeFragment()
+                    }
+                }
+            }
+        }
+
         requiredEntitlementIdentifier?.let { requiredEntitlementIdentifier ->
             launchPaywallIfNeeded(requiredEntitlementIdentifier)
         } ?: launchPaywall()
+    }
+
+    override fun onDestroy() {
+        // Clean up the customer info update listener
+        if (requiredEntitlementIdentifierForDismiss != null) {
+            setCustomerInfoUpdateListener(null)
+        }
+        super.onDestroy()
     }
 
     override fun onActivityResult(result: PaywallResult) {
