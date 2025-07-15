@@ -291,6 +291,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerWasDismissed?(controller)
+        self.requiredEntitlementIdentifierByVC.removeValue(forKey: controller)
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
     }
