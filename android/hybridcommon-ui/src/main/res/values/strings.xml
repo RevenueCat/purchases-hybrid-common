@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="paywall_purchases_not_configured">Purchases is not configured. Make sure to call Purchases.configure() before launching the paywall. Dismissing.</string>
-</resources>
