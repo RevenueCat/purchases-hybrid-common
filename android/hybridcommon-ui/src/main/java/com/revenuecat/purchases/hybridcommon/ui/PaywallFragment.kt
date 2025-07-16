@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.hybridcommon.setCustomerInfoUpdateListener
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -15,7 +14,6 @@ import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProv
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
-    private var requiredEntitlementIdentifierForDismiss: String? = null
     enum class ResultKey(val key: String) {
         PAYWALL_RESULT("paywall_result"),
     }
@@ -105,7 +103,8 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         if (!Purchases.isConfigured) {
             Log.e(
                 "PaywallFragment",
-                getString(R.string.paywall_purchases_not_configured),
+                "Purchases is not configured. " +
+                    "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
             )
             removeFragment()
             return
@@ -115,35 +114,10 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             this,
             this,
         )
-        // Store the required entitlement identifier for auto-dismiss logic
-        requiredEntitlementIdentifierForDismiss = requiredEntitlementIdentifier
-
-        // Set up customer info update listener to watch for entitlement changes
-        requiredEntitlementIdentifier?.let { entitlementId ->
-            setCustomerInfoUpdateListener { customerInfoMap ->
-                // Check if the required entitlement is now active
-                val entitlements = customerInfoMap["entitlements"] as? Map<String, Any>
-                val active = entitlements?.get("active") as? Map<String, Any>
-
-                if (active?.containsKey(entitlementId) == true) {
-                    // Auto-dismiss the paywall since the required entitlement is now active
-                    activity?.finish()
-                    removeFragment()
-                }
-            }
-        }
 
         requiredEntitlementIdentifier?.let { requiredEntitlementIdentifier ->
             launchPaywallIfNeeded(requiredEntitlementIdentifier)
         } ?: launchPaywall()
-    }
-
-    override fun onDestroy() {
-        // Clean up the customer info update listener
-        if (requiredEntitlementIdentifierForDismiss != null) {
-            setCustomerInfoUpdateListener(null)
-        }
-        super.onDestroy()
     }
 
     override fun onActivityResult(result: PaywallResult) {

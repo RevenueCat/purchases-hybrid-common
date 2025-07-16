@@ -33,7 +33,6 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
-import com.revenuecat.purchases.interfaces.UpdatedCustomerInfoListener
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
@@ -47,8 +46,6 @@ import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
 import com.revenuecat.purchases.syncPurchasesWith
 import java.net.URL
-
-private var customerInfoUpdateListener: ((Map<String, Any?>) -> Unit)? = null
 
 @Deprecated(
     "Replaced with configuration in the RevenueCat dashboard",
@@ -479,25 +476,6 @@ fun setLogHandlerWithOnResult(onResult: OnResult) {
     }
 }
 
-fun setCustomerInfoUpdateListener(listener: ((Map<String, Any?>) -> Unit)?) {
-    customerInfoUpdateListener = listener
-
-    // If Purchases is already configured, set the listener immediately
-    try {
-        if (listener != null) {
-            Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
-                customerInfo.mapAsync { map -> listener(map) }
-            }
-        } else {
-            Purchases.sharedInstance.updatedCustomerInfoListener = null
-        }
-    } catch (e: UninitializedPropertyAccessException) {
-        // Purchases might not be configured yet, listener will be set during configure()
-        // This is expected when the listener is set before Purchases.configure() is called
-        Log.d("RevenueCat", "Customer info listener will be set during configure: ${e.message}")
-    }
-}
-
 fun setProxyURLString(proxyURLString: String?) {
     Purchases.proxyURL = if (proxyURLString != null) URL(proxyURLString) else null
 }
@@ -635,16 +613,7 @@ fun configure(
             }
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
-        }.also {
-            Purchases.configure(it.build())
-
-            // Set up customer info update listener if one was provided
-            customerInfoUpdateListener?.let { listener ->
-                Purchases.sharedInstance.updatedCustomerInfoListener = UpdatedCustomerInfoListener { customerInfo ->
-                    customerInfo.mapAsync { map -> listener(map) }
-                }
-            }
-        }
+        }.also { Purchases.configure(it.build()) }
 }
 
 fun getPromotionalOffer(): ErrorContainer {

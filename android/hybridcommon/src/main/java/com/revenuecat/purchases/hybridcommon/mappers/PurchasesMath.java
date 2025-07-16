@@ -1,12 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.mappers;
 
 // The functionality of this class has been extracted from Java 8 Math class
-final class PurchasesMath {
-    
-    // Private constructor to prevent instantiation
-    private PurchasesMath() {
-        throw new AssertionError("Utility class should not be instantiated");
-    }
+class PurchasesMath {
     /**
      * Returns the sum of its arguments,
      * throwing an exception if the result overflows an {@code int}.
