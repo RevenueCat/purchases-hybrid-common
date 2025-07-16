@@ -494,7 +494,7 @@ fun setCustomerInfoUpdateListener(listener: ((Map<String, Any?>) -> Unit)?) {
     } catch (e: UninitializedPropertyAccessException) {
         // Purchases might not be configured yet, listener will be set during configure()
         // This is expected when the listener is set before Purchases.configure() is called
-        debugLog("Customer info listener will be set during configure: ${e.message}")
+        Log.d("RevenueCat", "Customer info listener will be set during configure: ${e.message}")
     }
 }
 
