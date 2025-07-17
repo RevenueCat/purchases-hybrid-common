@@ -1436,6 +1436,25 @@ internal class CommonKtTests {
         }
     }
 
+    @Test
+    fun `calling invalidateVirtualCurrenciesCache calls invalidateVirtualCurrenciesCache`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        every { mockPurchases.invalidateVirtualCurrenciesCache() } just runs
+
+        invalidateVirtualCurrenciesCache()
+
+        verify(exactly = 1) {
+            mockPurchases.invalidateVirtualCurrenciesCache()
+        }
+    }
+
     @OptIn(InternalRevenueCatAPI::class)
     private fun getOfferings(
         mockStoreProduct: StoreProduct,

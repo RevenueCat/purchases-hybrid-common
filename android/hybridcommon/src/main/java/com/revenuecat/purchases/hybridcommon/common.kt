@@ -689,8 +689,12 @@ fun getVirtualCurrencies(
 ) {
     Purchases.sharedInstance.getVirtualCurrenciesWith(
         onError = { error: PurchasesError -> onResult.onError(error.map()) },
-        onSuccess = { virtualCurrencies: VirtualCurrencies -> onResult.onReceived(virtualCurrencies.map())},
+        onSuccess = { virtualCurrencies: VirtualCurrencies -> onResult.onReceived(virtualCurrencies.map()) },
     )
+}
+
+fun invalidateVirtualCurrenciesCache() {
+    Purchases.sharedInstance.invalidateVirtualCurrenciesCache()
 }
 
 // region private functions

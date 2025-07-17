@@ -236,6 +236,10 @@ class CommonApiTests {
         CommonKt.getVirtualCurrencies(onResult);
     }
 
+    private void checkInvalidateVirtualCurrenciesCache() {
+        CommonKt.invalidateVirtualCurrenciesCache();
+    }
+
     private void checkErrorContainer(Integer code, String message, Map<String, Object> info) {
         ErrorContainer errorContainer = new ErrorContainer(code, message, info);
         Integer storedCode = errorContainer.getCode();
