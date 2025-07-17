@@ -26,6 +26,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
+import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
 import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
@@ -43,6 +44,8 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
+import com.revenuecat.purchases.virtualcurrencies.VirtualCurrencies
+import com.revenuecat.purchases.virtualcurrencies.VirtualCurrency
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -1324,6 +1327,113 @@ internal class CommonKtTests {
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(metadata, mappedMetadata)
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies correctly calls onReceived when the VC has a serverDescription`() {
+        verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+            mockedVCServerDescription = "Hello world",
+        )
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies correctly calls onReceived when the VC has a null serverDescription`() {
+        verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+            mockedVCServerDescription = null,
+        )
+    }
+
+    private fun verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+        mockedVCServerDescription: String?
+    ) {
+        val appUserID = "appUserID"
+        val expectedBalance = 100
+        val expectedName = "Coin"
+        val expectedCode = "COIN"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = appUserID,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockVirtualCurrency = mockk<VirtualCurrency>()
+        every { mockVirtualCurrency.balance } returns expectedBalance
+        every { mockVirtualCurrency.name } returns expectedName
+        every { mockVirtualCurrency.code } returns expectedCode
+        every { mockVirtualCurrency.serverDescription } returns mockedVCServerDescription
+
+        val mockVirtualCurrencies = mockk<VirtualCurrencies>()
+        every { mockVirtualCurrencies.all } returns mapOf(expectedCode to mockVirtualCurrency)
+
+        val capturedCallback = slot<GetVirtualCurrenciesCallback>()
+        every {
+            mockPurchases.getVirtualCurrencies(capture(capturedCallback))
+        } answers {
+            capturedCallback.captured.onReceived(mockVirtualCurrencies)
+        }
+
+        val onResult = mockk<OnResult>(relaxed = true)
+
+        getVirtualCurrencies(onResult = onResult)
+
+        verify(exactly = 1) {
+            onResult.onReceived(
+                mapOf(
+                    "all" to mapOf(
+                        expectedCode to mapOf(
+                            "balance" to expectedBalance,
+                            "name" to expectedName,
+                            "code" to expectedCode,
+                            "serverDescription" to mockedVCServerDescription
+                        )
+                    )
+                ),
+            )
+        }
+
+        verify(exactly = 0) {
+            onResult.onError(any())
+        }
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies with error calls onError`() {
+        val appUserID = "appUserID"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = appUserID,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockError = mockk<PurchasesError>(relaxed = true)
+        val capturedCallback = slot<GetVirtualCurrenciesCallback>()
+
+        every {
+            mockPurchases.getVirtualCurrencies(capture(capturedCallback))
+        } answers {
+            capturedCallback.captured.onError(mockError)
+        }
+
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        getVirtualCurrencies(onResult = onResult)
+
+        val mockErrorMap = mockError.map()
+        verify(exactly = 1) {
+            onResult.onError(mockErrorMap)
+        }
+
+        verify(exactly = 0) {
+            onResult.onReceived(any())
+        }
     }
 
     @OptIn(InternalRevenueCatAPI::class)

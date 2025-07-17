@@ -28,6 +28,7 @@ import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.getStorefrontCountryCodeWith
+import com.revenuecat.purchases.getVirtualCurrenciesWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -45,6 +46,7 @@ import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
 import com.revenuecat.purchases.syncPurchasesWith
+import com.revenuecat.purchases.virtualcurrencies.VirtualCurrencies
 import java.net.URL
 
 @Deprecated(
@@ -680,6 +682,15 @@ fun redeemWebPurchase(
             )
         }
     }
+}
+
+fun getVirtualCurrencies(
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.getVirtualCurrenciesWith(
+        onError = { error: PurchasesError -> onResult.onError(error.map()) },
+        onSuccess = { virtualCurrencies: VirtualCurrencies -> onResult.onReceived(virtualCurrencies.map())},
+    )
 }
 
 // region private functions
