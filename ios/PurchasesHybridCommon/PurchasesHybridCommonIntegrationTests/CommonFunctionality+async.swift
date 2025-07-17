@@ -130,4 +130,11 @@ extension CommonFunctionality {
         }
     }
 
+    static func virtualCurrencies() async throws -> [String: Any] {
+        return try await withCheckedThrowingContinuation { continuation in
+            Self.getVirtualCurrencies { dictionary, error in
+                continuation.resume(with: Result(dictionary, error?.error))
+            }
+        }
+    }
 }

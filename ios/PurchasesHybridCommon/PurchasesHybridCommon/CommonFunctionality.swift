@@ -848,23 +848,6 @@ private extension WebPurchaseRedemptionResult {
 @objc public extension CommonFunctionality {
 
     @objc static func getVirtualCurrencies(
-        completion: @escaping (VirtualCurrencies?, ErrorContainer?) -> Void
-    ) {
-        Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
-            if let error = error {
-                completion(nil, Self.createErrorContainer(error: error))
-            } else if let virtualCurrencies = virtualCurrencies {
-                completion(virtualCurrencies, nil)
-            } else {
-                completion(
-                    nil,
-                    ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
-                )
-            }
-        }
-    }
-
-    @objc(getVirtualCurrenciesDictionariesWithCompletion:) static func getVirtualCurrencies(
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
