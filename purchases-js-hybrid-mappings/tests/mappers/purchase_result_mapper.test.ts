@@ -1,4 +1,4 @@
-import { CustomerInfo, PurchaseResult } from '@revenuecat/purchases-js';
+import {CustomerInfo, PurchaseResult, StoreTransaction} from '@revenuecat/purchases-js';
 import { mapPurchaseResult } from '../../src/mappers/purchase_result_mapper';
 
 describe('mapPurchaseResult', () => {
@@ -22,10 +22,17 @@ describe('mapPurchaseResult', () => {
       subscriptionsByProductIdentifier: {},
     };
 
+    const transaction: StoreTransaction = {
+      storeTransactionId: 'test-transaction-id',
+      productIdentifier: 'test-product-id',
+      purchaseDate: mockDate,
+    };
+
     const purchaseResult: PurchaseResult = {
       customerInfo,
       redemptionInfo: { redeemUrl: "https://redeem.url" },
       operationSessionId: 'session_123',
+      storeTransaction: transaction,
     };
 
     const result = mapPurchaseResult(purchaseResult);
@@ -59,6 +66,12 @@ describe('mapPurchaseResult', () => {
       },
       redemptionInfo: { redeemUrl: "https://redeem.url" },
       operationSessionId: 'session_123',
+      transaction: {
+        transactionIdentifier: 'test-transaction-id',
+        productIdentifier: 'test-product-id',
+        purchaseDate: mockDate.toISOString(),
+        purchaseDateMillis: mockDate.getTime(),
+      },
     });
   });
-}); 
+});

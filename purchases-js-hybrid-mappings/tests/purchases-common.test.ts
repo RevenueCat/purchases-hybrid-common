@@ -103,7 +103,12 @@ describe('PurchasesCommon', () => {
   const mockPurchaseResult: PurchaseResult = {
     customerInfo: customerInfo,
     redemptionInfo: { redeemUrl: 'test_url' },
-    operationSessionId: 'test_session_id'
+    operationSessionId: 'test_session_id',
+    storeTransaction: {
+      storeTransactionId: 'test_transaction_id',
+      productIdentifier: 'test_product_id',
+      purchaseDate: new Date(),
+    }
   };
 
   const mockLocalStorage = {
