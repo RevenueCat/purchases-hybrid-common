@@ -1345,7 +1345,7 @@ internal class CommonKtTests {
     }
 
     private fun verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
-        mockedVCServerDescription: String?
+        mockedVCServerDescription: String?,
     ) {
         val appUserID = "appUserID"
         val expectedBalance = 100
@@ -1388,9 +1388,9 @@ internal class CommonKtTests {
                             "balance" to expectedBalance,
                             "name" to expectedName,
                             "code" to expectedCode,
-                            "serverDescription" to mockedVCServerDescription
-                        )
-                    )
+                            "serverDescription" to mockedVCServerDescription,
+                        ),
+                    ),
                 ),
             )
         }
@@ -1468,9 +1468,9 @@ internal class CommonKtTests {
                     "balance" to expectedBalance,
                     "name" to expectedName,
                     "code" to expectedCode,
-                    "serverDescription" to expectedServerDescription
-                )
-            )
+                    "serverDescription" to expectedServerDescription,
+                ),
+            ),
         )
 
         configure(

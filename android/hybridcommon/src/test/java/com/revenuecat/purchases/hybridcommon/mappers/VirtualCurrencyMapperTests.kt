@@ -2,11 +2,10 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.virtualcurrencies.VirtualCurrency
-import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 class VirtualCurrencyMapperTests {
-
 
     @OptIn(InternalRevenueCatAPI::class)
     @Test
@@ -20,7 +19,7 @@ class VirtualCurrencyMapperTests {
             balance = balance,
             name = name,
             code = code,
-            serverDescription = serverDescription
+            serverDescription = serverDescription,
         )
 
         val map = virtualCurrency.map()
@@ -44,7 +43,7 @@ class VirtualCurrencyMapperTests {
             balance = balance,
             name = name,
             code = code,
-            serverDescription = serverDescription
+            serverDescription = serverDescription,
         )
 
         val map = virtualCurrency.map()

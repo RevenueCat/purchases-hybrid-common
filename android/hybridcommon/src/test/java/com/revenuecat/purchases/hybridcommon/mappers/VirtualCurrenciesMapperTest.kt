@@ -29,8 +29,8 @@ class VirtualCurrenciesMapperTest {
         val virtualCurrencies = VirtualCurrencies(
             all = mapOf(
                 virtualCurrency1.code to virtualCurrency1,
-                virtualCurrency2.code to virtualCurrency2
-            )
+                virtualCurrency2.code to virtualCurrency2,
+            ),
         )
 
         val map = virtualCurrencies.map()
@@ -68,6 +68,5 @@ class VirtualCurrenciesMapperTest {
         val all: Map<String, Any>? = map["all"] as? Map<String, Any>
         assertThat(all).isNotNull()
         assertThat(all!!.isEmpty()).isTrue()
-
     }
 }
