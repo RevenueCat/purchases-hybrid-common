@@ -864,6 +864,27 @@ private extension WebPurchaseRedemptionResult {
         }
     }
 
+    @objc(getVirtualCurrenciesDictionariesWithCompletion:) static func getVirtualCurrencies(
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
+            if let error = error {
+                completion(nil, Self.createErrorContainer(error: error))
+            } else if let virtualCurrencies = virtualCurrencies {
+                completion(virtualCurrencies.rc_dictionary, nil)
+            } else {
+                completion(
+                    nil,
+                    ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+                )
+            }
+        }
+    }
+
+    @objc static func getCachedVirtualCurrencies() -> [String: Any]? {
+        return Self.sharedInstance.cachedVirtualCurrencies?.rc_dictionary
+    }
+
     @objc static func invalidateVirtualCurrenciesCache() {
         Self.sharedInstance.invalidateVirtualCurrenciesCache()
     }
