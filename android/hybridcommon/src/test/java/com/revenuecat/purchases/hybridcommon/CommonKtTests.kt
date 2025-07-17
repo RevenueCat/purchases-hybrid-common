@@ -60,6 +60,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
@@ -1453,6 +1454,72 @@ internal class CommonKtTests {
         verify(exactly = 1) {
             mockPurchases.invalidateVirtualCurrenciesCache()
         }
+    }
+
+    @Test
+    fun `getCachedVirtualCurrencies returns cached VCs from native SDK when available`() {
+        val expectedBalance = 100
+        val expectedName = "Coin"
+        val expectedCode = "COIN"
+        val expectedServerDescription = "Cached VC"
+        val expectedVirtualCurrenciesMap = mapOf(
+            "all" to mapOf(
+                expectedCode to mapOf(
+                    "balance" to expectedBalance,
+                    "name" to expectedName,
+                    "code" to expectedCode,
+                    "serverDescription" to expectedServerDescription
+                )
+            )
+        )
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockVirtualCurrency = mockk<VirtualCurrency>()
+        every { mockVirtualCurrency.balance } returns expectedBalance
+        every { mockVirtualCurrency.name } returns expectedName
+        every { mockVirtualCurrency.code } returns expectedCode
+        every { mockVirtualCurrency.serverDescription } returns expectedServerDescription
+
+        val mockVirtualCurrencies = mockk<VirtualCurrencies>()
+        every { mockVirtualCurrencies.all } returns mapOf(expectedCode to mockVirtualCurrency)
+
+        every { mockPurchases.cachedVirtualCurrencies } returns(mockVirtualCurrencies)
+
+        val actualCachedVirtualCurrenciesMap = getCachedVirtualCurrencies()
+
+        verify(exactly = 1) {
+            mockPurchases.cachedVirtualCurrencies
+        }
+
+        assertThat(actualCachedVirtualCurrenciesMap).isEqualTo(expectedVirtualCurrenciesMap)
+    }
+
+    @Test
+    fun `getCachedVirtualCurrencies returns null when there are no cached VCs`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        every { mockPurchases.cachedVirtualCurrencies } returns(null)
+
+        val actualCachedVirtualCurrenciesMap = getCachedVirtualCurrencies()
+
+        verify(exactly = 1) {
+            mockPurchases.cachedVirtualCurrencies
+        }
+
+        assertThat(actualCachedVirtualCurrenciesMap).isNull()
     }
 
     @OptIn(InternalRevenueCatAPI::class)

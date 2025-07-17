@@ -697,6 +697,8 @@ fun invalidateVirtualCurrenciesCache() {
     Purchases.sharedInstance.invalidateVirtualCurrenciesCache()
 }
 
+fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
+
 // region private functions
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
