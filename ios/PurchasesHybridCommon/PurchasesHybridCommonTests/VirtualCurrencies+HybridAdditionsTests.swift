@@ -11,7 +11,7 @@ import Quick
 import Nimble
 
 @testable import PurchasesHybridCommon
-@testable import RevenueCat
+@_spi(Internal) @testable import RevenueCat
 
 class VirtualCurrenciesHybridAdditionsTests: QuickSpec {
     override func spec() {
