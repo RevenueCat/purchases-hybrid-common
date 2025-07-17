@@ -10,7 +10,7 @@ export function mapPurchaseResult(purchaseResult: PurchaseResult): Record<string
       transactionIdentifier: purchaseResult.storeTransaction.storeTransactionId,
       productIdentifier: purchaseResult.storeTransaction.productIdentifier,
       purchaseDate: purchaseResult.storeTransaction.purchaseDate.toISOString(),
-      purchaseDateMillis: purchaseResult.storeTransaction.purchaseDate.getTime()
-    }
+      purchaseDateMillis: purchaseResult.storeTransaction.purchaseDate.getTime(),
+    },
   };
 }
