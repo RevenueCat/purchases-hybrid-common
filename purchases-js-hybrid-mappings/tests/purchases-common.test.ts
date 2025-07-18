@@ -1,5 +1,21 @@
 import { PurchasesCommon } from '../src/purchases-common';
-import { Purchases, Offering, Package, PurchaseResult, PurchasesError, ErrorCode, EntitlementInfos, CustomerInfo, PackageType, Product, ProductType, SubscriptionOption, PeriodUnit } from '@revenuecat/purchases-js';
+import {
+  Purchases,
+  Offering,
+  Package,
+  PurchaseResult,
+  PurchasesError,
+  ErrorCode,
+  EntitlementInfos,
+  CustomerInfo,
+  PackageType,
+  Product,
+  ProductType,
+  ReservedCustomerAttribute,
+  SubscriptionOption,
+  PeriodUnit,
+  PurchasesConfig
+} from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
 describe('PurchasesCommon', () => {
@@ -17,6 +33,7 @@ describe('PurchasesCommon', () => {
     getAppUserId: jest.fn(),
     isSandbox: jest.fn(),
     isAnonymous: jest.fn(),
+    setAttributes: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
@@ -48,6 +65,7 @@ describe('PurchasesCommon', () => {
         pricePerYear: { amountMicros: 11999000, amount: 11998, currency: 'USD', formattedPrice: '$119.98' },
     },
     trial: null,
+    introPrice: null,
     priceId: 'test_monthly_option_price_id',
   };
 
@@ -152,11 +170,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        appUserId,
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: appUserId,
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'revenuecat_user_id',
         appUserId
@@ -174,11 +194,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        storedUserId,
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: storedUserId,
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
     });
 
@@ -192,11 +214,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'revenuecat_user_id',
         'anonymous_id'
@@ -218,11 +242,49 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
+    });
+  });
+
+  describe('setAttributes', () => {
+    beforeEach(() => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+    });
+
+    it('should set attributes correctly', async () => {
+      const attributes = { key1: 'value1', key2: 'value2' };
+      await purchasesCommon.setAttributes(attributes);
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith(attributes);
+    });
+
+    it('should set email correctly', async () => {
+      await purchasesCommon.setEmail('test-email');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({[ReservedCustomerAttribute.Email]: 'test-email'});
+    });
+
+    it('should set phone number correctly', async () => {
+      await purchasesCommon.setPhoneNumber('test-phone-number');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({[ReservedCustomerAttribute.PhoneNumber]: 'test-phone-number'});
+    });
+
+    it('should set display name correctly', async () => {
+      await purchasesCommon.setDisplayName('Test User');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({[ReservedCustomerAttribute.DisplayName]: 'Test User'});
     });
   });
 
