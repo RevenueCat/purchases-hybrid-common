@@ -8,7 +8,9 @@ import {
   PurchaseParams,
   PurchaseResult,
   Purchases,
+  PurchasesConfig,
   PurchasesError,
+  ReservedCustomerAttribute,
 } from '@revenuecat/purchases-js';
 import { mapCustomerInfo } from './mappers/customer_info_mapper';
 import { mapOffering, mapOfferings } from './mappers/offerings_mapper';
@@ -67,7 +69,12 @@ export class PurchasesCommon {
       httpConfig = { proxyURL: PurchasesCommon.proxyUrl };
     }
 
-    const purchasesInstance = Purchases.configure(configuration.apiKey, appUserId, httpConfig);
+    const purchasesConfig: PurchasesConfig = {
+      apiKey: configuration.apiKey,
+      appUserId: appUserId,
+      httpConfig: httpConfig,
+    };
+    const purchasesInstance = Purchases.configure(purchasesConfig);
     PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
     return PurchasesCommon.instance;
   }
@@ -110,6 +117,26 @@ export class PurchasesCommon {
 
   public isAnonymous(): boolean {
     return this.purchases.isAnonymous();
+  }
+
+  public async setAttributes(attributes: { [key: string]: string | null }): Promise<void> {
+    try {
+      await this.purchases.setAttributes(attributes);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async setEmail(email: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.Email, email);
+  }
+
+  public async setPhoneNumber(phoneNumber: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.PhoneNumber, phoneNumber);
+  }
+
+  public async setDisplayName(displayName: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.DisplayName, displayName);
   }
 
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
@@ -273,6 +300,17 @@ export class PurchasesCommon {
     }
 
     return rcPackage;
+  }
+
+  private async setReservedCustomerAttribute(
+    reservedCustomerAttribute: ReservedCustomerAttribute,
+    value: string | null,
+  ): Promise<void> {
+    try {
+      await this.purchases.setAttributes({ [reservedCustomerAttribute]: value });
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   private handleError(error: unknown): never {
