@@ -1,5 +1,21 @@
 import { PurchasesCommon } from '../src/purchases-common';
-import { Purchases, Offering, Package, PurchaseResult, PurchasesError, ErrorCode, EntitlementInfos, CustomerInfo, PackageType, Product, ProductType, ReservedCustomerAttribute, SubscriptionOption, PeriodUnit } from '@revenuecat/purchases-js';
+import {
+  Purchases,
+  Offering,
+  Package,
+  PurchaseResult,
+  PurchasesError,
+  ErrorCode,
+  EntitlementInfos,
+  CustomerInfo,
+  PackageType,
+  Product,
+  ProductType,
+  ReservedCustomerAttribute,
+  SubscriptionOption,
+  PeriodUnit,
+  PurchasesConfig
+} from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
 describe('PurchasesCommon', () => {
@@ -154,11 +170,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        appUserId,
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: appUserId,
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'revenuecat_user_id',
         appUserId
@@ -176,11 +194,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        storedUserId,
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: storedUserId,
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
     });
 
@@ -194,11 +214,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'revenuecat_user_id',
         'anonymous_id'
@@ -220,11 +242,13 @@ describe('PurchasesCommon', () => {
         flavorVersion: '1.0.0'
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      }
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
     });
   });
 

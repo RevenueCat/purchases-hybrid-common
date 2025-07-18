@@ -119,7 +119,7 @@ export class PurchasesCommon {
     return this.purchases.isAnonymous();
   }
 
-  public async setAttributes(attributes: { [key: string]: string | null }) {
+  public async setAttributes(attributes: { [key: string]: string | null }): Promise<void> {
     try {
       await this.purchases.setAttributes(attributes);
     } catch (error) {
