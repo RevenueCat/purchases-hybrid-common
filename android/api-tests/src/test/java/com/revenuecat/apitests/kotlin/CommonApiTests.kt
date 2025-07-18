@@ -13,13 +13,16 @@ import com.revenuecat.purchases.hybridcommon.canMakePayments
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility
 import com.revenuecat.purchases.hybridcommon.configure
 import com.revenuecat.purchases.hybridcommon.getAppUserID
+import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo
 import com.revenuecat.purchases.hybridcommon.getOfferings
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
 import com.revenuecat.purchases.hybridcommon.getProxyURLString
 import com.revenuecat.purchases.hybridcommon.getStorefront
+import com.revenuecat.purchases.hybridcommon.getVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache
+import com.revenuecat.purchases.hybridcommon.invalidateVirtualCurrenciesCache
 import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
 import com.revenuecat.purchases.hybridcommon.logOut
@@ -263,5 +266,17 @@ private class CommonApiTests {
         val storedCode = errorContainer.code
         val storedMessage = errorContainer.message
         val storedInfo = errorContainer.info
+    }
+
+    private fun checkGetVirtualCurrencies(onResult: OnResult) {
+        getVirtualCurrencies(onResult)
+    }
+
+    private fun checkInvalidateVirtualCurrenciesCache() {
+        invalidateVirtualCurrenciesCache()
+    }
+
+    private fun checkGetCachedVirtualCurrencies() {
+        val cachedVirtualCurrencies: Map<String, Any?>? = getCachedVirtualCurrencies()
     }
 }
