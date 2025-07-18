@@ -73,7 +73,7 @@ export class PurchasesCommon {
       apiKey: configuration.apiKey,
       appUserId: appUserId,
       httpConfig: httpConfig,
-    }
+    };
     const purchasesInstance = Purchases.configure(purchasesConfig);
     PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
     return PurchasesCommon.instance;
@@ -119,9 +119,7 @@ export class PurchasesCommon {
     return this.purchases.isAnonymous();
   }
 
-  public async setAttributes(attributes: {
-    [key: string]: string | null;
-  }) {
+  public async setAttributes(attributes: { [key: string]: string | null }) {
     try {
       await this.purchases.setAttributes(attributes);
     } catch (error) {
