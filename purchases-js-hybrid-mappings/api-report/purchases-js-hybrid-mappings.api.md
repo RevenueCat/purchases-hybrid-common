@@ -45,7 +45,17 @@ export class PurchasesCommon {
         defaultLocale?: string;
     }): Promise<Record<string, unknown>>;
     // (undocumented)
+    setAttributes(attributes: {
+        [key: string]: string | null;
+    }): Promise<void>;
+    // (undocumented)
+    setDisplayName(displayName: string | null): Promise<void>;
+    // (undocumented)
+    setEmail(email: string | null): Promise<void>;
+    // (undocumented)
     static setLogLevel(logLevel: string): void;
+    // (undocumented)
+    setPhoneNumber(phoneNumber: string | null): Promise<void>;
     // (undocumented)
     static setProxyUrl(proxyUrl: string): void;
 }
