@@ -113,7 +113,7 @@ import UIKit
                                            shouldBlockTouchEvents: shouldBlockTouchEvents,
                                            paywallResultHandler: paywallResultHandler)
     }
-    
+
     private func privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                                displayCloseButton: Bool = false,
                                                content: Content = .defaultOffering,
