@@ -848,13 +848,13 @@ private extension WebPurchaseRedemptionResult {
 @objc public extension CommonFunctionality {
 
     @objc static func getVirtualCurrencies(
-        completion: @escaping (VirtualCurrencies?, ErrorContainer?) -> Void
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
             if let error = error {
                 completion(nil, Self.createErrorContainer(error: error))
             } else if let virtualCurrencies = virtualCurrencies {
-                completion(virtualCurrencies, nil)
+                completion(virtualCurrencies.rc_dictionary, nil)
             } else {
                 completion(
                     nil,
@@ -862,6 +862,10 @@ private extension WebPurchaseRedemptionResult {
                 )
             }
         }
+    }
+
+    @objc static func getCachedVirtualCurrencies() -> [String: Any]? {
+        return Self.sharedInstance.cachedVirtualCurrencies?.rc_dictionary
     }
 
     @objc static func invalidateVirtualCurrenciesCache() {
