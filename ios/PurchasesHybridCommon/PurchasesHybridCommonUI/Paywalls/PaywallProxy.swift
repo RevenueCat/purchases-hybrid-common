@@ -221,15 +221,12 @@ import UIKit
             delegate.paywallViewControllerRequestedDismissal?(controller)
         }
     }
-    
-    
-    
 
 }
 
 @available(iOS 15.0, *)
 extension PaywallProxy: PaywallViewControllerDelegate {
-    
+
     public func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerDidStartPurchase?(controller)
     }
