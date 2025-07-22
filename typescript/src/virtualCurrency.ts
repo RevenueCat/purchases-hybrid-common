@@ -32,7 +32,7 @@ export interface PurchasesVirtualCurrency {
   readonly code: string;
 
   /**
-   * The virtual currency'sdescription defined in the RevenueCat dashboard.
+   * The virtual currency's description defined in the RevenueCat dashboard.
    */
   readonly serverDescription: string | null;
 }
