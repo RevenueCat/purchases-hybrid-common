@@ -1,3 +1,33 @@
+## 16.0.2
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.33.0 => 5.33.1 Android 9.1.1 => 9.1.2 (#1220) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 1.11.13 to 1.12.2 (#1219) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `9a29f63` to `7d97553` (#1218) via dependabot[bot] (@dependabot[bot])
+* Bump danger from 9.5.1 to 9.5.3 (#1217) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.227.2 to 2.228.0 (#1216) via dependabot[bot] (@dependabot[bot])
+* VC Docs Typo Fix (#1213) via Will Taylor (@fire-at-will)
+
+## 16.0.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Auto dismiss paywall for required entitlement (#1201) via Josh Holtz (@joshdholtz)
+
+### 🔄 Other Changes
+* Bump nokogiri from 1.18.8 to 1.18.9 (#1214) via dependabot[bot] (@dependabot[bot])
+
+## 16.0.0
+## RevenueCat SDK
+### 💥 Breaking Changes
+* iOS: Add getCachedVirtualCurrencies + Fix getVirtualCurrencies API (#1209) via Will Taylor (@fire-at-will)
+### ✨ New Features
+* Expose VC APIs in Android PHC (#1206) via Will Taylor (@fire-at-will)
+* [purchases-js-hybrid-mappings] Support `setAttributes` (#1210) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.1.0 => 9.1.1 (#1207) via RevenueCat Git Bot (@RCGitBot)
+
 ## 15.0.0
 ## RevenueCat SDK
 ### 💥 Breaking Changes
