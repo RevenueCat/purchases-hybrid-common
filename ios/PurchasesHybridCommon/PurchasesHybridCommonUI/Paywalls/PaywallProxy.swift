@@ -30,6 +30,7 @@ import UIKit
 
     private var resultByVC: [PaywallViewController: (paywallResultHandler: (String) -> Void,
                                                      result: PaywallResult)] = [:]
+    private var requiredEntitlementIdentifierByVC: [PaywallViewController: String] = [:]
 
     @objc
     public func createPaywallView() -> PaywallViewController {
@@ -128,6 +129,7 @@ import UIKit
                                                content: content,
                                                fontName: fontName,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
                     paywallResultHandler?(PaywallResult.notPresented.name)
@@ -142,6 +144,7 @@ import UIKit
                                        content: Content = .defaultOffering,
                                        fontName: String? = nil,
                                        shouldBlockTouchEvents: Bool = false,
+                                       requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
@@ -150,9 +153,8 @@ import UIKit
 
         // In case we are currently presenting a modal or any other
         // view controller get to the top of the chain.
-        while (true) {
-          guard let presentedVC = rootController.presentedViewController else { break };
-          rootController = presentedVC
+        while let presentedVC = rootController.presentedViewController {
+            rootController = presentedVC
         }
 
         let fontProvider: PaywallFontProvider
@@ -183,6 +185,10 @@ import UIKit
         controller.delegate = self
         controller.modalPresentationStyle = .pageSheet
         controller.view.backgroundColor = .systemBackground
+
+        if let requiredEntitlementIdentifier {
+            self.requiredEntitlementIdentifierByVC[controller] = requiredEntitlementIdentifier
+        }
 
         if let paywallResultHandler {
             self.resultByVC[controller] = (paywallResultHandler, .cancelled)
@@ -220,7 +226,7 @@ import UIKit
 
 @available(iOS 15.0, *)
 extension PaywallProxy: PaywallViewControllerDelegate {
-    
+
     public func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerDidStartPurchase?(controller)
     }
@@ -257,12 +263,21 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerDidStartRestore(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerDidStartRestore?(controller)
+        
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
         self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
+
+        Purchases.shared.getCustomerInfo { customerInfo, error in
+            if let customerInfo,
+            let entitlementIdentifier = self.requiredEntitlementIdentifierByVC[controller],
+                customerInfo.entitlements.active.keys.contains(entitlementIdentifier) {
+                controller.dismiss(animated: true)
+            }
+        }
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
@@ -273,6 +288,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerWasDismissed?(controller)
+        self.requiredEntitlementIdentifierByVC.removeValue(forKey: controller)
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
     }
