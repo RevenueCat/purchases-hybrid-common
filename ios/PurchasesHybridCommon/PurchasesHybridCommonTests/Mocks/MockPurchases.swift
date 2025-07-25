@@ -517,16 +517,16 @@ final class MockPurchases: PurchasesType {
         invokedSetOnesignalIDParametersList.append((onesignalID, ()))
     }
 
-    var invokedSetPostHogUserId = false
-    var invokedSetPostHogUserIdCount = 0
-    var invokedSetPostHogUserIdParameters: (postHogUserId: String?, Void)?
-    var invokedSetPostHogUserIdParametersList = [(postHogUserId: String?, Void)]()
+    var invokedSetPostHogUserID = false
+    var invokedSetPostHogUserIDCount = 0
+    var invokedSetPostHogUserIDParameters: (postHogUserID: String?, Void)?
+    var invokedSetPostHogUserIDParametersList = [(postHogUserID: String?, Void)]()
 
-    func setPostHogUserId(_ postHogUserId: String?) {
-        invokedSetPostHogUserId = true
-        invokedSetPostHogUserIdCount += 1
-        invokedSetPostHogUserIdParameters = (postHogUserId, ())
-        invokedSetPostHogUserIdParametersList.append((postHogUserId, ()))
+    func setPostHogUserID(_ postHogUserID: String?) {
+        invokedSetPostHogUserID = true
+        invokedSetPostHogUserIDCount += 1
+        invokedSetPostHogUserIDParameters = (postHogUserID, ())
+        invokedSetPostHogUserIDParametersList.append((postHogUserID, ()))
     }
 
     var invokedSetMediaSource = false

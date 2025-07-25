@@ -182,12 +182,12 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setOnesignalUserID:nil];
     [RCCommonFunctionality setAirshipChannelID:@""];
     [RCCommonFunctionality setAirshipChannelID:nil];
+    [RCCommonFunctionality setPostHogUserID:@""];
+    [RCCommonFunctionality setPostHogUserID:nil];
     [RCCommonFunctionality setTenjinAnalyticsInstallationID:@""];
     [RCCommonFunctionality setTenjinAnalyticsInstallationID:nil];
     [RCCommonFunctionality setKochavaDeviceID:@""];
     [RCCommonFunctionality setKochavaDeviceID:nil];
-    [RCCommonFunctionality setPostHogUserId:@""];
-    [RCCommonFunctionality setPostHogUserId:nil];
     [RCCommonFunctionality setMediaSource:@""];
     [RCCommonFunctionality setMediaSource:nil];
     [RCCommonFunctionality setCampaign:@""];
