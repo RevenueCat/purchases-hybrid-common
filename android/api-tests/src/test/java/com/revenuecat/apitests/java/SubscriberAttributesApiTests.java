@@ -48,6 +48,11 @@ class SubscriberAttributesApiTests {
         SubscriberAttributesKt.setKochavaDeviceID(null);
     }
 
+    private void checkSetPostHogUserId(String id) {
+        SubscriberAttributesKt.setPostHogUserId(id);
+        SubscriberAttributesKt.setPostHogUserId(null);
+    }
+
     // endregion
     // region Campaign parameters
 

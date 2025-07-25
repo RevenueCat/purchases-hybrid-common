@@ -686,6 +686,10 @@ extension MockPurchases {
         fatalError("Not mocked")
     }
 
+    func setPostHogUserId(_ postHogUserId: String?) {
+        fatalError("Not mocked")
+    }
+
     var finishTransactions: Bool {
         get { fatalError("Not mocked") }
         set { fatalError("Not mocked") }

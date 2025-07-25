@@ -19,6 +19,7 @@ import com.revenuecat.purchases.hybridcommon.setMparticleID
 import com.revenuecat.purchases.hybridcommon.setOnesignalID
 import com.revenuecat.purchases.hybridcommon.setOnesignalUserID
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber
+import com.revenuecat.purchases.hybridcommon.setPostHogUserId
 import com.revenuecat.purchases.hybridcommon.setPushToken
 import com.revenuecat.purchases.hybridcommon.setTenjinAnalyticsInstallationID
 
@@ -64,6 +65,11 @@ private class SubscriberAttributesApiTests {
     fun checkKochavaDeviceID() {
         setKochavaDeviceID("kochavaDeviceId")
         setKochavaDeviceID(null)
+    }
+
+    fun checkSetPostHogUserId() {
+        setPostHogUserId("postHogUserId")
+        setPostHogUserId(null)
     }
 
     // endregion
