@@ -517,6 +517,18 @@ final class MockPurchases: PurchasesType {
         invokedSetOnesignalIDParametersList.append((onesignalID, ()))
     }
 
+    var invokedSetPostHogUserId = false
+    var invokedSetPostHogUserIdCount = 0
+    var invokedSetPostHogUserIdParameters: (postHogUserId: String?, Void)?
+    var invokedSetPostHogUserIdParametersList = [(postHogUserId: String?, Void)]()
+
+    func setPostHogUserId(_ postHogUserId: String?) {
+        invokedSetPostHogUserId = true
+        invokedSetPostHogUserIdCount += 1
+        invokedSetPostHogUserIdParameters = (postHogUserId, ())
+        invokedSetPostHogUserIdParametersList.append((postHogUserId, ()))
+    }
+
     var invokedSetMediaSource = false
     var invokedSetMediaSourceCount = 0
     var invokedSetMediaSourceParameters: (mediaSource: String?, Void)?
@@ -683,10 +695,6 @@ extension MockPurchases {
     }
 
     func setFirebaseAppInstanceID(_ firebaseAppInstanceID: String?) {
-        fatalError("Not mocked")
-    }
-
-    func setPostHogUserId(_ postHogUserId: String?) {
         fatalError("Not mocked")
     }
 
