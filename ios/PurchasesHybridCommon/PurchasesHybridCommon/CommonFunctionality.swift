@@ -625,6 +625,9 @@ import RevenueCat
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
         Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }
+    @objc static func setPostHogUserID(_ postHogUserId: String?) {
+        Self.sharedInstance.attribution.setPostHogUserID(postHogUserId)
+    }
 
 }
 
