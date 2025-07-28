@@ -1,3 +1,8 @@
+## 16.1.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: add setPostHogUserId method (#1222) via Hussain Mustafa (@hussain-mustafa990)
+
 ## 16.0.2
 ## RevenueCat SDK
 ### 📦 Dependency Updates
