@@ -25,6 +25,7 @@ export class PurchasesCommon {
   private static readonly APP_USER_ID_STORAGE_KEY = 'revenuecat_user_id';
 
   private purchases: Purchases;
+  private apiKey: string;
 
   private offeringsCache: Offerings | null = null;
 
@@ -75,7 +76,7 @@ export class PurchasesCommon {
       httpConfig: httpConfig,
     };
     const purchasesInstance = Purchases.configure(purchasesConfig);
-    PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
+    PurchasesCommon.instance = new PurchasesCommon(purchasesInstance, configuration.apiKey);
     return PurchasesCommon.instance;
   }
 
@@ -103,8 +104,13 @@ export class PurchasesCommon {
     }
   }
 
-  private constructor(purchasesInstance: Purchases) {
+  private constructor(purchasesInstance: Purchases, apiKey: string) {
     this.purchases = purchasesInstance;
+    this.apiKey = apiKey;
+  }
+
+  public getApiKey(): string {
+    return this.apiKey;
   }
 
   public getAppUserId(): string {
