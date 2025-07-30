@@ -16,6 +16,8 @@ export class PurchasesCommon {
         flavorVersion: string;
     }): PurchasesCommon;
     // (undocumented)
+    getApiKey(): string;
+    // (undocumented)
     getAppUserId(): string;
     // (undocumented)
     getCurrentOfferingForPlacement(placementIdentifier: string): Promise<Record<string, unknown> | null>;
