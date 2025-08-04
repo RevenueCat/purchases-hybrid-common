@@ -1,3 +1,8 @@
+## 16.2.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Add `productIdentifier` to purchase result in JS mappings (#1231) via Toni Rico (@tonidero)
+
 ## 16.2.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
