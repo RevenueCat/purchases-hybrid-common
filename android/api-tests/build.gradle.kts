@@ -46,5 +46,8 @@ android {
 dependencies {
     implementation(project(":hybridcommon"))
     implementation(project(":hybridcommon-ui"))
-    testImplementation(libs.junit)
+}
+
+tasks.withType<AbstractTestTask>().configureEach {
+    failOnNoDiscoveredTests = false
 }
