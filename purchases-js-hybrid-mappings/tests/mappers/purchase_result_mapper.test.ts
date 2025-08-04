@@ -72,6 +72,7 @@ describe('mapPurchaseResult', () => {
         purchaseDate: mockDate.toISOString(),
         purchaseDateMillis: mockDate.getTime(),
       },
+      productIdentifier: 'test-product-id',
     });
   });
 });
