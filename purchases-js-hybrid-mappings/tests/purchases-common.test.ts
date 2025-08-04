@@ -31,6 +31,7 @@ describe('PurchasesCommon', () => {
     close: jest.fn(),
     preload: jest.fn(),
     getAppUserId: jest.fn(),
+    getApiKey: jest.fn(),
     isSandbox: jest.fn(),
     isAnonymous: jest.fn(),
     setAttributes: jest.fn(),
@@ -249,6 +250,19 @@ describe('PurchasesCommon', () => {
       }
 
       expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
+    });
+  });
+
+  describe('getApiKey', () => {
+    it('should return provided api key', () => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0'
+      });
+
+      expect(purchasesCommon.getApiKey()).toBe('test_api_key');
     });
   });
 
