@@ -12,5 +12,6 @@ export function mapPurchaseResult(purchaseResult: PurchaseResult): Record<string
       purchaseDate: purchaseResult.storeTransaction.purchaseDate.toISOString(),
       purchaseDateMillis: purchaseResult.storeTransaction.purchaseDate.getTime(),
     },
+    productIdentifier: purchaseResult.storeTransaction.productIdentifier,
   };
 }
