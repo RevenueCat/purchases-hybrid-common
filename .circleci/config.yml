@@ -17,7 +17,7 @@ aliases:
     parameters:
       xcode_version:
         type: string
-        default: 15.2.0
+        default: 16.4.0
     working_directory: ~/ios
     shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
