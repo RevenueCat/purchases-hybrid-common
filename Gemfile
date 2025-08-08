@@ -8,3 +8,4 @@ gem "cocoapods", "~> 1.16"
 gem 'danger'
 gem 'rest-client'
 gem "lefthook", "~> 1.12"
+gem "abbrev"
