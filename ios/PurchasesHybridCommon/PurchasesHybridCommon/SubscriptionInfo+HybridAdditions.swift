@@ -14,8 +14,19 @@ internal extension SubscriptionInfo {
     var dictionary: [String: Any] {
         var priceObject: [String: Any]? = nil
         if let priceCurrency = price?.currency, let priceAmount = price?.amount {
-            priceObject = ["currency": priceCurrency, "amount": priceAmount]
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.locale = .autoupdatingCurrent
+            formatter.currencyCode = priceCurrency
+            let formattedPrice = formatter.string(from: NSDecimalNumber(decimal: Decimal(priceAmount))) ?? "\(priceAmount) \(priceCurrency)"
+            
+            priceObject = [
+                "currency": priceCurrency,
+                "amount": priceAmount,
+                "formatted": formattedPrice
+            ]
         }
+        
         return [
             "productIdentifier": productIdentifier,
             "purchaseDate": purchaseDate.rc_formattedAsISO8601(),
@@ -30,7 +41,10 @@ internal extension SubscriptionInfo {
             "periodType": periodType.periodTypeString,
             "refundedAt": refundedAt?.rc_formattedAsISO8601() ?? NSNull(),
             "storeTransactionId": storeTransactionId ?? NSNull(),
+            "autoResumeDate": NSNull(),
+            "productPlanIdentifier": NSNull(),
             "price": priceObject ?? NSNull(),
+            "managementURL": managementURL?.absoluteString ?? NSNull(),
             "isActive": isActive,
             "willRenew": willRenew,
         ]
