@@ -150,6 +150,12 @@ describe('PurchasesCommon', () => {
       writable: true,
       configurable: true
     });
+
+    Object.defineProperty(navigator, 'language', {
+      value: 'es-US',
+      writable: true,
+      configurable: true
+    });
   });
 
   afterEach(() => {
@@ -397,7 +403,7 @@ describe('PurchasesCommon', () => {
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
         optionIdentifier: 'test_monthly_option',
         customerEmail: 'test@example.com',
-        selectedLocale: 'en-US',
+        selectedLocale: 'es-US',
         defaultLocale: 'en'
       };
 
@@ -407,7 +413,7 @@ describe('PurchasesCommon', () => {
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption: mockOffering.availablePackages[0].webBillingProduct.subscriptionOptions['test_monthly_option'],
         customerEmail: 'test@example.com',
-        selectedLocale: 'en-US',
+        selectedLocale: 'es-US',
         defaultLocale: 'en'
       });
     });
@@ -430,7 +436,9 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption: null,
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
+        selectedLocale: 'es-US',
+        defaultLocale: undefined,
       });
     });
 
@@ -460,7 +468,9 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption: null,
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
+        selectedLocale: 'es-US',
+        defaultLocale: undefined,
       });
     });
 
