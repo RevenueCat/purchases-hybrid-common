@@ -244,7 +244,7 @@ export class PurchasesCommon {
         rcPackage: rcPackage,
         purchaseOption: nativePurchaseOption,
         customerEmail: purchaseParams.customerEmail,
-        selectedLocale: purchaseParams.selectedLocale,
+        selectedLocale: purchaseParams.selectedLocale || navigator?.language,
         defaultLocale: purchaseParams.defaultLocale,
       };
       const purchaseResult: PurchaseResult = await this.purchases.purchase(nativePurchaseParams);
