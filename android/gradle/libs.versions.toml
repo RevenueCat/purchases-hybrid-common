@@ -1,5 +1,5 @@
 [versions]
-agp = "8.12.0"
+agp = "8.12.1"
 assertj-core = "3.22.0"
 coroutines = "1.6.4"
 fragmentKtx = "1.6.2"
