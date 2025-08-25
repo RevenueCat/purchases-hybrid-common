@@ -129,6 +129,10 @@ extension CustomerCenterUIViewController {
                                                              withURL: nil)
             }
         }
+        .onCustomerCenterCustomActionSelected { [weak self] actionIdentifier, purchaseIdentifier in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self, didSelectCustomAction: actionIdentifier, withPurchaseIdentifier: purchaseIdentifier)
+        }
         
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = UIColor.clear
