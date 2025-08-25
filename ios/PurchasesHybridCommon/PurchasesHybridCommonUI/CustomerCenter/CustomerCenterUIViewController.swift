@@ -30,10 +30,6 @@ public final class CustomerCenterUIViewController: UIViewController {
     /// Handler for when the navigation close button is tapped
     @objc
     public var onCloseHandler: (() -> Void)?
-    
-    /// Handler for when a custom action is selected
-    @objc
-    public var onCustomerCenterCustomActionSelected: ((String, [String: Any]?) -> Void)?
 
     @objc
     public required init() {
@@ -70,7 +66,6 @@ public final class CustomerCenterUIViewController: UIViewController {
     /// Triggers a custom action with the given actionID and optional data
     @objc
     public func handleCustomAction(actionID: String, data: [String: Any]? = nil) {
-        onCustomerCenterCustomActionSelected?(actionID, data)
         delegate?.customerCenterViewController?(self, didSelectCustomAction: actionID, withData: data)
     }
 
