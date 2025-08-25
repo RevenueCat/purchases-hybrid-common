@@ -39,10 +39,10 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     }
 
     /**
-     * Triggers a custom action with the given actionId and optional data
+     * Triggers a custom action with the given actionId and optional purchaseIdentifier
      */
-    fun handleCustomAction(actionId: String, data: Map<String, Any?>? = null) {
-        this.onCustomerCenterCustomActionSelectedWrapper(actionId, data)
+    fun handleCustomAction(actionId: String, purchaseIdentifier: String? = null) {
+        this.onCustomerCenterCustomActionSelectedWrapper(actionId, purchaseIdentifier)
     }
 
     abstract fun onFeedbackSurveyCompletedWrapper(feedbackSurveyOptionId: String)
@@ -51,7 +51,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
-    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, data: Map<String, Any?>?)
+    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
 }
 
 private val CustomerCenterManagementOption.optionName: String

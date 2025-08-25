@@ -63,10 +63,10 @@ public final class CustomerCenterUIViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
 
-    /// Triggers a custom action with the given actionID and optional data
+    /// Triggers a custom action with the given actionID and optional purchaseIdentifier
     @objc
-    public func handleCustomAction(actionID: String, data: [String: Any]? = nil) {
-        delegate?.customerCenterViewController?(self, didSelectCustomAction: actionID, withData: data)
+    public func handleCustomAction(actionID: String, purchaseIdentifier: String? = nil) {
+        delegate?.customerCenterViewController?(self, didSelectCustomAction: actionID, withPurchaseIdentifier: purchaseIdentifier)
     }
 
     @available(*, unavailable, message: "Use init() and set delegate after initialization")
@@ -134,6 +134,10 @@ extension CustomerCenterUIViewController {
                                                              didSelectCustomerCenterManagementOption: action.name,
                                                              withURL: nil)
             }
+        }
+        .onCustomerCenterCustomActionSelected { [weak self] actionIdentifier, purchaseIdentifier in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self, didSelectCustomAction: actionIdentifier, withPurchaseIdentifier: purchaseIdentifier)
         }
         
         let controller = UIHostingController(rootView: view)
