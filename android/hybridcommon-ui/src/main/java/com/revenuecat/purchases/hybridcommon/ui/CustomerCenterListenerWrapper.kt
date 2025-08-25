@@ -38,13 +38,6 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         }
     }
 
-    /**
-     * Triggers a custom action with the given actionId and optional purchaseIdentifier
-     */
-    fun handleCustomAction(actionId: String, purchaseIdentifier: String? = null) {
-        this.onCustomerCenterCustomActionSelectedWrapper(actionId, purchaseIdentifier)
-    }
-
     abstract fun onFeedbackSurveyCompletedWrapper(feedbackSurveyOptionId: String)
     abstract fun onRestoreCompletedWrapper(customerInfo: Map<String, Any?>)
     abstract fun onRestoreFailedWrapper(error: Map<String, Any?>)

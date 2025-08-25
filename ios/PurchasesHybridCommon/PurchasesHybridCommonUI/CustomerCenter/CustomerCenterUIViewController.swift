@@ -63,12 +63,6 @@ public final class CustomerCenterUIViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
 
-    /// Triggers a custom action with the given actionID and optional purchaseIdentifier
-    @objc
-    public func handleCustomAction(actionID: String, purchaseIdentifier: String? = nil) {
-        delegate?.customerCenterViewController?(self, didSelectCustomAction: actionID, withPurchaseIdentifier: purchaseIdentifier)
-    }
-
     @available(*, unavailable, message: "Use init() and set delegate after initialization")
     required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
