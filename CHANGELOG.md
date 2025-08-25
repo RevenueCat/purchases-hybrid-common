@@ -1,3 +1,8 @@
+## 16.2.3
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [RENOVATE] Update dependency com.android.library to v8.12.1 (#1238) via RevenueCat Git Bot (@RCGitBot)
+
 ## 16.2.2
 ## RevenueCat SDK
 ### 🐞 Bugfixes
