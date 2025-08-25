@@ -44,6 +44,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
+    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
 }
 
 private val CustomerCenterManagementOption.optionName: String
