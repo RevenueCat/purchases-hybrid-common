@@ -61,6 +61,12 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
                                                didSelectCustomerCenterManagementOption optionID: String,
                                                withURL url: String?)
     
+    /// Notifies that a custom action has been selected in the Customer Center.
+    @objc(customerCenterViewController:didSelectCustomAction:withData:)
+    optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                               didSelectCustomAction actionID: String,
+                                               withData data: [String: Any]?)
+    
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
     @objc(customerCenterViewControllerWasDismissed:)
     optional func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController)

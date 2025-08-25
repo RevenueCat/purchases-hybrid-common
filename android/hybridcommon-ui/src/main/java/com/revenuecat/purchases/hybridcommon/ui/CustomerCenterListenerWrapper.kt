@@ -38,12 +38,20 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         }
     }
 
+    /**
+     * Triggers a custom action with the given actionId and optional data
+     */
+    fun handleCustomAction(actionId: String, data: Map<String, Any?>? = null) {
+        this.onCustomerCenterCustomActionSelectedWrapper(actionId, data)
+    }
+
     abstract fun onFeedbackSurveyCompletedWrapper(feedbackSurveyOptionId: String)
     abstract fun onRestoreCompletedWrapper(customerInfo: Map<String, Any?>)
     abstract fun onRestoreFailedWrapper(error: Map<String, Any?>)
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
+    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, data: Map<String, Any?>?)
 }
 
 private val CustomerCenterManagementOption.optionName: String
