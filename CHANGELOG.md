@@ -1,3 +1,11 @@
+## 17.0.0
+## RevenueCat SDK
+### 💥 Breaking Changes
+* Add missing mapping for custom action (#1244) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Update Gemfile.lock to latest changes to fix dependency updates (#1243) via Toni Rico (@tonidero)
+
 ## 16.3.0
 ## RevenueCat SDK
 ### ✨ New Features
