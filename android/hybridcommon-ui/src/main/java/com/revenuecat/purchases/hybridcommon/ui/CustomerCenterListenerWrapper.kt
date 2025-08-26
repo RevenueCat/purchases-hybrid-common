@@ -33,6 +33,8 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
         if (action is CustomerCenterManagementOption.CustomUrl) {
             this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
+        } else if (action is CustomerCenterManagementOption.CustomAction) {
+            this.onCustomerCenterCustomActionSelectedWrapper(action.actionIdentifier, action.purchaseIdentifier)
         } else {
             this.onManagementOptionSelectedWrapper(action.optionName, null)
         }
