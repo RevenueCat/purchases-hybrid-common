@@ -34,7 +34,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         if (action is CustomerCenterManagementOption.CustomUrl) {
             this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
         } else if (action is CustomerCenterManagementOption.CustomAction) {
-            this.onCustomerCenterCustomActionSelectedWrapper(action.actionIdentifier, action.purchaseIdentifier)
+            this.onManagementOptionSelectedWrapper(action.optionName, action.actionIdentifier, action.purchaseIdentifier)
         } else {
             this.onManagementOptionSelectedWrapper(action.optionName, null)
         }
@@ -45,8 +45,9 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onRestoreFailedWrapper(error: Map<String, Any?>)
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
+    
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
-    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
+    abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
 }
 
 private val CustomerCenterManagementOption.optionName: String
@@ -55,6 +56,7 @@ private val CustomerCenterManagementOption.optionName: String
             is CustomerCenterManagementOption.Cancel -> "cancel"
             is CustomerCenterManagementOption.MissingPurchase -> "missing_purchase"
             is CustomerCenterManagementOption.CustomUrl -> "custom_url"
+            is CustomerCenterManagementOption.CustomAction -> "custom_action"
             else -> "unknown"
         }
     }
