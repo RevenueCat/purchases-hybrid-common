@@ -1,9 +1,8 @@
-import {
-  VirtualCurrencies,
-  VirtualCurrency
-} from '@revenuecat/purchases-js';
+import { VirtualCurrencies, VirtualCurrency } from '@revenuecat/purchases-js';
 
-export function mapVirtualCurrencies(virtualCurrencies: VirtualCurrencies): Record<string, unknown> {
+export function mapVirtualCurrencies(
+  virtualCurrencies: VirtualCurrencies,
+): Record<string, unknown> {
   return {
     all: Object.fromEntries(
       Object.entries(virtualCurrencies.all).map(([key, value]) => [key, mapVirtualCurrency(value)]),
