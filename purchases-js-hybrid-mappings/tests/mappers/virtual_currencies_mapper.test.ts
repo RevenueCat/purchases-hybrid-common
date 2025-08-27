@@ -1,6 +1,5 @@
 import {
   VirtualCurrencies,
-  VirtualCurrency
 } from "@revenuecat/purchases-js";
 import { mapVirtualCurrencies } from "../../src/mappers/virtual_currencies_mapper";
 
