@@ -4,7 +4,7 @@ target 'PurchasesHybridCommon' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.35.1'
+  pod 'RevenueCat', '5.36.0'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -24,14 +24,14 @@ target 'PurchasesHybridCommonUI' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.35.1'
-  pod 'RevenueCatUI', '5.35.1'
+  pod 'RevenueCat', '5.36.0'
+  pod 'RevenueCatUI', '5.36.0'
 end
 
 target 'ObjCAPITester' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.35.1'
-  pod 'RevenueCatUI', '5.35.1'
+  pod 'RevenueCat', '5.36.0'
+  pod 'RevenueCatUI', '5.36.0'
 end
