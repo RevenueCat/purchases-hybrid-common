@@ -18,6 +18,7 @@ import { Logger } from './utils/logger';
 import { mapPurchasesError } from './mappers/purchases_error_mapper';
 import { mapPurchaseResult } from './mappers/purchase_result_mapper';
 import { mapLogLevel } from './mappers/log_level_mapper';
+import { mapVirtualCurrencies } from './mappers/virtual_currencies_mapper';
 
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
@@ -252,6 +253,24 @@ export class PurchasesCommon {
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  public async getVirtualCurrencies(): Promise<Record<string, unknown>> {
+    try {
+      const virtualCurrencies = await this.purchases.getVirtualCurrencies();
+      return mapVirtualCurrencies(virtualCurrencies);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public invalidateVirtualCurrenciesCache(): void {
+    this.purchases.invalidateVirtualCurrenciesCache();
+  }
+
+  public getCachedVirtualCurrencies(): Record<string, unknown> | null {
+    const virtualCurrencies = this.purchases.getCachedVirtualCurrencies();
+    return virtualCurrencies ? mapVirtualCurrencies(virtualCurrencies) : null;
   }
 
   private async findPackageToPurchase(
