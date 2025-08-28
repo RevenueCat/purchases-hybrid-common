@@ -306,6 +306,42 @@
             },
             {
               "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getCachedVirtualCurrencies:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getCachedVirtualCurrencies(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string, unknown> | null"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "getCachedVirtualCurrencies"
+            },
+            {
+              "kind": "Method",
               "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getCurrentOfferingForPlacement:member(1)",
               "docComment": "",
               "excerptTokens": [
@@ -487,6 +523,82 @@
               "isOptional": false,
               "isAbstract": false,
               "name": "getOfferings"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#getVirtualCurrencies:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "getVirtualCurrencies(): "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
+                  "text": "Record",
+                  "canonicalReference": "!Record:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<string, unknown>>"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 5
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "getVirtualCurrencies"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon#invalidateVirtualCurrenciesCache:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "invalidateVirtualCurrenciesCache(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "invalidateVirtualCurrenciesCache"
             },
             {
               "kind": "Method",
