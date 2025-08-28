@@ -14,7 +14,8 @@ import {
   ReservedCustomerAttribute,
   SubscriptionOption,
   PeriodUnit,
-  PurchasesConfig
+  PurchasesConfig,
+  VirtualCurrencies
 } from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
@@ -34,6 +35,9 @@ describe('PurchasesCommon', () => {
     isSandbox: jest.fn(),
     isAnonymous: jest.fn(),
     setAttributes: jest.fn(),
+    getVirtualCurrencies: jest.fn(),
+    invalidateVirtualCurrenciesCache: jest.fn(),
+    getCachedVirtualCurrencies: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
@@ -127,6 +131,23 @@ describe('PurchasesCommon', () => {
       productIdentifier: 'test_product_id',
       purchaseDate: new Date(),
     }
+  };
+
+  const mockVirtualCurrencies: VirtualCurrencies = {
+    all: {
+      'GOLD': {
+        balance: 100,
+        name: 'Gold',
+        code: 'GOLD',
+        serverDescription: 'It\'s gold',
+      },
+      'SILVER': {
+        balance: 50,
+        name: 'Silver', 
+        code: 'SILVER',
+        serverDescription: null,
+      },
+    },
   };
 
   const mockLocalStorage = {
@@ -496,6 +517,90 @@ describe('PurchasesCommon', () => {
         },
         underlyingErrorMessage: undefined,
       })
+    });
+  });
+
+  describe('getVirtualCurrencies', () => {
+    it('should successfully get virtual currencies', async () => {
+      mockPurchasesInstance.getVirtualCurrencies.mockResolvedValue(mockVirtualCurrencies);
+
+      const result = await purchasesCommon.getVirtualCurrencies();
+
+      expect(result).toEqual({
+        all: {
+          'GOLD': {
+            balance: 100,
+            name: 'Gold',
+            code: 'GOLD',
+            serverDescription: 'It\'s gold',
+          },
+          'SILVER': {
+            balance: 50,
+            name: 'Silver',
+            code: 'SILVER',
+            serverDescription: null,
+          },
+        },
+      });
+      expect(mockPurchasesInstance.getVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle errors from getVirtualCurrencies', async () => {
+      const mockError = new PurchasesError(ErrorCode.NetworkError, 'Network error');
+      mockPurchasesInstance.getVirtualCurrencies.mockRejectedValue(mockError);
+
+      await expect(purchasesCommon.getVirtualCurrencies()).rejects.toMatchObject({
+        code: ErrorCode.NetworkError,
+        message: 'Network error',
+        info: {
+          backendErrorCode: undefined,
+          statusCode: undefined,
+        },
+        underlyingErrorMessage: undefined,
+      });
+    });
+  });
+
+  describe('invalidateVirtualCurrenciesCache', () => {
+    it('should call invalidateVirtualCurrenciesCache on purchases instance', () => {
+      purchasesCommon.invalidateVirtualCurrenciesCache();
+
+      expect(mockPurchasesInstance.invalidateVirtualCurrenciesCache).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getCachedVirtualCurrencies', () => {
+    it('should return cached virtual currencies when available', () => {
+      mockPurchasesInstance.getCachedVirtualCurrencies.mockReturnValue(mockVirtualCurrencies);
+
+      const result = purchasesCommon.getCachedVirtualCurrencies();
+
+      expect(result).toEqual({
+        all: {
+          'GOLD': {
+            balance: 100,
+            name: 'Gold',
+            code: 'GOLD',
+            serverDescription: 'It\'s gold',
+          },
+          'SILVER': {
+            balance: 50,
+            name: 'Silver',
+            code: 'SILVER',
+            serverDescription: null,
+          },
+        },
+      });
+      expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return null when no cached virtual currencies are available', () => {
+      mockPurchasesInstance.getCachedVirtualCurrencies.mockReturnValue(null);
+
+      const result = purchasesCommon.getCachedVirtualCurrencies();
+
+      expect(result).toBeNull();
+      expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
     });
   });
 });

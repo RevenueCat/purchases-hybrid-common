@@ -18,6 +18,8 @@ export class PurchasesCommon {
     // (undocumented)
     getAppUserId(): string;
     // (undocumented)
+    getCachedVirtualCurrencies(): Record<string, unknown> | null;
+    // (undocumented)
     getCurrentOfferingForPlacement(placementIdentifier: string): Promise<Record<string, unknown> | null>;
     // (undocumented)
     getCustomerInfo(): Promise<Record<string, unknown>>;
@@ -25,6 +27,10 @@ export class PurchasesCommon {
     static getInstance(): PurchasesCommon;
     // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    getVirtualCurrencies(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    invalidateVirtualCurrenciesCache(): void;
     // (undocumented)
     isAnonymous(): boolean;
     // (undocumented)
