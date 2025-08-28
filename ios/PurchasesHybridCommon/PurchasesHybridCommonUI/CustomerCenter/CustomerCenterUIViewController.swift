@@ -86,8 +86,8 @@ extension CustomerCenterUIViewController {
         // Create the SwiftUI view with handlers that forward to the delegate
         let view = CustomerCenterView(
             navigationOptions: CustomerCenterNavigationOptions(
-                onCloseHandler: onCloseHandler,
-                shouldShowCloseButton: shouldShowCloseButton
+                shouldShowCloseButton: shouldShowCloseButton,
+                onCloseHandler: onCloseHandler
             )
         )
         .onCustomerCenterRestoreStarted { [weak self] in
