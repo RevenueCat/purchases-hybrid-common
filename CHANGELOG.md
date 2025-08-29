@@ -1,3 +1,8 @@
+## 17.2.0
+## RevenueCat SDK
+### ✨ New Features
+* Support new configure option automaticDeviceIdentifierCollectionEnabled (#1254) via Toni Rico (@tonidero)
+
 ## 17.1.0
 ## RevenueCat SDK
 ### ✨ New Features
