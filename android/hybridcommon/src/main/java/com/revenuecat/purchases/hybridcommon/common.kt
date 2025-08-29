@@ -596,6 +596,7 @@ fun configure(
     verificationMode: String? = null,
     pendingTransactionsForPrepaidPlansEnabled: Boolean? = null,
     diagnosticsEnabled: Boolean? = null,
+    automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -615,6 +616,7 @@ fun configure(
             }
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
+            automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
         }.also { Purchases.configure(it.build()) }
 }
 

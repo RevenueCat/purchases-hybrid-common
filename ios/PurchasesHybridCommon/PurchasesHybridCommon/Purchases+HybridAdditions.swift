@@ -13,7 +13,7 @@ import RevenueCat
 
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
-            verificationMode:diagnosticsEnabled:)
+            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -24,7 +24,8 @@ import RevenueCat
                           dangerousSettings: DangerousSettings?,
                           shouldShowInAppMessagesAutomatically: Bool = true,
                           verificationMode: String?,
-                          diagnosticsEnabled: Bool = false) -> Purchases {
+                          diagnosticsEnabled: Bool = false,
+                          automaticDeviceIdentifierCollectionEnabled: Bool = true) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -81,6 +82,34 @@ import RevenueCat
         CommonFunctionality.sharedInstance = purchases
 
         return purchases
+    }
+
+    @available(*, deprecated, message: "Use the full configure method instead")
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:diagnosticsEnabled:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          purchasesAreCompletedBy: String?,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          storeKitVersion: String = "DEFAULT",
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String?,
+                          diagnosticsEnabled: Bool = false) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: verificationMode,
+                         diagnosticsEnabled: diagnosticsEnabled,
+                         automaticDeviceIdentifierCollectionEnabled: true)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")
