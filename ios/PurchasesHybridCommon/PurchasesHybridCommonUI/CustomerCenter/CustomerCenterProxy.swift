@@ -25,6 +25,10 @@ public class CustomerCenterProxy: NSObject {
     /// See ``CustomerCenterViewControllerDelegateWrapper`` for receiving events.
     @objc
     public weak var delegate: CustomerCenterViewControllerDelegateWrapper?
+
+    /// Whether to show the close button in the navigation
+    @objc
+    public var shouldShowCloseButton: Bool = true
     
     @objc public func present(
         resultHandler: @escaping () -> Void
@@ -126,6 +130,7 @@ private extension CustomerCenterProxy {
     func createCustomerCenterViewController() -> CustomerCenterUIViewController {
         let vc = CustomerCenterUIViewController()
         vc.delegate = self
+        vc.shouldShowCloseButton = shouldShowCloseButton
 
         return vc
     }
