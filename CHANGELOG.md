@@ -1,3 +1,8 @@
+## 17.3.0
+## RevenueCat SDK
+### ✨ New Features
+* Add support for shouldShowClose in customer center (#1255) via Facundo Menzella (@facumenzella)
+
 ## 17.2.0
 ## RevenueCat SDK
 ### ✨ New Features

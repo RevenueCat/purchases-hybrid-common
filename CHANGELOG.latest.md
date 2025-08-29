@@ -1,3 +1,3 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Support new configure option automaticDeviceIdentifierCollectionEnabled (#1254) via Toni Rico (@tonidero)
+* Add support for shouldShowClose in customer center (#1255) via Facundo Menzella (@facumenzella)
