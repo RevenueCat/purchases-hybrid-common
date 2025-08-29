@@ -28,7 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                      dangerousSettings:nil
                                   shouldShowInAppMessagesAutomatically:NO
                                                       verificationMode:@""
-                                                    diagnosticsEnabled:YES];
+                                                    diagnosticsEnabled:YES
+                            automaticDeviceIdentifierCollectionEnabled:YES];
     RCPurchases *purchases2 __unused = [RCPurchases configureWithAPIKey:@""
                                                               appUserID:@""
                                                 purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
@@ -38,8 +39,19 @@ NS_ASSUME_NONNULL_BEGIN
                                                         storeKitVersion:@""
                                                       dangerousSettings:nil
                                    shouldShowInAppMessagesAutomatically:NO
-                                                       verificationMode:@""];
+                                                       verificationMode:@""
+                                                     diagnosticsEnabled:YES];
     RCPurchases *purchases3 __unused = [RCPurchases configureWithAPIKey:@""
+                                                              appUserID:@""
+                                                purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
+                                                  userDefaultsSuiteName:nil
+                                                         platformFlavor:nil
+                                                  platformFlavorVersion:@""
+                                                        storeKitVersion:@""
+                                                      dangerousSettings:nil
+                                   shouldShowInAppMessagesAutomatically:NO
+                                                       verificationMode:@""];
+    RCPurchases *purchases4 __unused = [RCPurchases configureWithAPIKey:@""
                                                               appUserID:@""
                                                 purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
                                                   userDefaultsSuiteName:nil

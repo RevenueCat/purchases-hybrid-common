@@ -181,5 +181,50 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                         expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.revenueCat))
                     }
                 }
+
+        context("configure with automaticDeviceIdentifierCollectionEnabled") {
+                    it("true") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: "INFORMATIONAL",
+                                                automaticDeviceIdentifierCollectionEnabled: true)
+                        }.notTo(raiseException())
+                    }
+
+                    it("false") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: "INFORMATIONAL",
+                                                automaticDeviceIdentifierCollectionEnabled: false)
+                        }.notTo(raiseException())
+                    }
+                    it("not passed") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: "INFORMATIONAL")
+                        }.notTo(raiseException())
+                    }
+                }
     }
 }
