@@ -48,13 +48,14 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                     putString(OptionKey.REQUEST_KEY.key, requestKey)
                     putString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key, it) }
+                    @Suppress("DEPRECATION")
                     when (paywallSource) {
                         is PaywallSource.Offering -> {
                             putString(
                                 OptionKey.OFFERING_IDENTIFIER.key,
                                 paywallSource.value.identifier,
                             )
-                            paywallSource.value.availablePackages.firstOrNull()?.presentedOfferingContext?.let {
+                            paywallSource.presentedOfferingContext?.let {
                                 putParcelable(
                                     OptionKey.PRESENTED_OFFERING_CONTEXT.key,
                                     it,
@@ -92,7 +93,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         get() = arguments?.getString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key)
 
     private val presentedOfferingContextArg: PresentedOfferingContext?
-        get() = arguments?.getParcelable(OptionKey.PRESENTED_OFFERING_CONTEXT.key)
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(
+                OptionKey.PRESENTED_OFFERING_CONTEXT.key,
+                PresentedOfferingContext::class.java,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable(OptionKey.PRESENTED_OFFERING_CONTEXT.key)
+        }
 
     private val shouldDisplayDismissButtonArg: Boolean?
         get() {

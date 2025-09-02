@@ -4,7 +4,10 @@ import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Offering as PurchasesOffering
 
 sealed class PaywallSource {
-    class Offering(val value: PurchasesOffering) : PaywallSource()
+    class Offering(val value: PurchasesOffering) : PaywallSource() {
+        internal val presentedOfferingContext: PresentedOfferingContext?
+            get() = value.availablePackages.firstOrNull()?.presentedOfferingContext
+    }
     object DefaultOffering : PaywallSource()
 
     @Deprecated("Use OfferingIdentifierWithPresentedOfferingContext instead")
