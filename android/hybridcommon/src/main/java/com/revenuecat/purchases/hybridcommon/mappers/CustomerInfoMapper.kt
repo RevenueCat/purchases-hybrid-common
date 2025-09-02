@@ -30,6 +30,7 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
     )
 
+@OptIn(InternalRevenueCatAPI::class)
 fun CustomerInfo.mapAsync(
     callback: (Map<String, Any?>) -> Unit,
 ) {
