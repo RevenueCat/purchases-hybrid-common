@@ -2,7 +2,10 @@ package com.revenuecat.apitests.kotlin
 
 import androidx.fragment.app.FragmentActivity
 import com.revenuecat.purchases.Offering
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
+import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
+import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 
@@ -19,12 +22,31 @@ private class PaywallApiTests {
         }
     }
 
+    fun checkPaywallSource(paywallSource: PaywallSource) {
+        when (paywallSource) {
+            is PaywallSource.Offering -> {
+                val offering: Offering = paywallSource.value
+            }
+            PaywallSource.DefaultOffering -> {
+            }
+            is PaywallSource.OfferingIdentifier -> {
+                val identifier: String = paywallSource.value
+            }
+            is PaywallSource.OfferingIdentifierWithPresentedOfferingContext -> {
+                val identifier: String = paywallSource.offeringIdentifier
+                val context: PresentedOfferingContext = paywallSource.presentedOfferingContext
+            }
+        }
+    }
+
+    @Suppress("LongParameterList")
     fun checkPresentPaywall(
         fragmentActivity: FragmentActivity,
         requiredEntitlementIdentifier: String?,
         paywallResultListener: PaywallResultListener,
         shouldDisplayDismissButton: Boolean?,
         offering: Offering?,
+        presentPaywallOptions: PresentPaywallOptions,
     ) {
         presentPaywallFromFragment(
             activity = fragmentActivity,
@@ -47,6 +69,10 @@ private class PaywallApiTests {
             paywallResultListener = paywallResultListener,
             shouldDisplayDismissButton = shouldDisplayDismissButton,
             offering = offering,
+        )
+        presentPaywallFromFragment(
+            activity = fragmentActivity,
+            options = presentPaywallOptions,
         )
     }
 }
