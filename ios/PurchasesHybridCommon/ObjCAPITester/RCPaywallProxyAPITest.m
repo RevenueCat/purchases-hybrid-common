@@ -50,8 +50,10 @@ NS_ASSUME_NONNULL_BEGIN
 
         __unused RCPaywallViewController *view1 = [proxy createPaywallView];
         __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
+        __unused RCPaywallViewController *view3 = [proxy createPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
         __unused RCPaywallFooterViewController *footer1 = [proxy createFooterPaywallView];
         __unused RCPaywallFooterViewController *footer2 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering"];
+        __unused RCPaywallFooterViewController *footer3 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
     }
 }
 
