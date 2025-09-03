@@ -10,7 +10,10 @@ sealed class PaywallSource {
     }
     object DefaultOffering : PaywallSource()
 
-    @Deprecated("Use OfferingIdentifierWithPresentedOfferingContext instead")
+    @Deprecated(
+        "Use OfferingIdentifierWithPresentedOfferingContext instead",
+        ReplaceWith("OfferingIdentifierWithPresentedOfferingContext(value, PresentedOfferingContext(value))"),
+    )
     class OfferingIdentifier(val value: String) : PaywallSource()
     class OfferingIdentifierWithPresentedOfferingContext(
         val offeringIdentifier: String,
