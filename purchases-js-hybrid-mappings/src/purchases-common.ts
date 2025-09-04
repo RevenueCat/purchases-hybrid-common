@@ -258,57 +258,6 @@ export class PurchasesCommon {
     return virtualCurrencies ? mapVirtualCurrencies(virtualCurrencies) : null;
   }
 
-  private async createNativePurchaseParams(purchaseParams: {
-    packageIdentifier: string;
-    presentedOfferingContext: Record<string, unknown>;
-    optionIdentifier?: string;
-    customerEmail?: string;
-    selectedLocale?: string;
-    defaultLocale?: string;
-    isSimulatedStoreProduct?: boolean;
-  }): Promise<PurchaseParams> {
-    const presentedOfferingIdentifier =
-      purchaseParams.presentedOfferingContext['offeringIdentifier'];
-    if (!presentedOfferingIdentifier || typeof presentedOfferingIdentifier !== 'string') {
-      const purchasesError = new PurchasesError(
-        ErrorCode.PurchaseInvalidError,
-        'Need to provide a valid offering identifier',
-      );
-      this.handleError(purchasesError);
-    }
-    try {
-      const rcPackage = await this.findPackageToPurchase(
-        purchaseParams.packageIdentifier,
-        presentedOfferingIdentifier,
-      );
-      let nativePurchaseOption: PurchaseOption | null = null;
-      if (purchaseParams.optionIdentifier) {
-        const product = rcPackage.webBillingProduct;
-        const option = product.subscriptionOptions[purchaseParams.optionIdentifier];
-        if (!option) {
-          const purchasesError = new PurchasesError(
-            ErrorCode.PurchaseInvalidError,
-            'Could not find option with id: ' +
-              purchaseParams.optionIdentifier +
-              ' in package with id: ' +
-              purchaseParams.packageIdentifier,
-          );
-          this.handleError(purchasesError);
-        }
-        nativePurchaseOption = option;
-      }
-      return {
-        rcPackage: rcPackage,
-        purchaseOption: nativePurchaseOption,
-        customerEmail: purchaseParams.customerEmail,
-        selectedLocale: purchaseParams.selectedLocale || navigator?.language,
-        defaultLocale: purchaseParams.defaultLocale,
-      } as PurchaseParams;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
   private async findPackageToPurchase(
     packageIdentifier: string,
     offeringIdentifier: string,
@@ -363,6 +312,57 @@ export class PurchasesCommon {
   ): Promise<void> {
     try {
       await this.purchases.setAttributes({ [reservedCustomerAttribute]: value });
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  private async createNativePurchaseParams(purchaseParams: {
+    packageIdentifier: string;
+    presentedOfferingContext: Record<string, unknown>;
+    optionIdentifier?: string;
+    customerEmail?: string;
+    selectedLocale?: string;
+    defaultLocale?: string;
+    isSimulatedStoreProduct?: boolean;
+  }): Promise<PurchaseParams> {
+    const presentedOfferingIdentifier =
+      purchaseParams.presentedOfferingContext['offeringIdentifier'];
+    if (!presentedOfferingIdentifier || typeof presentedOfferingIdentifier !== 'string') {
+      const purchasesError = new PurchasesError(
+        ErrorCode.PurchaseInvalidError,
+        'Need to provide a valid offering identifier',
+      );
+      this.handleError(purchasesError);
+    }
+    try {
+      const rcPackage = await this.findPackageToPurchase(
+        purchaseParams.packageIdentifier,
+        presentedOfferingIdentifier,
+      );
+      let nativePurchaseOption: PurchaseOption | null = null;
+      if (purchaseParams.optionIdentifier) {
+        const product = rcPackage.webBillingProduct;
+        const option = product.subscriptionOptions[purchaseParams.optionIdentifier];
+        if (!option) {
+          const purchasesError = new PurchasesError(
+            ErrorCode.PurchaseInvalidError,
+            'Could not find option with id: ' +
+              purchaseParams.optionIdentifier +
+              ' in package with id: ' +
+              purchaseParams.packageIdentifier,
+          );
+          this.handleError(purchasesError);
+        }
+        nativePurchaseOption = option;
+      }
+      return {
+        rcPackage: rcPackage,
+        purchaseOption: nativePurchaseOption,
+        customerEmail: purchaseParams.customerEmail,
+        selectedLocale: purchaseParams.selectedLocale || navigator?.language,
+        defaultLocale: purchaseParams.defaultLocale,
+      } as PurchaseParams;
     } catch (error) {
       this.handleError(error);
     }
