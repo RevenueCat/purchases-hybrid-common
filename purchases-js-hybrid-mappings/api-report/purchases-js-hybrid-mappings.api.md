@@ -42,6 +42,8 @@ export class PurchasesCommon {
     // (undocumented)
     logOut(): Promise<Record<string, unknown>>;
     // (undocumented)
+    static overridePreferredLocale(_locale: string | null): void;
+    // (undocumented)
     purchasePackage(purchaseParams: {
         packageIdentifier: string;
         presentedOfferingContext: Record<string, unknown>;
