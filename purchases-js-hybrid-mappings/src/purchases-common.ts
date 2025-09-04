@@ -104,15 +104,6 @@ export class PurchasesCommon {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static overridePreferredLocale(_locale: string | null): void {
-    const purchasesError = new PurchasesError(
-      ErrorCode.UnsupportedError,
-      'overridePreferredLocale is not supported on web platforms yet',
-    );
-    throw purchasesError;
-  }
-
   private constructor(purchasesInstance: Purchases) {
     this.purchases = purchasesInstance;
   }

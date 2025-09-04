@@ -79,7 +79,9 @@ import Foundation
             }
         }
 
-        configurationBuilder = configurationBuilder.with(preferredLocale: preferredLocale)
+        if let preferredLocale {
+            configurationBuilder = configurationBuilder.with(preferredLocale: preferredLocale)
+        }
 
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases
