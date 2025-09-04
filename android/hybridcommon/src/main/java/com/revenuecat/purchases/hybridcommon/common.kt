@@ -532,6 +532,10 @@ fun invalidateCustomerInfoCache() {
     Purchases.sharedInstance.invalidateCustomerInfoCache()
 }
 
+fun overridePreferredLocale(locale: String?) {
+    Purchases.sharedInstance.overridePreferredUILocale(locale)
+}
+
 fun canMakePayments(
     context: Context,
     features: List<Int>,

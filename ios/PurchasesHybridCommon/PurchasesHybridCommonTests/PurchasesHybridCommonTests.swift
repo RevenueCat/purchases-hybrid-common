@@ -506,5 +506,24 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect(NSDictionary(dictionary: cachedVirtualCurrencies2!)).to(equal(expectedVirtualCurrenciesDictionary))
             }
         }
+
+        context("overridePreferredLocale") {
+            it("passes the call correctly to Purchases with locale string") {
+                let testLocale = "es_ES"
+                CommonFunctionality.overridePreferredLocale(testLocale)
+
+                expect(mockPurchases.invokedOverridePreferredLocale) == true
+                expect(mockPurchases.invokedOverridePreferredLocaleCount) == 1
+                expect(mockPurchases.invokedOverridePreferredLocaleParameter) == testLocale
+            }
+
+            it("passes the call correctly to Purchases with nil locale") {
+                CommonFunctionality.overridePreferredLocale(nil)
+
+                expect(mockPurchases.invokedOverridePreferredLocale) == true
+                expect(mockPurchases.invokedOverridePreferredLocaleCount) == 1
+                expect(mockPurchases.invokedOverridePreferredLocaleParameter).to(beNil())
+            }
+        }
     }
 }

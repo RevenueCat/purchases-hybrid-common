@@ -128,6 +128,35 @@ internal class CommonKtTests {
         }
     }
 
+    @Test
+    fun `calling overridePreferredLocale with locale string correctly passes call to Purchases`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val testLocale = "es_ES"
+        overridePreferredLocale(testLocale)
+
+        verify { mockPurchases.overridePreferredLocale(testLocale) }
+    }
+
+    @Test
+    fun `calling overridePreferredLocale with null correctly passes call to Purchases`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        overridePreferredLocale(null)
+
+        verify { mockPurchases.overridePreferredLocale(null) }
+    }
+
     @RepeatedTest(5)
     fun `canMakePayments result successfully passed back`() {
         configure(

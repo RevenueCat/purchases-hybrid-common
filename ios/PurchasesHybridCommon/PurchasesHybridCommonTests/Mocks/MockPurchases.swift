@@ -718,6 +718,16 @@ extension MockPurchases {
         set { fatalError("Not mocked") }
     }
 
+    var invokedOverridePreferredLocale = false
+    var invokedOverridePreferredLocaleCount = 0
+    var invokedOverridePreferredLocaleParameter: String?
+
+    func overridePreferredLocale(_ locale: String?) {
+        invokedOverridePreferredLocale = true
+        invokedOverridePreferredLocaleCount += 1
+        invokedOverridePreferredLocaleParameter = locale
+    }
+
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *)

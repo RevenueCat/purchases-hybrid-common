@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03E5E8642E690FE300B55FA6 /* CommonFunctionality+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E5E8632E690FD700B55FA6 /* CommonFunctionality+Extensions.swift */; };
 		1EF418B12D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */; };
 		1EF418B32D75E5FE005E6702 /* Enums+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */; };
 		2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */; };
@@ -136,6 +137,7 @@
 
 /* Begin PBXFileReference section */
 		03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.debug.xcconfig"; sourceTree = "<group>"; };
+		03E5E8632E690FD700B55FA6 /* CommonFunctionality+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+Extensions.swift"; sourceTree = "<group>"; };
 		046C108DA8597F9CDC4D4C48 /* Pods-PurchasesHybridCommonUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonUI.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonUI/Pods-PurchasesHybridCommonUI.release.xcconfig"; sourceTree = "<group>"; };
 		1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums+HybridAdditions.swift"; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 		57E97CAA2D66236C007EB1C2 /* Paywalls */ = {
 			isa = PBXGroup;
 			children = (
+				03E5E8632E690FD700B55FA6 /* CommonFunctionality+Extensions.swift */,
 				57E97CA72D66236C007EB1C2 /* PaywallProxy.swift */,
 				57E97CA82D66236C007EB1C2 /* PaywallResult.swift */,
 				57E97CA92D66236C007EB1C2 /* PaywallViewControllerDelegateWrapper.swift */,
@@ -994,6 +997,7 @@
 				57E97CAD2D66236C007EB1C2 /* PaywallResult.swift in Sources */,
 				57E97CAE2D66236C007EB1C2 /* CustomerCenterUIViewController.swift in Sources */,
 				57DFC2762D6C915E00C93D97 /* CustomerCenterViewControllerDelegateWrapper.swift in Sources */,
+				03E5E8642E690FE300B55FA6 /* CommonFunctionality+Extensions.swift in Sources */,
 				57E97CAF2D66236C007EB1C2 /* PaywallProxy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
