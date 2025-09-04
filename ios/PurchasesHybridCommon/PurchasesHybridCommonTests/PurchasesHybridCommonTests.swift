@@ -506,6 +506,5 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect(NSDictionary(dictionary: cachedVirtualCurrencies2!)).to(equal(expectedVirtualCurrenciesDictionary))
             }
         }
-
     }
 }
