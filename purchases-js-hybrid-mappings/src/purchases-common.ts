@@ -12,13 +12,13 @@ import {
   PurchasesError,
   ReservedCustomerAttribute,
 } from '@revenuecat/purchases-js';
-import {mapCustomerInfo} from './mappers/customer_info_mapper';
-import {mapOffering, mapOfferings} from './mappers/offerings_mapper';
-import {Logger} from './utils/logger';
-import {mapPurchasesError} from './mappers/purchases_error_mapper';
-import {mapPurchaseResult} from './mappers/purchase_result_mapper';
-import {mapLogLevel} from './mappers/log_level_mapper';
-import {mapVirtualCurrencies} from './mappers/virtual_currencies_mapper';
+import { mapCustomerInfo } from './mappers/customer_info_mapper';
+import { mapOffering, mapOfferings } from './mappers/offerings_mapper';
+import { Logger } from './utils/logger';
+import { mapPurchasesError } from './mappers/purchases_error_mapper';
+import { mapPurchaseResult } from './mappers/purchase_result_mapper';
+import { mapLogLevel } from './mappers/log_level_mapper';
+import { mapVirtualCurrencies } from './mappers/virtual_currencies_mapper';
 
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
@@ -212,7 +212,8 @@ export class PurchasesCommon {
     defaultLocale?: string;
   }): Promise<Record<string, unknown>> {
     try {
-      const nativePurchaseParams: PurchaseParams = await this.createNativePurchaseParams(purchaseParams);
+      const nativePurchaseParams: PurchaseParams =
+        await this.createNativePurchaseParams(purchaseParams);
       const purchaseResult: PurchaseResult = await this.purchases.purchase(nativePurchaseParams);
       return mapPurchaseResult(purchaseResult);
     } catch (error) {
@@ -228,7 +229,8 @@ export class PurchasesCommon {
     presentedOfferingContext: Record<string, unknown>;
   }): Promise<Record<string, unknown>> {
     try {
-      const nativePurchaseParams: PurchaseParams = await this.createNativePurchaseParams(purchaseParams);
+      const nativePurchaseParams: PurchaseParams =
+        await this.createNativePurchaseParams(purchaseParams);
       const product = nativePurchaseParams.rcPackage.webBillingProduct;
       // @ts-ignore using an internal method
       const purchaseResult = await this.purchases._postSimulatedStoreReceipt(product);
@@ -287,9 +289,9 @@ export class PurchasesCommon {
           const purchasesError = new PurchasesError(
             ErrorCode.PurchaseInvalidError,
             'Could not find option with id: ' +
-            purchaseParams.optionIdentifier +
-            ' in package with id: ' +
-            purchaseParams.packageIdentifier,
+              purchaseParams.optionIdentifier +
+              ' in package with id: ' +
+              purchaseParams.packageIdentifier,
           );
           this.handleError(purchasesError);
         }
