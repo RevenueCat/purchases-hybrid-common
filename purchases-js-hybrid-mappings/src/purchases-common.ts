@@ -232,7 +232,7 @@ export class PurchasesCommon {
       const nativePurchaseParams: PurchaseParams =
         await this.createNativePurchaseParams(purchaseParams);
       const product = nativePurchaseParams.rcPackage.webBillingProduct;
-      // @ts-ignore using an internal method
+      // @ts-expect-error using an internal method
       const purchaseResult = await this.purchases._postSimulatedStoreReceipt(product);
       return mapPurchaseResult(purchaseResult);
     } catch (error) {
