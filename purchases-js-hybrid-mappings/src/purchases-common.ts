@@ -104,6 +104,7 @@ export class PurchasesCommon {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static overridePreferredLocale(_locale: string | null): void {
     const purchasesError = new PurchasesError(
       ErrorCode.UnsupportedError,
