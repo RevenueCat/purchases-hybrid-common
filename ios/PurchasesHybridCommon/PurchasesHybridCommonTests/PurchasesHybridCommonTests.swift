@@ -512,17 +512,17 @@ class PurchasesHybridCommonTests: QuickSpec {
                 let testLocale = "es_ES"
                 CommonFunctionality.overridePreferredLocale(testLocale)
 
-                expect(mockPurchases.invokedOverridePreferredLocale) == true
-                expect(mockPurchases.invokedOverridePreferredLocaleCount) == 1
-                expect(mockPurchases.invokedOverridePreferredLocaleParameter) == testLocale
+                expect(mockPurchases.invokedOverridePreferredUILocale) == true
+                expect(mockPurchases.invokedOverridePreferredUILocaleCount) == 1
+                expect(mockPurchases.invokedOverridePreferredUILocaleParameter) == testLocale
             }
 
             it("passes the call correctly to Purchases with nil locale") {
                 CommonFunctionality.overridePreferredLocale(nil)
 
-                expect(mockPurchases.invokedOverridePreferredLocale) == true
-                expect(mockPurchases.invokedOverridePreferredLocaleCount) == 1
-                expect(mockPurchases.invokedOverridePreferredLocaleParameter).to(beNil())
+                expect(mockPurchases.invokedOverridePreferredUILocale) == true
+                expect(mockPurchases.invokedOverridePreferredUILocaleCount) == 1
+                expect(mockPurchases.invokedOverridePreferredUILocaleParameter).to(beNil())
             }
         }
     }

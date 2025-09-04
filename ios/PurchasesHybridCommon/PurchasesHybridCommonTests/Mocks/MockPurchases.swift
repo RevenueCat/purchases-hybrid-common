@@ -718,14 +718,14 @@ extension MockPurchases {
         set { fatalError("Not mocked") }
     }
 
-    var invokedOverridePreferredLocale = false
-    var invokedOverridePreferredLocaleCount = 0
-    var invokedOverridePreferredLocaleParameter: String?
+    var invokedOverridePreferredUILocale = false
+    var invokedOverridePreferredUILocaleCount = 0
+    var invokedOverridePreferredUILocaleParameter: String?
 
-    func overridePreferredLocale(_ locale: String?) {
-        invokedOverridePreferredLocale = true
-        invokedOverridePreferredLocaleCount += 1
-        invokedOverridePreferredLocaleParameter = locale
+    func overridePreferredUILocale(_ locale: String?) {
+        invokedOverridePreferredUILocale = true
+        invokedOverridePreferredUILocaleCount += 1
+        invokedOverridePreferredUILocaleParameter = locale
     }
 
 }

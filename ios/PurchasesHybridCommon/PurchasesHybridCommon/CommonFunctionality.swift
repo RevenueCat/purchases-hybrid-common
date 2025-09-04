@@ -138,6 +138,10 @@ import RevenueCat
         Self.sharedInstance.invalidateCustomerInfoCache()
     }
 
+    @objc public static func overridePreferredLocale(_ locale: String?) {
+        Self.sharedInstance.overridePreferredUILocale(locale)
+    }
+
     @objc public static func getStorefront(completion: @escaping ([String: Any]?) -> Void) {
         Self.sharedInstance.getStorefront { storefront in
             var storefrontMap: [String: Any]? = nil
