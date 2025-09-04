@@ -1,11 +1,7 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Make UI events listeners map events on main thread in Android (#1262) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
-* [RENOVATE] Update dependency com.android.library to v8.12.2 (#1259) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.13.1 => 1.13.2 (#1269) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.36.0 => 5.37.0 Android 9.4.0 => 9.5.0 (#1265) via RevenueCat Git Bot (@RCGitBot)
 
-## RevenueCatUI SDK
-### Paywallv2
-#### ✨ New Features
-* Added presentedOfferingContext parameter to the hybrid APIs for presenting paywalls (#1246) via Rick (@rickvdl)
-* Add `PaywallSource` with `PresentedOfferingContext` in Android (#1261) via Toni Rico (@tonidero)
+### 🔄 Other Changes
+* Add internal `_purchaseSimulatedStorePackage` (#1268) via Toni Rico (@tonidero)
