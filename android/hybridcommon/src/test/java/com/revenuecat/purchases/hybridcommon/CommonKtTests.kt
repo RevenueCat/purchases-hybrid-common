@@ -128,7 +128,6 @@ internal class CommonKtTests {
         }
     }
 
-
     @RepeatedTest(5)
     fun `canMakePayments result successfully passed back`() {
         configure(

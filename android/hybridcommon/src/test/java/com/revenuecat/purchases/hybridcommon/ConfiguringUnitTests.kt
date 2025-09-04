@@ -221,7 +221,7 @@ internal class ConfiguringUnitTests {
             purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = expectedPlatformInfo,
             store = Store.PLAY_STORE,
-            preferredLocale = expectedLocale
+            preferredLocale = expectedLocale,
         )
         assertEquals(expectedLocale, purchasesConfigurationSlot.captured.preferredUILocaleOverride)
     }
