@@ -104,8 +104,12 @@ export class PurchasesCommon {
     }
   }
 
-  static overridePreferredLocale(locale: string | null): void {
-    Purchases.overridePreferredLocale(locale);
+  static overridePreferredLocale(_locale: string | null): void {
+    const purchasesError = new PurchasesError(
+      ErrorCode.UnsupportedError,
+      'overridePreferredLocale is not supported on web platforms yet',
+    );
+    throw purchasesError;
   }
 
   private constructor(purchasesInstance: Purchases) {
