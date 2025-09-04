@@ -211,6 +211,21 @@ internal class ConfiguringUnitTests {
         assertEquals(expectedDangerousSettings, purchasesConfigurationSlot.captured.dangerousSettings)
     }
 
+    @Test
+    fun `calling configure passing preferred locale with es-ES`() {
+        val expectedLocale = "es-ES"
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.PLAY_STORE,
+            preferredLocale = expectedLocale
+        )
+        assertEquals(expectedLocale, purchasesConfigurationSlot.captured.preferredUILocaleOverride)
+    }
+
     private fun assertConfiguration(
         purchasesConfigurationSlot: CapturingSlot<PurchasesConfiguration>,
         expectedContext: Context,

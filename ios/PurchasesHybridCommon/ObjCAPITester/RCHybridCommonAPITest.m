@@ -147,6 +147,8 @@ NS_ASSUME_NONNULL_BEGIN
     NSDictionary<NSString *, NSObject *> __unused  * _Nullable vcDictionary = [RCCommonFunctionality getCachedVirtualCurrencies];
 
     [RCCommonFunctionality invalidateVirtualCurrenciesCache];
+
+    [RCCommonFunctionality overridePreferredLocale:@"en-US"];
 }
 
 - (void)testDeprecatedAPI {

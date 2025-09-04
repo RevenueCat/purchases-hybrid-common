@@ -601,6 +601,7 @@ fun configure(
     pendingTransactionsForPrepaidPlansEnabled: Boolean? = null,
     diagnosticsEnabled: Boolean? = null,
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
+    preferredLocale: String? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -621,6 +622,7 @@ fun configure(
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
+            preferredLocale?.let { preferredUILocaleOverride(it) }
         }.also { Purchases.configure(it.build()) }
 }
 
