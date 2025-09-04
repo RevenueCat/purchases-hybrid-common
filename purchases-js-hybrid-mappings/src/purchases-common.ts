@@ -104,10 +104,6 @@ export class PurchasesCommon {
     }
   }
 
-  static overridePreferredLocale(locale: string | null): void {
-    Purchases.overridePreferredLocale(locale);
-  }
-
   private constructor(purchasesInstance: Purchases) {
     this.purchases = purchasesInstance;
   }

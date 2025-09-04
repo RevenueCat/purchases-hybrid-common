@@ -38,7 +38,6 @@ describe('PurchasesCommon', () => {
     getVirtualCurrencies: jest.fn(),
     invalidateVirtualCurrenciesCache: jest.fn(),
     getCachedVirtualCurrencies: jest.fn(),
-    overridePreferredLocale: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
@@ -602,34 +601,6 @@ describe('PurchasesCommon', () => {
 
       expect(result).toBeNull();
       expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('overridePreferredLocale', () => {
-    // Mock the Purchases static method
-    const originalOverridePreferredLocale = Purchases.overridePreferredLocale;
-
-    beforeEach(() => {
-      Purchases.overridePreferredLocale = jest.fn();
-    });
-
-    afterEach(() => {
-      Purchases.overridePreferredLocale = originalOverridePreferredLocale;
-    });
-
-    it('should call Purchases.overridePreferredLocale with locale string', () => {
-      const testLocale = 'es_ES';
-      PurchasesCommon.overridePreferredLocale(testLocale);
-
-      expect(Purchases.overridePreferredLocale).toHaveBeenCalledWith(testLocale);
-      expect(Purchases.overridePreferredLocale).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call Purchases.overridePreferredLocale with null', () => {
-      PurchasesCommon.overridePreferredLocale(null);
-
-      expect(Purchases.overridePreferredLocale).toHaveBeenCalledWith(null);
-      expect(Purchases.overridePreferredLocale).toHaveBeenCalledTimes(1);
     });
   });
 });
