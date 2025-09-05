@@ -119,7 +119,8 @@ private extension BaseIntegrationTests {
             dangerousSettings: self.dangerousSettings,
             verificationMode: nil,
             diagnosticsEnabled: false,
-            automaticDeviceIdentifierCollectionEnabled: true
+            automaticDeviceIdentifierCollectionEnabled: true,
+            preferredLocale: nil
         )
         Purchases.logLevel = .debug
     }
