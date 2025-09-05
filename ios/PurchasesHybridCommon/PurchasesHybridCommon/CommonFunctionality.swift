@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-import RevenueCat
+@_spi(Internal) import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -873,6 +873,10 @@ private extension WebPurchaseRedemptionResult {
 
     @objc static func invalidateVirtualCurrenciesCache() {
         Self.sharedInstance.invalidateVirtualCurrenciesCache()
+    }
+
+    @objc static func overridePreferredLocale(_ locale: String?) {
+        Purchases.shared.overridePreferredLocale(locale)
     }
 }
 

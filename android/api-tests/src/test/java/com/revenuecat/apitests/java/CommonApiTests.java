@@ -250,4 +250,8 @@ class CommonApiTests {
         String storedMessage = errorContainer.getMessage();
         Map<String, Object> storedAny = errorContainer.getInfo();
     }
+
+    private void checkOverridePreferredLocale(String locale) {
+        CommonKt.overridePreferredLocale(locale);
+    }
 }

@@ -26,6 +26,7 @@ import com.revenuecat.purchases.hybridcommon.invalidateVirtualCurrenciesCache
 import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
 import com.revenuecat.purchases.hybridcommon.logOut
+import com.revenuecat.purchases.hybridcommon.overridePreferredLocale
 import com.revenuecat.purchases.hybridcommon.purchasePackage
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
@@ -229,6 +230,8 @@ private class CommonApiTests {
         verificationMode: String?,
         pendingTransactionsForPrepaidPlansEnabled: Boolean?,
         diagnosticsEnabled: Boolean?,
+        automaticDeviceIdentifierCollectionEnabled: Boolean?,
+        preferredLocale: String?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -255,6 +258,35 @@ private class CommonApiTests {
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
             diagnosticsEnabled = diagnosticsEnabled,
         )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            purchasesAreCompletedBy,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+        )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            purchasesAreCompletedBy,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+            preferredLocale = preferredLocale,
+        )
     }
 
     fun checkGetPromotionalOffer() {
@@ -278,5 +310,9 @@ private class CommonApiTests {
 
     private fun checkGetCachedVirtualCurrencies() {
         val cachedVirtualCurrencies: Map<String, Any?>? = getCachedVirtualCurrencies()
+    }
+
+    private fun checkOverridePreferredLocale(locale: String?) {
+        overridePreferredLocale(locale)
     }
 }
