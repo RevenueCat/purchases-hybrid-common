@@ -43,6 +43,8 @@ public final class CustomerCenterUIViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        // No default onCloseHandler here. Handler is injected by the proxy for iOS 15 when needed.
+
         let vc = createHostingController()
 
         addChild(vc)

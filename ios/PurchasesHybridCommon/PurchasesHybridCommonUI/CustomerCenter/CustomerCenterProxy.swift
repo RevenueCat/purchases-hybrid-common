@@ -30,13 +30,29 @@ public class CustomerCenterProxy: NSObject {
     @objc
     public var shouldShowCloseButton: Bool = true
     
+    /// Presents the Customer Center.
+    /// - Parameter resultHandler: Called when the Customer Center is dismissed.
     @objc public func present(
+        resultHandler: @escaping () -> Void
+    ) {
+        // Backwards-compatible entry point (no onCloseHandler)
+        self.present(onCloseHandler: nil, resultHandler: resultHandler)
+    }
+
+    /// Presents the Customer Center.
+    /// - Parameters:
+    ///   - onCloseHandler: Optional handler for the navigation close button. Provide this on iOS 15
+    ///                     to ensure the close button dismisses the view controller. On newer iOS
+    ///                     versions this is typically not needed and can be `nil`.
+    ///   - resultHandler: Called when the Customer Center is dismissed.
+    @objc public func present(
+        onCloseHandler: (@escaping () -> Void)?,
         resultHandler: @escaping () -> Void
     ) {
         guard let rootController = Self.rootViewController else {
             return
         }
-        let vc = createCustomerCenterViewController()
+        let vc = createCustomerCenterViewController(onCloseHandler: onCloseHandler)
         resultByVC[vc] = resultHandler
 
         vc.modalPresentationStyle = .overCurrentContext
@@ -127,10 +143,11 @@ private extension CustomerCenterProxy {
         return windowScene.keyWindow?.rootViewController
     }
 
-    func createCustomerCenterViewController() -> CustomerCenterUIViewController {
+    func createCustomerCenterViewController(onCloseHandler: (@escaping () -> Void)?) -> CustomerCenterUIViewController {
         let vc = CustomerCenterUIViewController()
         vc.delegate = self
         vc.shouldShowCloseButton = shouldShowCloseButton
+        vc.onCloseHandler = onCloseHandler
 
         return vc
     }
