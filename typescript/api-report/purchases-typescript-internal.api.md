@@ -331,8 +331,8 @@ export interface PurchasesConfiguration {
     automaticDeviceIdentifierCollectionEnabled?: boolean;
     diagnosticsEnabled?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
-    overridePreferredLocale?: string;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
+    preferredUILocaleOverride?: string;
     purchasesAreCompletedBy?: PurchasesAreCompletedBy;
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
