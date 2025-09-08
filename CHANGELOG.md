@@ -1,3 +1,8 @@
+## 17.5.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Use `preferredUILocaleOverride` name in `PurchasesConfiguration` (#1274) via Antonio Pallares (@ajpallares)
+
 ## 17.5.0
 ## RevenueCat SDK
 ### ✨ New Features
