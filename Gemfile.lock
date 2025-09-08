@@ -268,7 +268,7 @@ GEM
       rexml (>= 3.3.9)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (1.12.3)
+    lefthook (1.12.4)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
@@ -360,7 +360,6 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-24
-  ruby
 
 DEPENDENCIES
   abbrev
