@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@_spi(Internal) import RevenueCat
+import RevenueCat
 
 @objc public extension Purchases {
 
@@ -80,7 +80,7 @@ import Foundation
         }
 
         if let preferredLocale {
-            configurationBuilder = configurationBuilder.with(preferredLocale: preferredLocale)
+            configurationBuilder = configurationBuilder.with(preferredUILocaleOverride: preferredLocale)
         }
 
         let purchases = self.configure(with: configurationBuilder.build())
