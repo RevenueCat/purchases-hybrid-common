@@ -697,7 +697,7 @@ describe('PurchasesCommon', () => {
 
       // Test first handler
       PurchasesCommon.setLogHandler(customLogHandler1);
-      let wrapperFunction1 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      const wrapperFunction1 = mockPurchasesSetLogHandler.mock.calls[0][0];
       wrapperFunction1(LogLevel.Info, 'Test message 1');
       expect(customLogHandler1).toHaveBeenCalledWith('INFO', 'Test message 1');
 
@@ -707,7 +707,7 @@ describe('PurchasesCommon', () => {
 
       // Test second handler
       PurchasesCommon.setLogHandler(customLogHandler2);
-      let wrapperFunction2 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      const wrapperFunction2 = mockPurchasesSetLogHandler.mock.calls[0][0];
       wrapperFunction2(LogLevel.Error, 'Test message 2');
       expect(customLogHandler2).toHaveBeenCalledWith('ERROR', 'Test message 2');
     });
