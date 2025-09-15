@@ -526,6 +526,8 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
             - deploy-js-mappings
+            - deploy-ios-phc
+            - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:
