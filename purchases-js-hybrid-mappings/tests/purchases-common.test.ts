@@ -16,6 +16,7 @@ import {
   PeriodUnit,
   PurchasesConfig,
   VirtualCurrencies,
+  LogLevel,
 } from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
@@ -620,6 +621,95 @@ describe('PurchasesCommon', () => {
 
       expect(result).toBeNull();
       expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('setLogHandler', () => {
+    let mockLogHandler: jest.Mock;
+    let mockPurchasesSetLogHandler: jest.Mock;
+
+    beforeEach(() => {
+      mockLogHandler = jest.fn();
+      mockPurchasesSetLogHandler = jest.fn();
+      jest.spyOn(Purchases, 'setLogHandler').mockImplementation(mockPurchasesSetLogHandler);
+    });
+
+    it('should delegate to Purchases.setLogHandler with correct mapping for all log levels', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      expect(mockPurchasesSetLogHandler).toHaveBeenCalledTimes(1);
+
+      // Get the wrapper function that was passed to Purchases.setLogHandler
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+      expect(typeof wrapperFunction).toBe('function');
+
+      // Test all log levels
+      const testCases = [
+        { logLevel: LogLevel.Verbose, expectedString: 'VERBOSE' },
+        { logLevel: LogLevel.Debug, expectedString: 'DEBUG' },
+        { logLevel: LogLevel.Info, expectedString: 'INFO' },
+        { logLevel: LogLevel.Warn, expectedString: 'WARN' },
+        { logLevel: LogLevel.Error, expectedString: 'ERROR' },
+        { logLevel: LogLevel.Silent, expectedString: 'SILENT' },
+      ];
+
+      testCases.forEach(({ logLevel, expectedString }) => {
+        const testMessage = `Test message for ${expectedString}`;
+        wrapperFunction(logLevel, testMessage);
+
+        expect(mockLogHandler).toHaveBeenCalledWith(expectedString, testMessage);
+      });
+
+      expect(mockLogHandler).toHaveBeenCalledTimes(testCases.length);
+    });
+
+    it('should ignore unknown log levels', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+
+      // Test with an unknown log level (using a number that's not in the enum)
+      wrapperFunction(999 as LogLevel, 'Test message');
+
+      // The custom log handler should not be called for unknown log levels
+      expect(mockLogHandler).not.toHaveBeenCalled();
+    });
+
+    it('should handle multiple log messages correctly', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+
+      // Send multiple log messages
+      wrapperFunction(LogLevel.Info, 'First message');
+      wrapperFunction(LogLevel.Error, 'Second message');
+      wrapperFunction(LogLevel.Debug, 'Third message');
+
+      expect(mockLogHandler).toHaveBeenCalledTimes(3);
+      expect(mockLogHandler).toHaveBeenNthCalledWith(1, 'INFO', 'First message');
+      expect(mockLogHandler).toHaveBeenNthCalledWith(2, 'ERROR', 'Second message');
+      expect(mockLogHandler).toHaveBeenNthCalledWith(3, 'DEBUG', 'Third message');
+    });
+
+    it('should work with different custom log handler implementations', () => {
+      const customLogHandler1 = jest.fn();
+      const customLogHandler2 = jest.fn();
+
+      // Test first handler
+      PurchasesCommon.setLogHandler(customLogHandler1);
+      const wrapperFunction1 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      wrapperFunction1(LogLevel.Info, 'Test message 1');
+      expect(customLogHandler1).toHaveBeenCalledWith('INFO', 'Test message 1');
+
+      // Reset mocks
+      mockPurchasesSetLogHandler.mockClear();
+      customLogHandler1.mockClear();
+
+      // Test second handler
+      PurchasesCommon.setLogHandler(customLogHandler2);
+      const wrapperFunction2 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      wrapperFunction2(LogLevel.Error, 'Test message 2');
+      expect(customLogHandler2).toHaveBeenCalledWith('ERROR', 'Test message 2');
     });
   });
 });

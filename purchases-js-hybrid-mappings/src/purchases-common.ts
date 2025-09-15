@@ -1,6 +1,7 @@
 import {
   ErrorCode,
   HttpConfig,
+  LogLevel,
   Offering,
   Offerings,
   Package,
@@ -92,6 +93,24 @@ export class PurchasesCommon {
     if (logLevelEnum) {
       Purchases.setLogLevel(logLevelEnum);
     }
+  }
+
+  static setLogHandler(logHandler: (level: string, message: string) => void): void {
+    const logLevelMap: Record<LogLevel, string> = {
+      [LogLevel.Verbose]: 'VERBOSE',
+      [LogLevel.Debug]: 'DEBUG',
+      [LogLevel.Info]: 'INFO',
+      [LogLevel.Warn]: 'WARN',
+      [LogLevel.Error]: 'ERROR',
+      [LogLevel.Silent]: 'SILENT',
+    };
+
+    Purchases.setLogHandler((logLevel: LogLevel, message: string): void => {
+      const levelString = logLevelMap[logLevel];
+      if (levelString) {
+        logHandler(levelString, message);
+      }
+    });
   }
 
   static isConfigured(): boolean {
