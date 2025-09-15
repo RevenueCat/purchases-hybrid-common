@@ -59,6 +59,8 @@ export class PurchasesCommon {
     // (undocumented)
     setEmail(email: string | null): Promise<void>;
     // (undocumented)
+    static setLogHandler(logHandler: (level: string, message: string) => void): void;
+    // (undocumented)
     static setLogLevel(logLevel: string): void;
     // (undocumented)
     setPhoneNumber(phoneNumber: string | null): Promise<void>;

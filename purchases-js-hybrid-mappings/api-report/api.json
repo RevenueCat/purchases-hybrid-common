@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.52.3",
+    "toolVersion": "7.52.13",
     "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -182,7 +182,7 @@
               "text": "declare class PurchasesCommon "
             }
           ],
-          "fileUrlPath": "src/index.ts",
+          "fileUrlPath": "dist/index.d.ts",
           "releaseTag": "Public",
           "isAbstract": false,
           "name": "PurchasesCommon",
@@ -1029,6 +1029,54 @@
               "isOptional": false,
               "isAbstract": false,
               "name": "setEmail"
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@revenuecat/purchases-js-hybrid-mappings!PurchasesCommon.setLogHandler:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "static setLogHandler(logHandler: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "(level: string, message: string) => void"
+                },
+                {
+                  "kind": "Content",
+                  "text": "): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": true,
+              "returnTypeTokenRange": {
+                "startIndex": 3,
+                "endIndex": 4
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "logHandler",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  },
+                  "isOptional": false
+                }
+              ],
+              "isOptional": false,
+              "isAbstract": false,
+              "name": "setLogHandler"
             },
             {
               "kind": "Method",
