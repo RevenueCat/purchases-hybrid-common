@@ -28,7 +28,7 @@ export interface PurchaseParams {
   googleIsPersonalizedPrice?: boolean | null;
   /**
    * iOS only, requires iOS 18.0 or greater with StoreKit 2. Win-back offer to apply to this purchase.
-   * Retrieve this using getEligibleWinBackOffersForPackage.
+   * Retrieve this using getEligibleWinBackOffersForPackage or getEligibleWinBackOffersForStoreProduct.
    */
   winBackOffer?: PurchasesWinBackOffer | null;
   /**
