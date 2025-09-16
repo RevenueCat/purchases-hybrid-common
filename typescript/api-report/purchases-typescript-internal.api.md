@@ -236,6 +236,15 @@ export enum PURCHASE_TYPE {
 }
 
 // @public
+export interface PurchaseParams {
+    discount?: PurchasesPromotionalOffer | null;
+    googleIsPersonalizedPrice?: boolean | null;
+    googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    itemToPurchase: PurchasesPackage | PurchasesStoreProduct | SubscriptionOption;
+    winBackOffer?: PurchasesWinBackOffer | null;
+}
+
+// @public
 export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
     MY_APP = "MY_APP",
     REVENUECAT = "REVENUECAT"
