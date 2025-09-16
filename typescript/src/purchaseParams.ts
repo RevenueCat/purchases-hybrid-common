@@ -21,7 +21,7 @@ export interface PurchaseParams {
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
-   * Google Play only. Optional boolean indicates personalized pricing on products available for purchase in the EU.
+   * Google Play only. Optional boolean that indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
    * See https://developer.android.com/google/play/billing/integrate#personalized-price for more info.
    */
