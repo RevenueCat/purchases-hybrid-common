@@ -11,7 +11,7 @@ Contains mappings and utilities for RevenueCat hybrid SDKs to interface with the
 Contains mappings and utilities for RevenueCat hybrid SDKs to interface with the native iOS library. This provides the necessary bridge to connect hybrid frameworks with the RevenueCat iOS SDK, managing iOS-specific functionality and data transformations.
 
 ### 3. TypeScript (`typescript/`)
-Shared TypeScript types and interfaces commonly used by both `react-native-purchases` and `purchases-capacitor`. This library ensures type consistency across different hybrid implementations by providing a single source of truth for common data structures, enums, and type definitions.
+Shared TypeScript types and interfaces commonly used by both [react-native-purchases](https://github.com/RevenueCat/react-native-purchases) and [purchases-capacitor](https://github.com/RevenueCat/purchases-capacitor). This library ensures type consistency across different hybrid implementations by providing a single source of truth for common data structures, enums, and type definitions.
 
 - **Package**: `@revenuecat/purchases-typescript-internal`
 - **Purpose**: Internal shared TypeScript code for hybrid SDKs
