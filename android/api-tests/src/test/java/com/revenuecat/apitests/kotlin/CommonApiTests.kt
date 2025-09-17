@@ -27,6 +27,7 @@ import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
 import com.revenuecat.purchases.hybridcommon.logOut
 import com.revenuecat.purchases.hybridcommon.overridePreferredLocale
+import com.revenuecat.purchases.hybridcommon.purchase
 import com.revenuecat.purchases.hybridcommon.purchasePackage
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
@@ -58,6 +59,14 @@ private class CommonApiTests {
         onResult: OnResultList,
     ) {
         getProductInfo(productIDs, type, onResult)
+    }
+
+    fun checkPurchase(
+        activity: Activity?,
+        options: Map<String, Any?>,
+        onResult: OnResult,
+    ) {
+        purchase(activity, options, onResult)
     }
 
     fun checkPurchaseProduct(
