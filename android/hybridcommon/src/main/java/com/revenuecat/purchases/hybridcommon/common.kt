@@ -202,7 +202,7 @@ private fun validatePurchaseParams(
             PurchasableItem.SubscriptionOption(productIdentifier, subscriptionOptionIdentifier)
         }
         productIdentifier != null -> {
-            val productType = options["type"] as? String ?: "inapp"
+            val productType = options["type"] as? String ?: "SUBSCRIPTION"
             val googleBasePlanId = options["googleBasePlanId"] as? String
             PurchasableItem.Product(productIdentifier, productType, googleBasePlanId)
         }
