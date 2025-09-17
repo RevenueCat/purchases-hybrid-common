@@ -1,0 +1,341 @@
+package com.revenuecat.purchases.hybridcommon
+
+import android.app.Activity
+import android.app.Application
+import android.content.Context
+import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.PurchaseParams
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesAreCompletedBy
+import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
+import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
+import com.revenuecat.purchases.interfaces.PurchaseCallback
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.Period
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.slot
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.fail
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
+@OptIn(ExperimentalCoroutinesApi::class)
+internal class CommonKtPurchaseTests {
+
+    private val mockApplicationContext = mockk<Application>(relaxed = true)
+    private val mockContext = mockk<Context>(relaxed = true)
+    private val mockPurchases = mockk<Purchases>()
+    private val mockActivity = mockk<Activity>(relaxed = true)
+
+    @BeforeEach
+    fun setup() {
+        mockkObject(Purchases)
+        mockLogs()
+        every {
+            Purchases.configure(configuration = any())
+        } returns mockPurchases
+        every { mockContext.applicationContext } returns mockApplicationContext
+        every { Purchases.sharedInstance } returns mockPurchases
+        every { mockPurchases.store } returns Store.PLAY_STORE
+        val testDispatcher = UnconfinedTestDispatcher()
+        overrideMapperDispatcher = testDispatcher
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `purchase with packageIdentifier calls purchasePackage`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val expectedPackageIdentifier = "monthly"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val mockStoreProduct = TestUtilities.stubStoreProduct("product_id")
+        val mockTransaction = TestUtilities.createMockTransaction("product_id")
+        val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
+            mockStoreProduct,
+            packageIdentifier = expectedPackageIdentifier,
+        )
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "packageIdentifier" to expectedPackageIdentifier,
+            "presentedOfferingContext" to mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+                "placementIdentifier" to "placement_id",
+            ),
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals("product_id", receivedResponse!!["productIdentifier"])
+    }
+
+    @Test
+    fun `purchase with productIdentifier calls purchaseProduct`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val expectedProductIdentifier = "product_id"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier, type = ProductType.INAPP)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.INAPP,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "productIdentifier" to expectedProductIdentifier,
+            "type" to "inapp",
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse!!["productIdentifier"])
+    }
+
+    @Test
+    fun `purchase with optionIdentifier and productIdentifier calls purchaseSubscriptionOption`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val expectedProductIdentifier = "subscription_product"
+        val expectedOptionIdentifier = "monthly_option"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val mockSubscriptionOption = TestUtilities.stubSubscriptionOption(
+            expectedOptionIdentifier,
+            expectedProductIdentifier,
+            Period(1, Period.Unit.MONTH, "P1M"),
+        )
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            expectedProductIdentifier,
+            subscriptionOptions = listOf(mockSubscriptionOption),
+        )
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "productIdentifier" to expectedProductIdentifier,
+            "optionIdentifier" to expectedOptionIdentifier,
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse!!["productIdentifier"])
+    }
+
+    @Test
+    fun `purchase with invalid options returns error`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        var receivedError: ErrorContainer? = null
+
+        val options = mapOf<String, Any?>() // Empty options
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Unexpected success: $map")
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    receivedError = error
+                }
+            },
+        )
+
+        assertNotNull(receivedError, "Expected error.")
+        assertEquals(
+            PurchasesErrorCode.PurchaseInvalidError.code,
+            receivedError!!.code,
+            "Expected error code ${PurchasesErrorCode.PurchaseInvalidError.code} but got ${receivedError!!.code}",
+        )
+    }
+
+    @Test
+    fun `purchase validates presentedOfferingContext with invalid keys`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val expectedProductIdentifier = "product_id"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier, type = ProductType.INAPP)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.INAPP,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "productIdentifier" to expectedProductIdentifier,
+            "type" to "inapp",
+            "presentedOfferingContext" to mapOf(
+                123 to "invalid_key_type", // Non-string key should be filtered out
+                "offeringIdentifier" to "default",
+            ),
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, receivedResponse!!["productIdentifier"])
+    }
+}

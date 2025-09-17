@@ -2,10 +2,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
-import com.revenuecat.purchases.hybridcommon.MICROS_MULTIPLIER
-import com.revenuecat.purchases.hybridcommon.stubPricingPhase
-import com.revenuecat.purchases.hybridcommon.stubStoreProduct
-import com.revenuecat.purchases.hybridcommon.stubSubscriptionOption
+import com.revenuecat.purchases.hybridcommon.TestUtilities
 import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
@@ -19,7 +16,7 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `maps product identifier correctly`() {
-        stubStoreProduct(productId = exptectedProductId).map().let {
+        TestUtilities.stubStoreProduct(productId = exptectedProductId).map().let {
             assertThat(it["identifier"]).isEqualTo(exptectedProductId)
         }
     }
@@ -28,7 +25,7 @@ internal class StoreProductMapperTests {
     @Test
     fun `maps product description correctly`() {
         val expected = "Expected Description"
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             description = expected,
         ).map().let {
@@ -39,7 +36,7 @@ internal class StoreProductMapperTests {
     @Test
     fun `maps product title correctly`() {
         val expected = "Expected Title"
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             title = expected,
         ).map().let {
@@ -54,14 +51,14 @@ internal class StoreProductMapperTests {
         val expected = 2.0
         val expectedFormatted = "$2.00"
         val expectedCurrencyCode = "USD"
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
                 duration,
                 pricingPhases = listOf(
-                    stubPricingPhase(
+                    TestUtilities.stubPricingPhase(
                         billingPeriod = duration,
                         priceCurrencyCodeValue = expectedCurrencyCode,
                         priceFormatted = expectedFormatted,
@@ -81,19 +78,19 @@ internal class StoreProductMapperTests {
         val freeTrialDuration = Period(1, Period.Unit.MONTH, "P7D")
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
                 duration,
                 pricingPhases = listOf(
-                    stubPricingPhase(
+                    TestUtilities.stubPricingPhase(
                         billingPeriod = freeTrialDuration,
                         priceFormatted = "$0.00",
                         price = 0.0,
                     ),
-                    stubPricingPhase(
+                    TestUtilities.stubPricingPhase(
                         billingPeriod = duration,
                     ),
                 ),
@@ -108,9 +105,9 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `maps null introPrice correctly`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
             ),
@@ -121,9 +118,9 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `maps null discounts correctly`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
             ),
@@ -134,19 +131,19 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `maps product category correctly`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.SUBS,
         ).map().let {
             assertThat(it["productCategory"]).isEqualTo("SUBSCRIPTION")
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP,
         ).map().let {
             assertThat(it["productCategory"]).isEqualTo("NON_SUBSCRIPTION")
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.UNKNOWN,
         ).map().let {
@@ -158,7 +155,7 @@ internal class StoreProductMapperTests {
     fun `maps product type correctly`() {
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.SUBS,
         ).map().let {
@@ -167,15 +164,15 @@ internal class StoreProductMapperTests {
             val defaultOption = it["defaultOption"] as Map<String, Any>
             assertThat(defaultOption["isPrepaid"]).isEqualTo(false)
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.SUBS,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
                 duration,
                 pricingPhases = listOf(
-                    stubPricingPhase(
+                    TestUtilities.stubPricingPhase(
                         billingPeriod = duration,
                         recurrenceMode = RecurrenceMode.NON_RECURRING,
                     ),
@@ -187,7 +184,7 @@ internal class StoreProductMapperTests {
             val defaultOption = it["defaultOption"] as Map<String, Any>
             assertThat(defaultOption["isPrepaid"]).isEqualTo(true)
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP,
         ).map().let {
@@ -196,7 +193,7 @@ internal class StoreProductMapperTests {
             val defaultOption = it["defaultOption"] as Map<String, Any>
             assertThat(defaultOption["isPrepaid"]).isEqualTo(false)
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.UNKNOWN,
         ).map().let {
@@ -209,7 +206,7 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `maps subscription period correctly`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             type = ProductType.INAPP,
             defaultOption = null,
@@ -218,9 +215,9 @@ internal class StoreProductMapperTests {
         ).map().let {
             assertThat(it["subscriptionPeriod"]).isNull()
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
                 Period(1, Period.Unit.MONTH, "P1M"),
@@ -228,9 +225,9 @@ internal class StoreProductMapperTests {
         ).map().let {
             assertThat(it["subscriptionPeriod"]).isEqualTo("P1M")
         }
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
                 Period(1, Period.Unit.MONTH, "P1Y"),
@@ -242,16 +239,16 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `map has correct size`() {
-        stubStoreProduct("monthly_product").map().let {
+        TestUtilities.stubStoreProduct("monthly_product").map().let {
             assertThat(it.size).isEqualTo(21)
         }
     }
 
     @Test
     fun `map has default option as base plan`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
-            defaultOption = stubSubscriptionOption(
+            defaultOption = TestUtilities.stubSubscriptionOption(
                 "monthly_base_plan",
                 exptectedProductId,
             ),
@@ -267,42 +264,42 @@ internal class StoreProductMapperTests {
         val introTrialDuration = Period(1, Period.Unit.MONTH, "P1M")
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
-        val basePlan = stubSubscriptionOption(
+        val basePlan = TestUtilities.stubSubscriptionOption(
             "monthly_base_plan",
             exptectedProductId,
             duration,
             pricingPhases = listOf(
-                stubPricingPhase(
+                TestUtilities.stubPricingPhase(
                     billingPeriod = duration,
                 ),
             ),
         )
-        val multiPricingPhaseOption = stubSubscriptionOption(
+        val multiPricingPhaseOption = TestUtilities.stubSubscriptionOption(
             "monthly_base_plan",
             exptectedProductId,
             duration,
             pricingPhases = listOf(
-                stubPricingPhase(
+                TestUtilities.stubPricingPhase(
                     billingPeriod = freeTrialDuration,
                     priceFormatted = "$0.00",
                     price = 0.0,
                     recurrenceMode = RecurrenceMode.FINITE_RECURRING,
                     billingCycleCount = 1,
                 ),
-                stubPricingPhase(
+                TestUtilities.stubPricingPhase(
                     billingPeriod = introTrialDuration,
                     priceFormatted = "$2.99",
                     price = 2.99,
                     recurrenceMode = RecurrenceMode.FINITE_RECURRING,
                     billingCycleCount = 1,
                 ),
-                stubPricingPhase(
+                TestUtilities.stubPricingPhase(
                     billingPeriod = duration,
                 ),
             ),
         )
 
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             defaultOption = multiPricingPhaseOption,
             subscriptionOptions = listOf(basePlan, multiPricingPhaseOption),
@@ -318,7 +315,7 @@ internal class StoreProductMapperTests {
 
     @Test
     fun `map presentedOfferingIdentifier correctly when null`() {
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             presentedOfferingContext = null,
         ).map().let {
@@ -330,7 +327,7 @@ internal class StoreProductMapperTests {
     fun `map presentedOfferingIdentifier correctly when not null`() {
         val expectedPresentedOfferingContext = PresentedOfferingContext("mainoffer")
 
-        stubStoreProduct(
+        TestUtilities.stubStoreProduct(
             productId = exptectedProductId,
             presentedOfferingContext = expectedPresentedOfferingContext,
         ).map().let {
@@ -364,7 +361,7 @@ internal class StoreProductMapperTests {
                 "billingCycleCount" to 0,
                 "price" to mapOf(
                     "formatted" to "$4.99",
-                    "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
+                    "amountMicros" to (4.99 * TestUtilities.MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD",
                 ),
                 "offerPaymentMode" to null,
@@ -404,7 +401,7 @@ internal class StoreProductMapperTests {
                 "billingCycleCount" to 0,
                 "price" to mapOf(
                     "formatted" to "$4.99",
-                    "amountMicros" to (4.99 * MICROS_MULTIPLIER).toLong(),
+                    "amountMicros" to (4.99 * TestUtilities.MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD",
                 ),
                 "offerPaymentMode" to null,
@@ -430,7 +427,7 @@ internal class StoreProductMapperTests {
                 "billingCycleCount" to 1,
                 "price" to mapOf(
                     "formatted" to "$2.99",
-                    "amountMicros" to (2.99 * MICROS_MULTIPLIER).toLong(),
+                    "amountMicros" to (2.99 * TestUtilities.MICROS_MULTIPLIER).toLong(),
                     "currencyCode" to "USD",
                 ),
                 "offerPaymentMode" to "SINGLE_PAYMENT",
