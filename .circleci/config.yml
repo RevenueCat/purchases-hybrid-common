@@ -227,11 +227,10 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
       - android/restore-gradle-cache
       - run:
           name: Detekt
-          command: ./gradlew detekt
+          command: ./gradlew detektAll
       - android/save-gradle-cache
 
   test-android:
@@ -244,7 +243,7 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
+      - android/restore-gradle-cache
       - run:
           name: Run Tests
           command: ./gradlew lint test
