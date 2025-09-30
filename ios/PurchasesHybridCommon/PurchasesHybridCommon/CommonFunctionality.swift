@@ -288,8 +288,6 @@ import RevenueCat
     @objc(purchase:completionBlock:)
     static func purchase(options: [String: Any],
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
-
         do {
             let validatedParams = try Self.validatePurchaseParams(options)
             switch validatedParams.purchasableItem {
