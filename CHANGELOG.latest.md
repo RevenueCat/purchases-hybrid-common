@@ -1,10 +1,12 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Implement setLogHandler for web (#1286) via Antonio Borrero Granell (@antoniobg)
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.38.2 => 5.39.0 Android 9.6.0 => 9.7.0 JS 1.13.2 => 1.14.0 (#1287) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.39.0 => 5.40.0 Android 9.7.0 => 9.7.2 (#1300) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Trigger hybrid updates after PHC UI finishes deploying (#1285) via Toni Rico (@tonidero)
-* Bump fastlane-plugin-revenuecat_internal from `7d97553` to `a6dc551` (#1283) via dependabot[bot] (@dependabot[bot])
-* Bump lefthook from 1.12.3 to 1.13.0 (#1282) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.13.0 to 1.13.4 (#1297) via dependabot[bot] (@dependabot[bot])
+* Bump rexml from 3.4.1 to 3.4.2 (#1293) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `401d148` to `6d539b3` (#1299) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `a6dc551` to `401d148` (#1298) via dependabot[bot] (@dependabot[bot])
+* [RENOVATE] Update build-dependencies (#1273) via RevenueCat Git Bot (@RCGitBot)
+* Add `PurchaseParams` interface (#1284) via Toni Rico (@tonidero)
+* Improve README (#1290) via Toni Rico (@tonidero)

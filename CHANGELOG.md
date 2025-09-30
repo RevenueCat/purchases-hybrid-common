@@ -1,3 +1,17 @@
+## 17.8.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.39.0 => 5.40.0 Android 9.7.0 => 9.7.2 (#1300) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 1.13.0 to 1.13.4 (#1297) via dependabot[bot] (@dependabot[bot])
+* Bump rexml from 3.4.1 to 3.4.2 (#1293) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `401d148` to `6d539b3` (#1299) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `a6dc551` to `401d148` (#1298) via dependabot[bot] (@dependabot[bot])
+* [RENOVATE] Update build-dependencies (#1273) via RevenueCat Git Bot (@RCGitBot)
+* Add `PurchaseParams` interface (#1284) via Toni Rico (@tonidero)
+* Improve README (#1290) via Toni Rico (@tonidero)
+
 ## 17.7.0
 ## RevenueCat SDK
 ### ✨ New Features
@@ -145,6 +159,15 @@
 * Update Kotlin 2.0.21 while keeping language compatibility (#1192) via Toni Rico (@tonidero)
 ### 📦 Dependency Updates
 * [RENOVATE] Update dependency com.android.library to v8.11.1 (#1199) via RevenueCat Git Bot (@RCGitBot)
+
+## 14.3.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [v14] Android 8.22.0 => 8.24.0 (#1296) via Antonio Pallares (@ajpallares)
+
+### 🔄 Other Changes
+* [V14] Pass current version in automatic bump (#1304) via Antonio Pallares (@ajpallares)
+* [v14] Bump fastlane-plugin-revenuecat_internal from `9a29f63` to `e1c0e04` (#1303) via Antonio Pallares (@ajpallares)
 
 ## 14.2.0
 ## RevenueCat SDK
