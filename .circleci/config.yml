@@ -230,7 +230,7 @@ jobs:
       - android/restore-gradle-cache
       - run:
           name: Detekt
-          command: ./gradlew detektAll
+          command: ./gradlew detekt
       - android/save-gradle-cache
 
   test-android:
