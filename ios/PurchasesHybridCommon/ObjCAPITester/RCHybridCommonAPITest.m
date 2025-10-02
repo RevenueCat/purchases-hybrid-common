@@ -80,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality purchase:@{} completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                          RCErrorContainer * _Nullable error) {
+    }];
+
     // Win-Back Offers
     [RCCommonFunctionality eligibleWinBackOffersForProductIdentifier:@"" completionBlock:^(NSArray<NSDictionary *> * _Nullable offers, RCErrorContainer * _Nullable error) {
     }];
