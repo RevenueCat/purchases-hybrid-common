@@ -56,8 +56,10 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
+
     @Deprecated("Use onCustomerCenterCustomActionSelectedWrapper instead.")
     abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
+
     abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
 }
 
