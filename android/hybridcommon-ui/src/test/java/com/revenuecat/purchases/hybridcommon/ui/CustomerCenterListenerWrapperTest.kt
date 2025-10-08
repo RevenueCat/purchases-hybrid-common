@@ -44,7 +44,7 @@ class CustomerCenterListenerWrapperTest {
 
         override fun onManagementOptionSelectedWrapper(action: String, url: String?) = Unit
 
-        @Deprecated("Use onCustomerCenterCustomActionSelectedWrapper instead.")
+        @Deprecated("Use onCustomActionSelectedWrapper instead.")
         override fun onManagementOptionSelectedWrapper(
             action: String,
             customAction: String?,
@@ -53,7 +53,7 @@ class CustomerCenterListenerWrapperTest {
             deprecatedCustomActionInvoked = true
         }
 
-        override fun onCustomerCenterCustomActionSelectedWrapper(
+        override fun onCustomActionSelectedWrapper(
             actionId: String,
             purchaseIdentifier: String?,
         ) {

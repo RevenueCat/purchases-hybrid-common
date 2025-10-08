@@ -35,7 +35,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         if (action is CustomerCenterManagementOption.CustomUrl) {
             this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
         } else if (action is CustomerCenterManagementOption.CustomAction) {
-            this.onCustomerCenterCustomActionSelectedWrapper(
+            this.onCustomActionSelectedWrapper(
                 actionId = action.actionIdentifier,
                 purchaseIdentifier = action.purchaseIdentifier,
             )
@@ -57,10 +57,10 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
 
-    @Deprecated("Use onCustomerCenterCustomActionSelectedWrapper instead.")
+    @Deprecated("Use onCustomActionSelectedWrapper instead.")
     abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
 
-    abstract fun onCustomerCenterCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
+    abstract fun onCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
 }
 
 private val CustomerCenterManagementOption.optionName: String
