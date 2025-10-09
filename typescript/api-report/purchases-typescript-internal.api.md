@@ -315,6 +315,8 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     SYSTEM_INFO_ERROR = "30",
     // (undocumented)
+    TEST_STORE_SIMULATED_PURCHASE_ERROR = "42",
+    // (undocumented)
     UNEXPECTED_BACKEND_RESPONSE_ERROR = "12",
     // (undocumented)
     UNKNOWN_BACKEND_ERROR = "16",
