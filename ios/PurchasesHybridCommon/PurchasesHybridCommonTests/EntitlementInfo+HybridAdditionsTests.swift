@@ -35,6 +35,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                         (.rcBilling, "RC_BILLING"),
                         (.external, "EXTERNAL"),
                         (.paddle, "PADDLE"),
+                        (.testStore, "TEST_STORE"),
                         (.unknownStore, "UNKNOWN_STORE")
                     ]
 
