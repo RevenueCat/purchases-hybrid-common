@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.0.0
+  revenuecat: revenuecat/sdks-common-config@3.7.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -227,7 +227,6 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -244,7 +243,7 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
+      - android/restore-gradle-cache
       - run:
           name: Run Tests
           command: ./gradlew lint test
@@ -349,19 +348,6 @@ jobs:
       - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
-
-  release:
-    docker:
-      - image: cimg/ruby:3.3.0
-    steps:
-      - checkout
-      - setup-git-credentials
-      - trust-github-key
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
-      - run:
-          name: Automatically bump release and create release PR
-          command: bundle exec fastlane automatic_bump github_rate_limit:10
 
   trigger-dependent-updates:
     docker:
@@ -564,7 +550,8 @@ workflows:
         - not:
             equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - release:
+      - revenuecat/automatic-bump:
+          ruby_version: "3.3.0"
           filters:
             tags:
               ignore: /.*/
