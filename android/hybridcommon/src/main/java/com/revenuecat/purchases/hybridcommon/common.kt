@@ -20,6 +20,7 @@ import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
@@ -102,6 +103,131 @@ fun getProductInfo(
         Purchases.sharedInstance.getProductsWith(productIDs, ProductType.SUBS, onError, onReceived)
     } else {
         Purchases.sharedInstance.getProductsWith(productIDs, ProductType.INAPP, onError, onReceived)
+    }
+}
+
+fun purchase(
+    activity: Activity?,
+    options: Map<String, Any?>,
+    onResult: OnResult,
+) {
+    val purchaseParams = validatePurchaseParams(options).onFailure {
+        onResult.onError((it as PurchasesException).error.map())
+    }.getOrNull() ?: return
+    when (val purchasableItem = purchaseParams.purchasableItem) {
+        is PurchasableItem.Product -> purchaseProduct(
+            activity = activity,
+            productIdentifier = purchasableItem.productIdentifier,
+            type = purchasableItem.type,
+            googleBasePlanId = purchasableItem.googleBasePlanId,
+            googleOldProductId = purchaseParams.googleOldProductId,
+            googleReplacementModeInt = purchaseParams.googleReplacementMode,
+            googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            presentedOfferingContext = purchaseParams.presentedOfferingContext,
+            onResult = onResult,
+        )
+
+        is PurchasableItem.Package -> purchasePackage(
+            activity = activity,
+            packageIdentifier = purchasableItem.packageIdentifier,
+            presentedOfferingContext = purchaseParams.presentedOfferingContext
+                ?: emptyMap(),
+            googleOldProductId = purchaseParams.googleOldProductId,
+            googleReplacementModeInt = purchaseParams.googleReplacementMode,
+            googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            onResult = onResult,
+        )
+
+        is PurchasableItem.SubscriptionOption -> purchaseSubscriptionOption(
+            activity = activity,
+            productIdentifier = purchasableItem.productIdentifier,
+            optionIdentifier = purchasableItem.optionIdentifier,
+            googleOldProductId = purchaseParams.googleOldProductId,
+            googleReplacementModeInt = purchaseParams.googleReplacementMode,
+            googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            presentedOfferingContext = purchaseParams.presentedOfferingContext,
+            onResult = onResult,
+        )
+    }
+}
+
+private sealed interface PurchasableItem {
+    data class Product(
+        val productIdentifier: String,
+        val type: String,
+        val googleBasePlanId: String?,
+    ) : PurchasableItem
+
+    data class Package(
+        val packageIdentifier: String,
+    ) : PurchasableItem
+
+    data class SubscriptionOption(
+        val productIdentifier: String,
+        val optionIdentifier: String,
+    ) : PurchasableItem
+}
+
+private data class CommonPurchaseParams(
+    val purchasableItem: PurchasableItem,
+    val googleOldProductId: String?,
+    val googleReplacementMode: Int?,
+    val googleIsPersonalizedPrice: Boolean?,
+    val presentedOfferingContext: Map<String, Any?>?,
+)
+
+private fun validatePurchaseParams(
+    options: Map<String, Any?>,
+): Result<CommonPurchaseParams> {
+    val packageIdentifier = options["packageIdentifier"] as? String
+    val productIdentifier = options["productIdentifier"] as? String
+    val subscriptionOptionIdentifier = options["optionIdentifier"] as? String
+
+    val googleOldProductId = options["googleOldProductId"] as? String
+    val googleReplacementMode = options["googleReplacementMode"] as? Int
+    val googleIsPersonalizedPrice = options["googleIsPersonalizedPrice"] as? Boolean
+    val presentedOfferingContext = (options["presentedOfferingContext"] as? Map<*, *>)?.let { map ->
+        if (map.keys.all { it is String }) {
+            map.mapKeys { it.key as String }
+        } else {
+            null
+        }
+    }
+    val type = options["type"] as? String
+
+    val purchasableItem = when {
+        packageIdentifier != null -> {
+            PurchasableItem.Package(packageIdentifier)
+        }
+        subscriptionOptionIdentifier != null && productIdentifier != null -> {
+            PurchasableItem.SubscriptionOption(productIdentifier, subscriptionOptionIdentifier)
+        }
+        productIdentifier != null && type != null -> {
+            val googleBasePlanId = options["googleBasePlanId"] as? String
+            PurchasableItem.Product(productIdentifier, type, googleBasePlanId)
+        }
+        else -> null
+    }
+
+    return if (purchasableItem != null) {
+        Result.success(
+            CommonPurchaseParams(
+                purchasableItem = purchasableItem,
+                googleOldProductId = googleOldProductId,
+                googleReplacementMode = googleReplacementMode,
+                googleIsPersonalizedPrice = googleIsPersonalizedPrice,
+                presentedOfferingContext = presentedOfferingContext,
+            ),
+        )
+    } else {
+        Result.failure(
+            PurchasesException(
+                PurchasesError(
+                    PurchasesErrorCode.PurchaseInvalidError,
+                    "Invalid purchase parameters provided: $options",
+                ),
+            ),
+        )
     }
 }
 

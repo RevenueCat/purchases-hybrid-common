@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/RevenueCat/fastlane-plugin-revenuecat_internal
-  revision: e1c0e045dfef42a8a7c6a4abc6458ed1b228fd4a
+  revision: 3f7fffc2e3111e92d2ad86e7c2644743bde69119
   specs:
     fastlane-plugin-revenuecat_internal (0.1.0)
       nokogiri
@@ -268,7 +268,7 @@ GEM
       rexml (>= 3.3.9)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (1.13.4)
+    lefthook (1.13.6)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
