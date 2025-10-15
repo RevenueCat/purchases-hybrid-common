@@ -2,6 +2,7 @@ package com.revenuecat.purchases.hybridcommon.ui
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
@@ -46,7 +47,7 @@ fun presentPaywallFromFragment(
                 activity.supportFragmentManager.clearFragmentResultListener(requestKey)
             }
 
-            if (!activity.isFinishing) {
+            if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 activity
                     .supportFragmentManager
                     .beginTransaction()
@@ -62,7 +63,10 @@ fun presentPaywallFromFragment(
                     )
                     .commit()
             } else {
-                Log.w("Purchases", "Tried to present a paywall while the activity was finishing. Not presenting.")
+                Log.w(
+                    "Purchases",
+                    "Tried to present a paywall while the activity was paused or finished. Not presenting.",
+                )
                 options.paywallResultListener.onPaywallResult("ERROR")
             }
         }
