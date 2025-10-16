@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.7.0
+  revenuecat: revenuecat/sdks-common-config@3.9.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -522,6 +522,11 @@ workflows:
             - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
+          requires:
+            - make-github-release
+      - revenuecat/insert-changelog-latest-in-main-if-needed:
+          <<: *release-tags
+          cache-version: v1
           requires:
             - make-github-release
 
