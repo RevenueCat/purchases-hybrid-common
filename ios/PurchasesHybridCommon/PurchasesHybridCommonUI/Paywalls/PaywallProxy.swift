@@ -11,7 +11,7 @@
 import Foundation
 import PurchasesHybridCommon
 import RevenueCat
-import RevenueCatUI
+@_spi(Internal) import RevenueCatUI
 import UIKit
 
 @available(iOS 15.0, *)
@@ -41,7 +41,9 @@ import UIKit
 
     @objc
     public func createPaywallView(offeringIdentifier: String) -> PaywallViewController {
+        let context = PresentedOfferingContext(offeringIdentifier: offeringIdentifier)
         let controller = PaywallViewController(offeringIdentifier: offeringIdentifier,
+                                               presentedOfferingContext: context,
                                                dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
         return controller
@@ -57,7 +59,9 @@ import UIKit
 
     @objc
     public func createFooterPaywallView(offeringIdentifier: String) -> PaywallFooterViewController {
+        let context = PresentedOfferingContext(offeringIdentifier: offeringIdentifier)
         let controller = PaywallFooterViewController(offeringIdentifier: offeringIdentifier,
+                                                     presentedOfferingContext: context,
                                                      dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
 
@@ -172,7 +176,9 @@ import UIKit
                                                displayCloseButton: displayCloseButton,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
         case let .offeringIdentifier(identifier):
-            controller = PaywallViewController(offeringIdentifier: identifier, 
+            let context = PresentedOfferingContext(offeringIdentifier: identifier)
+            controller = PaywallViewController(offeringIdentifier: identifier,
+                                               presentedOfferingContext: context,
                                                fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
