@@ -1,5 +1,23 @@
 import { PurchasesCommon } from '../src/purchases-common';
-import { Purchases, Offering, Package, PurchaseResult, PurchasesError, ErrorCode, EntitlementInfos, CustomerInfo, PackageType, Product, ProductType, SubscriptionOption, PeriodUnit } from '@revenuecat/purchases-js';
+import {
+  Purchases,
+  Offering,
+  Package,
+  PurchaseResult,
+  PurchasesError,
+  ErrorCode,
+  EntitlementInfos,
+  CustomerInfo,
+  PackageType,
+  Product,
+  ProductType,
+  ReservedCustomerAttribute,
+  SubscriptionOption,
+  PeriodUnit,
+  PurchasesConfig,
+  VirtualCurrencies,
+  LogLevel,
+} from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
 describe('PurchasesCommon', () => {
@@ -17,12 +35,16 @@ describe('PurchasesCommon', () => {
     getAppUserId: jest.fn(),
     isSandbox: jest.fn(),
     isAnonymous: jest.fn(),
+    setAttributes: jest.fn(),
+    getVirtualCurrencies: jest.fn(),
+    invalidateVirtualCurrenciesCache: jest.fn(),
+    getCachedVirtualCurrencies: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
     entitlements: {
       all: {},
-      active: {}
+      active: {},
     } as EntitlementInfos,
     activeSubscriptions: new Set<string>(),
     allPurchaseDatesByProduct: {},
@@ -33,21 +55,37 @@ describe('PurchasesCommon', () => {
     originalPurchaseDate: new Date(),
     managementURL: null,
     nonSubscriptionTransactions: [],
-    subscriptionsByProductIdentifier: {}
+    subscriptionsByProductIdentifier: {},
   };
 
   const mockMonthlyProductSubscriptionOption: SubscriptionOption = {
     id: 'test_monthly_option',
     base: {
-        periodDuration: 'P1M',
-        period: { number: 1, unit: PeriodUnit.Month },
-        price: { amountMicros: 9990000, amount: 999, currency: 'USD', formattedPrice: '$9.99' },
-        cycleCount: 0,
-        pricePerWeek: { amountMicros: 2490000, amount: 249, currency: 'USD', formattedPrice: '$2.49' },
-        pricePerMonth: { amountMicros: 9990000, amount: 999, currency: 'USD', formattedPrice: '$9.99' },
-        pricePerYear: { amountMicros: 11999000, amount: 11998, currency: 'USD', formattedPrice: '$119.98' },
+      periodDuration: 'P1M',
+      period: { number: 1, unit: PeriodUnit.Month },
+      price: { amountMicros: 9990000, amount: 999, currency: 'USD', formattedPrice: '$9.99' },
+      cycleCount: 0,
+      pricePerWeek: {
+        amountMicros: 2490000,
+        amount: 249,
+        currency: 'USD',
+        formattedPrice: '$2.49',
+      },
+      pricePerMonth: {
+        amountMicros: 9990000,
+        amount: 999,
+        currency: 'USD',
+        formattedPrice: '$9.99',
+      },
+      pricePerYear: {
+        amountMicros: 11999000,
+        amount: 11998,
+        currency: 'USD',
+        formattedPrice: '$119.98',
+      },
     },
     trial: null,
+    introPrice: null,
     priceId: 'test_monthly_option_price_id',
   };
 
@@ -83,9 +121,7 @@ describe('PurchasesCommon', () => {
   const mockOffering: Offering = {
     identifier: 'test_offering',
     serverDescription: 'Test offering',
-    availablePackages: [
-      mockMonthlyPackage,
-    ],
+    availablePackages: [mockMonthlyPackage],
     packagesById: {
       [mockMonthlyPackage.identifier]: mockMonthlyPackage,
     },
@@ -103,7 +139,29 @@ describe('PurchasesCommon', () => {
   const mockPurchaseResult: PurchaseResult = {
     customerInfo: customerInfo,
     redemptionInfo: { redeemUrl: 'test_url' },
-    operationSessionId: 'test_session_id'
+    operationSessionId: 'test_session_id',
+    storeTransaction: {
+      storeTransactionId: 'test_transaction_id',
+      productIdentifier: 'test_product_id',
+      purchaseDate: new Date(),
+    },
+  };
+
+  const mockVirtualCurrencies: VirtualCurrencies = {
+    all: {
+      GOLD: {
+        balance: 100,
+        name: 'Gold',
+        code: 'GOLD',
+        serverDescription: "It's gold",
+      },
+      SILVER: {
+        balance: 50,
+        name: 'Silver',
+        code: 'SILVER',
+        serverDescription: null,
+      },
+    },
   };
 
   const mockLocalStorage = {
@@ -125,7 +183,13 @@ describe('PurchasesCommon', () => {
     Object.defineProperty(global, 'localStorage', {
       value: mockLocalStorage,
       writable: true,
-      configurable: true
+      configurable: true,
+    });
+
+    Object.defineProperty(navigator, 'language', {
+      value: 'es-US',
+      writable: true,
+      configurable: true,
     });
   });
 
@@ -133,7 +197,7 @@ describe('PurchasesCommon', () => {
     Object.defineProperty(global, 'localStorage', {
       value: undefined,
       writable: true,
-      configurable: true
+      configurable: true,
     });
   });
 
@@ -144,18 +208,17 @@ describe('PurchasesCommon', () => {
         apiKey: 'test_api_key',
         appUserId,
         flavor: 'test_flavor',
-        flavorVersion: '1.0.0'
+        flavorVersion: '1.0.0',
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        appUserId,
-        undefined
-      );
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-        'revenuecat_user_id',
-        appUserId
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: appUserId,
+        httpConfig: undefined,
+      };
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith('revenuecat_user_id', appUserId);
     });
 
     it('should use stored userId from localStorage when appUserId is undefined', () => {
@@ -166,14 +229,16 @@ describe('PurchasesCommon', () => {
         apiKey: 'test_api_key',
         appUserId: undefined,
         flavor: 'test_flavor',
-        flavorVersion: '1.0.0'
+        flavorVersion: '1.0.0',
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        storedUserId,
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: storedUserId,
+        httpConfig: undefined,
+      };
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
       expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
     });
 
@@ -184,18 +249,17 @@ describe('PurchasesCommon', () => {
         apiKey: 'test_api_key',
         appUserId: undefined,
         flavor: 'test_flavor',
-        flavorVersion: '1.0.0'
+        flavorVersion: '1.0.0',
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
-        'revenuecat_user_id',
-        'anonymous_id'
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      };
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith('revenuecat_user_id', 'anonymous_id');
     });
 
     it('should handle environment without localStorage gracefully', () => {
@@ -203,21 +267,65 @@ describe('PurchasesCommon', () => {
       Object.defineProperty(global, 'localStorage', {
         value: undefined,
         writable: true,
-        configurable: true
+        configurable: true,
       });
 
       PurchasesCommon.configure({
         apiKey: 'test_api_key',
         appUserId: undefined,
         flavor: 'test_flavor',
-        flavorVersion: '1.0.0'
+        flavorVersion: '1.0.0',
       });
 
-      expect(Purchases.configure).toHaveBeenCalledWith(
-        'test_api_key',
-        'anonymous_id',
-        undefined
-      );
+      const expectedConfig: PurchasesConfig = {
+        apiKey: 'test_api_key',
+        appUserId: 'anonymous_id',
+        httpConfig: undefined,
+      };
+
+      expect(Purchases.configure).toHaveBeenCalledWith(expectedConfig);
+    });
+  });
+
+  describe('setAttributes', () => {
+    beforeEach(() => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0',
+      });
+    });
+
+    it('should set attributes correctly', async () => {
+      const attributes = { key1: 'value1', key2: 'value2' };
+      await purchasesCommon.setAttributes(attributes);
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith(attributes);
+    });
+
+    it('should set email correctly', async () => {
+      await purchasesCommon.setEmail('test-email');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({
+        [ReservedCustomerAttribute.Email]: 'test-email',
+      });
+    });
+
+    it('should set phone number correctly', async () => {
+      await purchasesCommon.setPhoneNumber('test-phone-number');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({
+        [ReservedCustomerAttribute.PhoneNumber]: 'test-phone-number',
+      });
+    });
+
+    it('should set display name correctly', async () => {
+      await purchasesCommon.setDisplayName('Test User');
+
+      expect(mockPurchasesInstance.setAttributes).toHaveBeenCalledWith({
+        [ReservedCustomerAttribute.DisplayName]: 'Test User',
+      });
     });
   });
 
@@ -227,7 +335,7 @@ describe('PurchasesCommon', () => {
         apiKey: 'test_api_key',
         appUserId: 'test_user_id',
         flavor: 'test_flavor',
-        flavorVersion: '1.0.0'
+        flavorVersion: '1.0.0',
       });
     });
 
@@ -235,7 +343,7 @@ describe('PurchasesCommon', () => {
       const purchaseParams = {
         packageIdentifier: 'test_package',
         presentedOfferingContext: {},
-        optionIdentifier: 'test_option'
+        optionIdentifier: 'test_option',
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
@@ -252,18 +360,19 @@ describe('PurchasesCommon', () => {
     it('should throw error when offering is not found', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: {},
-        current: null
+        current: null,
       });
 
       const purchaseParams = {
         packageIdentifier: 'test_package',
         presentedOfferingContext: { offeringIdentifier: 'non_existent_offering' },
-        optionIdentifier: 'test_option'
+        optionIdentifier: 'test_option',
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
         code: ErrorCode.PurchaseInvalidError,
-        message: 'Could not find offering with identifier: non_existent_offering. Found offering ids: ',
+        message:
+          'Could not find offering with identifier: non_existent_offering. Found offering ids: ',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
@@ -275,53 +384,55 @@ describe('PurchasesCommon', () => {
     it('should throw error when package is not found', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
 
       const purchaseParams = {
         packageIdentifier: 'non_existent_package',
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
-        optionIdentifier: 'test_option'
+        optionIdentifier: 'test_option',
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
         code: ErrorCode.PurchaseInvalidError,
-        message: 'Could not find package with id: non_existent_package in offering with id: test_offering',
+        message:
+          'Could not find package with id: non_existent_package in offering with id: test_offering',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
         underlyingErrorMessage: undefined,
-      })
+      });
     });
 
     it('should throw error when purchase option is not found', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
 
       const purchaseParams = {
         packageIdentifier: 'test_package',
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
-        optionIdentifier: 'non_existent_option'
+        optionIdentifier: 'non_existent_option',
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
         code: ErrorCode.PurchaseInvalidError,
-        message: 'Could not find option with id: non_existent_option in package with id: test_package',
+        message:
+          'Could not find option with id: non_existent_option in package with id: test_package',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
         underlyingErrorMessage: undefined,
-      })
+      });
     });
 
     it('should successfully complete purchase with option', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
       mockPurchasesInstance.purchase.mockResolvedValue(mockPurchaseResult);
 
@@ -330,32 +441,35 @@ describe('PurchasesCommon', () => {
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
         optionIdentifier: 'test_monthly_option',
         customerEmail: 'test@example.com',
-        selectedLocale: 'en-US',
-        defaultLocale: 'en'
+        selectedLocale: 'es-US',
+        defaultLocale: 'en',
       };
 
       const result = await purchasesCommon.purchasePackage(purchaseParams);
       expect(result).toBeDefined();
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
-        purchaseOption: mockOffering.availablePackages[0].webBillingProduct.subscriptionOptions['test_monthly_option'],
+        purchaseOption:
+          mockOffering.availablePackages[0].webBillingProduct.subscriptionOptions[
+            'test_monthly_option'
+          ],
         customerEmail: 'test@example.com',
-        selectedLocale: 'en-US',
-        defaultLocale: 'en'
+        selectedLocale: 'es-US',
+        defaultLocale: 'en',
       });
     });
 
     it('should successfully complete purchase without option', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
       mockPurchasesInstance.purchase.mockResolvedValue(mockPurchaseResult);
 
       const purchaseParams = {
         packageIdentifier: 'test_package',
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
       };
 
       const result = await purchasesCommon.purchasePackage(purchaseParams);
@@ -363,21 +477,23 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption: null,
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
+        selectedLocale: 'es-US',
+        defaultLocale: undefined,
       });
     });
 
     it('should use cached offering if it exists', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
       mockPurchasesInstance.purchase.mockResolvedValue(mockPurchaseResult);
 
       const purchaseParams = {
         packageIdentifier: 'test_package',
         presentedOfferingContext: { offeringIdentifier: 'test_offering' },
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
       };
 
       expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(0);
@@ -393,21 +509,23 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption: null,
-        customerEmail: 'test@example.com'
+        customerEmail: 'test@example.com',
+        selectedLocale: 'es-US',
+        defaultLocale: undefined,
       });
     });
 
     it('should handle purchase errors', async () => {
       mockPurchasesInstance.getOfferings.mockResolvedValue({
         all: { test_offering: mockOffering },
-        current: mockOffering
+        current: mockOffering,
       });
       const mockError = new PurchasesError(ErrorCode.UserCancelledError, 'Purchase cancelled');
       mockPurchasesInstance.purchase.mockRejectedValue(mockError);
 
       const purchaseParams = {
         packageIdentifier: 'test_package',
-        presentedOfferingContext: { offeringIdentifier: 'test_offering' }
+        presentedOfferingContext: { offeringIdentifier: 'test_offering' },
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
@@ -418,7 +536,180 @@ describe('PurchasesCommon', () => {
           statusCode: undefined,
         },
         underlyingErrorMessage: undefined,
-      })
+      });
+    });
+  });
+
+  describe('getVirtualCurrencies', () => {
+    it('should successfully get virtual currencies', async () => {
+      mockPurchasesInstance.getVirtualCurrencies.mockResolvedValue(mockVirtualCurrencies);
+
+      const result = await purchasesCommon.getVirtualCurrencies();
+
+      expect(result).toEqual({
+        all: {
+          GOLD: {
+            balance: 100,
+            name: 'Gold',
+            code: 'GOLD',
+            serverDescription: "It's gold",
+          },
+          SILVER: {
+            balance: 50,
+            name: 'Silver',
+            code: 'SILVER',
+            serverDescription: null,
+          },
+        },
+      });
+      expect(mockPurchasesInstance.getVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle errors from getVirtualCurrencies', async () => {
+      const mockError = new PurchasesError(ErrorCode.NetworkError, 'Network error');
+      mockPurchasesInstance.getVirtualCurrencies.mockRejectedValue(mockError);
+
+      await expect(purchasesCommon.getVirtualCurrencies()).rejects.toMatchObject({
+        code: ErrorCode.NetworkError,
+        message: 'Network error',
+        info: {
+          backendErrorCode: undefined,
+          statusCode: undefined,
+        },
+        underlyingErrorMessage: undefined,
+      });
+    });
+  });
+
+  describe('invalidateVirtualCurrenciesCache', () => {
+    it('should call invalidateVirtualCurrenciesCache on purchases instance', () => {
+      purchasesCommon.invalidateVirtualCurrenciesCache();
+
+      expect(mockPurchasesInstance.invalidateVirtualCurrenciesCache).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getCachedVirtualCurrencies', () => {
+    it('should return cached virtual currencies when available', () => {
+      mockPurchasesInstance.getCachedVirtualCurrencies.mockReturnValue(mockVirtualCurrencies);
+
+      const result = purchasesCommon.getCachedVirtualCurrencies();
+
+      expect(result).toEqual({
+        all: {
+          GOLD: {
+            balance: 100,
+            name: 'Gold',
+            code: 'GOLD',
+            serverDescription: "It's gold",
+          },
+          SILVER: {
+            balance: 50,
+            name: 'Silver',
+            code: 'SILVER',
+            serverDescription: null,
+          },
+        },
+      });
+      expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return null when no cached virtual currencies are available', () => {
+      mockPurchasesInstance.getCachedVirtualCurrencies.mockReturnValue(null);
+
+      const result = purchasesCommon.getCachedVirtualCurrencies();
+
+      expect(result).toBeNull();
+      expect(mockPurchasesInstance.getCachedVirtualCurrencies).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('setLogHandler', () => {
+    let mockLogHandler: jest.Mock;
+    let mockPurchasesSetLogHandler: jest.Mock;
+
+    beforeEach(() => {
+      mockLogHandler = jest.fn();
+      mockPurchasesSetLogHandler = jest.fn();
+      jest.spyOn(Purchases, 'setLogHandler').mockImplementation(mockPurchasesSetLogHandler);
+    });
+
+    it('should delegate to Purchases.setLogHandler with correct mapping for all log levels', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      expect(mockPurchasesSetLogHandler).toHaveBeenCalledTimes(1);
+
+      // Get the wrapper function that was passed to Purchases.setLogHandler
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+      expect(typeof wrapperFunction).toBe('function');
+
+      // Test all log levels
+      const testCases = [
+        { logLevel: LogLevel.Verbose, expectedString: 'VERBOSE' },
+        { logLevel: LogLevel.Debug, expectedString: 'DEBUG' },
+        { logLevel: LogLevel.Info, expectedString: 'INFO' },
+        { logLevel: LogLevel.Warn, expectedString: 'WARN' },
+        { logLevel: LogLevel.Error, expectedString: 'ERROR' },
+        { logLevel: LogLevel.Silent, expectedString: 'SILENT' },
+      ];
+
+      testCases.forEach(({ logLevel, expectedString }) => {
+        const testMessage = `Test message for ${expectedString}`;
+        wrapperFunction(logLevel, testMessage);
+
+        expect(mockLogHandler).toHaveBeenCalledWith(expectedString, testMessage);
+      });
+
+      expect(mockLogHandler).toHaveBeenCalledTimes(testCases.length);
+    });
+
+    it('should ignore unknown log levels', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+
+      // Test with an unknown log level (using a number that's not in the enum)
+      wrapperFunction(999 as LogLevel, 'Test message');
+
+      // The custom log handler should not be called for unknown log levels
+      expect(mockLogHandler).not.toHaveBeenCalled();
+    });
+
+    it('should handle multiple log messages correctly', () => {
+      PurchasesCommon.setLogHandler(mockLogHandler);
+
+      const wrapperFunction = mockPurchasesSetLogHandler.mock.calls[0][0];
+
+      // Send multiple log messages
+      wrapperFunction(LogLevel.Info, 'First message');
+      wrapperFunction(LogLevel.Error, 'Second message');
+      wrapperFunction(LogLevel.Debug, 'Third message');
+
+      expect(mockLogHandler).toHaveBeenCalledTimes(3);
+      expect(mockLogHandler).toHaveBeenNthCalledWith(1, 'INFO', 'First message');
+      expect(mockLogHandler).toHaveBeenNthCalledWith(2, 'ERROR', 'Second message');
+      expect(mockLogHandler).toHaveBeenNthCalledWith(3, 'DEBUG', 'Third message');
+    });
+
+    it('should work with different custom log handler implementations', () => {
+      const customLogHandler1 = jest.fn();
+      const customLogHandler2 = jest.fn();
+
+      // Test first handler
+      PurchasesCommon.setLogHandler(customLogHandler1);
+      const wrapperFunction1 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      wrapperFunction1(LogLevel.Info, 'Test message 1');
+      expect(customLogHandler1).toHaveBeenCalledWith('INFO', 'Test message 1');
+
+      // Reset mocks
+      mockPurchasesSetLogHandler.mockClear();
+      customLogHandler1.mockClear();
+
+      // Test second handler
+      PurchasesCommon.setLogHandler(customLogHandler2);
+      const wrapperFunction2 = mockPurchasesSetLogHandler.mock.calls[0][0];
+      wrapperFunction2(LogLevel.Error, 'Test message 2');
+      expect(customLogHandler2).toHaveBeenCalledWith('ERROR', 'Test message 2');
     });
   });
 });

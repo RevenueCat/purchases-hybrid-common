@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E6A6C252E7A5C8F006C69B9 /* CommonPurchaseParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */; };
+		1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */; };
+		1E6A6C292E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */; };
 		1EF418B12D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */; };
 		1EF418B32D75E5FE005E6702 /* Enums+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */; };
 		2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */; };
@@ -137,6 +140,9 @@
 /* Begin PBXFileReference section */
 		03AC07491DFE4DAB6F79517F /* Pods-PurchasesHybridCommonSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.debug.xcconfig"; sourceTree = "<group>"; };
 		046C108DA8597F9CDC4D4C48 /* Pods-PurchasesHybridCommonUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonUI.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonUI/Pods-PurchasesHybridCommonUI.release.xcconfig"; sourceTree = "<group>"; };
+		1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParams.swift; sourceTree = "<group>"; };
+		1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParamsTests.swift; sourceTree = "<group>"; };
+		1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+PurchaseTests.swift"; sourceTree = "<group>"; };
 		1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums+HybridAdditions.swift"; sourceTree = "<group>"; };
 		21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.release.xcconfig"; sourceTree = "<group>"; };
@@ -326,6 +332,8 @@
 				2D6E333B2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift */,
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
 				2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */,
+				1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */,
+				1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */,
 				2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */,
 				2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */,
 				2D44524024916501006AA26F /* PurchasesHybridCommonTests.swift */,
@@ -405,6 +413,7 @@
 				7720A9292D520021009EA43C /* IntroEligibility+HybridExtensions.swift */,
 				FDB842692E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift */,
 				FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */,
+				1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */,
 			);
 			path = PurchasesHybridCommon;
 			sourceTree = "<group>";
@@ -931,6 +940,7 @@
 				FD5EB01F2CEBC2CF004B88EF /* WinBackOffer+HybridAdditions.swift in Sources */,
 				7720A92A2D520021009EA43C /* IntroEligibility+HybridExtensions.swift in Sources */,
 				2DD3D1862810AF5A00A19EC6 /* Package+HybridAdditions.swift in Sources */,
+				1E6A6C252E7A5C8F006C69B9 /* CommonPurchaseParams.swift in Sources */,
 				2DD3D18C2810AF5A00A19EC6 /* Purchases+HybridAdditions.swift in Sources */,
 				2DD3D18D2810AF5A00A19EC6 /* StoreTransaction+HybridAdditions.swift in Sources */,
 				2DD3D18B2810AF5A00A19EC6 /* FatalErrorUtil.swift in Sources */,
@@ -977,9 +987,11 @@
 				FD31DE772841420000C0CA3A /* CustomerInfo+TestExtensions.swift in Sources */,
 				2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */,
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
+				1E6A6C292E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
 				FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */,
+				1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */,
 				FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */,
 				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
 			);

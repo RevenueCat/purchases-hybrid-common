@@ -13,16 +13,21 @@ import com.revenuecat.purchases.hybridcommon.canMakePayments
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility
 import com.revenuecat.purchases.hybridcommon.configure
 import com.revenuecat.purchases.hybridcommon.getAppUserID
+import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo
 import com.revenuecat.purchases.hybridcommon.getOfferings
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
 import com.revenuecat.purchases.hybridcommon.getProxyURLString
 import com.revenuecat.purchases.hybridcommon.getStorefront
+import com.revenuecat.purchases.hybridcommon.getVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.invalidateCustomerInfoCache
+import com.revenuecat.purchases.hybridcommon.invalidateVirtualCurrenciesCache
 import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
 import com.revenuecat.purchases.hybridcommon.logOut
+import com.revenuecat.purchases.hybridcommon.overridePreferredLocale
+import com.revenuecat.purchases.hybridcommon.purchase
 import com.revenuecat.purchases.hybridcommon.purchasePackage
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
@@ -54,6 +59,14 @@ private class CommonApiTests {
         onResult: OnResultList,
     ) {
         getProductInfo(productIDs, type, onResult)
+    }
+
+    fun checkPurchase(
+        activity: Activity?,
+        options: Map<String, Any?>,
+        onResult: OnResult,
+    ) {
+        purchase(activity, options, onResult)
     }
 
     fun checkPurchaseProduct(
@@ -226,6 +239,8 @@ private class CommonApiTests {
         verificationMode: String?,
         pendingTransactionsForPrepaidPlansEnabled: Boolean?,
         diagnosticsEnabled: Boolean?,
+        automaticDeviceIdentifierCollectionEnabled: Boolean?,
+        preferredLocale: String?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -252,6 +267,35 @@ private class CommonApiTests {
             pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
             diagnosticsEnabled = diagnosticsEnabled,
         )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            purchasesAreCompletedBy,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+        )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            purchasesAreCompletedBy,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+            preferredLocale = preferredLocale,
+        )
     }
 
     fun checkGetPromotionalOffer() {
@@ -263,5 +307,21 @@ private class CommonApiTests {
         val storedCode = errorContainer.code
         val storedMessage = errorContainer.message
         val storedInfo = errorContainer.info
+    }
+
+    private fun checkGetVirtualCurrencies(onResult: OnResult) {
+        getVirtualCurrencies(onResult)
+    }
+
+    private fun checkInvalidateVirtualCurrenciesCache() {
+        invalidateVirtualCurrenciesCache()
+    }
+
+    private fun checkGetCachedVirtualCurrencies() {
+        val cachedVirtualCurrencies: Map<String, Any?>? = getCachedVirtualCurrencies()
+    }
+
+    private fun checkOverridePreferredLocale(locale: String?) {
+        overridePreferredLocale(locale)
     }
 }

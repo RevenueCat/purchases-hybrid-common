@@ -56,6 +56,10 @@ fun setAirshipChannelID(airshipChannelID: String?) {
     Purchases.sharedInstance.setAirshipChannelID(airshipChannelID)
 }
 
+fun setPostHogUserID(postHogUserID: String?) {
+    Purchases.sharedInstance.setPostHogUserId(postHogUserID)
+}
+
 // endregion
 // region Campaign parameters
 

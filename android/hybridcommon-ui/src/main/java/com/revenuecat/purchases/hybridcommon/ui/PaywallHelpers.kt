@@ -1,6 +1,8 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
@@ -45,20 +47,28 @@ fun presentPaywallFromFragment(
                 activity.supportFragmentManager.clearFragmentResultListener(requestKey)
             }
 
-            activity
-                .supportFragmentManager
-                .beginTransaction()
-                .add(
-                    PaywallFragment.newInstance(
-                        requestKey,
-                        requiredEntitlementIdentifier,
-                        shouldDisplayDismissButton,
-                        paywallSource,
-                        fontFamily,
-                    ),
-                    PaywallFragment.tag,
+            if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                activity
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .add(
+                        PaywallFragment.newInstance(
+                            requestKey,
+                            requiredEntitlementIdentifier,
+                            shouldDisplayDismissButton,
+                            paywallSource,
+                            fontFamily,
+                        ),
+                        PaywallFragment.tag,
+                    )
+                    .commit()
+            } else {
+                Log.w(
+                    "Purchases",
+                    "Tried to present a paywall while the activity was paused or finished. Not presenting.",
                 )
-                .commit()
+                options.paywallResultListener.onPaywallResult("ERROR")
+            }
         }
     }
 }

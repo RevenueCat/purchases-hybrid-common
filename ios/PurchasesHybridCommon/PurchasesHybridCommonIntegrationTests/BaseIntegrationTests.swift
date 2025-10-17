@@ -116,7 +116,11 @@ private extension BaseIntegrationTests {
             platformFlavor: nil,
             platformFlavorVersion: nil,
             storeKitVersion: Self.storeKitVersion.name,
-            dangerousSettings: self.dangerousSettings
+            dangerousSettings: self.dangerousSettings,
+            verificationMode: nil,
+            diagnosticsEnabled: false,
+            automaticDeviceIdentifierCollectionEnabled: true,
+            preferredLocale: nil
         )
         Purchases.logLevel = .debug
     }

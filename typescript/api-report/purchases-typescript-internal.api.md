@@ -236,6 +236,15 @@ export enum PURCHASE_TYPE {
 }
 
 // @public
+export interface PurchaseParams {
+    discount?: PurchasesPromotionalOffer | null;
+    googleIsPersonalizedPrice?: boolean | null;
+    googleProductChangeInfo?: GoogleProductChangeInfo | null;
+    itemToPurchase: PurchasesPackage | PurchasesStoreProduct | SubscriptionOption;
+    winBackOffer?: PurchasesWinBackOffer | null;
+}
+
+// @public
 export enum PURCHASES_ARE_COMPLETED_BY_TYPE {
     MY_APP = "MY_APP",
     REVENUECAT = "REVENUECAT"
@@ -306,6 +315,8 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     SYSTEM_INFO_ERROR = "30",
     // (undocumented)
+    TEST_STORE_SIMULATED_PURCHASE_ERROR = "42",
+    // (undocumented)
     UNEXPECTED_BACKEND_RESPONSE_ERROR = "12",
     // (undocumented)
     UNKNOWN_BACKEND_ERROR = "16",
@@ -328,9 +339,11 @@ export type PurchasesAreCompletedByMyApp = {
 export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
+    automaticDeviceIdentifierCollectionEnabled?: boolean;
     diagnosticsEnabled?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
+    preferredUILocaleOverride?: string;
     purchasesAreCompletedBy?: PurchasesAreCompletedBy;
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
@@ -548,7 +561,7 @@ export enum REFUND_REQUEST_STATUS {
 export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promise<MakePurchaseResult>) => void;
 
 // @public
-export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "UNKNOWN_STORE";
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE";
 
 // @public
 export interface Storefront {

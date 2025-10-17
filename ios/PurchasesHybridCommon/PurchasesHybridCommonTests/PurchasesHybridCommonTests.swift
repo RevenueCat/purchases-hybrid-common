@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 @testable import PurchasesHybridCommon
-@testable import RevenueCat
+@_spi(Internal) @testable import RevenueCat
 import Foundation
 
 class PurchasesHybridCommonTests: QuickSpec {
@@ -377,10 +377,10 @@ class PurchasesHybridCommonTests: QuickSpec {
         context("getVirtualCurrencies") {
             it("calls Purchases.getVirtualCurrencies with VirtualCurrencies on success") {
                 var completionCallCount = 0
-                var completionVirtualCurrencies: VirtualCurrencies? = nil
+                var completionVirtualCurrencies: NSDictionary?
                 var completionError: ErrorContainer? = nil
 
-                let expectedVirtualCurrencies = VirtualCurrencies(virtualCurrencies: [
+                let virtualCurrencies = VirtualCurrencies(virtualCurrencies: [
                     "COIN": VirtualCurrency(
                         balance: 1,
                         name: "Coin",
@@ -388,24 +388,42 @@ class PurchasesHybridCommonTests: QuickSpec {
                         serverDescription: nil
                     )
                 ])
-                mockPurchases.getVirtualCurrenciesStub = .success(expectedVirtualCurrencies)
 
-                CommonFunctionality.getVirtualCurrencies { virtualCurrencies, error in
+                mockPurchases.getVirtualCurrenciesStub = .success(virtualCurrencies)
+
+                let expectedVirtualCurrenciesDictionary: NSDictionary = [
+                    "all": [
+                        "COIN": [
+                            "balance": 1,
+                            "name": "Coin",
+                            "code": "COIN",
+                            "serverDescription": nil
+                        ]
+                    ]
+                ]
+
+                CommonFunctionality.getVirtualCurrencies { rcDictionary, error in
+                    guard let rcDictionary else {
+                        fail("rcDictionary must not be nil")
+                        return
+                    }
+
                     completionCallCount += 1
-                    completionVirtualCurrencies = virtualCurrencies
+                    completionVirtualCurrencies = NSDictionary(dictionary: rcDictionary)
                     completionError = error
                 }
 
                 expect(mockPurchases.invokedGetVirtualCurrencies).to(beTrue())
                 expect(mockPurchases.invokedGetVirtualCurrenciesCount).to(equal(1))
                 expect(completionCallCount).to(equal(1))
-                expect(completionVirtualCurrencies).to(equal(expectedVirtualCurrencies))
+                expect(completionVirtualCurrencies).to(equal(expectedVirtualCurrenciesDictionary))
+
                 expect(completionError).to(beNil())
             }
 
             it("calls Purchases.getVirtualCurrencies with ErrorContainer on error") {
                 var completionCallCount = 0
-                var completionVirtualCurrencies: VirtualCurrencies? = nil
+                var completionVirtualCurrencies: NSDictionary? = nil
                 var completionError: ErrorContainer? = nil
 
                 let mockError = NSError(domain: "revenuecat", code: 123)
@@ -416,9 +434,16 @@ class PurchasesHybridCommonTests: QuickSpec {
                 ]
                 mockPurchases.getVirtualCurrenciesStub = .failure(mockError)
 
-                CommonFunctionality.getVirtualCurrencies { virtualCurrencies, error in
+                CommonFunctionality.getVirtualCurrencies { rcDictionary, error in
+                    expect(rcDictionary).to(beNil())
+
+                    if let rcDictionary {
+                        completionVirtualCurrencies = NSDictionary(dictionary: rcDictionary)
+                    } else {
+                        completionVirtualCurrencies = nil
+                    }
+
                     completionCallCount += 1
-                    completionVirtualCurrencies = virtualCurrencies
                     completionError = error
                 }
 
@@ -440,6 +465,45 @@ class PurchasesHybridCommonTests: QuickSpec {
                 CommonFunctionality.invalidateVirtualCurrenciesCache()
                 expect(mockPurchases.invokedInvalidateVirtualCurrenciesCache).to(beTrue())
                 expect(mockPurchases.invokedInvalidateVirtualCurrenciesCacheCount).to(equal(1))
+            }
+        }
+
+        context("getCachedVirtualCurrencies") {
+            it("calls Purchases.cachedVirtualCurrencies") {
+                let expectedCode = "COIN"
+                let expectedName = "Coin"
+                let expectedBalance = 1
+                let expectedServerDescription: String? = nil
+
+                let expectedVirtualCurrenciesDictionary: NSDictionary = [
+                    "all": [
+                        expectedCode: [
+                            "balance": expectedBalance,
+                            "name": expectedName,
+                            "code": expectedCode,
+                            "serverDescription": expectedServerDescription as Any
+                        ]
+                    ]
+                ]
+
+                let cachedVirtualCurrencies = CommonFunctionality.getCachedVirtualCurrencies()
+                expect(cachedVirtualCurrencies).to(beNil())
+
+                let virtualCurrencies = VirtualCurrencies(virtualCurrencies: [
+                    expectedCode: VirtualCurrency(
+                        balance: expectedBalance,
+                        name: expectedName,
+                        code: expectedCode,
+                        serverDescription: expectedServerDescription
+                    )
+                ])
+
+                mockPurchases.cachedVirtualCurrencies = virtualCurrencies
+
+                let cachedVirtualCurrencies2 = CommonFunctionality.getCachedVirtualCurrencies()
+                expect(cachedVirtualCurrencies2).toNot(beNil())
+
+                expect(NSDictionary(dictionary: cachedVirtualCurrencies2!)).to(equal(expectedVirtualCurrenciesDictionary))
             }
         }
     }

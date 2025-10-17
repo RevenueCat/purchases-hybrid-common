@@ -232,10 +232,26 @@ class CommonApiTests {
         ErrorContainer errorContainer = CommonKt.getPromotionalOffer();
     }
 
+    private void checkGetVirtualCurrencies(OnResult onResult) {
+        CommonKt.getVirtualCurrencies(onResult);
+    }
+
+    private void checkInvalidateVirtualCurrenciesCache() {
+        CommonKt.invalidateVirtualCurrenciesCache();
+    }
+
+    private void checkGetCachedVirtualCurrencies() {
+        Map<String, Object> cachedVirtualCurrencies = CommonKt.getCachedVirtualCurrencies();
+    }
+
     private void checkErrorContainer(Integer code, String message, Map<String, Object> info) {
         ErrorContainer errorContainer = new ErrorContainer(code, message, info);
         Integer storedCode = errorContainer.getCode();
         String storedMessage = errorContainer.getMessage();
         Map<String, Object> storedAny = errorContainer.getInfo();
+    }
+
+    private void checkOverridePreferredLocale(String locale) {
+        CommonKt.overridePreferredLocale(locale);
     }
 }

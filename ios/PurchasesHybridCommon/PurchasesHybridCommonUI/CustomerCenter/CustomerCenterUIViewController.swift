@@ -31,6 +31,10 @@ public final class CustomerCenterUIViewController: UIViewController {
     @objc
     public var onCloseHandler: (() -> Void)?
 
+    /// Whether to show the close button in the navigation
+    @objc
+    public var shouldShowCloseButton: Bool = true
+
     @objc
     public required init() {
         super.init(nibName: nil, bundle: nil)
@@ -82,6 +86,7 @@ extension CustomerCenterUIViewController {
         // Create the SwiftUI view with handlers that forward to the delegate
         let view = CustomerCenterView(
             navigationOptions: CustomerCenterNavigationOptions(
+                shouldShowCloseButton: shouldShowCloseButton,
                 onCloseHandler: onCloseHandler
             )
         )
@@ -128,6 +133,10 @@ extension CustomerCenterUIViewController {
                                                              didSelectCustomerCenterManagementOption: action.name,
                                                              withURL: nil)
             }
+        }
+        .onCustomerCenterCustomActionSelected { [weak self] actionIdentifier, purchaseIdentifier in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self, didSelectCustomAction: actionIdentifier, withPurchaseIdentifier: purchaseIdentifier)
         }
         
         let controller = UIHostingController(rootView: view)

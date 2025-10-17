@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.0.0
+  revenuecat: revenuecat/sdks-common-config@3.9.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -17,7 +17,7 @@ aliases:
     parameters:
       xcode_version:
         type: string
-        default: 15.2.0
+        default: 16.4.0
     working_directory: ~/ios
     shell: /bin/bash --login -o pipefail
   release-tags: &release-tags
@@ -142,6 +142,26 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
+  test-ios-18:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
+      - run:
+          name: Run ios tests
+          command: fastlane scan
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 16 (18.5)
+      - store_test_results:
+          path: ios/PurchasesHybridCommon/test_output
+      - store_artifacts:
+          path: ios/PurchasesHybridCommon/test_output
+          destination: scan-output
+
   integration-test-ios:
     <<: *base-ios-job
     steps:
@@ -157,7 +177,7 @@ jobs:
           command: bundle exec fastlane scan --result_bundle=true --testplan=CI
           working_directory: ios/PurchasesHybridCommon
           environment:
-            SCAN_DEVICE: iPhone 15 (17.2)
+            SCAN_DEVICE: iPhone 16 (18.5)
             SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
       - run:
           name: Compress result bundle
@@ -207,7 +227,6 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -224,7 +243,7 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-sdkman
-      - revenuecat/prepare-android
+      - android/restore-gradle-cache
       - run:
           name: Run Tests
           command: ./gradlew lint test
@@ -329,19 +348,6 @@ jobs:
       - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
-
-  release:
-    docker:
-      - image: cimg/ruby:3.3.0
-    steps:
-      - checkout
-      - setup-git-credentials
-      - trust-github-key
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
-      - run:
-          name: Automatically bump release and create release PR
-          command: bundle exec fastlane automatic_bump github_rate_limit:10
 
   trigger-dependent-updates:
     docker:
@@ -461,6 +467,7 @@ workflows:
     jobs:
       - test-ios-16
       - test-ios-17
+      - test-ios-18
       - check-pods
       - integration-test-ios
       - test-android
@@ -473,8 +480,14 @@ workflows:
 
   deploy:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+      - not:
+          equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      # Only run this workflow when the action is "build" (the default), 
+      # so it doesn't run for other actions like "bump" on a release branch,
+      # which should only open the release PR but not deploy it.
+      # (Deployment happens after the hold job is approved on the release PR.)
+      - equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - hold:
           type: approval
@@ -505,8 +518,15 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
             - deploy-js-mappings
+            - deploy-ios-phc
+            - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
+          requires:
+            - make-github-release
+      - revenuecat/insert-changelog-latest-in-main-if-needed:
+          <<: *release-tags
+          cache-version: v1
           requires:
             - make-github-release
 
@@ -535,7 +555,8 @@ workflows:
         - not:
             equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - release:
+      - revenuecat/automatic-bump:
+          ruby_version: "3.3.0"
           filters:
             tags:
               ignore: /.*/

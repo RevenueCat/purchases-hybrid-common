@@ -1,6 +1,7 @@
 import {
   ErrorCode,
   HttpConfig,
+  LogLevel,
   Offering,
   Offerings,
   Package,
@@ -8,7 +9,9 @@ import {
   PurchaseParams,
   PurchaseResult,
   Purchases,
+  PurchasesConfig,
   PurchasesError,
+  ReservedCustomerAttribute,
 } from '@revenuecat/purchases-js';
 import { mapCustomerInfo } from './mappers/customer_info_mapper';
 import { mapOffering, mapOfferings } from './mappers/offerings_mapper';
@@ -16,6 +19,7 @@ import { Logger } from './utils/logger';
 import { mapPurchasesError } from './mappers/purchases_error_mapper';
 import { mapPurchaseResult } from './mappers/purchase_result_mapper';
 import { mapLogLevel } from './mappers/log_level_mapper';
+import { mapVirtualCurrencies } from './mappers/virtual_currencies_mapper';
 
 export class PurchasesCommon {
   private static instance: PurchasesCommon | null = null;
@@ -67,7 +71,12 @@ export class PurchasesCommon {
       httpConfig = { proxyURL: PurchasesCommon.proxyUrl };
     }
 
-    const purchasesInstance = Purchases.configure(configuration.apiKey, appUserId, httpConfig);
+    const purchasesConfig: PurchasesConfig = {
+      apiKey: configuration.apiKey,
+      appUserId: appUserId,
+      httpConfig: httpConfig,
+    };
+    const purchasesInstance = Purchases.configure(purchasesConfig);
     PurchasesCommon.instance = new PurchasesCommon(purchasesInstance);
     return PurchasesCommon.instance;
   }
@@ -84,6 +93,24 @@ export class PurchasesCommon {
     if (logLevelEnum) {
       Purchases.setLogLevel(logLevelEnum);
     }
+  }
+
+  static setLogHandler(logHandler: (level: string, message: string) => void): void {
+    const logLevelMap: Record<LogLevel, string> = {
+      [LogLevel.Verbose]: 'VERBOSE',
+      [LogLevel.Debug]: 'DEBUG',
+      [LogLevel.Info]: 'INFO',
+      [LogLevel.Warn]: 'WARN',
+      [LogLevel.Error]: 'ERROR',
+      [LogLevel.Silent]: 'SILENT',
+    };
+
+    Purchases.setLogHandler((logLevel: LogLevel, message: string): void => {
+      const levelString = logLevelMap[logLevel];
+      if (levelString) {
+        logHandler(levelString, message);
+      }
+    });
   }
 
   static isConfigured(): boolean {
@@ -110,6 +137,26 @@ export class PurchasesCommon {
 
   public isAnonymous(): boolean {
     return this.purchases.isAnonymous();
+  }
+
+  public async setAttributes(attributes: { [key: string]: string | null }): Promise<void> {
+    try {
+      await this.purchases.setAttributes(attributes);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async setEmail(email: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.Email, email);
+  }
+
+  public async setPhoneNumber(phoneNumber: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.PhoneNumber, phoneNumber);
+  }
+
+  public async setDisplayName(displayName: string | null): Promise<void> {
+    await this.setReservedCustomerAttribute(ReservedCustomerAttribute.DisplayName, displayName);
   }
 
   public async getCustomerInfo(): Promise<Record<string, unknown>> {
@@ -183,48 +230,51 @@ export class PurchasesCommon {
     selectedLocale?: string;
     defaultLocale?: string;
   }): Promise<Record<string, unknown>> {
-    const presentedOfferingIdentifier =
-      purchaseParams.presentedOfferingContext['offeringIdentifier'];
-    if (!presentedOfferingIdentifier || typeof presentedOfferingIdentifier !== 'string') {
-      const purchasesError = new PurchasesError(
-        ErrorCode.PurchaseInvalidError,
-        'Need to provide a valid offering identifier',
-      );
-      this.handleError(purchasesError);
-    }
     try {
-      const rcPackage = await this.findPackageToPurchase(
-        purchaseParams.packageIdentifier,
-        presentedOfferingIdentifier,
-      );
-      let nativePurchaseOption: PurchaseOption | null = null;
-      if (purchaseParams.optionIdentifier) {
-        const product = rcPackage.webBillingProduct;
-        const option = product.subscriptionOptions[purchaseParams.optionIdentifier];
-        if (!option) {
-          const purchasesError = new PurchasesError(
-            ErrorCode.PurchaseInvalidError,
-            'Could not find option with id: ' +
-              purchaseParams.optionIdentifier +
-              ' in package with id: ' +
-              purchaseParams.packageIdentifier,
-          );
-          this.handleError(purchasesError);
-        }
-        nativePurchaseOption = option;
-      }
-      const nativePurchaseParams: PurchaseParams = {
-        rcPackage: rcPackage,
-        purchaseOption: nativePurchaseOption,
-        customerEmail: purchaseParams.customerEmail,
-        selectedLocale: purchaseParams.selectedLocale,
-        defaultLocale: purchaseParams.defaultLocale,
-      };
+      const nativePurchaseParams: PurchaseParams =
+        await this.createNativePurchaseParams(purchaseParams);
       const purchaseResult: PurchaseResult = await this.purchases.purchase(nativePurchaseParams);
       return mapPurchaseResult(purchaseResult);
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  /**
+   * @internal
+   */
+  public async _purchaseSimulatedStorePackage(purchaseParams: {
+    packageIdentifier: string;
+    presentedOfferingContext: Record<string, unknown>;
+  }): Promise<Record<string, unknown>> {
+    try {
+      const nativePurchaseParams: PurchaseParams =
+        await this.createNativePurchaseParams(purchaseParams);
+      const product = nativePurchaseParams.rcPackage.webBillingProduct;
+      // @ts-expect-error using an internal method
+      const purchaseResult = await this.purchases._postSimulatedStoreReceipt(product);
+      return mapPurchaseResult(purchaseResult);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public async getVirtualCurrencies(): Promise<Record<string, unknown>> {
+    try {
+      const virtualCurrencies = await this.purchases.getVirtualCurrencies();
+      return mapVirtualCurrencies(virtualCurrencies);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  public invalidateVirtualCurrenciesCache(): void {
+    this.purchases.invalidateVirtualCurrenciesCache();
+  }
+
+  public getCachedVirtualCurrencies(): Record<string, unknown> | null {
+    const virtualCurrencies = this.purchases.getCachedVirtualCurrencies();
+    return virtualCurrencies ? mapVirtualCurrencies(virtualCurrencies) : null;
   }
 
   private async findPackageToPurchase(
@@ -273,6 +323,68 @@ export class PurchasesCommon {
     }
 
     return rcPackage;
+  }
+
+  private async setReservedCustomerAttribute(
+    reservedCustomerAttribute: ReservedCustomerAttribute,
+    value: string | null,
+  ): Promise<void> {
+    try {
+      await this.purchases.setAttributes({ [reservedCustomerAttribute]: value });
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  private async createNativePurchaseParams(purchaseParams: {
+    packageIdentifier: string;
+    presentedOfferingContext: Record<string, unknown>;
+    optionIdentifier?: string;
+    customerEmail?: string;
+    selectedLocale?: string;
+    defaultLocale?: string;
+    isSimulatedStoreProduct?: boolean;
+  }): Promise<PurchaseParams> {
+    const presentedOfferingIdentifier =
+      purchaseParams.presentedOfferingContext['offeringIdentifier'];
+    if (!presentedOfferingIdentifier || typeof presentedOfferingIdentifier !== 'string') {
+      const purchasesError = new PurchasesError(
+        ErrorCode.PurchaseInvalidError,
+        'Need to provide a valid offering identifier',
+      );
+      this.handleError(purchasesError);
+    }
+    try {
+      const rcPackage = await this.findPackageToPurchase(
+        purchaseParams.packageIdentifier,
+        presentedOfferingIdentifier,
+      );
+      let nativePurchaseOption: PurchaseOption | null = null;
+      if (purchaseParams.optionIdentifier) {
+        const product = rcPackage.webBillingProduct;
+        const option = product.subscriptionOptions[purchaseParams.optionIdentifier];
+        if (!option) {
+          const purchasesError = new PurchasesError(
+            ErrorCode.PurchaseInvalidError,
+            'Could not find option with id: ' +
+              purchaseParams.optionIdentifier +
+              ' in package with id: ' +
+              purchaseParams.packageIdentifier,
+          );
+          this.handleError(purchasesError);
+        }
+        nativePurchaseOption = option;
+      }
+      return {
+        rcPackage: rcPackage,
+        purchaseOption: nativePurchaseOption,
+        customerEmail: purchaseParams.customerEmail,
+        selectedLocale: purchaseParams.selectedLocale || navigator?.language,
+        defaultLocale: purchaseParams.defaultLocale,
+      } as PurchaseParams;
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   private handleError(error: unknown): never {

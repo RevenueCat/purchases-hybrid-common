@@ -26,6 +26,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
+import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
 import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
@@ -33,16 +34,13 @@ import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.GoogleStoreProduct
-import com.revenuecat.purchases.models.InstallmentsInfo
-import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
-import com.revenuecat.purchases.models.PricingPhase
 import com.revenuecat.purchases.models.PurchasingData
-import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
-import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
+import com.revenuecat.purchases.virtualcurrencies.VirtualCurrencies
+import com.revenuecat.purchases.virtualcurrencies.VirtualCurrency
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -57,6 +55,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
@@ -480,8 +479,8 @@ internal class CommonKtTests {
         val expectedPurchaseDate: Long = 1000
         var receivedResponse: MutableMap<String, *>? = null
 
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
@@ -548,8 +547,8 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
@@ -611,8 +610,8 @@ internal class CommonKtTests {
 
         var receivedResponse: MutableMap<String, *>? = null
 
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
 
@@ -678,10 +677,10 @@ internal class CommonKtTests {
 
         var receivedResponse: MutableMap<String, *>? = null
 
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = stubStoreProduct(expectedStoreProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedStoreProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -762,7 +761,7 @@ internal class CommonKtTests {
             productDetails = mockk<ProductDetails>(relaxed = true),
         )
 
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -821,9 +820,9 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
 
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -882,8 +881,8 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
@@ -939,8 +938,8 @@ internal class CommonKtTests {
         var receivedResponse: MutableMap<String, *>? = null
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
-        val mockStoreProduct = stubStoreProduct(expectedProductIdentifier)
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
@@ -996,17 +995,17 @@ internal class CommonKtTests {
         val expectedOptionIdentifier = "monthly"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val subscriptionOption = stubSubscriptionOption(
+        val subscriptionOption = TestUtilities.stubSubscriptionOption(
             expectedOptionIdentifier,
             productId = expectedProductIdentifier,
         )
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = stubStoreProduct(
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
             expectedProductIdentifier,
             defaultOption = subscriptionOption,
         )
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -1066,17 +1065,17 @@ internal class CommonKtTests {
         val expectedOptionIdentifier = "monthly"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val subscriptionOption = stubSubscriptionOption(
+        val subscriptionOption = TestUtilities.stubSubscriptionOption(
             expectedOptionIdentifier,
             productId = expectedProductIdentifier,
         )
 
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = stubStoreProduct(
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
             expectedProductIdentifier,
             defaultOption = subscriptionOption,
         )
-        val mockTransaction = createMockTransaction(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         every {
             mockPurchases.getProducts(
@@ -1294,7 +1293,7 @@ internal class CommonKtTests {
     @Test
     fun `offerings maps with empty metadata`() {
         val productIdentifier = "product"
-        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = emptyMap())
 
         val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
@@ -1317,13 +1316,205 @@ internal class CommonKtTests {
         )
 
         val productIdentifier = "product"
-        val mockStoreProduct = stubStoreProduct(productIdentifier)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(productIdentifier)
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct, metadata = metadata)
 
         val mappedOffering = offerings.mapBlocking()["current"] as Map<*, *>
         val mappedMetadata = mappedOffering["metadata"] as Map<*, *>
 
         assertEquals(metadata, mappedMetadata)
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies correctly calls onReceived when the VC has a serverDescription`() {
+        verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+            mockedVCServerDescription = "Hello world",
+        )
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies correctly calls onReceived when the VC has a null serverDescription`() {
+        verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+            mockedVCServerDescription = null,
+        )
+    }
+
+    private fun verifyGetVirtualCurrencyCorrectlyCallsOnReceived(
+        mockedVCServerDescription: String?,
+    ) {
+        val appUserID = "appUserID"
+        val expectedBalance = 100
+        val expectedName = "Coin"
+        val expectedCode = "COIN"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = appUserID,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockVirtualCurrency = mockk<VirtualCurrency>()
+        every { mockVirtualCurrency.balance } returns expectedBalance
+        every { mockVirtualCurrency.name } returns expectedName
+        every { mockVirtualCurrency.code } returns expectedCode
+        every { mockVirtualCurrency.serverDescription } returns mockedVCServerDescription
+
+        val mockVirtualCurrencies = mockk<VirtualCurrencies>()
+        every { mockVirtualCurrencies.all } returns mapOf(expectedCode to mockVirtualCurrency)
+
+        val capturedCallback = slot<GetVirtualCurrenciesCallback>()
+        every {
+            mockPurchases.getVirtualCurrencies(capture(capturedCallback))
+        } answers {
+            capturedCallback.captured.onReceived(mockVirtualCurrencies)
+        }
+
+        val onResult = mockk<OnResult>(relaxed = true)
+
+        getVirtualCurrencies(onResult = onResult)
+
+        verify(exactly = 1) {
+            onResult.onReceived(
+                mapOf(
+                    "all" to mapOf(
+                        expectedCode to mapOf(
+                            "balance" to expectedBalance,
+                            "name" to expectedName,
+                            "code" to expectedCode,
+                            "serverDescription" to mockedVCServerDescription,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        verify(exactly = 0) {
+            onResult.onError(any())
+        }
+    }
+
+    @Test
+    fun `calling getVirtualCurrencies with error calls onError`() {
+        val appUserID = "appUserID"
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = appUserID,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockError = mockk<PurchasesError>(relaxed = true)
+        val capturedCallback = slot<GetVirtualCurrenciesCallback>()
+
+        every {
+            mockPurchases.getVirtualCurrencies(capture(capturedCallback))
+        } answers {
+            capturedCallback.captured.onError(mockError)
+        }
+
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(any()) } just runs
+
+        getVirtualCurrencies(onResult = onResult)
+
+        val mockErrorMap = mockError.map()
+        verify(exactly = 1) {
+            onResult.onError(mockErrorMap)
+        }
+
+        verify(exactly = 0) {
+            onResult.onReceived(any())
+        }
+    }
+
+    @Test
+    fun `calling invalidateVirtualCurrenciesCache calls invalidateVirtualCurrenciesCache`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        every { mockPurchases.invalidateVirtualCurrenciesCache() } just runs
+
+        invalidateVirtualCurrenciesCache()
+
+        verify(exactly = 1) {
+            mockPurchases.invalidateVirtualCurrenciesCache()
+        }
+    }
+
+    @Test
+    fun `getCachedVirtualCurrencies returns cached VCs from native SDK when available`() {
+        val expectedBalance = 100
+        val expectedName = "Coin"
+        val expectedCode = "COIN"
+        val expectedServerDescription = "Cached VC"
+        val expectedVirtualCurrenciesMap = mapOf(
+            "all" to mapOf(
+                expectedCode to mapOf(
+                    "balance" to expectedBalance,
+                    "name" to expectedName,
+                    "code" to expectedCode,
+                    "serverDescription" to expectedServerDescription,
+                ),
+            ),
+        )
+
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val mockVirtualCurrency = mockk<VirtualCurrency>()
+        every { mockVirtualCurrency.balance } returns expectedBalance
+        every { mockVirtualCurrency.name } returns expectedName
+        every { mockVirtualCurrency.code } returns expectedCode
+        every { mockVirtualCurrency.serverDescription } returns expectedServerDescription
+
+        val mockVirtualCurrencies = mockk<VirtualCurrencies>()
+        every { mockVirtualCurrencies.all } returns mapOf(expectedCode to mockVirtualCurrency)
+
+        every { mockPurchases.cachedVirtualCurrencies } returns(mockVirtualCurrencies)
+
+        val actualCachedVirtualCurrenciesMap = getCachedVirtualCurrencies()
+
+        verify(exactly = 1) {
+            mockPurchases.cachedVirtualCurrencies
+        }
+
+        assertThat(actualCachedVirtualCurrenciesMap).isEqualTo(expectedVirtualCurrenciesMap)
+    }
+
+    @Test
+    fun `getCachedVirtualCurrencies returns null when there are no cached VCs`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        every { mockPurchases.cachedVirtualCurrencies } returns(null)
+
+        val actualCachedVirtualCurrenciesMap = getCachedVirtualCurrencies()
+
+        verify(exactly = 1) {
+            mockPurchases.cachedVirtualCurrencies
+        }
+
+        assertThat(actualCachedVirtualCurrenciesMap).isNull()
     }
 
     @OptIn(InternalRevenueCatAPI::class)
@@ -1349,155 +1540,8 @@ internal class CommonKtTests {
     }
 }
 
-const val MICROS_MULTIPLIER = 1_000_000
-
-fun getPresentedOfferingContext(purchaseParams: PurchaseParams): PresentedOfferingContext? {
+private fun getPresentedOfferingContext(purchaseParams: PurchaseParams): PresentedOfferingContext? {
     // Uses reflection to test presentedOfferingContext exists in purchasing params
     val prop = PurchaseParams::class.members.firstOrNull { member -> member.name == "presentedOfferingContext" }
     return prop!!.call(purchaseParams) as? PresentedOfferingContext?
 }
-
-@SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
-fun stubStoreProduct(
-    productId: String,
-    description: String = "",
-    title: String = "",
-    name: String = "",
-    type: ProductType = ProductType.SUBS,
-    defaultOption: SubscriptionOption? = stubSubscriptionOption(
-        "monthly_base_plan",
-        productId,
-        Period(1, Period.Unit.MONTH, "P1M"),
-    ),
-    subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
-    price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
-    presentedOfferingContext: PresentedOfferingContext? = null,
-): StoreProduct = object : StoreProduct {
-    override val id: String
-        get() = productId
-    override val type: ProductType
-        get() = type
-    override val price: Price
-        get() = price
-    override val title: String
-        get() = title
-    override val name: String
-        get() = name
-    override val description: String
-        get() = description
-    override val period: Period?
-        get() = subscriptionOptions?.firstOrNull { it.isBasePlan }?.pricingPhases?.get(0)?.billingPeriod
-    override val presentedOfferingContext: PresentedOfferingContext?
-        get() = presentedOfferingContext
-    override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingContext?.offeringIdentifier
-    override val subscriptionOptions: SubscriptionOptions?
-        get() = subscriptionOptions?.let { SubscriptionOptions(it) }
-    override val defaultOption: SubscriptionOption?
-        get() = defaultOption
-    override val purchasingData: PurchasingData
-        get() = StubPurchasingData(
-            productId = productId.split(":").first(),
-        )
-    override val sku: String
-        get() = productId
-    override fun copyWithOfferingId(offeringId: String): StoreProduct {
-        return copyWithPresentedOfferingContext(PresentedOfferingContext(offeringId))
-    }
-    override fun copyWithPresentedOfferingContext(
-        presentedOfferingContext: PresentedOfferingContext?,
-    ): StoreProduct {
-        fun SubscriptionOption.applyOfferingContext(
-            presentedOfferingContext: PresentedOfferingContext?,
-        ): SubscriptionOption {
-            return stubSubscriptionOption(
-                id,
-                productId,
-                presentedOfferingContext = presentedOfferingContext,
-            )
-        }
-
-        return stubStoreProduct(
-            productId,
-            description,
-            title,
-            name,
-            type,
-            defaultOption?.let {
-                it.applyOfferingContext(presentedOfferingContext)
-            },
-            subscriptionOptions?.map {
-                it.applyOfferingContext(presentedOfferingContext)
-            },
-            price,
-            presentedOfferingContext,
-        )
-    }
-}
-
-@SuppressWarnings("EmptyFunctionBlock")
-fun stubSubscriptionOption(
-    id: String,
-    productId: String,
-    duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
-    pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
-    presentedOfferingContext: PresentedOfferingContext? = null,
-): SubscriptionOption = object : SubscriptionOption {
-    override val id: String
-        get() = id
-    override val presentedOfferingContext: PresentedOfferingContext?
-        get() = presentedOfferingContext
-    override val presentedOfferingIdentifier: String?
-        get() = presentedOfferingContext?.offeringIdentifier
-    override val pricingPhases: List<PricingPhase>
-        get() = pricingPhases
-    override val tags: List<String>
-        get() = listOf("tag")
-    override val purchasingData: PurchasingData
-        get() = StubPurchasingData(
-            productId = productId,
-        )
-    override val installmentsInfo: InstallmentsInfo?
-        get() = null
-}
-
-private fun createMockTransaction(
-    productIdentifier: String,
-    transactionIdentifier: String = "1",
-    purchaseDate: Long = 1000,
-): StoreTransaction {
-    val mockTransaction = mockk<StoreTransaction>()
-    every {
-        mockTransaction.productIds
-    } returns ArrayList(listOf(productIdentifier, "other"))
-    every {
-        mockTransaction.orderId
-    } returns transactionIdentifier
-    every {
-        mockTransaction.purchaseTime
-    } returns purchaseDate
-
-    return mockTransaction
-}
-
-@SuppressWarnings("MatchingDeclarationName")
-private data class StubPurchasingData(
-    override val productId: String,
-) : PurchasingData {
-    override val productType: ProductType
-        get() = ProductType.SUBS
-}
-
-fun stubPricingPhase(
-    billingPeriod: Period = Period(1, Period.Unit.MONTH, "P1M"),
-    priceCurrencyCodeValue: String = "USD",
-    priceFormatted: String = "$4.99",
-    price: Double = 4.99,
-    recurrenceMode: RecurrenceMode = RecurrenceMode.INFINITE_RECURRING,
-    billingCycleCount: Int = 0,
-): PricingPhase = PricingPhase(
-    billingPeriod,
-    recurrenceMode,
-    billingCycleCount,
-    Price(priceFormatted, price.times(MICROS_MULTIPLIER).toLong(), priceCurrencyCodeValue),
-)

@@ -1,10 +1,12 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private fun CustomerInfo.map(): Map<String, Any?> =
+@InternalRevenueCatAPI
+fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
         "entitlements" to entitlements.map(),
         "activeSubscriptions" to activeSubscriptions.toList(),
@@ -28,6 +30,7 @@ private fun CustomerInfo.map(): Map<String, Any?> =
         "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
     )
 
+@OptIn(InternalRevenueCatAPI::class)
 fun CustomerInfo.mapAsync(
     callback: (Map<String, Any?>) -> Unit,
 ) {

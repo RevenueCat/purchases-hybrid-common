@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import com.revenuecat.purchases.InternalRevenueCatAPI
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
@@ -13,6 +15,7 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProvider
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
+@OptIn(InternalRevenueCatAPI::class)
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     enum class ResultKey(val key: String) {
         PAYWALL_RESULT("paywall_result"),
@@ -24,13 +27,14 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             REQUIRED_ENTITLEMENT_IDENTIFIER("requiredEntitlementIdentifier"),
             SHOULD_DISPLAY_DISMISS_BUTTON("shouldDisplayDismissButton"),
             OFFERING_IDENTIFIER("offeringIdentifier"),
+            PRESENTED_OFFERING_CONTEXT("presentedOfferingContext"),
             FONT_FAMILY("fontProvider"),
         }
 
         private const val notPresentedPaywallResult = "NOT_PRESENTED"
         const val tag: String = "revenuecat-paywall-fragment"
 
-        @Suppress("LongParameterList")
+        @Suppress("LongParameterList", "NestedBlockDepth")
         @JvmStatic
         fun newInstance(
             requestKey: String,
@@ -44,16 +48,33 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                     putString(OptionKey.REQUEST_KEY.key, requestKey)
                     putString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key, requiredEntitlementIdentifier)
                     shouldDisplayDismissButton?.let { putBoolean(OptionKey.SHOULD_DISPLAY_DISMISS_BUTTON.key, it) }
+                    @Suppress("DEPRECATION")
                     when (paywallSource) {
-                        is PaywallSource.Offering -> putString(
-                            OptionKey.OFFERING_IDENTIFIER.key,
-                            paywallSource.value.identifier,
-                        )
+                        is PaywallSource.Offering -> {
+                            putString(
+                                OptionKey.OFFERING_IDENTIFIER.key,
+                                paywallSource.value.identifier,
+                            )
+                            paywallSource.presentedOfferingContext?.let {
+                                putParcelable(
+                                    OptionKey.PRESENTED_OFFERING_CONTEXT.key,
+                                    it,
+                                )
+                            }
+                        }
 
                         is PaywallSource.OfferingIdentifier -> putString(
                             OptionKey.OFFERING_IDENTIFIER.key,
                             paywallSource.value,
                         )
+
+                        is PaywallSource.OfferingIdentifierWithPresentedOfferingContext -> {
+                            putString(OptionKey.OFFERING_IDENTIFIER.key, paywallSource.offeringIdentifier)
+                            putParcelable(
+                                OptionKey.PRESENTED_OFFERING_CONTEXT.key,
+                                paywallSource.presentedOfferingContext,
+                            )
+                        }
 
                         is PaywallSource.DefaultOffering -> Unit
                     }
@@ -70,6 +91,17 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
     private val requiredEntitlementIdentifier: String?
         get() = arguments?.getString(OptionKey.REQUIRED_ENTITLEMENT_IDENTIFIER.key)
+
+    private val presentedOfferingContextArg: PresentedOfferingContext?
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(
+                OptionKey.PRESENTED_OFFERING_CONTEXT.key,
+                PresentedOfferingContext::class.java,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable(OptionKey.PRESENTED_OFFERING_CONTEXT.key)
+        }
 
     private val shouldDisplayDismissButtonArg: Boolean?
         get() {
@@ -132,6 +164,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         val displayDismissButton = shouldDisplayDismissButtonArg
         val offering = offeringIdentifierArg
+        val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
 
         val paywallDisplayCallback = object : PaywallDisplayCallback {
@@ -143,11 +176,12 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             }
         }
 
-        if (displayDismissButton != null && offering != null) {
+        if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 shouldDisplayDismissButton = displayDismissButton,
                 offeringIdentifier = offering,
+                presentedOfferingContext = presentedOfferingContext,
                 paywallDisplayCallback = paywallDisplayCallback,
                 fontProvider = fontProvider,
             )
@@ -158,10 +192,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 paywallDisplayCallback = paywallDisplayCallback,
                 fontProvider = fontProvider,
             )
-        } else if (offering != null) {
+        } else if (offering != null && presentedOfferingContext != null) {
             launcher.launchIfNeeded(
                 requiredEntitlementIdentifier = requiredEntitlementIdentifier,
                 offeringIdentifier = offering,
+                presentedOfferingContext = presentedOfferingContext,
                 paywallDisplayCallback = paywallDisplayCallback,
                 fontProvider = fontProvider,
             )
@@ -176,13 +211,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
     private fun launchPaywall() {
         val offering = offeringIdentifierArg
+        val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val displayDismissButton = shouldDisplayDismissButtonArg
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
 
-        if (displayDismissButton != null && offering != null) {
+        if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
             launcher.launch(
                 shouldDisplayDismissButton = displayDismissButton,
                 offeringIdentifier = offering,
+                presentedOfferingContext = presentedOfferingContext,
                 fontProvider = fontProvider,
             )
         } else if (displayDismissButton != null) {
@@ -190,9 +227,10 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 shouldDisplayDismissButton = displayDismissButton,
                 fontProvider = fontProvider,
             )
-        } else if (offering != null) {
+        } else if (offering != null && presentedOfferingContext != null) {
             launcher.launch(
                 offeringIdentifier = offering,
+                presentedOfferingContext = presentedOfferingContext,
                 fontProvider = fontProvider,
             )
         } else {

@@ -69,6 +69,8 @@ internal extension Store {
             return "EXTERNAL"
         case .paddle:
             return "PADDLE"
+        case .testStore:
+            return "TEST_STORE"
         @unknown default:
             return "UNKNOWN_STORE"
         }

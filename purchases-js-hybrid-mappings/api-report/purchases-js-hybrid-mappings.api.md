@@ -18,6 +18,8 @@ export class PurchasesCommon {
     // (undocumented)
     getAppUserId(): string;
     // (undocumented)
+    getCachedVirtualCurrencies(): Record<string, unknown> | null;
+    // (undocumented)
     getCurrentOfferingForPlacement(placementIdentifier: string): Promise<Record<string, unknown> | null>;
     // (undocumented)
     getCustomerInfo(): Promise<Record<string, unknown>>;
@@ -25,6 +27,10 @@ export class PurchasesCommon {
     static getInstance(): PurchasesCommon;
     // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    getVirtualCurrencies(): Promise<Record<string, unknown>>;
+    // (undocumented)
+    invalidateVirtualCurrenciesCache(): void;
     // (undocumented)
     isAnonymous(): boolean;
     // (undocumented)
@@ -45,7 +51,19 @@ export class PurchasesCommon {
         defaultLocale?: string;
     }): Promise<Record<string, unknown>>;
     // (undocumented)
+    setAttributes(attributes: {
+        [key: string]: string | null;
+    }): Promise<void>;
+    // (undocumented)
+    setDisplayName(displayName: string | null): Promise<void>;
+    // (undocumented)
+    setEmail(email: string | null): Promise<void>;
+    // (undocumented)
+    static setLogHandler(logHandler: (level: string, message: string) => void): void;
+    // (undocumented)
     static setLogLevel(logLevel: string): void;
+    // (undocumented)
+    setPhoneNumber(phoneNumber: string | null): Promise<void>;
     // (undocumented)
     static setProxyUrl(proxyUrl: string): void;
 }

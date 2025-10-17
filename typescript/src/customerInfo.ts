@@ -5,7 +5,7 @@ import { VERIFICATION_RESULT } from "./enums";
  * The supported stores for purchases.
  * @public
  */
-export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "UNKNOWN_STORE";
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE";
 
 /**
  * The supported ownership types for an entitlement.
@@ -273,13 +273,13 @@ export interface PurchasesSubscriptionInfo {
     /**
      * Date when RevenueCat detected any billing issues with this subscription.
      * If and when the billing issue gets resolved, this field is set to nil.
-     */ 
+     */
     readonly billingIssuesDetectedAt: string | null;
     /**
      * Date when any grace period for this subscription expires/expired.
      * nil if the customer has never been in a grace period.
      */
-    readonly gracePeriodExpiresDate: string | null; 
+    readonly gracePeriodExpiresDate: string | null;
     /**
      * How the Customer received access to this subscription:
      * - [OwnershipType.PURCHASED]: The customer bought the subscription.
@@ -294,7 +294,7 @@ export interface PurchasesSubscriptionInfo {
      * - [PeriodType.PREPAID]: The product is in a prepaid pricing period
      */
     readonly periodType: PeriodType;
-    /** 
+    /**
      * Date when RevenueCat detected a refund of this subscription.
      */
     readonly refundedAt: string | null;

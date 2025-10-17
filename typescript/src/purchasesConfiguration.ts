@@ -77,4 +77,25 @@ export interface PurchasesConfiguration {
    * The default value is false.
    */
   diagnosticsEnabled?: boolean;
+
+  /**
+   * Enable this setting to allow the collection of identifiers when setting the identifier for an
+   * attribution network. For example, when calling `Purchases.setAdjustID` or `Purchases.setAppsflyerID`,
+   * the SDK would collect some device identifiers, if available, and send them
+   * to RevenueCat. This is required by some attribution networks to attribute installs and re-installs.
+   *
+   * Enabling this setting does NOT mean we will always collect the identifiers. We will only do so when
+   * setting an attribution network ID AND the user has not limited ad tracking on their device.
+   *
+   * Default is enabled.
+   */
+  automaticDeviceIdentifierCollectionEnabled?: boolean;
+
+  /**
+   * Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests and UI rendering.
+   * This will automatically clear the offerings cache and trigger a background refetch to get paywall templates with the correct localizations.
+   *
+   * @param localeString - The locale string (e.g., "es-ES", "en-US") or null to use system default
+   */
+  preferredUILocaleOverride?: string;
 }

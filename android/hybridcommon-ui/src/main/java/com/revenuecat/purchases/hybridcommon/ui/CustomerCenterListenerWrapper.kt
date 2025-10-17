@@ -1,12 +1,13 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.customercenter.CustomerCenterListener
 import com.revenuecat.purchases.customercenter.CustomerCenterManagementOption
 import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 
+@OptIn(InternalRevenueCatAPI::class)
 @SuppressWarnings("TooManyFunctions")
 abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
 
@@ -15,7 +16,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     }
 
     override fun onRestoreCompleted(customerInfo: CustomerInfo) {
-        customerInfo.mapAsync { map -> this.onRestoreCompletedWrapper(map) }
+        this.onRestoreCompletedWrapper(customerInfo.map())
     }
 
     override fun onRestoreFailed(error: PurchasesError) {
@@ -33,6 +34,17 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
         if (action is CustomerCenterManagementOption.CustomUrl) {
             this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
+        } else if (action is CustomerCenterManagementOption.CustomAction) {
+            this.onCustomActionSelectedWrapper(
+                actionId = action.actionIdentifier,
+                purchaseIdentifier = action.purchaseIdentifier,
+            )
+            @Suppress("DEPRECATION")
+            this.onManagementOptionSelectedWrapper(
+                action.optionName,
+                action.actionIdentifier,
+                action.purchaseIdentifier,
+            )
         } else {
             this.onManagementOptionSelectedWrapper(action.optionName, null)
         }
@@ -44,6 +56,11 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onRestoreStartedWrapper()
     abstract fun onShowingManageSubscriptionsWrapper()
     abstract fun onManagementOptionSelectedWrapper(action: String, url: String?)
+
+    @Deprecated("Use onCustomActionSelectedWrapper instead.")
+    abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
+
+    abstract fun onCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
 }
 
 private val CustomerCenterManagementOption.optionName: String
@@ -52,6 +69,7 @@ private val CustomerCenterManagementOption.optionName: String
             is CustomerCenterManagementOption.Cancel -> "cancel"
             is CustomerCenterManagementOption.MissingPurchase -> "missing_purchase"
             is CustomerCenterManagementOption.CustomUrl -> "custom_url"
+            is CustomerCenterManagementOption.CustomAction -> "custom_action"
             else -> "unknown"
         }
     }

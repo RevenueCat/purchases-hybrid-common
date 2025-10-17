@@ -80,6 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality purchase:@{} completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                                          RCErrorContainer * _Nullable error) {
+    }];
+
     // Win-Back Offers
     [RCCommonFunctionality eligibleWinBackOffersForProductIdentifier:@"" completionBlock:^(NSArray<NSDictionary *> * _Nullable offers, RCErrorContainer * _Nullable error) {
     }];
@@ -141,10 +145,14 @@ NS_ASSUME_NONNULL_BEGIN
     NSDictionary<NSString *, NSObject *> __unused *dictionary = [RCCommonFunctionality encodeCustomerInfo:info];
 
     [RCCommonFunctionality getVirtualCurrenciesWithCompletion:^(
-                                                             RCVirtualCurrencies * _Nullable virtualCurrencies,
+                                                             NSDictionary<NSString *, NSObject *> * _Nullable virtualCurrencies,
                                                              RCErrorContainer * _Nullable errorContainer) {}];
 
+    NSDictionary<NSString *, NSObject *> __unused  * _Nullable vcDictionary = [RCCommonFunctionality getCachedVirtualCurrencies];
+
     [RCCommonFunctionality invalidateVirtualCurrenciesCache];
+
+    [RCCommonFunctionality overridePreferredLocale:@"en-US"];
 }
 
 - (void)testDeprecatedAPI {
@@ -180,6 +188,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setOnesignalUserID:nil];
     [RCCommonFunctionality setAirshipChannelID:@""];
     [RCCommonFunctionality setAirshipChannelID:nil];
+    [RCCommonFunctionality setPostHogUserID:@""];
+    [RCCommonFunctionality setPostHogUserID:nil];
     [RCCommonFunctionality setTenjinAnalyticsInstallationID:@""];
     [RCCommonFunctionality setTenjinAnalyticsInstallationID:nil];
     [RCCommonFunctionality setKochavaDeviceID:@""];

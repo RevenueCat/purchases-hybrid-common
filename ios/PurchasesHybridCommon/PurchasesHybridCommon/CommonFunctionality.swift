@@ -285,6 +285,45 @@ import RevenueCat
         }
     }
 
+    @objc(purchase:completionBlock:)
+    static func purchase(options: [String: Any],
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        do {
+            let validatedParams = try Self.validatePurchaseParams(options)
+            switch validatedParams.purchasableItem {
+            case let .package(packageIdentifier):
+                if let presentedOfferingContext = validatedParams.presentedOfferingContext {
+                    if let winBackOfferID = validatedParams.winBackOfferID {
+                        Self.purchase(package: packageIdentifier,
+                                      presentedOfferingContext: presentedOfferingContext,
+                                      winBackOfferID: winBackOfferID,
+                                      completion: completion)
+                    } else {
+                        Self.purchase(package: packageIdentifier,
+                                      presentedOfferingContext: presentedOfferingContext,
+                                      signedDiscountTimestamp: validatedParams.signedDiscountTimestamp,
+                                      completion: completion)
+                    }
+                } else {
+                    completion(nil,
+                               Self.purchaseInvalidError("When purchasing a package, a presentedOfferingContext must be provided."))
+                }
+            case let .product(productIdentifier):
+                if let winBackOfferID = validatedParams.winBackOfferID {
+                    Self.purchase(product: productIdentifier,
+                                  winBackOfferID: winBackOfferID,
+                                  completion: completion)
+                } else {
+                    Self.purchase(product: productIdentifier,
+                                  signedDiscountTimestamp: validatedParams.signedDiscountTimestamp,
+                                  completion: completion)
+                }
+            }
+        } catch {
+            completion(nil, Self.createErrorContainer(error: error))
+        }
+    }
+
     @objc(purchaseProduct:signedDiscountTimestamp:completionBlock:)
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
@@ -625,6 +664,9 @@ import RevenueCat
     @objc static func setAirshipChannelID(_ airshipChannelID: String?) {
         Self.sharedInstance.attribution.setAirshipChannelID(airshipChannelID)
     }
+    @objc static func setPostHogUserID(_ postHogUserId: String?) {
+        Self.sharedInstance.attribution.setPostHogUserID(postHogUserId)
+    }
 
 }
 
@@ -848,13 +890,13 @@ private extension WebPurchaseRedemptionResult {
 @objc public extension CommonFunctionality {
 
     @objc static func getVirtualCurrencies(
-        completion: @escaping (VirtualCurrencies?, ErrorContainer?) -> Void
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         Self.sharedInstance.getVirtualCurrencies { virtualCurrencies, error in
             if let error = error {
                 completion(nil, Self.createErrorContainer(error: error))
             } else if let virtualCurrencies = virtualCurrencies {
-                completion(virtualCurrencies, nil)
+                completion(virtualCurrencies.rc_dictionary, nil)
             } else {
                 completion(
                     nil,
@@ -864,8 +906,16 @@ private extension WebPurchaseRedemptionResult {
         }
     }
 
+    @objc static func getCachedVirtualCurrencies() -> [String: Any]? {
+        return Self.sharedInstance.cachedVirtualCurrencies?.rc_dictionary
+    }
+
     @objc static func invalidateVirtualCurrenciesCache() {
         Self.sharedInstance.invalidateVirtualCurrenciesCache()
+    }
+
+    @objc static func overridePreferredLocale(_ locale: String?) {
+        Purchases.shared.overridePreferredUILocale(locale)
     }
 }
 
@@ -897,6 +947,13 @@ private extension CommonFunctionality {
                             code: ErrorCode.productNotAvailableForPurchaseError.rawValue,
                             userInfo: [NSLocalizedDescriptionKey: description])
         return Self.createErrorContainer(error: error, userCancelled: userCancelled)
+    }
+
+    static func purchaseInvalidError(_ description: String) -> ErrorContainer {
+        let error = NSError(domain: ErrorCode.errorDomain,
+                            code: ErrorCode.purchaseInvalidError.rawValue,
+                            userInfo: [NSLocalizedDescriptionKey: description])
+        return Self.createErrorContainer(error: error)
     }
 
     static func toPresentedOfferingContext(presentedOfferingContext: [String: Any?]?) -> PresentedOfferingContext? {

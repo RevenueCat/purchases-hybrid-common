@@ -198,6 +198,8 @@ function mapStore(store: Store): string {
       return 'RC_BILLING';
     case 'paddle':
       return 'PADDLE';
+    case 'test_store':
+      return 'TEST_STORE';
     case 'unknown':
       return 'UNKNOWN';
   }
