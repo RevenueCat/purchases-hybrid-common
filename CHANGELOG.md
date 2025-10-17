@@ -1,3 +1,8 @@
+## 17.10.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix background crash presenting paywalls in Android (#1333) via Toni Rico (@tonidero)
+
 ## 17.10.0
 ## RevenueCat SDK
 ### ✨ New Features
