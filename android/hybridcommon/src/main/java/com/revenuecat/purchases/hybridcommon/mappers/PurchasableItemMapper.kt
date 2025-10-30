@@ -4,7 +4,7 @@ import com.revenuecat.purchases.hybridcommon.PurchasableItem
 import kotlin.collections.get
 
 internal fun PurchasableItem.Product.Companion.fromMap(
-    map: Map<*, *>
+    map: Map<*, *>,
 ): PurchasableItem.Product? {
     val productIdentifier = map["productIdentifier"] as? String
     val type = map["type"] as? String
@@ -17,6 +17,6 @@ internal fun PurchasableItem.Product.Companion.fromMap(
     return PurchasableItem.Product(
         productIdentifier = productIdentifier,
         type = type,
-        googleBasePlanId = googleBasePlanId
+        googleBasePlanId = googleBasePlanId,
     )
 }
