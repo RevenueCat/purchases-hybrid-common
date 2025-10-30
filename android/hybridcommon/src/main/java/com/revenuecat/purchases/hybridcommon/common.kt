@@ -154,7 +154,7 @@ fun purchase(
     }
 }
 
-internal sealed interface PurchasableItem {
+private sealed interface PurchasableItem {
     data class Product(
         val productIdentifier: String,
         val type: String,
