@@ -32,6 +32,7 @@ import com.revenuecat.purchases.getStorefrontCountryCodeWith
 import com.revenuecat.purchases.getVirtualCurrenciesWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
+import com.revenuecat.purchases.hybridcommon.mappers.fromMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
@@ -154,12 +155,14 @@ fun purchase(
     }
 }
 
-private sealed interface PurchasableItem {
+internal sealed interface PurchasableItem {
     data class Product(
         val productIdentifier: String,
         val type: String,
         val googleBasePlanId: String?,
-    ) : PurchasableItem
+    ) : PurchasableItem {
+        companion object
+    }
 
     data class Package(
         val packageIdentifier: String,
@@ -244,24 +247,11 @@ private fun validateAddOnStoreProducts(
     if (addOnStoreProductsOption == null) {
         return null
     }
-
-    val addOnStoreProductsList = addOnStoreProductsOption as? List<*>
-        ?: return null
-
+    val addOnStoreProductsList = addOnStoreProductsOption as? List<*> ?: return null
     val parsedProducts = addOnStoreProductsList.mapNotNull { item ->
         when (item) {
             is PurchasableItem.Product -> item
-            is Map<*, *> -> {
-                val productIdentifier = item["productIdentifier"] as? String
-                val type = item["type"] as? String
-                val googleBasePlanId = item["googleBasePlanId"] as? String
-
-                if (productIdentifier.isNullOrBlank() || type.isNullOrBlank()) {
-                    return null
-                }
-
-                PurchasableItem.Product(productIdentifier, type, googleBasePlanId)
-            }
+            is Map<*, *> -> PurchasableItem.Product.fromMap(map = item)
             else -> return null
         }
     }
@@ -572,7 +562,7 @@ fun purchaseSubscriptionOption(
         googleIsPersonalizedPrice = googleIsPersonalizedPrice,
         presentedOfferingContext = presentedOfferingContext,
         addOnStoreProducts = null,
-        onResult = onResult
+        onResult = onResult,
     )
 }
 
