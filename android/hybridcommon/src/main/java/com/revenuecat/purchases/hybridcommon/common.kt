@@ -148,6 +148,7 @@ fun purchase(
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
         )
     }
@@ -352,7 +353,7 @@ private fun purchaseProduct(
                     purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
                 }
 
-                // add on store products
+                // Add ons
                 if (!addOnStoreProducts.isNullOrEmpty()) {
                     val addOns = addOnStoreProducts.mapNotNull { purchasableProduct ->
                         val addOnType = mapStringToProductType(purchasableProduct.type)
@@ -364,7 +365,7 @@ private fun purchaseProduct(
                         )
                     }
                     if (addOns.isNotEmpty()) {
-                        purchaseParams.addOnStoreProducts(addOns)
+                        purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
                     }
                 }
 
@@ -551,7 +552,7 @@ private fun purchasePackage(
     }
 }
 
-@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
+@Suppress("LongParameterList")
 fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
@@ -560,6 +561,32 @@ fun purchaseSubscriptionOption(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
+    onResult: OnResult,
+) {
+    purchaseSubscriptionOption(
+        activity = activity,
+        productIdentifier = productIdentifier,
+        optionIdentifier = optionIdentifier,
+        googleOldProductId = googleOldProductId,
+        googleReplacementModeInt = googleReplacementModeInt,
+        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
+        presentedOfferingContext = presentedOfferingContext,
+        addOnStoreProducts = null,
+        onResult = onResult
+    )
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
+private fun purchaseSubscriptionOption(
+    activity: Activity?,
+    productIdentifier: String,
+    optionIdentifier: String,
+    googleOldProductId: String?,
+    googleReplacementModeInt: Int?,
+    googleIsPersonalizedPrice: Boolean?,
+    presentedOfferingContext: Map<String, Any?>?,
+    addOnStoreProducts: List<PurchasableItem.Product>?,
     onResult: OnResult,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
@@ -613,6 +640,22 @@ fun purchaseSubscriptionOption(
                 // Personalized price
                 googleIsPersonalizedPrice?.let {
                     purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+                }
+
+                // Add ons
+                if (!addOnStoreProducts.isNullOrEmpty()) {
+                    val addOns = addOnStoreProducts.mapNotNull { purchasableProduct ->
+                        val addOnType = mapStringToProductType(purchasableProduct.type)
+                        return@mapNotNull storeProductForProductId(
+                            productId = purchasableProduct.productIdentifier,
+                            type = addOnType,
+                            basePlanId = purchasableProduct.googleBasePlanId,
+                            storeProducts = storeProducts,
+                        )
+                    }
+                    if (addOns.isNotEmpty()) {
+                        purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
+                    }
                 }
 
                 // Perform purchase
