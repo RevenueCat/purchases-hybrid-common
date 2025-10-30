@@ -103,7 +103,7 @@ private class CommonApiTests {
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
-            addOnStoreProducts
+            addOnStoreProducts,
         )
     }
 
@@ -135,7 +135,7 @@ private class CommonApiTests {
             googleReplacementMode,
             googleIsPersonalizedPrice,
             onResult,
-            addOnStoreProducts
+            addOnStoreProducts,
         )
     }
 
@@ -170,7 +170,7 @@ private class CommonApiTests {
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
-            addOnStoreProducts
+            addOnStoreProducts,
         )
     }
 
