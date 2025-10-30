@@ -62,6 +62,7 @@ internal object TestUtilities {
         subscriptionOptions: List<SubscriptionOption>? = defaultOption?.let { listOf(defaultOption) } ?: emptyList(),
         price: Price = subscriptionOptions?.firstOrNull()?.fullPricePhase!!.price,
         presentedOfferingContext: PresentedOfferingContext? = null,
+        purchasingDataProductId: String? = null,
     ): StoreProduct = object : StoreProduct {
         override val id: String
             get() = productId
@@ -87,7 +88,7 @@ internal object TestUtilities {
             get() = defaultOption
         override val purchasingData: PurchasingData
             get() = StubPurchasingData(
-                productId = productId.split(":").first(),
+                productId = purchasingDataProductId ?: productId.split(":").first(),
             )
         override val sku: String
             get() = productId
@@ -121,6 +122,7 @@ internal object TestUtilities {
                 },
                 price,
                 presentedOfferingContext,
+                purchasingDataProductId ?: productId.split(":").first(),
             )
         }
     }
