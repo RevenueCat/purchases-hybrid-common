@@ -512,6 +512,11 @@ private fun purchasePackage(
                                 if (storeProductAddOns.isNotEmpty()) {
                                     purchaseParams.addOnStoreProducts(addOnStoreProducts = storeProductAddOns)
                                 }
+                                Purchases.sharedInstance.purchaseWith(
+                                    purchaseParams.build(),
+                                    onError = getPurchaseErrorFunction(onResult),
+                                    onSuccess = getPurchaseCompletedFunction(onResult),
+                                )
                             },
                         )
                     } else {
