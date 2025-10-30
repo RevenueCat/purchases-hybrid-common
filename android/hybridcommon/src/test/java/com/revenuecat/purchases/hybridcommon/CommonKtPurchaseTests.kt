@@ -181,7 +181,7 @@ internal class CommonKtPurchaseTests {
             mockPurchases.getProducts(
                 capture(capturedProductIds),
                 ProductType.SUBS,
-                capture(capturedGetStoreProductsCallback)
+                capture(capturedGetStoreProductsCallback),
             )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(addOnStoreProducts)
@@ -337,7 +337,7 @@ internal class CommonKtPurchaseTests {
             mockPurchases.getProducts(
                 capture(capturedProductIds),
                 ProductType.SUBS,
-                capture(capturedGetStoreProductsCallback)
+                capture(capturedGetStoreProductsCallback),
             )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct) + addOnStoreProducts)
@@ -474,6 +474,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     private fun testPurchaseSubscriptionOptionWithAddOnStoreProduct(
         productIdentifier: String,
         addOnProductIdentifiers: List<String>,
@@ -507,7 +508,7 @@ internal class CommonKtPurchaseTests {
             mockPurchases.getProducts(
                 capture(capturedProductIds),
                 ProductType.SUBS,
-                capture(capturedGetStoreProductsCallback)
+                capture(capturedGetStoreProductsCallback),
             )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(
