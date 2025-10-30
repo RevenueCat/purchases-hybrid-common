@@ -136,6 +136,7 @@ fun purchase(
             googleOldProductId = purchaseParams.googleOldProductId,
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
         )
 
@@ -324,29 +325,12 @@ private fun purchaseProduct(
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
 
-            fun storeProductForProductId(
-                productId: String,
-                type: ProductType,
-            ): StoreProduct? {
-                return storeProducts.firstOrNull {
-                    // Comparison for when productIdentifier is "subId:basePlanId"
-                    val foundByProductIdContainingBasePlan = (it.id == productId && it.type == type)
-
-                    // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
-                    val foundByProductIdAndGoogleBasePlanId = (
-                        it.purchasingData.productId == productId &&
-                            it.googleProduct?.basePlanId == googleBasePlanId &&
-                            it.type == type
-                        )
-
-                    // Finding the matching StoreProduct two different ways:
-                    // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
-                    // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
-                    foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
-                }
-            }
-
-            val productToBuy = storeProductForProductId(productId = productIdentifier, type = productType)
+            val productToBuy = storeProductForProductId(
+                productId = productIdentifier,
+                type = productType,
+                basePlanId = googleBasePlanId,
+                storeProducts = storeProducts,
+            )
 
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
@@ -375,6 +359,8 @@ private fun purchaseProduct(
                         return@mapNotNull storeProductForProductId(
                             productId = purchasableProduct.productIdentifier,
                             type = addOnType,
+                            basePlanId = purchasableProduct.googleBasePlanId,
+                            storeProducts = storeProducts,
                         )
                     }
                     if (addOns.isNotEmpty()) {
@@ -430,7 +416,7 @@ private fun purchaseProduct(
     }
 }
 
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongParameterList")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -438,6 +424,30 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    onResult: OnResult,
+) {
+    purchasePackage(
+        activity = activity,
+        packageIdentifier = packageIdentifier,
+        presentedOfferingContext = presentedOfferingContext,
+        googleOldProductId = googleOldProductId,
+        googleReplacementModeInt = googleReplacementModeInt,
+        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
+        addOnStoreProducts = null,
+        onResult = onResult,
+    )
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongMethod", "LongParameterList")
+private fun purchasePackage(
+    activity: Activity?,
+    packageIdentifier: String,
+    presentedOfferingContext: Map<String, Any?>,
+    googleOldProductId: String?,
+    googleReplacementModeInt: Int?,
+    googleIsPersonalizedPrice: Boolean?,
+    addOnStoreProducts: List<PurchasableItem.Product>?,
     onResult: OnResult,
 ) {
     val googleReplacementMode = try {
@@ -489,12 +499,38 @@ fun purchasePackage(
                         purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
                     }
 
-                    // Perform purchase
-                    Purchases.sharedInstance.purchaseWith(
-                        purchaseParams.build(),
-                        onError = getPurchaseErrorFunction(onResult),
-                        onSuccess = getPurchaseCompletedFunction(onResult),
-                    )
+                    // Add ons
+                    if (!addOnStoreProducts.isNullOrEmpty()) {
+                        val productIdsToFetch = addOnStoreProducts.map {
+                            it.productIdentifier.split(":").first()
+                        }
+
+                        Purchases.sharedInstance.getProductsWith(
+                            productIds = productIdsToFetch,
+                            type = ProductType.SUBS,
+                            onError = { onResult.onError(it.map()) },
+                            onGetStoreProducts = { products ->
+                                val storeProductAddOns = addOnStoreProducts.mapNotNull {
+                                    storeProductForProductId(
+                                        productId = it.productIdentifier,
+                                        type = mapStringToProductType(it.type),
+                                        basePlanId = it.googleBasePlanId,
+                                        storeProducts = products,
+                                    )
+                                }
+                                if (storeProductAddOns.isNotEmpty()) {
+                                    purchaseParams.addOnStoreProducts(addOnStoreProducts = storeProductAddOns)
+                                }
+                            },
+                        )
+                    } else {
+                        // Perform purchase
+                        Purchases.sharedInstance.purchaseWith(
+                            purchaseParams.build(),
+                            onError = getPurchaseErrorFunction(onResult),
+                            onSuccess = getPurchaseCompletedFunction(onResult),
+                        )
+                    }
                 } else {
                     onResult.onError(
                         PurchasesError(
@@ -924,6 +960,30 @@ fun invalidateVirtualCurrenciesCache() {
 fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
 
 // region private functions
+
+private fun storeProductForProductId(
+    productId: String,
+    type: ProductType,
+    basePlanId: String?,
+    storeProducts: List<StoreProduct>,
+): StoreProduct? {
+    return storeProducts.firstOrNull {
+        // Comparison for when productIdentifier is "subId:basePlanId"
+        val foundByProductIdContainingBasePlan = (it.id == productId && it.type == type)
+
+        // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+        val foundByProductIdAndGoogleBasePlanId = (
+            it.purchasingData.productId == productId &&
+                it.googleProduct?.basePlanId == basePlanId &&
+                it.type == type
+            )
+
+        // Finding the matching StoreProduct two different ways:
+        // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
+        // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+        foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
+    }
+}
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 private fun RedeemWebPurchaseListener.Result.toResultName(): String {
