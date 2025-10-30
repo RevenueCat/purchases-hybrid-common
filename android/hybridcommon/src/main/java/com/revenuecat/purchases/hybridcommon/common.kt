@@ -353,7 +353,6 @@ fun purchaseProduct(
                 onReceiveStoreProducts,
             )
         } else {
-            // Add-ons aren't supported for IN_APP products, so no need to search for their products
             Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
                 ProductType.INAPP,
