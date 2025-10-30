@@ -32,7 +32,6 @@ import com.revenuecat.purchases.getStorefrontCountryCodeWith
 import com.revenuecat.purchases.getVirtualCurrenciesWith
 import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
-import com.revenuecat.purchases.hybridcommon.mappers.fromMap
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
@@ -180,7 +179,7 @@ private data class CommonPurchaseParams(
     val googleReplacementMode: Int?,
     val googleIsPersonalizedPrice: Boolean?,
     val presentedOfferingContext: Map<String, Any?>?,
-    val addOnStoreProducts: List<PurchasableItem.Product>?,
+    val addOnStoreProducts: List<Map<String, Any?>>?,
 )
 
 private fun validatePurchaseParams(
@@ -201,7 +200,15 @@ private fun validatePurchaseParams(
         }
     }
     val type = options["type"] as? String
-    val addOnStoreProducts = validateAddOnStoreProducts(options["addOnStoreProducts"])
+    val addOnStoreProducts = (options["addOnStoreProducts"] as? List<*>)?.mapNotNull { element ->
+        (element as? Map<*, *>)?.let { map ->
+            if (map.keys.all { it is String }) {
+                map.mapKeys { it.key as String }
+            } else {
+                null
+            }
+        }
+    }
 
     val purchasableItem = when {
         packageIdentifier != null -> {
@@ -240,26 +247,9 @@ private fun validatePurchaseParams(
     }
 }
 
-@Suppress("ReturnCount")
-private fun validateAddOnStoreProducts(
-    addOnStoreProductsOption: Any?,
-): List<PurchasableItem.Product>? {
-    if (addOnStoreProductsOption == null) {
-        return null
-    }
-    val addOnStoreProductsList = addOnStoreProductsOption as? List<*> ?: return null
-    val parsedProducts = addOnStoreProductsList.mapNotNull { item ->
-        when (item) {
-            is PurchasableItem.Product -> item
-            is Map<*, *> -> PurchasableItem.Product.fromMap(map = item)
-            else -> return null
-        }
-    }
-
-    return parsedProducts
-}
-
-@Suppress("LongParameterList")
+@JvmOverloads
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
@@ -269,34 +259,7 @@ fun purchaseProduct(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
-    onResult: OnResult,
-) {
-    purchaseProduct(
-        activity = activity,
-        productIdentifier = productIdentifier,
-        type = type,
-        googleBasePlanId = googleBasePlanId,
-        googleOldProductId = googleOldProductId,
-        googleReplacementModeInt = googleReplacementModeInt,
-        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
-        presentedOfferingContext = presentedOfferingContext,
-        addOnStoreProducts = null,
-        onResult = onResult,
-    )
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
-private fun purchaseProduct(
-    activity: Activity?,
-    productIdentifier: String,
-    type: String,
-    googleBasePlanId: String?,
-    googleOldProductId: String?,
-    googleReplacementModeInt: Int?,
-    googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingContext: Map<String, Any?>?,
-    addOnStoreProducts: List<PurchasableItem.Product>?,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
 ) {
     val googleReplacementMode = try {
@@ -345,12 +308,14 @@ private fun purchaseProduct(
 
                 // Add ons
                 if (!addOnStoreProducts.isNullOrEmpty()) {
-                    val addOns = addOnStoreProducts.mapNotNull { purchasableProduct ->
-                        val addOnType = mapStringToProductType(purchasableProduct.type)
+                    val addOns = addOnStoreProducts.mapNotNull { addOnMap ->
+                        val addOnProductIdentifier = addOnMap["productIdentifier"] as? String ?: return@mapNotNull null
+                        val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
+                        val addOnType = mapStringToProductType(rawType)
                         return@mapNotNull storeProductForProductId(
-                            productId = purchasableProduct.productIdentifier,
+                            productId = addOnProductIdentifier,
                             type = addOnType,
-                            basePlanId = purchasableProduct.googleBasePlanId,
+                            basePlanId = null,
                             storeProducts = storeProducts,
                         )
                     }
@@ -377,8 +342,9 @@ private fun purchaseProduct(
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
             val baseProductIdWithoutBasePlanId = productIdentifier.split(":").first()
-            val addOnProductIdsWithoutBasePlanId = addOnStoreProducts.orEmpty().map {
-                it.productIdentifier.split(":").first()
+            val addOnProductIdsWithoutBasePlanId = addOnStoreProducts.orEmpty().mapNotNull {
+                val rawProductIdentifier = it["productIdentifier"] as? String ?: return@mapNotNull null
+                rawProductIdentifier.split(":").first()
             }
             val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductIdsWithoutBasePlanId
 
@@ -407,7 +373,9 @@ private fun purchaseProduct(
     }
 }
 
-@Suppress("LongParameterList")
+@JvmOverloads
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongMethod", "LongParameterList")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -415,30 +383,7 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    onResult: OnResult,
-) {
-    purchasePackage(
-        activity = activity,
-        packageIdentifier = packageIdentifier,
-        presentedOfferingContext = presentedOfferingContext,
-        googleOldProductId = googleOldProductId,
-        googleReplacementModeInt = googleReplacementModeInt,
-        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
-        addOnStoreProducts = null,
-        onResult = onResult,
-    )
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongMethod", "LongParameterList")
-private fun purchasePackage(
-    activity: Activity?,
-    packageIdentifier: String,
-    presentedOfferingContext: Map<String, Any?>,
-    googleOldProductId: String?,
-    googleReplacementModeInt: Int?,
-    googleIsPersonalizedPrice: Boolean?,
-    addOnStoreProducts: List<PurchasableItem.Product>?,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
 ) {
     val googleReplacementMode = try {
@@ -492,25 +437,30 @@ private fun purchasePackage(
 
                     // Add ons
                     if (!addOnStoreProducts.isNullOrEmpty()) {
-                        val productIdsToFetch = addOnStoreProducts.map {
-                            it.productIdentifier.split(":").first()
+                        val productIdsToFetch = addOnStoreProducts.mapNotNull {
+                            val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+                            rawProductId.split(":").first()
                         }
 
                         Purchases.sharedInstance.getProductsWith(
                             productIds = productIdsToFetch,
                             type = ProductType.SUBS,
                             onError = { onResult.onError(it.map()) },
-                            onGetStoreProducts = { products ->
-                                val storeProductAddOns = addOnStoreProducts.mapNotNull {
-                                    storeProductForProductId(
-                                        productId = it.productIdentifier,
-                                        type = mapStringToProductType(it.type),
-                                        basePlanId = it.googleBasePlanId,
-                                        storeProducts = products,
+                            onGetStoreProducts = { storeProducts ->
+                                val addOns = addOnStoreProducts.mapNotNull { addOnMap ->
+                                    val addOnProductIdentifier = addOnMap["productIdentifier"] as? String
+                                        ?: return@mapNotNull null
+                                    val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
+                                    val addOnType = mapStringToProductType(rawType)
+                                    return@mapNotNull storeProductForProductId(
+                                        productId = addOnProductIdentifier,
+                                        type = addOnType,
+                                        basePlanId = null,
+                                        storeProducts = storeProducts,
                                     )
                                 }
-                                if (storeProductAddOns.isNotEmpty()) {
-                                    purchaseParams.addOnStoreProducts(addOnStoreProducts = storeProductAddOns)
+                                if (addOns.isNotEmpty()) {
+                                    purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
                                 }
                                 Purchases.sharedInstance.purchaseWith(
                                     purchaseParams.build(),
@@ -547,7 +497,9 @@ private fun purchasePackage(
     }
 }
 
-@Suppress("LongParameterList")
+@JvmOverloads
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
 fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
@@ -556,32 +508,7 @@ fun purchaseSubscriptionOption(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
-    onResult: OnResult,
-) {
-    purchaseSubscriptionOption(
-        activity = activity,
-        productIdentifier = productIdentifier,
-        optionIdentifier = optionIdentifier,
-        googleOldProductId = googleOldProductId,
-        googleReplacementModeInt = googleReplacementModeInt,
-        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
-        presentedOfferingContext = presentedOfferingContext,
-        addOnStoreProducts = null,
-        onResult = onResult,
-    )
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
-private fun purchaseSubscriptionOption(
-    activity: Activity?,
-    productIdentifier: String,
-    optionIdentifier: String,
-    googleOldProductId: String?,
-    googleReplacementModeInt: Int?,
-    googleIsPersonalizedPrice: Boolean?,
-    presentedOfferingContext: Map<String, Any?>?,
-    addOnStoreProducts: List<PurchasableItem.Product>?,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
@@ -639,12 +566,14 @@ private fun purchaseSubscriptionOption(
 
                 // Add ons
                 if (!addOnStoreProducts.isNullOrEmpty()) {
-                    val addOns = addOnStoreProducts.mapNotNull { purchasableProduct ->
-                        val addOnType = mapStringToProductType(purchasableProduct.type)
+                    val addOns = addOnStoreProducts.mapNotNull { addOnMap ->
+                        val addOnProductIdentifier = addOnMap["productIdentifier"] as? String ?: return@mapNotNull null
+                        val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
+                        val addOnType = mapStringToProductType(rawType)
                         return@mapNotNull storeProductForProductId(
-                            productId = purchasableProduct.productIdentifier,
+                            productId = addOnProductIdentifier,
                             type = addOnType,
-                            basePlanId = purchasableProduct.googleBasePlanId,
+                            basePlanId = null,
                             storeProducts = storeProducts,
                         )
                     }
