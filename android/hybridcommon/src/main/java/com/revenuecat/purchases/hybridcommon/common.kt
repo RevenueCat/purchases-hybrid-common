@@ -159,9 +159,7 @@ private sealed interface PurchasableItem {
         val productIdentifier: String,
         val type: String,
         val googleBasePlanId: String?,
-    ) : PurchasableItem {
-        companion object
-    }
+    ) : PurchasableItem
 
     data class Package(
         val packageIdentifier: String,
