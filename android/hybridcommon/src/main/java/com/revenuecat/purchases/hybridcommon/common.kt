@@ -174,6 +174,7 @@ private data class CommonPurchaseParams(
     val googleReplacementMode: Int?,
     val googleIsPersonalizedPrice: Boolean?,
     val presentedOfferingContext: Map<String, Any?>?,
+    val addOnStoreProducts: List<PurchasableItem.Product>?,
 )
 
 private fun validatePurchaseParams(
@@ -194,6 +195,7 @@ private fun validatePurchaseParams(
         }
     }
     val type = options["type"] as? String
+    val addOnStoreProducts = validateAddOnStoreProducts(options["addOnStoreProducts"])
 
     val purchasableItem = when {
         packageIdentifier != null -> {
@@ -217,6 +219,7 @@ private fun validatePurchaseParams(
                 googleReplacementMode = googleReplacementMode,
                 googleIsPersonalizedPrice = googleIsPersonalizedPrice,
                 presentedOfferingContext = presentedOfferingContext,
+                addOnStoreProducts = addOnStoreProducts,
             ),
         )
     } else {
@@ -229,6 +232,37 @@ private fun validatePurchaseParams(
             ),
         )
     }
+}
+
+private fun validateAddOnStoreProducts(
+    addOnStoreProductsOption: Any?,
+): List<PurchasableItem.Product>? {
+    if (addOnStoreProductsOption == null) {
+        return null
+    }
+
+    val addOnStoreProductsList = addOnStoreProductsOption as? List<*>
+        ?: return null
+
+    val parsedProducts = addOnStoreProductsList.mapNotNull { item ->
+        when (item) {
+            is PurchasableItem.Product -> item
+            is Map<*, *> -> {
+                val productIdentifier = item["productIdentifier"] as? String
+                val type = item["type"] as? String
+                val googleBasePlanId = item["googleBasePlanId"] as? String
+
+                if (productIdentifier.isNullOrBlank() || type.isNullOrBlank()) {
+                    return null
+                }
+
+                PurchasableItem.Product(productIdentifier, type, googleBasePlanId)
+            }
+            else -> return null
+        }
+    }
+
+    return parsedProducts
 }
 
 @Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
