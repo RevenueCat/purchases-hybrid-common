@@ -121,7 +121,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier that includes add on store products with base plans calls purchasePackage`() {
+    fun `purchase with packageIdentifier with add on store products with base plans calls purchasePackage`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id:base_plan",
             addOnProductIds = listOf("addon_product:addon_base_plan"),
@@ -129,7 +129,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier that includes add on store products without base plans calls purchasePackage`() {
+    fun `purchase with packageIdentifier with add on store products without base plans calls purchasePackage`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product"),
@@ -137,13 +137,14 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier includes multiple add on store products`() {
+    fun `purchase with packageIdentifier with multiple add on store products calls purchasePackage`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product_one", "addon_product_two"),
         )
     }
 
+    @Suppress("LongMethod")
     private fun testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
         baseProductId: String,
         addOnProductIds: List<String>,
@@ -177,7 +178,11 @@ internal class CommonKtPurchaseTests {
         val capturedProductIds = slot<List<String>>()
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         every {
-            mockPurchases.getProducts(capture(capturedProductIds), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(addOnStoreProducts)
         }
@@ -301,7 +306,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with productIdentifier includes multiple add on store products`() {
+    fun `purchase with productIdentifier includes multiple add on store products calls purchaseProduct`() {
         testPurchaseWithProductIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product_one", "addon_product_two"),
@@ -329,7 +334,11 @@ internal class CommonKtPurchaseTests {
         val capturedProductIds = slot<List<String>>()
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         every {
-            mockPurchases.getProducts(capture(capturedProductIds), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct) + addOnStoreProducts)
         }
@@ -442,7 +451,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option includes add on store products with base plan`() {
+    fun `purchase subscription option with add on store products with base plan calls purchaseSubscriptionOption`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product:base_plan",
             addOnProductIdentifiers = listOf("addon_product:addon_base_plan"),
@@ -450,7 +459,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option includes add on store products without base plan`() {
+    fun `purchase subscription option with add on store products without base plan calls purchaseSubscriptionOption`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product",
             addOnProductIdentifiers = listOf("addon_product"),
@@ -458,7 +467,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option includes multiple add on store products`() {
+    fun `purchase subscription option with multiple add on store products calls purchaseSubscriptionOption`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product",
             addOnProductIdentifiers = listOf("addon_product_one", "addon_product_two"),
@@ -495,7 +504,11 @@ internal class CommonKtPurchaseTests {
         val capturedProductIds = slot<List<String>>()
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         every {
-            mockPurchases.getProducts(capture(capturedProductIds), ProductType.SUBS, capture(capturedGetStoreProductsCallback))
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback)
+            )
         } answers {
             capturedGetStoreProductsCallback.captured.onReceived(
                 listOf(mockStoreProduct) + addOnStoreProducts,
