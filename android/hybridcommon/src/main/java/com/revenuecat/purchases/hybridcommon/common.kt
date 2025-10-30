@@ -124,6 +124,7 @@ fun purchase(
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
         )
 
@@ -234,6 +235,7 @@ private fun validatePurchaseParams(
     }
 }
 
+@Suppress("ReturnCount")
 private fun validateAddOnStoreProducts(
     addOnStoreProductsOption: Any?,
 ): List<PurchasableItem.Product>? {
@@ -265,7 +267,7 @@ private fun validateAddOnStoreProducts(
     return parsedProducts
 }
 
-@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
+@Suppress("LongParameterList")
 fun purchaseProduct(
     activity: Activity?,
     productIdentifier: String,
@@ -275,6 +277,34 @@ fun purchaseProduct(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
+    onResult: OnResult,
+) {
+    purchaseProduct(
+        activity = activity,
+        productIdentifier = productIdentifier,
+        type = type,
+        googleBasePlanId = googleBasePlanId,
+        googleOldProductId = googleOldProductId,
+        googleReplacementModeInt = googleReplacementModeInt,
+        googleIsPersonalizedPrice = googleIsPersonalizedPrice,
+        presentedOfferingContext = presentedOfferingContext,
+        addOnStoreProducts = null,
+        onResult = onResult,
+    )
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
+private fun purchaseProduct(
+    activity: Activity?,
+    productIdentifier: String,
+    type: String,
+    googleBasePlanId: String?,
+    googleOldProductId: String?,
+    googleReplacementModeInt: Int?,
+    googleIsPersonalizedPrice: Boolean?,
+    presentedOfferingContext: Map<String, Any?>?,
+    addOnStoreProducts: List<PurchasableItem.Product>?,
     onResult: OnResult,
 ) {
     val googleReplacementMode = try {
@@ -293,23 +323,30 @@ fun purchaseProduct(
 
     if (activity != null) {
         val onReceiveStoreProducts: (List<StoreProduct>) -> Unit = { storeProducts ->
-            val productToBuy = storeProducts.firstOrNull {
-                // Comparison for when productIdentifier is "subId:basePlanId"
-                val foundByProductIdContainingBasePlan =
-                    (it.id == productIdentifier && it.type == productType)
 
-                // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
-                val foundByProductIdAndGoogleBasePlanId = (
-                    it.purchasingData.productId == productIdentifier &&
-                        it.googleProduct?.basePlanId == googleBasePlanId &&
-                        it.type == productType
-                    )
+            fun storeProductForProductId(
+                productId: String,
+                type: ProductType,
+            ): StoreProduct? {
+                return storeProducts.firstOrNull {
+                    // Comparison for when productIdentifier is "subId:basePlanId"
+                    val foundByProductIdContainingBasePlan = (it.id == productId && it.type == type)
 
-                // Finding the matching StoreProduct two different ways:
-                // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
-                // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
-                foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
+                    // Comparison for when productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+                    val foundByProductIdAndGoogleBasePlanId = (
+                        it.purchasingData.productId == productId &&
+                            it.googleProduct?.basePlanId == googleBasePlanId &&
+                            it.type == type
+                        )
+
+                    // Finding the matching StoreProduct two different ways:
+                    // 1) When productIdentifier is "subId:basePlanId" format (for backwards compatibility with hybrids)
+                    // 2) When productIdentifier is "subId" and googleBasePlanId is "basePlanId"
+                    foundByProductIdContainingBasePlan || foundByProductIdAndGoogleBasePlanId
+                }
             }
+
+            val productToBuy = storeProductForProductId(productId = productIdentifier, type = productType)
 
             if (productToBuy != null) {
                 val purchaseParams = PurchaseParams.Builder(activity, productToBuy)
@@ -331,6 +368,20 @@ fun purchaseProduct(
                     purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
                 }
 
+                // add on store products
+                if (!addOnStoreProducts.isNullOrEmpty()) {
+                    val addOns = addOnStoreProducts.mapNotNull { purchasableProduct ->
+                        val addOnType = mapStringToProductType(purchasableProduct.type)
+                        return@mapNotNull storeProductForProductId(
+                            productId = purchasableProduct.productIdentifier,
+                            type = addOnType,
+                        )
+                    }
+                    if (addOns.isNotEmpty()) {
+                        purchaseParams.addOnStoreProducts(addOns)
+                    }
+                }
+
                 // Perform purchase
                 Purchases.sharedInstance.purchaseWith(
                     purchaseParams.build(),
@@ -348,15 +399,20 @@ fun purchaseProduct(
         }
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
-            val productIdWithoutBasePlanId = productIdentifier.split(":").first()
+            val baseProductIdWithoutBasePlanId = productIdentifier.split(":").first()
+            val addOnProductIdsWithoutBasePlanId = addOnStoreProducts.orEmpty().map {
+                it.productIdentifier.split(":").first()
+            }
+            val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductIdsWithoutBasePlanId
 
             Purchases.sharedInstance.getProductsWith(
-                listOf(productIdWithoutBasePlanId),
+                productIdsToFetch,
                 ProductType.SUBS,
                 { onResult.onError(it.map()) },
                 onReceiveStoreProducts,
             )
         } else {
+            // Add-ons aren't supported for IN_APP products, so no need to search for their products
             Purchases.sharedInstance.getProductsWith(
                 listOf(productIdentifier),
                 ProductType.INAPP,
