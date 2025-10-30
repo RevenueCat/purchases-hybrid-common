@@ -124,8 +124,8 @@ fun purchase(
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
-            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
         )
 
         is PurchasableItem.Package -> purchasePackage(
@@ -136,8 +136,8 @@ fun purchase(
             googleOldProductId = purchaseParams.googleOldProductId,
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
-            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
         )
 
         is PurchasableItem.SubscriptionOption -> purchaseSubscriptionOption(
@@ -148,8 +148,8 @@ fun purchase(
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
-            addOnStoreProducts = purchaseParams.addOnStoreProducts,
             onResult = onResult,
+            addOnStoreProducts = purchaseParams.addOnStoreProducts,
         )
     }
 }
@@ -257,8 +257,8 @@ fun purchaseProduct(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
-    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
         getGoogleReplacementMode(googleReplacementModeInt)
@@ -380,8 +380,8 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
         getGoogleReplacementMode(googleReplacementModeInt)
@@ -505,8 +505,8 @@ fun purchaseSubscriptionOption(
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
     presentedOfferingContext: Map<String, Any?>?,
-    addOnStoreProducts: List<Map<String, Any?>>? = null,
     onResult: OnResult,
+    addOnStoreProducts: List<Map<String, Any?>>? = null,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
         onResult.onError(
