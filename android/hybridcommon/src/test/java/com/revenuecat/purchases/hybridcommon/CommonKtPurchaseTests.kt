@@ -35,6 +35,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@Suppress("LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CommonKtPurchaseTests {
 
@@ -147,6 +148,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
     fun `purchase with packageIdentifier preserves add on presented offering context`() {
@@ -257,6 +259,7 @@ internal class CommonKtPurchaseTests {
         assertEquals("rule_id", targetingContext.ruleId)
     }
 
+    @Suppress("LongMethod")
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
     fun `purchasePackage preserves add on presented offering context`() {
@@ -531,6 +534,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
     fun `purchaseProduct preserves add on presented offering context`() {
@@ -790,6 +794,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
     fun `purchaseSubscriptionOption preserves add on presented offering context`() {

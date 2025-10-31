@@ -191,7 +191,7 @@ private fun validatePurchaseParams(
     val googleReplacementMode = options["googleReplacementMode"] as? Int
     val googleIsPersonalizedPrice = options["googleIsPersonalizedPrice"] as? Boolean
     val presentedOfferingContext = castWildcardMapToStringToOptionalAnyMap(
-        options["presentedOfferingContext"] as? Map<*, *>
+        options["presentedOfferingContext"] as? Map<*, *>,
     )
 
     val type = options["type"] as? String
@@ -316,7 +316,7 @@ fun purchaseProduct(
                         if (storeProduct == null) { return@mapNotNull null }
                         storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
                             map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
-                            storeProduct = storeProduct
+                            storeProduct = storeProduct,
                         )
 
                         return@mapNotNull storeProduct
@@ -376,7 +376,7 @@ fun purchaseProduct(
 
 @JvmOverloads
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -462,7 +462,7 @@ fun purchasePackage(
                                     if (storeProduct == null) { return@mapNotNull null }
                                     storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
                                         map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
-                                        storeProduct = storeProduct
+                                        storeProduct = storeProduct,
                                     )
 
                                     return@mapNotNull storeProduct
@@ -507,7 +507,7 @@ fun purchasePackage(
 
 @JvmOverloads
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth")
+@Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
 fun purchaseSubscriptionOption(
     activity: Activity?,
     productIdentifier: String,
@@ -587,7 +587,7 @@ fun purchaseSubscriptionOption(
                         if (storeProduct == null) { return@mapNotNull null }
                         storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
                             map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
-                            storeProduct = storeProduct
+                            storeProduct = storeProduct,
                         )
 
                         return@mapNotNull storeProduct
@@ -973,7 +973,7 @@ private fun storeProductForProductId(
  */
 private fun copyPresentedOfferingContextFromMapIfAvailable(
     map: Map<*, *>?,
-    storeProduct: StoreProduct
+    storeProduct: StoreProduct,
 ): StoreProduct {
     return map
         ?.let(::castWildcardMapToStringToOptionalAnyMap)
@@ -1035,7 +1035,7 @@ internal fun mapStringToProductType(type: String): ProductType {
 }
 
 private fun castWildcardMapToStringToOptionalAnyMap(
-    map: Map<*, *>?
+    map: Map<*, *>?,
 ): Map<String, Any?>? {
     val result = map?.let { map ->
         if (map.keys.all { it is String }) {
