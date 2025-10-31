@@ -190,13 +190,10 @@ private fun validatePurchaseParams(
     val googleOldProductId = options["googleOldProductId"] as? String
     val googleReplacementMode = options["googleReplacementMode"] as? Int
     val googleIsPersonalizedPrice = options["googleIsPersonalizedPrice"] as? Boolean
-    val presentedOfferingContext = (options["presentedOfferingContext"] as? Map<*, *>)?.let { map ->
-        if (map.keys.all { it is String }) {
-            map.mapKeys { it.key as String }
-        } else {
-            null
-        }
-    }
+    val presentedOfferingContext = castWildcardMapToStringToOptionalAnyMap(
+        options["presentedOfferingContext"] as? Map<*, *>
+    )
+
     val type = options["type"] as? String
     val addOnStoreProducts = (options["addOnStoreProducts"] as? List<*>)?.mapNotNull { element ->
         (element as? Map<*, *>)?.let { map ->
@@ -310,12 +307,19 @@ fun purchaseProduct(
                         val addOnProductIdentifier = addOnMap["productIdentifier"] as? String ?: return@mapNotNull null
                         val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
                         val addOnType = mapStringToProductType(rawType)
-                        return@mapNotNull storeProductForProductId(
+                        var storeProduct = storeProductForProductId(
                             productId = addOnProductIdentifier,
                             type = addOnType,
                             basePlanId = null,
                             storeProducts = storeProducts,
                         )
+                        if (storeProduct == null) { return@mapNotNull null }
+                        storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
+                            map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
+                            storeProduct = storeProduct
+                        )
+
+                        return@mapNotNull storeProduct
                     }
                     if (addOns.isNotEmpty()) {
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
@@ -449,12 +453,19 @@ fun purchasePackage(
                                         ?: return@mapNotNull null
                                     val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
                                     val addOnType = mapStringToProductType(rawType)
-                                    return@mapNotNull storeProductForProductId(
+                                    var storeProduct = storeProductForProductId(
                                         productId = addOnProductIdentifier,
                                         type = addOnType,
                                         basePlanId = null,
                                         storeProducts = storeProducts,
                                     )
+                                    if (storeProduct == null) { return@mapNotNull null }
+                                    storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
+                                        map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
+                                        storeProduct = storeProduct
+                                    )
+
+                                    return@mapNotNull storeProduct
                                 }
                                 if (addOns.isNotEmpty()) {
                                     purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
@@ -567,12 +578,19 @@ fun purchaseSubscriptionOption(
                         val addOnProductIdentifier = addOnMap["productIdentifier"] as? String ?: return@mapNotNull null
                         val rawType = addOnMap["type"] as? String ?: return@mapNotNull null
                         val addOnType = mapStringToProductType(rawType)
-                        return@mapNotNull storeProductForProductId(
+                        var storeProduct = storeProductForProductId(
                             productId = addOnProductIdentifier,
                             type = addOnType,
                             basePlanId = null,
                             storeProducts = storeProducts,
                         )
+                        if (storeProduct == null) { return@mapNotNull null }
+                        storeProduct = copyPresentedOfferingContextFromMapIfAvailable(
+                            map = addOnMap["presentedOfferingContext"] as? Map<*, *>,
+                            storeProduct = storeProduct
+                        )
+
+                        return@mapNotNull storeProduct
                     }
                     if (addOns.isNotEmpty()) {
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = addOns)
@@ -949,6 +967,21 @@ private fun storeProductForProductId(
     }
 }
 
+/**
+ * Returns a `StoreProduct` that includes the presented offering context contained in [map],
+ * or the original [storeProduct] when the map is null or invalid.
+ */
+private fun copyPresentedOfferingContextFromMapIfAvailable(
+    map: Map<*, *>?,
+    storeProduct: StoreProduct
+): StoreProduct {
+    return map
+        ?.let(::castWildcardMapToStringToOptionalAnyMap)
+        ?.toPresentedOfferingContext()
+        ?.let(storeProduct::copyWithPresentedOfferingContext)
+        ?: storeProduct
+}
+
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 private fun RedeemWebPurchaseListener.Result.toResultName(): String {
     return when (this) {
@@ -999,6 +1032,19 @@ internal fun mapStringToProductType(type: String): ProductType {
             ProductType.INAPP
         }
     }
+}
+
+private fun castWildcardMapToStringToOptionalAnyMap(
+    map: Map<*, *>?
+): Map<String, Any?>? {
+    val result = map?.let { map ->
+        if (map.keys.all { it is String }) {
+            map.mapKeys { it.key as String }
+        } else {
+            null
+        }
+    }
+    return result
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
