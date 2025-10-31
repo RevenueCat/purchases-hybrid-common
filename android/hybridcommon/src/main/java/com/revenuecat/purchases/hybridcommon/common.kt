@@ -1035,9 +1035,9 @@ internal fun mapStringToProductType(type: String): ProductType {
 }
 
 private fun castWildcardMapToStringToOptionalAnyMap(
-    map: Map<*, *>?,
+    wildCardMap: Map<*, *>?,
 ): Map<String, Any?>? {
-    val result = map?.let { map ->
+    val result = wildCardMap?.let { map ->
         if (map.keys.all { it is String }) {
             map.mapKeys { it.key as String }
         } else {
