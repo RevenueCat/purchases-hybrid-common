@@ -79,6 +79,7 @@ private class CommonApiTests {
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         addOnStoreProducts: List<Map<String, Any?>>?,
+        addOnSubscriptionOptions: List<Map<String, Any?>>?,
         onResult: OnResult,
     ) {
         purchaseProduct(
@@ -104,6 +105,20 @@ private class CommonApiTests {
             presentedOfferingContext,
             onResult,
             addOnStoreProducts,
+        )
+
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleBasePlanId,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
         )
     }
 
@@ -116,6 +131,7 @@ private class CommonApiTests {
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult,
         addOnStoreProducts: List<Map<String, Any?>>?,
+        addOnSubscriptionOptions: List<Map<String, Any?>>?,
     ) {
         purchasePackage(
             activity,
@@ -136,6 +152,18 @@ private class CommonApiTests {
             googleIsPersonalizedPrice,
             onResult,
             addOnStoreProducts,
+        )
+
+        purchasePackage(
+            activity,
+            packageIdentifier,
+            presentedOfferingContext,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions
         )
     }
 
@@ -149,6 +177,7 @@ private class CommonApiTests {
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
         addOnStoreProducts: List<Map<String, Any?>>?,
+        addOnSubscriptionOptions: List<Map<String, Any?>>?,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -171,6 +200,19 @@ private class CommonApiTests {
             presentedOfferingContext,
             onResult,
             addOnStoreProducts,
+        )
+
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
         )
     }
 
