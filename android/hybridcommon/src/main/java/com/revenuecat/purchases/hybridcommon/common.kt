@@ -977,21 +977,6 @@ private fun subscriptionOptionForIdentifiers(
     }
 }
 
-/**
- * Returns a `StoreProduct` that includes the presented offering context contained in [map],
- * or the original [storeProduct] when the map is null or invalid.
- */
-private fun copyPresentedOfferingContextFromMapIfAvailable(
-    map: Map<*, *>?,
-    storeProduct: StoreProduct,
-): StoreProduct {
-    return map
-        ?.let(::castWildcardMapToStringToOptionalAnyMap)
-        ?.toPresentedOfferingContext()
-        ?.let(storeProduct::copyWithPresentedOfferingContext)
-        ?: storeProduct
-}
-
 private fun createAddOnSubscriptionOptions(
     rawAddOnSubscriptionOptions: List<Map<String, Any?>>?,
     storeProducts: List<StoreProduct>,
