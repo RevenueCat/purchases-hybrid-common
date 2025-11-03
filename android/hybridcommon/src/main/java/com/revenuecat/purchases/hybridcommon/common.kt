@@ -196,7 +196,7 @@ private fun validatePurchaseParams(
 
     val type = options["type"] as? String
     val addOnStoreProducts = castWildcardListToListOfStringToAnyMaps(
-        options["addOnStoreProducts"] as? List<*>
+        options["addOnStoreProducts"] as? List<*>,
     )
 
     val purchasableItem = when {
