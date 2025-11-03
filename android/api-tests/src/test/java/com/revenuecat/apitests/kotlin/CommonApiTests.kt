@@ -78,6 +78,7 @@ private class CommonApiTests {
         googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
+        addOnStoreProducts: List<Map<String, Any?>>?,
         onResult: OnResult,
     ) {
         purchaseProduct(
@@ -91,6 +92,19 @@ private class CommonApiTests {
             presentedOfferingContext,
             onResult,
         )
+
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleBasePlanId,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+        )
     }
 
     fun checkPurchasePackage(
@@ -101,6 +115,7 @@ private class CommonApiTests {
         googleReplacementMode: Int?,
         googleIsPersonalizedPrice: Boolean?,
         onResult: OnResult,
+        addOnStoreProducts: List<Map<String, Any?>>?,
     ) {
         purchasePackage(
             activity,
@@ -110,6 +125,17 @@ private class CommonApiTests {
             googleReplacementMode,
             googleIsPersonalizedPrice,
             onResult,
+        )
+
+        purchasePackage(
+            activity,
+            packageIdentifier,
+            presentedOfferingContext,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            onResult,
+            addOnStoreProducts,
         )
     }
 
@@ -122,6 +148,7 @@ private class CommonApiTests {
         googleIsPersonalizedPrice: Boolean?,
         presentedOfferingContext: Map<String, Any?>?,
         onResult: OnResult,
+        addOnStoreProducts: List<Map<String, Any?>>?,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -132,6 +159,18 @@ private class CommonApiTests {
             googleIsPersonalizedPrice,
             presentedOfferingContext,
             onResult,
+        )
+
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
         )
     }
 
