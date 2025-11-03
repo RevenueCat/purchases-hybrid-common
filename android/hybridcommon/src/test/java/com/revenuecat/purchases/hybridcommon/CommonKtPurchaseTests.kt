@@ -3,6 +3,8 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -19,6 +21,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.slot
+import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -32,6 +35,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@Suppress("LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CommonKtPurchaseTests {
 
@@ -142,6 +146,223 @@ internal class CommonKtPurchaseTests {
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product_one", "addon_product_two"),
         )
+    }
+
+    @Suppress("LongMethod")
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `purchase with packageIdentifier preserves add on presented offering context`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val expectedPackageIdentifier = "monthly"
+        val baseProductId = "base_product"
+        val addOnProductId = "addon_product"
+        val addOnPresentedOfferingContext = mapOf(
+            "offeringIdentifier" to "addon_offering",
+            "placementIdentifier" to "placement_id",
+            "targetingContext" to mapOf(
+                "revision" to 5,
+                "ruleId" to "rule_id",
+            ),
+        )
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
+        var capturedAddOnContext: PresentedOfferingContext? = null
+        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
+        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
+            capturedAddOnContext = invocation.args[0] as PresentedOfferingContext?
+            addOnStoreProduct
+        }
+        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+        val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
+            baseStoreProduct,
+            packageIdentifier = expectedPackageIdentifier,
+        )
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedProductIds = slot<List<String>>()
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(addOnStoreProduct))
+        }
+
+        val purchaseParamsSlot = slot<PurchaseParams>()
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchase(
+            activity = mockActivity,
+            options = mapOf(
+                "packageIdentifier" to expectedPackageIdentifier,
+                "presentedOfferingContext" to mapOf(
+                    "offeringIdentifier" to offeringIdentifier,
+                ),
+                "addOnStoreProducts" to listOf(
+                    mapOf(
+                        "productIdentifier" to addOnProductId,
+                        "type" to "subs",
+                        "presentedOfferingContext" to addOnPresentedOfferingContext,
+                    ),
+                ),
+            ),
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        val response = requireNotNull(receivedResponse) { "Expected response to be received" }
+        assertEquals(baseProductId, response["productIdentifier"])
+        assertTrue(purchaseParamsSlot.isCaptured)
+        assertTrue(capturedProductIds.isCaptured)
+        assertEquals(listOf(addOnProductId), capturedProductIds.captured)
+
+        val capturedContext = requireNotNull(capturedAddOnContext) {
+            "Expected add-on store product to be included in purchase params"
+        }
+        assertEquals("addon_offering", capturedContext.offeringIdentifier)
+        assertEquals("placement_id", capturedContext.placementIdentifier)
+
+        val targetingContext = requireNotNull(capturedContext.targetingContext) {
+            "Expected targeting context to be preserved"
+        }
+        assertEquals(5, targetingContext.revision)
+        assertEquals("rule_id", targetingContext.ruleId)
+    }
+
+    @Suppress("LongMethod")
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `purchasePackage preserves add on presented offering context`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val baseProductId = "base_product"
+        val addOnProductId = "addon_product"
+        val addOnPresentedOfferingContext = mapOf(
+            "offeringIdentifier" to "addon_offering",
+            "placementIdentifier" to "placement_id",
+            "targetingContext" to mapOf(
+                "revision" to 5,
+                "ruleId" to "rule_id",
+            ),
+        )
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
+        var capturedAddOnContext: PresentedOfferingContext? = null
+        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
+        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
+            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
+            addOnStoreProduct
+        }
+        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(baseStoreProduct)
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedProductIds = slot<List<String>>()
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(addOnStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchasePackage(
+            activity = mockActivity,
+            packageIdentifier = packageToPurchase.identifier,
+            presentedOfferingContext = mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+            ),
+            googleOldProductId = null,
+            googleReplacementModeInt = null,
+            googleIsPersonalizedPrice = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+            addOnStoreProducts = listOf(
+                mapOf(
+                    "productIdentifier" to addOnProductId,
+                    "type" to "subs",
+                    "presentedOfferingContext" to addOnPresentedOfferingContext,
+                ),
+            ),
+        )
+
+        val response = requireNotNull(receivedResponse) { "Expected response to be received" }
+        assertEquals(baseProductId, response["productIdentifier"])
+        assertTrue(capturedProductIds.isCaptured)
+        assertEquals(listOf(addOnProductId), capturedProductIds.captured)
+
+        val capturedContext = requireNotNull(capturedAddOnContext) {
+            "Expected add-on store product to include presented offering context"
+        }
+        assertEquals("addon_offering", capturedContext.offeringIdentifier)
+        assertEquals("placement_id", capturedContext.placementIdentifier)
+
+        val targetingContext = requireNotNull(capturedContext.targetingContext) {
+            "Expected targeting context to be preserved"
+        }
+        assertEquals(5, targetingContext.revision)
+        assertEquals("rule_id", targetingContext.ruleId)
     }
 
     @Suppress("LongMethod")
@@ -313,6 +534,105 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `purchaseProduct preserves add on presented offering context`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val baseProductId = "base_product"
+        val addOnProductId = "addon_product"
+        val addOnPresentedOfferingContext = mapOf(
+            "offeringIdentifier" to "addon_offering",
+            "placementIdentifier" to "placement_id",
+            "targetingContext" to mapOf(
+                "revision" to 3,
+                "ruleId" to "rule_id",
+            ),
+        )
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
+        var capturedAddOnContext: PresentedOfferingContext? = null
+        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
+        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
+            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
+            addOnStoreProduct
+        }
+        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+
+        val capturedProductIds = slot<List<String>>()
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(baseStoreProduct, addOnStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchase(
+            activity = mockActivity,
+            options = mapOf(
+                "productIdentifier" to baseProductId,
+                "type" to "subs",
+                "addOnStoreProducts" to listOf(
+                    mapOf(
+                        "productIdentifier" to addOnProductId,
+                        "type" to "subs",
+                        "presentedOfferingContext" to addOnPresentedOfferingContext,
+                    ),
+                ),
+            ),
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+        )
+
+        val response = requireNotNull(receivedResponse) { "Expected response to be received" }
+        assertEquals(baseProductId, response["productIdentifier"])
+        assertTrue(capturedProductIds.isCaptured)
+        val expectedFetchedIds = listOf(baseProductId) + listOf(addOnProductId)
+        assertEquals(
+            expectedFetchedIds.map { it.split(":").first() },
+            capturedProductIds.captured,
+        )
+
+        val capturedContext = requireNotNull(capturedAddOnContext) {
+            "Expected add-on store product to include presented offering context"
+        }
+        assertEquals("addon_offering", capturedContext.offeringIdentifier)
+        assertEquals("placement_id", capturedContext.placementIdentifier)
+
+        val targetingContext = requireNotNull(capturedContext.targetingContext) {
+            "Expected targeting context to be preserved"
+        }
+        assertEquals(3, targetingContext.revision)
+        assertEquals("rule_id", targetingContext.ruleId)
+    }
+
     private fun testPurchaseWithProductIdentifierAndAddOnStoreProduct(
         baseProductId: String,
         addOnProductIds: List<String>,
@@ -472,6 +792,109 @@ internal class CommonKtPurchaseTests {
             productIdentifier = "subscription_product",
             addOnProductIdentifiers = listOf("addon_product_one", "addon_product_two"),
         )
+    }
+
+    @Suppress("LongMethod")
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `purchaseSubscriptionOption preserves add on presented offering context`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val baseProductId = "base_product"
+        val optionIdentifier = "monthly"
+        val addOnProductId = "addon_product"
+        val addOnPresentedOfferingContext = mapOf(
+            "offeringIdentifier" to "addon_offering",
+            "placementIdentifier" to "placement_id",
+            "targetingContext" to mapOf(
+                "revision" to 7,
+                "ruleId" to "rule_id",
+            ),
+        )
+
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val subscriptionOption = TestUtilities.stubSubscriptionOption(
+            optionIdentifier,
+            productId = baseProductId,
+        )
+        val baseStoreProduct = TestUtilities.stubStoreProduct(
+            productId = baseProductId,
+            subscriptionOptions = listOf(subscriptionOption),
+            defaultOption = subscriptionOption,
+        )
+        var capturedAddOnContext: PresentedOfferingContext? = null
+        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
+        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
+            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
+            addOnStoreProduct
+        }
+        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                listOf(baseProductId),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(baseStoreProduct, addOnStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchaseSubscriptionOption(
+            activity = mockActivity,
+            productIdentifier = baseProductId,
+            optionIdentifier = optionIdentifier,
+            googleOldProductId = null,
+            googleReplacementModeInt = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingContext = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    fail("Expected success")
+                }
+            },
+            addOnStoreProducts = listOf(
+                mapOf(
+                    "productIdentifier" to addOnProductId,
+                    "type" to "subs",
+                    "presentedOfferingContext" to addOnPresentedOfferingContext,
+                ),
+            ),
+        )
+
+        val response = requireNotNull(receivedResponse) { "Expected response to be received" }
+        assertEquals(baseProductId, response["productIdentifier"])
+
+        val capturedContext = requireNotNull(capturedAddOnContext) {
+            "Expected add-on store product to include presented offering context"
+        }
+        assertEquals("addon_offering", capturedContext.offeringIdentifier)
+        assertEquals("placement_id", capturedContext.placementIdentifier)
+
+        val targetingContext = requireNotNull(capturedContext.targetingContext) {
+            "Expected targeting context to be preserved"
+        }
+        assertEquals(7, targetingContext.revision)
+        assertEquals("rule_id", targetingContext.ruleId)
     }
 
     @Suppress("LongMethod")
