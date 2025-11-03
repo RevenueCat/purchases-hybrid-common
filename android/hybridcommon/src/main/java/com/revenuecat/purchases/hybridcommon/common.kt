@@ -195,15 +195,9 @@ private fun validatePurchaseParams(
     )
 
     val type = options["type"] as? String
-    val addOnStoreProducts = (options["addOnStoreProducts"] as? List<*>)?.mapNotNull { element ->
-        (element as? Map<*, *>)?.let { map ->
-            if (map.keys.all { it is String }) {
-                map.mapKeys { it.key as String }
-            } else {
-                null
-            }
-        }
-    }
+    val addOnStoreProducts = castWildcardListToListOfStringToAnyMaps(
+        options["addOnStoreProducts"] as? List<*>
+    )
 
     val purchasableItem = when {
         packageIdentifier != null -> {
@@ -1042,6 +1036,21 @@ private fun castWildcardMapToStringToOptionalAnyMap(
             map.mapKeys { it.key as String }
         } else {
             null
+        }
+    }
+    return result
+}
+
+private fun castWildcardListToListOfStringToAnyMaps(
+    wildCardList: List<*>?,
+): List<Map<String, Any?>>? {
+    val result = wildCardList?.mapNotNull { element ->
+        (element as? Map<*, *>)?.let { map ->
+            if (map.keys.all { it is String }) {
+                map.mapKeys { it.key as String }
+            } else {
+                null
+            }
         }
     }
     return result
