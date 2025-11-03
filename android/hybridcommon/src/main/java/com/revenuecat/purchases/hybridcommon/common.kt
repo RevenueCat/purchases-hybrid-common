@@ -305,7 +305,7 @@ fun purchaseProduct(
                 // Add ons
                 createAddOnStoreProducts(
                     rawAddOnStoreProducts = addOnStoreProducts,
-                    storeProducts = storeProducts
+                    storeProducts = storeProducts,
                 ).let { typedAddOnStoreProducts ->
                     if (!typedAddOnStoreProducts.isNullOrEmpty()) {
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
@@ -314,10 +314,12 @@ fun purchaseProduct(
 
                 createAddOnSubscriptionOptions(
                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                    storeProducts = storeProducts
+                    storeProducts = storeProducts,
                 ).let { typedAddOnSubscriptionOptions ->
                     if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
-                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = typedAddOnSubscriptionOptions)
+                        purchaseParams.addOnSubscriptionOptions(
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                        )
                     }
                 }
 
@@ -437,11 +439,11 @@ fun purchasePackage(
                         val productIdsForAddOnStoreProducts = addOnStoreProducts?.mapNotNull {
                             val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
                             rawProductId.split(":").first()
-                        } ?: emptyList()
+                        }.orEmpty()
                         val productIdsForAddOnSubscriptionOptions = addOnSubscriptionOptions?.mapNotNull {
                             val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
                             rawProductId.split(":").first()
-                        } ?: emptyList()
+                        }.orEmpty()
                         val productIdsToFetch = productIdsForAddOnStoreProducts + productIdsForAddOnSubscriptionOptions
 
                         Purchases.sharedInstance.getProductsWith(
@@ -451,7 +453,7 @@ fun purchasePackage(
                             onGetStoreProducts = { storeProducts ->
                                 createAddOnStoreProducts(
                                     rawAddOnStoreProducts = addOnStoreProducts,
-                                    storeProducts = storeProducts
+                                    storeProducts = storeProducts,
                                 ).let { typedAddOnStoreProducts ->
                                     if (!typedAddOnStoreProducts.isNullOrEmpty()) {
                                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
@@ -460,10 +462,12 @@ fun purchasePackage(
 
                                 createAddOnSubscriptionOptions(
                                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                                    storeProducts = storeProducts
+                                    storeProducts = storeProducts,
                                 ).let { typedAddOnSubscriptionOptions ->
                                     if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
-                                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = typedAddOnSubscriptionOptions)
+                                        purchaseParams.addOnSubscriptionOptions(
+                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                                        )
                                     }
                                 }
 
@@ -544,7 +548,7 @@ fun purchaseSubscriptionOption(
             val optionToPurchase = subscriptionOptionForIdentifiers(
                 productIdentifier = productIdentifier,
                 optionIdentifier = optionIdentifier,
-                storeProducts = storeProducts
+                storeProducts = storeProducts,
             )
 
             if (optionToPurchase != null) {
@@ -570,7 +574,7 @@ fun purchaseSubscriptionOption(
                 // Add ons
                 createAddOnStoreProducts(
                     rawAddOnStoreProducts = addOnStoreProducts,
-                    storeProducts = storeProducts
+                    storeProducts = storeProducts,
                 ).let { typedAddOnStoreProducts ->
                     if (!typedAddOnStoreProducts.isNullOrEmpty()) {
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
@@ -579,10 +583,12 @@ fun purchaseSubscriptionOption(
 
                 createAddOnSubscriptionOptions(
                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                    storeProducts = storeProducts
+                    storeProducts = storeProducts,
                 ).let { typedAddOnSubscriptionOptions ->
                     if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
-                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = typedAddOnSubscriptionOptions)
+                        purchaseParams.addOnSubscriptionOptions(
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                        )
                     }
                 }
 
@@ -959,7 +965,7 @@ private fun storeProductForProductId(
 private fun subscriptionOptionForIdentifiers(
     productIdentifier: String,
     optionIdentifier: String,
-    storeProducts: List<StoreProduct>
+    storeProducts: List<StoreProduct>,
 ): SubscriptionOption? {
     // Iterates over StoreProducts and SubscriptionOptions to find
     // the first matching product id and subscription option id
@@ -986,10 +992,9 @@ private fun copyPresentedOfferingContextFromMapIfAvailable(
         ?: storeProduct
 }
 
-
 private fun createAddOnSubscriptionOptions(
     rawAddOnSubscriptionOptions: List<Map<String, Any?>>?,
-    storeProducts: List<StoreProduct>
+    storeProducts: List<StoreProduct>,
 ): List<SubscriptionOption>? {
     if (!rawAddOnSubscriptionOptions.isNullOrEmpty()) {
         return rawAddOnSubscriptionOptions.mapNotNull { addOnMap ->
@@ -1001,7 +1006,7 @@ private fun createAddOnSubscriptionOptions(
             return@mapNotNull subscriptionOptionForIdentifiers(
                 productIdentifier = addOnProductIdentifier,
                 optionIdentifier = addOnOptionIdentifier,
-                storeProducts = storeProducts
+                storeProducts = storeProducts,
             )
         }
     } else {
@@ -1011,7 +1016,7 @@ private fun createAddOnSubscriptionOptions(
 
 private fun createAddOnStoreProducts(
     rawAddOnStoreProducts: List<Map<String, Any?>>?,
-    storeProducts: List<StoreProduct>
+    storeProducts: List<StoreProduct>,
 ): List<StoreProduct>? {
     if (!rawAddOnStoreProducts.isNullOrEmpty()) {
         return rawAddOnStoreProducts.mapNotNull { addOnMap ->
