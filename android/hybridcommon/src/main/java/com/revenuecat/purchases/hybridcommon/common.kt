@@ -127,6 +127,7 @@ fun purchase(
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
 
         is PurchasableItem.Package -> purchasePackage(
@@ -139,6 +140,7 @@ fun purchase(
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
 
         is PurchasableItem.SubscriptionOption -> purchaseSubscriptionOption(
@@ -151,6 +153,7 @@ fun purchase(
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
     }
 }
@@ -179,7 +182,7 @@ private data class CommonPurchaseParams(
     val googleIsPersonalizedPrice: Boolean?,
     val presentedOfferingContext: Map<String, Any?>?,
     val addOnStoreProducts: List<Map<String, Any?>>?,
-    val addOnSubscriptionProducts: List<Map<String, Any?>>?,
+    val addOnSubscriptionOptions: List<Map<String, Any?>>?,
 )
 
 private fun validatePurchaseParams(
@@ -200,8 +203,8 @@ private fun validatePurchaseParams(
     val addOnStoreProducts = castWildcardListToListOfStringToAnyMaps(
         options["addOnStoreProducts"] as? List<*>,
     )
-    val addOnSubscriptionProducts = castWildcardListToListOfStringToAnyMaps(
-        options["addOnSubscriptionProducts"] as? List<*>,
+    val addOnSubscriptionOptions = castWildcardListToListOfStringToAnyMaps(
+        (options["addOnSubscriptionOptions"] as? List<*>,
     )
 
     val purchasableItem = when {
@@ -227,7 +230,7 @@ private fun validatePurchaseParams(
                 googleIsPersonalizedPrice = googleIsPersonalizedPrice,
                 presentedOfferingContext = presentedOfferingContext,
                 addOnStoreProducts = addOnStoreProducts,
-                addOnSubscriptionProducts = addOnSubscriptionProducts,
+                addOnSubscriptionOptions = addOnSubscriptionOptions,
             ),
         )
     } else {
