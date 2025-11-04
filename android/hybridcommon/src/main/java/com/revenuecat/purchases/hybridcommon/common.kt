@@ -309,22 +309,22 @@ fun purchaseProduct(
                 createAddOnStoreProducts(
                     rawAddOnStoreProducts = addOnStoreProducts,
                     storeProducts = storeProducts,
-                ).let { typedAddOnStoreProducts ->
-                    if (!typedAddOnStoreProducts.isNullOrEmpty()) {
+                )
+                    .takeUnless { it.isNullOrEmpty() }
+                    ?.let { typedAddOnStoreProducts ->
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
                     }
-                }
 
                 createAddOnSubscriptionOptions(
                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
                     storeProducts = storeProducts,
-                ).let { typedAddOnSubscriptionOptions ->
-                    if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
+                )
+                    .takeUnless { it.isNullOrEmpty() }
+                    ?.let { typedAddOnSubscriptionOptions ->
                         purchaseParams.addOnSubscriptionOptions(
-                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
                         )
                     }
-                }
 
                 // Perform purchase
                 Purchases.sharedInstance.purchaseWith(
@@ -457,22 +457,22 @@ fun purchasePackage(
                                 createAddOnStoreProducts(
                                     rawAddOnStoreProducts = addOnStoreProducts,
                                     storeProducts = storeProducts,
-                                ).let { typedAddOnStoreProducts ->
-                                    if (!typedAddOnStoreProducts.isNullOrEmpty()) {
+                                )
+                                    .takeUnless { it.isNullOrEmpty() }
+                                    ?.let { typedAddOnStoreProducts ->
                                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
                                     }
-                                }
 
                                 createAddOnSubscriptionOptions(
                                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
                                     storeProducts = storeProducts,
-                                ).let { typedAddOnSubscriptionOptions ->
-                                    if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
+                                )
+                                    .takeUnless { it.isNullOrEmpty() }
+                                    ?.let { typedAddOnSubscriptionOptions ->
                                         purchaseParams.addOnSubscriptionOptions(
-                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
                                         )
                                     }
-                                }
 
                                 Purchases.sharedInstance.purchaseWith(
                                     purchaseParams.build(),
@@ -578,22 +578,22 @@ fun purchaseSubscriptionOption(
                 createAddOnStoreProducts(
                     rawAddOnStoreProducts = addOnStoreProducts,
                     storeProducts = storeProducts,
-                ).let { typedAddOnStoreProducts ->
-                    if (!typedAddOnStoreProducts.isNullOrEmpty()) {
+                )
+                    .takeUnless { it.isNullOrEmpty() }
+                    ?.let { typedAddOnStoreProducts ->
                         purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
                     }
-                }
 
                 createAddOnSubscriptionOptions(
                     rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
                     storeProducts = storeProducts,
-                ).let { typedAddOnSubscriptionOptions ->
-                    if (!typedAddOnSubscriptionOptions.isNullOrEmpty()) {
+                )
+                    .takeUnless { it.isNullOrEmpty() }
+                    ?.let { typedAddOnSubscriptionOptions ->
                         purchaseParams.addOnSubscriptionOptions(
-                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
                         )
                     }
-                }
 
                 // Perform purchase
                 Purchases.sharedInstance.purchaseWith(
