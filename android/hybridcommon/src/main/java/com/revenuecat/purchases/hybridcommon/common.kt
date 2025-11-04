@@ -344,11 +344,17 @@ fun purchaseProduct(
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
             val baseProductIdWithoutBasePlanId = productIdentifier.split(":").first()
-            val addOnProductIdsWithoutBasePlanId = addOnStoreProducts.orEmpty().mapNotNull {
-                val rawProductIdentifier = it["productIdentifier"] as? String ?: return@mapNotNull null
-                rawProductIdentifier.split(":").first()
-            }
-            val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductIdsWithoutBasePlanId
+            val productIdsForAddOnStoreProducts = addOnStoreProducts?.mapNotNull {
+                val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+                rawProductId.split(":").first()
+            }.orEmpty()
+            val productIdsForAddOnSubscriptionOptions = addOnSubscriptionOptions?.mapNotNull {
+                val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+                rawProductId.split(":").first()
+            }.orEmpty()
+
+            val addOnProductsToFetch = productIdsForAddOnStoreProducts + productIdsForAddOnSubscriptionOptions
+            val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductsToFetch
 
             Purchases.sharedInstance.getProductsWith(
                 productIdsToFetch,
@@ -611,8 +617,20 @@ fun purchaseSubscriptionOption(
             }
         }
 
+        val productIdsForAddOnStoreProducts = addOnStoreProducts?.mapNotNull {
+            val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+            rawProductId.split(":").first()
+        }.orEmpty()
+        val productIdsForAddOnSubscriptionOptions = addOnSubscriptionOptions?.mapNotNull {
+            val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+            rawProductId.split(":").first()
+        }.orEmpty()
+
+        val addOnProductsToFetch = productIdsForAddOnStoreProducts + productIdsForAddOnSubscriptionOptions
+        val productIdsToFetch = listOf(productIdentifier) + addOnProductsToFetch
+
         Purchases.sharedInstance.getProductsWith(
-            listOf(productIdentifier),
+            productIdsToFetch,
             ProductType.SUBS,
             { onResult.onError(it.map()) },
             onReceiveStoreProducts,
