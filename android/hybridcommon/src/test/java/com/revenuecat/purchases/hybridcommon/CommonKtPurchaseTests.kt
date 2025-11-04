@@ -145,6 +145,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `purchase with packageIdentifier with add on subscription options calls purchase(params)`() {
         configure(
@@ -414,6 +415,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `purchase with productIdentifier with add on subscription options calls purchase(params)`() {
         configure(
@@ -671,6 +673,7 @@ internal class CommonKtPurchaseTests {
         )
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `purchase subscription option with add on subscription options calls purchase(params)`() {
         configure(
@@ -762,7 +765,6 @@ internal class CommonKtPurchaseTests {
         assertEquals(
             listOf(productIdentifier),
             capturedProductIds.captured,
-            "Unexpected product IDs fetched for add-on subscription options (subscription option): ${capturedProductIds.captured}",
         )
     }
 
