@@ -163,7 +163,7 @@ private class CommonApiTests {
             googleIsPersonalizedPrice,
             onResult,
             addOnStoreProducts,
-            addOnSubscriptionOptions
+            addOnSubscriptionOptions,
         )
     }
 
