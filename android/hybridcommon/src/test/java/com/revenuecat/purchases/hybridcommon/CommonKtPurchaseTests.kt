@@ -3,8 +3,6 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
-import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -21,7 +19,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.slot
-import io.mockk.spyk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -125,7 +122,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier with add on store products with base plans calls purchasePackage`() {
+    fun `purchase with packageIdentifier with add on store products with base plans calls purchase(params)`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id:base_plan",
             addOnProductIds = listOf("addon_product:addon_base_plan"),
@@ -133,7 +130,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier with add on store products without base plans calls purchasePackage`() {
+    fun `purchase with packageIdentifier with add on store products without base plans calls purchase(params)`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product"),
@@ -141,7 +138,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with packageIdentifier with multiple add on store products calls purchasePackage`() {
+    fun `purchase with packageIdentifier with multiple add on store products calls purchase(params)`() {
         testPurchaseWithPackageIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product_one", "addon_product_two"),
@@ -149,9 +146,8 @@ internal class CommonKtPurchaseTests {
     }
 
     @Suppress("LongMethod")
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
-    fun `purchase with packageIdentifier preserves add on presented offering context`() {
+    fun `purchase with packageIdentifier with add on subscription options calls purchase(params)`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -160,26 +156,24 @@ internal class CommonKtPurchaseTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
+        val baseProductId = "product_id"
+        val addOnSubscriptionOptions = listOf("addon_product" to "addon_option")
         val expectedPackageIdentifier = "monthly"
-        val baseProductId = "base_product"
-        val addOnProductId = "addon_product"
-        val addOnPresentedOfferingContext = mapOf(
-            "offeringIdentifier" to "addon_offering",
-            "placementIdentifier" to "placement_id",
-            "targetingContext" to mapOf(
-                "revision" to 5,
-                "ruleId" to "rule_id",
-            ),
-        )
-
         var receivedResponse: MutableMap<String, *>? = null
 
         val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
-        var capturedAddOnContext: PresentedOfferingContext? = null
-        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
-        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
-            capturedAddOnContext = invocation.args[0] as PresentedOfferingContext?
-            addOnStoreProduct
+        val addOnStoreProducts = addOnSubscriptionOptions.map { (productId, optionId) ->
+            val addOnSubscriptionOption = TestUtilities.stubSubscriptionOption(
+                optionId,
+                productId,
+                Period(1, Period.Unit.MONTH, "P1M"),
+            )
+            TestUtilities.stubStoreProduct(
+                productId = productId,
+                subscriptionOptions = listOf(addOnSubscriptionOption),
+                defaultOption = addOnSubscriptionOption,
+                purchasingDataProductId = productId,
+            )
         }
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
         val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
@@ -203,7 +197,7 @@ internal class CommonKtPurchaseTests {
                 capture(capturedGetStoreProductsCallback),
             )
         } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(addOnStoreProduct))
+            capturedGetStoreProductsCallback.captured.onReceived(addOnStoreProducts)
         }
 
         val purchaseParamsSlot = slot<PurchaseParams>()
@@ -214,21 +208,23 @@ internal class CommonKtPurchaseTests {
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
+        val options = mapOf(
+            "packageIdentifier" to expectedPackageIdentifier,
+            "presentedOfferingContext" to mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+                "placementIdentifier" to "placement_id",
+            ),
+            "addOnSubscriptionOptions" to addOnSubscriptionOptions.map { (productId, optionId) ->
+                mapOf(
+                    "productIdentifier" to productId,
+                    "optionIdentifier" to optionId,
+                )
+            },
+        )
+
         purchase(
             activity = mockActivity,
-            options = mapOf(
-                "packageIdentifier" to expectedPackageIdentifier,
-                "presentedOfferingContext" to mapOf(
-                    "offeringIdentifier" to offeringIdentifier,
-                ),
-                "addOnStoreProducts" to listOf(
-                    mapOf(
-                        "productIdentifier" to addOnProductId,
-                        "type" to "subs",
-                        "presentedOfferingContext" to addOnPresentedOfferingContext,
-                    ),
-                ),
-            ),
+            options = options,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -243,126 +239,11 @@ internal class CommonKtPurchaseTests {
         val response = requireNotNull(receivedResponse) { "Expected response to be received" }
         assertEquals(baseProductId, response["productIdentifier"])
         assertTrue(purchaseParamsSlot.isCaptured)
-        assertTrue(capturedProductIds.isCaptured)
-        assertEquals(listOf(addOnProductId), capturedProductIds.captured)
-
-        val capturedContext = requireNotNull(capturedAddOnContext) {
-            "Expected add-on store product to be included in purchase params"
-        }
-        assertEquals("addon_offering", capturedContext.offeringIdentifier)
-        assertEquals("placement_id", capturedContext.placementIdentifier)
-
-        val targetingContext = requireNotNull(capturedContext.targetingContext) {
-            "Expected targeting context to be preserved"
-        }
-        assertEquals(5, targetingContext.revision)
-        assertEquals("rule_id", targetingContext.ruleId)
-    }
-
-    @Suppress("LongMethod")
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-    @Test
-    fun `purchasePackage preserves add on presented offering context`() {
-        configure(
-            context = mockContext,
-            apiKey = "api_key",
-            appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
-            platformInfo = PlatformInfo("flavor", "version"),
+        assertTrue(capturedPurchaseCallback.isCaptured)
+        assertEquals(
+            addOnSubscriptionOptions.map { it.first.split(":").first() },
+            capturedProductIds.captured,
         )
-
-        val baseProductId = "base_product"
-        val addOnProductId = "addon_product"
-        val addOnPresentedOfferingContext = mapOf(
-            "offeringIdentifier" to "addon_offering",
-            "placementIdentifier" to "placement_id",
-            "targetingContext" to mapOf(
-                "revision" to 5,
-                "ruleId" to "rule_id",
-            ),
-        )
-
-        var receivedResponse: MutableMap<String, *>? = null
-
-        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
-        var capturedAddOnContext: PresentedOfferingContext? = null
-        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
-        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
-            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
-            addOnStoreProduct
-        }
-        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
-        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(baseStoreProduct)
-
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
-        every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
-        } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
-        }
-
-        val capturedProductIds = slot<List<String>>()
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        every {
-            mockPurchases.getProducts(
-                capture(capturedProductIds),
-                ProductType.SUBS,
-                capture(capturedGetStoreProductsCallback),
-            )
-        } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(addOnStoreProduct))
-        }
-
-        val capturedPurchaseCallback = slot<PurchaseCallback>()
-        every {
-            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
-        } answers {
-            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
-        }
-
-        purchasePackage(
-            activity = mockActivity,
-            packageIdentifier = packageToPurchase.identifier,
-            presentedOfferingContext = mapOf(
-                "offeringIdentifier" to offeringIdentifier,
-            ),
-            googleOldProductId = null,
-            googleReplacementModeInt = null,
-            googleIsPersonalizedPrice = null,
-            onResult = object : OnResult {
-                override fun onReceived(map: MutableMap<String, *>) {
-                    receivedResponse = map
-                }
-
-                override fun onError(error: ErrorContainer) {
-                    fail("Expected success")
-                }
-            },
-            addOnStoreProducts = listOf(
-                mapOf(
-                    "productIdentifier" to addOnProductId,
-                    "type" to "subs",
-                    "presentedOfferingContext" to addOnPresentedOfferingContext,
-                ),
-            ),
-        )
-
-        val response = requireNotNull(receivedResponse) { "Expected response to be received" }
-        assertEquals(baseProductId, response["productIdentifier"])
-        assertTrue(capturedProductIds.isCaptured)
-        assertEquals(listOf(addOnProductId), capturedProductIds.captured)
-
-        val capturedContext = requireNotNull(capturedAddOnContext) {
-            "Expected add-on store product to include presented offering context"
-        }
-        assertEquals("addon_offering", capturedContext.offeringIdentifier)
-        assertEquals("placement_id", capturedContext.placementIdentifier)
-
-        val targetingContext = requireNotNull(capturedContext.targetingContext) {
-            "Expected targeting context to be preserved"
-        }
-        assertEquals(5, targetingContext.revision)
-        assertEquals("rule_id", targetingContext.ruleId)
     }
 
     @Suppress("LongMethod")
@@ -511,7 +392,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with productIdentifier includes add on store products with base plan calls purchaseProduct`() {
+    fun `purchase with productIdentifier with add on store products with base plan calls purchase(params)`() {
         testPurchaseWithProductIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id:base_plan",
             addOnProductIds = listOf("addon_product:addon_base_plan"),
@@ -519,7 +400,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with productIdentifier includes add on store products without base plan calls purchaseProduct`() {
+    fun `purchase with productIdentifier with add on store products without base plan calls purchase(params)`() {
         testPurchaseWithProductIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product"),
@@ -527,7 +408,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase with productIdentifier includes multiple add on store products calls purchaseProduct`() {
+    fun `purchase with productIdentifier with multiple add on store products calls purchase(params)`() {
         testPurchaseWithProductIdentifierAndAddOnStoreProduct(
             baseProductId = "product_id",
             addOnProductIds = listOf("addon_product_one", "addon_product_two"),
@@ -535,9 +416,8 @@ internal class CommonKtPurchaseTests {
     }
 
     @Suppress("LongMethod")
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
-    fun `purchaseProduct preserves add on presented offering context`() {
+    fun `purchase with productIdentifier with add on subscription options calls purchase(params)`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -546,26 +426,33 @@ internal class CommonKtPurchaseTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
-        val baseProductId = "base_product"
+        val baseProductId = "product_id"
         val addOnProductId = "addon_product"
-        val addOnPresentedOfferingContext = mapOf(
-            "offeringIdentifier" to "addon_offering",
-            "placementIdentifier" to "placement_id",
-            "targetingContext" to mapOf(
-                "revision" to 3,
-                "ruleId" to "rule_id",
-            ),
-        )
-
+        val addOnOptionId = "addon_option"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
-        var capturedAddOnContext: PresentedOfferingContext? = null
-        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
-        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
-            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
-            addOnStoreProduct
-        }
+        val baseSubscriptionOption = TestUtilities.stubSubscriptionOption(
+            id = "base_option",
+            productId = baseProductId,
+            duration = Period(1, Period.Unit.MONTH, "P1M"),
+        )
+        val addOnSubscriptionOption = TestUtilities.stubSubscriptionOption(
+            id = addOnOptionId,
+            productId = addOnProductId,
+            duration = Period(1, Period.Unit.MONTH, "P1M"),
+        )
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            productId = baseProductId,
+            subscriptionOptions = listOf(baseSubscriptionOption),
+            defaultOption = baseSubscriptionOption,
+            purchasingDataProductId = baseProductId.split(":").first(),
+        )
+        val addOnStoreProduct = TestUtilities.stubStoreProduct(
+            productId = addOnProductId,
+            subscriptionOptions = listOf(addOnSubscriptionOption),
+            defaultOption = addOnSubscriptionOption,
+            purchasingDataProductId = addOnProductId,
+        )
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
 
         val capturedProductIds = slot<List<String>>()
@@ -577,29 +464,31 @@ internal class CommonKtPurchaseTests {
                 capture(capturedGetStoreProductsCallback),
             )
         } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(baseStoreProduct, addOnStoreProduct))
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct, addOnStoreProduct))
         }
 
+        val purchaseParamsSlot = slot<PurchaseParams>()
         val capturedPurchaseCallback = slot<PurchaseCallback>()
         every {
-            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
         } answers {
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
-        purchase(
-            activity = mockActivity,
-            options = mapOf(
-                "productIdentifier" to baseProductId,
-                "type" to "subs",
-                "addOnStoreProducts" to listOf(
-                    mapOf(
-                        "productIdentifier" to addOnProductId,
-                        "type" to "subs",
-                        "presentedOfferingContext" to addOnPresentedOfferingContext,
-                    ),
+        val options = mapOf(
+            "productIdentifier" to baseProductId,
+            "type" to "subs",
+            "addOnSubscriptionOptions" to listOf(
+                mapOf(
+                    "productIdentifier" to addOnProductId,
+                    "optionIdentifier" to addOnOptionId,
                 ),
             ),
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -613,24 +502,13 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedResponse) { "Expected response to be received" }
         assertEquals(baseProductId, response["productIdentifier"])
-        assertTrue(capturedProductIds.isCaptured)
-        val expectedFetchedIds = listOf(baseProductId) + listOf(addOnProductId)
+        assertTrue(purchaseParamsSlot.isCaptured)
+        assertTrue(capturedPurchaseCallback.isCaptured)
         assertEquals(
-            expectedFetchedIds.map { it.split(":").first() },
+            listOf(baseProductId.split(":").first()),
             capturedProductIds.captured,
+            "Unexpected product IDs fetched for add-on subscription options (product): ${capturedProductIds.captured}",
         )
-
-        val capturedContext = requireNotNull(capturedAddOnContext) {
-            "Expected add-on store product to include presented offering context"
-        }
-        assertEquals("addon_offering", capturedContext.offeringIdentifier)
-        assertEquals("placement_id", capturedContext.placementIdentifier)
-
-        val targetingContext = requireNotNull(capturedContext.targetingContext) {
-            "Expected targeting context to be preserved"
-        }
-        assertEquals(3, targetingContext.revision)
-        assertEquals("rule_id", targetingContext.ruleId)
     }
 
     private fun testPurchaseWithProductIdentifierAndAddOnStoreProduct(
@@ -704,6 +582,7 @@ internal class CommonKtPurchaseTests {
         assertEquals(expectedFetchedProductIds, capturedProductIds.captured)
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `purchase with optionIdentifier and productIdentifier calls purchaseSubscriptionOption`() {
         configure(
@@ -771,7 +650,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option with add on store products with base plan calls purchaseSubscriptionOption`() {
+    fun `purchase subscription option with add on store products with base plan calls purchase(params)`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product:base_plan",
             addOnProductIdentifiers = listOf("addon_product:addon_base_plan"),
@@ -779,7 +658,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option with add on store products without base plan calls purchaseSubscriptionOption`() {
+    fun `purchase subscription option with add on store products without base plan calls purchase(params)`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product",
             addOnProductIdentifiers = listOf("addon_product"),
@@ -787,7 +666,7 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
-    fun `purchase subscription option with multiple add on store products calls purchaseSubscriptionOption`() {
+    fun `purchase subscription option with multiple add on store products calls purchase(params)`() {
         testPurchaseSubscriptionOptionWithAddOnStoreProduct(
             productIdentifier = "subscription_product",
             addOnProductIdentifiers = listOf("addon_product_one", "addon_product_two"),
@@ -795,9 +674,8 @@ internal class CommonKtPurchaseTests {
     }
 
     @Suppress("LongMethod")
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     @Test
-    fun `purchaseSubscriptionOption preserves add on presented offering context`() {
+    fun `purchase subscription option with add on subscription options calls purchase(params)`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -806,63 +684,69 @@ internal class CommonKtPurchaseTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
-        val baseProductId = "base_product"
-        val optionIdentifier = "monthly"
-        val addOnProductId = "addon_product"
-        val addOnPresentedOfferingContext = mapOf(
-            "offeringIdentifier" to "addon_offering",
-            "placementIdentifier" to "placement_id",
-            "targetingContext" to mapOf(
-                "revision" to 7,
-                "ruleId" to "rule_id",
-            ),
-        )
-
+        val productIdentifier = "subscription_product"
+        val optionIdentifier = "monthly_option"
+        val addOnOptionIdentifiers = listOf("addon_option")
         var receivedResponse: MutableMap<String, *>? = null
 
-        val subscriptionOption = TestUtilities.stubSubscriptionOption(
+        val baseSubscriptionOption = TestUtilities.stubSubscriptionOption(
             optionIdentifier,
-            productId = baseProductId,
+            productIdentifier,
         )
-        val baseStoreProduct = TestUtilities.stubStoreProduct(
-            productId = baseProductId,
-            subscriptionOptions = listOf(subscriptionOption),
-            defaultOption = subscriptionOption,
+        val addOnProductId = "addon_product"
+        val addOnOptionId = addOnOptionIdentifiers.single()
+        val addOnSubscriptionOption = TestUtilities.stubSubscriptionOption(
+            addOnOptionId,
+            addOnProductId,
         )
-        var capturedAddOnContext: PresentedOfferingContext? = null
-        val addOnStoreProduct = spyk(TestUtilities.stubStoreProduct(addOnProductId))
-        every { addOnStoreProduct.copyWithPresentedOfferingContext(any()) } answers {
-            capturedAddOnContext = it.invocation.args[0] as PresentedOfferingContext?
-            addOnStoreProduct
-        }
-        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            productId = productIdentifier,
+            subscriptionOptions = listOf(baseSubscriptionOption),
+            defaultOption = baseSubscriptionOption,
+            purchasingDataProductId = productIdentifier,
+        )
+        val addOnStoreProduct = TestUtilities.stubStoreProduct(
+            productId = addOnProductId,
+            subscriptionOptions = listOf(addOnSubscriptionOption),
+            defaultOption = addOnSubscriptionOption,
+            purchasingDataProductId = addOnProductId,
+        )
+        val mockTransaction = TestUtilities.createMockTransaction(productIdentifier)
 
+        val capturedProductIds = slot<List<String>>()
         val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
         every {
             mockPurchases.getProducts(
-                listOf(baseProductId),
+                capture(capturedProductIds),
                 ProductType.SUBS,
                 capture(capturedGetStoreProductsCallback),
             )
         } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(baseStoreProduct, addOnStoreProduct))
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct, addOnStoreProduct))
         }
 
+        val purchaseParamsSlot = slot<PurchaseParams>()
         val capturedPurchaseCallback = slot<PurchaseCallback>()
         every {
-            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
         } answers {
             capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
         }
 
-        purchaseSubscriptionOption(
+        val options = mapOf(
+            "productIdentifier" to productIdentifier,
+            "optionIdentifier" to optionIdentifier,
+            "addOnSubscriptionOptions" to listOf(
+                mapOf(
+                    "productIdentifier" to addOnProductId,
+                    "optionIdentifier" to addOnOptionId,
+                ),
+            ),
+        )
+
+        purchase(
             activity = mockActivity,
-            productIdentifier = baseProductId,
-            optionIdentifier = optionIdentifier,
-            googleOldProductId = null,
-            googleReplacementModeInt = null,
-            googleIsPersonalizedPrice = null,
-            presentedOfferingContext = null,
+            options = options,
             onResult = object : OnResult {
                 override fun onReceived(map: MutableMap<String, *>) {
                     receivedResponse = map
@@ -872,29 +756,16 @@ internal class CommonKtPurchaseTests {
                     fail("Expected success")
                 }
             },
-            addOnStoreProducts = listOf(
-                mapOf(
-                    "productIdentifier" to addOnProductId,
-                    "type" to "subs",
-                    "presentedOfferingContext" to addOnPresentedOfferingContext,
-                ),
-            ),
         )
 
         val response = requireNotNull(receivedResponse) { "Expected response to be received" }
-        assertEquals(baseProductId, response["productIdentifier"])
-
-        val capturedContext = requireNotNull(capturedAddOnContext) {
-            "Expected add-on store product to include presented offering context"
-        }
-        assertEquals("addon_offering", capturedContext.offeringIdentifier)
-        assertEquals("placement_id", capturedContext.placementIdentifier)
-
-        val targetingContext = requireNotNull(capturedContext.targetingContext) {
-            "Expected targeting context to be preserved"
-        }
-        assertEquals(7, targetingContext.revision)
-        assertEquals("rule_id", targetingContext.ruleId)
+        assertEquals(productIdentifier, response["productIdentifier"])
+        assertTrue(purchaseParamsSlot.isCaptured)
+        assertTrue(capturedPurchaseCallback.isCaptured)
+        assertEquals(
+            listOf(productIdentifier),
+            capturedProductIds.captured,
+        )
     }
 
     @Suppress("LongMethod")
@@ -978,6 +849,7 @@ internal class CommonKtPurchaseTests {
         assertEquals(listOf(productIdentifier), capturedProductIds.captured)
     }
 
+    @Suppress("LongMethod")
     @Test
     fun `purchase with invalid options returns error`() {
         configure(

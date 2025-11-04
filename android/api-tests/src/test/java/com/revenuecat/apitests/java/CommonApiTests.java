@@ -47,7 +47,8 @@ class CommonApiTests {
                                       Boolean googleIsPersonalizedPrice,
                                       Map<String, Object> presentedOfferingContext,
                                       OnResult onResult,
-                                      List<Map<String, Object>> addOnStoreProducts) {
+                                      List<Map<String, Object>> addOnStoreProducts,
+                                      List<Map<String, Object>> addOnSubscriptionOptions) {
         CommonKt.purchaseProduct(
                 activity,
                 productIdentifier,
@@ -71,6 +72,20 @@ class CommonApiTests {
                 presentedOfferingContext,
                 onResult,
                 addOnStoreProducts
+        );
+
+        CommonKt.purchaseProduct(
+                activity,
+                productIdentifier,
+                type,
+                googleBasePlanId,
+                googleOldProductId,
+                googleReplacementMode,
+                googleIsPersonalizedPrice,
+                presentedOfferingContext,
+                onResult,
+                addOnStoreProducts,
+                addOnSubscriptionOptions
         );
     }
 
@@ -81,7 +96,8 @@ class CommonApiTests {
                                       Integer googleReplacementMode,
                                       Boolean googleIsPersonalizedPrice,
                                       OnResult onResult,
-                                      List<Map<String, Object>> addOnStoreProducts) {
+                                      List<Map<String, Object>> addOnStoreProducts,
+                                      List<Map<String, Object>> addOnSubscriptionOptions) {
         CommonKt.purchasePackage(
                 activity,
                 packageIdentifier,
@@ -101,6 +117,18 @@ class CommonApiTests {
                 googleIsPersonalizedPrice,
                 onResult,
                 addOnStoreProducts
+        );
+
+        CommonKt.purchasePackage(
+                activity,
+                packageIdentifier,
+                presentedOfferingContext,
+                googleOldProductId,
+                googleReplacementMode,
+                googleIsPersonalizedPrice,
+                onResult,
+                addOnStoreProducts,
+                addOnSubscriptionOptions
         );
     }
 
@@ -112,7 +140,8 @@ class CommonApiTests {
                                                  Boolean googleIsPersonalizedPrice,
                                                  Map<String, Object> presentedOfferingContext,
                                                  OnResult onResult,
-                                                 List<Map<String, Object>> addOnStoreProducts) {
+                                                 List<Map<String, Object>> addOnStoreProducts,
+                                                 List<Map<String, Object>> addOnSubscriptionOptions) {
         CommonKt.purchaseSubscriptionOption(
                 activity,
                 productIdentifier,
@@ -134,6 +163,19 @@ class CommonApiTests {
                 presentedOfferingContext,
                 onResult,
                 addOnStoreProducts
+        );
+
+        CommonKt.purchaseSubscriptionOption(
+                activity,
+                productIdentifier,
+                optionIdentifier,
+                googleOldProductId,
+                googleReplacementMode,
+                googleIsPersonalizedPrice,
+                presentedOfferingContext,
+                onResult,
+                addOnStoreProducts,
+                addOnSubscriptionOptions
         );
     }
 
