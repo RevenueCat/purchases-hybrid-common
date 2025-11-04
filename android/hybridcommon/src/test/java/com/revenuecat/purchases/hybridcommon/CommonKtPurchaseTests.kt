@@ -31,6 +31,7 @@ import org.junit.jupiter.api.fail
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.text.split
 
 @Suppress("LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -505,7 +506,7 @@ internal class CommonKtPurchaseTests {
         assertTrue(purchaseParamsSlot.isCaptured)
         assertTrue(capturedPurchaseCallback.isCaptured)
         assertEquals(
-            listOf(baseProductId.split(":").first()),
+            listOf(baseProductId.split(":").first(), "addon_product"),
             capturedProductIds.captured,
             "Unexpected product IDs fetched for add-on subscription options (product): ${capturedProductIds.captured}",
         )
@@ -763,7 +764,7 @@ internal class CommonKtPurchaseTests {
         assertTrue(purchaseParamsSlot.isCaptured)
         assertTrue(capturedPurchaseCallback.isCaptured)
         assertEquals(
-            listOf(productIdentifier),
+            listOf(productIdentifier, "addon_product"),
             capturedProductIds.captured,
         )
     }
@@ -846,7 +847,9 @@ internal class CommonKtPurchaseTests {
         val response = requireNotNull(receivedResponse) { "Expected response to be received" }
         assertEquals(productIdentifier, response["productIdentifier"])
         assertTrue(purchaseParamsSlot.isCaptured)
-        assertEquals(listOf(productIdentifier), capturedProductIds.captured)
+        val expectedAddOnProductIDs = addOnProductIdentifiers.map { it.split(":").first() }
+        val expectedProductIDs = listOf(productIdentifier) + expectedAddOnProductIDs
+        assertEquals(expectedProductIDs, capturedProductIds.captured)
     }
 
     @Suppress("LongMethod")
