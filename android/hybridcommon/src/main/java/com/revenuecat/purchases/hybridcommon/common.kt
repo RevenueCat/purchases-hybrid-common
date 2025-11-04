@@ -322,7 +322,7 @@ fun purchaseProduct(
                     .takeUnless { it.isNullOrEmpty() }
                     ?.let { typedAddOnSubscriptionOptions ->
                         purchaseParams.addOnSubscriptionOptions(
-                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
                         )
                     }
 
@@ -470,7 +470,7 @@ fun purchasePackage(
                                     .takeUnless { it.isNullOrEmpty() }
                                     ?.let { typedAddOnSubscriptionOptions ->
                                         purchaseParams.addOnSubscriptionOptions(
-                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
+                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
                                         )
                                     }
 
@@ -591,7 +591,7 @@ fun purchaseSubscriptionOption(
                     .takeUnless { it.isNullOrEmpty() }
                     ?.let { typedAddOnSubscriptionOptions ->
                         purchaseParams.addOnSubscriptionOptions(
-                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions
+                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
                         )
                     }
 
