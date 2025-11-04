@@ -1,3 +1,8 @@
+## 17.15.0
+## RevenueCat SDK
+### ✨ New Features
+* Add-On Subscription Options (#1350) via Will Taylor (@fire-at-will)
+
 ## 17.14.0
 ## RevenueCat SDK
 ### ✨ New Features
