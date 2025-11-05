@@ -344,11 +344,12 @@ fun purchaseProduct(
         if (productType == ProductType.SUBS) {
             // The "productIdentifier"
             val baseProductIdWithoutBasePlanId = productIdentifier.split(":").first()
-            val addOnProductIdsWithoutBasePlanId = addOnStoreProducts.orEmpty().mapNotNull {
-                val rawProductIdentifier = it["productIdentifier"] as? String ?: return@mapNotNull null
-                rawProductIdentifier.split(":").first()
-            }
-            val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductIdsWithoutBasePlanId
+            val addOnProductIdsToFetch = addOnProductIdsToFetch(
+                addOnStoreProducts = addOnStoreProducts,
+                addOnSubscriptionOptions = addOnSubscriptionOptions,
+            )
+
+            val productIdsToFetch = listOf(baseProductIdWithoutBasePlanId) + addOnProductIdsToFetch
 
             Purchases.sharedInstance.getProductsWith(
                 productIdsToFetch,
@@ -439,18 +440,13 @@ fun purchasePackage(
 
                     // Add ons
                     if (!addOnStoreProducts.isNullOrEmpty() || !addOnSubscriptionOptions.isNullOrEmpty()) {
-                        val productIdsForAddOnStoreProducts = addOnStoreProducts?.mapNotNull {
-                            val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
-                            rawProductId.split(":").first()
-                        }.orEmpty()
-                        val productIdsForAddOnSubscriptionOptions = addOnSubscriptionOptions?.mapNotNull {
-                            val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
-                            rawProductId.split(":").first()
-                        }.orEmpty()
-                        val productIdsToFetch = productIdsForAddOnStoreProducts + productIdsForAddOnSubscriptionOptions
+                        val addOnProductIdsToFetch = addOnProductIdsToFetch(
+                            addOnStoreProducts = addOnStoreProducts,
+                            addOnSubscriptionOptions = addOnSubscriptionOptions,
+                        )
 
                         Purchases.sharedInstance.getProductsWith(
-                            productIds = productIdsToFetch,
+                            productIds = addOnProductIdsToFetch,
                             type = ProductType.SUBS,
                             onError = { onResult.onError(it.map()) },
                             onGetStoreProducts = { storeProducts ->
@@ -611,8 +607,14 @@ fun purchaseSubscriptionOption(
             }
         }
 
+        val addOnProductIdsToFetch = addOnProductIdsToFetch(
+            addOnStoreProducts = addOnStoreProducts,
+            addOnSubscriptionOptions = addOnSubscriptionOptions,
+        )
+        val productIdsToFetch = listOf(productIdentifier) + addOnProductIdsToFetch
+
         Purchases.sharedInstance.getProductsWith(
-            listOf(productIdentifier),
+            productIdsToFetch,
             ProductType.SUBS,
             { onResult.onError(it.map()) },
             onReceiveStoreProducts,
@@ -1104,6 +1106,22 @@ private fun castWildcardListToListOfStringToAnyMaps(
         }
     }
     return result
+}
+
+private fun addOnProductIdsToFetch(
+    addOnStoreProducts: List<Map<String, Any?>>?,
+    addOnSubscriptionOptions: List<Map<String, Any?>>?,
+): List<String> {
+    val productIdsForAddOnStoreProducts = addOnStoreProducts?.mapNotNull {
+        val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+        rawProductId.split(":").first() // Don't include any base plan IDs
+    }.orEmpty()
+    val productIdsForAddOnSubscriptionOptions = addOnSubscriptionOptions?.mapNotNull {
+        val rawProductId = it["productIdentifier"] as? String ?: return@mapNotNull null
+        rawProductId.split(":").first() // Don't include any base plan IDs
+    }.orEmpty()
+
+    return productIdsForAddOnStoreProducts + productIdsForAddOnSubscriptionOptions
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
