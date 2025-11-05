@@ -1,3 +1,8 @@
+## 17.15.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fetch products for add on subscription options when base item is a StoreProduct or SubscriptionOption (#1352) via Will Taylor (@fire-at-will)
+
 ## 17.15.0
 ## RevenueCat SDK
 ### ✨ New Features
