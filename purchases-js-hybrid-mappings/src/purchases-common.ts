@@ -191,12 +191,10 @@ export class PurchasesCommon {
 
   public async logIn(appUserId: string): Promise<Record<string, unknown>> {
     try {
-      const customerInfo = await this.purchases.changeUser(appUserId);
+      const { customerInfo, wasCreated } = await this.purchases.identifyUser(appUserId);
       return {
         customerInfo: mapCustomerInfo(customerInfo),
-        // TODO: In Web, we don't have a logIn method, which provides the information on whether the user was created
-        // or not. For now, hardcoding this data to false
-        created: false,
+        created: wasCreated,
       };
     } catch (error) {
       this.handleError(error);
