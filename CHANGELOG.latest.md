@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add-On Subscription Options (#1350) via Will Taylor (@fire-at-will)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.46.1 => 5.46.3 (#1359) via RevenueCat Git Bot (@RCGitBot)
