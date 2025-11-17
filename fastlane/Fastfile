@@ -463,6 +463,27 @@ platform :android do
       properties: gradleProperties,
       project_dir: 'android'
     )
+
+    UI.verbose("Deploying bc7 version of libraries")
+    gradleProperties["ANDROID_VARIANT_TO_PUBLISH"] = "bc7Release"
+
+    # Publish hybridcommon with -bc7 suffix
+    gradle(
+      tasks: [
+        ":hybridcommon:publish --no-daemon --no-parallel"
+      ],
+      properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-bc7"}),
+      project_dir: 'android'
+    )
+
+    # Publish hybridcommon-ui with -bc7 suffix
+    gradle(
+      tasks: [
+        ":hybridcommon-ui:publish --no-daemon --no-parallel"
+      ],
+      properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-ui-bc7"}),
+      project_dir: 'android'
+    )
   end
 end
 
