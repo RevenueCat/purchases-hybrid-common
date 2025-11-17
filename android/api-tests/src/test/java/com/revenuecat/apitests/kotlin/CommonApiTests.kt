@@ -119,7 +119,7 @@ private class CommonApiTests {
             presentedOfferingContext,
             onResult,
             addOnStoreProducts,
-            addOnSubscriptionOptions
+            addOnSubscriptionOptions,
         )
 
         purchaseProduct(
@@ -243,7 +243,7 @@ private class CommonApiTests {
             presentedOfferingContext,
             onResult,
             addOnStoreProducts,
-            addOnSubscriptionOptions
+            addOnSubscriptionOptions,
         )
 
         purchaseSubscriptionOption(
