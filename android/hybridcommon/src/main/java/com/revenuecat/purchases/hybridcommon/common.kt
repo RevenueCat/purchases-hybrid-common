@@ -186,8 +186,8 @@ private data class CommonPurchaseParams(
     val googleIsPersonalizedPrice: Boolean?,
     val presentedOfferingContext: Map<String, Any?>?,
     val addOnStoreProducts: List<Map<String, Any?>>?,
-    val addOnPackages: List<Map<String, Any?>>?,
     val addOnSubscriptionOptions: List<Map<String, Any?>>?,
+    val addOnPackages: List<Map<String, Any?>>?,
 )
 
 private fun validatePurchaseParams(
@@ -238,8 +238,8 @@ private fun validatePurchaseParams(
                 googleIsPersonalizedPrice = googleIsPersonalizedPrice,
                 presentedOfferingContext = presentedOfferingContext,
                 addOnStoreProducts = addOnStoreProducts,
-                addOnPackages = addOnPackages,
                 addOnSubscriptionOptions = addOnSubscriptionOptions,
+                addOnPackages = addOnPackages,
             ),
         )
     } else {
