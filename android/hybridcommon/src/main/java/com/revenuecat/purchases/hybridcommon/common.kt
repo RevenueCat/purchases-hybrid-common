@@ -182,6 +182,7 @@ private data class CommonPurchaseParams(
     val googleIsPersonalizedPrice: Boolean?,
     val presentedOfferingContext: Map<String, Any?>?,
     val addOnStoreProducts: List<Map<String, Any?>>?,
+    val addOnPackages: List<Map<String, Any?>>?,
     val addOnSubscriptionOptions: List<Map<String, Any?>>?,
 )
 
@@ -202,6 +203,9 @@ private fun validatePurchaseParams(
     val type = options["type"] as? String
     val addOnStoreProducts = castWildcardListToListOfStringToAnyMaps(
         options["addOnStoreProducts"] as? List<*>,
+    )
+    val addOnPackages = castWildcardListToListOfStringToAnyMaps(
+        options["addOnPackages"] as? List<*>,
     )
     val addOnSubscriptionOptions = castWildcardListToListOfStringToAnyMaps(
         options["addOnSubscriptionOptions"] as? List<*>,
@@ -230,6 +234,7 @@ private fun validatePurchaseParams(
                 googleIsPersonalizedPrice = googleIsPersonalizedPrice,
                 presentedOfferingContext = presentedOfferingContext,
                 addOnStoreProducts = addOnStoreProducts,
+                addOnPackages = addOnPackages,
                 addOnSubscriptionOptions = addOnSubscriptionOptions,
             ),
         )
