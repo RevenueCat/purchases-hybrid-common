@@ -353,7 +353,8 @@ fun purchaseProduct(
                                 onResult.onError(
                                     PurchasesError(
                                         PurchasesErrorCode.PurchaseInvalidError,
-                                        "There is no or invalid presented offering context data provided to make this purchase",
+                                        "There is no or invalid presented offering context " +
+                                            "data provided to make this purchase",
                                     ).map(),
                                 )
                                 return@getOfferingsWith
@@ -373,7 +374,7 @@ fun purchaseProduct(
                                 onError = getPurchaseErrorFunction(onResult),
                                 onSuccess = getPurchaseCompletedFunction(onResult),
                             )
-                        }
+                        },
                     )
                 }
             } else {
@@ -692,7 +693,8 @@ fun purchaseSubscriptionOption(
                                 onResult.onError(
                                     PurchasesError(
                                         PurchasesErrorCode.PurchaseInvalidError,
-                                        "There is no or invalid presented offering context data provided to make this purchase",
+                                        "There is no or invalid presented offering context " +
+                                            "data provided to make this purchase",
                                     ).map(),
                                 )
                                 return@getOfferingsWith
@@ -712,7 +714,7 @@ fun purchaseSubscriptionOption(
                                 onError = getPurchaseErrorFunction(onResult),
                                 onSuccess = getPurchaseCompletedFunction(onResult),
                             )
-                        }
+                        },
                     )
                 }
             } else {
