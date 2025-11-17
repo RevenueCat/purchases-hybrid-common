@@ -12,6 +12,7 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
@@ -127,6 +128,7 @@ fun purchase(
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnPackages = purchaseParams.addOnPackages,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
 
@@ -140,6 +142,7 @@ fun purchase(
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnPackages = purchaseParams.addOnPackages,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
 
@@ -153,6 +156,7 @@ fun purchase(
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
+            addOnPackages = purchaseParams.addOnPackages,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
         )
     }
@@ -264,6 +268,7 @@ fun purchaseProduct(
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
@@ -331,12 +336,46 @@ fun purchaseProduct(
                         )
                     }
 
-                // Perform purchase
-                Purchases.sharedInstance.purchaseWith(
-                    purchaseParams.build(),
-                    onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult),
-                )
+                if (addOnPackages.isNullOrEmpty()) {
+                    // Perform purchase
+                    Purchases.sharedInstance.purchaseWith(
+                        purchaseParams.build(),
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult),
+                    )
+                } else {
+                    // Fetch packages
+                    Purchases.sharedInstance.getOfferingsWith(
+                        { onResult.onError(it.map()) },
+                        { offerings ->
+                            val context = presentedOfferingContext?.toPresentedOfferingContext()
+                            if (context == null) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        "There is no or invalid presented offering context data provided to make this purchase",
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
+
+                            createAddOnPackages(
+                                rawAddOnPackages = addOnPackages,
+                                packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
+                            )
+                                .takeUnless { it.isNullOrEmpty() }
+                                ?.let {
+                                    purchaseParams.addOnPackages(addOnPackages = it)
+                                }
+
+                            Purchases.sharedInstance.purchaseWith(
+                                purchaseParams.build(),
+                                onError = getPurchaseErrorFunction(onResult),
+                                onSuccess = getPurchaseCompletedFunction(onResult),
+                            )
+                        }
+                    )
+                }
             } else {
                 onResult.onError(
                     PurchasesError(
@@ -392,6 +431,7 @@ fun purchasePackage(
     googleIsPersonalizedPrice: Boolean?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
@@ -444,35 +484,75 @@ fun purchasePackage(
                     }
 
                     // Add ons
-                    if (!addOnStoreProducts.isNullOrEmpty() || !addOnSubscriptionOptions.isNullOrEmpty()) {
-                        val addOnProductIdsToFetch = addOnProductIdsToFetch(
-                            addOnStoreProducts = addOnStoreProducts,
-                            addOnSubscriptionOptions = addOnSubscriptionOptions,
-                        )
+                    if (!addOnStoreProducts.isNullOrEmpty() ||
+                        !addOnSubscriptionOptions.isNullOrEmpty() ||
+                        !addOnPackages.isNullOrEmpty()
+                    ) {
+                        /**
+                         * Helper function to fetch products and build the add-on StoreProducts and
+                         * SubscriptionOptions if needed.
+                         */
+                        fun fetchAddOnStoreProductsAndSubscriptionOptions(
+                            onError: (error: PurchasesError) -> Unit,
+                            onResult: (
+                                addOnStoreProducts: List<StoreProduct>?,
+                                addOnSubscriptionOptions: List<SubscriptionOption>?,
+                            ) -> Unit,
+                        ) {
+                            val addOnProductIdsToFetch = addOnProductIdsToFetch(
+                                addOnStoreProducts = addOnStoreProducts,
+                                addOnSubscriptionOptions = addOnSubscriptionOptions,
+                            )
 
-                        Purchases.sharedInstance.getProductsWith(
-                            productIds = addOnProductIdsToFetch,
-                            type = ProductType.SUBS,
-                            onError = { onResult.onError(it.map()) },
-                            onGetStoreProducts = { storeProducts ->
-                                createAddOnStoreProducts(
-                                    rawAddOnStoreProducts = addOnStoreProducts,
-                                    storeProducts = storeProducts,
+                            if (addOnProductIdsToFetch.isNotEmpty()) {
+                                Purchases.sharedInstance.getProductsWith(
+                                    productIds = addOnProductIdsToFetch,
+                                    type = ProductType.SUBS,
+                                    onError = { onError(it) },
+                                    onGetStoreProducts = { storeProducts ->
+                                        val typedAddOnStoreProducts = createAddOnStoreProducts(
+                                            rawAddOnStoreProducts = addOnStoreProducts,
+                                            storeProducts = storeProducts,
+                                        )
+
+                                        val typedAddOnSubscriptionOptions = createAddOnSubscriptionOptions(
+                                            rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
+                                            storeProducts = storeProducts,
+                                        )
+
+                                        onResult(
+                                            typedAddOnStoreProducts,
+                                            typedAddOnSubscriptionOptions,
+                                        )
+                                    },
                                 )
+                            } else {
+                                onResult(null, null)
+                            }
+                        }
+
+                        fetchAddOnStoreProductsAndSubscriptionOptions(
+                            onError = { onResult.onError(it.map()) },
+                            onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
+                                addOnStoreProducts
                                     .takeUnless { it.isNullOrEmpty() }
-                                    ?.let { typedAddOnStoreProducts ->
-                                        purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
+                                    ?.let {
+                                        purchaseParams.addOnStoreProducts(addOnStoreProducts = it)
                                     }
 
-                                createAddOnSubscriptionOptions(
-                                    rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                                    storeProducts = storeProducts,
+                                addOnSubscriptionOptions
+                                    .takeUnless { it.isNullOrEmpty() }
+                                    ?.let {
+                                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = it)
+                                    }
+
+                                createAddOnPackages(
+                                    rawAddOnPackages = addOnPackages,
+                                    packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
                                 )
                                     .takeUnless { it.isNullOrEmpty() }
-                                    ?.let { typedAddOnSubscriptionOptions ->
-                                        purchaseParams.addOnSubscriptionOptions(
-                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
-                                        )
+                                    ?.let {
+                                        purchaseParams.addOnPackages(addOnPackages = it)
                                     }
 
                                 Purchases.sharedInstance.purchaseWith(
@@ -523,6 +603,7 @@ fun purchaseSubscriptionOption(
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
@@ -596,12 +677,44 @@ fun purchaseSubscriptionOption(
                         )
                     }
 
-                // Perform purchase
-                Purchases.sharedInstance.purchaseWith(
-                    purchaseParams.build(),
-                    onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult),
-                )
+                if (addOnPackages.isNullOrEmpty()) {
+                    Purchases.sharedInstance.purchaseWith(
+                        purchaseParams.build(),
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult),
+                    )
+                } else {
+                    Purchases.sharedInstance.getOfferingsWith(
+                        { onResult.onError(it.map()) },
+                        { offerings ->
+                            val context = presentedOfferingContext?.toPresentedOfferingContext()
+                            if (context == null) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        "There is no or invalid presented offering context data provided to make this purchase",
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
+
+                            createAddOnPackages(
+                                rawAddOnPackages = addOnPackages,
+                                packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
+                            )
+                                .takeUnless { it.isNullOrEmpty() }
+                                ?.let {
+                                    purchaseParams.addOnPackages(addOnPackages = it)
+                                }
+
+                            Purchases.sharedInstance.purchaseWith(
+                                purchaseParams.build(),
+                                onError = getPurchaseErrorFunction(onResult),
+                                onSuccess = getPurchaseCompletedFunction(onResult),
+                            )
+                        }
+                    )
+                }
             } else {
                 onResult.onError(
                     PurchasesError(
@@ -1003,6 +1116,22 @@ private fun createAddOnSubscriptionOptions(
                 optionIdentifier = addOnOptionIdentifier,
                 storeProducts = storeProducts,
             )
+        }
+    } else {
+        return null
+    }
+}
+
+private fun createAddOnPackages(
+    rawAddOnPackages: List<Map<String, Any?>>?,
+    packages: List<Package>,
+): List<Package>? {
+    if (!rawAddOnPackages.isNullOrEmpty()) {
+        val packagesMap = packages.associateBy { it.identifier }
+
+        return rawAddOnPackages.mapNotNull { addOnMap ->
+            val addOnPackageIdentifier = addOnMap["packageIdentifier"] as? String ?: return@mapNotNull null
+            return@mapNotNull packagesMap[addOnPackageIdentifier]
         }
     } else {
         return null
