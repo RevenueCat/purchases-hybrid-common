@@ -23,6 +23,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        missingDimensionStrategy("billingclient", "bc8")
     }
 
     buildTypes {
