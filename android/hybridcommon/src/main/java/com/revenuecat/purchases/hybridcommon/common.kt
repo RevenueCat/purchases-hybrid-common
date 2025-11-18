@@ -12,6 +12,7 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
@@ -362,7 +363,7 @@ fun purchaseProduct(
 
                             createAddOnPackages(
                                 rawAddOnPackages = addOnPackages,
-                                packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
+                                offerings = offerings,
                             )
                                 .takeUnless { it.isNullOrEmpty() }
                                 ?.let {
@@ -549,7 +550,7 @@ fun purchasePackage(
 
                                 createAddOnPackages(
                                     rawAddOnPackages = addOnPackages,
-                                    packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
+                                    offerings = offerings,
                                 )
                                     .takeUnless { it.isNullOrEmpty() }
                                     ?.let {
@@ -702,7 +703,7 @@ fun purchaseSubscriptionOption(
 
                             createAddOnPackages(
                                 rawAddOnPackages = addOnPackages,
-                                packages = offerings[context.offeringIdentifier]?.availablePackages.orEmpty(),
+                                offerings = offerings,
                             )
                                 .takeUnless { it.isNullOrEmpty() }
                                 ?.let {
@@ -1126,10 +1127,12 @@ private fun createAddOnSubscriptionOptions(
 
 private fun createAddOnPackages(
     rawAddOnPackages: List<Map<String, Any?>>?,
-    packages: List<Package>,
+    offerings: Offerings,
 ): List<Package>? {
     if (!rawAddOnPackages.isNullOrEmpty()) {
-        val packagesMap = packages.associateBy { it.identifier }
+        val packagesMap: Map<String, Package> = offerings.all.values
+            .flatMap { it.availablePackages }
+            .associateBy { it.identifier }
 
         return rawAddOnPackages.mapNotNull { addOnMap ->
             val addOnPackageIdentifier = addOnMap["packageIdentifier"] as? String ?: return@mapNotNull null
