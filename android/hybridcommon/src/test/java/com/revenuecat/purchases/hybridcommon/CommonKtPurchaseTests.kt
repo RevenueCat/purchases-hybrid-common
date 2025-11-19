@@ -510,7 +510,7 @@ internal class CommonKtPurchaseTests {
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
     }
 
-    @Suppress("LongMethod", "MaximumLineLength")
+    @Suppress("LongMethod", "MaxLineLength")
     @Test
     fun `purchase package with addon package returns error if package is not in offering in presentedOfferingContext`() {
         configure(
@@ -1148,7 +1148,7 @@ internal class CommonKtPurchaseTests {
         assertTrue(capturedProductIds.isCaptured)
     }
 
-    @Suppress("LongMethod", "MaximumLineLength")
+    @Suppress("LongMethod", "MaxLineLength")
     @Test
     fun `purchase product with add on package returns error if package is not in offering in presentedOfferingContext`() {
         configure(
@@ -1881,7 +1881,7 @@ internal class CommonKtPurchaseTests {
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
     }
 
-    @Suppress("LongMethod", "MaximumLineLength")
+    @Suppress("LongMethod", "MaxLineLength")
     @Test
     fun `purchase subscription option with add on package returns error if package is not in offering in presentedOfferingContext`() {
         configure(
