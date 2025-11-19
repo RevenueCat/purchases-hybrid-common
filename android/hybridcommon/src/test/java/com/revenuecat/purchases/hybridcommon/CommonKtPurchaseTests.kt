@@ -10,6 +10,7 @@ import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesAreCompletedBy
+import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.text.split
@@ -305,7 +307,13 @@ internal class CommonKtPurchaseTests {
                 "placementIdentifier" to "placement_id",
             ),
             "addOnPackages" to addOnPackageIdentifiers.map {
-                mapOf("packageIdentifier" to it)
+                mapOf(
+                    "packageIdentifier" to it,
+                    "presentedOfferingContext" to mapOf(
+                        "offeringIdentifier" to offeringIdentifier,
+                        "placementIdentifier" to "placement_id",
+                    ),
+                )
             },
         )
 
@@ -327,6 +335,87 @@ internal class CommonKtPurchaseTests {
         assertEquals(baseProductId, response["productIdentifier"])
         assertTrue(purchaseParamsSlot.isCaptured)
         assertTrue(capturedPurchaseCallback.isCaptured)
+        assertTrue(capturedReceiveOfferingsCallback.isCaptured)
+    }
+
+    @Suppress("LongMethod")
+    @Test
+    fun `purchase with packageIdentifier with add on package without presentedOfferingContext returns error`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val baseProductId = "product_id"
+        val expectedPackageIdentifier = "monthly"
+        val addOnPackageIdentifiers = listOf("addon_package_one", "addon_package_two")
+        var receivedError: ErrorContainer? = null
+
+        val baseStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(
+            baseStoreProduct,
+            packageIdentifier = expectedPackageIdentifier,
+        )
+        val addOnPackages = addOnPackageIdentifiers.map { identifier ->
+            Package(
+                identifier = identifier,
+                packageType = PackageType.CUSTOM,
+                product = TestUtilities.stubStoreProduct("product_for_$identifier"),
+                presentedOfferingContext = PresentedOfferingContext(offeringIdentifier),
+            )
+        }
+        val offering = requireNotNull(offerings[offeringIdentifier])
+        every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
+        val purchaseParamsSlot = slot<PurchaseParams>()
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "packageIdentifier" to expectedPackageIdentifier,
+            "presentedOfferingContext" to mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+                "placementIdentifier" to "placement_id",
+            ),
+            "addOnPackages" to addOnPackageIdentifiers.map {
+                mapOf("packageIdentifier" to it)
+            },
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Expected failure")
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    receivedError = error
+                }
+            },
+        )
+
+        val response = requireNotNull(receivedError) { "Expected error to be received" }
+        assertEquals(response.code, PurchasesErrorCode.PurchaseInvalidError.code)
+        assertEquals(response.info["underlyingErrorMessage"], "Missing presentedOfferingContext for add-on package addon_package_one")
+        assertFalse(purchaseParamsSlot.isCaptured)
+        assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
     }
 
@@ -659,7 +748,13 @@ internal class CommonKtPurchaseTests {
                 "placementIdentifier" to "placement_id",
             ),
             "addOnPackages" to addOnPackageIdentifiers.map {
-                mapOf("packageIdentifier" to it)
+                mapOf(
+                    "packageIdentifier" to it,
+                    "presentedOfferingContext" to mapOf(
+                        "offeringIdentifier" to offeringIdentifier,
+                        "placementIdentifier" to "placement_id",
+                    ),
+                )
             },
         )
 
@@ -1084,7 +1179,13 @@ internal class CommonKtPurchaseTests {
                 "placementIdentifier" to "placement_id",
             ),
             "addOnPackages" to addOnPackageIdentifiers.map {
-                mapOf("packageIdentifier" to it)
+                mapOf(
+                    "packageIdentifier" to it,
+                    "presentedOfferingContext" to mapOf(
+                        "offeringIdentifier" to offeringIdentifier,
+                        "placementIdentifier" to "placement_id",
+                    ),
+                )
             },
         )
 
