@@ -782,6 +782,97 @@ internal class CommonKtPurchaseTests {
 
     @Suppress("LongMethod")
     @Test
+    fun `purchase with productIdentifier with add on package without presentedOfferingContext returns error`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val productIdentifier = "product_id:base_plan"
+        val addOnPackageIdentifiers = listOf("addon_package_one", "addon_package_two")
+        var receivedError: ErrorContainer? = null
+
+        val mockStoreProduct = TestUtilities.stubStoreProduct(productIdentifier)
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(mockStoreProduct)
+        val addOnPackages = addOnPackageIdentifiers.map { identifier ->
+            Package(
+                identifier = identifier,
+                packageType = PackageType.CUSTOM,
+                product = TestUtilities.stubStoreProduct("product_for_$identifier"),
+                presentedOfferingContext = PresentedOfferingContext(offeringIdentifier),
+            )
+        }
+        val offering = requireNotNull(offerings[offeringIdentifier])
+        every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
+
+        val capturedProductIds = slot<List<String>>()
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                capture(capturedProductIds),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val mockTransaction = TestUtilities.createMockTransaction(productIdentifier)
+        val purchaseParamsSlot = slot<PurchaseParams>()
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "productIdentifier" to productIdentifier,
+            "type" to "subs",
+            "presentedOfferingContext" to mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+                "placementIdentifier" to "placement_id",
+            ),
+            "addOnPackages" to addOnPackageIdentifiers.map {
+                mapOf("packageIdentifier" to it)
+            },
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Expected failure")
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    receivedError = error
+                }
+            },
+        )
+
+        val response = requireNotNull(receivedError) { "Expected error to be received" }
+        assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
+        assertEquals(response.info["underlyingErrorMessage"], "Missing presentedOfferingContext for add-on package addon_package_one")
+        assertFalse(purchaseParamsSlot.isCaptured)
+        assertFalse(capturedPurchaseCallback.isCaptured)
+        assertTrue(capturedReceiveOfferingsCallback.isCaptured)
+        assertTrue(capturedProductIds.isCaptured)
+    }
+
+    @Suppress("LongMethod")
+    @Test
     fun `purchase with productIdentifier with empty add on packages calls purchase(params)`() {
         configure(
             context = mockContext,
@@ -1207,6 +1298,105 @@ internal class CommonKtPurchaseTests {
         assertEquals(productIdentifier, response["productIdentifier"])
         assertTrue(purchaseParamsSlot.isCaptured)
         assertTrue(capturedPurchaseCallback.isCaptured)
+        assertTrue(capturedReceiveOfferingsCallback.isCaptured)
+    }
+
+    @Suppress("LongMethod")
+    @Test
+    fun `purchase subscription option with add on package without presentedOfferingContext returns error`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        val productIdentifier = "subscription_product"
+        val optionIdentifier = "monthly_option"
+        val addOnPackageIdentifiers = listOf("addon_package_one", "addon_package_two")
+        var receivedError: ErrorContainer? = null
+
+        val mockSubscriptionOption = TestUtilities.stubSubscriptionOption(
+            optionIdentifier,
+            productIdentifier,
+        )
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            productId = productIdentifier,
+            subscriptionOptions = listOf(mockSubscriptionOption),
+            defaultOption = mockSubscriptionOption,
+            purchasingDataProductId = productIdentifier,
+        )
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(mockStoreProduct)
+        val addOnPackages = addOnPackageIdentifiers.map { identifier ->
+            Package(
+                identifier = identifier,
+                packageType = PackageType.CUSTOM,
+                product = TestUtilities.stubStoreProduct("product_for_$identifier"),
+                presentedOfferingContext = PresentedOfferingContext(offeringIdentifier),
+            )
+        }
+        val offering = requireNotNull(offerings[offeringIdentifier])
+        every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        every {
+            mockPurchases.getProducts(
+                listOf(productIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val mockTransaction = TestUtilities.createMockTransaction(productIdentifier)
+        val purchaseParamsSlot = slot<PurchaseParams>()
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(capture(purchaseParamsSlot), capture(capturedPurchaseCallback))
+        } answers {
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        val options = mapOf(
+            "productIdentifier" to productIdentifier,
+            "optionIdentifier" to optionIdentifier,
+            "presentedOfferingContext" to mapOf(
+                "offeringIdentifier" to offeringIdentifier,
+                "placementIdentifier" to "placement_id",
+            ),
+            "addOnPackages" to addOnPackageIdentifiers.map {
+                mapOf("packageIdentifier" to it)
+            },
+        )
+
+        purchase(
+            activity = mockActivity,
+            options = options,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    fail("Expected failure")
+                }
+
+                override fun onError(error: ErrorContainer) {
+                    receivedError = error
+                }
+            },
+        )
+
+        val response = requireNotNull(receivedError) { "Expected error to be received" }
+        assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
+        assertEquals(response.info["underlyingErrorMessage"], "Missing presentedOfferingContext for add-on package addon_package_one")
+        assertFalse(purchaseParamsSlot.isCaptured)
+        assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
     }
 
