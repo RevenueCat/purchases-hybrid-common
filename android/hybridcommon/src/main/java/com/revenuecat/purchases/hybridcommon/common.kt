@@ -369,7 +369,7 @@ fun purchaseProduct(
                                     ?.let {
                                         purchaseParams.addOnPackages(addOnPackages = it)
                                     }
-                            } catch(e: IllegalArgumentException) {
+                            } catch (e: IllegalArgumentException) {
                                 onResult.onError(
                                     PurchasesError(
                                         PurchasesErrorCode.PurchaseInvalidError,
@@ -566,7 +566,7 @@ fun purchasePackage(
                                         ?.let {
                                             purchaseParams.addOnPackages(addOnPackages = it)
                                         }
-                                } catch(e: IllegalArgumentException) {
+                                } catch (e: IllegalArgumentException) {
                                     onResult.onError(
                                         PurchasesError(
                                             PurchasesErrorCode.PurchaseInvalidError,
@@ -575,7 +575,6 @@ fun purchasePackage(
                                     )
                                     return@fetchAddOnStoreProductsAndSubscriptionOptions
                                 }
-
 
                                 Purchases.sharedInstance.purchaseWith(
                                     purchaseParams.build(),
@@ -730,7 +729,7 @@ fun purchaseSubscriptionOption(
                                     ?.let {
                                         purchaseParams.addOnPackages(addOnPackages = it)
                                     }
-                            } catch(e: IllegalArgumentException) {
+                            } catch (e: IllegalArgumentException) {
                                 onResult.onError(
                                     PurchasesError(
                                         PurchasesErrorCode.PurchaseInvalidError,
@@ -1166,23 +1165,31 @@ private fun createAddOnPackages(
             val presentedOfferingContext = (addOnMap["presentedOfferingContext"] as? Map<*, *>)
                 ?.mapNotNull { (key, value) -> (key as? String)?.let { it to value } }
                 ?.toMap()
-                ?: throw IllegalArgumentException("Missing presentedOfferingContext for add-on " +
-                    "package $addOnPackageIdentifier")
+                ?: throw IllegalArgumentException(
+                    "Missing presentedOfferingContext for add-on " +
+                        "package $addOnPackageIdentifier",
+                )
 
             val offeringIdentifier = presentedOfferingContext["offeringIdentifier"] as? String
-                ?: throw IllegalArgumentException("Missing offeringIdentifier for add-on " +
-                    "package $addOnPackageIdentifier")
+                ?: throw IllegalArgumentException(
+                    "Missing offeringIdentifier for add-on " +
+                        "package $addOnPackageIdentifier",
+                )
 
             val offering = offerings[offeringIdentifier]
-                ?: throw IllegalArgumentException("Could not find offering with identifier $offeringIdentifier " +
-                    "for add-on package $addOnPackageIdentifier")
+                ?: throw IllegalArgumentException(
+                    "Could not find offering with identifier $offeringIdentifier " +
+                        "for add-on package $addOnPackageIdentifier",
+                )
 
             try {
                 val addOnPackage = offering.getPackage(identifier = addOnPackageIdentifier)
                 return@mapNotNull addOnPackage
-            } catch(_: NoSuchElementException) {
-                throw IllegalArgumentException("Could not find package with identifier $addOnPackageIdentifier" +
-                    " in offering with identifier $offeringIdentifier")
+            } catch (_: NoSuchElementException) {
+                throw IllegalArgumentException(
+                    "Could not find package with identifier $addOnPackageIdentifier" +
+                        " in offering with identifier $offeringIdentifier",
+                )
             }
         }
     } else {
