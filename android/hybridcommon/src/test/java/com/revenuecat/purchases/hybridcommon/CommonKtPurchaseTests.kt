@@ -412,7 +412,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals("Missing presentedOfferingContext for add-on package addon_package_one", response.info["underlyingErrorMessage"])
+        assertEquals(
+            "Missing presentedOfferingContext for add-on package addon_package_one",
+            response.info["underlyingErrorMessage"],
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
@@ -498,7 +501,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals("Missing offeringIdentifier for add-on package addon_package_one", response.info["underlyingErrorMessage"])
+        assertEquals(
+            "Missing offeringIdentifier for add-on package addon_package_one",
+            response.info["underlyingErrorMessage"],
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
@@ -557,7 +563,7 @@ internal class CommonKtPurchaseTests {
                     "packageIdentifier" to "addon_package_one",
                     "presentedOfferingContext" to mapOf(
                         "placementIdentifier" to "placement_id",
-                        "offeringIdentifier" to offeringIdentifier
+                        "offeringIdentifier" to offeringIdentifier,
                     ),
                 ),
             ),
@@ -1033,7 +1039,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals(response.info["underlyingErrorMessage"], "Missing presentedOfferingContext for add-on package addon_package_one")
+        assertEquals(
+            response.info["underlyingErrorMessage"],
+            "Missing presentedOfferingContext for add-on package addon_package_one",
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
@@ -1129,7 +1138,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals("Missing offeringIdentifier for add-on package addon_package_one", response.info["underlyingErrorMessage"])
+        assertEquals(
+            "Missing offeringIdentifier for add-on package addon_package_one",
+            response.info["underlyingErrorMessage"],
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
@@ -1753,7 +1765,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals(response.info["underlyingErrorMessage"], "Missing presentedOfferingContext for add-on package addon_package_one")
+        assertEquals(
+            response.info["underlyingErrorMessage"],
+            "Missing presentedOfferingContext for add-on package addon_package_one",
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
@@ -1857,7 +1872,10 @@ internal class CommonKtPurchaseTests {
 
         val response = requireNotNull(receivedError) { "Expected error to be received" }
         assertEquals(PurchasesErrorCode.PurchaseInvalidError.code, response.code)
-        assertEquals("Missing offeringIdentifier for add-on package addon_package_one", response.info["underlyingErrorMessage"])
+        assertEquals(
+            "Missing offeringIdentifier for add-on package addon_package_one",
+            response.info["underlyingErrorMessage"],
+        )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
         assertTrue(capturedReceiveOfferingsCallback.isCaptured)
