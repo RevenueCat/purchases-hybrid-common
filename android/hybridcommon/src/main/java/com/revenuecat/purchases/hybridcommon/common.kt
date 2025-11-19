@@ -1154,6 +1154,7 @@ private fun createAddOnSubscriptionOptions(
     }
 }
 
+@Suppress("ThrowsCount")
 @Throws(IllegalArgumentException::class)
 private fun createAddOnPackages(
     rawAddOnPackages: List<Map<String, Any?>>?,
