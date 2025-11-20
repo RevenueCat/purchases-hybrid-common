@@ -80,6 +80,7 @@ private class CommonApiTests {
         presentedOfferingContext: Map<String, Any?>?,
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
+        addOnPackages: List<Map<String, Any?>>?,
         onResult: OnResult,
     ) {
         purchaseProduct(
@@ -119,6 +120,21 @@ private class CommonApiTests {
             onResult,
             addOnStoreProducts,
             addOnSubscriptionOptions,
+        )
+
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleBasePlanId,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
         )
     }
 
@@ -132,6 +148,7 @@ private class CommonApiTests {
         onResult: OnResult,
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
+        addOnPackages: List<Map<String, Any?>>?,
     ) {
         purchasePackage(
             activity,
@@ -164,6 +181,19 @@ private class CommonApiTests {
             onResult,
             addOnStoreProducts,
             addOnSubscriptionOptions,
+        )
+
+        purchasePackage(
+            activity,
+            packageIdentifier,
+            presentedOfferingContext,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
         )
     }
 
@@ -178,6 +208,7 @@ private class CommonApiTests {
         onResult: OnResult,
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
+        addOnPackages: List<Map<String, Any?>>?,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -213,6 +244,20 @@ private class CommonApiTests {
             onResult,
             addOnStoreProducts,
             addOnSubscriptionOptions,
+        )
+
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
         )
     }
 
