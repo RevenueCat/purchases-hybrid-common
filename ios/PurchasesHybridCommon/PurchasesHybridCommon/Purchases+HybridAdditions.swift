@@ -116,7 +116,7 @@ import RevenueCat
                          shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                          verificationMode: verificationMode,
                          diagnosticsEnabled: diagnosticsEnabled,
-                         automaticDeviceIdentifierCollectionEnabled: true,
+                         automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
                          preferredLocale: nil)
     }
 
