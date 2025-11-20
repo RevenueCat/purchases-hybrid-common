@@ -1,3 +1,8 @@
+## 17.19.0
+## RevenueCat SDK
+### ✨ New Features
+* Support Add On Packages (#1373) via Will Taylor (@fire-at-will)
+
 ## 17.18.1
 ### 🔄 Other Changes
 * Deploy BC7 flavor for android (#1371) via Toni Rico (@tonidero)
