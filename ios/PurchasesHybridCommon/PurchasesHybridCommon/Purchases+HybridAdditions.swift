@@ -111,6 +111,7 @@ import RevenueCat
                          userDefaultsSuiteName: userDefaultsSuiteName,
                          platformFlavor: platformFlavor,
                          platformFlavorVersion: platformFlavorVersion,
+                         storeKitVersion: storeKitVersion,
                          dangerousSettings: dangerousSettings,
                          shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
                          verificationMode: verificationMode,
