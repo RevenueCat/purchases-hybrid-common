@@ -1,3 +1,8 @@
+## 17.19.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* pass storekit version & automaticDeviceIdentifierCollectionEnabled (#1376) via Will Taylor (@fire-at-will)
+
 ## 17.19.0
 ## RevenueCat SDK
 ### ✨ New Features
