@@ -500,6 +500,8 @@ fun purchasePackage(
                         !addOnPackages.isNullOrEmpty()
                     ) {
                         fetchAddOnStoreProductsAndSubscriptionOptions(
+                            addOnStoreProducts = addOnStoreProducts,
+                            addOnSubscriptionOptions = addOnSubscriptionOptions,
                             onError = { onResult.onError(it.map()) },
                             onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
                                 addOnStoreProducts
