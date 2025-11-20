@@ -499,49 +499,6 @@ fun purchasePackage(
                         !addOnSubscriptionOptions.isNullOrEmpty() ||
                         !addOnPackages.isNullOrEmpty()
                     ) {
-                        /**
-                         * Helper function to fetch products and build the add-on StoreProducts and
-                         * SubscriptionOptions if needed.
-                         */
-                        fun fetchAddOnStoreProductsAndSubscriptionOptions(
-                            onError: (error: PurchasesError) -> Unit,
-                            onResult: (
-                                addOnStoreProducts: List<StoreProduct>?,
-                                addOnSubscriptionOptions: List<SubscriptionOption>?,
-                            ) -> Unit,
-                        ) {
-                            val addOnProductIdsToFetch = addOnProductIdsToFetch(
-                                addOnStoreProducts = addOnStoreProducts,
-                                addOnSubscriptionOptions = addOnSubscriptionOptions,
-                            )
-
-                            if (addOnProductIdsToFetch.isNotEmpty()) {
-                                Purchases.sharedInstance.getProductsWith(
-                                    productIds = addOnProductIdsToFetch,
-                                    type = ProductType.SUBS,
-                                    onError = { onError(it) },
-                                    onGetStoreProducts = { storeProducts ->
-                                        val typedAddOnStoreProducts = createAddOnStoreProducts(
-                                            rawAddOnStoreProducts = addOnStoreProducts,
-                                            storeProducts = storeProducts,
-                                        )
-
-                                        val typedAddOnSubscriptionOptions = createAddOnSubscriptionOptions(
-                                            rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                                            storeProducts = storeProducts,
-                                        )
-
-                                        onResult(
-                                            typedAddOnStoreProducts,
-                                            typedAddOnSubscriptionOptions,
-                                        )
-                                    },
-                                )
-                            } else {
-                                onResult(null, null)
-                            }
-                        }
-
                         fetchAddOnStoreProductsAndSubscriptionOptions(
                             onError = { onResult.onError(it.map()) },
                             onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
@@ -1300,6 +1257,51 @@ private fun castWildcardListToListOfStringToAnyMaps(
         }
     }
     return result
+}
+
+/**
+ * Helper function to fetch products and build the add-on StoreProducts and
+ * SubscriptionOptions if needed.
+ */
+private fun fetchAddOnStoreProductsAndSubscriptionOptions(
+    addOnStoreProducts: List<Map<String, Any?>>?,
+    addOnSubscriptionOptions: List<Map<String, Any?>>?,
+    onError: (error: PurchasesError) -> Unit,
+    onResult: (
+        addOnStoreProducts: List<StoreProduct>?,
+        addOnSubscriptionOptions: List<SubscriptionOption>?,
+    ) -> Unit,
+) {
+    val addOnProductIdsToFetch = addOnProductIdsToFetch(
+        addOnStoreProducts = addOnStoreProducts,
+        addOnSubscriptionOptions = addOnSubscriptionOptions,
+    )
+
+    if (addOnProductIdsToFetch.isNotEmpty()) {
+        Purchases.sharedInstance.getProductsWith(
+            productIds = addOnProductIdsToFetch,
+            type = ProductType.SUBS,
+            onError = { onError(it) },
+            onGetStoreProducts = { storeProducts ->
+                val typedAddOnStoreProducts = createAddOnStoreProducts(
+                    rawAddOnStoreProducts = addOnStoreProducts,
+                    storeProducts = storeProducts,
+                )
+
+                val typedAddOnSubscriptionOptions = createAddOnSubscriptionOptions(
+                    rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
+                    storeProducts = storeProducts,
+                )
+
+                onResult(
+                    typedAddOnStoreProducts,
+                    typedAddOnSubscriptionOptions,
+                )
+            },
+        )
+    } else {
+        onResult(null, null)
+    }
 }
 
 private fun addOnProductIdsToFetch(
