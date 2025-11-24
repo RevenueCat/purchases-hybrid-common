@@ -1,3 +1,6 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* pass storekit version & automaticDeviceIdentifierCollectionEnabled (#1376) via Will Taylor (@fire-at-will)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.48.0 => 5.49.0 (#1379) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `083ced9` to `efca663` (#1378) via dependabot[bot] (@dependabot[bot])
