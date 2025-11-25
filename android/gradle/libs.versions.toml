@@ -8,7 +8,7 @@ kotlin = "2.0.21"
 kotlinLanguage = "1.8"
 junit = "4.13.2"
 mockk = "1.12.8"
-purchases = "9.12.1"
+purchases = "9.14.1"
 detekt = "1.23.6"
 android-junit5-version = "1.8.2.0"
 mavenPublish = "0.33.0"
@@ -24,9 +24,12 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
-purchases-ui = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }
-purchases-amazon = { module = "com.revenuecat.purchases:purchases-store-amazon", version.ref = "purchases" }
+purchases-bc8 = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
+purchases-ui-bc8 = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }
+purchases-amazon-bc8 = { module = "com.revenuecat.purchases:purchases-store-amazon", version.ref = "purchases" }
+purchases-bc7 = { module = "com.revenuecat.purchases:purchases-bc7", version.ref = "purchases" }
+purchases-ui-bc7 = { module = "com.revenuecat.purchases:purchases-ui-bc7", version.ref = "purchases" }
+purchases-amazon-bc7 = { module = "com.revenuecat.purchases:purchases-store-amazon-bc7", version.ref = "purchases" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 [plugins]

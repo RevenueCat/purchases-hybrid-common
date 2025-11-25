@@ -12,6 +12,8 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.LogLevel
+import com.revenuecat.purchases.Offerings
+import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
@@ -128,6 +130,7 @@ fun purchase(
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
+            addOnPackages = purchaseParams.addOnPackages,
         )
 
         is PurchasableItem.Package -> purchasePackage(
@@ -141,6 +144,7 @@ fun purchase(
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
+            addOnPackages = purchaseParams.addOnPackages,
         )
 
         is PurchasableItem.SubscriptionOption -> purchaseSubscriptionOption(
@@ -154,6 +158,7 @@ fun purchase(
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
+            addOnPackages = purchaseParams.addOnPackages,
         )
     }
 }
@@ -183,6 +188,7 @@ private data class CommonPurchaseParams(
     val presentedOfferingContext: Map<String, Any?>?,
     val addOnStoreProducts: List<Map<String, Any?>>?,
     val addOnSubscriptionOptions: List<Map<String, Any?>>?,
+    val addOnPackages: List<Map<String, Any?>>?,
 )
 
 private fun validatePurchaseParams(
@@ -205,6 +211,9 @@ private fun validatePurchaseParams(
     )
     val addOnSubscriptionOptions = castWildcardListToListOfStringToAnyMaps(
         options["addOnSubscriptionOptions"] as? List<*>,
+    )
+    val addOnPackages = castWildcardListToListOfStringToAnyMaps(
+        options["addOnPackages"] as? List<*>,
     )
 
     val purchasableItem = when {
@@ -231,6 +240,7 @@ private fun validatePurchaseParams(
                 presentedOfferingContext = presentedOfferingContext,
                 addOnStoreProducts = addOnStoreProducts,
                 addOnSubscriptionOptions = addOnSubscriptionOptions,
+                addOnPackages = addOnPackages,
             ),
         )
     } else {
@@ -260,6 +270,7 @@ fun purchaseProduct(
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
         getGoogleReplacementMode(googleReplacementModeInt)
@@ -325,13 +336,57 @@ fun purchaseProduct(
                             addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
                         )
                     }
+                if (addOnPackages.isNullOrEmpty()) {
+                    // Perform purchase
+                    Purchases.sharedInstance.purchaseWith(
+                        purchaseParams.build(),
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult),
+                    )
+                } else {
+                    // Fetch packages
+                    Purchases.sharedInstance.getOfferingsWith(
+                        { onResult.onError(it.map()) },
+                        { offerings ->
+                            val context = presentedOfferingContext?.toPresentedOfferingContext()
+                            if (context == null) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        "There is no or invalid presented offering context " +
+                                            "data provided to make this purchase",
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
 
-                // Perform purchase
-                Purchases.sharedInstance.purchaseWith(
-                    purchaseParams.build(),
-                    onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult),
-                )
+                            try {
+                                createAddOnPackages(
+                                    rawAddOnPackages = addOnPackages,
+                                    offerings = offerings,
+                                )
+                                    .takeUnless { it.isNullOrEmpty() }
+                                    ?.let {
+                                        purchaseParams.addOnPackages(addOnPackages = it)
+                                    }
+                            } catch (e: IllegalArgumentException) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        e.localizedMessage,
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
+
+                            Purchases.sharedInstance.purchaseWith(
+                                purchaseParams.build(),
+                                onError = getPurchaseErrorFunction(onResult),
+                                onSuccess = getPurchaseCompletedFunction(onResult),
+                            )
+                        },
+                    )
+                }
             } else {
                 onResult.onError(
                     PurchasesError(
@@ -388,6 +443,7 @@ fun purchasePackage(
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
 ) {
     val googleReplacementMode = try {
         getGoogleReplacementMode(googleReplacementModeInt)
@@ -439,36 +495,45 @@ fun purchasePackage(
                     }
 
                     // Add ons
-                    if (!addOnStoreProducts.isNullOrEmpty() || !addOnSubscriptionOptions.isNullOrEmpty()) {
-                        val addOnProductIdsToFetch = addOnProductIdsToFetch(
+                    if (!addOnStoreProducts.isNullOrEmpty() ||
+                        !addOnSubscriptionOptions.isNullOrEmpty() ||
+                        !addOnPackages.isNullOrEmpty()
+                    ) {
+                        fetchAddOnStoreProductsAndSubscriptionOptions(
                             addOnStoreProducts = addOnStoreProducts,
                             addOnSubscriptionOptions = addOnSubscriptionOptions,
-                        )
-
-                        Purchases.sharedInstance.getProductsWith(
-                            productIds = addOnProductIdsToFetch,
-                            type = ProductType.SUBS,
                             onError = { onResult.onError(it.map()) },
-                            onGetStoreProducts = { storeProducts ->
-                                createAddOnStoreProducts(
-                                    rawAddOnStoreProducts = addOnStoreProducts,
-                                    storeProducts = storeProducts,
-                                )
+                            onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
+                                addOnStoreProducts
                                     .takeUnless { it.isNullOrEmpty() }
-                                    ?.let { typedAddOnStoreProducts ->
-                                        purchaseParams.addOnStoreProducts(addOnStoreProducts = typedAddOnStoreProducts)
+                                    ?.let {
+                                        purchaseParams.addOnStoreProducts(addOnStoreProducts = it)
                                     }
 
-                                createAddOnSubscriptionOptions(
-                                    rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
-                                    storeProducts = storeProducts,
-                                )
+                                addOnSubscriptionOptions
                                     .takeUnless { it.isNullOrEmpty() }
-                                    ?.let { typedAddOnSubscriptionOptions ->
-                                        purchaseParams.addOnSubscriptionOptions(
-                                            addOnSubscriptionOptions = typedAddOnSubscriptionOptions,
-                                        )
+                                    ?.let {
+                                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = it)
                                     }
+
+                                try {
+                                    createAddOnPackages(
+                                        rawAddOnPackages = addOnPackages,
+                                        offerings = offerings,
+                                    )
+                                        .takeUnless { it.isNullOrEmpty() }
+                                        ?.let {
+                                            purchaseParams.addOnPackages(addOnPackages = it)
+                                        }
+                                } catch (e: IllegalArgumentException) {
+                                    onResult.onError(
+                                        PurchasesError(
+                                            PurchasesErrorCode.PurchaseInvalidError,
+                                            e.message,
+                                        ).map(),
+                                    )
+                                    return@fetchAddOnStoreProductsAndSubscriptionOptions
+                                }
 
                                 Purchases.sharedInstance.purchaseWith(
                                     purchaseParams.build(),
@@ -519,6 +584,7 @@ fun purchaseSubscriptionOption(
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
+    addOnPackages: List<Map<String, Any?>>? = null,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
         onResult.onError(
@@ -591,12 +657,55 @@ fun purchaseSubscriptionOption(
                         )
                     }
 
-                // Perform purchase
-                Purchases.sharedInstance.purchaseWith(
-                    purchaseParams.build(),
-                    onError = getPurchaseErrorFunction(onResult),
-                    onSuccess = getPurchaseCompletedFunction(onResult),
-                )
+                if (addOnPackages.isNullOrEmpty()) {
+                    Purchases.sharedInstance.purchaseWith(
+                        purchaseParams.build(),
+                        onError = getPurchaseErrorFunction(onResult),
+                        onSuccess = getPurchaseCompletedFunction(onResult),
+                    )
+                } else {
+                    Purchases.sharedInstance.getOfferingsWith(
+                        { onResult.onError(it.map()) },
+                        { offerings ->
+                            val context = presentedOfferingContext?.toPresentedOfferingContext()
+                            if (context == null) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        "There is no or invalid presented offering context " +
+                                            "data provided to make this purchase",
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
+
+                            try {
+                                createAddOnPackages(
+                                    rawAddOnPackages = addOnPackages,
+                                    offerings = offerings,
+                                )
+                                    .takeUnless { it.isNullOrEmpty() }
+                                    ?.let {
+                                        purchaseParams.addOnPackages(addOnPackages = it)
+                                    }
+                            } catch (e: IllegalArgumentException) {
+                                onResult.onError(
+                                    PurchasesError(
+                                        PurchasesErrorCode.PurchaseInvalidError,
+                                        e.message,
+                                    ).map(),
+                                )
+                                return@getOfferingsWith
+                            }
+
+                            Purchases.sharedInstance.purchaseWith(
+                                purchaseParams.build(),
+                                onError = getPurchaseErrorFunction(onResult),
+                                onSuccess = getPurchaseCompletedFunction(onResult),
+                            )
+                        },
+                    )
+                }
             } else {
                 onResult.onError(
                     PurchasesError(
@@ -1004,6 +1113,50 @@ private fun createAddOnSubscriptionOptions(
     }
 }
 
+@Suppress("ThrowsCount")
+@Throws(IllegalArgumentException::class)
+private fun createAddOnPackages(
+    rawAddOnPackages: List<Map<String, Any?>>?,
+    offerings: Offerings,
+): List<Package>? {
+    if (!rawAddOnPackages.isNullOrEmpty()) {
+        return rawAddOnPackages.mapNotNull { addOnMap ->
+            val addOnPackageIdentifier = addOnMap["packageIdentifier"] as? String ?: return@mapNotNull null
+            val presentedOfferingContext = (addOnMap["presentedOfferingContext"] as? Map<*, *>)
+                ?.mapNotNull { (key, value) -> (key as? String)?.let { it to value } }
+                ?.toMap()
+                ?: throw IllegalArgumentException(
+                    "Missing presentedOfferingContext for add-on " +
+                        "package $addOnPackageIdentifier",
+                )
+
+            val offeringIdentifier = presentedOfferingContext["offeringIdentifier"] as? String
+                ?: throw IllegalArgumentException(
+                    "Missing offeringIdentifier for add-on " +
+                        "package $addOnPackageIdentifier",
+                )
+
+            val offering = offerings[offeringIdentifier]
+                ?: throw IllegalArgumentException(
+                    "Could not find offering with identifier $offeringIdentifier " +
+                        "for add-on package $addOnPackageIdentifier",
+                )
+
+            try {
+                val addOnPackage = offering.getPackage(identifier = addOnPackageIdentifier)
+                return@mapNotNull addOnPackage
+            } catch (_: NoSuchElementException) {
+                throw IllegalArgumentException(
+                    "Could not find package with identifier $addOnPackageIdentifier" +
+                        " in offering with identifier $offeringIdentifier",
+                )
+            }
+        }
+    } else {
+        return null
+    }
+}
+
 private fun createAddOnStoreProducts(
     rawAddOnStoreProducts: List<Map<String, Any?>>?,
     storeProducts: List<StoreProduct>,
@@ -1106,6 +1259,51 @@ private fun castWildcardListToListOfStringToAnyMaps(
         }
     }
     return result
+}
+
+/**
+ * Helper function to fetch products and build the add-on StoreProducts and
+ * SubscriptionOptions if needed.
+ */
+private fun fetchAddOnStoreProductsAndSubscriptionOptions(
+    addOnStoreProducts: List<Map<String, Any?>>?,
+    addOnSubscriptionOptions: List<Map<String, Any?>>?,
+    onError: (error: PurchasesError) -> Unit,
+    onResult: (
+        addOnStoreProducts: List<StoreProduct>?,
+        addOnSubscriptionOptions: List<SubscriptionOption>?,
+    ) -> Unit,
+) {
+    val addOnProductIdsToFetch = addOnProductIdsToFetch(
+        addOnStoreProducts = addOnStoreProducts,
+        addOnSubscriptionOptions = addOnSubscriptionOptions,
+    )
+
+    if (addOnProductIdsToFetch.isNotEmpty()) {
+        Purchases.sharedInstance.getProductsWith(
+            productIds = addOnProductIdsToFetch,
+            type = ProductType.SUBS,
+            onError = { onError(it) },
+            onGetStoreProducts = { storeProducts ->
+                val typedAddOnStoreProducts = createAddOnStoreProducts(
+                    rawAddOnStoreProducts = addOnStoreProducts,
+                    storeProducts = storeProducts,
+                )
+
+                val typedAddOnSubscriptionOptions = createAddOnSubscriptionOptions(
+                    rawAddOnSubscriptionOptions = addOnSubscriptionOptions,
+                    storeProducts = storeProducts,
+                )
+
+                onResult(
+                    typedAddOnStoreProducts,
+                    typedAddOnSubscriptionOptions,
+                )
+            },
+        )
+    } else {
+        onResult(null, null)
+    }
 }
 
 private fun addOnProductIdsToFetch(

@@ -179,7 +179,14 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                         currentOfferingID: "default",
                         placements: nil,
                         targeting: nil,
-                        response: OfferingsResponse(currentOfferingId: "default", offerings: [], placements: nil, targeting: nil, uiConfig: nil)
+                        contents: Offerings.Contents(response: OfferingsResponse(currentOfferingId: "default",
+                                                                                 offerings: [],
+                                                                                 placements: nil,
+                                                                                 targeting: nil,
+                                                                                 uiConfig: nil),
+                                                     httpResponseOriginalSource: HTTPResponseOriginalSource(isFallbackUrlResponse: false,
+                                                                                                            isLoadShedderResponse: false)),
+                        loadedFromDiskCache: false,
                     )
 
                     let mockTransaction = StoreTransaction(

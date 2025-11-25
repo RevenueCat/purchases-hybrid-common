@@ -21,6 +21,18 @@ android {
     namespace = "com.revenuecat.purchases.hybridcommon"
     compileSdk = 34
 
+    flavorDimensions += "billingclient"
+
+    productFlavors {
+        create("bc8") {
+            dimension = "billingclient"
+            isDefault = true
+        }
+        create("bc7") {
+            dimension = "billingclient"
+        }
+    }
+
     defaultConfig {
         minSdk = 21
 
@@ -49,8 +61,10 @@ android {
 }
 
 dependencies {
-    api(libs.purchases)
-    api(libs.purchases.amazon)
+    "bc8Api"(libs.purchases.bc8)
+    "bc8Api"(libs.purchases.amazon.bc8)
+    "bc7Api"(libs.purchases.bc7)
+    "bc7Api"(libs.purchases.amazon.bc7)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlin.test)

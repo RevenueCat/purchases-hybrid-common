@@ -1,3 +1,52 @@
+## 17.20.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.48.0 => 5.49.0 (#1379) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `083ced9` to `efca663` (#1378) via dependabot[bot] (@dependabot[bot])
+
+## 17.19.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* pass storekit version & automaticDeviceIdentifierCollectionEnabled (#1376) via Will Taylor (@fire-at-will)
+
+## 17.19.0
+## RevenueCat SDK
+### ✨ New Features
+* Support Add On Packages (#1373) via Will Taylor (@fire-at-will)
+
+## 17.18.1
+### 🔄 Other Changes
+* Deploy BC7 flavor for android (#1371) via Toni Rico (@tonidero)
+* Bump fastlane-plugin-revenuecat_internal from `1e3e3fd` to `083ced9` (#1372) via dependabot[bot] (@dependabot[bot])
+
+## 17.18.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.47.0 => 5.48.0 Android 9.13.0 => 9.14.0 JS 1.18.0 => 1.18.3 (#1369) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `9362b21` to `1e3e3fd` (#1366) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `525d48c` to `9362b21` (#1365) via dependabot[bot] (@dependabot[bot])
+
+## 17.17.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Use `identifyUser` from purchases-js for `logIn` operation (#1354) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.46.3 => 5.47.0 Android 9.12.2 => 9.13.0 (#1361) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.16.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.46.1 => 5.46.3 (#1359) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.16.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.46.0 => 5.46.1 Android 9.12.1 => 9.12.2 JS 1.17.1 => 1.18.0 (#1356) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.15.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
