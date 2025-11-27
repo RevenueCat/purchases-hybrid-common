@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "PurchasesHybridCommonUI"
-  s.version          = "17.18.1"
+  s.version          = "17.21.0"
   s.summary          = "Common files for hybrid SDKs for RevenueCat UI"
 
   s.description      = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.framework      = 'StoreKit'
   s.framework      = 'SwiftUI'
 
-  s.dependency 'RevenueCatUI', '5.48.0'
+  s.dependency 'RevenueCatUI', '5.49.0'
   s.dependency 'PurchasesHybridCommon', s.version.to_s
   s.swift_version = '5.7'
 

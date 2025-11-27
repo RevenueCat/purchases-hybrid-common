@@ -1,3 +1,26 @@
+## 17.21.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.14.1 => 9.15.0 (#1382) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.20.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.48.0 => 5.49.0 (#1379) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `083ced9` to `efca663` (#1378) via dependabot[bot] (@dependabot[bot])
+
+## 17.19.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* pass storekit version & automaticDeviceIdentifierCollectionEnabled (#1376) via Will Taylor (@fire-at-will)
+
+## 17.19.0
+## RevenueCat SDK
+### ✨ New Features
+* Support Add On Packages (#1373) via Will Taylor (@fire-at-will)
+
 ## 17.18.1
 ### 🔄 Other Changes
 * Deploy BC7 flavor for android (#1371) via Toni Rico (@tonidero)
@@ -28,6 +51,11 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
 * [AUTOMATIC] iOS 5.46.0 => 5.46.1 Android 9.12.1 => 9.12.2 JS 1.17.1 => 1.18.0 (#1356) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.15.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fetch products for add on subscription options when base item is a StoreProduct or SubscriptionOption (#1352) via Will Taylor (@fire-at-will)
 
 ## 17.15.0
 ## RevenueCat SDK
