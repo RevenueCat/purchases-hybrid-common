@@ -65,7 +65,6 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
 
 class StoreKit1IntegrationTests: BaseIntegrationTests {
 
-
     override class func setUp() {
         // Uncomment this to re-record snapshots if necessary:
         // isRecording = true
