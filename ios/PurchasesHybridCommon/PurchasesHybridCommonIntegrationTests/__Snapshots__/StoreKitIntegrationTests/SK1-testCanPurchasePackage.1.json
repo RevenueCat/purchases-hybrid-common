@@ -62,7 +62,7 @@
         "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
         "refundedAt" : null,
         "store" : "APP_STORE",
-        "storeTransactionId" : "170",
+        "storeTransactionId" : "0",
         "unsubscribeDetectedAt" : null,
         "willRenew" : true
       }
@@ -72,7 +72,7 @@
   "transaction" : {
     "productId" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
     "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
-    "revenueCatId" : "170",
-    "transactionIdentifier" : "170"
+    "revenueCatId" : "0",
+    "transactionIdentifier" : "0"
   }
 }
