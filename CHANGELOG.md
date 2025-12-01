@@ -1,3 +1,7 @@
+## 17.22.0-alphaaidl01
+### 🔄 Other Changes
+* Add AIDL to query purchase history inapp products (#2872) via Toni Rico (@tonidero)
+
 ## 17.21.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
