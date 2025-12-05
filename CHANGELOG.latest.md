@@ -1,3 +1,3 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 9.14.1 => 9.15.0 (#1382) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.49.1 => 5.49.2 (#1388) via RevenueCat Git Bot (@RCGitBot)
