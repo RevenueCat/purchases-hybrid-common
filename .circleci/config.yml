@@ -11,7 +11,7 @@ version: 2.1
 
 aliases:
   base-ios-job: &base-ios-job
-    resource_class: macos.m1.medium.gen1
+    resource_class: m4pro.medium
     macos:
       xcode: << parameters.xcode_version >>
     parameters:
