@@ -42,6 +42,13 @@ export class PurchasesCommon {
     // (undocumented)
     logOut(): Promise<Record<string, unknown>>;
     // (undocumented)
+    presentPaywall(params?: {
+        requiredEntitlementIdentifier?: string;
+        offeringIdentifier?: string;
+        presentedOfferingContext?: Record<string, unknown>;
+        customerEmail?: string;
+    }): Promise<string>;
+    // (undocumented)
     purchasePackage(purchaseParams: {
         packageIdentifier: string;
         presentedOfferingContext: Record<string, unknown>;
