@@ -291,9 +291,14 @@ export class PurchasesCommon {
     }
     let offering: Offering | null = null;
     if (params?.offeringIdentifier) {
-      offering =
-        this.offeringsCache?.all[params.offeringIdentifier] ??
-        (await this.purchases.getOfferings()).all[params.offeringIdentifier];
+      let offering: Offering | null = null;
+      if (this.offeringsCache?.all[params.offeringIdentifier]) {
+        offering = this.offeringsCache.all[params.offeringIdentifier];
+      } else {
+        const offerings = await this.purchases.getOfferings();
+        this.offeringsCache = offerings;
+        offering = offerings.all[params.offeringIdentifier];
+      }
       if (offering && params.presentedOfferingContext) {
         offering = this.applyPresentedOfferingContextToOffering(
           offering,
@@ -331,6 +336,12 @@ export class PurchasesCommon {
     if (!offeringIdentifier) {
       Logger.error(
         'No offering identifier in presentedOfferingContext, returning original offering',
+      );
+      return offering;
+    }
+    if (offeringIdentifier !== offering.identifier) {
+      Logger.error(
+        'Offering identifier in presentedOfferingContext does not match offering identifier, returning original offering',
       );
       return offering;
     }
