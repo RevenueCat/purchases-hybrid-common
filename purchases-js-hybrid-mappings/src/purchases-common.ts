@@ -317,7 +317,7 @@ export class PurchasesCommon {
         return 'USER_CANCELLED';
       } else if (e instanceof PurchasesError) {
         Logger.error(
-          `Error presenting paywall: ${e.message}. Underlying error: ${e.underlyingErrorMessage})`,
+          `Error presenting paywall: ${e.message}. Underlying error: ${e.underlyingErrorMessage}`,
         );
         return 'ERROR';
       } else {
