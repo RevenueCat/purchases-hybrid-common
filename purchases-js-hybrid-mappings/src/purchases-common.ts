@@ -291,7 +291,6 @@ export class PurchasesCommon {
     }
     let offering: Offering | null = null;
     if (params?.offeringIdentifier) {
-      let offering: Offering | null = null;
       if (this.offeringsCache?.all[params.offeringIdentifier]) {
         offering = this.offeringsCache.all[params.offeringIdentifier];
       } else {
