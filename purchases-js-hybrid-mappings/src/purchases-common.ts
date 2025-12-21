@@ -5,6 +5,7 @@ import {
   Offering,
   Offerings,
   Package,
+  PresentedOfferingContext,
   PurchaseOption,
   PurchaseParams,
   PurchaseResult,
@@ -12,6 +13,7 @@ import {
   PurchasesConfig,
   PurchasesError,
   ReservedCustomerAttribute,
+  TargetingContext,
 } from '@revenuecat/purchases-js';
 import { mapCustomerInfo } from './mappers/customer_info_mapper';
 import { mapOffering, mapOfferings } from './mappers/offerings_mapper';
@@ -273,6 +275,134 @@ export class PurchasesCommon {
   public getCachedVirtualCurrencies(): Record<string, unknown> | null {
     const virtualCurrencies = this.purchases.getCachedVirtualCurrencies();
     return virtualCurrencies ? mapVirtualCurrencies(virtualCurrencies) : null;
+  }
+
+  public async presentPaywall(params?: {
+    requiredEntitlementIdentifier?: string;
+    offeringIdentifier?: string;
+    presentedOfferingContext?: Record<string, unknown>;
+    customerEmail?: string;
+  }): Promise<string> {
+    if (params?.requiredEntitlementIdentifier) {
+      const customerInfo = await this.purchases.getCustomerInfo();
+      if (customerInfo.entitlements.active[params.requiredEntitlementIdentifier]) {
+        return 'NOT_PRESENTED';
+      }
+    }
+    let offering: Offering | null = null;
+    if (params?.offeringIdentifier) {
+      if (this.offeringsCache?.all[params.offeringIdentifier]) {
+        offering = this.offeringsCache.all[params.offeringIdentifier];
+      } else {
+        const offerings = await this.purchases.getOfferings();
+        this.offeringsCache = offerings;
+        offering = offerings.all[params.offeringIdentifier];
+      }
+      if (offering && params.presentedOfferingContext) {
+        offering = this.applyPresentedOfferingContextToOffering(
+          offering,
+          params.presentedOfferingContext,
+        );
+      }
+    }
+
+    try {
+      await this.purchases.presentPaywall({
+        offering: offering ? offering : undefined,
+        customerEmail: params?.customerEmail,
+      });
+      return 'PURCHASED';
+    } catch (e) {
+      if (e instanceof PurchasesError && e.errorCode == ErrorCode.UserCancelledError) {
+        return 'USER_CANCELLED';
+      } else if (e instanceof PurchasesError) {
+        Logger.error(
+          `Error presenting paywall: ${e.message}. Underlying error: ${e.underlyingErrorMessage}`,
+        );
+        return 'ERROR';
+      } else {
+        Logger.error(String(e));
+        return 'ERROR';
+      }
+    }
+  }
+
+  private applyPresentedOfferingContextToOffering(
+    offering: Offering,
+    presentedOfferingContext: Record<string, unknown>,
+  ): Offering {
+    const offeringIdentifier = presentedOfferingContext['offeringIdentifier'] as string | undefined;
+    if (!offeringIdentifier) {
+      Logger.error(
+        'No offering identifier in presentedOfferingContext, returning original offering',
+      );
+      return offering;
+    }
+    if (offeringIdentifier !== offering.identifier) {
+      Logger.error(
+        'Offering identifier in presentedOfferingContext does not match offering identifier, returning original offering',
+      );
+      return offering;
+    }
+    const presentedOfferingContextObj = this.calculatePresentedOfferingContext(
+      offeringIdentifier,
+      presentedOfferingContext,
+    );
+
+    const updatePackage = (pkg: Package): Package => ({
+      ...pkg,
+      webBillingProduct: {
+        ...pkg.webBillingProduct,
+        presentedOfferingContext: presentedOfferingContextObj,
+      },
+    });
+
+    const updatedPackages = offering.availablePackages.map(updatePackage);
+
+    const updatedPackagesById: Record<string, Package> = {};
+    for (const [key, pkg] of Object.entries(offering.packagesById)) {
+      updatedPackagesById[key] = updatePackage(pkg);
+    }
+
+    return {
+      ...offering,
+      availablePackages: updatedPackages,
+      packagesById: updatedPackagesById,
+      lifetime: offering.lifetime ? updatePackage(offering.lifetime) : null,
+      annual: offering.annual ? updatePackage(offering.annual) : null,
+      sixMonth: offering.sixMonth ? updatePackage(offering.sixMonth) : null,
+      threeMonth: offering.threeMonth ? updatePackage(offering.threeMonth) : null,
+      twoMonth: offering.twoMonth ? updatePackage(offering.twoMonth) : null,
+      monthly: offering.monthly ? updatePackage(offering.monthly) : null,
+      weekly: offering.weekly ? updatePackage(offering.weekly) : null,
+    };
+  }
+
+  private calculatePresentedOfferingContext(
+    offeringIdentifier: string,
+    presentedOfferingContext: Record<string, unknown>,
+  ): PresentedOfferingContext {
+    const placementIdentifier =
+      (presentedOfferingContext['placementIdentifier'] as string | undefined) ?? null;
+    const targetingContext = presentedOfferingContext['targetingContext'] as
+      | Record<string, unknown>
+      | undefined;
+    let targetingContextObj: TargetingContext | null = null;
+    if (targetingContext) {
+      const targetingRevision = targetingContext['revision'] as number | undefined;
+      const targetingRuleId = targetingContext['ruleId'] as string | undefined;
+      if (targetingRevision !== undefined && targetingRuleId !== undefined) {
+        targetingContextObj = {
+          revision: targetingRevision,
+          ruleId: targetingRuleId,
+        };
+      }
+    }
+    return {
+      offeringIdentifier: offeringIdentifier,
+      placementIdentifier: placementIdentifier,
+      targetingContext: targetingContextObj,
+    };
   }
 
   private async findPackageToPurchase(
