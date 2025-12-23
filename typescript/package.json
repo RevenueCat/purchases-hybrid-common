@@ -1,7 +1,7 @@
 {
   "name": "@revenuecat/purchases-typescript-internal",
   "title": "Purchases typescript internal shared code",
-  "version": "17.24.0",
+  "version": "17.25.0",
   "description": "Typescript code to be used by RevenueCat's hybrid SDKs. Not meant for external usage.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
