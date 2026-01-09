@@ -11,6 +11,7 @@ import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
@@ -24,8 +25,13 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.common.events.FeatureEvent
+import com.revenuecat.purchases.customercenter.events.CustomerCenterImpressionEvent
+import com.revenuecat.purchases.customercenter.events.CustomerCenterSurveyOptionChosenEvent
+import com.revenuecat.purchases.paywalls.events.PaywallEvent
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -945,6 +951,7 @@ fun configure(
     diagnosticsEnabled: Boolean? = null,
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
     preferredLocale: String? = null,
+    trackedEventListener: ((Map<String, Any?>) -> Unit)? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -966,7 +973,71 @@ fun configure(
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
-        }.also { Purchases.configure(it.build()) }
+        }.also {
+            Purchases.configure(it.build())
+            trackedEventListener?.let { listener ->
+                setTrackedEventListener(listener)
+            }
+        }
+}
+
+/**
+ * Sets a listener for tracked feature events. This is a debug API for monitoring
+ * events tracked by RevenueCatUI.
+ *
+ * @param callback Called when a feature event is tracked, with a map containing event details.
+ */
+@OptIn(InternalRevenueCatAPI::class)
+fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
+    Purchases.sharedInstance.trackedEventListener = TrackedEventListener { event ->
+        callback(event.toMap())
+    }
+}
+
+@OptIn(InternalRevenueCatAPI::class)
+private fun FeatureEvent.toMap(): Map<String, Any?> {
+    return when (this) {
+        is PaywallEvent -> mapOf(
+            "eventType" to "paywall",
+            "type" to type.value,
+            "id" to creationData.id.toString(),
+            "date" to creationData.date.time,
+            "offeringIdentifier" to data.offeringIdentifier,
+            "paywallRevision" to data.paywallRevision,
+            "sessionIdentifier" to data.sessionIdentifier.toString(),
+            "displayMode" to data.displayMode,
+            "localeIdentifier" to data.localeIdentifier,
+            "darkMode" to data.darkMode,
+        )
+        is CustomerCenterImpressionEvent -> mapOf(
+            "eventType" to "customer_center_impression",
+            "id" to creationData.id.toString(),
+            "date" to creationData.date.time,
+            "darkMode" to data.darkMode,
+            "localeIdentifier" to data.locale,
+            "displayMode" to data.displayMode.name,
+            "isSandbox" to data.isSandbox,
+        )
+        is CustomerCenterSurveyOptionChosenEvent -> mapOf(
+            "eventType" to "customer_center_survey_option_chosen",
+            "id" to creationData.id.toString(),
+            "date" to creationData.date.time,
+            "darkMode" to data.darkMode,
+            "localeIdentifier" to data.locale,
+            "displayMode" to data.displayMode.name,
+            "isSandbox" to data.isSandbox,
+            "surveyOptionId" to data.surveyOptionID,
+            "surveyOptionTitleKey" to data.surveyOptionTitleKey,
+            "path" to data.path.name,
+            "url" to data.url,
+            "additionalContext" to data.additionalContext,
+            "revisionId" to data.revisionID,
+        )
+        else -> mapOf(
+            "eventType" to "unknown",
+            "className" to this::class.simpleName,
+        )
+    }
 }
 
 fun getPromotionalOffer(): ErrorContainer {
