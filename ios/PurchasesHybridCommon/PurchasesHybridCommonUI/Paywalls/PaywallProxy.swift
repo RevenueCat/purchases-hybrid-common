@@ -360,6 +360,20 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
     }
 
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      willPresentExitOfferController exitOfferController: PaywallViewController) {
+        // Transfer result tracking from main paywall to exit offer controller.
+        // This ensures the paywallResultHandler is called when the exit offer is dismissed.
+        if let tracked = self.resultByVC.removeValue(forKey: controller) {
+            self.resultByVC[exitOfferController] = tracked
+        }
+        if let entitlement = self.requiredEntitlementIdentifierByVC.removeValue(forKey: controller) {
+            self.requiredEntitlementIdentifierByVC[exitOfferController] = entitlement
+        }
+
+        self.delegate?.paywallViewController?(controller, willPresentExitOfferController: exitOfferController)
+    }
+
 }
 
 // MARK: - Deprecations

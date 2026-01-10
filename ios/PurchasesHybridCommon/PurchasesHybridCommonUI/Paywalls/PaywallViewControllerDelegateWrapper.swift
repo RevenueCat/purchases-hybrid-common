@@ -78,6 +78,11 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     optional func paywallViewController(_ controller: PaywallViewController,
                                         didChangeSizeTo size: CGSize)
 
+    /// Called when an exit offer paywall is about to be presented.
+    @objc(paywallViewController:willPresentExitOfferController:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        willPresentExitOfferController exitOfferController: PaywallViewController)
+
 }
 
 #endif
