@@ -1,3 +1,39 @@
+## 17.27.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.54.0 => 5.54.1 JS 1.23.0 => 1.23.1 (#1424) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.27.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.52.1 => 5.54.0 Android 9.18.1 => 9.19.0 (#1417) via RevenueCat Git Bot (@RCGitBot)
+
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add exit offer support for hybrid SDKs (#1419) via Facundo Menzella (@facumenzella)
+
+## 17.26.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.52.0 => 5.52.1 Android 9.18.0 => 9.18.1 (#1415) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.26.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.51.1 => 5.52.0 JS 1.22.1 => 1.23.0 (#1413) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `76a3a08` to `e6454e3` (#1411) via dependabot[bot] (@dependabot[bot])
+
+## 17.25.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.50.1 => 5.51.1 Android 9.15.5 => 9.18.0 JS 1.21.0 => 1.22.1 (#1409) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump aws-sdk-s3 from 1.194.0 to 1.208.0 (#1407) via dependabot[bot] (@dependabot[bot])
+
 ## 17.24.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
