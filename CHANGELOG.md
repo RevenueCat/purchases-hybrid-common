@@ -1,3 +1,8 @@
+## 17.28.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [RENOVATE] Update build-dependencies (#1346) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.28.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
