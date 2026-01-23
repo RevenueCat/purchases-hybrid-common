@@ -60,6 +60,10 @@ fun setPostHogUserID(postHogUserID: String?) {
     Purchases.sharedInstance.setPostHogUserId(postHogUserID)
 }
 
+fun setAirbridgeDeviceID(airbridgeDeviceID: String?) {
+    Purchases.sharedInstance.setAirbridgeDeviceID(airbridgeDeviceID)
+}
+
 // endregion
 // region Campaign parameters
 
