@@ -4,6 +4,7 @@ import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers
 import com.revenuecat.purchases.hybridcommon.setAd
 import com.revenuecat.purchases.hybridcommon.setAdGroup
 import com.revenuecat.purchases.hybridcommon.setAdjustID
+import com.revenuecat.purchases.hybridcommon.setAirbridgeDeviceID
 import com.revenuecat.purchases.hybridcommon.setAirshipChannelID
 import com.revenuecat.purchases.hybridcommon.setAppsflyerID
 import com.revenuecat.purchases.hybridcommon.setAttributes
@@ -20,7 +21,6 @@ import com.revenuecat.purchases.hybridcommon.setOnesignalID
 import com.revenuecat.purchases.hybridcommon.setOnesignalUserID
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber
 import com.revenuecat.purchases.hybridcommon.setPostHogUserID
-import com.revenuecat.purchases.hybridcommon.setAirbridgeDeviceID
 import com.revenuecat.purchases.hybridcommon.setPushToken
 import com.revenuecat.purchases.hybridcommon.setTenjinAnalyticsInstallationID
 
