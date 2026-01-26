@@ -1,4 +1,8 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.55.1 => 5.55.2 (#1431) via RevenueCat Git Bot (@RCGitBot)
-* [RENOVATE] Update build-dependencies (#1346) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* Added Airbridge device ID attribution methods (#1436) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.231.0 to 2.231.1 (#1434) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.13.6 to 2.0.15 (#1422) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.228.0 to 2.231.0 (#1433) via dependabot[bot] (@dependabot[bot])
