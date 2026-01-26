@@ -701,20 +701,12 @@ import StoreKit
 @objc public extension CommonFunctionality {
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @objc static func trackAdDisplayed(
-        _ adData: [String: Any],
-        completion: @escaping (ErrorContainer?) -> Void
-    ) {
+    @objc static func trackAdDisplayed(_ adData: [String: Any]) {
         guard let networkName = adData["networkName"] as? String,
               let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            let error = NSError(
-                domain: ErrorCode.errorDomain,
-                code: ErrorCode.unknownError.rawValue,
-                userInfo: [NSLocalizedDescriptionKey: "Missing required ad tracking parameters"]
-            )
-            completion(ErrorContainer(error: error, extraPayload: [:]))
+            NSLog("[PurchasesHybridCommon] trackAdDisplayed: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
             return
         }
 
@@ -728,27 +720,18 @@ import StoreKit
             impressionId: impressionId
         )
 
-        _ = Task<Void, Never> {
+        Task {
             await Purchases.shared.adTracker.trackAdDisplayed(adDisplayed)
-            completion(nil)
         }
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @objc static func trackAdOpened(
-        _ adData: [String: Any],
-        completion: @escaping (ErrorContainer?) -> Void
-    ) {
+    @objc static func trackAdOpened(_ adData: [String: Any]) {
         guard let networkName = adData["networkName"] as? String,
               let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            let error = NSError(
-                domain: ErrorCode.errorDomain,
-                code: ErrorCode.unknownError.rawValue,
-                userInfo: [NSLocalizedDescriptionKey: "Missing required ad tracking parameters"]
-            )
-            completion(ErrorContainer(error: error, extraPayload: [:]))
+            NSLog("[PurchasesHybridCommon] trackAdOpened: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
             return
         }
 
@@ -762,17 +745,13 @@ import StoreKit
             impressionId: impressionId
         )
 
-        _ = Task<Void, Never> {
+        Task {
             await Purchases.shared.adTracker.trackAdOpened(adOpened)
-            completion(nil)
         }
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @objc static func trackAdRevenue(
-        _ adData: [String: Any],
-        completion: @escaping (ErrorContainer?) -> Void
-    ) {
+    @objc static func trackAdRevenue(_ adData: [String: Any]) {
         guard let networkName = adData["networkName"] as? String,
               let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
@@ -780,12 +759,7 @@ import StoreKit
               let revenueMicros = adData["revenueMicros"] as? Int,
               let currency = adData["currency"] as? String,
               let precisionString = adData["precision"] as? String else {
-            let error = NSError(
-                domain: ErrorCode.errorDomain,
-                code: ErrorCode.unknownError.rawValue,
-                userInfo: [NSLocalizedDescriptionKey: "Missing required ad revenue tracking parameters"]
-            )
-            completion(ErrorContainer(error: error, extraPayload: [:]))
+            NSLog("[PurchasesHybridCommon] trackAdRevenue: Missing required parameters - networkName, mediatorName, adUnitId, impressionId, revenueMicros, currency, or precision")
             return
         }
 
@@ -803,27 +777,18 @@ import StoreKit
             precision: precision
         )
 
-        _ = Task<Void, Never> {
+        Task {
             await Purchases.shared.adTracker.trackAdRevenue(adRevenue)
-            completion(nil)
         }
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @objc static func trackAdLoaded(
-        _ adData: [String: Any],
-        completion: @escaping (ErrorContainer?) -> Void
-    ) {
+    @objc static func trackAdLoaded(_ adData: [String: Any]) {
         guard let networkName = adData["networkName"] as? String,
               let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            let error = NSError(
-                domain: ErrorCode.errorDomain,
-                code: ErrorCode.unknownError.rawValue,
-                userInfo: [NSLocalizedDescriptionKey: "Missing required ad tracking parameters"]
-            )
-            completion(ErrorContainer(error: error, extraPayload: [:]))
+            NSLog("[PurchasesHybridCommon] trackAdLoaded: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
             return
         }
 
@@ -837,26 +802,17 @@ import StoreKit
             impressionId: impressionId
         )
 
-        _ = Task<Void, Never> {
+        Task {
             await Purchases.shared.adTracker.trackAdLoaded(adLoaded)
-            completion(nil)
         }
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @objc static func trackAdFailedToLoad(
-        _ adData: [String: Any],
-        completion: @escaping (ErrorContainer?) -> Void
-    ) {
+    @objc static func trackAdFailedToLoad(_ adData: [String: Any]) {
         guard let networkName = adData["networkName"] as? String,
               let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String else {
-            let error = NSError(
-                domain: ErrorCode.errorDomain,
-                code: ErrorCode.unknownError.rawValue,
-                userInfo: [NSLocalizedDescriptionKey: "Missing required ad tracking parameters"]
-            )
-            completion(ErrorContainer(error: error, extraPayload: [:]))
+            NSLog("[PurchasesHybridCommon] trackAdFailedToLoad: Missing required parameters - networkName, mediatorName, or adUnitId")
             return
         }
 
@@ -871,9 +827,8 @@ import StoreKit
             mediatorErrorCode: mediatorErrorCode
         )
 
-        _ = Task<Void, Never> {
+        Task {
             await Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
-            completion(nil)
         }
     }
 

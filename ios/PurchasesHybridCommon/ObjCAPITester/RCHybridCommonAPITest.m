@@ -225,25 +225,11 @@ NS_ASSUME_NONNULL_BEGIN
             @"mediatorErrorCode": @(404)
         };
 
-        [RCCommonFunctionality trackAdDisplayed:adData completion:^(RCErrorContainer * _Nullable error) {
-            // Test callback
-        }];
-
-        [RCCommonFunctionality trackAdOpened:adData completion:^(RCErrorContainer * _Nullable error) {
-            // Test callback
-        }];
-
-        [RCCommonFunctionality trackAdRevenue:adData completion:^(RCErrorContainer * _Nullable error) {
-            // Test callback
-        }];
-
-        [RCCommonFunctionality trackAdLoaded:adData completion:^(RCErrorContainer * _Nullable error) {
-            // Test callback
-        }];
-
-        [RCCommonFunctionality trackAdFailedToLoad:adData completion:^(RCErrorContainer * _Nullable error) {
-            // Test callback
-        }];
+        [RCCommonFunctionality trackAdDisplayed:adData];
+        [RCCommonFunctionality trackAdOpened:adData];
+        [RCCommonFunctionality trackAdRevenue:adData];
+        [RCCommonFunctionality trackAdLoaded:adData];
+        [RCCommonFunctionality trackAdFailedToLoad:adData];
     }
 
     // Test IOSAPIAvailabilityChecker
