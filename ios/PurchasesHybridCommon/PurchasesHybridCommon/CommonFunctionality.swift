@@ -720,8 +720,8 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Task {
-            await Purchases.shared.adTracker.trackAdDisplayed(adDisplayed)
+        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed) {
+            // Fire-and-forget: completion handler intentionally empty
         }
     }
 
@@ -745,8 +745,8 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Task {
-            await Purchases.shared.adTracker.trackAdOpened(adOpened)
+        Purchases.shared.adTracker.trackAdOpened(adOpened) {
+            // Fire-and-forget: completion handler intentionally empty
         }
     }
 
@@ -777,8 +777,8 @@ import StoreKit
             precision: precision
         )
 
-        Task {
-            await Purchases.shared.adTracker.trackAdRevenue(adRevenue)
+        Purchases.shared.adTracker.trackAdRevenue(adRevenue) {
+            // Fire-and-forget: completion handler intentionally empty
         }
     }
 
@@ -802,8 +802,8 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Task {
-            await Purchases.shared.adTracker.trackAdLoaded(adLoaded)
+        Purchases.shared.adTracker.trackAdLoaded(adLoaded) {
+            // Fire-and-forget: completion handler intentionally empty
         }
     }
 
@@ -827,8 +827,8 @@ import StoreKit
             mediatorErrorCode: mediatorErrorCode
         )
 
-        Task {
-            await Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
+        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad) {
+            // Fire-and-forget: completion handler intentionally empty
         }
     }
 
