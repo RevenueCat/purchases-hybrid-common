@@ -667,6 +667,9 @@ import RevenueCat
     @objc static func setPostHogUserID(_ postHogUserId: String?) {
         Self.sharedInstance.attribution.setPostHogUserID(postHogUserId)
     }
+    @objc static func setAirbridgeDeviceID(_ airbridgeDeviceID: String?) {
+        Self.sharedInstance.attribution.setAirbridgeDeviceID(airbridgeDeviceID)
+    }
 
 }
 
