@@ -210,6 +210,35 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setCreative:nil];
 }
 
+- (void)testAdTrackingAPIs {
+    // Test Ad Tracking APIs
+    if (@available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)) {
+        NSDictionary *adData = @{
+            @"networkName": @"AdMob",
+            @"mediatorName": @"admob",
+            @"placement": @"banner",
+            @"adUnitId": @"unit123",
+            @"impressionId": @"imp123",
+            @"revenueMicros": @(1000000),
+            @"currency": @"USD",
+            @"precision": @"estimated",
+            @"mediatorErrorCode": @(404)
+        };
+
+        [RCCommonFunctionality trackAdDisplayed:adData];
+        [RCCommonFunctionality trackAdOpened:adData];
+        [RCCommonFunctionality trackAdRevenue:adData];
+        [RCCommonFunctionality trackAdLoaded:adData];
+        [RCCommonFunctionality trackAdFailedToLoad:adData];
+    }
+
+    // Test IOSAPIAvailabilityChecker
+    IOSAPIAvailabilityChecker *checker = [[IOSAPIAvailabilityChecker alloc] init];
+    BOOL isAdTrackingAvailable __unused = [checker isAdTrackingAPIAvailable];
+    BOOL isWinBackOfferAvailable __unused = [checker isWinBackOfferAPIAvailable];
+    BOOL isEnableAdServicesAvailable __unused = [checker isEnableAdServicesAttributionTokenCollectionAPIAvailable];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END
