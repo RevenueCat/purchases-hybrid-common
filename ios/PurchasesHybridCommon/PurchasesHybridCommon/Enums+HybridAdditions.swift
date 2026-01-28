@@ -71,6 +71,8 @@ internal extension Store {
             return "PADDLE"
         case .testStore:
             return "TEST_STORE"
+        case .galaxy:
+            return "GALAXY"
         @unknown default:
             return "UNKNOWN_STORE"
         }
