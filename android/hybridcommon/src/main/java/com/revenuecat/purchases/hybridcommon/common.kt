@@ -31,7 +31,6 @@ import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.common.events.FeatureEvent
 import com.revenuecat.purchases.customercenter.events.CustomerCenterImpressionEvent
 import com.revenuecat.purchases.customercenter.events.CustomerCenterSurveyOptionChosenEvent
-import com.revenuecat.purchases.paywalls.events.PaywallEvent
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -52,6 +51,7 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.googleProduct
+import com.revenuecat.purchases.paywalls.events.PaywallEvent
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
