@@ -720,9 +720,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed) {
-            // Fire-and-forget: completion handler intentionally empty
-        }
+        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed)
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -745,9 +743,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdOpened(adOpened) {
-            // Fire-and-forget: completion handler intentionally empty
-        }
+        Purchases.shared.adTracker.trackAdOpened(adOpened)
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -777,9 +773,7 @@ import StoreKit
             precision: precision
         )
 
-        Purchases.shared.adTracker.trackAdRevenue(adRevenue) {
-            // Fire-and-forget: completion handler intentionally empty
-        }
+        Purchases.shared.adTracker.trackAdRevenue(adRevenue)
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -802,9 +796,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdLoaded(adLoaded) {
-            // Fire-and-forget: completion handler intentionally empty
-        }
+        Purchases.shared.adTracker.trackAdLoaded(adLoaded)
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -827,9 +819,7 @@ import StoreKit
             mediatorErrorCode: mediatorErrorCode
         )
 
-        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad) {
-            // Fire-and-forget: completion handler intentionally empty
-        }
+        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
     }
 
 }
