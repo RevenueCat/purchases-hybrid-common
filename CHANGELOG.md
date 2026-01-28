@@ -1,3 +1,49 @@
+## 17.30.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.55.3 => 5.56.0 Android 9.19.2 => 9.19.3 (#1441) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.29.0
+## RevenueCat SDK
+### ✨ New Features
+* Added Airbridge device ID attribution methods (#1436) via Rick (@rickvdl)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.55.2 => 5.55.3 Android 9.19.1 => 9.19.2 JS 1.24.1 => 1.24.3 (#1438) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.231.0 to 2.231.1 (#1434) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 1.13.6 to 2.0.15 (#1422) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.228.0 to 2.231.0 (#1433) via dependabot[bot] (@dependabot[bot])
+
+## 17.28.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.55.1 => 5.55.2 (#1431) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update build-dependencies (#1346) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.28.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.54.1 => 5.55.1 Android 9.19.0 => 9.19.1 JS 1.23.1 => 1.24.1 (#1426) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add `presentPaywall` function (#1367) via Toni Rico (@tonidero)
+
+## 17.27.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.54.0 => 5.54.1 JS 1.23.0 => 1.23.1 (#1424) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.27.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.52.1 => 5.54.0 Android 9.18.1 => 9.19.0 (#1417) via RevenueCat Git Bot (@RCGitBot)
+
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add exit offer support for hybrid SDKs (#1419) via Facundo Menzella (@facumenzella)
+
 ## 17.26.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates

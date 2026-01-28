@@ -36,6 +36,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                         (.external, "EXTERNAL"),
                         (.paddle, "PADDLE"),
                         (.testStore, "TEST_STORE"),
+                        (.galaxy, "GALAXY"),
                         (.unknownStore, "UNKNOWN_STORE")
                     ]
 

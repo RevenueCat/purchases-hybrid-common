@@ -53,6 +53,11 @@ class SubscriberAttributesApiTests {
         SubscriberAttributesKt.setPostHogUserID(null);
     }
 
+    private void checkSetAirbridgeDeviceID() {
+        SubscriberAttributesKt.setAirbridgeDeviceID("airbridge_device_id");
+        SubscriberAttributesKt.setAirbridgeDeviceID(null);
+    }
+
     // endregion
     // region Campaign parameters
 

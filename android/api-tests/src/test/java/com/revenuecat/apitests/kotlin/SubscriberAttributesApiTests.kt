@@ -4,6 +4,7 @@ import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers
 import com.revenuecat.purchases.hybridcommon.setAd
 import com.revenuecat.purchases.hybridcommon.setAdGroup
 import com.revenuecat.purchases.hybridcommon.setAdjustID
+import com.revenuecat.purchases.hybridcommon.setAirbridgeDeviceID
 import com.revenuecat.purchases.hybridcommon.setAirshipChannelID
 import com.revenuecat.purchases.hybridcommon.setAppsflyerID
 import com.revenuecat.purchases.hybridcommon.setAttributes
@@ -70,6 +71,11 @@ private class SubscriberAttributesApiTests {
     fun checkSetPostHogUserID() {
         setPostHogUserID("postHogUserID")
         setPostHogUserID(null)
+    }
+
+    fun checkSetAirbridgeDeviceID() {
+        setAirbridgeDeviceID("airbridgeDeviceID")
+        setAirbridgeDeviceID(null)
     }
 
     // endregion

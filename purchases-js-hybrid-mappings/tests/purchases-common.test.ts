@@ -1,22 +1,23 @@
 import { PurchasesCommon } from '../src/purchases-common';
 import {
-  Purchases,
+  CustomerInfo,
+  EntitlementInfo,
+  EntitlementInfos,
+  ErrorCode,
+  LogLevel,
   Offering,
   Package,
-  PurchaseResult,
-  PurchasesError,
-  ErrorCode,
-  EntitlementInfos,
-  CustomerInfo,
   PackageType,
+  PeriodUnit,
   Product,
   ProductType,
+  PurchaseResult,
+  Purchases,
+  PurchasesConfig,
+  PurchasesError,
   ReservedCustomerAttribute,
   SubscriptionOption,
-  PeriodUnit,
-  PurchasesConfig,
   VirtualCurrencies,
-  LogLevel,
 } from '@revenuecat/purchases-js';
 import { jest } from '@jest/globals';
 
@@ -39,6 +40,7 @@ describe('PurchasesCommon', () => {
     getVirtualCurrencies: jest.fn(),
     invalidateVirtualCurrenciesCache: jest.fn(),
     getCachedVirtualCurrencies: jest.fn(),
+    presentPaywall: jest.fn(),
   };
 
   const customerInfo: CustomerInfo = {
@@ -710,6 +712,441 @@ describe('PurchasesCommon', () => {
       const wrapperFunction2 = mockPurchasesSetLogHandler.mock.calls[0][0];
       wrapperFunction2(LogLevel.Error, 'Test message 2');
       expect(customLogHandler2).toHaveBeenCalledWith('ERROR', 'Test message 2');
+    });
+  });
+
+  describe('presentPaywall', () => {
+    beforeEach(() => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0',
+      });
+    });
+
+    it('should return PURCHASED when paywall completes successfully', async () => {
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({});
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should return USER_CANCELLED when user cancels', async () => {
+      const mockError = new PurchasesError(ErrorCode.UserCancelledError, 'User cancelled');
+      mockPurchasesInstance.presentPaywall.mockRejectedValue(mockError);
+
+      const result = await purchasesCommon.presentPaywall({});
+
+      expect(result).toBe('USER_CANCELLED');
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should return ERROR when PurchasesError with non-cancel error occurs', async () => {
+      const mockError = new PurchasesError(ErrorCode.NetworkError, 'Network error');
+      mockPurchasesInstance.presentPaywall.mockRejectedValue(mockError);
+
+      const result = await purchasesCommon.presentPaywall({});
+
+      expect(result).toBe('ERROR');
+    });
+
+    it('should return ERROR when generic error occurs', async () => {
+      const mockError = new Error('Something went wrong');
+      mockPurchasesInstance.presentPaywall.mockRejectedValue(mockError);
+
+      const result = await purchasesCommon.presentPaywall({});
+
+      expect(result).toBe('ERROR');
+    });
+
+    it('should pass offering from cache when offeringIdentifier provided', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      await purchasesCommon.getOfferings();
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'test_offering',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: mockOffering,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should pass customerEmail when provided', async () => {
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        customerEmail: 'test@example.com',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: 'test@example.com',
+      });
+    });
+
+    it('should apply presentedOfferingContext to offering when both provided', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      await purchasesCommon.getOfferings();
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'test_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'test_offering',
+          placementIdentifier: 'test_placement',
+          targetingContext: {
+            revision: 5,
+            ruleId: 'test_rule',
+          },
+        },
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalled();
+
+      const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
+      expect(calledOffering).toBeDefined();
+      expect(calledOffering!.identifier).toBe('test_offering');
+
+      // Check that presentedOfferingContext was applied to all packages
+      expect(
+        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+      ).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: 'test_placement',
+        targetingContext: {
+          revision: 5,
+          ruleId: 'test_rule',
+        },
+      });
+
+      // Check that helper accessors were updated
+      expect(calledOffering!.monthly!.webBillingProduct.presentedOfferingContext).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: 'test_placement',
+        targetingContext: {
+          revision: 5,
+          ruleId: 'test_rule',
+        },
+      });
+
+      // Check that packagesById was updated
+      expect(
+        calledOffering!.packagesById['test_package'].webBillingProduct.presentedOfferingContext,
+      ).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: 'test_placement',
+        targetingContext: {
+          revision: 5,
+          ruleId: 'test_rule',
+        },
+      });
+    });
+
+    it('should handle presentedOfferingContext without placementIdentifier', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      await purchasesCommon.getOfferings();
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'test_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'test_offering',
+        },
+      });
+
+      expect(result).toBe('PURCHASED');
+      const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
+      expect(
+        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+      ).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: null,
+        targetingContext: null,
+      });
+    });
+
+    it('should handle presentedOfferingContext with incomplete targetingContext', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      await purchasesCommon.getOfferings();
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'test_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'test_offering',
+          targetingContext: {
+            revision: 5,
+            // missing ruleId
+          },
+        },
+      });
+
+      expect(result).toBe('PURCHASED');
+      const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
+      expect(
+        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+      ).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: null,
+        targetingContext: null,
+      });
+    });
+
+    it('should fetch offering from SDK when not in cache and apply presentedOfferingContext', async () => {
+      // Offering not in cache initially
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'test_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'test_offering',
+          placementIdentifier: 'test_placement',
+          targetingContext: {
+            revision: 5,
+            ruleId: 'test_rule',
+          },
+        },
+      });
+
+      expect(result).toBe('PURCHASED');
+      // Verify that getOfferings was called to fetch from SDK
+      expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(1);
+
+      const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
+      expect(calledOffering).toBeDefined();
+      expect(calledOffering!.identifier).toBe('test_offering');
+
+      // Verify presentedOfferingContext was applied to the fetched offering
+      expect(
+        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+      ).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: 'test_placement',
+        targetingContext: {
+          revision: 5,
+          ruleId: 'test_rule',
+        },
+      });
+    });
+
+    it('should handle when offering is not found in cache or SDK', async () => {
+      // Offering not in cache or SDK
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: {},
+        current: null,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        offeringIdentifier: 'non_existent_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'non_existent_offering',
+          placementIdentifier: 'test_placement',
+        },
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.getOfferings).toHaveBeenCalledTimes(1);
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should return NOT_PRESENTED when requiredEntitlementIdentifier is active', async () => {
+      const mockEntitlementInfo: EntitlementInfo = {
+        identifier: 'premium',
+        isActive: true,
+        willRenew: true,
+        periodType: 'normal',
+        latestPurchaseDate: new Date(),
+        originalPurchaseDate: new Date(),
+        expirationDate: new Date(Date.now() + 86400000),
+        store: 'app_store',
+        productIdentifier: 'premium_product',
+        productPlanIdentifier: null,
+        isSandbox: false,
+        unsubscribeDetectedAt: null,
+        billingIssueDetectedAt: null,
+        ownershipType: 'PURCHASED',
+      };
+      const mockCustomerInfoWithEntitlement: CustomerInfo = {
+        ...customerInfo,
+        entitlements: {
+          all: {
+            premium: mockEntitlementInfo
+          },
+          active: {
+            premium: mockEntitlementInfo,
+          },
+        },
+      };
+
+      mockPurchasesInstance.getCustomerInfo.mockResolvedValue(mockCustomerInfoWithEntitlement);
+
+      const result = await purchasesCommon.presentPaywall({
+        requiredEntitlementIdentifier: 'premium',
+      });
+
+      expect(result).toBe('NOT_PRESENTED');
+      expect(mockPurchasesInstance.getCustomerInfo).toHaveBeenCalledTimes(1);
+      expect(mockPurchasesInstance.presentPaywall).not.toHaveBeenCalled();
+    });
+
+    it('should present paywall when requiredEntitlementIdentifier is not active', async () => {
+      const mockCustomerInfoWithoutEntitlement: CustomerInfo = {
+        ...customerInfo,
+        entitlements: {
+          all: {},
+          active: {},
+        } as EntitlementInfos,
+      };
+
+      mockPurchasesInstance.getCustomerInfo.mockResolvedValue(mockCustomerInfoWithoutEntitlement);
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        requiredEntitlementIdentifier: 'premium',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.getCustomerInfo).toHaveBeenCalledTimes(1);
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should present paywall when requiredEntitlementIdentifier exists but is inactive', async () => {
+      const mockCustomerInfoWithInactiveEntitlement: CustomerInfo = {
+        ...customerInfo,
+        entitlements: {
+          all: {
+            premium: {
+              identifier: 'premium',
+              isActive: false,
+              willRenew: false,
+              periodType: 'normal',
+              latestPurchaseDate: new Date(),
+              originalPurchaseDate: new Date(),
+              expirationDate: new Date(Date.now() - 86400000),
+              store: 'app_store',
+              productIdentifier: 'premium_product',
+              isSandbox: false,
+              unsubscribeDetectedAt: null,
+              billingIssueDetectedAt: null,
+              ownershipType: 'PURCHASED',
+            },
+          },
+          active: {},
+        } as EntitlementInfos,
+      };
+
+      mockPurchasesInstance.getCustomerInfo.mockResolvedValue(
+        mockCustomerInfoWithInactiveEntitlement,
+      );
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        requiredEntitlementIdentifier: 'premium',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.getCustomerInfo).toHaveBeenCalledTimes(1);
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: undefined,
+      });
+    });
+
+    it('should combine requiredEntitlementIdentifier check with offeringIdentifier and presentedOfferingContext', async () => {
+      const mockCustomerInfoWithoutEntitlement: CustomerInfo = {
+        ...customerInfo,
+        entitlements: {
+          all: {},
+          active: {},
+        } as EntitlementInfos,
+      };
+
+      mockPurchasesInstance.getCustomerInfo.mockResolvedValue(mockCustomerInfoWithoutEntitlement);
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      await purchasesCommon.getOfferings();
+      const result = await purchasesCommon.presentPaywall({
+        requiredEntitlementIdentifier: 'premium',
+        offeringIdentifier: 'test_offering',
+        presentedOfferingContext: {
+          offeringIdentifier: 'test_offering',
+          placementIdentifier: 'test_placement',
+        },
+        customerEmail: 'test@example.com',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.getCustomerInfo).toHaveBeenCalledTimes(1);
+
+      const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
+      expect(calledOffering).toBeDefined();
+      expect(calledOffering!.identifier).toBe('test_offering');
+      expect(
+        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext
+          .placementIdentifier,
+      ).toBe('test_placement');
+
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: expect.any(Object),
+        customerEmail: 'test@example.com',
+      });
+    });
+
+    it('should not call getCustomerInfo when requiredEntitlementIdentifier is not provided', async () => {
+      mockPurchasesInstance.presentPaywall.mockResolvedValue(mockPurchaseResult);
+
+      const result = await purchasesCommon.presentPaywall({
+        customerEmail: 'test@example.com',
+      });
+
+      expect(result).toBe('PURCHASED');
+      expect(mockPurchasesInstance.getCustomerInfo).not.toHaveBeenCalled();
+      expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
+        offering: undefined,
+        customerEmail: 'test@example.com',
+      });
     });
   });
 });
