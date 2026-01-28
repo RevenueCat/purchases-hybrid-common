@@ -44,4 +44,17 @@ public final class IOSAPIAvailabilityChecker: NSObject {
         #endif
     }
 
+    /// Determines if the Ad Tracking APIs are available on the current device.
+    ///
+    /// - Returns: `true` if the Ad Tracking APIs (trackAdDisplayed, trackAdOpened, etc.) are available,
+    /// `false` otherwise.
+    @objc
+    public func isAdTrackingAPIAvailable() -> Bool {
+        if #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+
 }
