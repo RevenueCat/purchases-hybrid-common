@@ -11,6 +11,7 @@ import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
@@ -24,6 +25,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
@@ -36,6 +38,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
+import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
@@ -967,6 +970,19 @@ fun configure(
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
         }.also { Purchases.configure(it.build()) }
+}
+
+/**
+ * Sets a listener for tracked feature events. This is a debug API for monitoring
+ * events tracked by RevenueCatUI.
+ *
+ * @param callback Called when a feature event is tracked, with a map containing event details.
+ */
+@OptIn(InternalRevenueCatAPI::class)
+fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
+    Purchases.sharedInstance.trackedEventListener = TrackedEventListener { event ->
+        callback(event.toMap())
+    }
 }
 
 fun getPromotionalOffer(): ErrorContainer {
