@@ -28,9 +28,6 @@ import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.common.events.FeatureEvent
-import com.revenuecat.purchases.customercenter.events.CustomerCenterImpressionEvent
-import com.revenuecat.purchases.customercenter.events.CustomerCenterSurveyOptionChosenEvent
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -41,6 +38,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
+import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
@@ -51,7 +49,6 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.googleProduct
-import com.revenuecat.purchases.paywalls.events.PaywallEvent
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
@@ -985,52 +982,6 @@ fun configure(
 fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
     Purchases.sharedInstance.trackedEventListener = TrackedEventListener { event ->
         callback(event.toMap())
-    }
-}
-
-@OptIn(InternalRevenueCatAPI::class)
-private fun FeatureEvent.toMap(): Map<String, Any?> {
-    return when (this) {
-        is PaywallEvent -> mapOf(
-            "discriminator" to "paywalls",
-            "type" to type.value,
-            "id" to creationData.id.toString(),
-            "timestamp" to creationData.date.time,
-            "offering_id" to data.offeringIdentifier,
-            "paywall_revision" to data.paywallRevision,
-            "session_id" to data.sessionIdentifier.toString(),
-            "display_mode" to data.displayMode,
-            "locale" to data.localeIdentifier,
-            "dark_mode" to data.darkMode,
-        )
-        is CustomerCenterImpressionEvent -> mapOf(
-            "discriminator" to "customer_center",
-            "type" to "customer_center_impression",
-            "id" to creationData.id.toString(),
-            "timestamp" to creationData.date.time,
-            "dark_mode" to data.darkMode,
-            "locale" to data.locale,
-            "display_mode" to data.displayMode.name,
-            "revision_id" to data.revisionID,
-        )
-        is CustomerCenterSurveyOptionChosenEvent -> mapOf(
-            "discriminator" to "customer_center",
-            "type" to "customer_center_survey_option_chosen",
-            "id" to creationData.id.toString(),
-            "timestamp" to creationData.date.time,
-            "dark_mode" to data.darkMode,
-            "locale" to data.locale,
-            "display_mode" to data.displayMode.name,
-            "survey_option_id" to data.surveyOptionID,
-            "path" to data.path.name,
-            "url" to data.url,
-            "revision_id" to data.revisionID,
-        )
-        else -> mapOf(
-            "discriminator" to "unknown",
-            "type" to "unknown",
-            "class_name" to this::class.simpleName,
-        )
     }
 }
 
