@@ -951,7 +951,6 @@ fun configure(
     diagnosticsEnabled: Boolean? = null,
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
     preferredLocale: String? = null,
-    trackedEventListener: ((Map<String, Any?>) -> Unit)? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -973,12 +972,7 @@ fun configure(
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
-        }.also {
-            Purchases.configure(it.build())
-            trackedEventListener?.let { listener ->
-                setTrackedEventListener(listener)
-            }
-        }
+        }.also { Purchases.configure(it.build()) }
 }
 
 /**
@@ -998,44 +992,44 @@ fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
 private fun FeatureEvent.toMap(): Map<String, Any?> {
     return when (this) {
         is PaywallEvent -> mapOf(
-            "eventType" to "paywall",
+            "discriminator" to "paywalls",
             "type" to type.value,
             "id" to creationData.id.toString(),
-            "date" to creationData.date.time,
-            "offeringIdentifier" to data.offeringIdentifier,
-            "paywallRevision" to data.paywallRevision,
-            "sessionIdentifier" to data.sessionIdentifier.toString(),
-            "displayMode" to data.displayMode,
-            "localeIdentifier" to data.localeIdentifier,
-            "darkMode" to data.darkMode,
+            "timestamp" to creationData.date.time,
+            "offering_id" to data.offeringIdentifier,
+            "paywall_revision" to data.paywallRevision,
+            "session_id" to data.sessionIdentifier.toString(),
+            "display_mode" to data.displayMode,
+            "locale" to data.localeIdentifier,
+            "dark_mode" to data.darkMode,
         )
         is CustomerCenterImpressionEvent -> mapOf(
-            "eventType" to "customer_center_impression",
+            "discriminator" to "customer_center",
+            "type" to "customer_center_impression",
             "id" to creationData.id.toString(),
-            "date" to creationData.date.time,
-            "darkMode" to data.darkMode,
-            "localeIdentifier" to data.locale,
-            "displayMode" to data.displayMode.name,
-            "isSandbox" to data.isSandbox,
+            "timestamp" to creationData.date.time,
+            "dark_mode" to data.darkMode,
+            "locale" to data.locale,
+            "display_mode" to data.displayMode.name,
+            "revision_id" to data.revisionID,
         )
         is CustomerCenterSurveyOptionChosenEvent -> mapOf(
-            "eventType" to "customer_center_survey_option_chosen",
+            "discriminator" to "customer_center",
+            "type" to "customer_center_survey_option_chosen",
             "id" to creationData.id.toString(),
-            "date" to creationData.date.time,
-            "darkMode" to data.darkMode,
-            "localeIdentifier" to data.locale,
-            "displayMode" to data.displayMode.name,
-            "isSandbox" to data.isSandbox,
-            "surveyOptionId" to data.surveyOptionID,
-            "surveyOptionTitleKey" to data.surveyOptionTitleKey,
+            "timestamp" to creationData.date.time,
+            "dark_mode" to data.darkMode,
+            "locale" to data.locale,
+            "display_mode" to data.displayMode.name,
+            "survey_option_id" to data.surveyOptionID,
             "path" to data.path.name,
             "url" to data.url,
-            "additionalContext" to data.additionalContext,
-            "revisionId" to data.revisionID,
+            "revision_id" to data.revisionID,
         )
         else -> mapOf(
-            "eventType" to "unknown",
-            "className" to this::class.simpleName,
+            "discriminator" to "unknown",
+            "type" to "unknown",
+            "class_name" to this::class.simpleName,
         )
     }
 }
