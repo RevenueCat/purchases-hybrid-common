@@ -15,6 +15,15 @@ import RevenueCatUI
 @objc(RCPaywallViewControllerDelegateWrapper)
 public protocol PaywallViewControllerDelegateWrapper: AnyObject {
 
+    /// Notifies that a purchase is about to be initiated in a ``PaywallViewController``.
+    /// This is called before the purchase flow starts, allowing the delegate to perform
+    /// pre-purchase actions (e.g., authentication) and decide whether to proceed.
+    /// Call `PaywallViewControllerDelegateWrapper.resumePurchase(callbackId:shouldProceed:)` when ready.
+    @objc(paywallViewController:didInitiatePurchaseWithPackage:callbackId:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        didInitiatePurchaseWith packageDictionary: [String: Any],
+                                        callbackId: String)
+
     /// Notifies that a purchase has started in a ``PaywallViewController``.
     @objc(paywallViewControllerDidStartPurchase:)
     optional func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController)
