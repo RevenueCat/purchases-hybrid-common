@@ -27,6 +27,14 @@ import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
+import com.revenuecat.purchases.ads.events.types.AdDisplayedData
+import com.revenuecat.purchases.ads.events.types.AdFailedToLoadData
+import com.revenuecat.purchases.ads.events.types.AdFormat
+import com.revenuecat.purchases.ads.events.types.AdLoadedData
+import com.revenuecat.purchases.ads.events.types.AdMediatorName
+import com.revenuecat.purchases.ads.events.types.AdOpenedData
+import com.revenuecat.purchases.ads.events.types.AdRevenueData
+import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
@@ -1065,6 +1073,193 @@ fun invalidateVirtualCurrenciesCache() {
 }
 
 fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
+
+// region Ad Tracking
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdDisplayed(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+
+    if (networkName == null ||
+        mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null
+    ) {
+        warnLog(
+            "trackAdDisplayed: Missing required parameters - " +
+                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+        )
+        return
+    }
+
+    val placement = adData["placement"] as? String
+    val displayedData = AdDisplayedData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = placement,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData)
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdOpened(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+
+    if (networkName == null ||
+        mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null
+    ) {
+        warnLog(
+            "trackAdOpened: Missing required parameters - " +
+                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+        )
+        return
+    }
+
+    val placement = adData["placement"] as? String
+    val openedData = AdOpenedData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = placement,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdOpened(openedData)
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdRevenue(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+    val revenueMicros = (adData["revenueMicros"] as? Number)?.toLong()
+    val currency = adData["currency"] as? String
+    val precisionString = adData["precision"] as? String
+
+    if (networkName == null ||
+        mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null ||
+        revenueMicros == null ||
+        currency == null ||
+        precisionString == null
+    ) {
+        warnLog(
+            "trackAdRevenue: Missing required parameters - " +
+                "networkName, mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
+        )
+        return
+    }
+
+    val placement = adData["placement"] as? String
+    val revenueData = AdRevenueData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = placement,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+        revenueMicros = revenueMicros,
+        currency = currency,
+        precision = AdRevenuePrecision.fromString(precisionString),
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData)
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdLoaded(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+
+    if (networkName == null ||
+        mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null
+    ) {
+        warnLog(
+            "trackAdLoaded: Missing required parameters - " +
+                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+        )
+        return
+    }
+
+    val placement = adData["placement"] as? String
+    val loadedData = AdLoadedData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = placement,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData)
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdFailedToLoad(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+
+    if (networkName == null ||
+        mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null
+    ) {
+        warnLog(
+            "trackAdFailedToLoad: Missing required parameters - " +
+                "networkName, mediatorName, adFormat, or adUnitId",
+        )
+        return
+    }
+
+    val placement = adData["placement"] as? String
+    val mediatorErrorCode = (adData["mediatorErrorCode"] as? Number)?.toInt()
+    val failedToLoadData = AdFailedToLoadData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = placement,
+        adUnitId = adUnitId,
+        mediatorErrorCode = mediatorErrorCode,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+// endregion
 
 // region private functions
 
