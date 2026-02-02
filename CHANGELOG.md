@@ -1,3 +1,8 @@
+## 17.30.3
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [RENOVATE] Update dependency gradle to v9.3.1 (#1451) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.30.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
