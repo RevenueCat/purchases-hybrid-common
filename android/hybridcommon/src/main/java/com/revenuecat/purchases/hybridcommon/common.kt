@@ -1091,7 +1091,7 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
         adUnitId == null ||
         impressionId == null
     ) {
-        warnLog(
+        errorLog(
             "trackAdDisplayed: Missing required parameters - " +
                 "networkName, mediatorName, adFormat, adUnitId, or impressionId",
         )
@@ -1126,7 +1126,7 @@ fun trackAdOpened(adData: Map<String, Any?>) {
         adUnitId == null ||
         impressionId == null
     ) {
-        warnLog(
+        errorLog(
             "trackAdOpened: Missing required parameters - " +
                 "networkName, mediatorName, adFormat, adUnitId, or impressionId",
         )
@@ -1167,7 +1167,7 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
         currency == null ||
         precisionString == null
     ) {
-        warnLog(
+        errorLog(
             "trackAdRevenue: Missing required parameters - " +
                 "networkName, mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
         )
@@ -1205,7 +1205,7 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
         adUnitId == null ||
         impressionId == null
     ) {
-        warnLog(
+        errorLog(
             "trackAdLoaded: Missing required parameters - " +
                 "networkName, mediatorName, adFormat, adUnitId, or impressionId",
         )
@@ -1238,7 +1238,7 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
         adFormatString == null ||
         adUnitId == null
     ) {
-        warnLog(
+        errorLog(
             "trackAdFailedToLoad: Missing required parameters - " +
                 "networkName, mediatorName, adFormat, or adUnitId",
         )
