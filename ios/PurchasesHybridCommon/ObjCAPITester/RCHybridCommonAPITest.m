@@ -216,7 +216,8 @@ NS_ASSUME_NONNULL_BEGIN
         NSDictionary *adData = @{
             @"networkName": @"AdMob",
             @"mediatorName": @"admob",
-            @"placement": @"banner",
+            @"adFormat": @"banner",
+            @"placement": @"home_screen",
             @"adUnitId": @"unit123",
             @"impressionId": @"imp123",
             @"revenueMicros": @(1000000),
