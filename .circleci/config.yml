@@ -162,6 +162,30 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
+  test-ios-26:
+    <<: *base-ios-job
+    parameters:
+      xcode_version:
+        type: string
+        default: "26.2"
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
+      - run:
+          name: Run ios tests
+          command: fastlane scan
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 17 (26.2)
+      - store_test_results:
+          path: ios/PurchasesHybridCommon/test_output
+      - store_artifacts:
+          path: ios/PurchasesHybridCommon/test_output
+          destination: scan-output
+
   integration-test-ios:
     <<: *base-ios-job
     steps:
@@ -468,6 +492,7 @@ workflows:
       - test-ios-16
       - test-ios-17
       - test-ios-18
+      - test-ios-26
       - check-pods
       - integration-test-ios
       - test-android
