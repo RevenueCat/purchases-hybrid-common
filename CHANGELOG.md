@@ -1,3 +1,8 @@
+## 17.30.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Updated the pricePer{Period} methods to return the price as a double rather than amountMicros on Android to be consistent with iOS (#1447) via Rick (@rickvdl)
+
 ## 17.30.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
