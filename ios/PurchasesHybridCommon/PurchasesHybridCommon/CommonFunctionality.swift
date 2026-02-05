@@ -813,11 +813,10 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdFailedToLoad(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
               let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdFailedToLoad: Missing required parameters - networkName, mediatorName, adFormat, or adUnitId")
+            NSLog("[PurchasesHybridCommon] trackAdFailedToLoad: Missing required parameters - mediatorName, adFormat, or adUnitId")
             return
         }
 
@@ -826,7 +825,6 @@ import StoreKit
         let mediatorName = MediatorName(rawValue: mediatorNameString)
         let adFormat = AdFormat(rawValue: adFormatString)
         let adFailedToLoad = AdFailedToLoad(
-            networkName: networkName,
             mediatorName: mediatorName,
             adFormat: adFormat,
             placement: placement,

@@ -1228,19 +1228,17 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdFailedToLoad(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
     val mediatorNameString = adData["mediatorName"] as? String
     val adFormatString = adData["adFormat"] as? String
     val adUnitId = adData["adUnitId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null
     ) {
         errorLog(
             "trackAdFailedToLoad: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, or adUnitId",
+                "mediatorName, adFormat, or adUnitId",
         )
         return
     }
@@ -1248,7 +1246,6 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     val placement = adData["placement"] as? String
     val mediatorErrorCode = (adData["mediatorErrorCode"] as? Number)?.toInt()
     val failedToLoadData = AdFailedToLoadData(
-        networkName = networkName,
         mediatorName = AdMediatorName.fromString(mediatorNameString),
         adFormat = AdFormat.fromString(adFormatString),
         placement = placement,
