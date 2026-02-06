@@ -24,6 +24,7 @@ import UIKit
         @objc public static let displayCloseButton = "displayCloseButton"
         @objc public static let shouldBlockTouchEvents = "shouldBlockTouchEvents"
         @objc public static let fontName = "fontName"
+        @objc public static let customVariables = "customVariables"
     }
     
     @objc public class PresentedOfferingContextKeys: NSObject {
@@ -93,12 +94,14 @@ import UIKit
                                paywallResultHandler: @escaping (String) -> Void) {
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
-        
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: String]
+
         self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                    content: createContent(from: options),
                                    fontName: fontName,
                                    shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                   customVariables: customVariables,
                                    paywallResultHandler: paywallResultHandler)
     }
 
@@ -112,13 +115,15 @@ import UIKit
 
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: String]
 
         self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                            displayCloseButton: displayCloseButton,
                                            content: createContent(from: options),
                                            fontName: fontName,
                                            shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                           customVariables: customVariables,
                                            paywallResultHandler: paywallResultHandler)
     }
 
@@ -127,6 +132,7 @@ import UIKit
                                                content: Content = .defaultOffering,
                                                fontName: String? = nil,
                                                shouldBlockTouchEvents: Bool = false,
+                                               customVariables: [String: String]? = nil,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
@@ -137,6 +143,7 @@ import UIKit
                                                content: content,
                                                fontName: fontName,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               customVariables: customVariables,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
@@ -152,6 +159,7 @@ import UIKit
                                        content: Content = .defaultOffering,
                                        fontName: String? = nil,
                                        shouldBlockTouchEvents: Bool = false,
+                                       customVariables: [String: String]? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
@@ -175,7 +183,7 @@ import UIKit
         let controller: PaywallViewController
         switch content {
         case let .offering(offering):
-            controller = PaywallViewController(offering: offering, 
+            controller = PaywallViewController(offering: offering,
                                                fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
@@ -192,9 +200,13 @@ import UIKit
                                                displayCloseButton: displayCloseButton,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
         case .defaultOffering:
-            controller = PaywallViewController(fonts: fontProvider, 
+            controller = PaywallViewController(fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
+        }
+
+        customVariables?.forEach { key, value in
+            controller.setCustomVariable(value, forKey: key)
         }
 
         controller.delegate = self

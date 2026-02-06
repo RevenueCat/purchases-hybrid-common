@@ -75,4 +75,32 @@ private class PaywallApiTests {
             options = presentPaywallOptions,
         )
     }
+
+    fun checkPresentPaywallOptionsWithCustomVariables(
+        paywallResultListener: PaywallResultListener,
+    ) {
+        val options = PresentPaywallOptions(
+            paywallResultListener = paywallResultListener,
+            customVariables = mapOf("user_name" to "John"),
+        )
+        val retrievedVariables: Map<String, String>? = options.customVariables
+    }
+
+    fun checkPresentPaywallOptionsWithCustomVariablesAndContext(
+        fragmentActivity: FragmentActivity,
+        paywallResultListener: PaywallResultListener,
+    ) {
+        val options = PresentPaywallOptions(
+            paywallResultListener = paywallResultListener,
+            paywallSource = PaywallSource.OfferingIdentifierWithPresentedOfferingContext(
+                offeringIdentifier = "offering",
+                presentedOfferingContext = PresentedOfferingContext("offering"),
+            ),
+            customVariables = mapOf("user_name" to "John"),
+        )
+        presentPaywallFromFragment(
+            activity = fragmentActivity,
+            options = options,
+        )
+    }
 }

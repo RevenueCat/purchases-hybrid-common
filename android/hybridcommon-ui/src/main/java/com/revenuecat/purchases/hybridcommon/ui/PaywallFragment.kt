@@ -8,6 +8,7 @@ import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -29,6 +30,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             OFFERING_IDENTIFIER("offeringIdentifier"),
             PRESENTED_OFFERING_CONTEXT("presentedOfferingContext"),
             FONT_FAMILY("fontProvider"),
+            CUSTOM_VARIABLES("customVariables"),
         }
 
         private const val notPresentedPaywallResult = "NOT_PRESENTED"
@@ -42,6 +44,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             shouldDisplayDismissButton: Boolean? = null,
             paywallSource: PaywallSource,
             fontFamily: PaywallFontFamily? = null,
+            customVariables: Map<String, String>? = null,
         ): PaywallFragment {
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
@@ -79,6 +82,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                         is PaywallSource.DefaultOffering -> Unit
                     }
                     fontFamily?.let { putParcelable(OptionKey.FONT_FAMILY.key, it) }
+                    customVariables?.let { putSerializable(OptionKey.CUSTOM_VARIABLES.key, HashMap(it)) }
                 }
             }
         }
@@ -127,6 +131,15 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private val offeringIdentifierArg: String?
         get() = arguments?.getString(OptionKey.OFFERING_IDENTIFIER.key)
 
+    private val customVariablesArg: Map<String, String>?
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            @Suppress("UNCHECKED_CAST")
+            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key, HashMap::class.java) as? Map<String, String>
+        } else {
+            @Suppress("DEPRECATION", "UNCHECKED_CAST")
+            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key) as? Map<String, String>
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -159,6 +172,12 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
     private fun removeFragment() {
         parentFragmentManager.beginTransaction().remove(this).commit()
+    }
+
+    private fun convertToCustomVariableValues(
+        customVariables: Map<String, String>?,
+    ): Map<String, CustomVariableValue>? {
+        return customVariables?.mapValues { (_, value) -> CustomVariableValue.String(value) }
     }
 
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
@@ -214,6 +233,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val displayDismissButton = shouldDisplayDismissButtonArg
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
+        val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
 
         if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
             launcher.launch(
@@ -226,6 +246,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             launcher.launch(
                 shouldDisplayDismissButton = displayDismissButton,
                 fontProvider = fontProvider,
+                customVariables = customVariables,
             )
         } else if (offering != null && presentedOfferingContext != null) {
             launcher.launch(
@@ -234,7 +255,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 fontProvider = fontProvider,
             )
         } else {
-            launcher.launch(fontProvider = fontProvider)
+            launcher.launch(fontProvider = fontProvider, customVariables = customVariables)
         }
     }
 
