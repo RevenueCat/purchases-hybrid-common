@@ -1,3 +1,9 @@
+## 17.33.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add customVariables support for modal paywalls (#1462) via Facundo Menzella (@facumenzella)
+
 ## 17.32.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
