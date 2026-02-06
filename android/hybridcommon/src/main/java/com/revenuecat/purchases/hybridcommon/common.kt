@@ -1085,15 +1085,14 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdDisplayed: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
@@ -1120,15 +1119,14 @@ fun trackAdOpened(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdOpened: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
@@ -1158,8 +1156,7 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     val currency = adData["currency"] as? String
     val precisionString = adData["precision"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null ||
@@ -1169,7 +1166,7 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     ) {
         errorLog(
             "trackAdRevenue: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
+                "mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
         )
         return
     }
@@ -1199,15 +1196,14 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdLoaded: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
@@ -1228,19 +1224,17 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdFailedToLoad(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
     val mediatorNameString = adData["mediatorName"] as? String
     val adFormatString = adData["adFormat"] as? String
     val adUnitId = adData["adUnitId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null
     ) {
         errorLog(
             "trackAdFailedToLoad: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, or adUnitId",
+                "mediatorName, adFormat, or adUnitId",
         )
         return
     }
@@ -1248,7 +1242,6 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     val placement = adData["placement"] as? String
     val mediatorErrorCode = (adData["mediatorErrorCode"] as? Number)?.toInt()
     val failedToLoadData = AdFailedToLoadData(
-        networkName = networkName,
         mediatorName = AdMediatorName.fromString(mediatorNameString),
         adFormat = AdFormat.fromString(adFormatString),
         placement = placement,
