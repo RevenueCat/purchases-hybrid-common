@@ -80,8 +80,10 @@ class PaywallApiTests {
                 "offering",
                 new PresentedOfferingContext("offering")
         );
-        Map<String, String> customVariables = new HashMap<>();
+        Map<String, Object> customVariables = new HashMap<>();
         customVariables.put("user_name", "John");
+        customVariables.put("count", 42);
+        customVariables.put("enabled", true);
         PresentPaywallOptions options = new PresentPaywallOptions(
                 listener,
                 source,

@@ -81,9 +81,9 @@ private class PaywallApiTests {
     ) {
         val options = PresentPaywallOptions(
             paywallResultListener = paywallResultListener,
-            customVariables = mapOf("user_name" to "John"),
+            customVariables = mapOf("user_name" to "John", "count" to 42, "enabled" to true),
         )
-        val retrievedVariables: Map<String, String>? = options.customVariables
+        val retrievedVariables: Map<String, Any?>? = options.customVariables
     }
 
     fun checkPresentPaywallOptionsWithCustomVariablesAndContext(

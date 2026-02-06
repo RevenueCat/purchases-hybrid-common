@@ -95,7 +95,7 @@ import UIKit
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
             shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: String]
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
 
         self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                    content: createContent(from: options),
@@ -116,7 +116,7 @@ import UIKit
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
             shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: String]
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
 
         self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                            displayCloseButton: displayCloseButton,
@@ -132,7 +132,7 @@ import UIKit
                                                content: Content = .defaultOffering,
                                                fontName: String? = nil,
                                                shouldBlockTouchEvents: Bool = false,
-                                               customVariables: [String: String]? = nil,
+                                               customVariables: [String: Any]? = nil,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
@@ -159,7 +159,7 @@ import UIKit
                                        content: Content = .defaultOffering,
                                        fontName: String? = nil,
                                        shouldBlockTouchEvents: Bool = false,
-                                       customVariables: [String: String]? = nil,
+                                       customVariables: [String: Any]? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
@@ -206,7 +206,14 @@ import UIKit
         }
 
         customVariables?.forEach { key, value in
-            controller.setCustomVariable(value, forKey: key)
+            // Currently only String values are supported. Other types will be supported in a future release.
+            if let stringValue = value as? String {
+                controller.setCustomVariable(stringValue, forKey: key)
+            } else {
+                NSLog("Custom variable '%@' has unsupported type %@. " +
+                      "Only String values are currently supported. This variable will be ignored.",
+                      key, String(describing: type(of: value)))
+            }
         }
 
         controller.delegate = self
