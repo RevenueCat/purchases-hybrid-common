@@ -58,6 +58,7 @@ fun presentPaywallFromFragment(
                             shouldDisplayDismissButton,
                             paywallSource,
                             fontFamily,
+                            customVariables,
                         ),
                         PaywallFragment.tag,
                     )
@@ -79,4 +80,5 @@ data class PresentPaywallOptions @JvmOverloads constructor(
     val requiredEntitlementIdentifier: String? = null,
     val shouldDisplayDismissButton: Boolean? = null,
     val fontFamily: PaywallFontFamily? = null,
+    val customVariables: Map<String, String>? = null,
 )

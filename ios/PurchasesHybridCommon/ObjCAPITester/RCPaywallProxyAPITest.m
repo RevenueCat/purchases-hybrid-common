@@ -48,6 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
         [proxy presentPaywallIfNeededWithOptions:[NSDictionary new] paywallResultHandler:^(NSString * _Nonnull result) {
         }];
 
+        NSString *customVariablesKey = PaywallOptionsKeys.customVariables;
+        NSDictionary *optionsWithCustomVariables = @{
+            PaywallOptionsKeys.customVariables: @{@"user_name": @"John"}
+        };
+        [proxy presentPaywallWithOptions:optionsWithCustomVariables paywallResultHandler:^(NSString * _Nonnull result) {}];
+
         __unused RCPaywallViewController *view1 = [proxy createPaywallView];
         __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
         __unused RCPaywallViewController *view3 = [proxy createPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
