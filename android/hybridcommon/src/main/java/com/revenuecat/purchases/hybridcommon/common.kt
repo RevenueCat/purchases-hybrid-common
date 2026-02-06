@@ -1085,15 +1085,14 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdDisplayed: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
@@ -1120,15 +1119,14 @@ fun trackAdOpened(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdOpened: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
@@ -1158,8 +1156,7 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     val currency = adData["currency"] as? String
     val precisionString = adData["precision"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null ||
@@ -1169,7 +1166,7 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     ) {
         errorLog(
             "trackAdRevenue: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
+                "mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
         )
         return
     }
@@ -1199,15 +1196,14 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
     val adUnitId = adData["adUnitId"] as? String
     val impressionId = adData["impressionId"] as? String
 
-    if (networkName == null ||
-        mediatorNameString == null ||
+    if (mediatorNameString == null ||
         adFormatString == null ||
         adUnitId == null ||
         impressionId == null
     ) {
         errorLog(
             "trackAdLoaded: Missing required parameters - " +
-                "networkName, mediatorName, adFormat, adUnitId, or impressionId",
+                "mediatorName, adFormat, adUnitId, or impressionId",
         )
         return
     }
