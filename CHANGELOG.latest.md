@@ -1,5 +1,3 @@
-## RevenueCatUI SDK
-### Paywallv2
-#### ✨ New Features
-* Support Any type for customVariables, filter to String internally (#1464) via Facundo Menzella (@facumenzella)
-* Add customVariables support for modal paywalls (#1462) via Facundo Menzella (@facumenzella)
+### 🔄 Other Changes
+* Remove networkName from AdFailedToLoad and make it nullable in other ad events (#1461) via Pol Miro (@polmiro)
+* Bump fastlane from 2.231.1 to 2.232.0 (#1466) via dependabot[bot] (@dependabot[bot])
