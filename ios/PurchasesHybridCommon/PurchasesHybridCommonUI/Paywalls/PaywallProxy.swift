@@ -205,10 +205,8 @@ import UIKit
                                                shouldBlockTouchEvents: shouldBlockTouchEvents)
         }
 
-        if let customVariables = customVariables {
-            for (key, value) in customVariables {
-                controller.setCustomVariable(value, forKey: key)
-            }
+        customVariables?.forEach { key, value in
+            controller.setCustomVariable(value, forKey: key)
         }
 
         controller.delegate = self
