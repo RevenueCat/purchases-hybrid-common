@@ -1201,6 +1201,24 @@ private extension CommonFunctionality {
 
 }
 
+// MARK: - Health
+@objc public extension CommonFunctionality {
+
+    @objc(healthRequestWithSignatureVerification:completion:)
+    static func healthRequest(signatureVerification: Bool,
+                              completion: @escaping (ErrorContainer?) -> Void) {
+        _ = Task<Void, Never> {
+            do {
+                try await Self.sharedInstance.healthRequest(signatureVerification: signatureVerification)
+                completion(nil)
+            } catch {
+                completion(Self.createErrorContainer(error: error))
+            }
+        }
+    }
+
+}
+
 // MARK: - Encoding
 
 @objc public extension CommonFunctionality {

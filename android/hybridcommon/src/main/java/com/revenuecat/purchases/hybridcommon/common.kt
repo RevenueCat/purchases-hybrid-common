@@ -1074,6 +1074,23 @@ fun invalidateVirtualCurrenciesCache() {
 
 fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
 
+// region Health
+
+fun healthRequest(
+    signatureVerification: Boolean,
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.healthRequest(signatureVerification) { error ->
+        if (error != null) {
+            onResult.onError(error.map())
+        } else {
+            onResult.onReceived(emptyMap())
+        }
+    }
+}
+
+// endregion
+
 // region Ad Tracking
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
