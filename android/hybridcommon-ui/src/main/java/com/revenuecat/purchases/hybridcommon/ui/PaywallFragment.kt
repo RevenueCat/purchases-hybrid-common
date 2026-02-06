@@ -44,7 +44,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             shouldDisplayDismissButton: Boolean? = null,
             paywallSource: PaywallSource,
             fontFamily: PaywallFontFamily? = null,
-            customVariables: Map<String, String>? = null,
+            customVariables: Map<String, Any?>? = null,
         ): PaywallFragment {
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
@@ -131,13 +131,13 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private val offeringIdentifierArg: String?
         get() = arguments?.getString(OptionKey.OFFERING_IDENTIFIER.key)
 
-    private val customVariablesArg: Map<String, String>?
+    private val customVariablesArg: Map<String, Any?>?
         get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             @Suppress("UNCHECKED_CAST")
-            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key, HashMap::class.java) as? Map<String, String>
+            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key, HashMap::class.java) as? Map<String, Any?>
         } else {
             @Suppress("DEPRECATION", "UNCHECKED_CAST")
-            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key) as? Map<String, String>
+            arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key) as? Map<String, Any?>
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -175,9 +175,26 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     private fun convertToCustomVariableValues(
-        customVariables: Map<String, String>?,
+        customVariables: Map<String, Any?>?,
     ): Map<String, CustomVariableValue>? {
-        return customVariables?.mapValues { (_, value) -> CustomVariableValue.String(value) }
+        // Currently only String values are supported. Other types will be supported in a future release.
+        return customVariables
+            ?.mapNotNull { (key, value) ->
+                when (value) {
+                    is String -> key to CustomVariableValue.String(value)
+                    null -> null
+                    else -> {
+                        Log.w(
+                            "Purchases",
+                            "Custom variable '$key' has unsupported type ${value::class.simpleName}. " +
+                                "Only String values are currently supported. This variable will be ignored.",
+                        )
+                        null
+                    }
+                }
+            }
+            ?.toMap()
+            ?.takeIf { it.isNotEmpty() }
     }
 
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
