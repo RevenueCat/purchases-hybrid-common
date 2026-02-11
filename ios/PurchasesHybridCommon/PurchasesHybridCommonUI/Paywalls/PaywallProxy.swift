@@ -17,6 +17,8 @@ import UIKit
 @available(iOS 15.0, *)
 @objcMembers public class PaywallProxy: NSObject {
 
+    /// Keys for configuring paywall presentation options.
+    /// Used by hybrid SDKs (Flutter, React Native, Unity, etc.) to pass configuration to native iOS.
     @objc public class PaywallOptionsKeys: NSObject {
         @objc public static let requiredEntitlementIdentifier = "requiredEntitlementIdentifier"
         @objc public static let offeringIdentifier = "offeringIdentifier"
@@ -25,6 +27,11 @@ import UIKit
         @objc public static let shouldBlockTouchEvents = "shouldBlockTouchEvents"
         @objc public static let fontName = "fontName"
         @objc public static let customVariables = "customVariables"
+        /// When `true`, presents the paywall using `UIModalPresentationStyle.fullScreen` instead of `.pageSheet`.
+        /// This is useful for ensuring the paywall covers the entire screen in landscape orientation,
+        /// where `.pageSheet` leaves visible space on the sides.
+        /// Defaults to `false` to preserve backwards compatibility.
+        @objc public static let useFullScreenPresentation = "useFullScreenPresentation"
     }
     
     @objc public class PresentedOfferingContextKeys: NSObject {
@@ -95,13 +102,15 @@ import UIKit
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
             shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
+            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
 
         self.privatePresentPaywall(displayCloseButton: displayCloseButton,
                                    content: createContent(from: options),
                                    fontName: fontName,
                                    shouldBlockTouchEvents: shouldBlockTouchEvents,
                                    customVariables: customVariables,
+                                   useFullScreenPresentation: useFullScreenPresentation,
                                    paywallResultHandler: paywallResultHandler)
     }
 
@@ -116,7 +125,8 @@ import UIKit
         let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
             fontName = options[PaywallOptionsKeys.fontName] as? String,
             shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
+            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
 
         self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                            displayCloseButton: displayCloseButton,
@@ -124,6 +134,7 @@ import UIKit
                                            fontName: fontName,
                                            shouldBlockTouchEvents: shouldBlockTouchEvents,
                                            customVariables: customVariables,
+                                           useFullScreenPresentation: useFullScreenPresentation,
                                            paywallResultHandler: paywallResultHandler)
     }
 
@@ -133,6 +144,7 @@ import UIKit
                                                fontName: String? = nil,
                                                shouldBlockTouchEvents: Bool = false,
                                                customVariables: [String: Any]? = nil,
+                                               useFullScreenPresentation: Bool = false,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
@@ -144,6 +156,7 @@ import UIKit
                                                fontName: fontName,
                                                shouldBlockTouchEvents: shouldBlockTouchEvents,
                                                customVariables: customVariables,
+                                               useFullScreenPresentation: useFullScreenPresentation,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
@@ -160,6 +173,7 @@ import UIKit
                                        fontName: String? = nil,
                                        shouldBlockTouchEvents: Bool = false,
                                        customVariables: [String: Any]? = nil,
+                                       useFullScreenPresentation: Bool = false,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
@@ -217,7 +231,7 @@ import UIKit
         }
 
         controller.delegate = self
-        controller.modalPresentationStyle = .pageSheet
+        controller.modalPresentationStyle = useFullScreenPresentation ? .fullScreen : .pageSheet
         controller.view.backgroundColor = .systemBackground
 
         if let requiredEntitlementIdentifier {
