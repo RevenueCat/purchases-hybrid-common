@@ -1,3 +1,8 @@
+## 17.34.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.57.2 => 5.58.0 (#1469) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.33.1
 ### 🔄 Other Changes
 * Remove networkName from AdFailedToLoad and make it nullable in other ad events (#1461) via Pol Miro (@polmiro)
