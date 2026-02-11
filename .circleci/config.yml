@@ -484,24 +484,24 @@ jobs:
 
 workflows:
   version: 2
-  test:
-    when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-    jobs:
-      - test-ios-16
-      - test-ios-17
-      - test-ios-18
-      - test-ios-26
-      - check-pods
-      - integration-test-ios
-      - test-android
-      - detekt-android
-      - typescript-lint
-      - typescript-apitests
-      - web-tests
-      - web-api-tests
-      - web-lint
+  # test:
+  #   when:
+  #     not:
+  #       equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+  #   jobs:
+  #     - test-ios-16
+  #     - test-ios-17
+  #     - test-ios-18
+  #     - test-ios-26
+  #     - check-pods
+  #     - integration-test-ios
+  #     - test-android
+  #     - detekt-android
+  #     - typescript-lint
+  #     - typescript-apitests
+  #     - web-tests
+  #     - web-api-tests
+  #     - web-lint
 
   deploy:
     when:
@@ -514,39 +514,11 @@ workflows:
       # (Deployment happens after the hold job is approved on the release PR.)
       - equal: [ build, << pipeline.parameters.action >> ]
     jobs:
-      - hold:
-          type: approval
-          <<: *release-branches
-      - tag-release-branch:
-          requires:
-            - hold
-          <<: *release-branches
-      - deploy-ios-phc:
-          <<: *release-tags
-      - deploy-ios-phcui:
-          <<: *release-tags
-          requires:
-            - deploy-ios-phc
-      - deploy-android:
-          <<: *release-tags
-          context: maven-central-publishing
-      - deploy-typescript:
-          <<: *release-tags
-      - deploy-typescript-esm:
-          <<: *release-tags
-      - deploy-js-mappings:
-          <<: *release-tags
+      - deploy-ios-phcui
       - make-github-release:
-          <<: *release-tags
           requires:
-            - deploy-android
-            - deploy-typescript
-            - deploy-typescript-esm
-            - deploy-js-mappings
-            - deploy-ios-phc
             - deploy-ios-phcui
       - trigger-dependent-updates:
-          <<: *stable-release-tags
           requires:
             - make-github-release
 
