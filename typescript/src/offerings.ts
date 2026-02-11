@@ -347,7 +347,7 @@ export interface PurchasesPackage {
    */
   readonly presentedOfferingContext: PresentedOfferingContext;
   /**
-   * URL to use for web checkout for this package. Null if not available.
+   * URL to use for web checkout for this package. iOS and Android only. Null if not available.
    */
   readonly webCheckoutUrl: string | null;
 }
@@ -440,7 +440,7 @@ export interface PurchasesOffering {
    */
   readonly weekly: PurchasesPackage | null;
   /**
-   * URL to use for web checkout for this offering. Null if not available.
+   * URL to use for web checkout for this offering. iOS and Android only. Null if not available.
    */
   readonly webCheckoutUrl: string | null;
 }
