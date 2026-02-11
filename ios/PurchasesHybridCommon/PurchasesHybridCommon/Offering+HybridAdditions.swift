@@ -16,7 +16,8 @@ import RevenueCat
             "identifier": identifier,
             "serverDescription": serverDescription,
             "metadata": metadata,
-            "availablePackages": availablePackages.map { $0.dictionary(identifier) }
+            "availablePackages": availablePackages.map { $0.dictionary(identifier) },
+            "webCheckoutUrl": webCheckoutUrl?.absoluteString ?? NSNull()
         ]
 
         if let lifetime = lifetime {

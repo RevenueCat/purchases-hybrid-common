@@ -44,7 +44,8 @@ public extension Package {
             "packageType": packageType.name,
             "product": storeProduct.rc_dictionary,
             "offeringIdentifier": offeringIdentifier,
-            "presentedOfferingContext": presentedOfferingContext.dictionary
+            "presentedOfferingContext": presentedOfferingContext.dictionary,
+            "webCheckoutUrl": webCheckoutUrl?.absoluteString ?? NSNull()
         ]
     }
 
