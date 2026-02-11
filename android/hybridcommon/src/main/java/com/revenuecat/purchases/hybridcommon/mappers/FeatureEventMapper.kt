@@ -14,7 +14,7 @@ fun FeatureEvent.toMap(): Map<String, Any?> {
             "type" to type.value,
             "id" to creationData.id.toString(),
             "timestamp" to creationData.date.time,
-            "offering_id" to data.offeringIdentifier,
+            "offering_id" to data.presentedOfferingContext.offeringIdentifier,
             "paywall_revision" to data.paywallRevision,
             "session_id" to data.sessionIdentifier.toString(),
             "display_mode" to data.displayMode,
