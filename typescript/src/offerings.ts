@@ -346,6 +346,10 @@ export interface PurchasesPackage {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext;
+  /**
+   * URL to use for web checkout for this package. Null if not available.
+   */
+  readonly webCheckoutUrl: string | null;
 }
 
 /**
@@ -435,6 +439,10 @@ export interface PurchasesOffering {
    * Weekly package type configured in the RevenueCat dashboard, if available.
    */
   readonly weekly: PurchasesPackage | null;
+  /**
+   * URL to use for web checkout for this offering. Null if not available.
+   */
+  readonly webCheckoutUrl: string | null;
 }
 
 /**

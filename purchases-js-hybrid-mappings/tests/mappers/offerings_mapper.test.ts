@@ -54,6 +54,7 @@ describe('mapOfferings', () => {
       twoMonth: null,
       monthly: null,
       weekly: null,
+      webCheckoutUrl: null,
     };
 
     expect(result).toEqual({
@@ -473,7 +474,8 @@ describe('mapOfferings', () => {
           ruleId: 'rule_123'
         }
       },
-      product: expectedPackageProduct
+      product: expectedPackageProduct,
+      webCheckoutUrl: null,
     };
 
     const expectedMonthlyPackage = {
@@ -488,7 +490,8 @@ describe('mapOfferings', () => {
           ruleId: 'rule_123'
         }
       },
-      product: expectedMonthlyProduct
+      product: expectedMonthlyProduct,
+      webCheckoutUrl: null,
     };
 
     const expectedWeeklyPackage = {
@@ -503,7 +506,8 @@ describe('mapOfferings', () => {
           ruleId: 'rule_123'
         }
       },
-      product: expectedWeeklyProduct
+      product: expectedWeeklyProduct,
+      webCheckoutUrl: null,
     };
 
     const expectedLifetimePackage = {
@@ -518,7 +522,8 @@ describe('mapOfferings', () => {
           ruleId: 'rule_123'
         }
       },
-      product: expectedLifetimeProduct
+      product: expectedLifetimeProduct,
+      webCheckoutUrl: null,
     };
 
     const expectedOffering = {
@@ -537,7 +542,8 @@ describe('mapOfferings', () => {
       threeMonth: null,
       twoMonth: null,
       monthly: expectedMonthlyPackage,
-      weekly: expectedWeeklyPackage
+      weekly: expectedWeeklyPackage,
+      webCheckoutUrl: null,
     };
 
     expect(result).toEqual({

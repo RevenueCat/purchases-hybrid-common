@@ -426,6 +426,7 @@ export interface PurchasesOffering {
     readonly sixMonth: PurchasesPackage | null;
     readonly threeMonth: PurchasesPackage | null;
     readonly twoMonth: PurchasesPackage | null;
+    readonly webCheckoutUrl: string | null;
     readonly weekly: PurchasesPackage | null;
 }
 
@@ -445,6 +446,7 @@ export interface PurchasesPackage {
     readonly packageType: PACKAGE_TYPE;
     readonly presentedOfferingContext: PresentedOfferingContext;
     readonly product: PurchasesStoreProduct;
+    readonly webCheckoutUrl: string | null;
 }
 
 // @public
