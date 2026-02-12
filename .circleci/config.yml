@@ -587,4 +587,5 @@ workflows:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - release
+      - revenuecat/automatic-bump:
+          ruby_version: "3.3.0"
