@@ -258,6 +258,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 offeringIdentifier = offering,
                 presentedOfferingContext = presentedOfferingContext,
                 fontProvider = fontProvider,
+                customVariables = customVariables,
             )
         } else if (displayDismissButton != null) {
             launcher.launch(
@@ -270,6 +271,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 offeringIdentifier = offering,
                 presentedOfferingContext = presentedOfferingContext,
                 fontProvider = fontProvider,
+                customVariables = customVariables,
             )
         } else {
             launcher.launch(fontProvider = fontProvider, customVariables = customVariables)
