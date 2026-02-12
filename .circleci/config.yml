@@ -482,6 +482,18 @@ jobs:
           command: bundle exec fastlane ios pod_lint
           no_output_timeout: 30m
 
+  validate-circleci-config:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: Install CircleCI CLI
+          command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | bash
+      - run:
+          name: Validate CircleCI config
+          command: circleci config validate
+
 workflows:
   version: 2
   test:
@@ -489,6 +501,7 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
+      - validate-circleci-config
       - test-ios-16
       - test-ios-17
       - test-ios-18
