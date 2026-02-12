@@ -489,7 +489,7 @@ jobs:
       - checkout
       - run:
           name: Install CircleCI CLI
-          command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | bash
+          command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
       - run:
           name: Validate CircleCI config
           command: circleci config validate
