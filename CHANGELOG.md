@@ -1,3 +1,12 @@
+## 17.36.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Pass customVariables to launcher.launch when using offeringIdentifier (#1479) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Fix trigger-bump workflow to use orb job (#1480) via Facundo Menzella (@facumenzella)
+
 ## 17.35.0
 ## RevenueCat SDK
 ### ✨ New Features
