@@ -514,7 +514,6 @@ workflows:
       # (Deployment happens after the hold job is approved on the release PR.)
       - equal: [ build, << pipeline.parameters.action >> ]
     jobs:
-      - roto
       - hold:
           type: approval
           <<: *release-branches
@@ -588,4 +587,5 @@ workflows:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
+      - roto
       - release
