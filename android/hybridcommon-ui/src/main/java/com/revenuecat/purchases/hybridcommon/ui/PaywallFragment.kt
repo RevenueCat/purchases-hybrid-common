@@ -6,8 +6,11 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.InternalRevenueCatAPI
+import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
@@ -246,33 +249,52 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     private fun launchPaywall() {
-        val offering = offeringIdentifierArg
-        val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
+        val offeringIdentifier = offeringIdentifierArg
         val displayDismissButton = shouldDisplayDismissButtonArg
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
         val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
 
-        if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
+        // When we have an offering identifier, fetch the Offering object to use customVariables
+        // (the SDK doesn't support both offeringIdentifier and customVariables directly)
+        if (offeringIdentifier != null) {
+            Purchases.sharedInstance.getOfferings(object : ReceiveOfferingsCallback {
+                override fun onReceived(offerings: Offerings) {
+                    val offering = offerings.all[offeringIdentifier]
+                    if (offering != null) {
+                        launcher.launch(
+                            offering = offering,
+                            fontProvider = fontProvider,
+                            shouldDisplayDismissButton = displayDismissButton ?: false,
+                            customVariables = customVariables,
+                        )
+                    } else {
+                        Log.w(
+                            "PaywallFragment",
+                            "Offering '$offeringIdentifier' not found. Launching default paywall.",
+                        )
+                        launcher.launch(
+                            fontProvider = fontProvider,
+                            shouldDisplayDismissButton = displayDismissButton ?: false,
+                            customVariables = customVariables,
+                        )
+                    }
+                }
+
+                override fun onError(error: PurchasesError) {
+                    Log.e("PaywallFragment", "Error fetching offerings: ${error.message}")
+                    launcher.launch(
+                        fontProvider = fontProvider,
+                        shouldDisplayDismissButton = displayDismissButton ?: false,
+                        customVariables = customVariables,
+                    )
+                }
+            })
+        } else {
             launcher.launch(
-                shouldDisplayDismissButton = displayDismissButton,
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
                 fontProvider = fontProvider,
-            )
-        } else if (displayDismissButton != null) {
-            launcher.launch(
-                shouldDisplayDismissButton = displayDismissButton,
-                fontProvider = fontProvider,
+                shouldDisplayDismissButton = displayDismissButton ?: false,
                 customVariables = customVariables,
             )
-        } else if (offering != null && presentedOfferingContext != null) {
-            launcher.launch(
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
-                fontProvider = fontProvider,
-            )
-        } else {
-            launcher.launch(fontProvider = fontProvider, customVariables = customVariables)
         }
     }
 
