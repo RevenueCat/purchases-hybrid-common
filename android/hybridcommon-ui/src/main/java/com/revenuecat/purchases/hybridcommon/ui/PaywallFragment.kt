@@ -9,6 +9,7 @@ import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
+import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLaunchIfNeededOptions
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -202,6 +203,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val offering = offeringIdentifierArg
         val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
+        val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
 
         val paywallDisplayCallback = object : PaywallDisplayCallback {
             override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
@@ -212,37 +214,21 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             }
         }
 
-        if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
-            launcher.launchIfNeeded(
-                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                shouldDisplayDismissButton = displayDismissButton,
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
-                paywallDisplayCallback = paywallDisplayCallback,
-                fontProvider = fontProvider,
-            )
-        } else if (displayDismissButton != null) {
-            launcher.launchIfNeeded(
-                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                shouldDisplayDismissButton = displayDismissButton,
-                paywallDisplayCallback = paywallDisplayCallback,
-                fontProvider = fontProvider,
-            )
-        } else if (offering != null && presentedOfferingContext != null) {
-            launcher.launchIfNeeded(
-                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
-                paywallDisplayCallback = paywallDisplayCallback,
-                fontProvider = fontProvider,
-            )
-        } else {
-            launcher.launchIfNeeded(
-                requiredEntitlementIdentifier = requiredEntitlementIdentifier,
-                paywallDisplayCallback = paywallDisplayCallback,
-                fontProvider = fontProvider,
-            )
+        val optionsBuilder = PaywallActivityLaunchIfNeededOptions.Builder()
+            .setRequiredEntitlementIdentifier(requiredEntitlementIdentifier)
+            .setFontProvider(fontProvider)
+            .setPaywallDisplayCallback(paywallDisplayCallback)
+            .setCustomVariables(customVariables)
+
+        if (displayDismissButton != null) {
+            optionsBuilder.setShouldDisplayDismissButton(displayDismissButton)
         }
+
+        if (offering != null && presentedOfferingContext != null) {
+            optionsBuilder.setOfferingIdentifier(offering, presentedOfferingContext)
+        }
+
+        launcher.launchIfNeededWithOptions(optionsBuilder.build())
     }
 
     private fun launchPaywall() {
