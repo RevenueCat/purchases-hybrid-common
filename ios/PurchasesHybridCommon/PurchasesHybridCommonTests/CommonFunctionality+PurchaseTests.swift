@@ -250,6 +250,7 @@ private final class MockStoreTransaction: StoreTransactionType {
     let environment: StoreEnvironment?
     let hasKnownPurchaseDate: Bool
     let hasKnownTransactionIdentifier: Bool
+    let reason: RevenueCat.TransactionReason?
 
     init(
         productIdentifier: String,
@@ -269,6 +270,7 @@ private final class MockStoreTransaction: StoreTransactionType {
         self.environment = environment
         self.hasKnownPurchaseDate = true
         self.hasKnownTransactionIdentifier = true
+        self.reason = nil
     }
 
     func finish(_ wrapper: PaymentQueueWrapperType, completion: @escaping @Sendable () -> Void) {
