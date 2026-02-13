@@ -129,7 +129,7 @@ GEM
     ethon (0.16.0)
       ffi (>= 1.15.0)
     excon (0.112.0)
-    faraday (1.10.4)
+    faraday (1.10.5)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -277,7 +277,7 @@ GEM
       rexml (>= 3.3.9)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (2.1.0)
+    lefthook (2.1.1)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
