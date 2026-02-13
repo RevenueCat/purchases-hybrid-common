@@ -83,6 +83,12 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     optional func paywallViewController(_ controller: PaywallViewController,
                                         willPresentExitOfferController exitOfferController: PaywallViewController)
 
+    /// Called when a purchase is about to be initiated, before the payment sheet is displayed.
+    @objc(paywallViewController:didInitiatePurchaseWithPackageDictionary:requestId:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        didInitiatePurchaseWith packageDictionary: [String: Any],
+                                        requestId: String)
+
 }
 
 #endif
