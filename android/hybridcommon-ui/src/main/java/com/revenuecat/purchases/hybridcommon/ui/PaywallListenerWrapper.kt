@@ -11,6 +11,7 @@ import com.revenuecat.purchases.ui.revenuecatui.utils.Resumable
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
+@Suppress("TooManyFunctions")
 @OptIn(InternalRevenueCatAPI::class)
 abstract class PaywallListenerWrapper : PaywallListener {
 
