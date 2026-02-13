@@ -1,3 +1,70 @@
+## 17.36.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Pass customVariables to launcher.launch when using offeringIdentifier (#1479) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Fix trigger-bump workflow to use orb job (#1480) via Facundo Menzella (@facumenzella)
+
+## 17.35.0
+## RevenueCat SDK
+### ✨ New Features
+* Add webCheckoutUrl to Offering and Package mappings (#1471) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.20.2 => 9.21.0 JS 1.25.0 => 1.25.1 (#1474) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.232.0 to 2.232.1 (#1473) via dependabot[bot] (@dependabot[bot])
+
+## 17.34.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.57.2 => 5.58.0 (#1469) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.33.1
+### 🔄 Other Changes
+* Remove networkName from AdFailedToLoad and make it nullable in other ad events (#1461) via Pol Miro (@polmiro)
+* Bump fastlane from 2.231.1 to 2.232.0 (#1466) via dependabot[bot] (@dependabot[bot])
+
+## 17.33.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Support Any type for customVariables, filter to String internally (#1464) via Facundo Menzella (@facumenzella)
+* Add customVariables support for modal paywalls (#1462) via Facundo Menzella (@facumenzella)
+
+## 17.32.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.57.0 => 5.57.1 Android 9.20.0 => 9.20.1 JS 1.24.4 => 1.25.0 (#1459) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add iOS 26 test pipeline to CI (#1458) via Facundo Menzella (@facumenzella)
+* Bump lefthook from 2.0.15 to 2.1.0 (#1457) via dependabot[bot] (@dependabot[bot])
+
+## 17.31.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.56.0 => 5.57.0 Android 9.19.4 => 9.20.0 (#1453) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency gradle to v9.3.1 (#1451) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add adFormat parameter to ad tracking APIs (#1449) via Pol Miro (@polmiro)
+
+## 17.30.3
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [RENOVATE] Update dependency gradle to v9.3.1 (#1451) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add adFormat parameter to ad tracking APIs (#1449) via Pol Miro (@polmiro)
+
+## 17.30.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Updated the pricePer{Period} methods to return the price as a double rather than amountMicros on Android to be consistent with iOS (#1447) via Rick (@rickvdl)
+
 ## 17.30.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates

@@ -34,6 +34,7 @@ export function mapOffering(offering: Offering): Record<string, unknown> {
     twoMonth: offering.twoMonth ? mapPackage(offering.twoMonth) : null,
     monthly: offering.monthly ? mapPackage(offering.monthly) : null,
     weekly: offering.weekly ? mapPackage(offering.weekly) : null,
+    webCheckoutUrl: null,
   };
 }
 
@@ -46,6 +47,7 @@ function mapPackage(pkg: Package): Record<string, unknown> {
     presentedOfferingContext: mapPresentedOfferingContext(
       pkg.webBillingProduct.presentedOfferingContext,
     ),
+    webCheckoutUrl: null,
   };
 }
 

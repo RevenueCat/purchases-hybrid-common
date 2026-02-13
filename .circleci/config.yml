@@ -162,6 +162,30 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
+  test-ios-26:
+    <<: *base-ios-job
+    parameters:
+      xcode_version:
+        type: string
+        default: "26.2"
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
+      - run:
+          name: Run ios tests
+          command: fastlane scan
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 17 (26.2)
+      - store_test_results:
+          path: ios/PurchasesHybridCommon/test_output
+      - store_artifacts:
+          path: ios/PurchasesHybridCommon/test_output
+          destination: scan-output
+
   integration-test-ios:
     <<: *base-ios-job
     steps:
@@ -458,6 +482,18 @@ jobs:
           command: bundle exec fastlane ios pod_lint
           no_output_timeout: 30m
 
+  validate-circleci-config:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: Install CircleCI CLI
+          command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
+      - run:
+          name: Validate CircleCI config
+          command: circleci config validate
+
 workflows:
   version: 2
   test:
@@ -465,9 +501,11 @@ workflows:
       not:
         equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
+      - validate-circleci-config
       - test-ios-16
       - test-ios-17
       - test-ios-18
+      - test-ios-26
       - check-pods
       - integration-test-ios
       - test-android
@@ -562,4 +600,5 @@ workflows:
     when:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
-      - release
+      - revenuecat/automatic-bump:
+          ruby_version: "3.3.0"

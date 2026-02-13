@@ -11,6 +11,9 @@ import com.revenuecat.purchases.hybridcommon.ui.PaywallSource;
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions;
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings({"unused"})
 class PaywallApiTests {
 
@@ -66,5 +69,29 @@ class PaywallApiTests {
         PaywallHelpersKt.presentPaywallFromFragment(
                 fragmentActivity, presentPaywallOptions
         );
+    }
+
+    private void checkPresentPaywallOptionsWithCustomVariablesAndContext(
+            FragmentActivity fragmentActivity,
+            PaywallResultListener listener
+    ) {
+        PaywallSource.OfferingIdentifierWithPresentedOfferingContext source
+                = new PaywallSource.OfferingIdentifierWithPresentedOfferingContext(
+                "offering",
+                new PresentedOfferingContext("offering")
+        );
+        Map<String, Object> customVariables = new HashMap<>();
+        customVariables.put("user_name", "John");
+        customVariables.put("count", 42);
+        customVariables.put("enabled", true);
+        PresentPaywallOptions options = new PresentPaywallOptions(
+                listener,
+                source,
+                null,
+                null,
+                null,
+                customVariables
+        );
+        PaywallHelpersKt.presentPaywallFromFragment(fragmentActivity, options);
     }
 }

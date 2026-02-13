@@ -702,19 +702,22 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdDisplayed(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdDisplayed: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
+            NSLog("[PurchasesHybridCommon] trackAdDisplayed: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
             return
         }
 
+        let networkName = adData["networkName"] as? String
         let placement = adData["placement"] as? String
         let mediatorName = MediatorName(rawValue: mediatorNameString)
+        let adFormat = AdFormat(rawValue: adFormatString)
         let adDisplayed = AdDisplayed(
             networkName: networkName,
             mediatorName: mediatorName,
+            adFormat: adFormat,
             placement: placement,
             adUnitId: adUnitId,
             impressionId: impressionId
@@ -725,19 +728,22 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdOpened(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdOpened: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
+            NSLog("[PurchasesHybridCommon] trackAdOpened: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
             return
         }
 
+        let networkName = adData["networkName"] as? String
         let placement = adData["placement"] as? String
         let mediatorName = MediatorName(rawValue: mediatorNameString)
+        let adFormat = AdFormat(rawValue: adFormatString)
         let adOpened = AdOpened(
             networkName: networkName,
             mediatorName: mediatorName,
+            adFormat: adFormat,
             placement: placement,
             adUnitId: adUnitId,
             impressionId: impressionId
@@ -748,23 +754,26 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdRevenue(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String,
               let revenueMicros = adData["revenueMicros"] as? Int,
               let currency = adData["currency"] as? String,
               let precisionString = adData["precision"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdRevenue: Missing required parameters - networkName, mediatorName, adUnitId, impressionId, revenueMicros, currency, or precision")
+            NSLog("[PurchasesHybridCommon] trackAdRevenue: Missing required parameters - mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision")
             return
         }
 
+        let networkName = adData["networkName"] as? String
         let placement = adData["placement"] as? String
         let mediatorName = MediatorName(rawValue: mediatorNameString)
+        let adFormat = AdFormat(rawValue: adFormatString)
         let precision = AdRevenue.Precision(rawValue: precisionString)
         let adRevenue = AdRevenue(
             networkName: networkName,
             mediatorName: mediatorName,
+            adFormat: adFormat,
             placement: placement,
             adUnitId: adUnitId,
             impressionId: impressionId,
@@ -778,19 +787,22 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdLoaded(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String,
               let impressionId = adData["impressionId"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdLoaded: Missing required parameters - networkName, mediatorName, adUnitId, or impressionId")
+            NSLog("[PurchasesHybridCommon] trackAdLoaded: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
             return
         }
 
+        let networkName = adData["networkName"] as? String
         let placement = adData["placement"] as? String
         let mediatorName = MediatorName(rawValue: mediatorNameString)
+        let adFormat = AdFormat(rawValue: adFormatString)
         let adLoaded = AdLoaded(
             networkName: networkName,
             mediatorName: mediatorName,
+            adFormat: adFormat,
             placement: placement,
             adUnitId: adUnitId,
             impressionId: impressionId
@@ -801,19 +813,20 @@ import StoreKit
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackAdFailedToLoad(_ adData: [String: Any]) {
-        guard let networkName = adData["networkName"] as? String,
-              let mediatorNameString = adData["mediatorName"] as? String,
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String else {
-            NSLog("[PurchasesHybridCommon] trackAdFailedToLoad: Missing required parameters - networkName, mediatorName, or adUnitId")
+            NSLog("[PurchasesHybridCommon] trackAdFailedToLoad: Missing required parameters - mediatorName, adFormat, or adUnitId")
             return
         }
 
         let placement = adData["placement"] as? String
         let mediatorErrorCode = adData["mediatorErrorCode"] as? NSNumber
         let mediatorName = MediatorName(rawValue: mediatorNameString)
+        let adFormat = AdFormat(rawValue: adFormatString)
         let adFailedToLoad = AdFailedToLoad(
-            networkName: networkName,
             mediatorName: mediatorName,
+            adFormat: adFormat,
             placement: placement,
             adUnitId: adUnitId,
             mediatorErrorCode: mediatorErrorCode

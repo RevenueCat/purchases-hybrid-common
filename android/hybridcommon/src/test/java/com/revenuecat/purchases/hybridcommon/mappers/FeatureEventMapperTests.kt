@@ -1,6 +1,7 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
 import com.revenuecat.purchases.InternalRevenueCatAPI
+import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.customercenter.CustomerCenterConfigData
 import com.revenuecat.purchases.customercenter.events.CustomerCenterDisplayMode
 import com.revenuecat.purchases.customercenter.events.CustomerCenterImpressionEvent
@@ -28,7 +29,7 @@ class FeatureEventMapperTests {
                 date = eventDate,
             ),
             data = PaywallEvent.Data(
-                offeringIdentifier = "test_offering",
+                presentedOfferingContext = PresentedOfferingContext("test_offering"),
                 paywallIdentifier = "test_paywall_id",
                 paywallRevision = 5,
                 sessionIdentifier = sessionId,
@@ -64,7 +65,7 @@ class FeatureEventMapperTests {
                 date = Date(9876543210L),
             ),
             data = PaywallEvent.Data(
-                offeringIdentifier = "premium_offering",
+                presentedOfferingContext = PresentedOfferingContext("premium_offering"),
                 paywallIdentifier = "test_paywall_id",
                 paywallRevision = 10,
                 sessionIdentifier = sessionId,
