@@ -54,6 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
         };
         [proxy presentPaywallWithOptions:optionsWithCustomVariables paywallResultHandler:^(NSString * _Nonnull result) {}];
 
+        NSString *useFullScreenPresentationKey = PaywallOptionsKeys.useFullScreenPresentation;
+        NSDictionary *optionsWithFullScreen = @{
+            PaywallOptionsKeys.useFullScreenPresentation: @YES
+        };
+        [proxy presentPaywallWithOptions:optionsWithFullScreen paywallResultHandler:^(NSString * _Nonnull result) {}];
+
         __unused RCPaywallViewController *view1 = [proxy createPaywallView];
         __unused RCPaywallViewController *view2 = [proxy createPaywallViewWithOfferingIdentifier:@"offering"];
         __unused RCPaywallViewController *view3 = [proxy createPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
