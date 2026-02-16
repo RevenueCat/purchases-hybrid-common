@@ -1,3 +1,8 @@
+## RevenueCat SDK
+### ✨ New Features
+* [SDK-4254] Add onPurchasePackageInitiated support to hybrid common layer (#1487) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.58.0 => 5.59.0 (#1489) via RevenueCat Git Bot (@RCGitBot)
+
 ### 🔄 Other Changes
-* Remove networkName from AdFailedToLoad and make it nullable in other ad events (#1461) via Pol Miro (@polmiro)
-* Bump fastlane from 2.231.1 to 2.232.0 (#1466) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `e6454e3` to `afc9219` (#1488) via dependabot[bot] (@dependabot[bot])

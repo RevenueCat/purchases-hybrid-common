@@ -52,6 +52,13 @@ import UIKit
                                                      result: PaywallResult)] = [:]
     private var requiredEntitlementIdentifierByVC: [PaywallViewController: String] = [:]
 
+    private static var pendingPurchaseInitiatedCallbacks: [String: (Bool) -> Void] = [:]
+
+    @objc public static func resumePurchasePackageInitiated(requestId: String, shouldProceed: Bool) {
+        guard let callback = pendingPurchaseInitiatedCallbacks.removeValue(forKey: requestId) else { return }
+        callback(shouldProceed)
+    }
+
     @objc
     public func createPaywallView() -> PaywallViewController {
         let controller = PaywallViewController(dismissRequestedHandler: createDismissHandler())
@@ -391,6 +398,17 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didChangeSizeTo size: CGSize) {
         self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didInitiatePurchaseWith package: Package,
+                                      resume: @escaping (Bool) -> Void) {
+        let requestId = UUID().uuidString
+        Self.pendingPurchaseInitiatedCallbacks[requestId] = resume
+        self.delegate?.paywallViewController?(controller,
+                                              didInitiatePurchaseWith: package.dictionary,
+                                              requestId: requestId)
+            ?? Self.resumePurchasePackageInitiated(requestId: requestId, shouldProceed: true)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,

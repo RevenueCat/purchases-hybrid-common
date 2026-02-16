@@ -35,6 +35,7 @@ private fun Offering.map(): Map<String, Any?> =
         "twoMonth" to twoMonth?.map(),
         "monthly" to monthly?.map(),
         "weekly" to weekly?.map(),
+        "webCheckoutUrl" to webCheckoutURL?.toString(),
     )
 
 fun Offering.mapAsync(
@@ -53,6 +54,7 @@ fun Package.map(): Map<String, Any?> =
         "product" to product.map(),
         "offeringIdentifier" to presentedOfferingContext.offeringIdentifier,
         "presentedOfferingContext" to presentedOfferingContext.map(),
+        "webCheckoutUrl" to webCheckoutURL?.toString(),
     )
 
 fun PresentedOfferingContext.map(): Map<String, Any?> =

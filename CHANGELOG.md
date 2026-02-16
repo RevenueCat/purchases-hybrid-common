@@ -1,3 +1,47 @@
+## 17.38.0
+## RevenueCat SDK
+### ✨ New Features
+* [SDK-4254] Add onPurchasePackageInitiated support to hybrid common layer (#1487) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.58.0 => 5.59.0 (#1489) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `e6454e3` to `afc9219` (#1488) via dependabot[bot] (@dependabot[bot])
+
+## 17.37.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Pass customVariables to launchIfNeededWithOptions (#1484) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.0 to 2.1.1 (#1485) via dependabot[bot] (@dependabot[bot])
+* Bump faraday from 1.10.4 to 1.10.5 (#1483) via dependabot[bot] (@dependabot[bot])
+
+## 17.36.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Pass customVariables to launcher.launch when using offeringIdentifier (#1479) via Facundo Menzella (@facumenzella)
+
+### 🔄 Other Changes
+* Fix trigger-bump workflow to use orb job (#1480) via Facundo Menzella (@facumenzella)
+
+## 17.35.0
+## RevenueCat SDK
+### ✨ New Features
+* Add webCheckoutUrl to Offering and Package mappings (#1471) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.20.2 => 9.21.0 JS 1.25.0 => 1.25.1 (#1474) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.232.0 to 2.232.1 (#1473) via dependabot[bot] (@dependabot[bot])
+
+## 17.34.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.57.2 => 5.58.0 (#1469) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.33.1
 ### 🔄 Other Changes
 * Remove networkName from AdFailedToLoad and make it nullable in other ad events (#1461) via Pol Miro (@polmiro)

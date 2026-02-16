@@ -37,7 +37,8 @@
           "productType" : "NON_CONSUMABLE",
           "subscriptionPeriod" : "P1Y",
           "title" : "Annual Subscription"
-        }
+        },
+        "webCheckoutUrl" : null
       },
       "availablePackages" : [
         {
@@ -76,7 +77,8 @@
             "productType" : "NON_CONSUMABLE",
             "subscriptionPeriod" : "P1Y",
             "title" : "Annual Subscription"
-          }
+          },
+          "webCheckoutUrl" : null
         },
         {
           "identifier" : "$rc_monthly",
@@ -122,7 +124,8 @@
             "productType" : "NON_CONSUMABLE",
             "subscriptionPeriod" : "P1M",
             "title" : "Monthly Subscription"
-          }
+          },
+          "webCheckoutUrl" : null
         }
       ],
       "identifier" : "default",
@@ -173,9 +176,11 @@
           "productType" : "NON_CONSUMABLE",
           "subscriptionPeriod" : "P1M",
           "title" : "Monthly Subscription"
-        }
+        },
+        "webCheckoutUrl" : null
       },
-      "serverDescription" : "standard set of packages"
+      "serverDescription" : "standard set of packages",
+      "webCheckoutUrl" : null
     }
   },
   "current" : {
@@ -218,7 +223,8 @@
         "productType" : "NON_CONSUMABLE",
         "subscriptionPeriod" : "P1Y",
         "title" : "Annual Subscription"
-      }
+      },
+      "webCheckoutUrl" : null
     },
     "availablePackages" : [
       {
@@ -260,7 +266,8 @@
           "productType" : "NON_CONSUMABLE",
           "subscriptionPeriod" : "P1Y",
           "title" : "Annual Subscription"
-        }
+        },
+        "webCheckoutUrl" : null
       },
       {
         "identifier" : "$rc_monthly",
@@ -309,7 +316,8 @@
           "productType" : "NON_CONSUMABLE",
           "subscriptionPeriod" : "P1M",
           "title" : "Monthly Subscription"
-        }
+        },
+        "webCheckoutUrl" : null
       }
     ],
     "identifier" : "default",
@@ -363,8 +371,10 @@
         "productType" : "NON_CONSUMABLE",
         "subscriptionPeriod" : "P1M",
         "title" : "Monthly Subscription"
-      }
+      },
+      "webCheckoutUrl" : null
     },
-    "serverDescription" : "standard set of packages"
+    "serverDescription" : "standard set of packages",
+    "webCheckoutUrl" : null
   }
 }
