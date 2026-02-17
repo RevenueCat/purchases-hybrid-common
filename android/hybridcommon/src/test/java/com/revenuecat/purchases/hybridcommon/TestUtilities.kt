@@ -10,6 +10,7 @@ import com.revenuecat.purchases.models.InstallmentsInfo
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PricingPhase
+import com.revenuecat.purchases.models.PurchaseType
 import com.revenuecat.purchases.models.PurchasingData
 import com.revenuecat.purchases.models.RecurrenceMode
 import com.revenuecat.purchases.models.StoreProduct
@@ -157,6 +158,8 @@ internal object TestUtilities {
         productIdentifier: String,
         transactionIdentifier: String = "1",
         purchaseDate: Long = 1000,
+        purchaseType: PurchaseType = PurchaseType.GOOGLE_PURCHASE,
+        purchaseToken: String = "google_purchase_token",
     ): StoreTransaction {
         val mockTransaction = mockk<StoreTransaction>()
         every {
@@ -168,6 +171,37 @@ internal object TestUtilities {
         every {
             mockTransaction.purchaseTime
         } returns purchaseDate
+        every {
+            mockTransaction.purchaseType
+        } returns purchaseType
+        every {
+            mockTransaction.purchaseToken
+        } returns purchaseToken
+
+        return mockTransaction
+    }
+
+    fun createMockAmazonTransaction(
+        productIdentifier: String,
+        receiptId: String = "amazon_receipt_id",
+        purchaseDate: Long = 1000,
+    ): StoreTransaction {
+        val mockTransaction = mockk<StoreTransaction>()
+        every {
+            mockTransaction.productIds
+        } returns ArrayList(listOf(productIdentifier, "other"))
+        every {
+            mockTransaction.orderId
+        } returns null
+        every {
+            mockTransaction.purchaseTime
+        } returns purchaseDate
+        every {
+            mockTransaction.purchaseType
+        } returns PurchaseType.AMAZON_PURCHASE
+        every {
+            mockTransaction.purchaseToken
+        } returns receiptId
 
         return mockTransaction
     }
