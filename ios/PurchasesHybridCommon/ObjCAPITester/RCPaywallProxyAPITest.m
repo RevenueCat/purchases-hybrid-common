@@ -67,7 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
         __unused RCPaywallFooterViewController *footer2 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering"];
         __unused RCPaywallFooterViewController *footer3 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
 
-        HybridPurchaseLogicBridge *bridge = [[HybridPurchaseLogicBridge alloc] init];
+        HybridPurchaseLogicBridge *bridge = [[HybridPurchaseLogicBridge alloc]
+            initWithOnPerformPurchase:^(NSDictionary<NSString *, id> *eventData) {}
+                    onPerformRestore:^(NSDictionary<NSString *, id> *eventData) {}];
         __unused RCPaywallViewController *view4 = [proxy createPaywallViewWithPurchaseLogicBridge:bridge];
         __unused RCPaywallViewController *view5 = [proxy createPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{} purchaseLogicBridge:bridge];
         __unused RCPaywallFooterViewController *footer4 = [proxy createFooterPaywallViewWithPurchaseLogicBridge:bridge];

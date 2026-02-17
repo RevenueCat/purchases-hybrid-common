@@ -47,8 +47,15 @@ import RevenueCatUI
 
     // MARK: - Public
 
-    public var onPerformPurchase: ((_ eventData: [String: Any]) -> Void)?
-    public var onPerformRestore: ((_ eventData: [String: Any]) -> Void)?
+    private let onPerformPurchase: ((_ eventData: [String: Any]) -> Void)?
+    private let onPerformRestore: ((_ eventData: [String: Any]) -> Void)?
+
+    @objc public init(onPerformPurchase: ((_ eventData: [String: Any]) -> Void)?,
+                      onPerformRestore: ((_ eventData: [String: Any]) -> Void)?) {
+        self.onPerformPurchase = onPerformPurchase
+        self.onPerformRestore = onPerformRestore
+        super.init()
+    }
 
     public func makePerformPurchase() -> PerformPurchase {
         return { [weak self] packageToPurchase in
