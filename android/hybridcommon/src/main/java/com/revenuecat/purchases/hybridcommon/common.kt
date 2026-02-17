@@ -9,6 +9,7 @@ import androidx.annotation.VisibleForTesting
 import com.revenuecat.purchases.AmazonLWAConsentStatus
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.DebugEventListener
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.InternalRevenueCatAPI
@@ -989,6 +990,13 @@ fun configure(
 @OptIn(InternalRevenueCatAPI::class)
 fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
     Purchases.sharedInstance.trackedEventListener = TrackedEventListener { event ->
+        callback(event.toMap())
+    }
+}
+
+@OptIn(InternalRevenueCatAPI::class)
+fun setDebugEventListener(callback: (Map<String, Any?>) -> Unit) {
+    Purchases.sharedInstance.debugEventListener = DebugEventListener { event ->
         callback(event.toMap())
     }
 }
