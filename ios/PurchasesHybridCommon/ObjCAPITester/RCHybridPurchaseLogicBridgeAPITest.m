@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)testAPI {
     if (@available(iOS 15.0, *)) {
         HybridPurchaseLogicBridge *bridge = [[HybridPurchaseLogicBridge alloc]
-            initWithOnPerformPurchase:^(NSDictionary<NSString *, id> *eventData) {}
-                    onPerformRestore:^(NSDictionary<NSString *, id> *eventData) {}];
+            initOnPerformPurchase:^(NSDictionary<NSString *, id> *eventData) {}
+                 onPerformRestore:^(NSDictionary<NSString *, id> *eventData) {}];
 
         __unused NSString *requestIdKey = HybridPurchaseLogicBridge.eventKeyRequestId;
         __unused NSString *packageKey = HybridPurchaseLogicBridge.eventKeyPackageBeingPurchased;

@@ -68,12 +68,19 @@ NS_ASSUME_NONNULL_BEGIN
         __unused RCPaywallFooterViewController *footer3 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{}];
 
         HybridPurchaseLogicBridge *bridge = [[HybridPurchaseLogicBridge alloc]
-            initWithOnPerformPurchase:^(NSDictionary<NSString *, id> *eventData) {}
-                    onPerformRestore:^(NSDictionary<NSString *, id> *eventData) {}];
-        __unused RCPaywallViewController *view4 = [proxy createPaywallViewWithPurchaseLogicBridge:bridge];
-        __unused RCPaywallViewController *view5 = [proxy createPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{} purchaseLogicBridge:bridge];
-        __unused RCPaywallFooterViewController *footer4 = [proxy createFooterPaywallViewWithPurchaseLogicBridge:bridge];
-        __unused RCPaywallFooterViewController *footer5 = [proxy createFooterPaywallViewWithOfferingIdentifier:@"offering" presentedOfferingContext:@{} purchaseLogicBridge:bridge];
+            initOnPerformPurchase:^(NSDictionary<NSString *, id> *eventData) {}
+                 onPerformRestore:^(NSDictionary<NSString *, id> *eventData) {}];
+
+        PaywallViewCreationParams *params = [PaywallViewCreationParams new];
+        params.purchaseLogicBridge = bridge;
+        __unused RCPaywallViewController *view4 = [proxy createPaywallViewWithParams:params];
+
+        PaywallViewCreationParams *paramsWithOffering = [PaywallViewCreationParams new];
+        paramsWithOffering.offeringIdentifier = @"offering";
+        paramsWithOffering.presentedOfferingContext = @{};
+        paramsWithOffering.purchaseLogicBridge = bridge;
+        __unused RCPaywallViewController *view5 = [proxy createPaywallViewWithParams:paramsWithOffering];
+
     }
 }
 

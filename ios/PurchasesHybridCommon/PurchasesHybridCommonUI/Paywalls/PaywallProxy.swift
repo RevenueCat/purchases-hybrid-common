@@ -15,6 +15,17 @@ import RevenueCat
 import UIKit
 
 @available(iOS 15.0, *)
+@objcMembers public class PaywallViewCreationParams: NSObject {
+    public var offeringIdentifier: String?
+    public var presentedOfferingContext: [String: Any]?
+    public var purchaseLogicBridge: HybridPurchaseLogicBridge?
+
+    public override init() {
+        super.init()
+    }
+}
+
+@available(iOS 15.0, *)
 @objcMembers public class PaywallProxy: NSObject {
 
     /// Keys for configuring paywall presentation options.
@@ -65,7 +76,7 @@ import UIKit
         controller.delegate = self
         return controller
     }
-    
+
     @objc
     public func createPaywallView(offeringIdentifier: String, presentedOfferingContext: [String: Any]) -> PaywallViewController {
         let controller = PaywallViewController(
@@ -81,13 +92,51 @@ import UIKit
     }
 
     @objc
+    public func createPaywallView(params: PaywallViewCreationParams) -> PaywallViewController {
+        let dismissHandler = createDismissHandler()
+        let controller: PaywallViewController
+
+        switch (params.offeringIdentifier, params.purchaseLogicBridge) {
+        case let (offeringId?, bridge?):
+            controller = PaywallViewController(
+                offeringIdentifier: offeringId,
+                presentedOfferingContext: createPresentedOfferingContext(
+                    for: offeringId, data: params.presentedOfferingContext
+                ),
+                performPurchase: bridge.makePerformPurchase(),
+                performRestore: bridge.makePerformRestore(),
+                dismissRequestedHandler: dismissHandler
+            )
+        case let (nil, bridge?):
+            controller = PaywallViewController(
+                fonts: DefaultPaywallFontProvider(),
+                performPurchase: bridge.makePerformPurchase(),
+                performRestore: bridge.makePerformRestore(),
+                dismissRequestedHandler: dismissHandler
+            )
+        case let (offeringId?, nil):
+            controller = PaywallViewController(
+                offeringIdentifier: offeringId,
+                presentedOfferingContext: createPresentedOfferingContext(
+                    for: offeringId, data: params.presentedOfferingContext
+                ),
+                dismissRequestedHandler: dismissHandler
+            )
+        case (nil, nil):
+            controller = PaywallViewController(dismissRequestedHandler: dismissHandler)
+        }
+
+        controller.delegate = self
+        return controller
+    }
+
+    @objc
     public func createFooterPaywallView() -> PaywallFooterViewController {
         let controller = PaywallFooterViewController(dismissRequestedHandler: createDismissHandler())
         controller.delegate = self
-
         return controller
     }
-    
+
     @objc
     public func createFooterPaywallView(offeringIdentifier: String, presentedOfferingContext: [String: Any]) -> PaywallFooterViewController {
         let controller = PaywallFooterViewController(
@@ -99,76 +148,9 @@ import UIKit
             dismissRequestedHandler: createDismissHandler()
         )
         controller.delegate = self
-
         return controller
     }
 
-    // Custom purchase logic variants
-
-    @objc
-    public func createPaywallView(purchaseLogicBridge: HybridPurchaseLogicBridge) -> PaywallViewController {
-        let controller = PaywallViewController(
-            fonts: DefaultPaywallFontProvider(),
-            performPurchase: purchaseLogicBridge.makePerformPurchase(),
-            performRestore: purchaseLogicBridge.makePerformRestore(),
-            dismissRequestedHandler: createDismissHandler()
-        )
-        controller.delegate = self
-        return controller
-    }
-
-    @objc
-    public func createPaywallView(
-        offeringIdentifier: String,
-        presentedOfferingContext: [String: Any],
-        purchaseLogicBridge: HybridPurchaseLogicBridge
-    ) -> PaywallViewController {
-        let controller = PaywallViewController(
-            offeringIdentifier: offeringIdentifier,
-            presentedOfferingContext: createPresentedOfferingContext(
-                for: offeringIdentifier,
-                data: presentedOfferingContext
-            ),
-            performPurchase: purchaseLogicBridge.makePerformPurchase(),
-            performRestore: purchaseLogicBridge.makePerformRestore(),
-            dismissRequestedHandler: createDismissHandler()
-        )
-        controller.delegate = self
-        return controller
-    }
-
-    @objc
-    public func createFooterPaywallView(
-        purchaseLogicBridge: HybridPurchaseLogicBridge
-    ) -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController(
-            performPurchase: purchaseLogicBridge.makePerformPurchase(),
-            performRestore: purchaseLogicBridge.makePerformRestore(),
-            dismissRequestedHandler: createDismissHandler()
-        )
-        controller.delegate = self
-        return controller
-    }
-
-    @objc
-    public func createFooterPaywallView(
-        offeringIdentifier: String,
-        presentedOfferingContext: [String: Any],
-        purchaseLogicBridge: HybridPurchaseLogicBridge
-    ) -> PaywallFooterViewController {
-        let controller = PaywallFooterViewController(
-            offeringIdentifier: offeringIdentifier,
-            presentedOfferingContext: createPresentedOfferingContext(
-                for: offeringIdentifier,
-                data: presentedOfferingContext
-            ),
-            performPurchase: purchaseLogicBridge.makePerformPurchase(),
-            performRestore: purchaseLogicBridge.makePerformRestore(),
-            dismissRequestedHandler: createDismissHandler()
-        )
-        controller.delegate = self
-        return controller
-    }
 
     @objc
     public func presentPaywall(options: [String:Any],

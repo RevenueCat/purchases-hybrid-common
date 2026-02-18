@@ -40,7 +40,7 @@ import RevenueCatUI
     private static let queue = DispatchQueue(label: "com.revenuecat.hybridcommon.purchaselogicbridge")
     private static var pendingRequests: [String: PendingRequest] = [:]
 
-    /// The request IDs managed by this PaywallView instance.
+    /// The request IDs managed by this bridge instance.
     /// May contain already-resolved IDs since resolveResult is static and can't clean up here.
     /// This is harmless — cancelPending handles missing entries gracefully.
     private var instanceRequestIds: Set<String> = []
@@ -57,7 +57,7 @@ import RevenueCatUI
         super.init()
     }
 
-    public func makePerformPurchase() -> PerformPurchase {
+    func makePerformPurchase() -> PerformPurchase {
         return { [weak self] packageToPurchase in
             guard let self = self else {
                 return (userCancelled: true, error: nil)
@@ -72,7 +72,7 @@ import RevenueCatUI
         }
     }
 
-    public func makePerformRestore() -> PerformRestore {
+    func makePerformRestore() -> PerformRestore {
         return { [weak self] in
             guard let self = self else {
                 return (success: false, error: nil)
