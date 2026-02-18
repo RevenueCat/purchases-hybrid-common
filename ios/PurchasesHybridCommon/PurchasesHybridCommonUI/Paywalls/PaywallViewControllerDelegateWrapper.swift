@@ -89,6 +89,19 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
                                         didInitiatePurchaseWith packageDictionary: [String: Any],
                                         requestId: String)
 
+    /// Called when the paywall requests a custom purchase to be performed.
+    /// Used when `purchasesAreCompletedBy` is set to `.myApp`.
+    @objc(paywallViewControllerDidRequestPerformPurchase:packageDictionary:requestId:)
+    optional func paywallViewControllerDidRequestPerformPurchase(_ controller: PaywallViewController,
+                                                                 packageDictionary: [String: Any],
+                                                                 requestId: String)
+
+    /// Called when the paywall requests a custom restore to be performed.
+    /// Used when `purchasesAreCompletedBy` is set to `.myApp`.
+    @objc(paywallViewControllerDidRequestPerformRestore:requestId:)
+    optional func paywallViewControllerDidRequestPerformRestore(_ controller: PaywallViewController,
+                                                                requestId: String)
+
 }
 
 #endif

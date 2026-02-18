@@ -177,6 +177,64 @@ import UIKit
                                            paywallResultHandler: paywallResultHandler)
     }
 
+    /// Presents a paywall with optional custom purchase logic.
+    /// When `purchaseLogicBridge` is provided, the paywall delegates purchase and restore
+    /// operations to the hybrid layer via the bridge's handlers.
+    /// Use ``HybridPurchaseLogicBridge/resolveResult(requestId:resultString:errorMessage:)``
+    /// to complete the operations.
+    @objc
+    public func presentPaywall(options: [String: Any],
+                               purchaseLogicBridge: HybridPurchaseLogicBridge?,
+                               paywallResultHandler: @escaping (String) -> Void) {
+        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
+            fontName = options[PaywallOptionsKeys.fontName] as? String,
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
+            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+
+        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
+                                   content: createContent(from: options),
+                                   fontName: fontName,
+                                   shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                   customVariables: customVariables,
+                                   useFullScreenPresentation: useFullScreenPresentation,
+                                   performPurchase: purchaseLogicBridge?.makePerformPurchase(),
+                                   performRestore: purchaseLogicBridge?.makePerformRestore(),
+                                   purchaseLogicBridge: purchaseLogicBridge,
+                                   paywallResultHandler: paywallResultHandler)
+    }
+
+    /// Presents a paywall only if the user does not have the specified entitlement,
+    /// with optional custom purchase logic.
+    /// See ``presentPaywall(options:purchaseLogicBridge:paywallResultHandler:)`` for details.
+    @objc
+    public func presentPaywallIfNeeded(options: [String: Any],
+                                       purchaseLogicBridge: HybridPurchaseLogicBridge?,
+                                       paywallResultHandler: @escaping (String) -> Void) {
+        guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
+            print("Error: missing required entitlement identifier.")
+            return
+        }
+
+        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
+            fontName = options[PaywallOptionsKeys.fontName] as? String,
+            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
+            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
+            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+
+        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+                                           displayCloseButton: displayCloseButton,
+                                           content: createContent(from: options),
+                                           fontName: fontName,
+                                           shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                           customVariables: customVariables,
+                                           useFullScreenPresentation: useFullScreenPresentation,
+                                           performPurchase: purchaseLogicBridge?.makePerformPurchase(),
+                                           performRestore: purchaseLogicBridge?.makePerformRestore(),
+                                           purchaseLogicBridge: purchaseLogicBridge,
+                                           paywallResultHandler: paywallResultHandler)
+    }
+
     private func privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                                displayCloseButton: Bool = false,
                                                content: Content = .defaultOffering,
@@ -184,6 +242,9 @@ import UIKit
                                                shouldBlockTouchEvents: Bool = false,
                                                customVariables: [String: Any]? = nil,
                                                useFullScreenPresentation: Bool = false,
+                                               performPurchase: PerformPurchase? = nil,
+                                               performRestore: PerformRestore? = nil,
+                                               purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
@@ -196,6 +257,9 @@ import UIKit
                                                shouldBlockTouchEvents: shouldBlockTouchEvents,
                                                customVariables: customVariables,
                                                useFullScreenPresentation: useFullScreenPresentation,
+                                               performPurchase: performPurchase,
+                                               performRestore: performRestore,
+                                               purchaseLogicBridge: purchaseLogicBridge,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
@@ -213,6 +277,9 @@ import UIKit
                                        shouldBlockTouchEvents: Bool = false,
                                        customVariables: [String: Any]? = nil,
                                        useFullScreenPresentation: Bool = false,
+                                       performPurchase: PerformPurchase? = nil,
+                                       performRestore: PerformRestore? = nil,
+                                       purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
@@ -239,23 +306,31 @@ import UIKit
             controller = PaywallViewController(offering: offering,
                                                fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               performPurchase: performPurchase,
+                                               performRestore: performRestore)
         case let .offeringIdentifier(identifier):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: .init(offeringIdentifier: identifier),
                                                fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               performPurchase: performPurchase,
+                                               performRestore: performRestore)
         case let .offeringIdentifierWithPresentedOfferingContext(identifier, presentedOfferingContext):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: presentedOfferingContext,
                                                fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               performPurchase: performPurchase,
+                                               performRestore: performRestore)
         case .defaultOffering:
             controller = PaywallViewController(fonts: fontProvider,
                                                displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents)
+                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               performPurchase: performPurchase,
+                                               performRestore: performRestore)
         }
 
         customVariables?.forEach { key, value in
@@ -272,6 +347,10 @@ import UIKit
         controller.delegate = self
         controller.modalPresentationStyle = useFullScreenPresentation ? .fullScreen : .pageSheet
         controller.view.backgroundColor = .systemBackground
+
+        if let purchaseLogicBridge {
+            self.purchaseLogicBridgeByVC[controller] = purchaseLogicBridge
+        }
 
         if let requiredEntitlementIdentifier {
             self.requiredEntitlementIdentifierByVC[controller] = requiredEntitlementIdentifier
