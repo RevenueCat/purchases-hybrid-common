@@ -1,6 +1,6 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] Android 9.21.0 => 9.22.0 JS 1.25.1 => 1.26.0 (#1495) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* Add support for `setDebugEventListener` in Android (#1497) via Toni Rico (@tonidero)
+### ✨ New Features
+* Add PaywallListener and PurchaseLogic bridge support for Capacitor (#1501) via Toni Rico (@tonidero)
+* Implemented support for passing custom PurchaseLogic to PaywallView from hybrids (#1494) via Rick (@rickvdl)
+### 🐞 Bugfixes
+* [Amazon] Use receiptId for transactionIdentifier (#1498) via Greenie (@greenietea)
