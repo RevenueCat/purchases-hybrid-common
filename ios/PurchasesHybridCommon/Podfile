@@ -1,7 +1,6 @@
 # Uncomment the next line to define a global platform for your project
 
-# Depends on https://github.com/RevenueCat/purchases-ios/pull/6289
-purchases_ios_branch = 'pallares/spi-track-paywall-events'
+purchases_ios_branch = 'main'
 
 target 'PurchasesHybridCommon' do
   platform :ios, '13.0'

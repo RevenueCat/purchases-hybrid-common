@@ -1,15 +1,15 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.60.0-SNAPSHOT)
-  - RevenueCatUI (5.60.0-SNAPSHOT):
-    - RevenueCat (= 5.60.0-SNAPSHOT)
+  - RevenueCat (5.59.1)
+  - RevenueCatUI (5.59.1):
+    - RevenueCat (= 5.59.1)
 
 DEPENDENCIES:
   - Nimble (= 10.0.0)
   - Quick (= 5.0.1)
-  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `pallares/spi-track-paywall-events`)
-  - RevenueCatUI (from `https://github.com/RevenueCat/purchases-ios.git`, branch `pallares/spi-track-paywall-events`)
+  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `main`)
+  - RevenueCatUI (from `https://github.com/RevenueCat/purchases-ios.git`, branch `main`)
 
 SPEC REPOS:
   trunk:
@@ -18,26 +18,26 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   RevenueCat:
-    :branch: pallares/spi-track-paywall-events
+    :branch: main
     :git: https://github.com/RevenueCat/purchases-ios.git
   RevenueCatUI:
-    :branch: pallares/spi-track-paywall-events
+    :branch: main
     :git: https://github.com/RevenueCat/purchases-ios.git
 
 CHECKOUT OPTIONS:
   RevenueCat:
-    :commit: c6b0ad8cacbe8c6a875ab104d39d5be2cbd7b77a
+    :commit: fdcac4362c5611fe808d84d1546e219a11b05553
     :git: https://github.com/RevenueCat/purchases-ios.git
   RevenueCatUI:
-    :commit: c6b0ad8cacbe8c6a875ab104d39d5be2cbd7b77a
+    :commit: fdcac4362c5611fe808d84d1546e219a11b05553
     :git: https://github.com/RevenueCat/purchases-ios.git
 
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 4459278249130ffc957032dbeee7139d30b95c7e
-  RevenueCatUI: 48634fb314549922b1b51e418a088bc9369e8cd1
+  RevenueCat: 52c4a56d822b80b25de014c0c4e548ffbd6a5a71
+  RevenueCatUI: 1f1e47881c81adef3e0a85c30b9f2e35dd3d0a94
 
-PODFILE CHECKSUM: 810beeaaf3bbef412759fdbaf06bbbd84add9005
+PODFILE CHECKSUM: cc62100913e46af690b366095877aa22dca43fb2
 
 COCOAPODS: 1.16.2
