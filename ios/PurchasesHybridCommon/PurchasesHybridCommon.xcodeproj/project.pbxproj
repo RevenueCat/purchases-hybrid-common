@@ -51,6 +51,7 @@
 		4F79746F2B5EDFB3003085E7 /* PurchasesHybridCommonUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7974672B5EDDEF003085E7 /* PurchasesHybridCommonUI.framework */; };
 		4F7974752B5EE002003085E7 /* PurchasesHybridCommonUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F7974742B5EE002003085E7 /* PurchasesHybridCommonUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */; };
+		A1B2C3D42026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */; };
 		4FBD2DA72A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */; };
 		579EF61C286B761C002263AD /* PurchasesHybridCommon.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 57FFDE47286B72750089A57B /* PurchasesHybridCommon.storekit */; };
 		57AD0D7A28733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD0D7928733B0C000932FF /* NonSubscriptionTransaction+HybridAdditions.swift */; };
@@ -61,6 +62,7 @@
 		57E97CAD2D66236C007EB1C2 /* PaywallResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E97CA82D66236C007EB1C2 /* PaywallResult.swift */; };
 		57E97CAE2D66236C007EB1C2 /* CustomerCenterUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E97CA52D66236C007EB1C2 /* CustomerCenterUIViewController.swift */; };
 		57E97CAF2D66236C007EB1C2 /* PaywallProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E97CA72D66236C007EB1C2 /* PaywallProxy.swift */; };
+		A1B2C3D62026021600AABBCC /* HybridPurchaseLogicBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */; };
 		57FFDE19286A566D0089A57B /* BaseIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE18286A566D0089A57B /* BaseIntegrationTests.swift */; };
 		57FFDE1A286A566D0089A57B /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
 		57FFDE2B286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FFDE2A286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp.swift */; };
@@ -189,6 +191,7 @@
 		4F7974672B5EDDEF003085E7 /* PurchasesHybridCommonUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PurchasesHybridCommonUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7974742B5EE002003085E7 /* PurchasesHybridCommonUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchasesHybridCommonUI.h; sourceTree = "<group>"; };
 		4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCPaywallProxyAPITest.m; sourceTree = "<group>"; };
+		A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridPurchaseLogicBridgeAPITest.m; sourceTree = "<group>"; };
 		4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjCAPITester.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FBD2DA62A4B7D8300C8A0FB /* EntitlementVerificationMode+HybridAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EntitlementVerificationMode+HybridAdditions.swift"; sourceTree = "<group>"; };
 		517430C4E8FC91A379B7BFE0 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -200,6 +203,7 @@
 		57E97CA42D66236C007EB1C2 /* CustomerCenterProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCenterProxy.swift; sourceTree = "<group>"; };
 		57E97CA52D66236C007EB1C2 /* CustomerCenterUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerCenterUIViewController.swift; sourceTree = "<group>"; };
 		57E97CA72D66236C007EB1C2 /* PaywallProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallProxy.swift; sourceTree = "<group>"; };
+		A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridPurchaseLogicBridge.swift; sourceTree = "<group>"; };
 		57E97CA82D66236C007EB1C2 /* PaywallResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallResult.swift; sourceTree = "<group>"; };
 		57E97CA92D66236C007EB1C2 /* PaywallViewControllerDelegateWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewControllerDelegateWrapper.swift; sourceTree = "<group>"; };
 		57FFDE16286A566D0089A57B /* PurchasesHybridCommonIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PurchasesHybridCommonIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -320,6 +324,7 @@
 				2D4FDFDC280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m */,
 				2D4FDFE02807377600863298 /* RCErrorContainerAPITests.m */,
 				4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */,
+				A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */,
 			);
 			path = ObjCAPITester;
 			sourceTree = "<group>";
@@ -465,6 +470,7 @@
 		57E97CAA2D66236C007EB1C2 /* Paywalls */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */,
 				57E97CA72D66236C007EB1C2 /* PaywallProxy.swift */,
 				57E97CA82D66236C007EB1C2 /* PaywallResult.swift */,
 				57E97CA92D66236C007EB1C2 /* PaywallViewControllerDelegateWrapper.swift */,
@@ -966,6 +972,7 @@
 			files = (
 				2D4FDFE12807377600863298 /* RCErrorContainerAPITests.m in Sources */,
 				4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */,
+				A1B2C3D42026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m in Sources */,
 				2D4FDFDD280726BC00863298 /* RCPurchases+HybridAdditionsAPITest.m in Sources */,
 				2D557F8D280711970090FACC /* RCHybridCommonAPITest.m in Sources */,
 			);
@@ -1007,6 +1014,7 @@
 				57E97CAE2D66236C007EB1C2 /* CustomerCenterUIViewController.swift in Sources */,
 				57DFC2762D6C915E00C93D97 /* CustomerCenterViewControllerDelegateWrapper.swift in Sources */,
 				57E97CAF2D66236C007EB1C2 /* PaywallProxy.swift in Sources */,
+				A1B2C3D62026021600AABBCC /* HybridPurchaseLogicBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
