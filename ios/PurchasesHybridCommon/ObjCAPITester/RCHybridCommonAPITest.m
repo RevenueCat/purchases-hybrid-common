@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setLogLevel:@"WARN"];
     [RCCommonFunctionality setLogHanderOnLogReceived:^(NSDictionary<NSString *,NSString *> * _Nonnull logDetails) {
     }];
+    [RCCommonFunctionality setTrackedEventListenerOnEventReceived:^(NSDictionary<NSString *, id> * _Nonnull event) {
+    }];
     [RCCommonFunctionality getCustomerInfoWithCompletionBlock:^(NSDictionary * _Nullable customerInfo,
                                                                 RCErrorContainer * _Nullable error) {
     }];
