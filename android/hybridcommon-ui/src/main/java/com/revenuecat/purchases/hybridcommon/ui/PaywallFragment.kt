@@ -9,7 +9,9 @@ import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
+import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLaunchIfNeededOptions
+import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLaunchOptions
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLauncher
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallDisplayCallback
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
@@ -17,7 +19,7 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProvider
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
-@OptIn(InternalRevenueCatAPI::class)
+@OptIn(InternalRevenueCatAPI::class, ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     enum class ResultKey(val key: String) {
         PAYWALL_RESULT("paywall_result"),
@@ -172,6 +174,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     private fun removeFragment() {
+        PaywallFragmentNonSerializableArgsStore.remove(requestKey)
         parentFragmentManager.beginTransaction().remove(this).commit()
     }
 
@@ -204,6 +207,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
         val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
+        val nonSerializableArgs = PaywallFragmentNonSerializableArgsStore.get(requestKey)
 
         val paywallDisplayCallback = object : PaywallDisplayCallback {
             override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
@@ -228,6 +232,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             optionsBuilder.setOfferingIdentifier(offering, presentedOfferingContext)
         }
 
+        nonSerializableArgs?.paywallListener?.let { optionsBuilder.setListener(it) }
+        nonSerializableArgs?.purchaseLogic?.let { optionsBuilder.setPurchaseLogic(it) }
+
         launcher.launchIfNeededWithOptions(optionsBuilder.build())
     }
 
@@ -237,31 +244,24 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val displayDismissButton = shouldDisplayDismissButtonArg
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
         val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
+        val nonSerializableArgs = PaywallFragmentNonSerializableArgsStore.get(requestKey)
 
-        if (displayDismissButton != null && offering != null && presentedOfferingContext != null) {
-            launcher.launch(
-                shouldDisplayDismissButton = displayDismissButton,
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
-                fontProvider = fontProvider,
-                customVariables = customVariables,
-            )
-        } else if (displayDismissButton != null) {
-            launcher.launch(
-                shouldDisplayDismissButton = displayDismissButton,
-                fontProvider = fontProvider,
-                customVariables = customVariables,
-            )
-        } else if (offering != null && presentedOfferingContext != null) {
-            launcher.launch(
-                offeringIdentifier = offering,
-                presentedOfferingContext = presentedOfferingContext,
-                fontProvider = fontProvider,
-                customVariables = customVariables,
-            )
-        } else {
-            launcher.launch(fontProvider = fontProvider, customVariables = customVariables)
+        val optionsBuilder = PaywallActivityLaunchOptions.Builder()
+            .setFontProvider(fontProvider)
+            .setCustomVariables(customVariables)
+
+        if (displayDismissButton != null) {
+            optionsBuilder.setShouldDisplayDismissButton(displayDismissButton)
         }
+
+        if (offering != null && presentedOfferingContext != null) {
+            optionsBuilder.setOfferingIdentifier(offering, presentedOfferingContext)
+        }
+
+        nonSerializableArgs?.paywallListener?.let { optionsBuilder.setListener(it) }
+        nonSerializableArgs?.purchaseLogic?.let { optionsBuilder.setPurchaseLogic(it) }
+
+        launcher.launchWithOptions(optionsBuilder.build())
     }
 
     private fun setFragmentResult(paywallResult: PaywallResult) =

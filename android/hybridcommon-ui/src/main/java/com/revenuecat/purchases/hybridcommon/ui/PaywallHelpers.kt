@@ -39,6 +39,16 @@ fun presentPaywallFromFragment(
     with(options) {
         val requestKey = System.identityHashCode(paywallResultListener).toString()
 
+        if (paywallListener != null || purchaseLogic != null) {
+            PaywallFragmentNonSerializableArgsStore.put(
+                requestKey,
+                PaywallFragmentNonSerializableArgs(
+                    paywallListener = paywallListener,
+                    purchaseLogic = purchaseLogic,
+                ),
+            )
+        }
+
         activity.runOnUiThread {
             activity.supportFragmentManager.setFragmentResultListener(requestKey, activity) { _, result ->
                 val paywallResult = result.getString(PaywallFragment.ResultKey.PAYWALL_RESULT.key)
@@ -81,4 +91,6 @@ data class PresentPaywallOptions @JvmOverloads constructor(
     val shouldDisplayDismissButton: Boolean? = null,
     val fontFamily: PaywallFontFamily? = null,
     val customVariables: Map<String, Any?>? = null,
+    val paywallListener: PaywallListenerWrapper? = null,
+    val purchaseLogic: HybridPurchaseLogicBridge? = null,
 )

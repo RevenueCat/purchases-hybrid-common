@@ -1,3 +1,8 @@
+## 17.40.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* [Amazon] Use receiptId for transactionIdentifier (#1498) via Greenie (@greenietea)
+
 ## 17.40.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
