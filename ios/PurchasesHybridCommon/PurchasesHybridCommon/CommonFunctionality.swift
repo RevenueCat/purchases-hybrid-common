@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-@_spi(Experimental) import RevenueCat
+@_spi(Internal) @_spi(Experimental) import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -119,6 +119,10 @@ import StoreKit
             ]
             onLogReceived(logDetails)
         }
+    }
+
+    @objc public static func setTrackedEventListener(onEventReceived: @escaping ([String: Any]) -> Void) {
+        Purchases.shared.eventsListener = TrackedEventListener(callback: onEventReceived)
     }
 
     @available(iOS 14.3, macOS 11.1, macCatalyst 14.3, *)
@@ -1210,6 +1214,24 @@ private extension CommonFunctionality {
     @objc(encodeCustomerInfo:)
     static func encode(customerInfo: CustomerInfo) -> [String: Any] {
         return customerInfo.dictionary
+    }
+
+}
+
+// MARK: - TrackedEventListener
+
+private class TrackedEventListener: EventsListener {
+
+    private let callback: ([String: Any]) -> Void
+
+    init(callback: @escaping ([String: Any]) -> Void) {
+        self.callback = callback
+    }
+
+    func onEventTracked(_ event: [String: Any]) {
+        DispatchQueue.main.async { [callback] in
+            callback(event)
+        }
     }
 
 }
