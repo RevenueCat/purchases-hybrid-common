@@ -58,6 +58,10 @@ import RevenueCatUI
         super.init()
     }
 
+    deinit {
+        cancelPending()
+    }
+
     func makePerformPurchase() -> PerformPurchase {
         return { [weak self] packageToPurchase in
             guard let self = self else {

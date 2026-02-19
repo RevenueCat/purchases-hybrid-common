@@ -70,8 +70,14 @@ class HybridPurchaseLogicBridge(
         val deferred: CompletableDeferred<PurchaseLogicResult>,
         val owner: HybridPurchaseLogicBridge,
     ) {
-        class Purchase(deferred: CompletableDeferred<PurchaseLogicResult>, owner: HybridPurchaseLogicBridge) : PendingRequest(deferred, owner)
-        class Restore(deferred: CompletableDeferred<PurchaseLogicResult>, owner: HybridPurchaseLogicBridge) : PendingRequest(deferred, owner)
+        class Purchase(
+            deferred: CompletableDeferred<PurchaseLogicResult>,
+            owner: HybridPurchaseLogicBridge,
+        ) : PendingRequest(deferred, owner)
+        class Restore(
+            deferred: CompletableDeferred<PurchaseLogicResult>,
+            owner: HybridPurchaseLogicBridge,
+        ) : PendingRequest(deferred, owner)
     }
 
     override suspend fun performPurchase(activity: Activity, rcPackage: Package): PurchaseLogicResult {
