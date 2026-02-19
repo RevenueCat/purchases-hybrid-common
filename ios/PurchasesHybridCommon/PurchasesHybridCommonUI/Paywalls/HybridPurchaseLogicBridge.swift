@@ -26,6 +26,7 @@ import RevenueCatUI
     @objc public static let resultError = "ERROR"
 
     static let errorDomain = "com.revenuecat.purchases.hybridcommon.purchaselogic"
+    static let errorCodeOperationFailed = 1
 
     // MARK: - Private
 
@@ -121,6 +122,7 @@ import RevenueCatUI
     }
 
     /// Cancels pending requests owned by this instance.
+    /// Called by PaywallProxy on dismiss, and by hybrid SDKs (e.g. RN) for embedded view cleanup.
     @objc public func cancelPending() {
         let requests: [PendingRequest] = Self.queue.sync {
             let owned = instanceRequestIds.compactMap { Self.pendingRequests.removeValue(forKey: $0) }
@@ -133,12 +135,7 @@ import RevenueCatUI
             case .purchase(let continuation):
                 continuation.resume(returning: (userCancelled: true, error: nil))
             case .restore(let continuation):
-                let error = NSError(
-                    domain: Self.errorDomain,
-                    code: -3,
-                    userInfo: [NSLocalizedDescriptionKey: "Paywall dismissed"]
-                )
-                continuation.resume(returning: (success: false, error: error))
+                continuation.resume(returning: (success: false, error: nil))
             }
         }
     }
@@ -181,7 +178,7 @@ import RevenueCatUI
         default:
             return NSError(
                 domain: errorDomain,
-                code: -1,
+                code: errorCodeOperationFailed,
                 userInfo: [NSLocalizedDescriptionKey: errorMessage ?? "Operation failed"]
             )
         }
