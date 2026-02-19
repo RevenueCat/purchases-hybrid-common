@@ -12,7 +12,6 @@ import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.ui.revenuecatui.PurchaseLogic
 import com.revenuecat.purchases.ui.revenuecatui.PurchaseLogicResult
 import kotlinx.coroutines.CompletableDeferred
-import java.util.Collections
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -67,12 +66,13 @@ class HybridPurchaseLogicBridge(
         }
     }
 
-    private sealed class PendingRequest(val deferred: CompletableDeferred<PurchaseLogicResult>) {
-        class Purchase(deferred: CompletableDeferred<PurchaseLogicResult>) : PendingRequest(deferred)
-        class Restore(deferred: CompletableDeferred<PurchaseLogicResult>) : PendingRequest(deferred)
+    private sealed class PendingRequest(
+        val deferred: CompletableDeferred<PurchaseLogicResult>,
+        val owner: HybridPurchaseLogicBridge,
+    ) {
+        class Purchase(deferred: CompletableDeferred<PurchaseLogicResult>, owner: HybridPurchaseLogicBridge) : PendingRequest(deferred, owner)
+        class Restore(deferred: CompletableDeferred<PurchaseLogicResult>, owner: HybridPurchaseLogicBridge) : PendingRequest(deferred, owner)
     }
-
-    private val instanceRequestIds = Collections.synchronizedSet(mutableSetOf<String>())
 
     override suspend fun performPurchase(activity: Activity, rcPackage: Package): PurchaseLogicResult {
         val handler = onPerformPurchase
@@ -88,10 +88,7 @@ class HybridPurchaseLogicBridge(
 
         val requestId = UUID.randomUUID().toString()
         val deferred = CompletableDeferred<PurchaseLogicResult>()
-        synchronized(instanceRequestIds) {
-            pendingRequests[requestId] = PendingRequest.Purchase(deferred)
-            instanceRequestIds.add(requestId)
-        }
+        pendingRequests[requestId] = PendingRequest.Purchase(deferred, this)
 
         val eventData = mapOf<String, Any?>(
             EVENT_KEY_REQUEST_ID to requestId,
@@ -119,10 +116,7 @@ class HybridPurchaseLogicBridge(
 
         val requestId = UUID.randomUUID().toString()
         val deferred = CompletableDeferred<PurchaseLogicResult>()
-        synchronized(instanceRequestIds) {
-            pendingRequests[requestId] = PendingRequest.Restore(deferred)
-            instanceRequestIds.add(requestId)
-        }
+        pendingRequests[requestId] = PendingRequest.Restore(deferred, this)
 
         val eventData = mapOf<String, Any?>(
             EVENT_KEY_REQUEST_ID to requestId,
@@ -136,22 +130,12 @@ class HybridPurchaseLogicBridge(
     }
 
     fun cancelPending() {
-        val requestIds = synchronized(instanceRequestIds) {
-            val ids = instanceRequestIds.toSet()
-            instanceRequestIds.clear()
-            ids
-        }
-
-        for (requestId in requestIds) {
-            val request = pendingRequests.remove(requestId) ?: continue
-
-            when (request) {
-                is PendingRequest.Purchase -> {
-                    request.deferred.complete(PurchaseLogicResult.Cancellation)
-                }
-                is PendingRequest.Restore -> {
-                    request.deferred.complete(PurchaseLogicResult.Cancellation)
-                }
+        val iterator = pendingRequests.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (entry.value.owner === this) {
+                iterator.remove()
+                entry.value.deferred.complete(PurchaseLogicResult.Cancellation)
             }
         }
     }

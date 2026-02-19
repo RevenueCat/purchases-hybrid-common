@@ -33,18 +33,18 @@ import RevenueCatUI
     private typealias PurchaseResult = (userCancelled: Bool, error: Error?)
     private typealias RestoreResult = (success: Bool, error: Error?)
 
-    private enum PendingRequest {
-        case purchase(CheckedContinuation<PurchaseResult, Never>)
-        case restore(CheckedContinuation<RestoreResult, Never>)
+    private struct PendingRequest {
+        let kind: Kind
+        weak var owner: HybridPurchaseLogicBridge?
+
+        enum Kind {
+            case purchase(CheckedContinuation<PurchaseResult, Never>)
+            case restore(CheckedContinuation<RestoreResult, Never>)
+        }
     }
 
     private static let queue = DispatchQueue(label: "com.revenuecat.hybridcommon.purchaselogicbridge")
     private static var pendingRequests: [String: PendingRequest] = [:]
-
-    /// The request IDs managed by this bridge instance.
-    /// May contain already-resolved IDs since resolveResult is static and can't clean up here.
-    /// This is harmless — cancelPending handles missing entries gracefully.
-    private var instanceRequestIds: Set<String> = []
 
     // MARK: - Public
 
@@ -103,7 +103,7 @@ import RevenueCatUI
 
         let error = makeError(resultString: resultString, errorMessage: errorMessage)
 
-        switch request {
+        switch request.kind {
         case .purchase(let continuation):
             continuation.resume(returning: (
                 userCancelled: resultString == resultCancellation,
@@ -124,14 +124,16 @@ import RevenueCatUI
     /// Cancels pending requests owned by this instance.
     /// Called by PaywallProxy on dismiss, and by hybrid SDKs (e.g. RN) for embedded view cleanup.
     @objc public func cancelPending() {
-        let requests: [PendingRequest] = Self.queue.sync {
-            let owned = instanceRequestIds.compactMap { Self.pendingRequests.removeValue(forKey: $0) }
-            instanceRequestIds.removeAll()
-            return owned
+        let owned: [PendingRequest] = Self.queue.sync {
+            let matching = Self.pendingRequests.filter { $0.value.owner === self }
+            for key in matching.keys {
+                Self.pendingRequests.removeValue(forKey: key)
+            }
+            return Array(matching.values)
         }
 
-        for request in requests {
-            switch request {
+        for request in owned {
+            switch request.kind {
             case .purchase(let continuation):
                 continuation.resume(returning: (userCancelled: true, error: nil))
             case .restore(let continuation):
@@ -143,7 +145,7 @@ import RevenueCatUI
     // MARK: - Private helpers
 
     private func sendRequest<T>(
-        createRequest: @escaping (CheckedContinuation<T, Never>) -> PendingRequest,
+        createRequest: @escaping (CheckedContinuation<T, Never>) -> PendingRequest.Kind,
         data: [String: Any],
         handler: (([String: Any]) -> Void)?,
         fallbackError: String
@@ -152,8 +154,10 @@ import RevenueCatUI
 
         return await withCheckedContinuation { continuation in
             Self.queue.sync {
-                Self.pendingRequests[requestId] = createRequest(continuation)
-                self.instanceRequestIds.insert(requestId)
+                Self.pendingRequests[requestId] = PendingRequest(
+                    kind: createRequest(continuation),
+                    owner: self
+                )
             }
 
             var eventData: [String: Any] = [Self.eventKeyRequestId: requestId]
