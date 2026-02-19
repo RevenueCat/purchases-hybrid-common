@@ -1,12 +1,10 @@
 # Uncomment the next line to define a global platform for your project
 
-purchases_ios_branch = 'main'
-
 target 'PurchasesHybridCommon' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => purchases_ios_branch
+  pod 'RevenueCat', '5.59.0'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
@@ -26,14 +24,14 @@ target 'PurchasesHybridCommonUI' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => purchases_ios_branch
-  pod 'RevenueCatUI', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => purchases_ios_branch
+  pod 'RevenueCat', '5.59.0'
+  pod 'RevenueCatUI', '5.59.0'
 end
 
 target 'ObjCAPITester' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => purchases_ios_branch
-  pod 'RevenueCatUI', :git => 'https://github.com/RevenueCat/purchases-ios.git', :branch => purchases_ios_branch
+  pod 'RevenueCat', '5.59.0'
+  pod 'RevenueCatUI', '5.59.0'
 end

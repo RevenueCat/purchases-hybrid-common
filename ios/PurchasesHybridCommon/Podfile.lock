@@ -1,43 +1,29 @@
 PODS:
   - Nimble (10.0.0)
   - Quick (5.0.1)
-  - RevenueCat (5.59.1)
-  - RevenueCatUI (5.59.1):
-    - RevenueCat (= 5.59.1)
+  - RevenueCat (5.59.0)
+  - RevenueCatUI (5.59.0):
+    - RevenueCat (= 5.59.0)
 
 DEPENDENCIES:
   - Nimble (= 10.0.0)
   - Quick (= 5.0.1)
-  - RevenueCat (from `https://github.com/RevenueCat/purchases-ios.git`, branch `main`)
-  - RevenueCatUI (from `https://github.com/RevenueCat/purchases-ios.git`, branch `main`)
+  - RevenueCat (= 5.59.0)
+  - RevenueCatUI (= 5.59.0)
 
 SPEC REPOS:
   trunk:
     - Nimble
     - Quick
-
-EXTERNAL SOURCES:
-  RevenueCat:
-    :branch: main
-    :git: https://github.com/RevenueCat/purchases-ios.git
-  RevenueCatUI:
-    :branch: main
-    :git: https://github.com/RevenueCat/purchases-ios.git
-
-CHECKOUT OPTIONS:
-  RevenueCat:
-    :commit: fdcac4362c5611fe808d84d1546e219a11b05553
-    :git: https://github.com/RevenueCat/purchases-ios.git
-  RevenueCatUI:
-    :commit: fdcac4362c5611fe808d84d1546e219a11b05553
-    :git: https://github.com/RevenueCat/purchases-ios.git
+    - RevenueCat
+    - RevenueCatUI
 
 SPEC CHECKSUMS:
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
-  RevenueCat: 52c4a56d822b80b25de014c0c4e548ffbd6a5a71
-  RevenueCatUI: 1f1e47881c81adef3e0a85c30b9f2e35dd3d0a94
+  RevenueCat: e6722311bff00ecb66d7a1129138843bff94d742
+  RevenueCatUI: af5fa6cdf063760a4e2980a6d3d6f2fe24a6afb8
 
-PODFILE CHECKSUM: cc62100913e46af690b366095877aa22dca43fb2
+PODFILE CHECKSUM: 5416708f3d5308b6ebce8db4d15440f978781b8d
 
 COCOAPODS: 1.16.2
