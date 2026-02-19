@@ -162,18 +162,8 @@ import UIKit
     public func presentPaywall(options: [String: Any],
                                purchaseLogicBridge: HybridPurchaseLogicBridge?,
                                paywallResultHandler: @escaping (String) -> Void) {
-        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
-            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
-
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                   content: createContent(from: options),
-                                   fontName: fontName,
-                                   shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                   customVariables: customVariables,
-                                   useFullScreenPresentation: useFullScreenPresentation,
+        let params = PaywallPresentationParams(options: options, content: createContent(from: options))
+        self.privatePresentPaywall(params: params,
                                    purchaseLogicBridge: purchaseLogicBridge,
                                    paywallResultHandler: paywallResultHandler)
     }
@@ -190,48 +180,19 @@ import UIKit
             return
         }
 
-        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
-            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+        let params = PaywallPresentationParams(options: options, content: createContent(from: options))
 
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           displayCloseButton: displayCloseButton,
-                                           content: createContent(from: options),
-                                           fontName: fontName,
-                                           shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                           customVariables: customVariables,
-                                           useFullScreenPresentation: useFullScreenPresentation,
-                                           purchaseLogicBridge: purchaseLogicBridge,
-                                           paywallResultHandler: paywallResultHandler)
-    }
-
-    private func privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: String,
-                                               displayCloseButton: Bool = false,
-                                               content: Content = .defaultOffering,
-                                               fontName: String? = nil,
-                                               shouldBlockTouchEvents: Bool = false,
-                                               customVariables: [String: Any]? = nil,
-                                               useFullScreenPresentation: Bool = false,
-                                               purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
-                                               paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
             do {
                 let customerInfo = try await Purchases.shared.customerInfo()
                 let shouldDisplay = !customerInfo.entitlements.active.keys.contains(requiredEntitlementIdentifier)
                 if shouldDisplay {
-                    self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                               content: content,
-                                               fontName: fontName,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                               customVariables: customVariables,
-                                               useFullScreenPresentation: useFullScreenPresentation,
+                    self.privatePresentPaywall(params: params,
                                                purchaseLogicBridge: purchaseLogicBridge,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
-                    paywallResultHandler?(PaywallResult.notPresented.name)
+                    paywallResultHandler(PaywallResult.notPresented.name)
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
@@ -239,12 +200,7 @@ import UIKit
         }
     }
 
-    private func privatePresentPaywall(displayCloseButton: Bool = false,
-                                       content: Content = .defaultOffering,
-                                       fontName: String? = nil,
-                                       shouldBlockTouchEvents: Bool = false,
-                                       customVariables: [String: Any]? = nil,
-                                       useFullScreenPresentation: Bool = false,
+    private func privatePresentPaywall(params: PaywallPresentationParams,
                                        purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
@@ -259,50 +215,43 @@ import UIKit
             rootController = presentedVC
         }
 
-        let fontProvider: PaywallFontProvider
-        if let fontName = fontName {
-            fontProvider = CustomPaywallFontProvider(fontName: fontName)
-        } else {
-            fontProvider = DefaultPaywallFontProvider()
-        }
-
         let performPurchase = purchaseLogicBridge?.makePerformPurchase()
         let performRestore = purchaseLogicBridge?.makePerformRestore()
 
         let controller: PaywallViewController
-        switch content {
+        switch params.content {
         case let .offering(offering):
             controller = PaywallViewController(offering: offering,
-                                               fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
                                                performPurchase: performPurchase,
                                                performRestore: performRestore)
         case let .offeringIdentifier(identifier):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: .init(offeringIdentifier: identifier),
-                                               fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
                                                performPurchase: performPurchase,
                                                performRestore: performRestore)
         case let .offeringIdentifierWithPresentedOfferingContext(identifier, presentedOfferingContext):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: presentedOfferingContext,
-                                               fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+                                               fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
                                                performPurchase: performPurchase,
                                                performRestore: performRestore)
         case .defaultOffering:
-            controller = PaywallViewController(fonts: fontProvider,
-                                               displayCloseButton: displayCloseButton,
-                                               shouldBlockTouchEvents: shouldBlockTouchEvents,
+            controller = PaywallViewController(fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
                                                performPurchase: performPurchase,
                                                performRestore: performRestore)
         }
 
-        customVariables?.forEach { key, value in
+        params.customVariables?.forEach { key, value in
             // Currently only String values are supported. Other types will be supported in a future release.
             if let stringValue = value as? String {
                 controller.setCustomVariable(stringValue, forKey: key)
@@ -314,7 +263,7 @@ import UIKit
         }
 
         controller.delegate = self
-        controller.modalPresentationStyle = useFullScreenPresentation ? .fullScreen : .pageSheet
+        controller.modalPresentationStyle = params.useFullScreenPresentation ? .fullScreen : .pageSheet
         controller.view.backgroundColor = .systemBackground
 
         if let purchaseLogicBridge {
@@ -403,6 +352,30 @@ import UIKit
             revision: revision,
             ruleId: ruleId
         )
+    }
+
+    /// Parsed paywall presentation parameters extracted from an options dictionary.
+    private struct PaywallPresentationParams {
+        let displayCloseButton: Bool
+        let fontProvider: PaywallFontProvider
+        let shouldBlockTouchEvents: Bool
+        let customVariables: [String: Any]?
+        let useFullScreenPresentation: Bool
+        let content: Content
+
+        init(options: [String: Any], content: Content) {
+            self.displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false
+            self.shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
+            self.customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
+            self.useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+            self.content = content
+
+            if let fontName = options[PaywallOptionsKeys.fontName] as? String {
+                self.fontProvider = CustomPaywallFontProvider(fontName: fontName)
+            } else {
+                self.fontProvider = DefaultPaywallFontProvider()
+            }
+        }
     }
 }
 
