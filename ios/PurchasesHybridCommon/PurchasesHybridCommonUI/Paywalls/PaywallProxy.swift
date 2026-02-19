@@ -135,46 +135,22 @@ import UIKit
     }
 
 
+    @available(*, deprecated, message: "Use presentPaywall with purchaseLogicBridge instead")
     @objc
     public func presentPaywall(options: [String:Any],
                                paywallResultHandler: @escaping (String) -> Void) {
-        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
-            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
-
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                   content: createContent(from: options),
-                                   fontName: fontName,
-                                   shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                   customVariables: customVariables,
-                                   useFullScreenPresentation: useFullScreenPresentation,
-                                   paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: options,
+                            purchaseLogicBridge: nil,
+                            paywallResultHandler: paywallResultHandler)
     }
 
+    @available(*, deprecated, message: "Use presentPaywallIfNeeded with purchaseLogicBridge instead")
     @objc
     public func presentPaywallIfNeeded(options: [String:Any],
                                        paywallResultHandler: @escaping (String) -> Void) {
-        guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
-            print("Error: missing required entitlement identifier.")
-            return
-        }
-
-        let displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false,
-            fontName = options[PaywallOptionsKeys.fontName] as? String,
-            shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false,
-            customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any],
-            useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
-
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           displayCloseButton: displayCloseButton,
-                                           content: createContent(from: options),
-                                           fontName: fontName,
-                                           shouldBlockTouchEvents: shouldBlockTouchEvents,
-                                           customVariables: customVariables,
-                                           useFullScreenPresentation: useFullScreenPresentation,
-                                           paywallResultHandler: paywallResultHandler)
+        self.presentPaywallIfNeeded(options: options,
+                                    purchaseLogicBridge: nil,
+                                    paywallResultHandler: paywallResultHandler)
     }
 
     /// Presents a paywall with optional custom purchase logic.
