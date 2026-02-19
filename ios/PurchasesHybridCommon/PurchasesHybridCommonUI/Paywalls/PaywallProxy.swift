@@ -526,45 +526,49 @@ extension PaywallProxy {
     @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall() {
-        self.privatePresentPaywall()
+        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: { _ in })
     }
 
     @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(displayCloseButton: Bool) {
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton)
+        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
+                            purchaseLogicBridge: nil,
+                            paywallResultHandler: { _ in })
     }
 
     @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(offering: Offering) {
-        self.privatePresentPaywall(content: .offering(offering))
+        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: { _ in })
     }
 
     @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
     @objc
     public func presentPaywall(offering: Offering, displayCloseButton: Bool) {
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton, content: .offering(offering))
+        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
+                            purchaseLogicBridge: nil,
+                            paywallResultHandler: { _ in })
     }
 
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywall(paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(displayCloseButton: Bool, paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                   paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
+                            purchaseLogicBridge: nil,
+                            paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(offering: Offering, paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywall(content: .offering(offering),
-                                   paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywall with options instead")
@@ -572,9 +576,9 @@ extension PaywallProxy {
     public func presentPaywall(offering: Offering,
                                displayCloseButton: Bool,
                                paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                   content: .offering(offering),
-                                   paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
+                            purchaseLogicBridge: nil,
+                            paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywall with options instead")
@@ -582,33 +586,39 @@ extension PaywallProxy {
     public func presentPaywall(offeringIdentifier: String,
                                displayCloseButton: Bool,
                                paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywall(displayCloseButton: displayCloseButton,
-                                   content: .offeringIdentifier(offeringIdentifier),
-                                   paywallResultHandler: paywallResultHandler)
+        self.presentPaywall(options: [
+            PaywallOptionsKeys.displayCloseButton: displayCloseButton,
+            PaywallOptionsKeys.offeringIdentifier: offeringIdentifier,
+        ], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywallIfNeeded with paywallResultHandler instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String) {
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           paywallResultHandler: nil)
+        self.presentPaywallIfNeeded(
+            options: [PaywallOptionsKeys.requiredEntitlementIdentifier: requiredEntitlementIdentifier],
+            purchaseLogicBridge: nil,
+            paywallResultHandler: { _ in })
     }
 
     @available(*, deprecated, message: "Use presentPaywallIfNeeded with paywallResultHandler instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                        displayCloseButton: Bool) {
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           displayCloseButton: displayCloseButton,
-                                           paywallResultHandler: nil)
+        self.presentPaywallIfNeeded(options: [
+            PaywallOptionsKeys.requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+            PaywallOptionsKeys.displayCloseButton: displayCloseButton,
+        ], purchaseLogicBridge: nil, paywallResultHandler: { _ in })
     }
-    
+
     @available(*, deprecated, message: "Use presentPaywallIfNeeded with options instead")
     @objc
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                        paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           paywallResultHandler: paywallResultHandler)
+        self.presentPaywallIfNeeded(
+            options: [PaywallOptionsKeys.requiredEntitlementIdentifier: requiredEntitlementIdentifier],
+            purchaseLogicBridge: nil,
+            paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywallIfNeeded with options instead")
@@ -616,9 +626,10 @@ extension PaywallProxy {
     public func presentPaywallIfNeeded(requiredEntitlementIdentifier: String,
                                        displayCloseButton: Bool,
                                        paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           displayCloseButton: displayCloseButton,
-                                           paywallResultHandler: paywallResultHandler)
+        self.presentPaywallIfNeeded(options: [
+            PaywallOptionsKeys.requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+            PaywallOptionsKeys.displayCloseButton: displayCloseButton,
+        ], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
     }
 
     @available(*, deprecated, message: "Use presentPaywallIfNeeded with options instead")
@@ -627,10 +638,11 @@ extension PaywallProxy {
                                        offeringIdentifier: String,
                                        displayCloseButton: Bool,
                                        paywallResultHandler: @escaping (String) -> Void) {
-        self.privatePresentPaywallIfNeeded(requiredEntitlementIdentifier: requiredEntitlementIdentifier,
-                                           displayCloseButton: displayCloseButton,
-                                           content: .offeringIdentifier(offeringIdentifier),
-                                           paywallResultHandler: paywallResultHandler)
+        self.presentPaywallIfNeeded(options: [
+            PaywallOptionsKeys.requiredEntitlementIdentifier: requiredEntitlementIdentifier,
+            PaywallOptionsKeys.displayCloseButton: displayCloseButton,
+            PaywallOptionsKeys.offeringIdentifier: offeringIdentifier,
+        ], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
     }
 
 }
