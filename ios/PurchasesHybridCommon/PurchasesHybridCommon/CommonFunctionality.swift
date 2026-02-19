@@ -1229,7 +1229,9 @@ private class TrackedEventListener: EventsListener {
     }
 
     func onEventTracked(_ event: [String: Any]) {
-        callback(event)
+        DispatchQueue.main.async { [callback] in
+            callback(event)
+        }
     }
 
 }
