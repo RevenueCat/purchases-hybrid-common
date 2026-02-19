@@ -198,8 +198,6 @@ import UIKit
                                    shouldBlockTouchEvents: shouldBlockTouchEvents,
                                    customVariables: customVariables,
                                    useFullScreenPresentation: useFullScreenPresentation,
-                                   performPurchase: purchaseLogicBridge?.makePerformPurchase(),
-                                   performRestore: purchaseLogicBridge?.makePerformRestore(),
                                    purchaseLogicBridge: purchaseLogicBridge,
                                    paywallResultHandler: paywallResultHandler)
     }
@@ -229,8 +227,6 @@ import UIKit
                                            shouldBlockTouchEvents: shouldBlockTouchEvents,
                                            customVariables: customVariables,
                                            useFullScreenPresentation: useFullScreenPresentation,
-                                           performPurchase: purchaseLogicBridge?.makePerformPurchase(),
-                                           performRestore: purchaseLogicBridge?.makePerformRestore(),
                                            purchaseLogicBridge: purchaseLogicBridge,
                                            paywallResultHandler: paywallResultHandler)
     }
@@ -242,8 +238,6 @@ import UIKit
                                                shouldBlockTouchEvents: Bool = false,
                                                customVariables: [String: Any]? = nil,
                                                useFullScreenPresentation: Bool = false,
-                                               performPurchase: PerformPurchase? = nil,
-                                               performRestore: PerformRestore? = nil,
                                                purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                                paywallResultHandler: ((String) -> Void)? = nil) {
         _ = Task { @MainActor in
@@ -257,8 +251,6 @@ import UIKit
                                                shouldBlockTouchEvents: shouldBlockTouchEvents,
                                                customVariables: customVariables,
                                                useFullScreenPresentation: useFullScreenPresentation,
-                                               performPurchase: performPurchase,
-                                               performRestore: performRestore,
                                                purchaseLogicBridge: purchaseLogicBridge,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
@@ -277,8 +269,6 @@ import UIKit
                                        shouldBlockTouchEvents: Bool = false,
                                        customVariables: [String: Any]? = nil,
                                        useFullScreenPresentation: Bool = false,
-                                       performPurchase: PerformPurchase? = nil,
-                                       performRestore: PerformRestore? = nil,
                                        purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
@@ -299,6 +289,9 @@ import UIKit
         } else {
             fontProvider = DefaultPaywallFontProvider()
         }
+
+        let performPurchase = purchaseLogicBridge?.makePerformPurchase()
+        let performRestore = purchaseLogicBridge?.makePerformRestore()
 
         let controller: PaywallViewController
         switch content {
