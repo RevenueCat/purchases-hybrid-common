@@ -587,6 +587,8 @@ workflows:
             equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - not:
             equal: [ dependency-update, << pipeline.parameters.action >> ]
+        - not:
+            equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
           ruby_version: "3.3.0"
