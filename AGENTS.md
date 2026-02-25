@@ -111,18 +111,18 @@ npm run allchecks       # Format + lint + api + test
 
 ### Cross-Platform (Fastlane)
 
+See [fastlane/README.md](fastlane/README.md) for available lanes. Common commands:
+
 ```bash
 bundle exec fastlane bump                           # Version bump
-bundle exec fastlane automatic_bump                 # Auto bump
-bundle exec fastlane ios push_pod_PHC               # Release to CocoaPods
-bundle exec fastlane android deploy                 # Release to Maven Central
-bundle exec fastlane typescript deploy              # Release to npm
 bundle exec fastlane check_typescript_api_changes   # API validation
 ```
 
+**Note:** Deploy lanes should only be run via CI automation, not manually.
+
 ## Project Architecture
 
-This repository provides two libraries per platform (core + UI):
+For iOS and Android, this repository provides two libraries each (core + UI):
 
 ### Android (`android/`)
 
@@ -155,13 +155,14 @@ This repository provides two libraries per platform (core + UI):
 - **Package**: `@revenuecat/purchases-typescript-internal`
 - **Main Entry**: `src/index.ts`
 - Exports: errors, customerInfo, offerings, enums, purchaseParams, etc.
-- Shared TypeScript type definitions used by Capacitor and web integrations
+- Used by: Capacitor, React Native
 
 ### `purchases-js-hybrid-mappings`
 - **Package**: `@revenuecat/purchases-js-hybrid-mappings`
 - **Main Entry**: `src/index.ts` and `purchases-common.ts`
+- Wraps `purchases-js` and translates methods to hybrid SDK expectations
 - Mappers for: virtual currencies, offerings, customer info, errors
-- Used by: Web SDK integrations (purchases-js)
+- Used by: React Native, Flutter
 
 ## Constraints / Support Policy
 
