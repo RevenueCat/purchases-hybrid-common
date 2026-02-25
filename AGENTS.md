@@ -7,12 +7,14 @@ This file provides guidance to AI coding agents when working with code in this r
 Shared native libraries for RevenueCat's hybrid SDKs (Flutter, React Native, Unity, Capacitor, Cordova). This repository contains iOS (Swift), Android (Kotlin), TypeScript, and JavaScript bridge code that connects platform-native SDKs to hybrid frameworks.
 
 **Related repositories:**
-- **iOS SDK**: https://github.com/RevenueCat/purchases-ios
-- **Android SDK**: https://github.com/RevenueCat/purchases-android
-- **Flutter SDK**: https://github.com/RevenueCat/purchases-flutter
-- **React Native SDK**: https://github.com/RevenueCat/react-native-purchases
-- **Unity SDK**: https://github.com/RevenueCat/purchases-unity
-- **Capacitor SDK**: https://github.com/RevenueCat/purchases-capacitor
+- **iOS SDK**: https://github.com/RevenueCat/purchases-ios — Native iOS SDK that this library wraps. Used by `PurchasesHybridCommon` and `PurchasesHybridCommonUI`.
+- **Android SDK**: https://github.com/RevenueCat/purchases-android — Native Android SDK that this library wraps. Used by `hybridcommon` and `hybridcommon-ui`.
+- **Flutter SDK**: https://github.com/RevenueCat/purchases-flutter — Uses the iOS and Android hybrid common libraries.
+- **React Native SDK**: https://github.com/RevenueCat/react-native-purchases — Uses the iOS and Android hybrid common libraries.
+- **Unity SDK**: https://github.com/RevenueCat/purchases-unity — Uses the iOS and Android hybrid common libraries.
+- **Capacitor SDK**: https://github.com/RevenueCat/purchases-capacitor — Uses the iOS and Android hybrid common libraries plus TypeScript types.
+- **Cordova SDK**: https://github.com/RevenueCat/cordova-plugin-purchases — Uses the iOS and Android hybrid common libraries.
+- **KMP SDK**: https://github.com/RevenueCat/purchases-kmp — Kotlin Multiplatform SDK, uses Android hybrid common library.
 
 When implementing features or debugging, check these repos for reference and patterns.
 
@@ -83,9 +85,12 @@ swift build
 
 # Code validation
 bundle exec fastlane ios pod_lint
+
+# Lint
+swiftlint
 ```
 
-### TypeScript
+### TypeScript (`@revenuecat/purchases-typescript-internal`)
 
 ```bash
 yarn build              # TypeScript compilation
@@ -94,7 +99,7 @@ yarn lint               # ESLint
 yarn extract-api        # API report generation
 ```
 
-### JavaScript/Web
+### `@revenuecat/purchases-js-hybrid-mappings`
 
 ```bash
 npm run build           # Rollup bundling
@@ -117,26 +122,46 @@ bundle exec fastlane check_typescript_api_changes   # API validation
 
 ## Project Architecture
 
+This repository provides two libraries per platform (core + UI):
+
 ### Android (`android/`)
+
+**Core library (`hybridcommon`):**
 - **Main Entry**: `hybridcommon/src/main/java/.../common.kt`
 - Core functions: `getOfferings()`, `getCurrentOfferingForPlacement()`, `configure()`
 - Mappers package handles data transformations
 - Two flavors: BillingClient v8 (default) and v7
+- Used by: Flutter, React Native, Unity, Capacitor, Cordova, KMP
+
+**UI library (`hybridcommon-ui`):**
+- Provides `PaywallFragment` and `CustomerCenterFragment` for hybrid SDKs
+- Wraps RevenueCatUI components from purchases-android
+- Used by: Flutter, React Native, Unity, Capacitor
 
 ### iOS (`ios/`)
+
+**Core library (`PurchasesHybridCommon`):**
 - **Main Entry**: `PurchasesHybridCommon/CommonFunctionality.swift`
 - Provides Objective-C compatible API for hybrid SDKs
 - Handles StoreKit integration, configuration, and purchase flows
+- Used by: Flutter, React Native, Unity, Capacitor, Cordova
+
+**UI library (`PurchasesHybridCommonUI`):**
+- Provides SwiftUI views wrapped for hybrid SDK consumption (Paywalls, CustomerCenter)
+- Wraps RevenueCatUI components from purchases-ios
+- Used by: Flutter, React Native, Unity, Capacitor
 
 ### TypeScript (`typescript/`)
+- **Package**: `@revenuecat/purchases-typescript-internal`
 - **Main Entry**: `src/index.ts`
 - Exports: errors, customerInfo, offerings, enums, purchaseParams, etc.
-- Package: `@revenuecat/purchases-typescript-internal`
+- Shared TypeScript type definitions used by Capacitor and web integrations
 
-### JavaScript/Web (`purchases-js-hybrid-mappings/`)
+### `purchases-js-hybrid-mappings`
+- **Package**: `@revenuecat/purchases-js-hybrid-mappings`
 - **Main Entry**: `src/index.ts` and `purchases-common.ts`
-- Package: `@revenuecat/purchases-js-hybrid-mappings`
 - Mappers for: virtual currencies, offerings, customer info, errors
+- Used by: Web SDK integrations (purchases-js)
 
 ## Constraints / Support Policy
 
@@ -156,15 +181,24 @@ Don't raise minimum versions unless explicitly required and justified.
 ### Android
 ```bash
 ./gradlew test
+./gradlew detekt
+```
+
+### iOS
+```bash
+swift build
+bundle exec fastlane ios pod_lint
+swiftlint
 ```
 
 ### TypeScript
 ```bash
 yarn lint
 yarn extract-api
+cd android && ./gradlew :api-tests:test  # API compatibility tests
 ```
 
-### JavaScript
+### `purchases-js-hybrid-mappings`
 ```bash
 npm run allchecks
 ```
