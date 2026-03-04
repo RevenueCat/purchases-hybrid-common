@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.7.0
+  revenuecat: revenuecat/sdks-common-config@3.13.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
