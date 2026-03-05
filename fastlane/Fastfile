@@ -402,9 +402,7 @@ lane :bump_hybrid_dependencies do |options|
   if response.code != "201"
     error_body = JSON.parse(response.body)
     error_message = error_body["message"]
-    UI.error("Error triggering the pipeline.")
-    UI.error("Response code: #{response.code}")
-    UI.error("Error message: #{error_message}")
+    UI.user_error!("Error triggering the pipeline for #{repo_name}. Response code: #{response.code}. Error message: #{error_message}")
   end
 end
 
