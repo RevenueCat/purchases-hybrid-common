@@ -44,7 +44,7 @@ aliases:
 parameters:
   action:
     type: enum
-    enum: [ build, dependency-update, bump, trigger-dependent-updates ]
+    enum: [ build, dependency-update, bump ]
     default: build
 
 commands:
@@ -594,10 +594,3 @@ workflows:
     jobs:
       - revenuecat/automatic-bump:
           ruby_version: "3.3.0"
-
-  # TEMPORARY: for testing trigger-dependent-updates in isolation
-  test-trigger-dependent-updates:
-    when:
-      equal: [ trigger-dependent-updates, << pipeline.parameters.action >> ]
-    jobs:
-      - trigger-dependent-updates
