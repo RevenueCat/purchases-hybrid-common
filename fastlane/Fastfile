@@ -387,8 +387,7 @@ lane :bump_hybrid_dependencies do |options|
     "parameters" => {
       "action" => "upgrade-hybrid-common",
       "version" => "#{version_number_for_bump}",
-      "automatic" => true,
-      "enable_auto_merge" => true
+      "automatic" => true
     }
   })
 
