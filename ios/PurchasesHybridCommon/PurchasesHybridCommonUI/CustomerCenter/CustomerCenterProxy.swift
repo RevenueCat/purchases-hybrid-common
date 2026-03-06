@@ -109,10 +109,6 @@ extension CustomerCenterProxy: CustomerCenterViewControllerDelegateWrapper {
         self.delegate?.customerCenterViewController?(controller, didSelectCustomAction: actionID, withPurchaseIdentifier: purchaseIdentifier)
     }
 
-    public func customerCenterViewControllerDidSucceedWithPromotionalOffer(_ controller: CustomerCenterUIViewController) {
-        self.delegate?.customerCenterViewControllerDidSucceedWithPromotionalOffer?(controller)
-    }
-
     public func customerCenterViewController(_ controller: CustomerCenterUIViewController,
                                              didSucceedWithPromotionalOffer offerId: String,
                                              customerInfoDictionary: [String: Any],

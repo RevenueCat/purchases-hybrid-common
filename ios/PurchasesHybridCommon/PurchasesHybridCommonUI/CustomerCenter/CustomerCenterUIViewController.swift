@@ -138,10 +138,6 @@ extension CustomerCenterUIViewController {
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didSelectCustomAction: actionIdentifier, withPurchaseIdentifier: purchaseIdentifier)
         }
-        .onCustomerCenterPromotionalOfferSuccess { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.customerCenterViewControllerDidSucceedWithPromotionalOffer?(self)
-        }
         .onCustomerCenterPromotionalOfferSucceeded { [weak self] customerInfo, transaction, offerId in
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self,
