@@ -31,6 +31,10 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         this.onShowingManageSubscriptionsWrapper()
     }
 
+    override fun onPromotionalOfferSuccess() {
+        this.onPromotionalOfferSuccessWrapper()
+    }
+
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
         if (action is CustomerCenterManagementOption.CustomUrl) {
             this.onManagementOptionSelectedWrapper(action.optionName, action.uri.toString())
@@ -61,6 +65,8 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
 
     abstract fun onCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
+
+    abstract fun onPromotionalOfferSuccessWrapper()
 }
 
 private val CustomerCenterManagementOption.optionName: String
