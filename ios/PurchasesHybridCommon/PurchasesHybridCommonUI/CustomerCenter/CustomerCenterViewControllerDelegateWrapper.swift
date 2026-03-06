@@ -67,6 +67,10 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
                                                didSelectCustomAction actionID: String,
                                                withPurchaseIdentifier purchaseIdentifier: String?)
     
+    /// Notifies that a promotional offer was successfully redeemed in the Customer Center.
+    @objc(customerCenterViewControllerDidSucceedWithPromotionalOffer:)
+    optional func customerCenterViewControllerDidSucceedWithPromotionalOffer(_ controller: CustomerCenterUIViewController)
+
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
     @objc(customerCenterViewControllerWasDismissed:)
     optional func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController)
