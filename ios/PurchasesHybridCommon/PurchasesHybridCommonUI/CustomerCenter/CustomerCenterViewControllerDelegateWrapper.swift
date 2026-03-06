@@ -71,6 +71,14 @@ public protocol CustomerCenterViewControllerDelegateWrapper: AnyObject {
     @objc(customerCenterViewControllerDidSucceedWithPromotionalOffer:)
     optional func customerCenterViewControllerDidSucceedWithPromotionalOffer(_ controller: CustomerCenterUIViewController)
 
+    /// Notifies that a promotional offer purchase completed successfully in the Customer Center,
+    /// providing the resulting customer info dictionary, transaction dictionary, and the promotional offer identifier.
+    @objc(customerCenterViewController:didSucceedWithPromotionalOffer:customerInfoDictionary:transactionDictionary:)
+    optional func customerCenterViewController(_ controller: CustomerCenterUIViewController,
+                                               didSucceedWithPromotionalOffer offerId: String,
+                                               customerInfoDictionary: [String: Any],
+                                               transactionDictionary: [String: Any])
+
     /// Notifies that the ``CustomerCenterUIViewController`` was dismissed.
     @objc(customerCenterViewControllerWasDismissed:)
     optional func customerCenterViewControllerWasDismissed(_ controller: CustomerCenterUIViewController)
