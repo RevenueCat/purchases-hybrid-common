@@ -240,6 +240,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isAdTrackingAvailable __unused = [checker isAdTrackingAPIAvailable];
     BOOL isWinBackOfferAvailable __unused = [checker isWinBackOfferAPIAvailable];
     BOOL isEnableAdServicesAvailable __unused = [checker isEnableAdServicesAttributionTokenCollectionAPIAvailable];
+    BOOL isCodeRedemptionSheetAvailable __unused = [checker isCodeRedemptionSheetAPIAvailable];
 }
 
 @end
