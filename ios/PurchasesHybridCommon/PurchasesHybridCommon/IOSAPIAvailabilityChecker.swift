@@ -52,7 +52,7 @@ public final class IOSAPIAvailabilityChecker: NSObject {
         #if os(tvOS) || os(watchOS) || os(macOS) || targetEnvironment(macCatalyst)
             return false
         #else
-            if #available(iOS 14.0, *) {
+            if #available(iOS 14.0, visionOS 1.0, *) {
                 return true
             } else {
                 return false
