@@ -66,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     }];
 
+    [RCCommonFunctionality setAppstackAttributionParams:@{} completionBlock:^(NSDictionary<NSString *,id> * _Nullable offerings, RCErrorContainer * _Nullable error) {
+
+    }];
+
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
     NSString *version __unused = RCCommonFunctionality.hybridCommonVersion;
 
@@ -240,6 +244,7 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isAdTrackingAvailable __unused = [checker isAdTrackingAPIAvailable];
     BOOL isWinBackOfferAvailable __unused = [checker isWinBackOfferAPIAvailable];
     BOOL isEnableAdServicesAvailable __unused = [checker isEnableAdServicesAttributionTokenCollectionAPIAvailable];
+    BOOL isCodeRedemptionSheetAvailable __unused = [checker isCodeRedemptionSheetAPIAvailable];
 }
 
 @end

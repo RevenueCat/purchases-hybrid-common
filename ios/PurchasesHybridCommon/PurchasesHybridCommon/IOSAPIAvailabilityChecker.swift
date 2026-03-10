@@ -44,6 +44,22 @@ public final class IOSAPIAvailabilityChecker: NSObject {
         #endif
     }
 
+    /// Determines if the `presentCodeRedemptionSheet` API is available on the current device.
+    ///
+    /// - Returns: `true` if `presentCodeRedemptionSheet` is available, `false` otherwise.
+    @objc
+    public func isCodeRedemptionSheetAPIAvailable() -> Bool {
+        #if os(tvOS) || os(watchOS) || os(macOS) || targetEnvironment(macCatalyst)
+            return false
+        #else
+            if #available(iOS 14.0, visionOS 1.0, *) {
+                return true
+            } else {
+                return false
+            }
+        #endif
+    }
+
     /// Determines if the Ad Tracking APIs are available on the current device.
     ///
     /// - Returns: `true` if the Ad Tracking APIs (trackAdDisplayed, trackAdOpened, etc.) are available,

@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.7.0
+  revenuecat: revenuecat/sdks-common-config@3.13.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -74,16 +74,6 @@ commands:
            command: |
              git config user.email $GIT_EMAIL
              git config user.name $GIT_USERNAME
-
-  trust-github-key:
-    steps:
-      - run:
-          name: Trust GitHub key
-          command: |
-              for ip in $(dig @8.8.8.8 github.com +short); \
-              do ssh-keyscan github.com,$ip; \
-              ssh-keyscan $ip; \
-              done 2>/dev/null >> ~/.ssh/known_hosts
 
   copy-npm-rc:
     steps:
@@ -222,7 +212,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - trust-github-key
+      - revenuecat/trust-github-key
       - run:
           name: Deploy PurchasesHybridCommon to Cocoapods
           command: bundle exec fastlane ios push_pod_PHC
@@ -234,7 +224,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - trust-github-key
+      - revenuecat/trust-github-key
       - run:
           name: Deploy PurchasesHybridCommonUI to Cocoapods
           command: bundle exec fastlane ios push_pod_PHCUI
@@ -351,7 +341,7 @@ jobs:
       - attach_workspace:
           at: .
       - setup-git-credentials
-      - trust-github-key
+      - revenuecat/trust-github-key
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - run:
@@ -366,7 +356,7 @@ jobs:
     steps:
       - checkout
       - setup-git-credentials
-      - trust-github-key
+      - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -379,7 +369,7 @@ jobs:
     steps:
       - checkout
       - setup-git-credentials
-      - trust-github-key
+      - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -476,7 +466,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - trust-github-key
+      - revenuecat/trust-github-key
       - run:
           name: Lint Podspec
           command: bundle exec fastlane ios pod_lint
@@ -587,6 +577,8 @@ workflows:
             equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
         - not:
             equal: [ dependency-update, << pipeline.parameters.action >> ]
+        - not:
+            equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
           ruby_version: "3.3.0"

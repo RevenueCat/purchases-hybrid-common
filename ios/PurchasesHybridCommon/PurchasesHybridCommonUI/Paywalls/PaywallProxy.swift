@@ -19,6 +19,8 @@ import UIKit
     public var offeringIdentifier: String?
     public var presentedOfferingContext: [String: Any]?
     public var purchaseLogicBridge: HybridPurchaseLogicBridge?
+    public var displayCloseButton: NSNumber?
+    public var customVariables: [String: Any]?
 
     public override init() {
         super.init()
@@ -74,6 +76,7 @@ import UIKit
     @objc
     public func createPaywallView(params: PaywallViewCreationParams) -> PaywallViewController {
         let dismissHandler = createDismissHandler()
+        let displayCloseButton = params.displayCloseButton?.boolValue ?? false
         let controller: PaywallViewController
 
         switch (params.offeringIdentifier, params.purchaseLogicBridge) {
@@ -83,6 +86,7 @@ import UIKit
                 presentedOfferingContext: createPresentedOfferingContext(
                     for: offeringId, data: params.presentedOfferingContext
                 ),
+                displayCloseButton: displayCloseButton,
                 performPurchase: bridge.makePerformPurchase(),
                 performRestore: bridge.makePerformRestore(),
                 dismissRequestedHandler: dismissHandler
@@ -90,6 +94,7 @@ import UIKit
         case let (nil, bridge?):
             controller = PaywallViewController(
                 fonts: DefaultPaywallFontProvider(),
+                displayCloseButton: displayCloseButton,
                 performPurchase: bridge.makePerformPurchase(),
                 performRestore: bridge.makePerformRestore(),
                 dismissRequestedHandler: dismissHandler
@@ -100,10 +105,24 @@ import UIKit
                 presentedOfferingContext: createPresentedOfferingContext(
                     for: offeringId, data: params.presentedOfferingContext
                 ),
+                displayCloseButton: displayCloseButton,
                 dismissRequestedHandler: dismissHandler
             )
         case (nil, nil):
-            controller = PaywallViewController(dismissRequestedHandler: dismissHandler)
+            controller = PaywallViewController(
+                displayCloseButton: displayCloseButton,
+                dismissRequestedHandler: dismissHandler
+            )
+        }
+
+        params.customVariables?.forEach { key, value in
+            if let stringValue = value as? String {
+                controller.setCustomVariable(stringValue, forKey: key)
+            } else {
+                NSLog("Custom variable '%@' has unsupported type %@. " +
+                      "Only String values are currently supported. This variable will be ignored.",
+                      key, String(describing: type(of: value)))
+            }
         }
 
         controller.delegate = self
