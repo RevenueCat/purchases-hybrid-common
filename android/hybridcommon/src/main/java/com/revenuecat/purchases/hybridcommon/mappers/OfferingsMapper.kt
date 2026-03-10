@@ -4,6 +4,7 @@ import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PresentedOfferingContext
+import com.revenuecat.purchases.hybridcommon.toPresentedOfferingContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,6 +21,10 @@ fun Offerings.mapAsync(
         val map = withContext(mapperDispatcher) { map() }
         callback(map)
     }
+}
+
+fun createPresentedOfferingContextFromMap(map: Map<String, Any?>?): PresentedOfferingContext? {
+    return map?.toPresentedOfferingContext()
 }
 
 private fun Offering.map(): Map<String, Any?> =
