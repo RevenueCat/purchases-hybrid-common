@@ -1,5 +1,7 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Add isCodeRedemptionSheetAPIAvailable to IOSAPIAvailabilityChecker (#1533) via Rick (@rickvdl)
-### 📦 Dependency Updates
-* [RENOVATE] Update dependency gradle to v9.4.0 (#1531) via RevenueCat Git Bot (@RCGitBot)
+* Expose `createPresentedOfferingContextFromMap` method (#1539) via Toni Rico (@tonidero)
+* Add setAppstackAttributionParams bridge API (#1538) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `f5c099b` to `e146447` (#1535) via dependabot[bot] (@dependabot[bot])
