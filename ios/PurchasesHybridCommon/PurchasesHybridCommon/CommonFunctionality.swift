@@ -512,7 +512,7 @@ import StoreKit
 
     @objc(setAppstackAttributionParams:completionBlock:)
     static func setAppstackAttributionParams(
-        _ data: [String: Any]?,
+        _ data: [String: String],
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         Self.sharedInstance.attribution.setAppstackAttributionParams(data) { offerings, error in
