@@ -452,7 +452,7 @@ private class CommonApiTests {
         overridePreferredLocale(locale)
     }
 
-    fun checkSetAppstackAttributionParams(data: Map<String, String>, onResult: OnResult) {
+    private fun checkSetAppstackAttributionParams(data: Map<String, String>, onResult: OnResult) {
         setAppstackAttributionParams(data, onResult)
     }
 }
