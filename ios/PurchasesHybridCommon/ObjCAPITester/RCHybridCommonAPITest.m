@@ -66,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     }];
 
+    [RCCommonFunctionality setAppstackAttributionParams:@{} completionBlock:^(NSDictionary<NSString *,id> * _Nullable offerings, RCErrorContainer * _Nullable error) {
+
+    }];
+
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
     NSString *version __unused = RCCommonFunctionality.hybridCommonVersion;
 
