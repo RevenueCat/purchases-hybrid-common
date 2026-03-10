@@ -49,6 +49,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
+import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
@@ -112,11 +113,11 @@ fun setAppstackAttributionParams(
 ) {
     Purchases.sharedInstance.setAppstackAttributionParams(
         data,
-        object : com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback {
-            override fun onSuccess(offerings: com.revenuecat.purchases.Offerings) {
+        object : SyncAttributesAndOfferingsCallback {
+            override fun onSuccess(offerings: Offerings) {
                 offerings.mapAsync { map -> onResult.onReceived(map) }
             }
-            override fun onError(error: com.revenuecat.purchases.PurchasesError) {
+            override fun onError(error: PurchasesError) {
                 onResult.onError(error.map())
             }
         },
