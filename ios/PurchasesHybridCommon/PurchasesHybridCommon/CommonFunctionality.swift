@@ -854,6 +854,13 @@ import StoreKit
         Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
     }
 
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackCustomPaywallImpression(_ data: [String: Any]) {
+        let paywallId = data["paywallId"] as? String
+        let params = CustomPaywallImpressionParams(paywallId: paywallId)
+        Purchases.shared.trackCustomPaywallImpression(params)
+    }
+
 }
 
 // MARK: - Win-Back Offers
