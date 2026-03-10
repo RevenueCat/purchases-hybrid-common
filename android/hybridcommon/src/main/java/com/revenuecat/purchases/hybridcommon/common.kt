@@ -106,6 +106,23 @@ fun syncAttributesAndOfferingsIfNeeded(
     }
 }
 
+fun setAppstackAttributionParams(
+    data: Map<String, String>,
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.setAppstackAttributionParams(
+        data,
+        object : com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback {
+            override fun onSuccess(offerings: com.revenuecat.purchases.Offerings) {
+                offerings.mapAsync { map -> onResult.onReceived(map) }
+            }
+            override fun onError(error: com.revenuecat.purchases.PurchasesError) {
+                onResult.onError(error.map())
+            }
+        },
+    )
+}
+
 fun getProductInfo(
     productIDs: List<String>,
     type: String,

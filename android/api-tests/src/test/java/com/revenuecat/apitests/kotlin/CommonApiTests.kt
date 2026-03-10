@@ -39,6 +39,7 @@ import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
 import com.revenuecat.purchases.hybridcommon.setLogLevel
 import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
+import com.revenuecat.purchases.hybridcommon.setAppstackAttributionParams
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
 import com.revenuecat.purchases.models.InAppMessageType
@@ -449,5 +450,9 @@ private class CommonApiTests {
 
     private fun checkOverridePreferredLocale(locale: String?) {
         overridePreferredLocale(locale)
+    }
+
+    fun checkSetAppstackAttributionParams(data: Map<String, String>, onResult: OnResult) {
+        setAppstackAttributionParams(data, onResult)
     }
 }

@@ -510,6 +510,21 @@ import StoreKit
         }
     }
 
+    @objc(setAppstackAttributionParams:completionBlock:)
+    static func setAppstackAttributionParams(
+        _ data: [String: Any]?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.attribution.setAppstackAttributionParams(data) { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
+
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
     static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
