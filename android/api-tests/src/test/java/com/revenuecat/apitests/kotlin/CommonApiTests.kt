@@ -33,13 +33,13 @@ import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
 import com.revenuecat.purchases.hybridcommon.restorePurchases
 import com.revenuecat.purchases.hybridcommon.setAllowSharingAppStoreAccount
+import com.revenuecat.purchases.hybridcommon.setAppstackAttributionParams
 import com.revenuecat.purchases.hybridcommon.setDebugLogsEnabled
 import com.revenuecat.purchases.hybridcommon.setLogHandler
 import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
 import com.revenuecat.purchases.hybridcommon.setLogLevel
 import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
-import com.revenuecat.purchases.hybridcommon.setAppstackAttributionParams
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
 import com.revenuecat.purchases.models.InAppMessageType
