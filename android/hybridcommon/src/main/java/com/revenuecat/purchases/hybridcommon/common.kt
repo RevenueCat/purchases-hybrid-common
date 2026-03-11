@@ -108,11 +108,12 @@ fun syncAttributesAndOfferingsIfNeeded(
 }
 
 fun setAppstackAttributionParams(
-    data: Map<String, String>,
+    data: Map<String, Any>,
     onResult: OnResult,
 ) {
+    val stringData = data.mapValues { it.value.toString() }
     Purchases.sharedInstance.setAppstackAttributionParams(
-        data,
+        stringData,
         object : SyncAttributesAndOfferingsCallback {
             override fun onSuccess(offerings: Offerings) {
                 offerings.mapAsync { map -> onResult.onReceived(map) }
