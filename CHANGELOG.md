@@ -1,3 +1,8 @@
+## 17.46.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Accept Map<String, Any> in setAppstackAttributionParams (#1542) via Rick (@rickvdl)
+
 ## 17.46.0
 ## RevenueCat SDK
 ### ✨ New Features
