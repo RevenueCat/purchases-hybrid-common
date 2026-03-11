@@ -381,7 +381,7 @@ class CommonApiTests {
         CommonKt.overridePreferredLocale(locale);
     }
 
-    private void checkSetAppstackAttributionParams(Map<String, String> data, OnResult onResult) {
+    private void checkSetAppstackAttributionParams(Map<String, Object> data, OnResult onResult) {
         CommonKt.setAppstackAttributionParams(data, onResult);
     }
 }
