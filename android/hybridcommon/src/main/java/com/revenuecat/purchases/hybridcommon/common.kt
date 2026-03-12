@@ -37,7 +37,7 @@ import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
 import com.revenuecat.purchases.common.PlatformInfo
-import com.revenuecat.purchases.paywalls.events.CustomPaywallEventParams
+import com.revenuecat.purchases.paywalls.events.CustomPaywallImpressionParams
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -1287,7 +1287,7 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun trackCustomPaywallImpression(data: Map<String, Any?>) {
     val paywallId = data["paywallId"] as? String
-    val params = CustomPaywallEventParams(paywallId = paywallId)
+    val params = CustomPaywallImpressionParams(paywallId = paywallId)
     Purchases.sharedInstance.trackCustomPaywallImpression(params)
 }
 
