@@ -200,6 +200,8 @@ function mapStore(store: Store): string {
       return 'PADDLE';
     case 'test_store':
       return 'TEST_STORE';
+    case 'galaxy':
+      return 'GALAXY';
     case 'unknown':
       return 'UNKNOWN';
   }
