@@ -59,6 +59,7 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.googleProduct
+import com.revenuecat.purchases.paywalls.events.CustomPaywallImpressionParams
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
@@ -1277,6 +1278,17 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     )
 
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+// endregion
+
+// region Custom Paywall Tracking
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun trackCustomPaywallImpression(data: Map<String, Any?>) {
+    val paywallId = data["paywallId"] as? String
+    val params = CustomPaywallImpressionParams(paywallId = paywallId)
+    Purchases.sharedInstance.trackCustomPaywallImpression(params)
 }
 
 // endregion
