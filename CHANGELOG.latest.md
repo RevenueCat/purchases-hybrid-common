@@ -1,3 +1,6 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.61.0 => 5.63.0 Android 9.23.1 => 9.25.0 JS 1.27.0 => 1.28.0 (#1545) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* Expose trackCustomPaywallImpression bridge methods (#1537) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Add auto-merge workflow for dependency PRs (#1547) via Facundo Menzella (@facumenzella)
