@@ -73,4 +73,17 @@ public final class IOSAPIAvailabilityChecker: NSObject {
         }
     }
 
+    /// Determines if the Custom Paywall Tracking APIs are available on the current device.
+    ///
+    /// - Returns: `true` if the Custom Paywall Tracking APIs (trackCustomPaywallImpression) are available,
+    /// `false` otherwise.
+    @objc
+    public func isCustomPaywallTrackingAPIAvailable() -> Bool {
+        if #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) {
+            return true
+        } else {
+            return false
+        }
+    }
+
 }
