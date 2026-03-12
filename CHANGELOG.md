@@ -1,3 +1,8 @@
+## 17.49.0
+## RevenueCat SDK
+### ✨ New Features
+* Add Galaxy Store to Typescript Store Definitions (#1548) via Will Taylor (@fire-at-will)
+
 ## 17.47.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
