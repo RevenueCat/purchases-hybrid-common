@@ -118,9 +118,17 @@ import UIKit
         params.customVariables?.forEach { key, value in
             if let stringValue = value as? String {
                 controller.setCustomVariable(stringValue, forKey: key)
+            } else if let numberValue = value as? Double {
+                controller.setCustomVariableNumber(numberValue, forKey: key)
+            } else if let numberValue = value as? NSNumber {
+                if CFGetTypeID(numberValue) == CFBooleanGetTypeID() {
+                    controller.setCustomVariableBool(numberValue.boolValue, forKey: key)
+                } else {
+                    controller.setCustomVariableNumber(numberValue.doubleValue, forKey: key)
+                }
             } else {
                 NSLog("Custom variable '%@' has unsupported type %@. " +
-                      "Only String values are currently supported. This variable will be ignored.",
+                      "Supported types are: String, Number, Boolean. This variable will be ignored.",
                       key, String(describing: type(of: value)))
             }
         }
@@ -271,12 +279,19 @@ import UIKit
         }
 
         params.customVariables?.forEach { key, value in
-            // Currently only String values are supported. Other types will be supported in a future release.
             if let stringValue = value as? String {
                 controller.setCustomVariable(stringValue, forKey: key)
+            } else if let numberValue = value as? Double {
+                controller.setCustomVariableNumber(numberValue, forKey: key)
+            } else if let numberValue = value as? NSNumber {
+                if CFGetTypeID(numberValue) == CFBooleanGetTypeID() {
+                    controller.setCustomVariableBool(numberValue.boolValue, forKey: key)
+                } else {
+                    controller.setCustomVariableNumber(numberValue.doubleValue, forKey: key)
+                }
             } else {
                 NSLog("Custom variable '%@' has unsupported type %@. " +
-                      "Only String values are currently supported. This variable will be ignored.",
+                      "Supported types are: String, Number, Boolean. This variable will be ignored.",
                       key, String(describing: type(of: value)))
             }
         }

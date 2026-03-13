@@ -181,17 +181,21 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private fun convertToCustomVariableValues(
         customVariables: Map<String, Any?>?,
     ): Map<String, CustomVariableValue>? {
-        // Currently only String values are supported. Other types will be supported in a future release.
         return customVariables
             ?.mapNotNull { (key, value) ->
                 when (value) {
                     is String -> key to CustomVariableValue.String(value)
+                    is Int -> key to CustomVariableValue.Number(value)
+                    is Long -> key to CustomVariableValue.Number(value)
+                    is Double -> key to CustomVariableValue.Number(value)
+                    is Float -> key to CustomVariableValue.Number(value)
+                    is Boolean -> key to CustomVariableValue.Boolean(value)
                     null -> null
                     else -> {
                         Log.w(
                             "Purchases",
                             "Custom variable '$key' has unsupported type ${value::class.simpleName}. " +
-                                "Only String values are currently supported. This variable will be ignored.",
+                                "Supported types are: String, Number, Boolean. This variable will be ignored.",
                         )
                         null
                     }
