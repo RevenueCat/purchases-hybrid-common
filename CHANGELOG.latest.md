@@ -1,6 +1,3 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Expose trackCustomPaywallImpression bridge methods (#1537) via Rick (@rickvdl)
-
-### 🔄 Other Changes
-* Add auto-merge workflow for dependency PRs (#1547) via Facundo Menzella (@facumenzella)
+* Add Galaxy Store to Typescript Store Definitions (#1548) via Will Taylor (@fire-at-will)
