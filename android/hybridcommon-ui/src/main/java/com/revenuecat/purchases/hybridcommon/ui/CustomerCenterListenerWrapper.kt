@@ -6,6 +6,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.customercenter.CustomerCenterListener
 import com.revenuecat.purchases.customercenter.CustomerCenterManagementOption
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.models.StoreTransaction
 
 @OptIn(InternalRevenueCatAPI::class)
 @SuppressWarnings("TooManyFunctions")
@@ -29,6 +30,14 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
 
     override fun onShowingManageSubscriptions() {
         this.onShowingManageSubscriptionsWrapper()
+    }
+
+    override fun onPromotionalOfferSucceeded(
+        customerInfo: CustomerInfo,
+        transaction: StoreTransaction,
+        offerId: String,
+    ) {
+        this.onPromotionalOfferSucceededWrapper(customerInfo.map(), transaction.map(), offerId)
     }
 
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
@@ -61,6 +70,12 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onManagementOptionSelectedWrapper(action: String, customAction: String?, purchaseIdentifier: String?)
 
     abstract fun onCustomActionSelectedWrapper(actionId: String, purchaseIdentifier: String?)
+
+    abstract fun onPromotionalOfferSucceededWrapper(
+        customerInfo: Map<String, Any?>,
+        transaction: Map<String, Any?>,
+        offerId: String,
+    )
 }
 
 private val CustomerCenterManagementOption.optionName: String
