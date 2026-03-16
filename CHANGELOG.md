@@ -1,3 +1,9 @@
+## 17.51.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add number and boolean support for custom paywall variables (#1551) via Facundo Menzella (@facumenzella)
+
 ## 17.50.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
