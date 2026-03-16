@@ -50,7 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
 
         NSString *customVariablesKey = PaywallOptionsKeys.customVariables;
         NSDictionary *optionsWithCustomVariables = @{
-            PaywallOptionsKeys.customVariables: @{@"user_name": @"John"}
+            PaywallOptionsKeys.customVariables: @{
+                @"user_name": @"John",
+                @"count": @42,
+                @"enabled": @YES
+            }
         };
         [proxy presentPaywallWithOptions:optionsWithCustomVariables paywallResultHandler:^(NSString * _Nonnull result) {}];
 
