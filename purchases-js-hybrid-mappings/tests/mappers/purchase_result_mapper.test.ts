@@ -71,6 +71,7 @@ describe('mapPurchaseResult', () => {
         productIdentifier: 'test-product-id',
         purchaseDate: mockDate.toISOString(),
         purchaseDateMillis: mockDate.getTime(),
+        purchaseToken: null,
       },
       productIdentifier: 'test-product-id',
     });

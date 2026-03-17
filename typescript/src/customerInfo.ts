@@ -232,6 +232,10 @@ export interface PurchasesStoreTransaction {
      * Purchase date of the transaction in ISO 8601 format.
      */
     purchaseDate: string;
+    /**
+     * Purchase token of the transaction. Android only.
+     */
+    purchaseToken: string | null;
 }
 
 /**

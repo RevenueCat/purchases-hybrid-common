@@ -20,7 +20,8 @@ public extension StoreTransaction {
             // Deprecated: Use productIdentifier in this map instead
             "productId": self.productIdentifier,
             "purchaseDateMillis": self.purchaseDate.rc_millisecondsSince1970AsDouble(),
-            "purchaseDate": self.purchaseDate.rc_formattedAsISO8601()
+            "purchaseDate": self.purchaseDate.rc_formattedAsISO8601(),
+            "purchaseToken": nil
         ]
     }
 
