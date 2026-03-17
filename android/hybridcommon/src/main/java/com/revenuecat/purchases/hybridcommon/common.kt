@@ -1284,7 +1284,6 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
 
 // region Custom Paywall Tracking
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun trackCustomPaywallImpression(data: Map<String, Any?>) {
     val paywallId = data["paywallId"] as? String
     val params = CustomPaywallImpressionParams(paywallId = paywallId)

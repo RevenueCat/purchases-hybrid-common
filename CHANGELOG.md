@@ -1,3 +1,28 @@
+## 17.51.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.26.0 => 9.26.1 (#1562) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.64.0 => 5.65.0 Android 9.25.0 => 9.26.0 (#1560) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.51.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add number and boolean support for custom paywall variables (#1551) via Facundo Menzella (@facumenzella)
+
+## 17.50.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.63.0 => 5.64.0 (#1555) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.2 to 2.1.4 (#1553) via dependabot[bot] (@dependabot[bot])
+
+## 17.49.0
+## RevenueCat SDK
+### ✨ New Features
+* Add Galaxy Store to Typescript Store Definitions (#1548) via Will Taylor (@fire-at-will)
+
 ## 17.48.0
 ## RevenueCat SDK
 ### ✨ New Features
