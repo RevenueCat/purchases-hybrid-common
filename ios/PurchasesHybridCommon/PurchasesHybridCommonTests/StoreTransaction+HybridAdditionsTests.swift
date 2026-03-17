@@ -25,8 +25,7 @@ class StoreTransactionHybridAdditionsTests: QuickSpec {
 
                 let dictionary = mockTransaction.dictionary
 
-                expect(dictionary["purchaseToken"]).to(beNil())
-                expect(dictionary.keys).to(contain("purchaseToken"))
+                expect(dictionary["purchaseToken"] is NSNull).to(beTrue())
                 expect(dictionary["transactionIdentifier"] as? String) == "test_transaction_id"
                 expect(dictionary["productIdentifier"] as? String) == "test_product_id"
                 expect(dictionary["purchaseDateMillis"]).toNot(beNil())

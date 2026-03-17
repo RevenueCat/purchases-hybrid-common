@@ -21,7 +21,7 @@ public extension StoreTransaction {
             "productId": self.productIdentifier,
             "purchaseDateMillis": self.purchaseDate.rc_millisecondsSince1970AsDouble(),
             "purchaseDate": self.purchaseDate.rc_formattedAsISO8601(),
-            "purchaseToken": nil
+            "purchaseToken": NSNull()
         ]
     }
 

@@ -504,6 +504,7 @@ export interface PurchasesStoreProductDiscount {
 export interface PurchasesStoreTransaction {
     productIdentifier: string;
     purchaseDate: string;
+    purchaseToken: string | null;
     transactionIdentifier: string;
 }
 
