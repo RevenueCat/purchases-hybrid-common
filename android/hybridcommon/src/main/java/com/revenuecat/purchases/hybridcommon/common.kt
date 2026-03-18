@@ -1286,7 +1286,8 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
 
 fun trackCustomPaywallImpression(data: Map<String, Any?>) {
     val paywallId = data["paywallId"] as? String
-    val params = CustomPaywallImpressionParams(paywallId = paywallId)
+    val offeringId = data["offeringId"] as? String
+    val params = CustomPaywallImpressionParams(paywallId = paywallId, offeringId = offeringId)
     Purchases.sharedInstance.trackCustomPaywallImpression(params)
 }
 
