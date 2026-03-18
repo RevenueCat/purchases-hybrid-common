@@ -1,3 +1,8 @@
+## 17.53.0
+## RevenueCat SDK
+### ✨ New Features
+* Add purchaseToken to StoreTransaction mapping (#1564) via Toni Rico (@tonidero)
+
 ## 17.52.0
 ## RevenueCat SDK
 ### ✨ New Features
