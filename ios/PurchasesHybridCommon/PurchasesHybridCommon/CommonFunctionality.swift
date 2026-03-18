@@ -862,7 +862,8 @@ import StoreKit
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackCustomPaywallImpression(_ data: [String: Any]) {
         let paywallId = data["paywallId"] as? String
-        let params = CustomPaywallImpressionParams(paywallId: paywallId)
+        let offeringId = data["offeringId"] as? String
+        let params = CustomPaywallImpressionParams(paywallId: paywallId, offeringId: offeringId)
         Purchases.shared.trackCustomPaywallImpression(params)
     }
 
