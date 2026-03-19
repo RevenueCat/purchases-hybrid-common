@@ -35,9 +35,8 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     override fun onPromotionalOfferSucceeded(
         customerInfo: CustomerInfo,
         transaction: StoreTransaction,
-        offerId: String,
     ) {
-        this.onPromotionalOfferSucceededWrapper(customerInfo.map(), transaction.map(), offerId)
+        this.onPromotionalOfferSucceededWrapper(customerInfo.map(), transaction.map())
     }
 
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
@@ -74,7 +73,6 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onPromotionalOfferSucceededWrapper(
         customerInfo: Map<String, Any?>,
         transaction: Map<String, Any?>,
-        offerId: String,
     )
 }
 

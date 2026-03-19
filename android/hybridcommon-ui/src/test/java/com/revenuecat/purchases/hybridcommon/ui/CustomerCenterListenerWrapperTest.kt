@@ -31,6 +31,9 @@ class CustomerCenterListenerWrapperTest {
         var deprecatedCustomActionInvoked: Boolean = false
         var lastActionId: String? = null
         var lastPurchaseIdentifier: String? = null
+        var promotionalOfferSucceededInvoked: Boolean = false
+        var lastCustomerInfo: Map<String, Any?>? = null
+        var lastTransaction: Map<String, Any?>? = null
 
         override fun onFeedbackSurveyCompletedWrapper(feedbackSurveyOptionId: String) = Unit
 
@@ -60,6 +63,15 @@ class CustomerCenterListenerWrapperTest {
             customActionInvoked = true
             lastActionId = actionId
             lastPurchaseIdentifier = purchaseIdentifier
+        }
+
+        override fun onPromotionalOfferSucceededWrapper(
+            customerInfo: Map<String, Any?>,
+            transaction: Map<String, Any?>,
+        ) {
+            promotionalOfferSucceededInvoked = true
+            lastCustomerInfo = customerInfo
+            lastTransaction = transaction
         }
     }
 }
