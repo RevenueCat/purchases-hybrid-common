@@ -66,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     }];
 
+    [RCCommonFunctionality setAppstackAttributionParams:@{} completionBlock:^(NSDictionary<NSString *,id> * _Nullable offerings, RCErrorContainer * _Nullable error) {
+
+    }];
+
     BOOL isAnonymous __unused = RCCommonFunctionality.isAnonymous;
     NSString *version __unused = RCCommonFunctionality.hybridCommonVersion;
 
@@ -235,11 +239,18 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality trackAdFailedToLoad:adData];
     }
 
+    // Test Custom Paywall Tracking
+    if (@available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)) {
+        [RCCommonFunctionality trackCustomPaywallImpression:@{@"paywallId": @"my-paywall"}];
+    }
+
     // Test IOSAPIAvailabilityChecker
     IOSAPIAvailabilityChecker *checker = [[IOSAPIAvailabilityChecker alloc] init];
     BOOL isAdTrackingAvailable __unused = [checker isAdTrackingAPIAvailable];
     BOOL isWinBackOfferAvailable __unused = [checker isWinBackOfferAPIAvailable];
     BOOL isEnableAdServicesAvailable __unused = [checker isEnableAdServicesAttributionTokenCollectionAPIAvailable];
+    BOOL isCodeRedemptionSheetAvailable __unused = [checker isCodeRedemptionSheetAPIAvailable];
+    BOOL isCustomPaywallTrackingAvailable __unused = [checker isCustomPaywallTrackingAPIAvailable];
 }
 
 @end

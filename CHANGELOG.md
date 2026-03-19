@@ -1,3 +1,76 @@
+## 17.52.0
+## RevenueCat SDK
+### ✨ New Features
+* Add support for offeringId override to trackCustomPaywallImpression API (#1565) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `e146447` to `3e8c384` (#1552) via dependabot[bot] (@dependabot[bot])
+* Remove experimental annotation opt-in from trackCustomPaywallImpression (#1559) via Rick (@rickvdl)
+
+## 17.51.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 9.26.0 => 9.26.1 (#1562) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.64.0 => 5.65.0 Android 9.25.0 => 9.26.0 (#1560) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.51.0
+## RevenueCatUI SDK
+### Paywallv2
+#### ✨ New Features
+* Add number and boolean support for custom paywall variables (#1551) via Facundo Menzella (@facumenzella)
+
+## 17.50.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.63.0 => 5.64.0 (#1555) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.2 to 2.1.4 (#1553) via dependabot[bot] (@dependabot[bot])
+
+## 17.49.0
+## RevenueCat SDK
+### ✨ New Features
+* Add Galaxy Store to Typescript Store Definitions (#1548) via Will Taylor (@fire-at-will)
+
+## 17.48.0
+## RevenueCat SDK
+### ✨ New Features
+* Expose trackCustomPaywallImpression bridge methods (#1537) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Add auto-merge workflow for dependency PRs (#1547) via Facundo Menzella (@facumenzella)
+
+## 17.47.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.61.0 => 5.63.0 Android 9.23.1 => 9.25.0 JS 1.27.0 => 1.28.0 (#1545) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.46.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Accept Map<String, Any> in setAppstackAttributionParams (#1542) via Rick (@rickvdl)
+
+## 17.46.0
+## RevenueCat SDK
+### ✨ New Features
+* Expose `createPresentedOfferingContextFromMap` method (#1539) via Toni Rico (@tonidero)
+* Add setAppstackAttributionParams bridge API (#1538) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `f5c099b` to `e146447` (#1535) via dependabot[bot] (@dependabot[bot])
+
+## 17.45.0
+## RevenueCat SDK
+### ✨ New Features
+* Add isCodeRedemptionSheetAPIAvailable to IOSAPIAvailabilityChecker (#1533) via Rick (@rickvdl)
+### 📦 Dependency Updates
+* [RENOVATE] Update dependency gradle to v9.4.0 (#1531) via RevenueCat Git Bot (@RCGitBot)
+
+## 17.44.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.60.0 => 5.61.0 Android 9.22.2 => 9.23.1 JS 1.26.3 => 1.27.0 (#1529) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.43.0
 ## RevenueCat SDK
 ### ✨ New Features

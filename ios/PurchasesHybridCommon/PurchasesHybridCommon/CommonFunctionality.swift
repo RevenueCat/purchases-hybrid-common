@@ -510,6 +510,21 @@ import StoreKit
         }
     }
 
+    @objc(setAppstackAttributionParams:completionBlock:)
+    static func setAppstackAttributionParams(
+        _ data: [String: Any],
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.attribution.setAppstackAttributionParams(data) { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                completion(offerings?.dictionary, nil)
+            }
+        }
+    }
+
     @objc(checkTrialOrIntroductoryPriceEligibility:completionBlock:)
     static func checkTrialOrIntroductoryPriceEligibility(
         for products: [String],
@@ -837,6 +852,19 @@ import StoreKit
         )
 
         Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
+    }
+
+}
+
+// MARK: - Custom Paywall Tracking
+@objc public extension CommonFunctionality {
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackCustomPaywallImpression(_ data: [String: Any]) {
+        let paywallId = data["paywallId"] as? String
+        let offeringId = data["offeringId"] as? String
+        let params = CustomPaywallImpressionParams(paywallId: paywallId, offeringId: offeringId)
+        Purchases.shared.trackCustomPaywallImpression(params)
     }
 
 }

@@ -5,7 +5,7 @@ import { VERIFICATION_RESULT } from "./enums";
  * The supported stores for purchases.
  * @public
  */
-export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "UNKNOWN_STORE";
+export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "GALAXY" | "UNKNOWN_STORE";
 
 /**
  * The supported ownership types for an entitlement.
@@ -232,6 +232,10 @@ export interface PurchasesStoreTransaction {
      * Purchase date of the transaction in ISO 8601 format.
      */
     purchaseDate: string;
+    /**
+     * Purchase token of the transaction. Android only.
+     */
+    purchaseToken: string | null;
 }
 
 /**

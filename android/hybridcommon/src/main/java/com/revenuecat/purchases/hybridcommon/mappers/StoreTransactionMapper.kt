@@ -10,6 +10,7 @@ fun StoreTransaction.map(): Map<String, Any?> =
         "productIdentifier" to this.productIds.first(),
         "purchaseDateMillis" to this.purchaseTime,
         "purchaseDate" to Date(this.purchaseTime).toIso8601(),
+        "purchaseToken" to this.purchaseToken,
     )
 
 /**

@@ -49,6 +49,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
+import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
 import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
@@ -58,6 +59,7 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.googleProduct
+import com.revenuecat.purchases.paywalls.events.CustomPaywallImpressionParams
 import com.revenuecat.purchases.purchaseWith
 import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.syncAttributesAndOfferingsIfNeededWith
@@ -104,6 +106,24 @@ fun syncAttributesAndOfferingsIfNeeded(
     Purchases.sharedInstance.syncAttributesAndOfferingsIfNeededWith(onError = { onResult.onError(it.map()) }) {
         it.mapAsync { map -> onResult.onReceived(map) }
     }
+}
+
+fun setAppstackAttributionParams(
+    data: Map<String, Any>,
+    onResult: OnResult,
+) {
+    val stringData = data.mapValues { it.value.toString() }
+    Purchases.sharedInstance.setAppstackAttributionParams(
+        stringData,
+        object : SyncAttributesAndOfferingsCallback {
+            override fun onSuccess(offerings: Offerings) {
+                offerings.mapAsync { map -> onResult.onReceived(map) }
+            }
+            override fun onError(error: PurchasesError) {
+                onResult.onError(error.map())
+            }
+        },
+    )
 }
 
 fun getProductInfo(
@@ -1258,6 +1278,17 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     )
 
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+// endregion
+
+// region Custom Paywall Tracking
+
+fun trackCustomPaywallImpression(data: Map<String, Any?>) {
+    val paywallId = data["paywallId"] as? String
+    val offeringId = data["offeringId"] as? String
+    val params = CustomPaywallImpressionParams(paywallId = paywallId, offeringId = offeringId)
+    Purchases.sharedInstance.trackCustomPaywallImpression(params)
 }
 
 // endregion

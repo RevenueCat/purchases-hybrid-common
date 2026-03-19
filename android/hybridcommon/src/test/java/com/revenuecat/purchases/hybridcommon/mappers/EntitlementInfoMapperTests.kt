@@ -54,6 +54,11 @@ class EntitlementInfoMapperTests {
             Pair(Store.PROMOTIONAL, "PROMOTIONAL"),
             Pair(Store.UNKNOWN_STORE, "UNKNOWN_STORE"),
             Pair(Store.AMAZON, "AMAZON"),
+            Pair(Store.RC_BILLING, "RC_BILLING"),
+            Pair(Store.EXTERNAL, "EXTERNAL"),
+            Pair(Store.PADDLE, "PADDLE"),
+            Pair(Store.TEST_STORE, "TEST_STORE"),
+            Pair(Store.GALAXY, "GALAXY"),
         )
 
         for (expectation in expectations) {

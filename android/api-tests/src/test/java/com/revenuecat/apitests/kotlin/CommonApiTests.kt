@@ -33,6 +33,7 @@ import com.revenuecat.purchases.hybridcommon.purchaseProduct
 import com.revenuecat.purchases.hybridcommon.purchaseSubscriptionOption
 import com.revenuecat.purchases.hybridcommon.restorePurchases
 import com.revenuecat.purchases.hybridcommon.setAllowSharingAppStoreAccount
+import com.revenuecat.purchases.hybridcommon.setAppstackAttributionParams
 import com.revenuecat.purchases.hybridcommon.setDebugLogsEnabled
 import com.revenuecat.purchases.hybridcommon.setLogHandler
 import com.revenuecat.purchases.hybridcommon.setLogHandlerWithOnResult
@@ -449,5 +450,9 @@ private class CommonApiTests {
 
     private fun checkOverridePreferredLocale(locale: String?) {
         overridePreferredLocale(locale)
+    }
+
+    private fun checkSetAppstackAttributionParams(data: Map<String, Any>, onResult: OnResult) {
+        setAppstackAttributionParams(data, onResult)
     }
 }
