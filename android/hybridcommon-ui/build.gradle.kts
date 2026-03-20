@@ -64,4 +64,5 @@ dependencies {
     "bc7Api"(libs.purchases.bc7)
     "bc7Api"(libs.purchases.ui.bc7)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }

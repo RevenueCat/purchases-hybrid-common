@@ -36,7 +36,9 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
         customerInfo: CustomerInfo,
         transaction: StoreTransaction,
     ) {
-        this.onPromotionalOfferSucceededWrapper(customerInfo.map(), transaction.map())
+        val offerId = transaction.subscriptionOptionId?.substringAfter(":", missingDelimiterValue = "")
+            ?.ifEmpty { null }
+        this.onPromotionalOfferSucceededWrapper(customerInfo.map(), transaction.map(), offerId)
     }
 
     override fun onManagementOptionSelected(action: CustomerCenterManagementOption) {
@@ -73,6 +75,7 @@ abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
     abstract fun onPromotionalOfferSucceededWrapper(
         customerInfo: Map<String, Any?>,
         transaction: Map<String, Any?>,
+        offerId: String?,
     )
 }
 
