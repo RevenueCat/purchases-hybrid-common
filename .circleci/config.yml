@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.13.0
+  revenuecat: revenuecat/sdks-common-config@3.16.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -359,6 +359,7 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
+      - revenuecat/validate_pr_approved
       - run:
           name: Tag branch
           command: bundle exec fastlane tag_current_branch
