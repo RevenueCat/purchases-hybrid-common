@@ -138,6 +138,13 @@ extension CustomerCenterUIViewController {
             guard let self = self else { return }
             self.delegate?.customerCenterViewController?(self, didSelectCustomAction: actionIdentifier, withPurchaseIdentifier: purchaseIdentifier)
         }
+        .onCustomerCenterPromotionalOfferSucceeded { [weak self] customerInfo, transaction, offerId in
+            guard let self = self else { return }
+            self.delegate?.customerCenterViewController?(self,
+                                                         didSucceedWithPromotionalOffer: offerId,
+                                                         customerInfoDictionary: customerInfo.dictionary,
+                                                         transactionDictionary: transaction.dictionary)
+        }
         
         let controller = UIHostingController(rootView: view)
         controller.view.backgroundColor = UIColor.clear
