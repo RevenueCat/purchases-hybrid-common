@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.13.0
+  revenuecat: revenuecat/sdks-common-config@3.16.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -348,21 +348,6 @@ jobs:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
 
-  tag-release-branch:
-    docker:
-      - image: cimg/ruby:3.3.0
-    working_directory: ~/purchases-ios
-    shell: /bin/bash --login -o pipefail
-    steps:
-      - checkout
-      - setup-git-credentials
-      - revenuecat/trust-github-key
-      - revenuecat/install-gem-unix-dependencies:
-          cache-version: v1
-      - run:
-          name: Tag branch
-          command: bundle exec fastlane tag_current_branch
-
   trigger-dependent-updates:
     docker:
       - image: cimg/ruby:3.3.0
@@ -520,7 +505,8 @@ workflows:
       - hold:
           type: approval
           <<: *release-branches
-      - tag-release-branch:
+      - revenuecat/tag-current-branch:
+          ruby_version: "3.3.0"
           requires:
             - hold
           <<: *release-branches
