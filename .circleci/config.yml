@@ -538,6 +538,11 @@ workflows:
           <<: *stable-release-tags
           requires:
             - make-github-release
+      - revenuecat/merge-release-pr:
+          repo_name: purchases-hybrid-common
+          requires:
+            - trigger-dependent-updates
+          <<: *stable-release-tags
 
   dependency-update:
     when:
