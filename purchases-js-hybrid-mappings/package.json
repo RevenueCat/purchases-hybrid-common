@@ -1,6 +1,6 @@
 {
   "name": "@revenuecat/purchases-js-hybrid-mappings",
-  "version": "18.0.0",
+  "version": "18.1.0",
   "description": "RevenueCat's JavaScript hybrid mappings for purchases-js",
   "main": "dist/index.js",
   "browser": "dist/index.umd.js",
