@@ -36,6 +36,7 @@ import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.GoogleStoreProduct
 import com.revenuecat.purchases.models.Price
 import com.revenuecat.purchases.models.PurchasingData
+import com.revenuecat.purchases.models.StoreReplacementMode
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
@@ -1264,6 +1265,87 @@ internal class CommonKtTests {
         }
 
         assertTrue(catchWasCalled)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns null if null replacementModeIndex`() {
+        val replacementModeInt: Int? = null
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertNull(mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns WITHOUT_PRORATION for 3`() {
+        val replacementModeInt: Int? = 3
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertEquals(StoreReplacementMode.WITHOUT_PRORATION, mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns WITH_TIME_PRORATION for 1`() {
+        val replacementModeInt: Int? = 1
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertEquals(StoreReplacementMode.WITH_TIME_PRORATION, mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns CHARGE_PRORATED_PRICE for 2`() {
+        val replacementModeInt: Int? = 2
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertEquals(StoreReplacementMode.CHARGE_PRORATED_PRICE, mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns CHARGE_FULL_PRICE for 5`() {
+        val replacementModeInt: Int? = 5
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertEquals(StoreReplacementMode.CHARGE_FULL_PRICE, mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode returns DEFERRED for 6`() {
+        val replacementModeInt: Int? = 6
+
+        val mode = getStoreReplacementMode(replacementModeInt)
+
+        assertEquals(StoreReplacementMode.DEFERRED, mode)
+    }
+
+    @Test
+    fun `getStoreReplacementMode maps every StoreReplacementMode by billing client mode`() {
+        StoreReplacementMode.values().forEach { replacementMode ->
+            val mode = getStoreReplacementMode(replacementMode.playBillingClientMode)
+
+            assertEquals(replacementMode, mode)
+        }
+    }
+
+    @Test
+    fun `getStoreReplacementMode throws exception for negative out of bounds number`() {
+        val replacementModeInt = -1
+
+        assertFailsWith<InvalidReplacementModeException> {
+            getStoreReplacementMode(replacementModeInt)
+        }
+    }
+
+    @Test
+    fun `getStoreReplacementMode throws exception for position out of bounds number`() {
+        val replacementModeInt = Int.MAX_VALUE
+
+        assertFailsWith<InvalidReplacementModeException> {
+            getStoreReplacementMode(replacementModeInt)
+        }
     }
 
     @Test

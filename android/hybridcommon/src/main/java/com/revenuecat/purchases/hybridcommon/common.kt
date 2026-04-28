@@ -56,6 +56,7 @@ import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.InAppMessageType
 import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.models.StoreReplacementMode
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.googleProduct
@@ -158,6 +159,7 @@ fun purchase(
             googleOldProductId = purchaseParams.googleOldProductId,
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            storeReplacementModeString = purchaseParams.storeReplacementMode,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
@@ -217,6 +219,7 @@ private data class CommonPurchaseParams(
     val googleOldProductId: String?,
     val googleReplacementMode: Int?,
     val googleIsPersonalizedPrice: Boolean?,
+    val storeReplacementMode: String?,
     val presentedOfferingContext: Map<String, Any?>?,
     val addOnStoreProducts: List<Map<String, Any?>>?,
     val addOnSubscriptionOptions: List<Map<String, Any?>>?,
@@ -233,6 +236,7 @@ private fun validatePurchaseParams(
     val googleOldProductId = options["googleOldProductId"] as? String
     val googleReplacementMode = options["googleReplacementMode"] as? Int
     val googleIsPersonalizedPrice = options["googleIsPersonalizedPrice"] as? Boolean
+    val storeReplacementMode = options["storeReplacementMode"] as? String
     val presentedOfferingContext = castWildcardMapToStringToOptionalAnyMap(
         options["presentedOfferingContext"] as? Map<*, *>,
     )
@@ -269,6 +273,7 @@ private fun validatePurchaseParams(
                 googleOldProductId = googleOldProductId,
                 googleReplacementMode = googleReplacementMode,
                 googleIsPersonalizedPrice = googleIsPersonalizedPrice,
+                storeReplacementMode = storeReplacementMode,
                 presentedOfferingContext = presentedOfferingContext,
                 addOnStoreProducts = addOnStoreProducts,
                 addOnSubscriptionOptions = addOnSubscriptionOptions,
@@ -298,14 +303,18 @@ fun purchaseProduct(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    storeReplacementModeString: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
     addOnPackages: List<Map<String, Any?>>? = null,
 ) {
-    val googleReplacementMode = try {
-        getGoogleReplacementMode(googleReplacementModeInt)
+    val storeReplacementMode: StoreReplacementMode? = try {
+        getStoreReplacementMode(
+            googleReplacementModeInt = googleReplacementModeInt,
+            storeReplacementModeString = storeReplacementModeString
+        )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
@@ -338,8 +347,8 @@ fun purchaseProduct(
                 // Product upgrade
                 if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
                     purchaseParams.oldProductId(googleOldProductId)
-                    if (googleReplacementMode != null) {
-                        purchaseParams.googleReplacementMode(googleReplacementMode)
+                    if (storeReplacementMode != null) {
+                        purchaseParams.replacementMode(storeReplacementMode)
                     }
                 }
 
@@ -472,13 +481,17 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    storeReplacementModeString: String?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
     addOnPackages: List<Map<String, Any?>>? = null,
 ) {
-    val googleReplacementMode = try {
-        getGoogleReplacementMode(googleReplacementModeInt)
+    val storeReplacementMode: StoreReplacementMode? = try {
+        getStoreReplacementMode(
+            googleReplacementModeInt = googleReplacementModeInt,
+            storeReplacementModeString = storeReplacementModeString
+        )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
@@ -516,8 +529,8 @@ fun purchasePackage(
                     // Product upgrade
                     if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
                         purchaseParams.oldProductId(googleOldProductId)
-                        if (googleReplacementMode != null) {
-                            purchaseParams.googleReplacementMode(googleReplacementMode)
+                        if (storeReplacementMode != null) {
+                            purchaseParams.replacementMode(storeReplacementMode)
                         }
                     }
 
@@ -612,6 +625,7 @@ fun purchaseSubscriptionOption(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
+    storeReplacementModeString: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
@@ -628,8 +642,11 @@ fun purchaseSubscriptionOption(
         return
     }
 
-    val googleReplacementMode = try {
-        getGoogleReplacementMode(googleReplacementModeInt)
+    val storeReplacementMode: StoreReplacementMode? = try {
+        getStoreReplacementMode(
+            googleReplacementModeInt = googleReplacementModeInt,
+            storeReplacementModeString = storeReplacementModeString
+        )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
             PurchasesError(
@@ -658,8 +675,8 @@ fun purchaseSubscriptionOption(
                 // Product upgrade
                 googleOldProductId.takeUnless { it.isNullOrBlank() }?.let {
                     purchaseParams.oldProductId(it)
-                    if (googleReplacementMode != null) {
-                        purchaseParams.googleReplacementMode(googleReplacementMode)
+                    if (storeReplacementMode != null) {
+                        purchaseParams.replacementMode(storeReplacementMode)
                     }
                 }
 
@@ -1566,6 +1583,22 @@ private fun addOnProductIdsToFetch(
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+@Throws(InvalidReplacementModeException::class)
+private fun getStoreReplacementMode(
+    googleReplacementModeInt: Int?,
+    storeReplacementModeString: String?,
+) : StoreReplacementMode? {
+    if(storeReplacementModeString != null && googleReplacementModeInt != null) {
+        warnLog("Both a googleReplacementMode and a storeReplacementMode were provided. " +
+            "Ignoring the googleReplacementMode and will use the storeReplacementMode.")
+    }
+
+    val storeReplacementMode = getStoreReplacementMode(storeReplacementModeString = storeReplacementModeString)
+    if(storeReplacementMode != null) { return storeReplacementMode }
+    return getStoreReplacementMode(googleReplacementModeInt = googleReplacementModeInt)
+}
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 internal class InvalidReplacementModeException : Exception()
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -1579,6 +1612,44 @@ internal fun getGoogleReplacementMode(replacementModeInt: Int?): GoogleReplaceme
                 throw InvalidReplacementModeException()
             }
         }
+}
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+@Throws(InvalidReplacementModeException::class)
+internal fun getStoreReplacementMode(storeReplacementModeString: String?): StoreReplacementMode? {
+    return storeReplacementModeString
+        ?.let {
+            when(storeReplacementModeString) {
+                "WITHOUT_PRORATION" -> StoreReplacementMode.WITHOUT_PRORATION
+                "WITH_TIME_PRORATION" -> StoreReplacementMode.WITH_TIME_PRORATION
+                "CHARGE_FULL_PRICE" -> StoreReplacementMode.CHARGE_FULL_PRICE
+                "CHARGE_PRORATED_PRICE" -> StoreReplacementMode.CHARGE_PRORATED_PRICE
+                "DEFERRED" -> StoreReplacementMode.DEFERRED
+                else -> throw InvalidReplacementModeException()
+            }
+        }
+}
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+@Throws(InvalidReplacementModeException::class)
+internal fun getStoreReplacementMode(googleReplacementModeInt: Int?): StoreReplacementMode? {
+    val googleReplacementMode = googleReplacementModeInt
+        ?.let {
+            GoogleReplacementMode.values().find { replacementMode ->
+                replacementMode.playBillingClientMode == it
+            } ?: run {
+                throw InvalidReplacementModeException()
+            }
+        }
+
+    if(googleReplacementMode == null) { return null }
+    return when(googleReplacementMode) {
+        GoogleReplacementMode.WITHOUT_PRORATION -> StoreReplacementMode.WITHOUT_PRORATION
+        GoogleReplacementMode.WITH_TIME_PRORATION -> StoreReplacementMode.WITH_TIME_PRORATION
+        GoogleReplacementMode.CHARGE_FULL_PRICE -> StoreReplacementMode.CHARGE_FULL_PRICE
+        GoogleReplacementMode.CHARGE_PRORATED_PRICE -> StoreReplacementMode.CHARGE_PRORATED_PRICE
+        GoogleReplacementMode.DEFERRED -> StoreReplacementMode.DEFERRED
+    }
 }
 
 private fun getPurchaseErrorFunction(onResult: OnResult): (PurchasesError, Boolean) -> Unit {
