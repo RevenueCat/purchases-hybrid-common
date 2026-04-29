@@ -1712,7 +1712,8 @@ internal class CommonKtTests {
         val expectations = mapOf(
             GoogleReplacementMode.WITHOUT_PRORATION.playBillingClientMode to StoreReplacementMode.WITHOUT_PRORATION,
             GoogleReplacementMode.WITH_TIME_PRORATION.playBillingClientMode to StoreReplacementMode.WITH_TIME_PRORATION,
-            GoogleReplacementMode.CHARGE_PRORATED_PRICE.playBillingClientMode to StoreReplacementMode.CHARGE_PRORATED_PRICE,
+            GoogleReplacementMode.CHARGE_PRORATED_PRICE.playBillingClientMode
+                to StoreReplacementMode.CHARGE_PRORATED_PRICE,
             GoogleReplacementMode.CHARGE_FULL_PRICE.playBillingClientMode to StoreReplacementMode.CHARGE_FULL_PRICE,
             GoogleReplacementMode.DEFERRED.playBillingClientMode to StoreReplacementMode.DEFERRED,
         )
