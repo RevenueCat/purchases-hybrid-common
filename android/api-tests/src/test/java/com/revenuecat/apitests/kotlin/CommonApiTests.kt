@@ -70,6 +70,7 @@ private class CommonApiTests {
         purchase(activity, options, onResult)
     }
 
+    @Suppress("LongMethod")
     fun checkPurchaseProduct(
         activity: Activity?,
         productIdentifier: String,
@@ -230,6 +231,7 @@ private class CommonApiTests {
         )
     }
 
+    @Suppress("LongMethod")
     fun checkPurchaseSubscriptionOption(
         activity: Activity?,
         productIdentifier: String,
