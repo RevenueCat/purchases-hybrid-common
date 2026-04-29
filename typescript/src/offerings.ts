@@ -549,7 +549,7 @@ export enum PRORATION_MODE {
 
   /**
    * Replacement takes effect immediately, and the remaining time will be
-   * prorated and credited to the user. This is the current default behavior.
+   * prorated and credited to the user.
    */
   IMMEDIATE_WITH_TIME_PRORATION = 1,
 
@@ -563,6 +563,8 @@ export enum PRORATION_MODE {
   /**
    * Replacement takes effect immediately, and the new price will be charged on
    * next recurrence time. The billing cycle stays the same.
+   *
+   * This is the current default behavior.
    */
   IMMEDIATE_WITHOUT_PRORATION = 3,
 
