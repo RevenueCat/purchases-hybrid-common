@@ -1727,7 +1727,7 @@ internal class CommonKtTests {
             6 to StoreReplacementMode.DEFERRED,
         )
 
-        for(expectation in expectations) {
+        for (expectation in expectations) {
             val googleReplacementModeInt = expectation.key
             val expectedStoreReplacementMode = expectation.value
             val actualStoreReplacementMode = getStoreReplacementMode(googleReplacementModeInt)
@@ -1764,7 +1764,7 @@ internal class CommonKtTests {
             "DEFERRED" to StoreReplacementMode.DEFERRED,
         )
 
-        for(expectation in expectations) {
+        for (expectation in expectations) {
             val storeReplacementModeString = expectation.key
             val expectedStoreReplacementMode = expectation.value
             val actualStoreReplacementMode = getStoreReplacementMode(storeReplacementModeString)
