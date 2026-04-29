@@ -1294,8 +1294,8 @@ internal class CommonKtTests {
             storeReplacementModeString = StoreReplacementMode.WITH_TIME_PRORATION.name,
         )
 
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
     }
 
     @Test
