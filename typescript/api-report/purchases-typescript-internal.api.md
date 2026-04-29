@@ -241,6 +241,7 @@ export interface PurchaseParams {
     googleIsPersonalizedPrice?: boolean | null;
     googleProductChangeInfo?: GoogleProductChangeInfo | null;
     itemToPurchase: PurchasesPackage | PurchasesStoreProduct | SubscriptionOption;
+    productChangeInfo?: StoreProductChangeInfo | null;
     winBackOffer?: PurchasesWinBackOffer | null;
 }
 
