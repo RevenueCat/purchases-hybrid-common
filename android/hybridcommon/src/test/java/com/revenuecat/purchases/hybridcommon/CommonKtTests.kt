@@ -62,6 +62,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.net.URL
+import kotlin.math.exp
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -81,6 +82,7 @@ internal class CommonKtTests {
 
     @BeforeEach
     fun setup() {
+        mockLogs()
         mockkObject(Purchases)
         every {
             Purchases.configure(configuration = any())
@@ -928,8 +930,8 @@ internal class CommonKtTests {
             storeReplacementModeString = StoreReplacementMode.CHARGE_FULL_PRICE.name,
         )
 
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
     }
 
     @Test
@@ -938,7 +940,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -990,8 +992,69 @@ internal class CommonKtTests {
             },
         )
 
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
+    }
+
+    @Test
+    fun `purchase uses StoreReplacementMode from googleReplacementMode option`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOldProductIdentifier = "old_product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(expectedOldProductIdentifier, params.oldProductId)
+            assertEquals(StoreReplacementMode.DEFERRED, params.replacementMode)
+
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchase(
+            mockActivity,
+            options = mapOf(
+                "productIdentifier" to expectedProductIdentifier,
+                "type" to "subs",
+                "googleOldProductId" to expectedOldProductIdentifier,
+                "googleReplacementMode" to GoogleReplacementMode.DEFERRED.playBillingClientMode,
+            ),
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+        )
+
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
     }
 
     @Test
@@ -1000,7 +1063,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -1050,8 +1113,8 @@ internal class CommonKtTests {
             },
         )
 
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
     }
 
     @Test
@@ -1060,7 +1123,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -1120,8 +1183,8 @@ internal class CommonKtTests {
             },
         )
 
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
     }
 
     @Test
@@ -1244,7 +1307,7 @@ internal class CommonKtTests {
             context = mockContext,
             apiKey = "api_key",
             appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
             platformInfo = PlatformInfo("flavor", "version"),
         )
         val expectedProductIdentifier = "product"
@@ -1292,6 +1355,77 @@ internal class CommonKtTests {
             },
             presentedOfferingContext = PresentedOfferingContext(offeringIdentifier).map(),
             storeReplacementModeString = StoreReplacementMode.WITH_TIME_PRORATION.name,
+        )
+
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption sets replacementMode from storeReplacementModeString`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOptionIdentifier = "monthly"
+        val expectedOldProductIdentifier = "old_product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val subscriptionOption = TestUtilities.stubSubscriptionOption(
+            expectedOptionIdentifier,
+            productId = expectedProductIdentifier,
+        )
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            expectedProductIdentifier,
+            defaultOption = subscriptionOption,
+        )
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(expectedOldProductIdentifier, params.oldProductId)
+            assertEquals(StoreReplacementMode.CHARGE_PRORATED_PRICE, params.replacementMode)
+
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            optionIdentifier = expectedOptionIdentifier,
+            googleOldProductId = expectedOldProductIdentifier,
+            googleReplacementModeInt = null,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingContext = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+            storeReplacementModeString = StoreReplacementMode.CHARGE_PRORATED_PRICE.name,
         )
 
         val response = assertNotNull(receivedResponse)
@@ -1360,77 +1494,6 @@ internal class CommonKtTests {
                     fail("Should be success")
                 }
             },
-        )
-
-        assertNotNull(receivedResponse)
-        assertEquals(expectedProductIdentifier, receivedResponse?.get("productIdentifier"))
-    }
-
-    @Test
-    fun `purchaseSubscriptionOption sets replacementMode from storeReplacementModeString`() {
-        configure(
-            context = mockContext,
-            apiKey = "api_key",
-            appUserID = "appUserID",
-            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
-            platformInfo = PlatformInfo("flavor", "version"),
-        )
-        val expectedProductIdentifier = "product"
-        val expectedOptionIdentifier = "monthly"
-        val expectedOldProductIdentifier = "old_product"
-        var receivedResponse: MutableMap<String, *>? = null
-
-        val subscriptionOption = TestUtilities.stubSubscriptionOption(
-            expectedOptionIdentifier,
-            productId = expectedProductIdentifier,
-        )
-
-        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
-        val mockStoreProduct = TestUtilities.stubStoreProduct(
-            expectedProductIdentifier,
-            defaultOption = subscriptionOption,
-        )
-        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
-
-        every {
-            mockPurchases.getProducts(
-                listOf(expectedProductIdentifier),
-                ProductType.SUBS,
-                capture(capturedGetStoreProductsCallback),
-            )
-        } answers {
-            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
-        }
-
-        val capturedPurchaseCallback = slot<PurchaseCallback>()
-        every {
-            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
-        } answers {
-            val params = it.invocation.args.first() as PurchaseParams
-            assertEquals(expectedOldProductIdentifier, params.oldProductId)
-            assertEquals(StoreReplacementMode.CHARGE_PRORATED_PRICE, params.replacementMode)
-
-            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
-        }
-
-        purchaseSubscriptionOption(
-            mockActivity,
-            productIdentifier = expectedProductIdentifier,
-            optionIdentifier = expectedOptionIdentifier,
-            googleOldProductId = expectedOldProductIdentifier,
-            googleReplacementModeInt = null,
-            googleIsPersonalizedPrice = null,
-            presentedOfferingContext = null,
-            onResult = object : OnResult {
-                override fun onReceived(map: MutableMap<String, *>) {
-                    receivedResponse = map
-                }
-
-                override fun onError(errorContainer: ErrorContainer) {
-                    fail("Should be success")
-                }
-            },
-            storeReplacementModeString = StoreReplacementMode.CHARGE_PRORATED_PRICE.name,
         )
 
         assertNotNull(receivedResponse)
@@ -1654,73 +1717,22 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `getStoreReplacementMode returns null if null replacementModeIndex`() {
-        val replacementModeInt: Int? = null
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertNull(mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns WITHOUT_PRORATION for 3`() {
-        val replacementModeInt: Int? = 3
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertEquals(StoreReplacementMode.WITHOUT_PRORATION, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns WITH_TIME_PRORATION for 1`() {
-        val replacementModeInt: Int? = 1
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertEquals(StoreReplacementMode.WITH_TIME_PRORATION, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns CHARGE_PRORATED_PRICE for 2`() {
-        val replacementModeInt: Int? = 2
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertEquals(StoreReplacementMode.CHARGE_PRORATED_PRICE, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns CHARGE_FULL_PRICE for 5`() {
-        val replacementModeInt: Int? = 5
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertEquals(StoreReplacementMode.CHARGE_FULL_PRICE, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns DEFERRED for 6`() {
-        val replacementModeInt: Int? = 6
-
-        val mode = getStoreReplacementMode(replacementModeInt)
-
-        assertEquals(StoreReplacementMode.DEFERRED, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode maps every StoreReplacementMode by billing client mode`() {
+    fun `getStoreReplacementMode works as expected for billing client mode ints`() {
         val expectations = mapOf(
-            GoogleReplacementMode.WITHOUT_PRORATION.playBillingClientMode to StoreReplacementMode.WITHOUT_PRORATION,
-            GoogleReplacementMode.WITH_TIME_PRORATION.playBillingClientMode to StoreReplacementMode.WITH_TIME_PRORATION,
-            GoogleReplacementMode.CHARGE_PRORATED_PRICE.playBillingClientMode
-                to StoreReplacementMode.CHARGE_PRORATED_PRICE,
-            GoogleReplacementMode.CHARGE_FULL_PRICE.playBillingClientMode to StoreReplacementMode.CHARGE_FULL_PRICE,
-            GoogleReplacementMode.DEFERRED.playBillingClientMode to StoreReplacementMode.DEFERRED,
+            null to null,
+            1 to StoreReplacementMode.WITH_TIME_PRORATION,
+            2 to StoreReplacementMode.CHARGE_PRORATED_PRICE,
+            3 to StoreReplacementMode.WITHOUT_PRORATION,
+            // No 4 because that's undefined in BillingFlowParams' ReplacementMode
+            5 to StoreReplacementMode.CHARGE_FULL_PRICE,
+            6 to StoreReplacementMode.DEFERRED,
         )
-        expectations.forEach { (googlePlayCode, expectedReplacementMode) ->
-            val mode = getStoreReplacementMode(googlePlayCode)
 
-            assertEquals(expectedReplacementMode, mode)
+        for(expectation in expectations) {
+            val googleReplacementModeInt = expectation.key
+            val expectedStoreReplacementMode = expectation.value
+            val actualStoreReplacementMode = getStoreReplacementMode(googleReplacementModeInt)
+            assertEquals(expectedStoreReplacementMode, actualStoreReplacementMode)
         }
     }
 
@@ -1743,62 +1755,21 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `getStoreReplacementMode returns null if null replacementModeString`() {
-        val replacementModeString: String? = null
-
-        val mode = getStoreReplacementMode(storeReplacementModeString = replacementModeString)
-
-        assertNull(mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns WITHOUT_PRORATION for WITHOUT_PRORATION string`() {
-        val mode = getStoreReplacementMode(storeReplacementModeString = "WITHOUT_PRORATION")
-
-        assertEquals(StoreReplacementMode.WITHOUT_PRORATION, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns WITH_TIME_PRORATION for WITH_TIME_PRORATION string`() {
-        val mode = getStoreReplacementMode(storeReplacementModeString = "WITH_TIME_PRORATION")
-
-        assertEquals(StoreReplacementMode.WITH_TIME_PRORATION, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns CHARGE_PRORATED_PRICE for CHARGE_PRORATED_PRICE string`() {
-        val mode = getStoreReplacementMode(storeReplacementModeString = "CHARGE_PRORATED_PRICE")
-
-        assertEquals(StoreReplacementMode.CHARGE_PRORATED_PRICE, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns CHARGE_FULL_PRICE for CHARGE_FULL_PRICE string`() {
-        val mode = getStoreReplacementMode(storeReplacementModeString = "CHARGE_FULL_PRICE")
-
-        assertEquals(StoreReplacementMode.CHARGE_FULL_PRICE, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode returns DEFERRED for DEFERRED string`() {
-        val mode = getStoreReplacementMode(storeReplacementModeString = "DEFERRED")
-
-        assertEquals(StoreReplacementMode.DEFERRED, mode)
-    }
-
-    @Test
-    fun `getStoreReplacementMode maps every StoreReplacementMode by name`() {
+    fun `getStoreReplacementMode works as expected for StoreReplacementMode strings`() {
         val expectations = mapOf(
-            StoreReplacementMode.WITHOUT_PRORATION.name to StoreReplacementMode.WITHOUT_PRORATION,
-            StoreReplacementMode.WITH_TIME_PRORATION.name to StoreReplacementMode.WITH_TIME_PRORATION,
-            StoreReplacementMode.CHARGE_PRORATED_PRICE.name to StoreReplacementMode.CHARGE_PRORATED_PRICE,
-            StoreReplacementMode.CHARGE_FULL_PRICE.name to StoreReplacementMode.CHARGE_FULL_PRICE,
-            StoreReplacementMode.DEFERRED.name to StoreReplacementMode.DEFERRED,
+            null to null,
+            "WITH_TIME_PRORATION" to StoreReplacementMode.WITH_TIME_PRORATION,
+            "CHARGE_PRORATED_PRICE" to StoreReplacementMode.CHARGE_PRORATED_PRICE,
+            "WITHOUT_PRORATION" to StoreReplacementMode.WITHOUT_PRORATION,
+            "CHARGE_FULL_PRICE" to StoreReplacementMode.CHARGE_FULL_PRICE,
+            "DEFERRED" to StoreReplacementMode.DEFERRED,
         )
-        expectations.forEach { (storeReplacementModeString, expectedReplacementMode) ->
-            val mode = getStoreReplacementMode(storeReplacementModeString = storeReplacementModeString)
 
-            assertEquals(expectedReplacementMode, mode)
+        for(expectation in expectations) {
+            val storeReplacementModeString = expectation.key
+            val expectedStoreReplacementMode = expectation.value
+            val actualStoreReplacementMode = getStoreReplacementMode(storeReplacementModeString)
+            assertEquals(expectedStoreReplacementMode, actualStoreReplacementMode)
         }
     }
 
