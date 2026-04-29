@@ -175,6 +175,7 @@ fun purchase(
             googleOldProductId = purchaseParams.googleOldProductId,
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            storeReplacementModeString = purchaseParams.storeReplacementMode,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
             addOnSubscriptionOptions = purchaseParams.addOnSubscriptionOptions,
@@ -188,6 +189,7 @@ fun purchase(
             googleOldProductId = purchaseParams.googleOldProductId,
             googleReplacementModeInt = purchaseParams.googleReplacementMode,
             googleIsPersonalizedPrice = purchaseParams.googleIsPersonalizedPrice,
+            storeReplacementModeString = purchaseParams.storeReplacementMode,
             presentedOfferingContext = purchaseParams.presentedOfferingContext,
             onResult = onResult,
             addOnStoreProducts = purchaseParams.addOnStoreProducts,
@@ -303,17 +305,17 @@ fun purchaseProduct(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    storeReplacementModeString: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
     addOnPackages: List<Map<String, Any?>>? = null,
+    storeReplacementModeString: String? = null,
 ) {
     val storeReplacementMode: StoreReplacementMode? = try {
         getStoreReplacementMode(
             googleReplacementModeInt = googleReplacementModeInt,
-            storeReplacementModeString = storeReplacementModeString
+            storeReplacementModeString = storeReplacementModeString,
         )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
@@ -481,16 +483,16 @@ fun purchasePackage(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    storeReplacementModeString: String?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
     addOnPackages: List<Map<String, Any?>>? = null,
+    storeReplacementModeString: String? = null,
 ) {
     val storeReplacementMode: StoreReplacementMode? = try {
         getStoreReplacementMode(
             googleReplacementModeInt = googleReplacementModeInt,
-            storeReplacementModeString = storeReplacementModeString
+            storeReplacementModeString = storeReplacementModeString,
         )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
@@ -625,12 +627,12 @@ fun purchaseSubscriptionOption(
     googleOldProductId: String?,
     googleReplacementModeInt: Int?,
     googleIsPersonalizedPrice: Boolean?,
-    storeReplacementModeString: String?,
     presentedOfferingContext: Map<String, Any?>?,
     onResult: OnResult,
     addOnStoreProducts: List<Map<String, Any?>>? = null,
     addOnSubscriptionOptions: List<Map<String, Any?>>? = null,
     addOnPackages: List<Map<String, Any?>>? = null,
+    storeReplacementModeString: String? = null,
 ) {
     if (Purchases.sharedInstance.store != Store.PLAY_STORE) {
         onResult.onError(
@@ -645,7 +647,7 @@ fun purchaseSubscriptionOption(
     val storeReplacementMode: StoreReplacementMode? = try {
         getStoreReplacementMode(
             googleReplacementModeInt = googleReplacementModeInt,
-            storeReplacementModeString = storeReplacementModeString
+            storeReplacementModeString = storeReplacementModeString,
         )
     } catch (e: InvalidReplacementModeException) {
         onResult.onError(
@@ -1587,14 +1589,18 @@ private fun addOnProductIdsToFetch(
 private fun getStoreReplacementMode(
     googleReplacementModeInt: Int?,
     storeReplacementModeString: String?,
-) : StoreReplacementMode? {
-    if(storeReplacementModeString != null && googleReplacementModeInt != null) {
-        warnLog("Both a googleReplacementMode and a storeReplacementMode were provided. " +
-            "Ignoring the googleReplacementMode and will use the storeReplacementMode.")
+): StoreReplacementMode? {
+    if (storeReplacementModeString != null && googleReplacementModeInt != null) {
+        warnLog(
+            "Both a googleReplacementMode and a storeReplacementMode were provided. " +
+                "Ignoring the googleReplacementMode and using the storeReplacementMode.",
+        )
     }
 
     val storeReplacementMode = getStoreReplacementMode(storeReplacementModeString = storeReplacementModeString)
-    if(storeReplacementMode != null) { return storeReplacementMode }
+    if (storeReplacementMode != null) {
+        return storeReplacementMode
+    }
     return getStoreReplacementMode(googleReplacementModeInt = googleReplacementModeInt)
 }
 
@@ -1619,7 +1625,7 @@ internal fun getGoogleReplacementMode(replacementModeInt: Int?): GoogleReplaceme
 internal fun getStoreReplacementMode(storeReplacementModeString: String?): StoreReplacementMode? {
     return storeReplacementModeString
         ?.let {
-            when(storeReplacementModeString) {
+            when (storeReplacementModeString) {
                 "WITHOUT_PRORATION" -> StoreReplacementMode.WITHOUT_PRORATION
                 "WITH_TIME_PRORATION" -> StoreReplacementMode.WITH_TIME_PRORATION
                 "CHARGE_FULL_PRICE" -> StoreReplacementMode.CHARGE_FULL_PRICE
@@ -1642,8 +1648,10 @@ internal fun getStoreReplacementMode(googleReplacementModeInt: Int?): StoreRepla
             }
         }
 
-    if(googleReplacementMode == null) { return null }
-    return when(googleReplacementMode) {
+    if (googleReplacementMode == null) {
+        return null
+    }
+    return when (googleReplacementMode) {
         GoogleReplacementMode.WITHOUT_PRORATION -> StoreReplacementMode.WITHOUT_PRORATION
         GoogleReplacementMode.WITH_TIME_PRORATION -> StoreReplacementMode.WITH_TIME_PRORATION
         GoogleReplacementMode.CHARGE_FULL_PRICE -> StoreReplacementMode.CHARGE_FULL_PRICE

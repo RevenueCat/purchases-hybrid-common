@@ -567,6 +567,15 @@ export type ShouldPurchasePromoProductListener = (deferredPurchase: () => Promis
 export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "PROMOTIONAL" | "AMAZON" | "RC_BILLING" | "EXTERNAL" | "PADDLE" | "TEST_STORE" | "GALAXY" | "UNKNOWN_STORE";
 
 // @public
+export enum STORE_REPLACEMENT_MODE {
+    CHARGE_FULL_PRICE = "CHARGE_FULL_PRICE",
+    CHARGE_PRORATED_PRICE = "CHARGE_PRORATED_PRICE",
+    DEFERRED = "DEFERRED",
+    WITH_TIME_PRORATION = "WITH_TIME_PRORATION",
+    WITHOUT_PRORATION = "WITHOUT_PRORATION"
+}
+
+// @public
 export interface Storefront {
     readonly countryCode: string;
 }
@@ -576,6 +585,12 @@ export enum STOREKIT_VERSION {
     DEFAULT = "DEFAULT",
     STOREKIT_1 = "STOREKIT_1",
     STOREKIT_2 = "STOREKIT_2"
+}
+
+// @public
+export interface StoreProductChangeInfo {
+    readonly oldProductIdentifier: string;
+    readonly prorationMode?: PRORATION_MODE;
 }
 
 // @public
