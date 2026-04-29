@@ -590,7 +590,7 @@ export enum STOREKIT_VERSION {
 // @public
 export interface StoreProductChangeInfo {
     readonly oldProductIdentifier: string;
-    readonly prorationMode?: PRORATION_MODE;
+    readonly replacementMode?: STORE_REPLACEMENT_MODE;
 }
 
 // @public
