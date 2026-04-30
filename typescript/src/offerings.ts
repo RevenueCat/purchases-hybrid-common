@@ -493,6 +493,21 @@ export interface GoogleProductChangeInfo {
 }
 
 /**
+ * Holds the information used when upgrading from another sku. For use on the Play Store and Galaxy Store on Android only.
+ * @public
+ */
+export interface StoreProductChangeInfo {
+  /**
+   * The old product identifier to upgrade from.
+   */
+  readonly oldProductIdentifier: string;
+  /**
+   * The [STORE_REPLACEMENT_MODE] to use when upgrading the given oldSKU.
+   */
+  readonly replacementMode?: STORE_REPLACEMENT_MODE;
+}
+
+/**
  * Holds the introductory price status
  * @public
  */
@@ -565,6 +580,46 @@ export enum PRORATION_MODE {
    * plus remaining prorated time from the old plan.
    */
   IMMEDIATE_AND_CHARGE_FULL_PRICE = 5,
+}
+
+/**
+ * Enum with possible proration modes in a subscription upgrade or downgrade in the Play Store or Galaxy Store. Used only on Android.
+ * @public
+ */
+export enum STORE_REPLACEMENT_MODE {
+  /**
+   * Old subscription is cancelled, and new subscription takes effect immediately.
+   * User is charged for the full price of the new subscription on the old subscription's expiration date.
+   *
+   * This is the default behavior for the Galaxy and Play stores.
+   */
+  WITHOUT_PRORATION = "WITHOUT_PRORATION",
+
+  /**
+   * Replacement takes effect immediately, and the remaining time will be
+   * prorated and credited to the user. This is the current default behavior.
+   */
+  WITH_TIME_PRORATION = "WITH_TIME_PRORATION",
+
+  /**
+   * Replacement takes effect immediately, and the user is charged full price of new plan and is
+   * given a full billing cycle of subscription, plus remaining prorated time from the old plan.
+   *
+   * This mode is not supported by the Galaxy Store. If it is passed to the Galaxy Store, an error will be thrown.
+   */
+  CHARGE_FULL_PRICE = "CHARGE_FULL_PRICE",
+
+  /**
+   * Replacement takes effect immediately, and the billing cycle remains the
+   * same. The price for the remaining period will be charged. This option is
+   * only available for subscription upgrade.
+   */
+  CHARGE_PRORATED_PRICE = "CHARGE_PRORATED_PRICE",
+
+  /**
+   * Replacement takes effect when the old plan expires, and the new price will be charged at the same time.
+   */
+  DEFERRED = "DEFERRED",
 }
 
 /**

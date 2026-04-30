@@ -70,6 +70,7 @@ private class CommonApiTests {
         purchase(activity, options, onResult)
     }
 
+    @Suppress("LongMethod")
     fun checkPurchaseProduct(
         activity: Activity?,
         productIdentifier: String,
@@ -82,6 +83,7 @@ private class CommonApiTests {
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
         addOnPackages: List<Map<String, Any?>>?,
+        storeReplacementModeString: String?,
         onResult: OnResult,
     ) {
         purchaseProduct(
@@ -136,6 +138,22 @@ private class CommonApiTests {
             addOnStoreProducts,
             addOnSubscriptionOptions,
             addOnPackages,
+        )
+
+        purchaseProduct(
+            activity,
+            productIdentifier,
+            type,
+            googleBasePlanId,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
+            storeReplacementModeString,
         )
     }
 
@@ -150,6 +168,7 @@ private class CommonApiTests {
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
         addOnPackages: List<Map<String, Any?>>?,
+        storeReplacementModeString: String?,
     ) {
         purchasePackage(
             activity,
@@ -196,8 +215,23 @@ private class CommonApiTests {
             addOnSubscriptionOptions,
             addOnPackages,
         )
+
+        purchasePackage(
+            activity,
+            packageIdentifier,
+            presentedOfferingContext,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
+            storeReplacementModeString,
+        )
     }
 
+    @Suppress("LongMethod")
     fun checkPurchaseSubscriptionOption(
         activity: Activity?,
         productIdentifier: String,
@@ -210,6 +244,7 @@ private class CommonApiTests {
         addOnStoreProducts: List<Map<String, Any?>>?,
         addOnSubscriptionOptions: List<Map<String, Any?>>?,
         addOnPackages: List<Map<String, Any?>>?,
+        storeReplacementModeString: String?,
     ) {
         purchaseSubscriptionOption(
             activity,
@@ -259,6 +294,21 @@ private class CommonApiTests {
             addOnStoreProducts,
             addOnSubscriptionOptions,
             addOnPackages,
+        )
+
+        purchaseSubscriptionOption(
+            activity,
+            productIdentifier,
+            optionIdentifier,
+            googleOldProductId,
+            googleReplacementMode,
+            googleIsPersonalizedPrice,
+            presentedOfferingContext,
+            onResult,
+            addOnStoreProducts,
+            addOnSubscriptionOptions,
+            addOnPackages,
+            storeReplacementModeString,
         )
     }
 
