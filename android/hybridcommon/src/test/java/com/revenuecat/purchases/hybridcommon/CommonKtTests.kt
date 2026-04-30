@@ -934,6 +934,68 @@ internal class CommonKtTests {
     }
 
     @Test
+    fun `purchaseProduct sets replacementMode from googleReplacementModeInt`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOldProductIdentifier = "old_product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(expectedOldProductIdentifier, params.oldProductId)
+            assertEquals(StoreReplacementMode.DEFERRED, params.replacementMode)
+
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchaseProduct(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            type = "subs",
+            googleBasePlanId = null,
+            googleOldProductId = expectedOldProductIdentifier,
+            googleReplacementModeInt = GoogleReplacementMode.DEFERRED.playBillingClientMode,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingContext = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+        )
+
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
+    }
+
+    @Test
     fun `purchasePackage sets replacementMode from storeReplacementModeString`() {
         configure(
             context = mockContext,
@@ -987,6 +1049,65 @@ internal class CommonKtTests {
             },
             presentedOfferingContext = PresentedOfferingContext(offeringIdentifier).map(),
             storeReplacementModeString = StoreReplacementMode.WITH_TIME_PRORATION.name,
+        )
+
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
+    }
+
+    @Test
+    fun `purchasePackage sets replacementMode from googleReplacementModeInt`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOldProductIdentifier = "old_product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
+
+        every {
+            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+        } answers {
+            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(expectedOldProductIdentifier, params.oldProductId)
+            assertEquals(StoreReplacementMode.CHARGE_FULL_PRICE, params.replacementMode)
+
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchasePackage(
+            mockActivity,
+            packageIdentifier = packageToPurchase.identifier,
+            googleOldProductId = expectedOldProductIdentifier,
+            googleReplacementModeInt = GoogleReplacementMode.CHARGE_FULL_PRICE.playBillingClientMode,
+            googleIsPersonalizedPrice = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
+            presentedOfferingContext = PresentedOfferingContext(offeringIdentifier).map(),
         )
 
         val response = assertNotNull(receivedResponse)
@@ -1058,6 +1179,76 @@ internal class CommonKtTests {
                 }
             },
             storeReplacementModeString = StoreReplacementMode.CHARGE_PRORATED_PRICE.name,
+        )
+
+        val response = assertNotNull(receivedResponse)
+        assertEquals(expectedProductIdentifier, response["productIdentifier"])
+    }
+
+    @Test
+    fun `purchaseSubscriptionOption sets replacementMode from googleReplacementModeInt`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+        val expectedProductIdentifier = "product"
+        val expectedOptionIdentifier = "monthly"
+        val expectedOldProductIdentifier = "old_product"
+        var receivedResponse: MutableMap<String, *>? = null
+
+        val subscriptionOption = TestUtilities.stubSubscriptionOption(
+            expectedOptionIdentifier,
+            productId = expectedProductIdentifier,
+        )
+
+        val capturedGetStoreProductsCallback = slot<GetStoreProductsCallback>()
+        val mockStoreProduct = TestUtilities.stubStoreProduct(
+            expectedProductIdentifier,
+            defaultOption = subscriptionOption,
+        )
+        val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
+
+        every {
+            mockPurchases.getProducts(
+                listOf(expectedProductIdentifier),
+                ProductType.SUBS,
+                capture(capturedGetStoreProductsCallback),
+            )
+        } answers {
+            capturedGetStoreProductsCallback.captured.onReceived(listOf(mockStoreProduct))
+        }
+
+        val capturedPurchaseCallback = slot<PurchaseCallback>()
+        every {
+            mockPurchases.purchase(any<PurchaseParams>(), capture(capturedPurchaseCallback))
+        } answers {
+            val params = it.invocation.args.first() as PurchaseParams
+            assertEquals(expectedOldProductIdentifier, params.oldProductId)
+            assertEquals(StoreReplacementMode.WITH_TIME_PRORATION, params.replacementMode)
+
+            capturedPurchaseCallback.captured.onCompleted(mockTransaction, mockk(relaxed = true))
+        }
+
+        purchaseSubscriptionOption(
+            mockActivity,
+            productIdentifier = expectedProductIdentifier,
+            optionIdentifier = expectedOptionIdentifier,
+            googleOldProductId = expectedOldProductIdentifier,
+            googleReplacementModeInt = GoogleReplacementMode.WITH_TIME_PRORATION.playBillingClientMode,
+            googleIsPersonalizedPrice = null,
+            presentedOfferingContext = null,
+            onResult = object : OnResult {
+                override fun onReceived(map: MutableMap<String, *>) {
+                    receivedResponse = map
+                }
+
+                override fun onError(errorContainer: ErrorContainer) {
+                    fail("Should be success")
+                }
+            },
         )
 
         val response = assertNotNull(receivedResponse)
