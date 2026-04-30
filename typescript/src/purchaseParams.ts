@@ -1,10 +1,11 @@
 import {
   GoogleProductChangeInfo,
-  PurchasesPackage, PurchasesPromotionalOffer,
+  PurchasesPackage,
+  PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesWinBackOffer,
   StoreProductChangeInfo,
-  SubscriptionOption
+  SubscriptionOption,
 } from "./offerings";
 
 /**
@@ -19,11 +20,15 @@ export interface PurchaseParams {
   /**
    * Google Play only. Optional {@link GoogleProductChangeInfo} you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   *
+   * If both googleProductChangeInfo and productChangeInfo are provided, then productChangeInfo is used and googleProductChangeInfo is ignored.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
   /**
    * Google Play and Galaxy Store only. Optional {@link StoreProductChangeInfo} that allows you
    * to make a product change with the oldProductIdentifier and the optional replacementMode.
+   *
+   * If both googleProductChangeInfo and productChangeInfo are provided, then productChangeInfo is used and googleProductChangeInfo is ignored.
    */
   productChangeInfo?: StoreProductChangeInfo | null;
   /**
