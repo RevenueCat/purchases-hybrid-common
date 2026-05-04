@@ -4,33 +4,40 @@ import { defineConfig } from 'rollup';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import terser from '@rollup/plugin-terser';
 
+const jsPlugins = () => [
+  nodeResolve(),
+  typescript({
+    tsconfig: './tsconfig.json',
+    declaration: false,
+    declarationMap: false,
+    sourceMap: true,
+    inlineSources: true
+  }),
+  terser()
+];
+
 export default defineConfig([
   {
     input: 'src/index.ts',
-    output: [
-      {
-        file: 'dist/index.js',
-        format: 'esm',
-        sourcemap: true
-      },
-      {
-        file: 'dist/index.umd.js',
-        format: 'umd',
-        name: 'PurchasesHybridMappings',
-        sourcemap: true
-      }
-    ],
-    plugins: [
-      nodeResolve(),
-      typescript({
-        tsconfig: './tsconfig.json',
-        declaration: false,
-        declarationMap: false,
-        sourceMap: true,
-        inlineSources: true
-      }),
-      terser()
-    ]
+    output: {
+      dir: 'dist',
+      format: 'esm',
+      entryFileNames: 'index.js',
+      chunkFileNames: 'chunks/[name]-[hash].js',
+      sourcemap: true
+    },
+    plugins: jsPlugins()
+  },
+  {
+    input: 'src/index.ts',
+    output: {
+      file: 'dist/index.umd.js',
+      format: 'umd',
+      name: 'PurchasesHybridMappings',
+      inlineDynamicImports: true,
+      sourcemap: true
+    },
+    plugins: jsPlugins()
   },
   {
     input: 'src/index.ts',
