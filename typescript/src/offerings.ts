@@ -479,6 +479,7 @@ export interface UpgradeInfo {
 
 /**
  * Holds the information used when upgrading from another sku. For Android use only.
+ * @deprecated Use StoreProductChangeInfo
  * @public
  */
 export interface GoogleProductChangeInfo {
@@ -542,6 +543,7 @@ export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {}
 
 /**
  * Enum with possible proration modes in a subscription upgrade or downgrade in the Play Store. Used only for Google.
+ * @deprecated Use STORE_REPLACEMENT_MODE
  * @public
  */
 export enum PRORATION_MODE {

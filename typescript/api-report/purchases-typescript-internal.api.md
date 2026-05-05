@@ -52,7 +52,7 @@ export interface ErrorInfo {
     readableErrorCode: string;
 }
 
-// @public
+// @public @deprecated
 export interface GoogleProductChangeInfo {
     readonly oldProductIdentifier: string;
     readonly prorationMode?: PRORATION_MODE;
@@ -218,7 +218,7 @@ export enum PRODUCT_TYPE {
     UNKNOWN = "UNKNOWN"
 }
 
-// @public
+// @public @deprecated
 export enum PRORATION_MODE {
     DEFERRED = 6,
     IMMEDIATE_AND_CHARGE_FULL_PRICE = 5,
