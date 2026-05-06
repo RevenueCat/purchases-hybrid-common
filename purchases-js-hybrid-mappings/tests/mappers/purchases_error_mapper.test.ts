@@ -20,9 +20,27 @@ describe('mapPurchasesError', () => {
       code: error.errorCode,
       message: error.message,
       underlyingErrorMessage: error.underlyingErrorMessage,
+      userCancelled: false,
       info: {
         statusCode: error.extra?.statusCode,
         backendErrorCode: error.extra?.backendErrorCode
+      }
+    });
+  });
+
+  it('maps cancelled errors to hybrid-compatible shape', () => {
+    const error = new PurchasesError(ErrorCode.UserCancelledError);
+
+    const result = mapPurchasesError(error);
+
+    expect(result).toEqual({
+      code: "1",
+      message: "Purchase was cancelled.",
+      underlyingErrorMessage: undefined,
+      userCancelled: true,
+      info: {
+        statusCode: undefined,
+        backendErrorCode: undefined
       }
     });
   });

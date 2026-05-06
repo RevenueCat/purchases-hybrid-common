@@ -531,7 +531,7 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.UserCancelledError,
+        code: String(ErrorCode.UserCancelledError),
         message: 'Purchase cancelled',
         info: {
           backendErrorCode: undefined,
