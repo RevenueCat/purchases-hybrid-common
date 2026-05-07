@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.16.0
+  revenuecat: revenuecat/sdks-common-config@3.20.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -49,17 +49,9 @@ parameters:
 
 commands:
   install-sdkman:
-    description: Install SDKMAN
+    description: Install SDKMAN and set up Java environment
     steps:
-      - run:
-          name: Installing SDKMAN
-          command: |
-            if curl -s "https://get.sdkman.io?rcupdate=false" | bash; then
-              echo -e '\nsource "/home/circleci/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
-              source $BASH_ENV
-            else
-              echo "Error installing SDKMAN, continuing with default Java" >&2
-            fi
+      - revenuecat/install-sdkman
       - run:
           name: Setup Java environment
           command: |

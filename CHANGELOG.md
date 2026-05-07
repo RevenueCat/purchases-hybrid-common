@@ -1,3 +1,90 @@
+## 18.4.0
+## RevenueCat SDK
+### ✨ New Features
+* Deprecate PRORATION_MODE and GoogleProductChangeInfo (#1634) via Will Taylor (@fire-at-will)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `21e02ec` to `af7bb5c` (#1633) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `2d11430` to `21e02ec` (#1632) via dependabot[bot] (@dependabot[bot])
+
+## 18.3.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.69.0 => 5.70.0 (#1626) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `d24ab26` to `2d11430` (#1628) via dependabot[bot] (@dependabot[bot])
+
+## 18.2.0
+## RevenueCat SDK
+### ✨ New Features
+* New Unified StoreReplacementMode APIs (#1622) via Will Taylor (@fire-at-will)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.3.0 => 10.3.1 JS 1.36.0 => 1.38.0 (#1623) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.68.0 => 5.69.0 Android 10.2.0 => 10.3.0 JS 1.35.0 => 1.36.0 (#1617) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.34.0 => 1.35.0 (#1612) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Replace unauthenticated SDKMAN install with SHA-pinned orb command (#1618) via Rick (@rickvdl)
+* PRORATION_MODE docstring fix (#1621) via Will Taylor (@fire-at-will)
+* Bump fastlane from 2.233.0 to 2.233.1 (#1619) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `b822f01` to `d24ab26` (#1614) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `58cccc8` to `b822f01` (#1610) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.232.2 to 2.233.0 (#1611) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `a1eed48` to `58cccc8` (#1609) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `20911d1` to `a1eed48` (#1607) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 2.1.5 to 2.1.6 (#1608) via dependabot[bot] (@dependabot[bot])
+
+## 18.1.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.67.2 => 5.68.0 Android 10.1.2 => 10.2.0 JS 1.32.0 => 1.34.0 (#1605) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.0.0
+## RevenueCat SDK
+### 💥 Breaking Changes
+* Update Android SDK 10.0.0 (#1595) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.1.0 => 10.1.2 (#1602) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.67.1 => 5.67.2 Android 10.0.0 => 10.1.0 JS 1.30.0 => 1.32.0 (#1599) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `894bb1b` to `20911d1` (#1600) via dependabot[bot] (@dependabot[bot])
+* Update CODEOWNERS default owner to @RevenueCat/sdk (#1598) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `ceecf91` to `894bb1b` (#1597) via dependabot[bot] (@dependabot[bot])
+* Bump addressable from 2.8.8 to 2.9.0 (#1594) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `6289be1` to `ceecf91` (#1593) via dependabot[bot] (@dependabot[bot])
+
+## 17.55.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Pass storeKitVersion in all configure() functions (#1591) via Will Taylor (@fire-at-will)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.4 to 2.1.5 (#1590) via dependabot[bot] (@dependabot[bot])
+
+## 17.55.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.67.0 => 5.67.1 Android 9.28.1 => 9.29.0 (#1588) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `5d6e93f` to `6289be1` (#1587) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `f11fe40` to `5d6e93f` (#1586) via dependabot[bot] (@dependabot[bot])
+
+## 17.54.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.66.0 => 5.67.0 Android 9.27.0 => 9.28.1 JS 1.29.0 => 1.30.0 (#1584) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `9a6911b` to `f11fe40` (#1582) via dependabot[bot] (@dependabot[bot])
+* Bump activesupport from 7.2.2 to 7.2.3.1 (#1580) via dependabot[bot] (@dependabot[bot])
+* Merge release PR after deploy (#1577) via Antonio Pallares (@ajpallares)
+* Require PR approval before release tagging (#1576) via Antonio Pallares (@ajpallares)
+* Bump json from 2.18.1 to 2.19.2 (#1572) via dependabot[bot] (@dependabot[bot])
+* [RENOVATE] Update dependency gradle to v9.4.1 (#1578) via RevenueCat Git Bot (@RCGitBot)
+
 ## 17.53.0
 ## RevenueCat SDK
 ### ✨ New Features

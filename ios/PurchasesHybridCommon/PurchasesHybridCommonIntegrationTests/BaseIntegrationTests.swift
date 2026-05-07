@@ -8,7 +8,7 @@
 
 import PurchasesHybridCommon
 
-@testable import RevenueCat
+@_spi(Internal) @testable import RevenueCat
 import SnapshotTesting
 import StoreKitTest
 import XCTest

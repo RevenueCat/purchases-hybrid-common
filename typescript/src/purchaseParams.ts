@@ -1,9 +1,11 @@
 import {
   GoogleProductChangeInfo,
-  PurchasesPackage, PurchasesPromotionalOffer,
+  PurchasesPackage,
+  PurchasesPromotionalOffer,
   PurchasesStoreProduct,
   PurchasesWinBackOffer,
-  SubscriptionOption
+  StoreProductChangeInfo,
+  SubscriptionOption,
 } from "./offerings";
 
 /**
@@ -18,8 +20,17 @@ export interface PurchaseParams {
   /**
    * Google Play only. Optional {@link GoogleProductChangeInfo} you
    * wish to upgrade from containing the oldProductIdentifier and the optional prorationMode.
+   *
+   * If both googleProductChangeInfo and productChangeInfo are provided, then productChangeInfo is used and googleProductChangeInfo is ignored.
    */
   googleProductChangeInfo?: GoogleProductChangeInfo | null;
+  /**
+   * Google Play and Galaxy Store only. Optional {@link StoreProductChangeInfo} that allows you
+   * to make a product change with the oldProductIdentifier and the optional replacementMode.
+   *
+   * If both googleProductChangeInfo and productChangeInfo are provided, then productChangeInfo is used and googleProductChangeInfo is ignored.
+   */
+  productChangeInfo?: StoreProductChangeInfo | null;
   /**
    * Google Play only. Optional boolean that indicates personalized pricing on products available for purchase in the EU.
    * For compliance with EU regulations. User will see "This price has been customized for you" in the purchase dialog when true.
