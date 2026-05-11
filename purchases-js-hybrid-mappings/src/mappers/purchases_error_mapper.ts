@@ -5,9 +5,9 @@ export function mapPurchasesError(error: PurchasesError): Record<string, unknown
   const message = error.message || (userCancelled ? 'Purchase was cancelled.' : 'Unknown error.');
 
   return {
-    code: userCancelled ? String(error.errorCode) : error.errorCode,
+    code: String(error.errorCode),
     message,
-    underlyingErrorMessage: error.underlyingErrorMessage,
+    underlyingErrorMessage: error.underlyingErrorMessage ?? '',
     userCancelled,
     info: {
       statusCode: error.extra?.statusCode,

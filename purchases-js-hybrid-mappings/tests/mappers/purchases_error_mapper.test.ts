@@ -17,7 +17,7 @@ describe('mapPurchasesError', () => {
     const result = mapPurchasesError(error);
 
     expect(result).toEqual({
-      code: error.errorCode,
+      code: String(error.errorCode),
       message: error.message,
       underlyingErrorMessage: error.underlyingErrorMessage,
       userCancelled: false,
@@ -36,7 +36,7 @@ describe('mapPurchasesError', () => {
     expect(result).toEqual({
       code: "1",
       message: "Purchase was cancelled.",
-      underlyingErrorMessage: undefined,
+      underlyingErrorMessage: "",
       userCancelled: true,
       info: {
         statusCode: undefined,
