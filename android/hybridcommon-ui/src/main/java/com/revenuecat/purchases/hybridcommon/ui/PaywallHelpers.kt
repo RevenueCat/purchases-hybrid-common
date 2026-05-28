@@ -69,6 +69,7 @@ fun presentPaywallFromFragment(
                             paywallSource,
                             fontFamily,
                             customVariables,
+                            hasNonSerializableArgs = paywallListener != null || purchaseLogic != null,
                         ),
                         PaywallFragment.tag,
                     )
