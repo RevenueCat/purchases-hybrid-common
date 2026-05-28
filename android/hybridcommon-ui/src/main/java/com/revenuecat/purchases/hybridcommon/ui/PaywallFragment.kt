@@ -34,6 +34,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             PRESENTED_OFFERING_CONTEXT("presentedOfferingContext"),
             FONT_FAMILY("fontProvider"),
             CUSTOM_VARIABLES("customVariables"),
+            HAS_NON_SERIALIZABLE_ARGS("hasNonSerializableArgs"),
         }
 
         private const val notPresentedPaywallResult = "NOT_PRESENTED"
@@ -48,6 +49,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             paywallSource: PaywallSource,
             fontFamily: PaywallFontFamily? = null,
             customVariables: Map<String, Any?>? = null,
+            hasNonSerializableArgs: Boolean = false,
         ): PaywallFragment {
             return PaywallFragment().apply {
                 arguments = Bundle().apply {
@@ -86,6 +88,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                     }
                     fontFamily?.let { putParcelable(OptionKey.FONT_FAMILY.key, it) }
                     customVariables?.let { putSerializable(OptionKey.CUSTOM_VARIABLES.key, HashMap(it)) }
+                    putBoolean(OptionKey.HAS_NON_SERIALIZABLE_ARGS.key, hasNonSerializableArgs)
                 }
             }
         }
@@ -143,6 +146,9 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
             arguments?.getSerializable(OptionKey.CUSTOM_VARIABLES.key) as? Map<String, Any?>
         }
 
+    private val hasNonSerializableArgsArg: Boolean
+        get() = arguments?.getBoolean(OptionKey.HAS_NON_SERIALIZABLE_ARGS.key) ?: false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -154,6 +160,25 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 "Purchases is not configured. " +
                     "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
             )
+            removeFragment()
+            return
+        }
+
+        // When the system kills and restores the process, the Fragment is recreated from its saved
+        // Bundle but PaywallFragmentNonSerializableArgsStore (in-memory) is cleared. If this
+        // fragment was originally created with a purchaseLogic or paywallListener, those args are
+        // now gone. Continuing would leave the paywall in a broken state (e.g. crash on purchase
+        // when PurchasesAreCompletedBy.MY_APP is set). Dismiss instead.
+        if (savedInstanceState != null &&
+            hasNonSerializableArgsArg &&
+            PaywallFragmentNonSerializableArgsStore.get(requestKey) == null
+        ) {
+            Log.w(
+                "PaywallFragment",
+                "Non-serializable paywall args (purchaseLogic/paywallListener) were lost after " +
+                    "process death. Dismissing paywall to prevent a broken state.",
+            )
+            setFragmentResult("ERROR")
             removeFragment()
             return
         }
