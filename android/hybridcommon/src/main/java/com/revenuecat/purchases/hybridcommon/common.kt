@@ -1303,10 +1303,18 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
 
 // region Custom Paywall Tracking
 
+@OptIn(InternalRevenueCatAPI::class)
 fun trackCustomPaywallImpression(data: Map<String, Any?>) {
     val paywallId = data["paywallId"] as? String
     val offeringId = data["offeringId"] as? String
-    val params = CustomPaywallImpressionParams(paywallId = paywallId, offeringId = offeringId)
+    val presentedOfferingContext = castWildcardMapToStringToOptionalAnyMap(
+        data["presentedOfferingContext"] as? Map<*, *>,
+    )?.toPresentedOfferingContext()
+    val params = CustomPaywallImpressionParams(
+        paywallId = paywallId,
+        offeringId = offeringId,
+        presentedOfferingContext = presentedOfferingContext,
+    )
     Purchases.sharedInstance.trackCustomPaywallImpression(params)
 }
 

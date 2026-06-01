@@ -863,7 +863,14 @@ import StoreKit
     @objc static func trackCustomPaywallImpression(_ data: [String: Any]) {
         let paywallId = data["paywallId"] as? String
         let offeringId = data["offeringId"] as? String
-        let params = CustomPaywallImpressionParams(paywallId: paywallId, offeringId: offeringId)
+        let presentedOfferingContext = Self.toPresentedOfferingContext(
+            presentedOfferingContext: data["presentedOfferingContext"] as? [String: Any]
+        )
+        let params = CustomPaywallImpressionParams(
+            paywallId: paywallId,
+            offeringId: offeringId,
+            presentedOfferingContext: presentedOfferingContext
+        )
         Purchases.shared.trackCustomPaywallImpression(params)
     }
 
