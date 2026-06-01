@@ -554,6 +554,139 @@ describe('mapOfferings', () => {
     });
   });
 
+  it('maps a paid introductory price with no free trial correctly', () => {
+    const basePrice: Price = {
+      amount: 2000,
+      amountMicros: 20000000,
+      currency: 'USD',
+      formattedPrice: '$20.00',
+    };
+
+    const introPrice: Price = {
+      amount: 1000,
+      amountMicros: 10000000,
+      currency: 'USD',
+      formattedPrice: '$10.00',
+    };
+
+    const yearlyPeriod: Period = { unit: PeriodUnit.Year, number: 1 };
+
+    const basePricingPhase: PricingPhase = {
+      price: basePrice,
+      period: yearlyPeriod,
+      periodDuration: 'P1Y',
+      cycleCount: 0,
+      pricePerMonth: null,
+      pricePerYear: basePrice,
+      pricePerWeek: null,
+    };
+
+    const introPricingPhase: PricingPhase = {
+      price: introPrice,
+      period: yearlyPeriod,
+      periodDuration: 'P1Y',
+      cycleCount: 1,
+      pricePerMonth: null,
+      pricePerYear: introPrice,
+      pricePerWeek: null,
+    };
+
+    const optionId = 'offerc65d4f2ee1564261a912a746ea43ba21';
+    const presentedOfferingContext: PresentedOfferingContext = {
+      offeringIdentifier: 'intro_offering',
+      placementIdentifier: null,
+      targetingContext: null,
+    };
+
+    const option = {
+      id: optionId,
+      priceId: 'prcd147abef16984a7791f2',
+      base: basePricingPhase,
+      trial: null,
+      introPrice: introPricingPhase,
+    } as SubscriptionOption;
+
+    const product: Product = {
+      identifier: 'bookwise.mindlab.ai.intro_price_not_show',
+      title: 'Annually',
+      displayName: 'Annually',
+      description: 'Annually',
+      productType: ProductType.Subscription,
+      currentPrice: basePrice,
+      normalPeriodDuration: 'P1Y',
+      subscriptionOptions: { [optionId]: option },
+      defaultSubscriptionOption: option,
+      defaultNonSubscriptionOption: null,
+      defaultPurchaseOption: option,
+      presentedOfferingIdentifier: 'intro_offering',
+      presentedOfferingContext: presentedOfferingContext,
+    };
+
+    const pkg: Package = {
+      identifier: 'annual_pkg',
+      packageType: PackageType.Annual,
+      webBillingProduct: product,
+      rcBillingProduct: product,
+    };
+
+    const offering: Offering = {
+      identifier: 'intro_offering',
+      serverDescription: 'Intro offering description',
+      metadata: {},
+      availablePackages: [pkg],
+      lifetime: null,
+      annual: pkg,
+      sixMonth: null,
+      threeMonth: null,
+      twoMonth: null,
+      monthly: null,
+      weekly: null,
+      packagesById: {},
+      paywall_components: null,
+    };
+
+    const offerings: Offerings = {
+      all: { 'intro_offering': offering },
+      current: offering,
+    };
+
+    const result = mapOfferings(offerings);
+
+    const mappedProduct = (
+      (result.current as Record<string, unknown>).annual as Record<string, unknown>
+    ).product as Record<string, unknown>;
+
+    expect(mappedProduct.introPrice).toEqual({
+      price: 10,
+      priceString: '$10.00',
+      period: 'P1Y',
+      cycles: 1,
+      periodUnit: 'YEAR',
+      periodNumberOfUnits: 1,
+    });
+
+    const mappedOption = (mappedProduct.defaultOption as Record<string, unknown>);
+    const introPhase = {
+      billingCycleCount: 1,
+      billingPeriod: { iso8601: 'P1Y', unit: 'YEAR', value: 1 },
+      offerPaymentMode: null,
+      price: { amountMicros: 10000000, currencyCode: 'USD', formatted: '$10.00' },
+      recurrenceMode: 3,
+    };
+    const basePhase = {
+      billingCycleCount: 0,
+      billingPeriod: { iso8601: 'P1Y', unit: 'YEAR', value: 1 },
+      offerPaymentMode: null,
+      price: { amountMicros: 20000000, currencyCode: 'USD', formatted: '$20.00' },
+      recurrenceMode: 1,
+    };
+
+    expect(mappedOption.introPhase).toEqual(introPhase);
+    expect(mappedOption.freePhase).toBeNull();
+    expect(mappedOption.isBasePlan).toBe(false);
+    expect(mappedOption.pricingPhases).toEqual([introPhase, basePhase]);
+  });
+
   function createPackage(identifier: string, offeringId: string, packageType: PackageType): Package {
     const presentedOfferingContext: PresentedOfferingContext = {
       offeringIdentifier: offeringId,
