@@ -687,6 +687,165 @@ describe('mapOfferings', () => {
     expect(mappedOption.pricingPhases).toEqual([introPhase, basePhase]);
   });
 
+  it('prioritizes the free trial over a paid intro for product.introPrice when both exist', () => {
+    const basePrice: Price = {
+      amount: 2000,
+      amountMicros: 20000000,
+      currency: 'USD',
+      formattedPrice: '$20.00',
+    };
+
+    const introPrice: Price = {
+      amount: 1000,
+      amountMicros: 10000000,
+      currency: 'USD',
+      formattedPrice: '$10.00',
+    };
+
+    const trialPrice: Price = {
+      amount: 0,
+      amountMicros: 0,
+      currency: 'USD',
+      formattedPrice: 'Free',
+    };
+
+    const yearlyPeriod: Period = { unit: PeriodUnit.Year, number: 1 };
+    const weeklyTrialPeriod: Period = { unit: PeriodUnit.Day, number: 7 };
+
+    const basePricingPhase: PricingPhase = {
+      price: basePrice,
+      period: yearlyPeriod,
+      periodDuration: 'P1Y',
+      cycleCount: 0,
+      pricePerMonth: null,
+      pricePerYear: basePrice,
+      pricePerWeek: null,
+    };
+
+    const introPricingPhase: PricingPhase = {
+      price: introPrice,
+      period: yearlyPeriod,
+      periodDuration: 'P1Y',
+      cycleCount: 1,
+      pricePerMonth: null,
+      pricePerYear: introPrice,
+      pricePerWeek: null,
+    };
+
+    const trialPricingPhase: PricingPhase = {
+      price: trialPrice,
+      period: weeklyTrialPeriod,
+      periodDuration: 'P7D',
+      cycleCount: 1,
+      pricePerMonth: trialPrice,
+      pricePerYear: trialPrice,
+      pricePerWeek: trialPrice,
+    };
+
+    const optionId = 'option_with_trial_and_intro';
+    const presentedOfferingContext: PresentedOfferingContext = {
+      offeringIdentifier: 'intro_offering',
+      placementIdentifier: null,
+      targetingContext: null,
+    };
+
+    const option = {
+      id: optionId,
+      priceId: 'price_with_trial_and_intro',
+      base: basePricingPhase,
+      trial: trialPricingPhase,
+      introPrice: introPricingPhase,
+    } as SubscriptionOption;
+
+    const product: Product = {
+      identifier: 'product_with_trial_and_intro',
+      title: 'Annually',
+      displayName: 'Annually',
+      description: 'Annually',
+      productType: ProductType.Subscription,
+      currentPrice: basePrice,
+      normalPeriodDuration: 'P1Y',
+      subscriptionOptions: { [optionId]: option },
+      defaultSubscriptionOption: option,
+      defaultNonSubscriptionOption: null,
+      defaultPurchaseOption: option,
+      presentedOfferingIdentifier: 'intro_offering',
+      presentedOfferingContext: presentedOfferingContext,
+    };
+
+    const pkg: Package = {
+      identifier: 'annual_pkg',
+      packageType: PackageType.Annual,
+      webBillingProduct: product,
+      rcBillingProduct: product,
+    };
+
+    const offering: Offering = {
+      identifier: 'intro_offering',
+      serverDescription: 'Intro offering description',
+      metadata: {},
+      availablePackages: [pkg],
+      lifetime: null,
+      annual: pkg,
+      sixMonth: null,
+      threeMonth: null,
+      twoMonth: null,
+      monthly: null,
+      weekly: null,
+      packagesById: {},
+      paywall_components: null,
+    };
+
+    const offerings: Offerings = {
+      all: { 'intro_offering': offering },
+      current: offering,
+    };
+
+    const result = mapOfferings(offerings);
+
+    const mappedProduct = (
+      (result.current as Record<string, unknown>).annual as Record<string, unknown>
+    ).product as Record<string, unknown>;
+
+    // product.introPrice reflects the free trial, matching the native Android precedence.
+    expect(mappedProduct.introPrice).toEqual({
+      price: 0,
+      priceString: 'Free',
+      period: 'P7D',
+      cycles: 1,
+      periodUnit: 'DAY',
+      periodNumberOfUnits: 7,
+    });
+
+    // The subscription option still exposes both phases separately.
+    const mappedOption = (mappedProduct.defaultOption as Record<string, unknown>);
+    const freePhase = {
+      billingCycleCount: 1,
+      billingPeriod: { iso8601: 'P7D', unit: 'DAY', value: 7 },
+      offerPaymentMode: 'FREE_TRIAL',
+      price: { amountMicros: 0, currencyCode: 'USD', formatted: 'Free' },
+      recurrenceMode: 3,
+    };
+    const introPhase = {
+      billingCycleCount: 1,
+      billingPeriod: { iso8601: 'P1Y', unit: 'YEAR', value: 1 },
+      offerPaymentMode: null,
+      price: { amountMicros: 10000000, currencyCode: 'USD', formatted: '$10.00' },
+      recurrenceMode: 3,
+    };
+    const basePhase = {
+      billingCycleCount: 0,
+      billingPeriod: { iso8601: 'P1Y', unit: 'YEAR', value: 1 },
+      offerPaymentMode: null,
+      price: { amountMicros: 20000000, currencyCode: 'USD', formatted: '$20.00' },
+      recurrenceMode: 1,
+    };
+
+    expect(mappedOption.freePhase).toEqual(freePhase);
+    expect(mappedOption.introPhase).toEqual(introPhase);
+    expect(mappedOption.pricingPhases).toEqual([freePhase, introPhase, basePhase]);
+  });
+
   function createPackage(identifier: string, offeringId: string, packageType: PackageType): Package {
     const presentedOfferingContext: PresentedOfferingContext = {
       offeringIdentifier: offeringId,

@@ -87,8 +87,9 @@ function mapProduct(product: Product): Record<string, unknown> {
 
 function mapIntroPrice(product: Product): Record<string, unknown> | null {
   const option = product.defaultSubscriptionOption;
-  // Prefer the paid introductory phase; fall back to the free trial.
-  const introPhase = option?.introPrice ?? option?.trial;
+  // Give priority to the free trial, falling back to the paid introductory
+  // phase. This matches the precedence used by the native Android mapper.
+  const introPhase = option?.trial ?? option?.introPrice;
   if (!introPhase) {
     return null;
   }
