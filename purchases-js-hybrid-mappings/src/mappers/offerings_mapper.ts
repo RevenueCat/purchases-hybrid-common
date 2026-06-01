@@ -60,7 +60,7 @@ function mapProduct(product: Product): Record<string, unknown> {
     price: product.currentPrice.amountMicros / 1_000_000,
     priceString: product.currentPrice.formattedPrice,
     currencyCode: product.currentPrice.currency,
-    introPrice: mapIntroPrice(product), // Not supported in web yet
+    introPrice: mapIntroPrice(product),
     discounts: null,
     pricePerWeek: defaultOptionBasePricingPhase?.pricePerWeek?.amountMicros ?? null,
     pricePerMonth: defaultOptionBasePricingPhase?.pricePerMonth?.amountMicros ?? null,
@@ -86,17 +86,20 @@ function mapProduct(product: Product): Record<string, unknown> {
 }
 
 function mapIntroPrice(product: Product): Record<string, unknown> | null {
-  const trialPhase = product.defaultSubscriptionOption?.trial;
-  if (!trialPhase) {
+  const option = product.defaultSubscriptionOption;
+  // Give priority to the free trial, falling back to the paid introductory
+  // phase. This matches the precedence used by the native Android mapper.
+  const introPhase = option?.trial ?? option?.introPrice;
+  if (!introPhase) {
     return null;
   }
 
   return {
-    price: 0,
-    priceString: trialPhase.price?.formattedPrice ?? '0.00', // TODO: Improve how we get a formatted price for trials
-    period: trialPhase.periodDuration,
-    cycles: trialPhase.cycleCount,
-    ...mapPeriodForStoreProduct(trialPhase.period),
+    price: (introPhase.price?.amountMicros ?? 0) / 1_000_000,
+    priceString: introPhase.price?.formattedPrice ?? '0.00',
+    period: introPhase.periodDuration,
+    cycles: introPhase.cycleCount,
+    ...mapPeriodForStoreProduct(introPhase.period),
   };
 }
 
@@ -112,10 +115,17 @@ function mapSubscriptionOption(
   if (option.trial) {
     trialPhase = mapPricingPhase(option.trial);
   }
+  let introPhase: Record<string, unknown> | null = null;
+  if (option.introPrice) {
+    introPhase = mapPricingPhase(option.introPrice);
+  }
   const basePhase = mapPricingPhase(option.base);
   const pricingPhases = [];
   if (trialPhase) {
     pricingPhases.push(trialPhase);
+  }
+  if (introPhase) {
+    pricingPhases.push(introPhase);
   }
   pricingPhases.push(basePhase);
   return {
@@ -124,12 +134,12 @@ function mapSubscriptionOption(
     productId: product.identifier,
     pricingPhases: pricingPhases,
     tags: [],
-    isBasePlan: option.trial === null,
+    isBasePlan: option.trial === null && option.introPrice === null,
     billingPeriod: period,
     isPrepaid: false,
     fullPricePhase: basePhase,
     freePhase: trialPhase,
-    introPhase: null,
+    introPhase: introPhase,
     presentedOfferingIdentifier: product.presentedOfferingContext.offeringIdentifier,
     presentedOfferingContext: mapPresentedOfferingContext(product.presentedOfferingContext),
     installmentsInfo: null,
