@@ -237,7 +237,7 @@ export interface PurchasesStoreTransaction {
      */
     purchaseToken: string | null;
     /**
-     * The original purchase JSON as a string. Android only, null on iOS and some stores.
+     * The original purchase JSON provided by the store as a string. Android only, null on iOS and some stores.
      */
     originalJson: string | null;
     /**
