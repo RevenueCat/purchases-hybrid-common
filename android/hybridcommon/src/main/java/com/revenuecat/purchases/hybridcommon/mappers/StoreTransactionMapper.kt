@@ -11,6 +11,8 @@ fun StoreTransaction.map(): Map<String, Any?> =
         "purchaseDateMillis" to this.purchaseTime,
         "purchaseDate" to Date(this.purchaseTime).toIso8601(),
         "purchaseToken" to this.purchaseToken,
+        "originalJson" to this.originalJson.toString(),
+        "signature" to this.signature,
     )
 
 /**

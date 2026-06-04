@@ -236,6 +236,14 @@ export interface PurchasesStoreTransaction {
      * Purchase token of the transaction. Android only.
      */
     purchaseToken: string | null;
+    /**
+     * The original purchase JSON as a string. Android only, null on iOS and some stores.
+     */
+    originalJson: string | null;
+    /**
+     * The purchase signature. Google Play only, null on iOS and other stores.
+     */
+    signature: string | null;
 }
 
 /**

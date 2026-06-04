@@ -503,9 +503,11 @@ export interface PurchasesStoreProductDiscount {
 
 // @public
 export interface PurchasesStoreTransaction {
+    originalJson: string | null;
     productIdentifier: string;
     purchaseDate: string;
     purchaseToken: string | null;
+    signature: string | null;
     transactionIdentifier: string;
 }
 
