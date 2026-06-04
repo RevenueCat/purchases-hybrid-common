@@ -4,6 +4,7 @@ import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.common.events.FeatureEvent
 import com.revenuecat.purchases.customercenter.events.CustomerCenterImpressionEvent
 import com.revenuecat.purchases.customercenter.events.CustomerCenterSurveyOptionChosenEvent
+import com.revenuecat.purchases.paywalls.events.CustomPaywallEvent
 import com.revenuecat.purchases.paywalls.events.PaywallEvent
 
 @OptIn(InternalRevenueCatAPI::class)
@@ -44,6 +45,17 @@ fun FeatureEvent.toMap(): Map<String, Any?> {
             "url" to data.url,
             "revision_id" to data.revisionID,
         )
+        is CustomPaywallEvent.Impression -> buildMap {
+            put("discriminator", "custom_paywall_event")
+            put("type", "custom_paywall_impression")
+            put("id", creationData.id.toString())
+            put("timestamp", creationData.date.time)
+            data.paywallId?.let { put("paywall_id", it) }
+            data.offeringId?.let { put("offering_id", it) }
+            data.placementIdentifier?.let { put("placement_identifier", it) }
+            data.targetingRevision?.let { put("targeting_revision", it) }
+            data.targetingRuleId?.let { put("targeting_rule_id", it) }
+        }
         else -> mapOf(
             "discriminator" to "unknown",
             "type" to "unknown",
