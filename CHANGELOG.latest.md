@@ -1,8 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Fix paid introductory price not mapped for Web Billing (#1662) via Antonio Pallares (@ajpallares)
-
-### 🔄 Other Changes
-* Remove KMP from automatic PHC dependency update triggers (#1583) via Antonio Pallares (@ajpallares)
-* Bump fastlane-plugin-revenuecat_internal from `af7bb5c` to `ce6a7ef` (#1660) via dependabot[bot] (@dependabot[bot])
-* Bump lefthook from 2.1.8 to 2.1.9 (#1661) via dependabot[bot] (@dependabot[bot])
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.75.0 => 5.76.0 Android 10.7.0 => 10.8.0 JS 1.41.2 => 1.42.0 (#1666) via RevenueCat Git Bot (@RCGitBot)
