@@ -49,13 +49,15 @@ class CustomerCenterListenerWrapperTest {
     }
 
     private fun createMockTransaction(subscriptionOptionId: String?): StoreTransaction {
+        val mockOriginalJson = mockk<JSONObject>()
+        every { mockOriginalJson.toString() } returns "{}"
         return mockk<StoreTransaction>(relaxed = true) {
             every { this@mockk.subscriptionOptionId } returns subscriptionOptionId
             every { productIds } returns listOf("paywall_tester.subs")
             every { purchaseTime } returns 1774013027784L
             every { purchaseToken } returns "test-token"
             every { orderId } returns "GPA.1234"
-            every { originalJson } returns JSONObject()
+            every { originalJson } returns mockOriginalJson
         }
     }
 
