@@ -1,3 +1,8 @@
+## 18.11.0
+## RevenueCat SDK
+### ✨ New Features
+* Expose originalJson and signature on StoreTransaction (#1668) via Toni Rico (@tonidero)
+
 ## 18.10.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
