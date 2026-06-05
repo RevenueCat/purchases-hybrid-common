@@ -73,10 +73,12 @@
   },
   "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
   "transaction" : {
+    "originalJson" : null,
     "productId" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
     "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
     "purchaseToken" : null,
     "revenueCatId" : "0",
+    "signature" : null,
     "transactionIdentifier" : "0"
   }
 }

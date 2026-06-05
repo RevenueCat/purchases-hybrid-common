@@ -30,6 +30,8 @@ class StoreTransactionHybridAdditionsTests: QuickSpec {
                 expect(dictionary["productIdentifier"] as? String) == "test_product_id"
                 expect(dictionary["purchaseDateMillis"]).toNot(beNil())
                 expect(dictionary["purchaseDate"]).toNot(beNil())
+                expect(dictionary["originalJson"] is NSNull).to(beTrue())
+                expect(dictionary["signature"] is NSNull).to(beTrue())
             }
         }
     }
