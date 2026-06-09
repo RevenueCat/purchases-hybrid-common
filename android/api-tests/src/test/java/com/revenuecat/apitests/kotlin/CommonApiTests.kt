@@ -418,6 +418,7 @@ private class CommonApiTests {
         diagnosticsEnabled: Boolean?,
         automaticDeviceIdentifierCollectionEnabled: Boolean?,
         preferredLocale: String?,
+        galaxyBillingMode: String?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -472,6 +473,7 @@ private class CommonApiTests {
             diagnosticsEnabled = diagnosticsEnabled,
             automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
             preferredLocale = preferredLocale,
+            galaxyBillingMode = galaxyBillingMode,
         )
     }
 
