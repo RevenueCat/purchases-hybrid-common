@@ -283,6 +283,20 @@ internal class ConfiguringUnitTests {
         assertEquals(GalaxyBillingMode.ALWAYS_FAIL, purchasesConfigurationSlot.captured.galaxyBillingMode)
     }
 
+    @Test
+    fun `calling configure with unknown Galaxy billing mode defaults to production`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+            galaxyBillingMode = "UNKNOWN",
+        )
+        assertEquals(GalaxyBillingMode.PRODUCTION, purchasesConfigurationSlot.captured.galaxyBillingMode)
+    }
+
     private fun assertConfiguration(
         purchasesConfigurationSlot: CapturingSlot<PurchasesConfiguration>,
         expectedContext: Context,

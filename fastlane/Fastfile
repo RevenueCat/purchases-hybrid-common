@@ -483,14 +483,6 @@ platform :android do
       project_dir: 'android'
     )
 
-    # Publish hybridcommon-store-galaxy with -bc7 suffix
-    gradle(
-      tasks: [
-        ":hybridcommon-store-galaxy:publish --no-daemon --no-parallel"
-      ],
-      properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-store-galaxy-bc7"}),
-      project_dir: 'android'
-    )
   end
 end
 

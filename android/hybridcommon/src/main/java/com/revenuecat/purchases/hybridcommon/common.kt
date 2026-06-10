@@ -1037,7 +1037,10 @@ private fun PurchasesConfiguration.Builder.configureGalaxyBillingModeIfNeeded(
         null, "PRODUCTION" -> galaxyBillingMode(GalaxyBillingMode.PRODUCTION)
         "TEST" -> galaxyBillingMode(GalaxyBillingMode.TEST)
         "ALWAYS_FAIL" -> galaxyBillingMode(GalaxyBillingMode.ALWAYS_FAIL)
-        else -> warnLog("Attempted to configure with unknown Galaxy billing mode: $galaxyBillingMode.")
+        else -> {
+            warnLog("Attempted to configure with unknown Galaxy billing mode: $galaxyBillingMode.")
+            galaxyBillingMode(GalaxyBillingMode.PRODUCTION)
+        }
     }
 }
 

@@ -1,4 +1,3 @@
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -26,9 +25,6 @@ android {
             dimension = "billingclient"
             isDefault = true
         }
-        create("bc7") {
-            dimension = "billingclient"
-        }
     }
 
     defaultConfig {
@@ -38,15 +34,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -59,7 +46,5 @@ android {
 }
 
 dependencies {
-    api(project(":hybridcommon"))
     "bc8Api"(libs.purchases.galaxy.bc8)
-    "bc7Api"(libs.purchases.galaxy.bc7)
 }
