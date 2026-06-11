@@ -264,6 +264,10 @@ jobs:
       name: android/android-machine
       resource-class: large
       tag: default
+    parameters:
+      dry_run:
+        type: boolean
+        default: false
     steps:
       - checkout
       - install-sdkman
@@ -275,7 +279,7 @@ jobs:
       - android/restore-build-cache
       - run:
           name: Deployment
-          command: bundle exec fastlane android deploy
+          command: bundle exec fastlane android deploy dry_run:<< parameters.dry_run >>
 
   deploy-typescript:
     docker:
@@ -472,6 +476,9 @@ workflows:
       - check-pods
       - integration-test-ios
       - test-android
+      - deploy-android:
+          name: android-deploy-dry-run
+          dry_run: true
       - detekt-android
       - typescript-lint
       - typescript-apitests
