@@ -214,6 +214,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setKeyword:nil];
     [RCCommonFunctionality setCreative:@""];
     [RCCommonFunctionality setCreative:nil];
+    [RCCommonFunctionality setAppsFlyerConversionData:@{@"media_source": @"", @"campaign": @""}];
+    [RCCommonFunctionality setAppsFlyerConversionData:nil];
 }
 
 - (void)testAdTrackingAPIs {
