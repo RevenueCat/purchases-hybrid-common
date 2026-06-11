@@ -1,3 +1,8 @@
+## 18.15.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Add `setAppsFlyerConversionData` attribute method (#1683) via Toni Rico (@tonidero)
+
 ## 18.14.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
