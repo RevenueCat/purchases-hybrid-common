@@ -37,6 +37,7 @@ import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.galaxy.GalaxyBillingMode
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.getOfferingsWith
@@ -980,6 +981,7 @@ fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InApp
     }
 }
 
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongParameterList")
 @JvmOverloads
 fun configure(
@@ -996,6 +998,7 @@ fun configure(
     diagnosticsEnabled: Boolean? = null,
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
     preferredLocale: String? = null,
+    galaxyBillingMode: String? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -1017,7 +1020,28 @@ fun configure(
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
+            configureGalaxyBillingModeIfNeeded(store, galaxyBillingMode)
         }.also { Purchases.configure(it.build()) }
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+private fun PurchasesConfiguration.Builder.configureGalaxyBillingModeIfNeeded(
+    store: Store,
+    galaxyBillingMode: String?,
+) {
+    if (store != Store.GALAXY) {
+        return
+    }
+
+    when (galaxyBillingMode) {
+        null, "PRODUCTION" -> galaxyBillingMode(GalaxyBillingMode.PRODUCTION)
+        "TEST" -> galaxyBillingMode(GalaxyBillingMode.TEST)
+        "ALWAYS_FAIL" -> galaxyBillingMode(GalaxyBillingMode.ALWAYS_FAIL)
+        else -> {
+            warnLog("Attempted to configure with unknown Galaxy billing mode: $galaxyBillingMode.")
+            galaxyBillingMode(GalaxyBillingMode.PRODUCTION)
+        }
+    }
 }
 
 /**

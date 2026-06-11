@@ -482,6 +482,7 @@ platform :android do
       properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-ui-bc7"}),
       project_dir: 'android'
     )
+
   end
 end
 
