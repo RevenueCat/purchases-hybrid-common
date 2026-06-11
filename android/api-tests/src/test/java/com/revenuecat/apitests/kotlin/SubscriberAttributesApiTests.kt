@@ -6,6 +6,7 @@ import com.revenuecat.purchases.hybridcommon.setAdGroup
 import com.revenuecat.purchases.hybridcommon.setAdjustID
 import com.revenuecat.purchases.hybridcommon.setAirbridgeDeviceID
 import com.revenuecat.purchases.hybridcommon.setAirshipChannelID
+import com.revenuecat.purchases.hybridcommon.setAppsFlyerConversionData
 import com.revenuecat.purchases.hybridcommon.setAppsflyerID
 import com.revenuecat.purchases.hybridcommon.setAttributes
 import com.revenuecat.purchases.hybridcommon.setCampaign
@@ -103,6 +104,11 @@ private class SubscriberAttributesApiTests {
 
     fun checkSetCreative(creative: String?) {
         setCreative(creative)
+    }
+
+    fun checkSetAppsFlyerConversionData(data: Map<*, *>?) {
+        setAppsFlyerConversionData(data)
+        setAppsFlyerConversionData(null)
     }
 
     // endregion

@@ -713,6 +713,9 @@ import StoreKit
     @objc static func setCreative(_ creative: String?) {
         Self.sharedInstance.attribution.setCreative(creative)
     }
+    @objc static func setAppsFlyerConversionData(_ data: [AnyHashable: Any]?) {
+        Self.sharedInstance.attribution.setAppsFlyerConversionData(data)
+    }
 
 }
 
