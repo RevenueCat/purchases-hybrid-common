@@ -40,6 +40,7 @@ import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreReplacementMode
 import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
+import com.revenuecat.purchases.paywalls.events.CustomPaywallImpressionParams
 import com.revenuecat.purchases.virtualcurrencies.VirtualCurrencies
 import com.revenuecat.purchases.virtualcurrencies.VirtualCurrency
 import io.mockk.Runs
@@ -2233,6 +2234,75 @@ internal class CommonKtTests {
         }
 
         assertThat(actualCachedVirtualCurrenciesMap).isNull()
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackCustomPaywallImpression with null data passes empty params to native`() {
+        val capturedParams = slot<CustomPaywallImpressionParams>()
+        every { mockPurchases.trackCustomPaywallImpression(capture(capturedParams)) } just Runs
+
+        trackCustomPaywallImpression(null)
+
+        assertThat(capturedParams.captured.paywallId).isNull()
+        assertThat(capturedParams.captured.offeringId).isNull()
+        assertThat(capturedParams.captured.presentedOfferingContext).isNull()
+        verify(exactly = 1) {
+            mockPurchases.trackCustomPaywallImpression(any<CustomPaywallImpressionParams>())
+        }
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackCustomPaywallImpression with paywallId only passes no offering params to native`() {
+        val capturedParams = slot<CustomPaywallImpressionParams>()
+        every { mockPurchases.trackCustomPaywallImpression(capture(capturedParams)) } just Runs
+
+        trackCustomPaywallImpression(
+            mapOf(
+                "paywallId" to "my_paywall",
+            ),
+        )
+
+        assertThat(capturedParams.captured.paywallId).isEqualTo("my_paywall")
+        assertThat(capturedParams.captured.offeringId).isNull()
+        assertThat(capturedParams.captured.presentedOfferingContext).isNull()
+        verify(exactly = 1) {
+            mockPurchases.trackCustomPaywallImpression(any<CustomPaywallImpressionParams>())
+        }
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackCustomPaywallImpression with data passes params to native`() {
+        val capturedParams = slot<CustomPaywallImpressionParams>()
+        every { mockPurchases.trackCustomPaywallImpression(capture(capturedParams)) } just Runs
+
+        trackCustomPaywallImpression(
+            mapOf(
+                "paywallId" to "my_paywall",
+                "offeringId" to "my_offering",
+                "presentedOfferingContext" to mapOf(
+                    "offeringIdentifier" to "my_offering",
+                    "placementIdentifier" to "onboarding",
+                    "targetingContext" to mapOf(
+                        "revision" to 7,
+                        "ruleId" to "rule_7",
+                    ),
+                ),
+            ),
+        )
+
+        assertThat(capturedParams.captured.paywallId).isEqualTo("my_paywall")
+        assertThat(capturedParams.captured.offeringId).isEqualTo("my_offering")
+        val presentedOfferingContext = capturedParams.captured.presentedOfferingContext
+        assertThat(presentedOfferingContext?.offeringIdentifier).isEqualTo("my_offering")
+        assertThat(presentedOfferingContext?.placementIdentifier).isEqualTo("onboarding")
+        assertThat(presentedOfferingContext?.targetingContext?.revision).isEqualTo(7)
+        assertThat(presentedOfferingContext?.targetingContext?.ruleId).isEqualTo("rule_7")
+        verify(exactly = 1) {
+            mockPurchases.trackCustomPaywallImpression(any<CustomPaywallImpressionParams>())
+        }
     }
 
     @OptIn(InternalRevenueCatAPI::class)

@@ -42,6 +42,7 @@ import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
+import com.revenuecat.purchases.hybridcommon.trackCustomPaywallImpression
 import com.revenuecat.purchases.models.InAppMessageType
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
@@ -502,6 +503,12 @@ private class CommonApiTests {
 
     private fun checkOverridePreferredLocale(locale: String?) {
         overridePreferredLocale(locale)
+    }
+
+    private fun checkTrackCustomPaywallImpression(data: Map<String, Any?>) {
+        trackCustomPaywallImpression(null)
+        trackCustomPaywallImpression(data)
+        trackCustomPaywallImpression(mapOf("paywallId" to "my-paywall"))
     }
 
     private fun checkSetAppstackAttributionParams(data: Map<String, Any>, onResult: OnResult) {

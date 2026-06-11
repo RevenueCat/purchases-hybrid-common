@@ -243,6 +243,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     // Test Custom Paywall Tracking
     if (@available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)) {
+        [RCCommonFunctionality trackCustomPaywallImpression:nil];
         [RCCommonFunctionality trackCustomPaywallImpression:@{@"paywallId": @"my-paywall"}];
     }
 

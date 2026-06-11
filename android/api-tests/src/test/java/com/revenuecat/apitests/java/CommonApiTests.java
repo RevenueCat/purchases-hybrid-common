@@ -16,6 +16,7 @@ import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
 import com.revenuecat.purchases.models.InAppMessageType;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -427,6 +428,15 @@ class CommonApiTests {
 
     private void checkOverridePreferredLocale(String locale) {
         CommonKt.overridePreferredLocale(locale);
+    }
+
+    private void checkTrackCustomPaywallImpression(Map<String, Object> data) {
+        CommonKt.trackCustomPaywallImpression(null);
+        CommonKt.trackCustomPaywallImpression(data);
+
+        Map<String, Object> dataWithPaywallId = new HashMap<>();
+        dataWithPaywallId.put("paywallId", "my-paywall");
+        CommonKt.trackCustomPaywallImpression(dataWithPaywallId);
     }
 
     private void checkSetAppstackAttributionParams(Map<String, Object> data, OnResult onResult) {
