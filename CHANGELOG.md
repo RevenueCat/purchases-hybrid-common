@@ -1,3 +1,8 @@
+## 18.14.0
+## RevenueCat SDK
+### ✨ New Features
+* Add Galaxy Store wrapper dependency for hybrid SDKs (#1673) via Rick (@rickvdl)
+
 ## 18.13.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
