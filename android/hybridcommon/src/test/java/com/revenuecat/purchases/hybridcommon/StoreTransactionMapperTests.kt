@@ -13,6 +13,8 @@ internal class StoreTransactionMapperTests {
             transactionIdentifier = "order_id",
             purchaseDate = 1000L,
             purchaseToken = "google_purchase_token",
+            signature = "google_signature",
+            originalJson = """{"orderId":"order_id"}""",
         )
         val mapped = transaction.map()
 
@@ -21,6 +23,8 @@ internal class StoreTransactionMapperTests {
         assertThat(mapped["productIdentifier"]).isEqualTo("product_id")
         assertThat(mapped["purchaseDateMillis"]).isEqualTo(1000L)
         assertThat(mapped["purchaseDate"]).isNotNull
+        assertThat(mapped["signature"]).isEqualTo("google_signature")
+        assertThat(mapped["originalJson"]).isEqualTo("""{"orderId":"order_id"}""")
     }
 
     @Test
@@ -36,5 +40,7 @@ internal class StoreTransactionMapperTests {
         assertThat(mapped["transactionIdentifier"]).isEqualTo("amazon_receipt_id")
         assertThat(mapped["productIdentifier"]).isEqualTo("product_id")
         assertThat(mapped["purchaseDateMillis"]).isEqualTo(2000L)
+        assertThat(mapped["signature"]).isNull()
+        assertThat(mapped["originalJson"]).isEqualTo("""{"receiptId":"amazon_receipt_id"}""")
     }
 }

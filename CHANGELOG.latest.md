@@ -1,6 +1,7 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.72.0 => 5.73.0 Android 10.5.0 => 10.6.0 JS 1.39.0 => 1.40.0 (#1646) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.9.0 => 10.9.1 JS 1.42.3 => 1.42.4 (#1688) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fastlane from 2.233.1 to 2.234.0 (#1644) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `ce6a7ef` to `70bf5c7` (#1687) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.236.0 to 2.236.1 (#1685) via dependabot[bot] (@dependabot[bot])

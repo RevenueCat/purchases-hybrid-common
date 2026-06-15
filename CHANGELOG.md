@@ -1,3 +1,85 @@
+## 18.15.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.9.0 => 10.9.1 JS 1.42.3 => 1.42.4 (#1688) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `ce6a7ef` to `70bf5c7` (#1687) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.236.0 to 2.236.1 (#1685) via dependabot[bot] (@dependabot[bot])
+
+## 18.15.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Add `setAppsFlyerConversionData` attribute method (#1683) via Toni Rico (@tonidero)
+
+## 18.14.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* [android] Skip Galaxy module during bc7 publishing (#1679) via Rick (@rickvdl)
+
+### 🔄 Other Changes
+* [android] Add Android deploy dry-run CI check (#1680) via Rick (@rickvdl)
+
+## 18.13.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.8.0 => 10.9.0 JS 1.42.1 => 1.42.3 (#1676) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.235.0 to 2.236.0 (#1674) via dependabot[bot] (@dependabot[bot])
+
+## 18.12.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.76.0 => 5.78.0 JS 1.42.0 => 1.42.1 (#1671) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.11.0
+## RevenueCat SDK
+### ✨ New Features
+* Expose originalJson and signature on StoreTransaction (#1668) via Toni Rico (@tonidero)
+
+## 18.10.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.75.0 => 5.76.0 Android 10.7.0 => 10.8.0 JS 1.41.2 => 1.42.0 (#1666) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.9.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix paid introductory price not mapped for Web Billing (#1662) via Antonio Pallares (@ajpallares)
+
+### 🔄 Other Changes
+* Remove KMP from automatic PHC dependency update triggers (#1583) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `af7bb5c` to `ce6a7ef` (#1660) via dependabot[bot] (@dependabot[bot])
+* Bump lefthook from 2.1.8 to 2.1.9 (#1661) via dependabot[bot] (@dependabot[bot])
+
+## 18.9.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix crash when app is killed while paywall is shown with MY_APP purchase logic (#1658) via Toni Rico (@tonidero)
+
+## 18.9.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.74.0 => 5.75.0 Android 10.6.1 => 10.7.0 JS 1.41.1 => 1.41.2 (#1656) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.234.0 to 2.235.0 (#1655) via dependabot[bot] (@dependabot[bot])
+
+## 18.8.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.73.1 => 5.74.0 (#1653) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.7.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.73.0 => 5.73.1 Android 10.6.0 => 10.6.1 JS 1.41.0 => 1.41.1 (#1651) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* [AUTOMATIC] JS 1.40.0 => 1.41.0 (#1649) via RevenueCat Git Bot (@RCGitBot)
+* Bump lefthook from 2.1.6 to 2.1.8 (#1650) via dependabot[bot] (@dependabot[bot])
+
 ## 18.7.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates

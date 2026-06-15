@@ -444,7 +444,9 @@ platform :android do
   desc "Upload and close a release"
   lane :deploy do |options|
     version = current_version_number
-    gradleProperties = {
+    dry_run = options[:dry_run] || false
+    dry_run_flag = dry_run ? " --dry-run" : ""
+    gradleProperties = dry_run ? {} : {
       "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
       "signing.password" => ENV['GPG_SIGNING_KEY_PW'],
       "signing.secretKeyRingFile" => "#{File.expand_path('android', get_root_folder)}/secring.gpg",
@@ -452,11 +454,11 @@ platform :android do
       "mavenCentralPassword" => ENV['MAVEN_CENTRAL_PORTAL_PASSWORD'],
       "RELEASE_SIGNING_ENABLED" => true
     }
-    UI.verbose("Deploying #{version}")
+    UI.verbose("#{dry_run ? "Dry-run deploying" : "Deploying"} #{version}")
 
     gradle(
       tasks: [
-        "publish --no-daemon --no-parallel"
+        "publish --no-daemon --no-parallel#{dry_run_flag}"
       ],
       properties: gradleProperties,
       project_dir: 'android'
@@ -468,7 +470,7 @@ platform :android do
     # Publish hybridcommon with -bc7 suffix
     gradle(
       tasks: [
-        ":hybridcommon:publish --no-daemon --no-parallel"
+        ":hybridcommon:publish --no-daemon --no-parallel#{dry_run_flag}"
       ],
       properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-bc7"}),
       project_dir: 'android'
@@ -477,11 +479,12 @@ platform :android do
     # Publish hybridcommon-ui with -bc7 suffix
     gradle(
       tasks: [
-        ":hybridcommon-ui:publish --no-daemon --no-parallel"
+        ":hybridcommon-ui:publish --no-daemon --no-parallel#{dry_run_flag}"
       ],
       properties: gradleProperties.merge({"POM_ARTIFACT_ID" => "purchases-hybrid-common-ui-bc7"}),
       project_dir: 'android'
     )
+
   end
 end
 

@@ -8,7 +8,7 @@ kotlin = "2.0.21"
 kotlinLanguage = "1.8"
 junit = "4.13.2"
 mockk = "1.12.8"
-purchases = "10.6.0"
+purchases = "10.9.1"
 detekt = "1.23.6"
 android-junit5-version = "1.8.2.0"
 mavenPublish = "0.33.0"
@@ -27,9 +27,11 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 purchases-bc8 = { module = "com.revenuecat.purchases:purchases", version.ref = "purchases" }
 purchases-ui-bc8 = { module = "com.revenuecat.purchases:purchases-ui", version.ref = "purchases" }
 purchases-amazon-bc8 = { module = "com.revenuecat.purchases:purchases-store-amazon", version.ref = "purchases" }
+purchases-galaxy-bc8 = { module = "com.revenuecat.purchases:purchases-store-galaxy", version.ref = "purchases" }
 purchases-bc7 = { module = "com.revenuecat.purchases:purchases-bc7", version.ref = "purchases" }
 purchases-ui-bc7 = { module = "com.revenuecat.purchases:purchases-ui-bc7", version.ref = "purchases" }
 purchases-amazon-bc7 = { module = "com.revenuecat.purchases:purchases-store-amazon-bc7", version.ref = "purchases" }
+purchases-galaxy-bc7 = { module = "com.revenuecat.purchases:purchases-store-galaxy-bc7", version.ref = "purchases" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 [plugins]

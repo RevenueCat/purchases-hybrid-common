@@ -19,6 +19,7 @@ import com.revenuecat.purchases.models.SubscriptionOption
 import com.revenuecat.purchases.models.SubscriptionOptions
 import io.mockk.every
 import io.mockk.mockk
+import org.json.JSONObject
 
 /**
  * Shared test utilities for creating mock objects and test data
@@ -154,14 +155,19 @@ internal object TestUtilities {
             get() = null
     }
 
+    @Suppress("LongParameterList")
     fun createMockTransaction(
         productIdentifier: String,
         transactionIdentifier: String = "1",
         purchaseDate: Long = 1000,
         purchaseType: PurchaseType = PurchaseType.GOOGLE_PURCHASE,
         purchaseToken: String = "google_purchase_token",
+        signature: String? = "google_signature",
+        originalJson: String = """{"orderId":"order_id"}""",
     ): StoreTransaction {
         val mockTransaction = mockk<StoreTransaction>()
+        val mockOriginalJson = mockk<JSONObject>()
+        every { mockOriginalJson.toString() } returns originalJson
         every {
             mockTransaction.productIds
         } returns ArrayList(listOf(productIdentifier, "other"))
@@ -177,6 +183,12 @@ internal object TestUtilities {
         every {
             mockTransaction.purchaseToken
         } returns purchaseToken
+        every {
+            mockTransaction.signature
+        } returns signature
+        every {
+            mockTransaction.originalJson
+        } returns mockOriginalJson
 
         return mockTransaction
     }
@@ -185,8 +197,12 @@ internal object TestUtilities {
         productIdentifier: String,
         receiptId: String = "amazon_receipt_id",
         purchaseDate: Long = 1000,
+        signature: String? = null,
+        originalJson: String = """{"receiptId":"amazon_receipt_id"}""",
     ): StoreTransaction {
         val mockTransaction = mockk<StoreTransaction>()
+        val mockOriginalJson = mockk<JSONObject>()
+        every { mockOriginalJson.toString() } returns originalJson
         every {
             mockTransaction.productIds
         } returns ArrayList(listOf(productIdentifier, "other"))
@@ -202,6 +218,12 @@ internal object TestUtilities {
         every {
             mockTransaction.purchaseToken
         } returns receiptId
+        every {
+            mockTransaction.signature
+        } returns signature
+        every {
+            mockTransaction.originalJson
+        } returns mockOriginalJson
 
         return mockTransaction
     }

@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.EntitlementVerificationMode
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
+import com.revenuecat.purchases.galaxy.GalaxyBillingMode
 import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockk
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 internal class ConfiguringUnitTests {
     private val mockPurchases = mockk<Purchases>()
     private val mockContext = mockk<Context>(relaxed = true)
@@ -224,6 +227,74 @@ internal class ConfiguringUnitTests {
             preferredLocale = expectedLocale,
         )
         assertEquals(expectedLocale, purchasesConfigurationSlot.captured.preferredUILocaleOverride)
+    }
+
+    @Test
+    fun `calling configure with Galaxy store configures the Android SDK with Galaxy store`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+        )
+        assertEquals(Store.GALAXY, purchasesConfigurationSlot.captured.store)
+    }
+
+    @Test
+    fun `calling configure with Galaxy store defaults Galaxy billing mode to production`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+        )
+        assertEquals(GalaxyBillingMode.PRODUCTION, purchasesConfigurationSlot.captured.galaxyBillingMode)
+    }
+
+    @Test
+    fun `calling configure with Galaxy billing mode test forwards it to Android SDK`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+            galaxyBillingMode = "TEST",
+        )
+        assertEquals(GalaxyBillingMode.TEST, purchasesConfigurationSlot.captured.galaxyBillingMode)
+    }
+
+    @Test
+    fun `calling configure with Galaxy billing mode always fail forwards it to Android SDK`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+            galaxyBillingMode = "ALWAYS_FAIL",
+        )
+        assertEquals(GalaxyBillingMode.ALWAYS_FAIL, purchasesConfigurationSlot.captured.galaxyBillingMode)
+    }
+
+    @Test
+    fun `calling configure with unknown Galaxy billing mode defaults to production`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.REVENUECAT.name,
+            platformInfo = expectedPlatformInfo,
+            store = Store.GALAXY,
+            galaxyBillingMode = "UNKNOWN",
+        )
+        assertEquals(GalaxyBillingMode.PRODUCTION, purchasesConfigurationSlot.captured.galaxyBillingMode)
     }
 
     private fun assertConfiguration(

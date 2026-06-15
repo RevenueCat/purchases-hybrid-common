@@ -91,6 +91,10 @@ fun setCreative(creative: String?) {
     Purchases.sharedInstance.setCreative(creative)
 }
 
+fun setAppsFlyerConversionData(data: Map<*, *>?) {
+    Purchases.sharedInstance.setAppsFlyerConversionData(data)
+}
+
 // endregion
 // region subscriber attributes
 
