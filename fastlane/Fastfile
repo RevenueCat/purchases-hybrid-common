@@ -378,17 +378,29 @@ lane :bump_hybrid_dependencies do |options|
   require 'uri'
   require 'json'
 
+  parameters = {
+    "action" => "upgrade-hybrid-common",
+    "version" => "#{version_number_for_bump}",
+    "automatic" => true
+  }
+
+  # purchases-flutter vendors the purchases-js-hybrid-mappings web bundle, so it
+  # verifies the copy it downloads against the sha256 of the artifact we just
+  # built and published (computed in the deploy-js-mappings job and read from the
+  # workspace). Only forward it to repos that declare the pipeline parameter; an
+  # undeclared parameter makes the CircleCI trigger fail.
+  js_mappings_sha = ENV['JS_MAPPINGS_SHA'].to_s.strip
+  if repo_name == 'purchases-flutter' && !js_mappings_sha.empty?
+    parameters["js_mappings_sha"] = js_mappings_sha
+  end
+
   uri = URI.parse("https://circleci.com/api/v2/project/github/RevenueCat/#{repo_name}/pipeline")
   request = Net::HTTP::Post.new(uri)
   request.basic_auth(ENV['CIRCLECI_TOKEN'], "")
   request.content_type = "application/json"
   request.body = JSON.dump({
     "branch" => "main",
-    "parameters" => {
-      "action" => "upgrade-hybrid-common",
-      "version" => "#{version_number_for_bump}",
-      "automatic" => true
-    }
+    "parameters" => parameters
   })
 
   req_options = {

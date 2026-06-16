@@ -316,6 +316,15 @@ jobs:
       - run:
           name: Deploy js-mappings NPM package
           command: bundle exec fastlane web deploy_js_mappings
+      - run:
+          name: Compute js-mappings bundle sha256
+          command: |
+            sha256sum purchases-js-hybrid-mappings/dist/index.umd.js | awk '{ print $1 }' > js_mappings_sha.txt
+            echo "purchases-js-hybrid-mappings sha256: $(cat js_mappings_sha.txt)"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - js_mappings_sha.txt
 
   make-github-release:
     docker:
@@ -349,13 +358,17 @@ jobs:
       - image: cimg/ruby:3.3.0
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - setup-git-credentials
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
           name: Kick off Flutter automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
+          command: |
+            export JS_MAPPINGS_SHA="$(cat js_mappings_sha.txt 2>/dev/null || true)"
+            bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
           when: always
       - run:
           name: Kick off React Native automatic dependency update
