@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@3.20.0
+  revenuecat: revenuecat/sdks-common-config@3.21.1
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -44,7 +44,7 @@ aliases:
 parameters:
   action:
     type: enum
-    enum: [ build, dependency-update, bump ]
+    enum: [ build, dependency-update, bump, update_error_codes ]
     default: build
 
 commands:
@@ -478,8 +478,11 @@ workflows:
   version: 2
   test:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - validate-circleci-config
       - test-ios-16
@@ -564,10 +567,34 @@ workflows:
 
   danger:
     when:
-      not:
-        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/danger
+
+  update-error-codes:
+    when:
+      equal: [ update_error_codes, << pipeline.parameters.action >> ]
+    jobs:
+      - revenuecat/update-error-codes:
+          platform: hybridCommon
+          output: typescript/src/generated/error-codes.ts
+          commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
+          update_api_steps:
+            - node/install:
+                install-yarn: true
+            - revenuecat/install-gem-unix-dependencies:
+                cache-version: v1
+            - run:
+                name: Build TypeScript and regenerate API report
+                command: |
+                  cd typescript
+                  yarn install
+                  yarn build
+                  yarn extract-api
 
   automatic-release:
     when:
@@ -578,6 +605,8 @@ workflows:
             equal: [ dependency-update, << pipeline.parameters.action >> ]
         - not:
             equal: [ bump, << pipeline.parameters.action >> ]
+        - not:
+            equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
           ruby_version: "3.3.0"
