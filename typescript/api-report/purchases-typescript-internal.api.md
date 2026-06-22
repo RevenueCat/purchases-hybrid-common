@@ -513,15 +513,19 @@ export interface PurchasesStoreTransaction {
 
 // @public
 export interface PurchasesSubscriptionInfo {
+    readonly autoResumeDate: string | null;
     readonly billingIssuesDetectedAt: string | null;
+    readonly displayName: string | null;
     readonly expiresDate: string | null;
     readonly gracePeriodExpiresDate: string | null;
     readonly isActive: boolean;
     readonly isSandbox: boolean;
+    readonly managementURL: string | null;
     readonly originalPurchaseDate: string | null;
     readonly ownershipType: OwnershipType;
     readonly periodType: PeriodType;
     readonly productIdentifier: string;
+    readonly productPlanIdentifier: string | null;
     readonly purchaseDate: string;
     readonly refundedAt: string | null;
     readonly store: Store;

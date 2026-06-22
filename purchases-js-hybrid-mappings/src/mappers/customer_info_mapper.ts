@@ -175,6 +175,11 @@ function mapSubscriptionInfos(
         storeTransactionId: subscriptionInfo.storeTransactionId,
         isActive: subscriptionInfo.isActive,
         willRenew: subscriptionInfo.willRenew,
+        // Not modeled by purchases-js; web has no Play-paused subscriptions.
+        autoResumeDate: null,
+        displayName: subscriptionInfo.displayName,
+        managementURL: subscriptionInfo.managementURL,
+        productPlanIdentifier: subscriptionInfo.productPlanIdentifier,
       },
     ]),
   );

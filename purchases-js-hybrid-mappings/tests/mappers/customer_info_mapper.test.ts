@@ -99,7 +99,10 @@ describe('mapCustomerInfo', () => {
       refundedAt: null,
       storeTransactionId: 'transaction_123',
       isActive: true,
-      willRenew: true
+      willRenew: true,
+      displayName: 'Premium Plan',
+      managementURL: 'https://manage.url/',
+      productPlanIdentifier: 'plan_123'
     };
 
     const nonSubscriptionTransaction: NonSubscriptionTransaction = {
@@ -237,7 +240,11 @@ describe('mapCustomerInfo', () => {
           refundedAt: null,
           storeTransactionId: 'transaction_123',
           isActive: true,
-          willRenew: true
+          willRenew: true,
+          autoResumeDate: null,
+          displayName: 'Premium Plan',
+          managementURL: 'https://manage.url/',
+          productPlanIdentifier: 'plan_123'
         }
       }
     });
