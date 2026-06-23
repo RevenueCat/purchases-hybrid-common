@@ -55,6 +55,8 @@ purchases-hybrid-common/
 
 ### Android
 
+JDK setup: install [mise](https://mise.jdx.dev/) and run `mise install` in project root to get the pinned Java version (sdkman via `sdk env install` is also supported).
+
 ```bash
 # Build
 ./gradlew build
