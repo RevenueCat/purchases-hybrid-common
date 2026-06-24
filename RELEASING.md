@@ -28,4 +28,5 @@ Sometimes you might need to release a patch on a version that's not the latest. 
     npm dist-tag add @revenuecat/purchases-typescript-internal@x.x.x latest
     ```
     This step is only needed when the hotfix is older than the current `latest`. If you're patching the newest version, npm's `latest` is already correct and you can skip it.
+    - **Getting a `403` from `npm dist-tag`?** Check whether you're routing npm through a firewall/proxy — e.g. a Socket firewall (`sfw`) alias in your shell that wraps all npm commands. It can block the registry write that `dist-tag add` performs even though regular installs work. Temporarily disable the alias (or run the command without the wrapper) and retry.
 1. Remember to edit the CHANGELOG.md in `main` to include the version that has been just released
