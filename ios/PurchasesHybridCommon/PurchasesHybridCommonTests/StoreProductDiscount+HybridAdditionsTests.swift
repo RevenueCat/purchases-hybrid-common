@@ -18,7 +18,7 @@ class StoreProductDiscountHybridAdditionsTests: QuickSpec {
             it("has the right format") {
                 let subscriptionPeriod = SKProductSubscriptionPeriod(numberOfUnits: 3, unit: .month)
                 let productDiscount = SKProductDiscount(price: 10.99,
-                                                        priceLocale: Locale.current,
+                                                        priceLocale: Locale(identifier: "en_US"),
                                                         identifier: "product discount",
                                                         subscriptionPeriod: subscriptionPeriod,
                                                         numberOfPeriods: 3,
