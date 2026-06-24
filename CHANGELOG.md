@@ -1,3 +1,7 @@
+## 18.8.1
+### 🔄 Other Changes
+* Android 10.6.1 => 10.6.2 via Cesar de la Vega
+
 ## 18.8.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
