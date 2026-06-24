@@ -251,6 +251,8 @@ private final class MockStoreTransaction: StoreTransactionType {
     let hasKnownPurchaseDate: Bool
     let hasKnownTransactionIdentifier: Bool
     let reason: RevenueCat.TransactionReason?
+    let revocationDate: Date?
+    let revocationReason: RevenueCat.RevocationReason?
 
     init(
         productIdentifier: String,
@@ -271,6 +273,8 @@ private final class MockStoreTransaction: StoreTransactionType {
         self.hasKnownPurchaseDate = true
         self.hasKnownTransactionIdentifier = true
         self.reason = nil
+        self.revocationDate = nil
+        self.revocationReason = nil
     }
 
     func finish(_ wrapper: PaymentQueueWrapperType, completion: @escaping @Sendable () -> Void) {
