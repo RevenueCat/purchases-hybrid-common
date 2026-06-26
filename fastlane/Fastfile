@@ -372,6 +372,14 @@ lane :bump_hybrid_dependencies do |options|
   version_number_for_bump = current_version_number
   repo_name = options[:repo_name]
 
+  latest_published = latest_published_version_number
+  if latest_published && Gem::Version.new(version_number_for_bump) < latest_published
+    UI.important("Skipping #{repo_name} bump: purchases-hybrid-common #{version_number_for_bump} " \
+                 "is older than the latest published release #{latest_published}. " \
+                 "Not propagating a downgrade.")
+    next
+  end
+
   UI.message("Triggering pipeline to bump #{repo_name} dependency to #{version_number_for_bump}")
 
   require 'net/http'
@@ -577,6 +585,14 @@ end
 
 def current_version_number
   File.read("../.version").strip
+end
+
+def latest_published_version_number
+  Fastlane::Helper::RevenuecatInternalHelper
+    .get_github_release_tag_names("purchases-hybrid-common", ENV['GITHUB_TOKEN'])
+    .select { |tag_name| Gem::Version.correct?(tag_name) }
+    .map { |tag_name| Gem::Version.new(tag_name) }
+    .max
 end
 
 def check_pods
