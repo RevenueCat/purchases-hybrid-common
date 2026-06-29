@@ -349,6 +349,8 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
+      - node/install:
+          install-yarn: true
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
