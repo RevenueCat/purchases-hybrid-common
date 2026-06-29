@@ -33,6 +33,10 @@ internal extension SubscriptionInfo {
             "price": priceObject ?? NSNull(),
             "isActive": isActive,
             "willRenew": willRenew,
+            "autoResumeDate": autoResumeDate?.rc_formattedAsISO8601() ?? NSNull(),
+            "displayName": displayName ?? NSNull(),
+            "managementURL": managementURL?.absoluteString ?? NSNull(),
+            "productPlanIdentifier": productPlanIdentifier ?? NSNull(),
         ]
     }
 

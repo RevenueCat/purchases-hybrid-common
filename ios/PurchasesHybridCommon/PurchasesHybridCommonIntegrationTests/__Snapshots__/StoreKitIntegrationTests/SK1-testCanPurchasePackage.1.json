@@ -52,14 +52,18 @@
     "originalApplicationVersion" : "1.0",
     "subscriptionsByProductIdentifier" : {
       "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro" : {
+        "autoResumeDate" : null,
         "billingIssuesDetectedAt" : null,
+        "displayName" : null,
         "gracePeriodExpiresDate" : null,
         "isActive" : true,
         "isSandbox" : true,
+        "managementURL" : null,
         "ownershipType" : "PURCHASED",
         "periodType" : "INTRO",
         "price" : null,
         "productIdentifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+        "productPlanIdentifier" : null,
         "refundedAt" : null,
         "store" : "APP_STORE",
         "storeTransactionId" : "0",

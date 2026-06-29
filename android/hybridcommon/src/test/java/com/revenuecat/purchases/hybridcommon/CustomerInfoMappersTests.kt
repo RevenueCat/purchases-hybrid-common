@@ -102,6 +102,8 @@ internal class CustomerInfoMappersTests {
     @Test
     fun `a CustomerInfo with SubscriptionInfo, should map to a non empty map of subscription infos`() {
         val mockDate = Date()
+        val mockManagementURL = mockk<Uri>(relaxed = true)
+        every { mockManagementURL.toString() } returns "https://manage.url/"
         every { mockCustomerInfo.subscriptionsByProductIdentifier } returns mapOf(
             "productIdentifier" to SubscriptionInfo(
                 productIdentifier = "productIdentifier",
@@ -117,6 +119,11 @@ internal class CustomerInfoMappersTests {
                 periodType = PeriodType.NORMAL,
                 refundedAt = mockDate,
                 storeTransactionId = "storeTransactionId",
+                autoResumeDate = mockDate,
+                displayName = "displayName",
+                price = null,
+                productPlanIdentifier = "productPlanIdentifier",
+                managementURL = mockManagementURL,
                 requestDate = mockDate,
             ),
         )
@@ -140,5 +147,9 @@ internal class CustomerInfoMappersTests {
         assertThat(mappedSubscriptionInfo["storeTransactionId"]).isEqualTo("storeTransactionId")
         assertThat(mappedSubscriptionInfo["isActive"]).isEqualTo(false)
         assertThat(mappedSubscriptionInfo["willRenew"]).isEqualTo(false)
+        assertThat(mappedSubscriptionInfo["autoResumeDate"]).isEqualTo(mockDate.toIso8601())
+        assertThat(mappedSubscriptionInfo["displayName"]).isEqualTo("displayName")
+        assertThat(mappedSubscriptionInfo["managementURL"]).isEqualTo("https://manage.url/")
+        assertThat(mappedSubscriptionInfo["productPlanIdentifier"]).isEqualTo("productPlanIdentifier")
     }
 }

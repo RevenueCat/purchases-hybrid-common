@@ -322,4 +322,22 @@ export interface PurchasesSubscriptionInfo {
      * Whether the subscription will renew at the next billing period.
      */
     readonly willRenew: boolean;
+    /**
+     * Date when a paused subscription is expected to automatically resume.
+     * Only set for Google Play subscriptions that have been paused; null otherwise.
+     */
+    readonly autoResumeDate: string | null;
+    /**
+     * The display name of the subscription as configured in the RevenueCat dashboard.
+     */
+    readonly displayName: string | null;
+    /**
+     * The management URL for this subscription.
+     */
+    readonly managementURL: string | null;
+    /**
+     * The base plan identifier that unlocked this subscription (Google Play base plans
+     * and Apple purchases with non-upfront billing plans).
+     */
+    readonly productPlanIdentifier: string | null;
 }

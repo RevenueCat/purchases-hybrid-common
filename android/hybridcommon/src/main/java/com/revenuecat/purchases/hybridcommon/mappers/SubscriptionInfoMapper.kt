@@ -19,4 +19,8 @@ fun SubscriptionInfo.map(): Map<String, Any?> =
         "storeTransactionId" to storeTransactionId,
         "isActive" to isActive,
         "willRenew" to willRenew,
+        "autoResumeDate" to autoResumeDate?.toIso8601(),
+        "displayName" to displayName,
+        "managementURL" to managementURL?.toString(),
+        "productPlanIdentifier" to productPlanIdentifier,
     )
