@@ -36,6 +36,8 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.rewardverification.RewardVerificationResult
+import com.revenuecat.purchases.ads.rewardverification.VerifiedReward
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.galaxy.GalaxyBillingMode
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
@@ -48,7 +50,9 @@ import com.revenuecat.purchases.hybridcommon.mappers.LogHandlerWithMapping
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
+import com.revenuecat.purchases.hybridcommon.mappers.toIso8601
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
+import com.revenuecat.purchases.hybridcommon.mappers.toMillis
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
@@ -1768,3 +1772,57 @@ internal fun convertToInt(value: Any?): Int? {
         else -> null
     }
 }
+
+// region Reward verification
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun generateRewardVerificationToken(impressionId: String): Map<String, Any?> {
+    val token = Purchases.sharedInstance.generateRewardVerificationToken(impressionId)
+    return mapOf(
+        "customData" to token.customData,
+        "clientTransactionId" to token.clientTransactionId,
+        "appUserID" to token.appUserID,
+    )
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun pollRewardVerification(
+    clientTransactionId: String,
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.pollRewardVerification(clientTransactionId) { result ->
+        onResult.onReceived(result.encode())
+    }
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+private fun RewardVerificationResult.encode(): Map<String, Any?> {
+    val reward = verifiedReward ?: return mapOf(
+        "failed" to true,
+        "moreRewards" to emptyList<Map<String, Any?>>(),
+    )
+    return mapOf(
+        "failed" to false,
+        "reward" to reward.encode(),
+        "moreRewards" to moreRewards.map { it.encode() },
+    )
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+private fun VerifiedReward.encode(): Map<String, Any?> = when (this) {
+    is VerifiedReward.VirtualCurrency -> mapOf(
+        "type" to "virtual_currency",
+        "code" to code,
+        "amount" to amount,
+    )
+    is VerifiedReward.Entitlement -> mapOf(
+        "type" to "entitlement",
+        "identifier" to identifier,
+        "expiresAt" to expiresAt.toIso8601(),
+        "expiresAtMillis" to expiresAt.toMillis(),
+    )
+    VerifiedReward.NoReward -> mapOf("type" to "no_reward")
+    else -> mapOf("type" to "unsupported_reward")
+}
+
+// endregion
