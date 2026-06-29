@@ -233,6 +233,9 @@ lane :update_native_dependencies_to_latest do |options|
   update_ios_native_version(new_version: latest_ios_release, current_version: current_ios_version)
   update_android_native_version(new_version: latest_android_release, current_version: current_android_version)
   update_js_native_version(new_version: latest_js_release, current_version: current_js_version)
+  Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+    sh("yarn install")
+  end
   run_pod_install
 
   new_versions = {
