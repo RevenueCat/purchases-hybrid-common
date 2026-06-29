@@ -29,6 +29,7 @@
     "url": "https://github.com/RevenueCat/purchases-hybrid-common/issues"
   },
   "homepage": "https://github.com/RevenueCat/purchases-hybrid-common#readme",
+  "packageManager": "yarn@1.22.22",
   "devDependencies": {
     "@microsoft/api-extractor": "^7.43.1",
     "@typescript-eslint/eslint-plugin": "^5.61.0",

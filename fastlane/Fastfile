@@ -119,7 +119,7 @@ end
 desc "Update typescript library API report"
 lane :update_typescript_api_report do
   Dir.chdir(File.expand_path('typescript', get_root_folder)) do
-    sh("yarn && yarn build && yarn extract-api")
+    sh("yarn install --frozen-lockfile && yarn build && yarn extract-api")
   end
 end
 
@@ -233,6 +233,11 @@ lane :update_native_dependencies_to_latest do |options|
   update_ios_native_version(new_version: latest_ios_release, current_version: current_ios_version)
   update_android_native_version(new_version: latest_android_release, current_version: current_android_version)
   update_js_native_version(new_version: latest_js_release, current_version: current_js_version)
+  if latest_js_release != current_js_version
+    Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
+      sh("yarn install")
+    end
+  end
   run_pod_install
 
   new_versions = {
@@ -525,21 +530,21 @@ platform :web do
   desc "Run tests for purchases-js-hybrid-mappings"
   lane :test_js_mappings do |options|
     Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
-      sh("yarn && yarn test")
+      sh("yarn install --frozen-lockfile && yarn test")
     end
   end
 
   desc "Run API tests for purchases-js-hybrid-mappings"
   lane :test_js_mappings_api do |options|
     Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
-      sh("yarn && yarn api-test:ci")
+      sh("yarn install --frozen-lockfile && yarn api-test:ci")
     end
   end
 
   desc "Run linter for purchases-js-hybrid-mappings"
   lane :lint_js_mappings do |options|
     Dir.chdir(File.expand_path('purchases-js-hybrid-mappings', get_root_folder)) do
-      sh("yarn && yarn format:check && yarn lint")
+      sh("yarn install --frozen-lockfile && yarn format:check && yarn lint")
     end
   end
 
@@ -567,7 +572,7 @@ def build_and_publish_npm_package(folder)
   is_prerelease = Gem::Version.new(version_number).prerelease?
 
   build_args = [
-    'yarn && yarn build'
+    'yarn install --frozen-lockfile && yarn build'
   ]
 
   publish_args = [
