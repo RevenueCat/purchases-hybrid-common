@@ -1,6 +1,7 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Skip bump_hybrid_dependencies when version is older than latest published (#1708) via Álvaro Brey (@AlvaroBrey)
-### 📦 Dependency Updates
-* [AUTOMATIC] Android 10.10.0 => 10.11.0 (#1712) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] iOS 5.79.0 => 5.80.0 JS 1.45.0 => 1.46.0 (#1707) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* Expose `autoResumeDate`, `displayName`, `managementURL`, `productPlanIdentifier` on `SubscriptionInfo` (#1698) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Commit yarn.lock for JS/TS packages and enforce --frozen-lockfile in CI (#1715) via Álvaro Brey (@AlvaroBrey)
+* Bump faraday from 1.10.5 to 1.10.6 (#1716) via dependabot[bot] (@dependabot[bot])
