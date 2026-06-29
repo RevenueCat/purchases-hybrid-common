@@ -396,7 +396,7 @@ jobs:
       - node/install:
           install-yarn: true
       - run:
-          command: yarn && yarn eslint
+          command: yarn install --frozen-lockfile && yarn eslint
 
   typescript-apitests:
     docker:
@@ -592,7 +592,7 @@ workflows:
                 name: Build TypeScript and regenerate API report
                 command: |
                   cd typescript
-                  yarn install
+                  yarn install --frozen-lockfile
                   yarn build
                   yarn extract-api
 
