@@ -134,7 +134,7 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                         mockPurchases.invokedProductsParameters?.completion([storeProduct])
 
                         DispatchQueue.main.async {
-                            if let purchaseParams = mockPurchases.invokedPurchaseProductParameters {
+                            if let purchaseParams = mockPurchases.invokedPurchaseParamsCompletionParameters {
                                 purchaseParams.completion(mockTransaction, mockCustomerInfo, nil, false)
                             }
                         }
@@ -143,7 +143,9 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                     expect(receivedError).to(beNil())
                     expect(receivedResult).toNot(beNil())
                     expect(receivedResult?["productIdentifier"] as? String) == "test_product_id"
-                    expect(mockPurchases.invokedPurchaseProductCount) == 1
+                    expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 1
+                    expect(mockPurchases.invokedPurchaseParamsCompletionParameters?.params.product?.productIdentifier)
+                        == "test_product_id"
                 }
 
                 it("successfully purchases a package") {
@@ -216,14 +218,15 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
 
                         mockPurchases.invokedOfferingsParameters?.completion(mockOfferings, nil)
 
-                        let presentedOfferingContext = mockPurchases.invokedPurchasePackageParameters?.package.presentedOfferingContext
+                        let presentedOfferingContext = mockPurchases.invokedPurchaseParamsCompletionParameters?
+                            .params.package?.presentedOfferingContext
                         expect(presentedOfferingContext?.offeringIdentifier) == "default"
                         expect(presentedOfferingContext?.placementIdentifier) == "placement_id"
                         expect(presentedOfferingContext?.targetingContext).to(beNil())
 
                         // Simulate the purchase completion
                         DispatchQueue.main.async {
-                            if let purchaseParams = mockPurchases.invokedPurchasePackageParameters {
+                            if let purchaseParams = mockPurchases.invokedPurchaseParamsCompletionParameters {
                                 purchaseParams.completion(mockTransaction, mockCustomerInfo, nil, false)
                             }
                         }
@@ -232,7 +235,7 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                     expect(receivedError).to(beNil())
                     expect(receivedResult).toNot(beNil())
                     expect(receivedResult?["productIdentifier"] as? String) == "monthly_product_id"
-                    expect(mockPurchases.invokedPurchasePackageCount) == 1
+                    expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 1
                 }
             }
         }

@@ -18,6 +18,7 @@ struct CommonPurchaseParams {
     let signedDiscountTimestamp: String?
     let winBackOfferID: String?
     let presentedOfferingContext: [String: Any]?
+    let quantity: Int?
 }
 
 extension CommonFunctionality {
@@ -29,6 +30,7 @@ extension CommonFunctionality {
         let presentedOfferingContext = options["presentedOfferingContext"] as? [String: Any]
         let signedDiscountTimestamp = options["signedDiscountTimestamp"] as? String
         let winBackOfferID = options["winBackOfferID"] as? String
+        let quantity = options["quantity"] as? Int
 
         let purchasableItem: PurchasableItem
 
@@ -45,7 +47,8 @@ extension CommonFunctionality {
             purchasableItem: purchasableItem,
             signedDiscountTimestamp: signedDiscountTimestamp,
             winBackOfferID: winBackOfferID,
-            presentedOfferingContext: presentedOfferingContext
+            presentedOfferingContext: presentedOfferingContext,
+            quantity: quantity
         )
     }
 

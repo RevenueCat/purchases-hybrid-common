@@ -306,6 +306,7 @@ import StoreKit
                         Self.purchase(package: packageIdentifier,
                                       presentedOfferingContext: presentedOfferingContext,
                                       signedDiscountTimestamp: validatedParams.signedDiscountTimestamp,
+                                      quantity: validatedParams.quantity.map { NSNumber(value: $0) },
                                       completion: completion)
                     }
                 } else {
@@ -320,6 +321,7 @@ import StoreKit
                 } else {
                     Self.purchase(product: productIdentifier,
                                   signedDiscountTimestamp: validatedParams.signedDiscountTimestamp,
+                                  quantity: validatedParams.quantity.map { NSNumber(value: $0) },
                                   completion: completion)
                 }
             }
@@ -332,6 +334,17 @@ import StoreKit
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(product: productIdentifier,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      quantity: nil,
+                      completion: completion)
+    }
+
+    @objc(purchaseProduct:signedDiscountTimestamp:quantity:completionBlock:)
+    static func purchase(product productIdentifier: String,
+                         signedDiscountTimestamp: String?,
+                         quantity: NSNumber?,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         self.product(with: productIdentifier) { storeProduct in
@@ -340,21 +353,22 @@ import StoreKit
                 return
             }
 
+            let builder = PurchaseParams.Builder(product: storeProduct)
+            if let quantity = quantity {
+                _ = builder.with(quantity: quantity.intValue)
+            }
+
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Self.sharedInstance.purchase(product: storeProduct,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
-                    return
+                    _ = builder.with(promotionalOffer: promotionalOffer)
                 }
-
             }
 
-            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
+            Self.sharedInstance.purchase(builder.build(), completion: hybridCompletion)
         }
     }
 
@@ -362,6 +376,19 @@ import StoreKit
     static func purchase(package packageIdentifier: String,
                          presentedOfferingContext: [String: Any],
                          signedDiscountTimestamp: String?,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(package: packageIdentifier,
+                      presentedOfferingContext: presentedOfferingContext,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      quantity: nil,
+                      completion: completion)
+    }
+
+    @objc(purchasePackage:presentedOfferingContext:signedDiscountTimestamp:quantity:completionBlock:)
+    static func purchase(package packageIdentifier: String,
+                         presentedOfferingContext: [String: Any],
+                         signedDiscountTimestamp: String?,
+                         quantity: NSNumber?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
@@ -375,22 +402,23 @@ import StoreKit
                 return
             }
 
+            let builder = PurchaseParams.Builder(package: package)
+            if let quantity = quantity {
+                _ = builder.with(quantity: quantity.intValue)
+            }
+
             if let signedDiscountTimestamp = signedDiscountTimestamp {
                 if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
                     guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
                         completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
                         return
                     }
-                    Self.sharedInstance.purchase(package: package,
-                                                 promotionalOffer: promotionalOffer,
-                                                 completion: hybridCompletion)
-                    return
+                    _ = builder.with(promotionalOffer: promotionalOffer)
                 }
             }
 
-            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
+            Self.sharedInstance.purchase(builder.build(), completion: hybridCompletion)
         }
-
     }
 
     @objc(makeDeferredPurchase:completionBlock:)

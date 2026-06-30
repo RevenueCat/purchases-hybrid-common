@@ -38,7 +38,8 @@ class CommonPurchaseParamsTests: QuickSpec {
                         "packageIdentifier": "test_package",
                         "signedDiscountTimestamp": "123456",
                         "winBackOfferID": "winback_123",
-                        "presentedOfferingContext": presentedOfferingContext
+                        "presentedOfferingContext": presentedOfferingContext,
+                        "quantity": 3
                     ]
 
                     let result = try? CommonFunctionality.validatePurchaseParams(options)
@@ -47,6 +48,7 @@ class CommonPurchaseParamsTests: QuickSpec {
                     expect(result?.signedDiscountTimestamp) == "123456"
                     expect(result?.winBackOfferID) == "winback_123"
                     expect(result?.presentedOfferingContext?["offering_id"] as? String) == "test_offering"
+                    expect(result?.quantity) == 3
                 }
             }
 
@@ -73,7 +75,8 @@ class CommonPurchaseParamsTests: QuickSpec {
                         "productIdentifier": "test_product",
                         "signedDiscountTimestamp": "789012",
                         "winBackOfferID": "winback_456",
-                        "presentedOfferingContext": presentedOfferingContext
+                        "presentedOfferingContext": presentedOfferingContext,
+                        "quantity": 5
                     ]
 
                     let result = try? CommonFunctionality.validatePurchaseParams(options)
@@ -82,6 +85,30 @@ class CommonPurchaseParamsTests: QuickSpec {
                     expect(result?.signedDiscountTimestamp) == "789012"
                     expect(result?.winBackOfferID) == "winback_456"
                     expect(result?.presentedOfferingContext?["offering_id"] as? String) == "test_offering"
+                    expect(result?.quantity) == 5
+                }
+            }
+
+            context("quantity") {
+                it("defaults to nil when not provided") {
+                    let options: [String: Any] = ["packageIdentifier": "test_package"]
+
+                    let result = try? CommonFunctionality.validatePurchaseParams(options)
+
+                    expect(result).toNot(beNil())
+                    expect(result?.quantity).to(beNil())
+                }
+
+                it("ignores a non-integer quantity") {
+                    let options: [String: Any] = [
+                        "packageIdentifier": "test_package",
+                        "quantity": "not_a_number"
+                    ]
+
+                    let result = try? CommonFunctionality.validatePurchaseParams(options)
+
+                    expect(result).toNot(beNil())
+                    expect(result?.quantity).to(beNil())
                 }
             }
 
