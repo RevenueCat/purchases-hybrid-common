@@ -132,7 +132,6 @@ For iOS and Android, this repository provides two libraries each (core + UI):
 - **Main Entry**: `hybridcommon/src/main/java/.../common.kt`
 - Core functions: `getOfferings()`, `getCurrentOfferingForPlacement()`, `configure()`
 - Mappers package handles data transformations
-- Targets BillingClient v8 (BillingClient v7 support has been removed)
 - Used by: Flutter, React Native, Unity, Capacitor, Cordova, KMP
 
 **UI library (`hybridcommon-ui`):**
