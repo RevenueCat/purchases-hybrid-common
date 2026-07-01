@@ -20,18 +20,6 @@ android {
     namespace = "com.revenuecat.purchases.hybridcommon.ui"
     compileSdk = 34
 
-    flavorDimensions += "billingclient"
-
-    productFlavors {
-        create("bc8") {
-            dimension = "billingclient"
-            isDefault = true
-        }
-        create("bc7") {
-            dimension = "billingclient"
-        }
-    }
-
     defaultConfig {
         minSdk = 24
 
@@ -59,10 +47,8 @@ android {
 dependencies {
     implementation(libs.fragment.ktx)
     implementation(project(":hybridcommon"))
-    "bc8Api"(libs.purchases.bc8)
-    "bc8Api"(libs.purchases.ui.bc8)
-    "bc7Api"(libs.purchases.bc7)
-    "bc7Api"(libs.purchases.ui.bc7)
+    api(libs.purchases)
+    api(libs.purchases.ui)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
 }
