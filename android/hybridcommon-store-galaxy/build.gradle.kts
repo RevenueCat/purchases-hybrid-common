@@ -18,15 +18,6 @@ android {
     namespace = "com.revenuecat.purchases.hybridcommon.galaxy"
     compileSdk = 34
 
-    flavorDimensions += "billingclient"
-
-    productFlavors {
-        create("bc8") {
-            dimension = "billingclient"
-            isDefault = true
-        }
-    }
-
     defaultConfig {
         minSdk = 23
 
@@ -46,5 +37,5 @@ android {
 }
 
 dependencies {
-    "bc8Api"(libs.purchases.galaxy.bc8)
+    api(libs.purchases.galaxy)
 }
