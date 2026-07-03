@@ -1,7 +1,7 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Expose `autoResumeDate`, `displayName`, `managementURL`, `productPlanIdentifier` on `SubscriptionInfo` (#1698) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.80.0 => 5.80.2 Android 10.11.0 => 10.12.0 JS 1.46.0 => 1.47.0 (#1724) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Commit yarn.lock for JS/TS packages and enforce --frozen-lockfile in CI (#1715) via Álvaro Brey (@AlvaroBrey)
-* Bump faraday from 1.10.5 to 1.10.6 (#1716) via dependabot[bot] (@dependabot[bot])
+* Remove BillingClient v7 (bc7) flavor (#1722) via Toni Rico (@tonidero)
+* Bump fastlane-plugin-revenuecat_internal from `70bf5c7` to `dab6765` (#1720) via dependabot[bot] (@dependabot[bot])
