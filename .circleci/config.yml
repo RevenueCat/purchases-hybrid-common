@@ -226,7 +226,8 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-mise-tools
+      - install-mise-tools:
+          working_directory: ~/purchases-hybrid-common
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -242,7 +243,8 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-mise-tools
+      - install-mise-tools:
+          working_directory: ~/purchases-hybrid-common
       - android/restore-gradle-cache
       - run:
           name: Run Tests
