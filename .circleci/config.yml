@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@4.1.0
+  revenuecat: revenuecat/sdks-common-config@4.2.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -48,16 +48,10 @@ parameters:
     default: build
 
 commands:
-  install-sdkman:
-    description: Install SDKMAN and set up Java environment
+  install-mise-tools:
+    description: Install mise tools from mise.toml (Java, etc.)
     steps:
-      - revenuecat/install-sdkman
-      - run:
-          name: Setup Java environment
-          command: |
-            if ! sdk env install; then
-              echo "Error installing Java SDK through SDKMAN, continuing with default Java" >&2
-            fi
+      - revenuecat/install-mise-tools
 
   setup-git-credentials:
      steps:
@@ -232,7 +226,7 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-sdkman
+      - install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -248,7 +242,7 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-sdkman
+      - install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Run Tests
@@ -270,7 +264,7 @@ jobs:
         default: false
     steps:
       - checkout
-      - install-sdkman
+      - install-mise-tools
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - android/accept-licenses
