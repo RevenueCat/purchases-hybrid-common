@@ -50,8 +50,27 @@ parameters:
 commands:
   install-mise-tools:
     description: Install mise tools from mise.toml (Java, etc.)
+    parameters:
+      root:
+        type: string
+        default: "."
     steps:
-      - revenuecat/install-mise-tools
+      - revenuecat/install-mise
+      - run:
+          name: Install mise tools
+          working_directory: << parameters.root >>
+          command: |
+            if [ ! -f "mise.toml" ]; then
+              echo "❌ mise.toml not found. Please create a mise.toml file with tool versions."
+              exit 1
+            fi
+            mise settings set experimental true
+            mise install
+            if java_home="$(mise where java 2>/dev/null)"; then
+              echo "export JAVA_HOME=\"$java_home\"" >> "$BASH_ENV"
+              java -version || { echo "❌ Java did not install properly."; exit 1; }
+            fi
+            echo "✅ mise tools installation completed"
 
   setup-git-credentials:
      steps:
@@ -227,7 +246,7 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-mise-tools:
-          working_directory: ~/purchases-hybrid-common
+          root: ~/purchases-hybrid-common
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -244,7 +263,7 @@ jobs:
       - checkout:
           path: ~/purchases-hybrid-common
       - install-mise-tools:
-          working_directory: ~/purchases-hybrid-common
+          root: ~/purchases-hybrid-common
       - android/restore-gradle-cache
       - run:
           name: Run Tests
