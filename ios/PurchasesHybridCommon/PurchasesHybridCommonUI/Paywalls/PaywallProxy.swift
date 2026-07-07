@@ -44,7 +44,20 @@ import UIKit
         /// This is useful for ensuring the paywall covers the entire screen in landscape orientation,
         /// where `.pageSheet` leaves visible space on the sides.
         /// Defaults to `false` to preserve backwards compatibility.
+        ///
+        /// Prefer ``presentationMode`` for new integrations, which supports all presentation styles.
+        /// When ``presentationMode`` is provided it takes precedence over this flag.
         @objc public static let useFullScreenPresentation = "useFullScreenPresentation"
+        /// The `UIModalPresentationStyle` to present the paywall with. One of `"pageSheet"`, `"formSheet"`,
+        /// `"fullScreen"` or `"automatic"`.
+        ///
+        /// This is the preferred way for hybrid SDKs to control presentation, and takes precedence over
+        /// ``useFullScreenPresentation``. When neither is provided, the paywall is presented with `.pageSheet`
+        /// to preserve backwards compatibility.
+        ///
+        /// Note: on iPad, `.pageSheet` covers most of the screen while `.formSheet` presents a smaller,
+        /// centered modal. `.automatic` resolves to `.formSheet` on iOS 18+ and `.pageSheet` on earlier versions.
+        @objc public static let presentationMode = "presentationMode"
     }
     
     @objc public class PresentedOfferingContextKeys: NSObject {
@@ -289,7 +302,7 @@ import UIKit
         }
 
         controller.delegate = self
-        controller.modalPresentationStyle = params.useFullScreenPresentation ? .fullScreen : .pageSheet
+        controller.modalPresentationStyle = params.modalPresentationStyle
         controller.view.backgroundColor = .systemBackground
 
         if let purchaseLogicBridge {
@@ -386,14 +399,14 @@ import UIKit
         let fontProvider: PaywallFontProvider
         let shouldBlockTouchEvents: Bool
         let customVariables: [String: Any]?
-        let useFullScreenPresentation: Bool
+        let modalPresentationStyle: UIModalPresentationStyle
         let content: Content
 
         init(options: [String: Any], content: Content) {
             self.displayCloseButton = options[PaywallOptionsKeys.displayCloseButton] as? Bool ?? false
             self.shouldBlockTouchEvents = options[PaywallOptionsKeys.shouldBlockTouchEvents] as? Bool ?? false
             self.customVariables = options[PaywallOptionsKeys.customVariables] as? [String: Any]
-            self.useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+            self.modalPresentationStyle = Self.resolveModalPresentationStyle(from: options)
             self.content = content
 
             if let fontName = options[PaywallOptionsKeys.fontName] as? String {
@@ -401,6 +414,27 @@ import UIKit
             } else {
                 self.fontProvider = DefaultPaywallFontProvider()
             }
+        }
+
+        /// Resolves the presentation style from the options dictionary.
+        ///
+        /// `presentationMode` takes precedence when present. Otherwise falls back to the legacy
+        /// `useFullScreenPresentation` boolean, defaulting to `.pageSheet` to preserve backwards
+        /// compatibility for existing hybrid integrations that pass neither key.
+        private static func resolveModalPresentationStyle(from options: [String: Any]) -> UIModalPresentationStyle {
+            if let mode = options[PaywallOptionsKeys.presentationMode] as? String {
+                switch mode.lowercased() {
+                case "fullscreen": return .fullScreen
+                case "formsheet": return .formSheet
+                case "automatic": return .automatic
+                // "sheet" is accepted as an alias for "pageSheet" to match hybrid SDK tokens (e.g. Unity).
+                case "pagesheet", "sheet": return .pageSheet
+                default: break
+                }
+            }
+
+            let useFullScreenPresentation = options[PaywallOptionsKeys.useFullScreenPresentation] as? Bool ?? false
+            return useFullScreenPresentation ? .fullScreen : .pageSheet
         }
     }
 }
