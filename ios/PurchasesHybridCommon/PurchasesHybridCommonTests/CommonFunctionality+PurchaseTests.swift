@@ -8,8 +8,8 @@
 
 import Quick
 import Nimble
-@testable import PurchasesHybridCommon
-@testable import RevenueCat
+@_spi(Internal) @testable import PurchasesHybridCommon
+@_spi(Internal) @testable import RevenueCat
 
 class CommonFunctionalityPurchaseTests: QuickSpec {
 

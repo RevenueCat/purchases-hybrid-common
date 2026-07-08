@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
+@import PurchasesHybridCommonUI;
 @import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -254,6 +255,14 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isCodeRedemptionSheetAvailable __unused = [checker isCodeRedemptionSheetAPIAvailable];
     BOOL isCustomPaywallTrackingAvailable __unused = [checker isCustomPaywallTrackingAPIAvailable];
 }
+
+#if TARGET_OS_IPHONE && !TARGET_OS_TV && !TARGET_OS_WATCH
+- (void)testPresentPaywallAPIs {
+    if (@available(iOS 15, *)) {
+        BOOL ok __unused = [RCCommonFunctionality presentPaywallFromURL: @"test"];
+    }
+}
+#endif
 
 @end
 
