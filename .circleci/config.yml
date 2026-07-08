@@ -48,30 +48,6 @@ parameters:
     default: build
 
 commands:
-  install-mise-tools:
-    description: Install mise tools from mise.toml (Java, etc.)
-    parameters:
-      root:
-        type: string
-        default: "."
-    steps:
-      - revenuecat/install-mise
-      - run:
-          name: Install mise tools
-          working_directory: << parameters.root >>
-          command: |
-            if [ ! -f "mise.toml" ]; then
-              echo "❌ mise.toml not found. Please create a mise.toml file with tool versions."
-              exit 1
-            fi
-            mise settings set experimental true
-            mise install
-            if java_home="$(mise where java 2>/dev/null)"; then
-              echo "export JAVA_HOME=\"$java_home\"" >> "$BASH_ENV"
-              java -version || { echo "❌ Java did not install properly."; exit 1; }
-            fi
-            echo "✅ mise tools installation completed"
-
   setup-git-credentials:
      steps:
        - run:
@@ -240,16 +216,16 @@ jobs:
       name: android/android-machine
       resource-class: large
       tag: default
-    working_directory: ~/purchases-hybrid-common/android
+    working_directory: ~/purchases-hybrid-common
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-mise-tools:
-          root: ~/purchases-hybrid-common
+      - revenuecat/install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Detekt
+          working_directory: android
           command: ./gradlew detekt
       - android/save-gradle-cache
 
@@ -258,21 +234,21 @@ jobs:
       name: android/android-machine
       resource-class: large
       tag: default
-    working_directory: ~/purchases-hybrid-common/android
+    working_directory: ~/purchases-hybrid-common
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-mise-tools:
-          root: ~/purchases-hybrid-common
+      - revenuecat/install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Run Tests
+          working_directory: android
           command: ./gradlew lint test
       - android/save-build-cache
       - store_artifacts:
-          path: build/reports
+          path: android/build/reports
       - store_test_results:
-          path: build/test-results
+          path: android/build/test-results
 
   deploy-android:
     executor:
@@ -285,7 +261,7 @@ jobs:
         default: false
     steps:
       - checkout
-      - install-mise-tools
+      - revenuecat/install-mise-tools
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - android/accept-licenses
