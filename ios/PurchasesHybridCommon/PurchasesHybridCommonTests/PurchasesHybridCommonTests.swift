@@ -132,6 +132,74 @@ class PurchasesHybridCommonTests: QuickSpec {
             }
         }
 
+        context("redeemWebPurchase") {
+            let validURLString = "purchases://redeem_web_purchase?redemption_token=test_token"
+
+            it("returns a serializable error dictionary and no error container on the error result") {
+                let mockError = NSError(domain: "revenuecat", code: 123)
+                mockPurchases.stubbedRedeemWebPurchaseAsyncResult = .error(mockError)
+
+                var receivedResultDict: NSDictionary?
+                var receivedError: ErrorContainer?
+
+                waitUntil { done in
+                    CommonFunctionality.redeemWebPurchase(urlString: validURLString) { resultDict, error in
+                        receivedResultDict = resultDict as NSDictionary?
+                        receivedError = error
+                        done()
+                    }
+                }
+
+                // The error must NOT be delivered through the completion's error slot for this path.
+                expect(receivedError).to(beNil())
+
+                let unwrappedResultDict = try XCTUnwrap(receivedResultDict)
+                expect(unwrappedResultDict["result"] as? String) == "ERROR"
+
+                // Regression: the error value must be a plain serializable dictionary, not an ErrorContainer
+                // object. A raw ErrorContainer cannot be encoded by hybrid platform codecs (SIGABRT).
+                let errorValue = try XCTUnwrap(unwrappedResultDict["error"])
+                expect(errorValue is ErrorContainer) == false
+
+                let expectedErrorDict: NSDictionary = [
+                    "code": mockError.code,
+                    "message": mockError.localizedDescription,
+                    "underlyingErrorMessage": ""
+                ]
+                expect(errorValue as? NSDictionary) == expectedErrorDict
+            }
+
+            it("returns the obfuscatedEmail on the expired result") {
+                mockPurchases.stubbedRedeemWebPurchaseAsyncResult = .expired("t***@example.com")
+
+                var receivedResultDict: NSDictionary?
+
+                waitUntil { done in
+                    CommonFunctionality.redeemWebPurchase(urlString: validURLString) { resultDict, _ in
+                        receivedResultDict = resultDict as NSDictionary?
+                        done()
+                    }
+                }
+
+                let unwrappedResultDict = try XCTUnwrap(receivedResultDict)
+                expect(unwrappedResultDict["result"] as? String) == "EXPIRED"
+                expect(unwrappedResultDict["obfuscatedEmail"] as? String) == "t***@example.com"
+            }
+
+            it("returns an error container through the completion when the URL is invalid") {
+                var receivedResultDict: NSDictionary?
+                var receivedError: ErrorContainer?
+
+                CommonFunctionality.redeemWebPurchase(urlString: "not a valid url") { resultDict, error in
+                    receivedResultDict = resultDict as NSDictionary?
+                    receivedError = error
+                }
+
+                expect(receivedResultDict).to(beNil())
+                expect(receivedError).toNot(beNil())
+            }
+        }
+
         context("logOut") {
             it("passes the call correctly to Purchases") {
                 mockPurchases.stubbedLogOutCompletionResult = (Self.mockCustomerInfo, nil)
