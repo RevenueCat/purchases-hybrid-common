@@ -258,7 +258,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testPresentPaywallAPIs {
 
-    if (@available(iOS 15)) {
+    if (@available(iOS 15, *)) {
         BOOL ok __unused = [RCCommonFunctionality presentPaywallFromURL: @"test"];
     }
 
