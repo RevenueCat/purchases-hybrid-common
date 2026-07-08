@@ -256,14 +256,14 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isCustomPaywallTrackingAvailable __unused = [checker isCustomPaywallTrackingAPIAvailable];
 }
 
+#if canImport(UIKit) && !os(tvOS) && !os(watchOS)
 - (void)testPresentPaywallAPIs {
-
     if (@available(iOS 15, *)) {
         BOOL ok __unused = [RCCommonFunctionality presentPaywallFromURL: @"test"];
     }
-
 }
 
 @end
+#endif
 
 NS_ASSUME_NONNULL_END
