@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @import PurchasesHybridCommon;
+@import PurchasesHybridCommonUI;
 @import RevenueCat;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -253,6 +254,14 @@ NS_ASSUME_NONNULL_BEGIN
     BOOL isEnableAdServicesAvailable __unused = [checker isEnableAdServicesAttributionTokenCollectionAPIAvailable];
     BOOL isCodeRedemptionSheetAvailable __unused = [checker isCodeRedemptionSheetAPIAvailable];
     BOOL isCustomPaywallTrackingAvailable __unused = [checker isCustomPaywallTrackingAPIAvailable];
+}
+
+- (void)testPresentPaywallAPIs {
+
+    if (@available(iOS 15)) {
+        BOOL ok __unused = [RCCommonFunctionality presentPaywallFromURL: @"test"];
+    }
+
 }
 
 @end
