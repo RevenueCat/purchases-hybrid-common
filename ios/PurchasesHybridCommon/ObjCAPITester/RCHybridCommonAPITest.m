@@ -262,8 +262,8 @@ NS_ASSUME_NONNULL_BEGIN
         BOOL ok __unused = [RCCommonFunctionality presentPaywallFromURL: @"test"];
     }
 }
+#endif
 
 @end
-#endif
 
 NS_ASSUME_NONNULL_END
