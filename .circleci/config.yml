@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@4.1.0
+  revenuecat: revenuecat/sdks-common-config@4.3.0
   macos: circleci/macos@2.0.1
   node: circleci/node@5.1.0
 
@@ -48,17 +48,6 @@ parameters:
     default: build
 
 commands:
-  install-sdkman:
-    description: Install SDKMAN and set up Java environment
-    steps:
-      - revenuecat/install-sdkman
-      - run:
-          name: Setup Java environment
-          command: |
-            if ! sdk env install; then
-              echo "Error installing Java SDK through SDKMAN, continuing with default Java" >&2
-            fi
-
   setup-git-credentials:
      steps:
        - run:
@@ -227,15 +216,16 @@ jobs:
       name: android/android-machine
       resource-class: large
       tag: default
-    working_directory: ~/purchases-hybrid-common/android
+    working_directory: ~/purchases-hybrid-common
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-sdkman
+      - revenuecat/install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Detekt
+          working_directory: android
           command: ./gradlew detekt
       - android/save-gradle-cache
 
@@ -244,20 +234,21 @@ jobs:
       name: android/android-machine
       resource-class: large
       tag: default
-    working_directory: ~/purchases-hybrid-common/android
+    working_directory: ~/purchases-hybrid-common
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - install-sdkman
+      - revenuecat/install-mise-tools
       - android/restore-gradle-cache
       - run:
           name: Run Tests
+          working_directory: android
           command: ./gradlew lint test
       - android/save-build-cache
       - store_artifacts:
-          path: build/reports
+          path: android/build/reports
       - store_test_results:
-          path: build/test-results
+          path: android/build/test-results
 
   deploy-android:
     executor:
@@ -270,7 +261,7 @@ jobs:
         default: false
     steps:
       - checkout
-      - install-sdkman
+      - revenuecat/install-mise-tools
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - android/accept-licenses
