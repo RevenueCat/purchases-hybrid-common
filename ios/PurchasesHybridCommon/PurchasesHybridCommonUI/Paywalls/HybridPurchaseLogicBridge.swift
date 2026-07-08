@@ -9,7 +9,7 @@
 #if !os(macOS) && !os(tvOS) && !os(watchOS)
 
 import Foundation
-//import PurchasesHybridCommon
+import PurchasesHybridCommon
 import RevenueCat
 import RevenueCatUI
 

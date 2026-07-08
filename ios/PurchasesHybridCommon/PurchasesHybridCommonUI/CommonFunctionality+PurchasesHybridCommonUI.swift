@@ -41,7 +41,7 @@ extension CommonFunctionality {
          Therefore, to avoid the hassle of creating an entirely new protocol in another repo just to add a single
          method where we would still need to cast to the correct type, this implementation does a direct cast
          to the "Purchases" type. In the event that a "PurchasesUIType" protocol ever gets created,
-         this cast would be a reasonale place to adopt it.
+         this cast would be a reasonable place to adopt it.
          */
         guard let purchases = Self.sharedInstance as? Purchases else {
             // in the off-chance that we somehow have the wrong kind of shared instance, log a message
