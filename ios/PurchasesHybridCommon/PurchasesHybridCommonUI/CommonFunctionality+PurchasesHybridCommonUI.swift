@@ -13,7 +13,7 @@ import RevenueCatUI
 
 extension CommonFunctionality {
 
-    @available(iOS 15.0)
+    @available(iOS 15.0, *)
     @MainActor
     @objc(presentPaywallFromURL:)
     public static func presentPaywall(from url: String) -> Bool {
