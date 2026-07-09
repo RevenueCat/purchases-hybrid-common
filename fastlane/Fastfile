@@ -490,13 +490,13 @@ end
 platform :typescript do
   desc "Deploy npm package to npm.js"
   lane :deploy do |options|
-    build_and_publish_npm_package("typescript")
+    build_and_publish_npm_package("typescript", dry_run: options[:dry_run])
   end
 
   desc "Deploy typescript interfaces ESNext NPM package"
   lane :deploy_esm do |options|
     make_typescript_package_esm
-    build_and_publish_npm_package("typescript")
+    build_and_publish_npm_package("typescript", dry_run: options[:dry_run])
   end
 end
 
@@ -524,7 +524,7 @@ platform :web do
 
   desc "Deploy purchases-js-hybrid-mappings to npm.js"
   lane :deploy_js_mappings do |options|
-    build_and_publish_npm_package("purchases-js-hybrid-mappings")
+    build_and_publish_npm_package("purchases-js-hybrid-mappings", dry_run: options[:dry_run])
   end
 end
 
@@ -541,7 +541,7 @@ def make_typescript_package_esm
   )
 end
 
-def build_and_publish_npm_package(folder)
+def build_and_publish_npm_package(folder, dry_run: false)
   version_number = current_version_number
   is_prerelease = Gem::Version.new(version_number).prerelease?
 
@@ -558,7 +558,12 @@ def build_and_publish_npm_package(folder)
 
   Dir.chdir(File.expand_path(folder, get_root_folder)) do
     sh(build_args)
-    sh(publish_args)
+    if dry_run
+      sh(['npm', 'pack'])
+      UI.message("ℹ️  npm pack dry-run for #{folder}; nothing published.")
+    else
+      sh(publish_args)
+    end
   end
 end
 

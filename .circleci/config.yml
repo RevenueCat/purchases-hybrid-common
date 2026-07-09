@@ -5,7 +5,6 @@ orbs:
   android: circleci/android@2.4.0
   revenuecat: revenuecat/sdks-common-config@4.4.0
   macos: circleci/macos@2.0.1
-  node: circleci/node@5.1.0
 
 version: 2.1
 
@@ -221,7 +220,8 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - revenuecat/install-mise-tools
+      - revenuecat/install-mise-tools:
+          tools: java
       - android/restore-gradle-cache
       - run:
           name: Detekt
@@ -238,7 +238,8 @@ jobs:
     steps:
       - checkout:
           path: ~/purchases-hybrid-common
-      - revenuecat/install-mise-tools
+      - revenuecat/install-mise-tools:
+          tools: java
       - android/restore-gradle-cache
       - run:
           name: Run Tests
@@ -261,7 +262,8 @@ jobs:
         default: false
     steps:
       - checkout
-      - revenuecat/install-mise-tools
+      - revenuecat/install-mise-tools:
+          tools: java
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - android/accept-licenses
@@ -274,39 +276,57 @@ jobs:
 
   deploy-typescript:
     docker:
-      - image: cimg/ruby:3.3.0-node
+      - image: cimg/ruby:3.3.0
+    parameters:
+      dry_run:
+        type: boolean
+        default: false
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package
-          command: bundle exec fastlane typescript deploy
+          command: bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
 
   deploy-typescript-esm:
     docker:
-      - image: cimg/ruby:3.3.0-node
+      - image: cimg/ruby:3.3.0
+    parameters:
+      dry_run:
+        type: boolean
+        default: false
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - copy-npm-rc
       - run:
           name: Deploy typescript interfaces ESNext NPM package
-          command: bundle exec fastlane typescript deploy_esm
+          command: bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
 
   deploy-js-mappings:
     docker:
-      - image: cimg/ruby:3.3.0-node
+      - image: cimg/ruby:3.3.0
+    parameters:
+      dry_run:
+        type: boolean
+        default: false
     steps:
       - checkout
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - copy-npm-rc
       - run:
           name: Deploy js-mappings NPM package
-          command: bundle exec fastlane web deploy_js_mappings
+          command: bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
       - run:
           name: Compute js-mappings bundle sha256
           command: |
@@ -340,8 +360,8 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
       - run:
           name: Update dependencies to latest versions
           command: bundle exec fastlane open_pr_upgrading_dependencies
@@ -381,14 +401,14 @@ jobs:
           when: always
 
   typescript-lint:
-    executor: node/default
-    working_directory: ~/purchases-hybrid-common/typescript
+    docker:
+      - image: cimg/base:current
     steps:
-      - checkout:
-          path: ~/purchases-hybrid-common
-      - node/install:
-          install-yarn: true
+      - checkout
+      - revenuecat/install-mise-tools:
+          tools: node
       - run:
+          working_directory: typescript
           command: yarn install --frozen-lockfile && yarn eslint
 
   typescript-apitests:
@@ -396,8 +416,8 @@ jobs:
       - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -409,8 +429,8 @@ jobs:
       - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -422,8 +442,8 @@ jobs:
       - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -435,8 +455,8 @@ jobs:
       - image: cimg/ruby:3.3.0-node
     steps:
       - checkout
-      - node/install:
-          install-yarn: true
+      - revenuecat/install-mise-tools:
+          tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       - run:
@@ -487,6 +507,15 @@ workflows:
       - test-android
       - deploy-android:
           name: android-deploy-dry-run
+          dry_run: true
+      - deploy-typescript:
+          name: typescript-deploy-dry-run
+          dry_run: true
+      - deploy-typescript-esm:
+          name: typescript-esm-deploy-dry-run
+          dry_run: true
+      - deploy-js-mappings:
+          name: js-mappings-deploy-dry-run
           dry_run: true
       - detekt-android
       - typescript-lint
@@ -577,8 +606,8 @@ workflows:
           outputs: "error-codes.ts:typescript/src/generated/error-codes.ts"
           commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
           update_api_steps:
-            - node/install:
-                install-yarn: true
+            - revenuecat/install-mise-tools:
+                tools: node
             - revenuecat/install-gem-unix-dependencies:
                 cache-version: v1
             - run:
