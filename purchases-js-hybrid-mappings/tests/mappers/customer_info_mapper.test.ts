@@ -61,6 +61,7 @@ describe('mapCustomerInfo', () => {
   it('maps CustomerInfo with subs and non subs purchases correctly', () => {
     const purchaseDate = new Date('2024-01-15T12:00:00Z');
     const expirationDate = new Date('2024-02-15T12:00:00Z');
+    const autoResumeDate = new Date('2024-03-15T12:00:00Z');
 
     const entitlementInfo: EntitlementInfo = {
       identifier: 'premium',
@@ -100,6 +101,7 @@ describe('mapCustomerInfo', () => {
       storeTransactionId: 'transaction_123',
       isActive: true,
       willRenew: true,
+      autoResumeDate: autoResumeDate,
       displayName: 'Premium Plan',
       managementURL: 'https://manage.url/',
       productPlanIdentifier: 'plan_123'
@@ -241,7 +243,7 @@ describe('mapCustomerInfo', () => {
           storeTransactionId: 'transaction_123',
           isActive: true,
           willRenew: true,
-          autoResumeDate: null,
+          autoResumeDate: autoResumeDate.toISOString(),
           displayName: 'Premium Plan',
           managementURL: 'https://manage.url/',
           productPlanIdentifier: 'plan_123'
