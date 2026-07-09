@@ -3,8 +3,11 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import com.android.billingclient.api.ProductDetails
 import com.revenuecat.purchases.CustomerInfo
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offering
@@ -19,6 +22,7 @@ import com.revenuecat.purchases.PurchasesAreCompletedBy
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
+import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -31,6 +35,7 @@ import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.GoogleStoreProduct
@@ -46,9 +51,13 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
+import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -382,6 +391,87 @@ internal class CommonKtTests {
         val mockErrorMap = mockError.map()
         verify(exactly = 1) {
             onResult.onError(mockErrorMap)
+        }
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `redeemWebPurchase with error result emits a serializable error map, not an ErrorContainer`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockk(relaxed = true)
+        mockkConstructor(Intent::class)
+
+        val mockRedemption = mockk<WebPurchaseRedemption>()
+        every { Purchases.parseAsWebPurchaseRedemption(any<Intent>()) } returns mockRedemption
+
+        val listenerSlot = slot<RedeemWebPurchaseListener>()
+        every { mockPurchases.redeemWebPurchase(any(), capture(listenerSlot)) } just runs
+
+        val mockError = mockk<PurchasesError>(relaxed = true)
+
+        val capturedMap = slot<Map<String, *>>()
+        val onResult = mockk<OnResult>()
+        every { onResult.onReceived(capture(capturedMap)) } just runs
+        every { onResult.onError(any()) } just runs
+
+        try {
+            redeemWebPurchase(
+                urlString = "https://revenuecat.com/redeem?redemption_token=token",
+                onResult = onResult,
+            )
+            listenerSlot.captured.handleResult(RedeemWebPurchaseListener.Result.Error(mockError))
+
+            val receivedMap = capturedMap.captured
+            assertThat(receivedMap["result"]).isEqualTo("ERROR")
+            // Regression: the error value must be the flat, serializable info map (as consumers parse),
+            // never an ErrorContainer object, which platform codecs cannot encode (crash).
+            assertThat(receivedMap["error"]).isInstanceOf(Map::class.java)
+            assertThat(receivedMap["error"]).isEqualTo(mockError.map().info)
+            verify(exactly = 0) { onResult.onError(any()) }
+        } finally {
+            unmockkConstructor(Intent::class)
+            unmockkStatic(Uri::class)
+        }
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    @Test
+    fun `redeemWebPurchase with invalid URL calls onError`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = "appUserID",
+            purchasesAreCompletedBy = PurchasesAreCompletedBy.MY_APP.name,
+            platformInfo = PlatformInfo("flavor", "version"),
+        )
+
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockk(relaxed = true)
+        mockkConstructor(Intent::class)
+        every { Purchases.parseAsWebPurchaseRedemption(any<Intent>()) } returns null
+
+        val onResult = mockk<OnResult>()
+        val errorSlot = slot<ErrorContainer>()
+        every { onResult.onReceived(any()) } just runs
+        every { onResult.onError(capture(errorSlot)) } just runs
+
+        try {
+            redeemWebPurchase(urlString = "not a valid url", onResult = onResult)
+
+            verify(exactly = 1) { onResult.onError(any()) }
+            verify(exactly = 0) { onResult.onReceived(any()) }
+            assertThat(errorSlot.captured.code).isEqualTo(PurchasesErrorCode.UnsupportedError.code)
+        } finally {
+            unmockkConstructor(Intent::class)
+            unmockkStatic(Uri::class)
         }
     }
 

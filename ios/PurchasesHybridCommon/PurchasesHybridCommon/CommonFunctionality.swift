@@ -1047,7 +1047,7 @@ import StoreKit
             case let .success(customerInfo):
                 resultMap["customerInfo"] = customerInfo.dictionary
             case let .error(error):
-                resultMap["error"] = Self.createErrorContainer(error: error)
+                resultMap["error"] = Self.createErrorContainer(error: error).info
             case let .expired(obfuscatedEmail):
                 resultMap["obfuscatedEmail"] = obfuscatedEmail
             case .purchaseBelongsToOtherUser, .invalidToken:
