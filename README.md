@@ -32,7 +32,7 @@ Install [mise](https://mise.jdx.dev/), then from the repo root:
 mise install
 ```
 
-That installs Java, Ruby, and Node from `mise.toml` / `mise.lock`. Yarn classic is provided via corepack (`[settings.node] corepack` and `packageManager` in `typescript/package.json`).
+That installs Java, Ruby, and Node from `mise.toml` / `mise.lock`. Yarn is provided via corepack.
 
 **Exceptions (not managed by mise):** Xcode for iOS work, Android SDK for local Android builds.
 
