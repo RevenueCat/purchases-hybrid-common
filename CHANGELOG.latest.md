@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* fix: Serialize redeemWebPurchase error as a dictionary to avoid crash (DSE-39) (#1728) via Toni Rico (@tonidero)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.80.2 => 5.80.3 Android 10.12.0 => 10.13.0 JS 1.47.0 => 1.47.1 (#1736) via RevenueCat Git Bot (@RCGitBot)
