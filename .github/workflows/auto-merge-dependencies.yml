@@ -6,12 +6,9 @@ on:
 
 jobs:
   approve:
-    # Only run for PRs created by RCGitBot with the dependencies label.
-    # Auto-merge itself is enabled from CircleCI using the RCGitBot token, which
-    # is authorized to merge into the protected `main` branch. This job only
-    # provides the required approval, since RCGitBot (the PR author) cannot
-    # approve its own PR. GitHub merges the PR automatically once this approval
-    # and the required status checks are in place.
+    # Approves RCGitBot dependency PRs so they satisfy the required review.
+    # Auto-merge is enabled separately from CircleCI (RCGitBot can't approve
+    # its own PR).
     if: |
       contains(github.event.pull_request.labels.*.name, 'pr:dependencies') &&
       github.event.pull_request.user.login == 'RCGitBot'
