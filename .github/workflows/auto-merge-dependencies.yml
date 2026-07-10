@@ -5,24 +5,23 @@ on:
     types: [labeled, opened, synchronize, reopened]
 
 jobs:
-  auto-merge:
-    # Only run for PRs created by RCGitBot with the dependencies label
+  approve:
+    # Only run for PRs created by RCGitBot with the dependencies label.
+    # Auto-merge itself is enabled from CircleCI using the RCGitBot token, which
+    # is authorized to merge into the protected `main` branch. This job only
+    # provides the required approval, since RCGitBot (the PR author) cannot
+    # approve its own PR. GitHub merges the PR automatically once this approval
+    # and the required status checks are in place.
     if: |
       contains(github.event.pull_request.labels.*.name, 'pr:dependencies') &&
       github.event.pull_request.user.login == 'RCGitBot'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       pull-requests: write
     steps:
       - name: Approve PR
         run: gh pr review --approve "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Enable auto-merge (squash)
-        run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -214,6 +214,18 @@ lane :open_pr_upgrading_dependencies do |options|
       body: message,
       labels: labels
     )
+
+    # Enable auto-merge so the PR merges automatically once required checks pass
+    # and it has been approved. The GITHUB_TOKEN here belongs to RCGitBot, which
+    # is authorized to merge into the protected `main` branch (unlike the
+    # github-actions[bot] token available to GitHub Actions).
+    enable_auto_merge_for_pr(
+      github_token: ENV["GITHUB_TOKEN"],
+      repo_name: repo_name,
+      branch: branch,
+      base_branch: "main",
+      merge_method: "SQUASH"
+    )
   end
 end
 
