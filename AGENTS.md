@@ -55,7 +55,7 @@ purchases-hybrid-common/
 
 ### Android
 
-JDK setup: install [mise](https://mise.jdx.dev/) and run `mise install` in project root to get the pinned Java version (sdkman via `sdk env install` is also supported).
+Tool setup: install [mise](https://mise.jdx.dev/) and run `mise install` in the project root (Java, Ruby, Node from `mise.toml`; Yarn via corepack).
 
 ```bash
 # Build
