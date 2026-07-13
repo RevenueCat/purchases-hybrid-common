@@ -280,7 +280,7 @@ GEM
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (2.1.9)
+    lefthook (2.1.10)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
