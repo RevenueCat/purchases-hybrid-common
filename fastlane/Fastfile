@@ -214,6 +214,16 @@ lane :open_pr_upgrading_dependencies do |options|
       body: message,
       labels: labels
     )
+
+    # Uses the RCGitBot GITHUB_TOKEN, which (unlike github-actions[bot]) is
+    # authorized to merge into the protected `main` branch.
+    enable_auto_merge_for_pr(
+      github_token: ENV["GITHUB_TOKEN"],
+      repo_name: repo_name,
+      branch: branch,
+      base_branch: "main",
+      merge_method: "SQUASH"
+    )
   end
 end
 
