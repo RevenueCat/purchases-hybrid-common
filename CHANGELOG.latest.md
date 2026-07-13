@@ -1,3 +1,6 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.80.2 => 5.80.3 Android 10.12.0 => 10.13.0 JS 1.47.0 => 1.47.1 (#1736) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.4.0 (#1743) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump cocoapods from 1.16.2 to 1.17.0 (#1742) via dependabot[bot] (@dependabot[bot])
