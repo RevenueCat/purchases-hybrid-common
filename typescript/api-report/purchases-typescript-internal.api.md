@@ -341,6 +341,10 @@ export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     automaticDeviceIdentifierCollectionEnabled?: boolean;
+    // @internal
+    dangerousSettings?: {
+        useWorkflows?: boolean;
+    };
     diagnosticsEnabled?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;

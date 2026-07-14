@@ -98,4 +98,16 @@ export interface PurchasesConfiguration {
    * @param localeString - The locale string (e.g., "es-ES", "en-US") or null to use system default
    */
   preferredUILocaleOverride?: string;
+
+  /**
+   * @internal
+   * Dangerous settings for the SDK. Internal RevenueCat use only.
+   */
+  dangerousSettings?: {
+    /**
+     * Enables RevenueCat Workflows (multipage paywalls). Internal RevenueCat use only;
+     * not intended for public use and may change without warning.
+     */
+    useWorkflows?: boolean;
+  };
 }
