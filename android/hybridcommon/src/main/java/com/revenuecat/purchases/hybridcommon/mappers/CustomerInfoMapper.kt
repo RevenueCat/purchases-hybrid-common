@@ -5,7 +5,8 @@ import com.revenuecat.purchases.InternalRevenueCatAPI
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@InternalRevenueCatAPI
+// phc:stable-bridge - foundational CustomerInfo mapping, used throughout the bridge.
+@OptIn(InternalRevenueCatAPI::class)
 fun CustomerInfo.map(): Map<String, Any?> =
     mapOf(
         "entitlements" to entitlements.map(),
@@ -30,6 +31,7 @@ fun CustomerInfo.map(): Map<String, Any?> =
         "subscriptionsByProductIdentifier" to subscriptionsByProductIdentifier.mapValues { it.value.map() },
     )
 
+// phc:stable-bridge - foundational CustomerInfo mapping, same as CustomerInfo.map() above.
 @OptIn(InternalRevenueCatAPI::class)
 fun CustomerInfo.mapAsync(
     callback: (Map<String, Any?>) -> Unit,

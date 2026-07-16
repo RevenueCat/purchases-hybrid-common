@@ -28,14 +28,6 @@ import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
-import com.revenuecat.purchases.ads.events.types.AdDisplayedData
-import com.revenuecat.purchases.ads.events.types.AdFailedToLoadData
-import com.revenuecat.purchases.ads.events.types.AdFormat
-import com.revenuecat.purchases.ads.events.types.AdLoadedData
-import com.revenuecat.purchases.ads.events.types.AdMediatorName
-import com.revenuecat.purchases.ads.events.types.AdOpenedData
-import com.revenuecat.purchases.ads.events.types.AdRevenueData
-import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.galaxy.GalaxyBillingMode
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
@@ -296,6 +288,7 @@ private fun validatePurchaseParams(
 }
 
 @JvmOverloads
+// phc:stable-bridge - add-on purchases are a foundational, already-shipped hybrid purchase feature.
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
 fun purchaseProduct(
@@ -475,6 +468,7 @@ fun purchaseProduct(
 }
 
 @JvmOverloads
+// phc:stable-bridge - add-on purchases are a foundational, already-shipped hybrid purchase feature.
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod")
 fun purchasePackage(
@@ -619,6 +613,7 @@ fun purchasePackage(
 }
 
 @JvmOverloads
+// phc:stable-bridge - add-on purchases are a foundational, already-shipped hybrid purchase feature.
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongParameterList", "LongMethod", "NestedBlockDepth", "CyclomaticComplexMethod")
 fun purchaseSubscriptionOption(
@@ -981,7 +976,6 @@ fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InApp
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongParameterList")
 @JvmOverloads
 fun configure(
@@ -1024,7 +1018,6 @@ fun configure(
         }.also { Purchases.configure(it.build()) }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 private fun PurchasesConfiguration.Builder.configureGalaxyBillingModeIfNeeded(
     store: Store,
     galaxyBillingMode: String?,
@@ -1050,6 +1043,7 @@ private fun PurchasesConfiguration.Builder.configureGalaxyBillingModeIfNeeded(
  *
  * @param callback Called when a feature event is tracked, with a map containing event details.
  */
+// phc:stable-bridge - established debug tooling, documented as such above.
 @OptIn(InternalRevenueCatAPI::class)
 fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
     Purchases.sharedInstance.trackedEventListener = TrackedEventListener { event ->
@@ -1057,6 +1051,7 @@ fun setTrackedEventListener(callback: (Map<String, Any?>) -> Unit) {
     }
 }
 
+// phc:stable-bridge - established debug tooling.
 @OptIn(InternalRevenueCatAPI::class)
 fun setDebugEventListener(callback: (Map<String, Any?>) -> Unit) {
     Purchases.sharedInstance.debugEventListener = DebugEventListener { event ->
@@ -1072,12 +1067,10 @@ fun getPromotionalOffer(): ErrorContainer {
     )
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun isWebPurchaseRedemptionURL(urlString: String): Boolean {
     return urlString.toWebPurchaseRedemption() != null
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun redeemWebPurchase(
     urlString: String,
     onResult: OnResult,
@@ -1145,188 +1138,10 @@ fun invalidateVirtualCurrenciesCache() {
 
 fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
 
-// region Ad Tracking
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("ComplexCondition")
-fun trackAdDisplayed(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
-    val mediatorNameString = adData["mediatorName"] as? String
-    val adFormatString = adData["adFormat"] as? String
-    val adUnitId = adData["adUnitId"] as? String
-    val impressionId = adData["impressionId"] as? String
-
-    if (mediatorNameString == null ||
-        adFormatString == null ||
-        adUnitId == null ||
-        impressionId == null
-    ) {
-        errorLog(
-            "trackAdDisplayed: Missing required parameters - " +
-                "mediatorName, adFormat, adUnitId, or impressionId",
-        )
-        return
-    }
-
-    val placement = adData["placement"] as? String
-    val displayedData = AdDisplayedData(
-        networkName = networkName,
-        mediatorName = AdMediatorName.fromString(mediatorNameString),
-        adFormat = AdFormat.fromString(adFormatString),
-        placement = placement,
-        adUnitId = adUnitId,
-        impressionId = impressionId,
-    )
-
-    Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData)
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("ComplexCondition")
-fun trackAdOpened(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
-    val mediatorNameString = adData["mediatorName"] as? String
-    val adFormatString = adData["adFormat"] as? String
-    val adUnitId = adData["adUnitId"] as? String
-    val impressionId = adData["impressionId"] as? String
-
-    if (mediatorNameString == null ||
-        adFormatString == null ||
-        adUnitId == null ||
-        impressionId == null
-    ) {
-        errorLog(
-            "trackAdOpened: Missing required parameters - " +
-                "mediatorName, adFormat, adUnitId, or impressionId",
-        )
-        return
-    }
-
-    val placement = adData["placement"] as? String
-    val openedData = AdOpenedData(
-        networkName = networkName,
-        mediatorName = AdMediatorName.fromString(mediatorNameString),
-        adFormat = AdFormat.fromString(adFormatString),
-        placement = placement,
-        adUnitId = adUnitId,
-        impressionId = impressionId,
-    )
-
-    Purchases.sharedInstance.adTracker.trackAdOpened(openedData)
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("ComplexCondition")
-fun trackAdRevenue(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
-    val mediatorNameString = adData["mediatorName"] as? String
-    val adFormatString = adData["adFormat"] as? String
-    val adUnitId = adData["adUnitId"] as? String
-    val impressionId = adData["impressionId"] as? String
-    val revenueMicros = (adData["revenueMicros"] as? Number)?.toLong()
-    val currency = adData["currency"] as? String
-    val precisionString = adData["precision"] as? String
-
-    if (mediatorNameString == null ||
-        adFormatString == null ||
-        adUnitId == null ||
-        impressionId == null ||
-        revenueMicros == null ||
-        currency == null ||
-        precisionString == null
-    ) {
-        errorLog(
-            "trackAdRevenue: Missing required parameters - " +
-                "mediatorName, adFormat, adUnitId, impressionId, revenueMicros, currency, or precision",
-        )
-        return
-    }
-
-    val placement = adData["placement"] as? String
-    val revenueData = AdRevenueData(
-        networkName = networkName,
-        mediatorName = AdMediatorName.fromString(mediatorNameString),
-        adFormat = AdFormat.fromString(adFormatString),
-        placement = placement,
-        adUnitId = adUnitId,
-        impressionId = impressionId,
-        revenueMicros = revenueMicros,
-        currency = currency,
-        precision = AdRevenuePrecision.fromString(precisionString),
-    )
-
-    Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData)
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("ComplexCondition")
-fun trackAdLoaded(adData: Map<String, Any?>) {
-    val networkName = adData["networkName"] as? String
-    val mediatorNameString = adData["mediatorName"] as? String
-    val adFormatString = adData["adFormat"] as? String
-    val adUnitId = adData["adUnitId"] as? String
-    val impressionId = adData["impressionId"] as? String
-
-    if (mediatorNameString == null ||
-        adFormatString == null ||
-        adUnitId == null ||
-        impressionId == null
-    ) {
-        errorLog(
-            "trackAdLoaded: Missing required parameters - " +
-                "mediatorName, adFormat, adUnitId, or impressionId",
-        )
-        return
-    }
-
-    val placement = adData["placement"] as? String
-    val loadedData = AdLoadedData(
-        networkName = networkName,
-        mediatorName = AdMediatorName.fromString(mediatorNameString),
-        adFormat = AdFormat.fromString(adFormatString),
-        placement = placement,
-        adUnitId = adUnitId,
-        impressionId = impressionId,
-    )
-
-    Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData)
-}
-
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("ComplexCondition")
-fun trackAdFailedToLoad(adData: Map<String, Any?>) {
-    val mediatorNameString = adData["mediatorName"] as? String
-    val adFormatString = adData["adFormat"] as? String
-    val adUnitId = adData["adUnitId"] as? String
-
-    if (mediatorNameString == null ||
-        adFormatString == null ||
-        adUnitId == null
-    ) {
-        errorLog(
-            "trackAdFailedToLoad: Missing required parameters - " +
-                "mediatorName, adFormat, or adUnitId",
-        )
-        return
-    }
-
-    val placement = adData["placement"] as? String
-    val mediatorErrorCode = (adData["mediatorErrorCode"] as? Number)?.toInt()
-    val failedToLoadData = AdFailedToLoadData(
-        mediatorName = AdMediatorName.fromString(mediatorNameString),
-        adFormat = AdFormat.fromString(adFormatString),
-        placement = placement,
-        adUnitId = adUnitId,
-        mediatorErrorCode = mediatorErrorCode,
-    )
-
-    Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
-}
-
-// endregion
-
 // region Custom Paywall Tracking
 
+// phc:stable-bridge - established event-forwarding feature; internal only because it forwards
+// PHC-owned paywall tracking data into the native event pipeline, not because the surface itself is unstable.
 @OptIn(InternalRevenueCatAPI::class)
 fun trackCustomPaywallImpression(data: Map<String, Any?>) {
     val paywallId = data["paywallId"] as? String
@@ -1475,7 +1290,6 @@ private fun createAddOnStoreProducts(
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 private fun RedeemWebPurchaseListener.Result.toResultName(): String {
     return when (this) {
         is RedeemWebPurchaseListener.Result.Success -> "SUCCESS"
@@ -1486,7 +1300,6 @@ private fun RedeemWebPurchaseListener.Result.toResultName(): String {
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 private fun String.toWebPurchaseRedemption(): WebPurchaseRedemption? {
     try {
         // Replace this with parseAsWebPurchaseRedemption overload

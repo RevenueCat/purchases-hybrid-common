@@ -1,14 +1,12 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.customercenter.CustomerCenterListener
 import com.revenuecat.purchases.customercenter.CustomerCenterManagementOption
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.models.StoreTransaction
 
-@OptIn(InternalRevenueCatAPI::class)
 @SuppressWarnings("TooManyFunctions")
 abstract class CustomerCenterListenerWrapper : CustomerCenterListener {
 

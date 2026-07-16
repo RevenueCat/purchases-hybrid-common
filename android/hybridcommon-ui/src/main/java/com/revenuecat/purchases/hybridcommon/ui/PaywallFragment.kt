@@ -19,6 +19,10 @@ import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResultHandler
 import com.revenuecat.purchases.ui.revenuecatui.fonts.CustomParcelizableFontProvider
 import com.revenuecat.purchases.ui.revenuecatui.fonts.PaywallFontFamily
 
+// phc:stable-bridge - InternalRevenueCatAPI: CustomerInfo/other mapping, established PHC-owned
+// surface. ExperimentalPreviewRevenueCatUIPurchasesAPI: setListener/setPurchaseLogic, a
+// foundational, already-shipped hybrid paywall feature (see setListener/setPurchaseLogic calls
+// in launchPaywall/launchPaywallIfNeeded below).
 @OptIn(InternalRevenueCatAPI::class, ExperimentalPreviewRevenueCatUIPurchasesAPI::class)
 internal class PaywallFragment : Fragment(), PaywallResultHandler {
     enum class ResultKey(val key: String) {

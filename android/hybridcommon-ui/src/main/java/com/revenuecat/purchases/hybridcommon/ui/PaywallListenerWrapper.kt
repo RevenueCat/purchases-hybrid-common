@@ -1,7 +1,6 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -12,7 +11,6 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 @Suppress("TooManyFunctions")
-@OptIn(InternalRevenueCatAPI::class)
 abstract class PaywallListenerWrapper : PaywallListener {
 
     companion object {

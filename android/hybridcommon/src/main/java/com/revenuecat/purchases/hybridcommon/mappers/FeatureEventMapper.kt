@@ -7,6 +7,8 @@ import com.revenuecat.purchases.customercenter.events.CustomerCenterSurveyOption
 import com.revenuecat.purchases.paywalls.events.CustomPaywallEvent
 import com.revenuecat.purchases.paywalls.events.PaywallEvent
 
+// phc:stable-bridge - established event mapping for all FeatureEvent subtypes below
+// (paywall, customer center, custom paywall impressions): all already-shipped, PHC-owned surfaces.
 @OptIn(InternalRevenueCatAPI::class)
 fun FeatureEvent.toMap(): Map<String, Any?> {
     return when (this) {
