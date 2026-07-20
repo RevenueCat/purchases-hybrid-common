@@ -10,6 +10,8 @@ target 'PurchasesHybridCommon' do
     # Pods for testing
     pod 'Quick', '5.0.1'
     pod 'Nimble', '10.0.0'
+    # Required to @testable import PurchasesHybridCommonUI (which links RevenueCatUI).
+    pod 'RevenueCatUI', '5.81.1'
   end
 
   target 'PurchasesHybridCommonIntegrationTests' do

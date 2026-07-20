@@ -330,7 +330,8 @@ import UIKit
         return windowScene.keyWindow?.rootViewController
     }
 
-    private enum Content {
+    // `internal` (rather than `private`) because it is referenced by the now-`internal` `PaywallPresentationParams`.
+    enum Content {
 
         case offering(Offering)
         case offeringIdentifierWithPresentedOfferingContext(String, presentedOfferingContext: PresentedOfferingContext)
@@ -394,7 +395,8 @@ import UIKit
     }
 
     /// Parsed paywall presentation parameters extracted from an options dictionary.
-    private struct PaywallPresentationParams {
+    /// `internal` (rather than `private`) so `resolveModalPresentationStyle` can be unit tested via `@testable import`.
+    struct PaywallPresentationParams {
         let displayCloseButton: Bool
         let fontProvider: PaywallFontProvider
         let shouldBlockTouchEvents: Bool
@@ -421,7 +423,9 @@ import UIKit
         /// `presentationMode` takes precedence when present. Otherwise falls back to the legacy
         /// `useFullScreenPresentation` boolean, defaulting to `.pageSheet` to preserve backwards
         /// compatibility for existing hybrid integrations that pass neither key.
-        private static func resolveModalPresentationStyle(from options: [String: Any]) -> UIModalPresentationStyle {
+        ///
+        /// `internal` (rather than `private`) so it can be unit tested via `@testable import`.
+        static func resolveModalPresentationStyle(from options: [String: Any]) -> UIModalPresentationStyle {
             if let mode = options[PaywallOptionsKeys.presentationMode] as? String {
                 switch mode.lowercased() {
                 case "fullscreen": return .fullScreen
