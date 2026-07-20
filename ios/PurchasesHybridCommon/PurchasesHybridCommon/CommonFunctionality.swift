@@ -13,9 +13,11 @@ import StoreKit
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
 
-    typealias InstanceType = PurchasesType & PurchasesSwiftType
+    @_spi(Internal)
+    public typealias InstanceType = PurchasesType & PurchasesSwiftType
 
-    static var sharedInstance: InstanceType {
+    @_spi(Internal)
+    public static var sharedInstance: InstanceType {
         get {
             guard let purchases = Self._sharedInstance else {
                 fatalError("Purchases has not been configured. Please configure the SDK before calling this method")
@@ -1045,7 +1047,7 @@ import StoreKit
             case let .success(customerInfo):
                 resultMap["customerInfo"] = customerInfo.dictionary
             case let .error(error):
-                resultMap["error"] = Self.createErrorContainer(error: error)
+                resultMap["error"] = Self.createErrorContainer(error: error).info
             case let .expired(obfuscatedEmail):
                 resultMap["obfuscatedEmail"] = obfuscatedEmail
             case .purchaseBelongsToOtherUser, .invalidToken:

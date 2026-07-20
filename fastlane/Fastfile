@@ -26,14 +26,12 @@ files_with_version_number_without_prerelease_modifiers = {
 }
 POD_VERSION_PATTERNS = ['\'RevenueCat\', \'{x}\'', '\'RevenueCatUI\', \'{x}\'']
 SPM_VERSION_PATTERNS = ['.package(url: "https://github.com/RevenueCat/purchases-ios-spm", exact: "{x}"),']
-SPM_RESOLVED_VERSION_PATTERNS = ['"version" : "{x}"']
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
     'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
     'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
     'Package.swift' => SPM_VERSION_PATTERNS,
-    'Package.resolved' => SPM_RESOLVED_VERSION_PATTERNS,
 }
 
 files_to_update_android_dependency = {
@@ -216,6 +214,16 @@ lane :open_pr_upgrading_dependencies do |options|
       body: message,
       labels: labels
     )
+
+    # Uses the RCGitBot GITHUB_TOKEN, which (unlike github-actions[bot]) is
+    # authorized to merge into the protected `main` branch.
+    enable_auto_merge_for_pr(
+      github_token: ENV["GITHUB_TOKEN"],
+      repo_name: repo_name,
+      branch: branch,
+      base_branch: "main",
+      merge_method: "SQUASH"
+    )
   end
 end
 
@@ -295,15 +303,13 @@ private_lane :update_ios_native_version do |options|
     files_to_update: files_to_update_ios_dependency
   )
 
-  # Updating the commit hash in Package.resolved.
-  ios_spm_repository = "https://github.com/RevenueCat/purchases-ios-spm"
-  previous_commit_hash = get_commit_hash_for_tag(ios_spm_repository, previous_version_number)
-  new_commit_hash = get_commit_hash_for_tag(ios_spm_repository, new_version_number)
-  replace_text_in_files(
-    previous_text: previous_commit_hash,
-    new_text: new_commit_hash,
-    paths_of_files_to_update: ["Package.resolved"]
-  )
+  # Regenerate Package.resolved from Package.swift instead of text-replacing
+  # the previous version, so an out-of-sync file self-heals on the next bump.
+  if previous_version_number != new_version_number
+    Dir.chdir(get_root_folder) do
+      sh("swift package resolve")
+    end
+  end
 end
 
 desc "Update purchases-android dependency version"
@@ -494,13 +500,13 @@ end
 platform :typescript do
   desc "Deploy npm package to npm.js"
   lane :deploy do |options|
-    build_and_publish_npm_package("typescript")
+    build_and_publish_npm_package("typescript", dry_run: options[:dry_run])
   end
 
   desc "Deploy typescript interfaces ESNext NPM package"
   lane :deploy_esm do |options|
     make_typescript_package_esm
-    build_and_publish_npm_package("typescript")
+    build_and_publish_npm_package("typescript", dry_run: options[:dry_run])
   end
 end
 
@@ -528,7 +534,7 @@ platform :web do
 
   desc "Deploy purchases-js-hybrid-mappings to npm.js"
   lane :deploy_js_mappings do |options|
-    build_and_publish_npm_package("purchases-js-hybrid-mappings")
+    build_and_publish_npm_package("purchases-js-hybrid-mappings", dry_run: options[:dry_run])
   end
 end
 
@@ -545,7 +551,7 @@ def make_typescript_package_esm
   )
 end
 
-def build_and_publish_npm_package(folder)
+def build_and_publish_npm_package(folder, dry_run: false)
   version_number = current_version_number
   is_prerelease = Gem::Version.new(version_number).prerelease?
 
@@ -562,7 +568,12 @@ def build_and_publish_npm_package(folder)
 
   Dir.chdir(File.expand_path(folder, get_root_folder)) do
     sh(build_args)
-    sh(publish_args)
+    if dry_run
+      sh(['npm', 'pack'])
+      UI.message("ℹ️  npm pack dry-run for #{folder}; nothing published.")
+    else
+      sh(publish_args)
+    end
   end
 end
 
@@ -647,8 +658,4 @@ def detect_bump_type(a, b)
   else
     return :major
   end
-end
-
-def get_commit_hash_for_tag(repository, tag)
-  sh("git ls-remote --tags #{repository} | grep refs/tags/#{tag}^{} | cut -f 1 | tr -d '\n'")
 end

@@ -1108,7 +1108,7 @@ fun redeemWebPurchase(
             is RedeemWebPurchaseListener.Result.Error -> onResult.onReceived(
                 mutableMapOf(
                     "result" to result.toResultName(),
-                    "error" to result.error.map(),
+                    "error" to result.error.map().info,
                 ),
             )
 

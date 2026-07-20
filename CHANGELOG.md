@@ -1,3 +1,58 @@
+## 18.22.2
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.81.0 => 5.81.1 Android 10.14.0 => 10.14.1 (#1759) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `c970fb6` to `9b928b6` (#1758) via dependabot[bot] (@dependabot[bot])
+* ci: bump sdks-common-config orb to 4.5.0 (#1757) via Antonio Pallares (@ajpallares)
+
+## 18.22.1
+### 🔄 Other Changes
+* fix: revert purchases-js 1.47.3 => 1.47.2 to unblock React Native builds (#1755) via Antonio Pallares (@ajpallares)
+
+## 18.22.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.80.3 => 5.81.0 Android 10.13.0 => 10.14.0 (#1751) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.47.2 => 1.47.3 (#1748) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Update `Podfile.lock` (#1746) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.4.0 (#1743) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `dab6765` to `c970fb6` (#1753) via dependabot[bot] (@dependabot[bot])
+* Add internal DangerousSettings an `useWorkflows` to PurchasesConfiguration (#1749) via Cesar de la Vega (@vegaro)
+* Bump lefthook from 2.1.9 to 2.1.10 (#1747) via dependabot[bot] (@dependabot[bot])
+* Enable dependency-update auto-merge from CircleCI (#1741) via Álvaro Brey (@AlvaroBrey)
+* Use mise for Ruby, Node, and Yarn too (#1734) via Álvaro Brey (@AlvaroBrey)
+* Bump cocoapods from 1.16.2 to 1.17.0 (#1742) via dependabot[bot] (@dependabot[bot])
+
+## 18.21.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.80.2 => 5.80.3 Android 10.12.0 => 10.13.0 JS 1.47.0 => 1.47.1 (#1736) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.20.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* fix: Serialize redeemWebPurchase error as a dictionary to avoid crash (DSE-39) (#1728) via Toni Rico (@tonidero)
+
+## 18.20.0
+## RevenueCatUI SDK
+### ✨ New Features
+* Expose the new PreviewPaywall handler (#1732) via Dave DeLong (@davedelong)
+
+### 🔄 Other Changes
+* Regenerate Package.resolved via swift package resolve on iOS bumps (#1729) via Álvaro Brey (@AlvaroBrey)
+
+## 18.19.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Map autoResumeDate from purchases-js SubscriptionInfo in JS hybrid mappings (#1730) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Use mise for Java in CI (#1727) via Álvaro Brey (@AlvaroBrey)
+
 ## 18.19.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates

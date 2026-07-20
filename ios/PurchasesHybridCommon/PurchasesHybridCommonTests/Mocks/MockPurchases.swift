@@ -358,6 +358,7 @@ final class MockPurchases: PurchasesType {
         invokedEligibleWinBackOffersForPackageCompletionParametersList.append((package, completion))
     }
 
+    var stubbedRedeemWebPurchaseAsyncResult: WebPurchaseRedemptionResult?
     var invokedRedeemWebPurchase = false
     var invokedRedeemWebPurchaseCount = 0
     var invokedRedeemWebPurchaseParameters: (
@@ -847,7 +848,10 @@ extension MockPurchases: PurchasesSwiftType {
     }
 
     func redeemWebPurchase(_ webPurchaseRedemption: WebPurchaseRedemption) async -> WebPurchaseRedemptionResult {
-        fatalError("Not mocked")
+        guard let result = stubbedRedeemWebPurchaseAsyncResult else {
+            fatalError("stubbedRedeemWebPurchaseAsyncResult not set")
+        }
+        return result
     }
 
     func virtualCurrencies() async throws -> RevenueCat.VirtualCurrencies {
