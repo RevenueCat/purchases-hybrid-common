@@ -73,11 +73,13 @@
 		57FFDE46286B606A0089A57B /* XCTestCase+Expectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD3D1842810A81F00A19EC6 /* XCTestCase+Expectations.swift */; };
 		7720A92A2D520021009EA43C /* IntroEligibility+HybridExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7720A9292D520021009EA43C /* IntroEligibility+HybridExtensions.swift */; };
 		77D5E72A2C233E2C002ECC77 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D5E7292C233E2C002ECC77 /* Constants.swift */; };
+		8D7E9A16717774CB710220ED /* PaywallPresentationStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */; };
 		A1B2C3D42026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */; };
 		A1B2C3D62026021600AABBCC /* HybridPurchaseLogicBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */; };
 		AE0B58267EE48614BBF43A9E /* Pods_PurchasesHybridCommonUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D02631302E453BBC6C5F5471 /* Pods_PurchasesHybridCommonUI.framework */; };
 		B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E05FA8EACFF88F020CF8B9BB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework */; };
 		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
+		E154E4AD206A01BCC76C3976 /* PurchasesHybridCommonUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7974672B5EDDEF003085E7 /* PurchasesHybridCommonUI.framework */; };
 		E54FA36E3E12B4802B29BC74 /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AF1F3DF376D2EA6B061FDB /* Pods_PurchasesHybridCommon_PurchasesHybridCommonIntegrationTests.framework */; };
 		F928DE87DE0A86261D51DFA3 /* Pods_PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */; };
 		FD1425A52C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1425A42C3C444E00323B48 /* StoreKitVersion+HybridAdditions.swift */; };
@@ -96,6 +98,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1D7B76F90118AF9506837FED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F7974492B5EDDEF003085E7;
+			remoteInfo = PurchasesHybridCommonUI;
+		};
 		2D4FDFD428071F7C00863298 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2DD4B8B124377B470070344F /* Project object */;
@@ -230,6 +239,7 @@
 		A4FFCDDD40F8CB4D3D00FFB6 /* Pods_PurchasesHybridCommon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PurchasesHybridCommon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA2213E187711A1014A1C874 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSandboxEnvironmentDetector.swift; sourceTree = "<group>"; };
+		BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallPresentationStyleTests.swift; sourceTree = "<group>"; };
 		BEA47FF2383D59FB41CA66D8 /* Pods-PurchasesHybridCommonUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonUI.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonUI/Pods-PurchasesHybridCommonUI.debug.xcconfig"; sourceTree = "<group>"; };
 		C3DF770C345D861DE0CE6DC9 /* Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests/Pods-PurchasesHybridCommon-PurchasesHybridCommonTests.release.xcconfig"; sourceTree = "<group>"; };
 		C48588E24A992EC358A9B0CF /* Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests/Pods-PurchasesHybridCommonSwift-PurchasesHybridCommonSwiftTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -277,6 +287,7 @@
 			files = (
 				2D6E33242450F68C0022A971 /* PurchasesHybridCommon.framework in Frameworks */,
 				B1C9A7EEA6961CC6DE22BCAD /* Pods_PurchasesHybridCommon_PurchasesHybridCommonTests.framework in Frameworks */,
+				E154E4AD206A01BCC76C3976 /* PurchasesHybridCommonUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +364,7 @@
 				FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */,
 				FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */,
 				FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */,
+				BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -619,6 +631,7 @@
 			);
 			dependencies = (
 				2D6E33262450F68C0022A971 /* PBXTargetDependency */,
+				F65BF4F895E6FD49191461ED /* PBXTargetDependency */,
 			);
 			name = PurchasesHybridCommonTests;
 			productName = PurchasesHybridCommonTests;
@@ -1004,6 +1017,7 @@
 				1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */,
 				FD3652E12C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift in Sources */,
 				B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */,
+				8D7E9A16717774CB710220ED /* PaywallPresentationStyleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1088,12 @@
 			isa = PBXTargetDependency;
 			target = 57FFDE27286A57580089A57B /* PurchasesHybridCommonIntegrationTestApp */;
 			targetProxy = 57FFDE36286A57940089A57B /* PBXContainerItemProxy */;
+		};
+		F65BF4F895E6FD49191461ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PurchasesHybridCommonUI;
+			target = 4F7974492B5EDDEF003085E7 /* PurchasesHybridCommonUI */;
+			targetProxy = 1D7B76F90118AF9506837FED /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
