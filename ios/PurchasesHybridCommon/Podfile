@@ -4,14 +4,14 @@ target 'PurchasesHybridCommon' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.81.1'
+  pod 'RevenueCat', '5.81.2'
 
   target 'PurchasesHybridCommonTests' do
     # Pods for testing
     pod 'Quick', '5.0.1'
     pod 'Nimble', '10.0.0'
     # Required to @testable import PurchasesHybridCommonUI (which links RevenueCatUI).
-    pod 'RevenueCatUI', '5.81.1'
+    pod 'RevenueCatUI', '5.81.2'
   end
 
   target 'PurchasesHybridCommonIntegrationTests' do
@@ -26,14 +26,14 @@ target 'PurchasesHybridCommonUI' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.81.1'
-  pod 'RevenueCatUI', '5.81.1'
+  pod 'RevenueCat', '5.81.2'
+  pod 'RevenueCatUI', '5.81.2'
 end
 
 target 'ObjCAPITester' do
   platform :ios, '13.0'
   use_frameworks!
 
-  pod 'RevenueCat', '5.81.1'
-  pod 'RevenueCatUI', '5.81.1'
+  pod 'RevenueCat', '5.81.2'
+  pod 'RevenueCatUI', '5.81.2'
 end
