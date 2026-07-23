@@ -9,7 +9,7 @@ import Foundation
 import Quick
 import Nimble
 
-@testable import PurchasesHybridCommon
+@_spi(Experimental) @testable import PurchasesHybridCommon
 @_spi(Internal) @_spi(Experimental) @testable import RevenueCat
 
 class AdRewardHybridAdditionsTests: QuickSpec {
