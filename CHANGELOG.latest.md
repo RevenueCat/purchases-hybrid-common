@@ -1,7 +1,9 @@
 ## RevenueCat SDK
+### 🐞 Bugfixes
+* Add presentationMode option to control paywall modal presentation style (#1726) via Facundo Menzella (@facumenzella)
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.81.0 => 5.81.1 Android 10.14.0 => 10.14.1 (#1759) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.81.1 => 5.81.2 Android 10.14.1 => 10.15.0 (#1768) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.47.2 => 1.48.0 (#1764) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `c970fb6` to `9b928b6` (#1758) via dependabot[bot] (@dependabot[bot])
-* ci: bump sdks-common-config orb to 4.5.0 (#1757) via Antonio Pallares (@ajpallares)
+* Bump fastlane-plugin-revenuecat_internal from `9b928b6` to `b52fca5` (#1762) via dependabot[bot] (@dependabot[bot])
