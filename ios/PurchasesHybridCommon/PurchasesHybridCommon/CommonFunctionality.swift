@@ -1264,12 +1264,7 @@ private extension CommonFunctionality {
 
     @objc(generateRewardVerificationTokenWithImpressionId:)
     static func generateRewardVerificationToken(impressionId: String) -> [String: Any] {
-        let token = Purchases.shared.generateRewardVerificationToken(impressionId: impressionId)
-        return [
-            "customData": token.customData,
-            "clientTransactionId": token.clientTransactionID,
-            "appUserID": token.appUserID
-        ]
+        return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
 
     @objc(pollRewardVerificationWithClientTransactionId:completion:)
@@ -1279,42 +1274,8 @@ private extension CommonFunctionality {
     ) {
         _ = Task<Void, Never> {
             let result = await Purchases.shared.pollRewardVerification(clientTransactionID: clientTransactionId)
-            completion(Self.encode(rewardVerificationResult: result), nil)
+            completion(result.rc_dictionary, nil)
         }
-    }
-
-}
-
-private extension CommonFunctionality {
-
-    static func encode(rewardVerificationResult result: RewardVerificationResult) -> [String: Any] {
-        guard let reward = result.verifiedReward else {
-            return ["failed": true, "moreRewards": [[String: Any]]()]
-        }
-        return [
-            "failed": false,
-            "reward": Self.encode(adReward: reward),
-            "moreRewards": result.moreRewards.map { Self.encode(adReward: $0) }
-        ]
-    }
-
-    static func encode(adReward reward: AdReward) -> [String: Any] {
-        if let virtualCurrency = reward.virtualCurrency {
-            return [
-                "type": "virtual_currency",
-                "code": virtualCurrency.code,
-                "amount": virtualCurrency.amount
-            ]
-        }
-        if let entitlement = reward.entitlement {
-            return [
-                "type": "entitlement",
-                "identifier": entitlement.identifier,
-                "expiresAt": entitlement.expiresAt.rc_formattedAsISO8601(),
-                "expiresAtMillis": entitlement.expiresAt.rc_millisecondsSince1970AsDouble()
-            ]
-        }
-        return ["type": reward == .noReward ? "no_reward" : "unsupported_reward"]
     }
 
 }
