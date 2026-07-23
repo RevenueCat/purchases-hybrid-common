@@ -160,6 +160,14 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality invalidateVirtualCurrenciesCache];
 
     [RCCommonFunctionality overridePreferredLocale:@"en-US"];
+
+    NSDictionary<NSString *, NSObject *> __unused *tokenDictionary =
+        [RCCommonFunctionality generateRewardVerificationTokenWithImpressionId:@""];
+
+    [RCCommonFunctionality pollRewardVerificationWithClientTransactionId:@""
+                                                                completion:^(
+                                                                    NSDictionary<NSString *, NSObject *> * _Nullable result,
+                                                                    RCErrorContainer * _Nullable error) {}];
 }
 
 - (void)testDeprecatedAPI {
