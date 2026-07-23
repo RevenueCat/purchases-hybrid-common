@@ -3,6 +3,7 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -16,6 +17,7 @@ import com.revenuecat.purchases.hybridcommon.getAppUserID
 import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo
 import com.revenuecat.purchases.hybridcommon.getOfferings
+import com.revenuecat.purchases.hybridcommon.generateRewardVerificationToken
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
 import com.revenuecat.purchases.hybridcommon.getProxyURLString
@@ -27,6 +29,7 @@ import com.revenuecat.purchases.hybridcommon.isAnonymous
 import com.revenuecat.purchases.hybridcommon.logIn
 import com.revenuecat.purchases.hybridcommon.logOut
 import com.revenuecat.purchases.hybridcommon.overridePreferredLocale
+import com.revenuecat.purchases.hybridcommon.pollRewardVerification
 import com.revenuecat.purchases.hybridcommon.purchase
 import com.revenuecat.purchases.hybridcommon.purchasePackage
 import com.revenuecat.purchases.hybridcommon.purchaseProduct
@@ -506,5 +509,15 @@ private class CommonApiTests {
 
     private fun checkSetAppstackAttributionParams(data: Map<String, Any>, onResult: OnResult) {
         setAppstackAttributionParams(data, onResult)
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    private fun checkGenerateRewardVerificationToken(impressionId: String) {
+        val token: Map<String, Any?> = generateRewardVerificationToken(impressionId)
+    }
+
+    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+    private fun checkPollRewardVerification(clientTransactionId: String, onResult: OnResult) {
+        pollRewardVerification(clientTransactionId, onResult)
     }
 }
