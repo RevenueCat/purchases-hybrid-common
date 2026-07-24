@@ -43,15 +43,23 @@ class PurchasesHybridCommonTests: QuickSpec {
         }
 
         context("dangerous settings") {
-            it("creates settings with workflows enabled") {
-                let settings = CommonFunctionality.createDangerousSettings(useWorkflows: true)
+            it("creates settings with auto-sync disabled and workflows enabled") {
+                let settings = CommonFunctionality.createDangerousSettings(
+                    autoSyncPurchases: false,
+                    useWorkflows: true
+                )
 
+                expect(settings.autoSyncPurchases) == false
                 expect(settings.useWorkflows) == true
             }
 
-            it("creates settings with workflows disabled") {
-                let settings = CommonFunctionality.createDangerousSettings(useWorkflows: false)
+            it("creates settings with auto-sync enabled and workflows disabled") {
+                let settings = CommonFunctionality.createDangerousSettings(
+                    autoSyncPurchases: true,
+                    useWorkflows: false
+                )
 
+                expect(settings.autoSyncPurchases) == true
                 expect(settings.useWorkflows) == false
             }
         }
