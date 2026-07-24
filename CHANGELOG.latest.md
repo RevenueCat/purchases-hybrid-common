@@ -1,9 +1,8 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Add presentationMode option to control paywall modal presentation style (#1726) via Facundo Menzella (@facumenzella)
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.81.1 => 5.81.2 Android 10.14.1 => 10.15.0 (#1768) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] JS 1.47.2 => 1.48.0 (#1764) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* Move dangerous settings factory to dedicated extension (#1771) via Cesar de la Vega (@vegaro)
+* Expose workflows dangerous settings to Objective-C (#1770) via Cesar de la Vega (@vegaro)
 
 ### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `9b928b6` to `b52fca5` (#1762) via dependabot[bot] (@dependabot[bot])
+* Bump fast-uri from 3.1.2 to 3.1.4 in /typescript (#1766) via dependabot[bot] (@dependabot[bot])
+* Bump js-yaml from 4.2.0 to 4.3.0 in /typescript (#1767) via dependabot[bot] (@dependabot[bot])
