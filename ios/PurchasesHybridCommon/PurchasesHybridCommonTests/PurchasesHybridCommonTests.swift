@@ -42,6 +42,19 @@ class PurchasesHybridCommonTests: QuickSpec {
             Logger.internalLogHandler = Logger.defaultLogHandler
         }
 
+        context("dangerous settings") {
+            it("creates settings with workflows enabled") {
+                let settings = CommonFunctionality.createDangerousSettings(useWorkflows: true)
+
+                expect(settings.useWorkflows) == true
+            }
+
+            it("creates settings with workflows disabled") {
+                let settings = CommonFunctionality.createDangerousSettings(useWorkflows: false)
+
+                expect(settings.useWorkflows) == false
+            }
+        }
 
         context("proxy url string") {
             it("parses the string and sets the url if valid") {

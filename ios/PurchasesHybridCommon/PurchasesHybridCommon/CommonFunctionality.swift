@@ -39,6 +39,10 @@ import StoreKit
     @objc public static var isAnonymous: Bool { Self.sharedInstance.isAnonymous }
     @objc public static var hybridCommonVersion: String { Constants.hybridCommonVersion }
 
+    @objc public static func createDangerousSettings(useWorkflows: Bool) -> DangerousSettings {
+        DangerousSettings(useWorkflows: useWorkflows)
+    }
+
     @objc public static var proxyURLString: String? {
         get { Purchases.proxyURL?.absoluteString }
         set {

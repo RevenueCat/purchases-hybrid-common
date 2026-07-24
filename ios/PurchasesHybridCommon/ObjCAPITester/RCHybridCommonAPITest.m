@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 
     NSString *appUserID __unused = [RCCommonFunctionality appUserID];
+    RCDangerousSettings *dangerousSettings __unused =
+        [RCCommonFunctionality createDangerousSettingsWithUseWorkflows:YES];
     [RCCommonFunctionality getStorefrontWithCompletion:^(NSDictionary<NSString *,id> * _Nullable storefront) {
     }];
     [RCCommonFunctionality logInWithAppUserID:@""
