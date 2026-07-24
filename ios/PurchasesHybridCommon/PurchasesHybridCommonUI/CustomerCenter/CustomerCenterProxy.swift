@@ -141,6 +141,9 @@ private extension CustomerCenterProxy {
         let vc = CustomerCenterUIViewController()
         vc.delegate = self
         vc.shouldShowCloseButton = shouldShowCloseButton
+        vc.onCloseHandler = { [weak vc] in
+            vc?.dismiss(animated: true)
+        }
 
         return vc
     }
