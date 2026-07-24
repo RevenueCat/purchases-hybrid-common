@@ -1768,3 +1768,22 @@ internal fun convertToInt(value: Any?): Int? {
         else -> null
     }
 }
+
+// region Reward verification
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun generateRewardVerificationToken(impressionId: String): Map<String, Any?> {
+    return Purchases.sharedInstance.generateRewardVerificationToken(impressionId).map()
+}
+
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun pollRewardVerification(
+    clientTransactionId: String,
+    onResult: OnResult,
+) {
+    Purchases.sharedInstance.pollRewardVerification(clientTransactionId) { result ->
+        onResult.onReceived(result.map())
+    }
+}
+
+// endregion
