@@ -1772,7 +1772,7 @@ internal fun convertToInt(value: Any?): Int? {
 // region Reward verification
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-fun generateRewardVerificationToken(impressionId: String): Map<String, Any?> {
+fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
     return Purchases.sharedInstance.generateRewardVerificationToken(impressionId).map()
 }
 

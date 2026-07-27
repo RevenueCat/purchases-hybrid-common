@@ -6,17 +6,17 @@ import com.revenuecat.purchases.ads.rewardverification.RewardVerificationToken
 import com.revenuecat.purchases.ads.rewardverification.VerifiedReward
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-fun RewardVerificationToken.map(): Map<String, Any?> = mapOf(
+fun RewardVerificationToken.map(): Map<String, Any> = mapOf(
     "customData" to customData,
     "clientTransactionId" to clientTransactionId,
     "appUserID" to appUserID,
 )
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-fun RewardVerificationResult.map(): Map<String, Any?> {
+fun RewardVerificationResult.map(): Map<String, Any> {
     val reward = verifiedReward ?: return mapOf(
         "failed" to true,
-        "moreRewards" to emptyList<Map<String, Any?>>(),
+        "moreRewards" to emptyList<Map<String, Any>>(),
     )
     return mapOf(
         "failed" to false,
@@ -26,7 +26,7 @@ fun RewardVerificationResult.map(): Map<String, Any?> {
 }
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-fun VerifiedReward.map(): Map<String, Any?> = when (this) {
+fun VerifiedReward.map(): Map<String, Any> = when (this) {
     is VerifiedReward.VirtualCurrency -> mapOf(
         "type" to "virtual_currency",
         "code" to code,

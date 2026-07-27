@@ -513,7 +513,7 @@ private class CommonApiTests {
 
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     private fun checkGenerateRewardVerificationToken(impressionId: String) {
-        val token: Map<String, Any?> = generateRewardVerificationToken(impressionId)
+        val token: Map<String, Any> = generateRewardVerificationToken(impressionId)
     }
 
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)

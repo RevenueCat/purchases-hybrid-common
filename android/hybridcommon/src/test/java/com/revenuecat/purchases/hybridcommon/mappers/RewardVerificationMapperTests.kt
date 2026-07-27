@@ -34,7 +34,7 @@ class RewardVerificationMapperTests {
 
         assertThat(map.size).isEqualTo(2)
         assertThat(map["failed"]).isEqualTo(true)
-        assertThat(map["moreRewards"]).isEqualTo(emptyList<Map<String, Any?>>())
+        assertThat(map["moreRewards"]).isEqualTo(emptyList<Map<String, Any>>())
     }
 
     @OptIn(InternalRevenueCatAPI::class)
