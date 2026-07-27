@@ -1,8 +1,9 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Move dangerous settings factory to dedicated extension (#1771) via Cesar de la Vega (@vegaro)
-* Expose workflows dangerous settings to Objective-C (#1770) via Cesar de la Vega (@vegaro)
+* feat(ads): bridge reward-verification primitives to hybrids (iOS) (#1717) via Peter Porfy (@peterporfy)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.15.0 => 10.15.1 JS 1.48.0 => 1.48.1 (#1777) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.5.1 (#1774) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fast-uri from 3.1.2 to 3.1.4 in /typescript (#1766) via dependabot[bot] (@dependabot[bot])
-* Bump js-yaml from 4.2.0 to 4.3.0 in /typescript (#1767) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `b52fca5` to `d392939` (#1773) via dependabot[bot] (@dependabot[bot])
