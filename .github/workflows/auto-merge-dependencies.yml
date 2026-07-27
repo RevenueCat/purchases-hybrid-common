@@ -10,11 +10,8 @@ jobs:
     # Auto-merge is enabled separately from CircleCI (RCGitBot can't approve
     # its own PR).
     if: |
-      github.event.pull_request.user.login == 'RCGitBot' &&
-      (
-        contains(github.event.pull_request.labels.*.name, 'pr:dependencies') ||
-        startsWith(github.event.pull_request.head.ref, 'renovate/')
-      )
+      contains(github.event.pull_request.labels.*.name, 'pr:dependencies') &&
+      github.event.pull_request.user.login == 'RCGitBot'
     runs-on: ubuntu-latest
     permissions:
       contents: read

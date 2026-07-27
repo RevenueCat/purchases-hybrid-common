@@ -1,5 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>RevenueCat/renovate"],
-  "labels": ["pr:other"]
+  "extends": ["github>RevenueCat/renovate"]
 }
