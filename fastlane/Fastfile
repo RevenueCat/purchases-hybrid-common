@@ -206,9 +206,6 @@ lane :open_pr_upgrading_dependencies do |options|
     elsif type_of_bump_ios == :patch || type_of_bump_android == :patch || type_of_bump_js == :patch
       labels << "pr:force_patch"
     end
-    # Note: major bumps intentionally get no force_* label. Combined with pr:dependencies being
-    # release-neutral, a major native bump won't trigger an automatic release and must be handled
-    # intentionally. In practice the lane only bumps within the same major, so this is defensive.
 
     create_pull_request(
       api_token: ENV["GITHUB_TOKEN"],
