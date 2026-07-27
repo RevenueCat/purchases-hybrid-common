@@ -1258,6 +1258,28 @@ private extension CommonFunctionality {
 
 }
 
+// MARK: Reward verification
+
+@objc public extension CommonFunctionality {
+
+    @objc(generateRewardVerificationTokenWithImpressionId:)
+    static func generateRewardVerificationToken(impressionId: String) -> [String: Any] {
+        return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
+    }
+
+    @objc(pollRewardVerificationWithClientTransactionId:completion:)
+    static func pollRewardVerification(
+        clientTransactionId: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        _ = Task<Void, Never> {
+            let result = await Purchases.shared.pollRewardVerification(clientTransactionID: clientTransactionId)
+            completion(result.rc_dictionary, nil)
+        }
+    }
+
+}
+
 // MARK: - TrackedEventListener
 
 private class TrackedEventListener: EventsListener {
