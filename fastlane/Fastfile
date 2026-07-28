@@ -203,6 +203,8 @@ lane :open_pr_upgrading_dependencies do |options|
     labels = ["pr:dependencies"]
     if type_of_bump_ios == :minor || type_of_bump_android == :minor || type_of_bump_js == :minor
       labels << "pr:force_minor"
+    elsif type_of_bump_ios == :patch || type_of_bump_android == :patch || type_of_bump_js == :patch
+      labels << "pr:force_patch"
     end
 
     create_pull_request(
