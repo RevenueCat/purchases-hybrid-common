@@ -1,10 +1,7 @@
 ## RevenueCat SDK
-### ✨ New Features
-* feat(ads): bridge reward-verification primitives to hybrids (Android) (#1718) via Peter Porfy (@peterporfy)
-* feat(ads): bridge reward-verification primitives to hybrids (iOS) (#1717) via Peter Porfy (@peterporfy)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 10.15.0 => 10.15.1 JS 1.48.0 => 1.48.1 (#1777) via RevenueCat Git Bot (@RCGitBot)
-* [RENOVATE] Update dependency revenuecat to v4.5.1 (#1774) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.48.1 => 1.49.0 (#1783) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `b52fca5` to `d392939` (#1773) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `d392939` to `3421c88` (#1785) via dependabot[bot] (@dependabot[bot])
+* fastlane: force patch release on automatic native dependency bumps (#1781) via Antonio Pallares (@ajpallares)
