@@ -1,8 +1,4 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.81.2 => 5.81.3 (#1787) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] JS 1.48.1 => 1.49.0 (#1783) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `d392939` to `3421c88` (#1785) via dependabot[bot] (@dependabot[bot])
-* fastlane: force patch release on automatic native dependency bumps (#1781) via Antonio Pallares (@ajpallares)
+* [AUTOMATIC] iOS 5.81.3 => 5.82.0 (#1791) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.49.0 => 1.49.1 (#1789) via RevenueCat Git Bot (@RCGitBot)
