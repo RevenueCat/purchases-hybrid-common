@@ -1,3 +1,8 @@
+## 18.29.0
+## RevenueCatUI SDK
+### ✨ New Features
+* Add onWebCheckoutOpened and onUrlOpened to paywall listener bridge (#1776) via Álvaro Brey (@AlvaroBrey)
+
 ## 18.28.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
