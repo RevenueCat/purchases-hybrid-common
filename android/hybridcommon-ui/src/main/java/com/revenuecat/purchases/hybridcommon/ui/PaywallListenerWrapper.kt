@@ -57,14 +57,6 @@ abstract class PaywallListenerWrapper : PaywallListener {
         this.onRestoreError(error = error.map().info)
     }
 
-    override fun onWebCheckoutOpened() {
-        // No native data to map; overridable directly since there's nothing to forward.
-    }
-
-    override fun onUrlOpened(url: String) {
-        // url is already a hybrid-friendly String; overridable directly since there's nothing to map.
-    }
-
     abstract fun onPurchaseStarted(rcPackage: Map<String, Any?>)
     abstract fun onPurchaseCompleted(customerInfo: Map<String, Any?>, storeTransaction: Map<String, Any?>)
     abstract fun onPurchaseError(error: Map<String, Any?>)
