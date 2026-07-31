@@ -27,8 +27,8 @@ preflight will:
 2. Query GitHub for the latest stable `purchases-ios` release in the same major
    version.
 3. Exit immediately when there is no newer iOS release.
-4. Poll the CocoaPods CDN version-index shards for both `RevenueCat` and
-   `RevenueCatUI`.
+4. Poll the CocoaPods CDN version-index shards and exact podspec objects for
+   both `RevenueCat` and `RevenueCatUI`.
 5. Continue only when both pods list the selected version.
 
 The check will run immediately and then every five minutes for up to one hour.

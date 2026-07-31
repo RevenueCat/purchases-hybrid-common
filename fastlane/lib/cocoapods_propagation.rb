@@ -8,6 +8,7 @@ module CocoaPodsPropagation
   GITHUB_RELEASES_URI =
     URI("https://api.github.com/repos/RevenueCat/purchases-ios/releases?per_page=100")
   COCOAPODS_CDN_BASE = "https://cdn.cocoapods.org"
+  COCOAPODS_SPECS_BASE = "https://cdn.jsdelivr.net/cocoa/Specs"
   REQUIRED_PODS = %w[RevenueCat RevenueCatUI].freeze
 
   class TimeoutError < StandardError; end
@@ -77,7 +78,10 @@ module CocoaPodsPropagation
         entry.start_with?("#{pod_name}/")
       end
       versions = line&.split("/")&.drop(1)&.map(&:strip) || []
-      versions.include?(version.to_s)
+      return false unless versions.include?(version.to_s)
+
+      spec_response = @http.get(spec_uri(pod_name, version))
+      spec_response.code.to_i.between?(200, 299)
     end
 
     private
@@ -85,6 +89,14 @@ module CocoaPodsPropagation
     def shard_uri(pod_name)
       shard = Digest::MD5.hexdigest(pod_name).chars.first(3).join("_")
       URI("#{COCOAPODS_CDN_BASE}/all_pods_versions_#{shard}.txt")
+    end
+
+    def spec_uri(pod_name, version)
+      path = Digest::MD5.hexdigest(pod_name).chars.first(3).join("/")
+      URI(
+        "#{COCOAPODS_SPECS_BASE}/#{path}/#{pod_name}/#{version}/" \
+        "#{pod_name}.podspec.json"
+      )
     end
 
     def ensure_success!(response, uri)

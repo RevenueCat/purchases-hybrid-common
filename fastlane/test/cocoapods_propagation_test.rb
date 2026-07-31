@@ -67,9 +67,12 @@ class CocoaPodsPropagationTest < Minitest::Test
       "https://cdn.cocoapods.org/all_pods_versions_e_9_b.txt"
     revenue_cat_ui_url =
       "https://cdn.cocoapods.org/all_pods_versions_c_3_7.txt"
+    revenue_cat_spec_url =
+      "https://cdn.jsdelivr.net/cocoa/Specs/e/9/b/RevenueCat/5.83.0/RevenueCat.podspec.json"
     http = FakeHttp.new(
       revenue_cat_url =>
         FakeResponse.new("200", "RevenueCat/5.81.3/5.82.0/5.83.0\n"),
+      revenue_cat_spec_url => FakeResponse.new("200", "{}"),
       revenue_cat_ui_url =>
         FakeResponse.new("200", "RevenueCatUI/5.81.3/5.82.0\n")
     )
@@ -77,6 +80,20 @@ class CocoaPodsPropagationTest < Minitest::Test
 
     assert checker.available?("RevenueCat", Gem::Version.new("5.83.0"))
     refute checker.available?("RevenueCatUI", Gem::Version.new("5.83.0"))
+  end
+
+  def test_is_unavailable_when_version_is_indexed_but_podspec_is_missing
+    shard_url = "https://cdn.cocoapods.org/all_pods_versions_e_9_b.txt"
+    spec_url =
+      "https://cdn.jsdelivr.net/cocoa/Specs/e/9/b/RevenueCat/5.83.0/RevenueCat.podspec.json"
+    http = FakeHttp.new(
+      shard_url =>
+        FakeResponse.new("200", "RevenueCat/5.81.3/5.82.0/5.83.0\n"),
+      spec_url => FakeResponse.new("404", "not found")
+    )
+    checker = CocoaPodsPropagation::CdnChecker.new(http: http)
+
+    refute checker.available?("RevenueCat", Gem::Version.new("5.83.0"))
   end
 
   def test_exits_immediately_when_current_version_is_latest

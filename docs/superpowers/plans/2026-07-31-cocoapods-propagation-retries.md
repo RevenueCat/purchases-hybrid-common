@@ -4,7 +4,7 @@
 
 **Goal:** Prevent `dependency-update` from failing while new RevenueCat pods propagate, without holding an expensive macOS executor for up to an hour.
 
-**Architecture:** A standalone Ruby preflight selects the latest stable `purchases-ios` release in the current major and polls the CocoaPods CDN version shards for both required pods. CircleCI runs it on a small Linux executor before the existing macOS job; a separate pure-Ruby helper gives the final `pod install` short retries and skips that command when iOS is unchanged.
+**Architecture:** A standalone Ruby preflight selects the latest stable `purchases-ios` release in the current major and polls the CocoaPods CDN version shards and exact podspec objects for both required pods. CircleCI runs it on a small Linux executor before the existing macOS job; a separate pure-Ruby helper gives the final `pod install` short retries and skips that command when iOS is unchanged.
 
 **Tech Stack:** Ruby 3.3 standard library (`net/http`, `json`, `digest`, `rubygems`, `minitest`), Fastlane, CocoaPods, CircleCI 2.1.
 
@@ -78,6 +78,7 @@ module CocoaPodsPropagation
   GITHUB_RELEASES_URI =
     URI("https://api.github.com/repos/RevenueCat/purchases-ios/releases?per_page=100")
   COCOAPODS_CDN_BASE = "https://cdn.cocoapods.org"
+  COCOAPODS_SPECS_BASE = "https://cdn.jsdelivr.net/cocoa/Specs"
   REQUIRED_PODS = %w[RevenueCat RevenueCatUI].freeze
 
   class ReleaseFinder
@@ -107,14 +108,30 @@ module CocoaPodsPropagation
       shard = Digest::MD5.hexdigest(pod_name).chars.first(3).join("_")
       body = @http.get(URI("#{COCOAPODS_CDN_BASE}/all_pods_versions_#{shard}.txt")).body
       line = body.lines.find { |entry| entry.start_with?("#{pod_name}/") }
-      line&.split("/")&.drop(1)&.map(&:strip)&.include?(version.to_s) || false
+      versions = line&.split("/")&.drop(1)&.map(&:strip) || []
+      return false unless versions.include?(version.to_s)
+
+      spec_response = @http.get(spec_uri(pod_name, version))
+      spec_response.code.to_i.between?(200, 299)
+    end
+
+    private
+
+    def spec_uri(pod_name, version)
+      path = Digest::MD5.hexdigest(pod_name).chars.first(3).join("/")
+      URI(
+        "#{COCOAPODS_SPECS_BASE}/#{path}/#{pod_name}/#{version}/" \
+        "#{pod_name}.podspec.json"
+      )
     end
   end
 end
 ```
 
 Add explicit non-success HTTP handling so GitHub and CDN response codes outside
-200–299 raise a descriptive error that the waiter can retry.
+200–299 raise a descriptive error that the waiter can retry. Add a test where
+the version is indexed but the exact podspec returns 404, and assert that the
+pod is still unavailable.
 
 - [ ] **Step 4: Run the focused test and verify release/CDN checks pass**
 
