@@ -479,7 +479,7 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     }
 
     public func paywallViewController(_ controller: PaywallViewController, didOpenURL url: URL) {
-        self.delegate?.paywallViewController?(controller, didOpenURL: url)
+        self.delegate?.paywallViewController?(controller, didOpenURL: url.absoluteString)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
