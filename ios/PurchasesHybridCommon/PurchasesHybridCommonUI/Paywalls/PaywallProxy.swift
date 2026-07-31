@@ -478,6 +478,10 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         self.delegate?.paywallViewControllerDidOpenWebCheckout?(controller)
     }
 
+    public func paywallViewController(_ controller: PaywallViewController, didOpenURL url: URL) {
+        self.delegate?.paywallViewController?(controller, didOpenURL: url)
+    }
+
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFailPurchasingWith error: NSError) {
         let errorContainer = ErrorContainer(error: error, extraPayload: [:])

@@ -43,6 +43,11 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     @objc(paywallViewControllerDidOpenWebCheckout:)
     optional func paywallViewControllerDidOpenWebCheckout(_ controller: PaywallViewController)
 
+    /// Notifies that the paywall successfully opened a URL, either from a button with a URL destination
+    /// or from a link inside a text component. Not called for web checkout URLs.
+    @objc(paywallViewController:didOpenURL:)
+    optional func paywallViewController(_ controller: PaywallViewController, didOpenURL url: URL)
+
     /// Notifies that the purchase operation has failed in a ``PaywallViewController``.
     @objc(paywallViewController:didFailPurchasingWithErrorDictionary:)
     optional func paywallViewController(_ controller: PaywallViewController,
