@@ -10,6 +10,8 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
+require_relative "lib/dependency_update_resilience"
+
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
@@ -248,7 +250,12 @@ lane :update_native_dependencies_to_latest do |options|
       sh("yarn install")
     end
   end
-  run_pod_install
+  DependencyUpdateResilience.if_ios_changed(
+    current_version: current_ios_version,
+    new_version: latest_ios_release
+  ) do
+    run_pod_install
+  end
 
   new_versions = {
     new_ios_version: latest_ios_release,
@@ -376,7 +383,14 @@ end
 desc "Run pod install"
 lane :run_pod_install do |options|
   Dir.chdir(File.expand_path('ios/PurchasesHybridCommon', get_root_folder)) do
-    sh("pod install --repo-update")
+    DependencyUpdateResilience.with_retries(
+      max_attempts: 3,
+      initial_delay: 30,
+      sleeper: ->(seconds) { sleep(seconds) },
+      logger: ->(message) { UI.important(message) }
+    ) do
+      sh("pod install --repo-update")
+    end
   end
 end
 
