@@ -1267,13 +1267,37 @@ private extension CommonFunctionality {
         return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
 
-    @objc(pollRewardVerificationWithClientTransactionId:completion:)
+    @objc(pollRewardVerificationWithClientTransactionId:trackingMetadata:completion:)
     static func pollRewardVerification(
         clientTransactionId: String,
+        trackingMetadata: [String: Any]?,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
+        let metadata = trackingMetadata.flatMap { data -> RewardedAdTrackingMetadata? in
+            guard let mediatorNameString = data["mediatorName"] as? String,
+                  let adFormatString = data["adFormat"] as? String,
+                  let adUnitId = data["adUnitId"] as? String,
+                  let impressionId = data["impressionId"] as? String else {
+                NSLog("[PurchasesHybridCommon] pollRewardVerification: Missing required trackingMetadata " +
+                      "parameters - mediatorName, adFormat, adUnitId, or impressionId")
+                return nil
+            }
+
+            return RewardedAdTrackingMetadata(
+                networkName: data["networkName"] as? String,
+                mediatorName: MediatorName(rawValue: mediatorNameString),
+                adFormat: AdFormat(rawValue: adFormatString),
+                placement: data["placement"] as? String,
+                adUnitId: adUnitId,
+                impressionId: impressionId
+            )
+        }
+
         _ = Task<Void, Never> {
-            let result = await Purchases.shared.pollRewardVerification(clientTransactionID: clientTransactionId)
+            let result = await Purchases.shared.pollRewardVerification(
+                clientTransactionID: clientTransactionId,
+                trackingMetadata: metadata
+            )
             completion(result.rc_dictionary, nil)
         }
     }
