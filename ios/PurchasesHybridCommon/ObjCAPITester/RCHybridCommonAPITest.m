@@ -165,6 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality generateRewardVerificationTokenWithImpressionId:@""];
 
     [RCCommonFunctionality pollRewardVerificationWithClientTransactionId:@""
+                                                        trackingMetadata:nil
                                                                 completion:^(
                                                                     NSDictionary<NSString *, NSObject *> * _Nullable result,
                                                                     RCErrorContainer * _Nullable error) {}];
