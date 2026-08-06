@@ -737,10 +737,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@revenuecat/purchases-js@1.49.1":
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-js/-/purchases-js-1.49.1.tgz#0174a0d8d1842810befab67a63b6e25e9f0ee994"
-  integrity sha512-eW5/zT0/Jyp0z2Sq1JTFFdlHrUn31fGLuL099/zee8SemHzszlzKOp1IPCOSolLscTUmFUwlalC65opsa365uw==
+"@revenuecat/purchases-js@1.51.0":
+  version "1.51.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-js/-/purchases-js-1.51.0.tgz#3f9630e5cc97f1c9fbfa9b8ff17f3b8a9c35e1f4"
+  integrity sha512-JD/T+7nERHvpz3lI9UjchtUcInKXHsOLHjemyVEKpiELALcfeT1k4s5Nzm83md1HzqQrzsX0bmAYl7FbEXiMZA==
 
 "@rollup/plugin-node-resolve@^15.2.3":
   version "15.3.1"
