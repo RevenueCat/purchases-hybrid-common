@@ -36,6 +36,7 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.rewardverification.RewardedAdTrackingMetadata
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.galaxy.GalaxyBillingMode
 import com.revenuecat.purchases.getAmazonLWAConsentStatusWith
@@ -1777,13 +1778,45 @@ fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
 }
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+@Suppress("ComplexCondition")
 fun pollRewardVerification(
     clientTransactionId: String,
     onResult: OnResult,
+    trackingMetadata: Map<String, Any?>? = null,
 ) {
-    Purchases.sharedInstance.pollRewardVerification(clientTransactionId) { result ->
-        onResult.onReceived(result.map())
+    val metadata = trackingMetadata?.let { data ->
+        val mediatorNameString = data["mediatorName"] as? String
+        val adFormatString = data["adFormat"] as? String
+        val adUnitId = data["adUnitId"] as? String
+        val impressionId = data["impressionId"] as? String
+
+        if (mediatorNameString == null ||
+            adFormatString == null ||
+            adUnitId == null ||
+            impressionId == null
+        ) {
+            errorLog(
+                "pollRewardVerification: Missing required trackingMetadata parameters - " +
+                    "mediatorName, adFormat, adUnitId, or impressionId",
+            )
+            null
+        } else {
+            RewardedAdTrackingMetadata(
+                networkName = data["networkName"] as? String,
+                mediatorName = AdMediatorName.fromString(mediatorNameString),
+                adFormat = AdFormat.fromString(adFormatString),
+                placement = data["placement"] as? String,
+                adUnitId = adUnitId,
+                impressionId = impressionId,
+            )
+        }
     }
+
+    Purchases.sharedInstance.pollRewardVerification(
+        clientTransactionId = clientTransactionId,
+        callback = { result -> onResult.onReceived(result.map()) },
+        trackingMetadata = metadata,
+    )
 }
 
 // endregion
