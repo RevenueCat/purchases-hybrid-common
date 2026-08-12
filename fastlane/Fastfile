@@ -46,7 +46,6 @@ changelog_path = './CHANGELOG.md'
 
 before_all do
   setup_circle_ci
-  update_fastlane
 end
 
 desc "Bump version, edit changelog, and create pull request"
