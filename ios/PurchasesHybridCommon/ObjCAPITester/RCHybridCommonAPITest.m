@@ -169,6 +169,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                                 completion:^(
                                                                     NSDictionary<NSString *, NSObject *> * _Nullable result,
                                                                     RCErrorContainer * _Nullable error) {}];
+
+    [RCCommonFunctionality pollRewardVerificationWithClientTransactionId:@""
+                                                                completion:^(
+                                                                    NSDictionary<NSString *, NSObject *> * _Nullable result,
+                                                                    RCErrorContainer * _Nullable error) {}];
 }
 
 - (void)testDeprecatedAPI {
