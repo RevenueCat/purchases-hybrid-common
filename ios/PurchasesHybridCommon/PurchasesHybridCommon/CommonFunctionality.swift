@@ -1267,10 +1267,18 @@ private extension CommonFunctionality {
         return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
 
+    @objc(pollRewardVerificationWithClientTransactionId:completion:)
+    static func pollRewardVerificationForObjC(
+        clientTransactionId: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        pollRewardVerification(clientTransactionId: clientTransactionId, trackingMetadata: nil, completion: completion)
+    }
+
     @objc(pollRewardVerificationWithClientTransactionId:trackingMetadata:completion:)
     static func pollRewardVerification(
         clientTransactionId: String,
-        trackingMetadata: [String: Any]?,
+        trackingMetadata: [String: Any]? = nil,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         let metadata = trackingMetadata.flatMap { data -> RewardedAdTrackingMetadata? in
