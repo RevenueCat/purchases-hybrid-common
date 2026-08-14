@@ -1778,6 +1778,7 @@ fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
     return Purchases.sharedInstance.generateRewardVerificationToken(impressionId).map()
 }
 
+@JvmOverloads
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun pollRewardVerification(
