@@ -7,6 +7,7 @@ import terser from '@rollup/plugin-terser';
 export default defineConfig([
   {
     input: 'src/index.ts',
+    external: ['@amazon-devices/keplerscript-appstore-iap-lib'],
     output: [
       {
         file: 'dist/index.js',
