@@ -32,7 +32,13 @@ export default defineConfig([
         sourceMap: true,
         inlineSources: true
       }),
-      terser()
+      // Keep runtime-only imports as variables. Otherwise Terser turns them into
+      // static imports, causing web bundlers to require optional native SDKs.
+      terser({
+        compress: {
+          reduce_vars: false,
+        }
+      }),
     ]
   },
   {
