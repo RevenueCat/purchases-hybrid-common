@@ -49,6 +49,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
+import com.revenuecat.purchases.interfaces.PollRewardVerificationCallback
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
@@ -1781,9 +1782,12 @@ fun pollRewardVerification(
     clientTransactionId: String,
     onResult: OnResult,
 ) {
-    Purchases.sharedInstance.pollRewardVerification(clientTransactionId) { result ->
-        onResult.onReceived(result.map())
-    }
+    Purchases.sharedInstance.pollRewardVerification(
+        clientTransactionId,
+        PollRewardVerificationCallback { result ->
+            onResult.onReceived(result.map())
+        },
+    )
 }
 
 // endregion
