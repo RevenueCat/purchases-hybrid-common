@@ -517,7 +517,12 @@ private class CommonApiTests {
     }
 
     @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-    private fun checkPollRewardVerification(clientTransactionId: String, onResult: OnResult) {
+    private fun checkPollRewardVerification(
+        clientTransactionId: String,
+        onResult: OnResult,
+        trackingMetadata: Map<String, Any?>?,
+    ) {
         pollRewardVerification(clientTransactionId, onResult)
+        pollRewardVerification(clientTransactionId, onResult, trackingMetadata)
     }
 }

@@ -1268,12 +1268,44 @@ private extension CommonFunctionality {
     }
 
     @objc(pollRewardVerificationWithClientTransactionId:completion:)
-    static func pollRewardVerification(
+    static func pollRewardVerificationForObjC(
         clientTransactionId: String,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
+        pollRewardVerification(clientTransactionId: clientTransactionId, trackingMetadata: nil, completion: completion)
+    }
+
+    @objc(pollRewardVerificationWithClientTransactionId:trackingMetadata:completion:)
+    static func pollRewardVerification(
+        clientTransactionId: String,
+        trackingMetadata: [String: Any]? = nil,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        let metadata = trackingMetadata.flatMap { data -> RewardedAdTrackingMetadata? in
+            guard let mediatorNameString = data["mediatorName"] as? String,
+                  let adFormatString = data["adFormat"] as? String,
+                  let adUnitId = data["adUnitId"] as? String,
+                  let impressionId = data["impressionId"] as? String else {
+                NSLog("[PurchasesHybridCommon] pollRewardVerification: Missing required trackingMetadata " +
+                      "parameters - mediatorName, adFormat, adUnitId, or impressionId")
+                return nil
+            }
+
+            return RewardedAdTrackingMetadata(
+                networkName: data["networkName"] as? String,
+                mediatorName: MediatorName(rawValue: mediatorNameString),
+                adFormat: AdFormat(rawValue: adFormatString),
+                placement: data["placement"] as? String,
+                adUnitId: adUnitId,
+                impressionId: impressionId
+            )
+        }
+
         _ = Task<Void, Never> {
-            let result = await Purchases.shared.pollRewardVerification(clientTransactionID: clientTransactionId)
+            let result = await Purchases.shared.pollRewardVerification(
+                clientTransactionID: clientTransactionId,
+                trackingMetadata: metadata
+            )
             completion(result.rc_dictionary, nil)
         }
     }
