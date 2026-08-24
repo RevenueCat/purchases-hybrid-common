@@ -9,8 +9,8 @@ import Foundation
 import Quick
 import Nimble
 
-@_spi(Experimental) @testable import PurchasesHybridCommon
-@_spi(Internal) @_spi(Experimental) @testable import RevenueCat
+@testable import PurchasesHybridCommon
+@_spi(Internal) @testable import RevenueCat
 
 class AdRewardHybridAdditionsTests: QuickSpec {
     override func spec() {
