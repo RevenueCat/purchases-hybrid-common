@@ -35,15 +35,17 @@ function firstString(values: unknown[]): string {
 }
 
 /**
- * `purchases-js` types its error code as a numeric enum, while the native
- * bridges send it as a string.
+ * Every code the SDK emits is a PURCHASES_ERROR_CODE value, which is always
+ * numeric. Plugin level rejections use names such as "UNIMPLEMENTED" or
+ * "PAYWALL_ERROR" and are not ours to touch.
+ *
+ * `purchases-js` types its code as a numeric enum, while the native bridges
+ * send the same value as a string.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
     const raw = error.code !== undefined ? error.code : payload.code;
-    if (typeof raw === "number") {
-        return String(raw);
-    }
-    return typeof raw === "string" ? raw : undefined;
+    const code = typeof raw === "number" ? String(raw) : raw;
+    return typeof code === "string" && /^\d+$/.test(code) ? code : undefined;
 }
 
 /**

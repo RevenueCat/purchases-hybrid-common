@@ -225,6 +225,25 @@ describe("normalizePurchasesError", () => {
             }
         );
 
+        // Both UI plugins and Capacitor itself reject with names rather than
+        // PURCHASES_ERROR_CODE values.
+        it.each([
+            ["a capacitor plugin exception", "UNIMPLEMENTED"],
+            ["a paywall plugin rejection", "PAYWALL_ERROR"],
+            ["an unsupported version rejection", "PaywallsUnsupportedCode"],
+            ["a node style code", "ECONNABORTED"],
+            ["a negative number", -1],
+        ])("does not touch %s", (_name, code) => {
+            const input = { code, message: "not ours" } as Record<string, unknown>;
+
+            const result = normalizePurchasesError(input) as Record<string, unknown>;
+
+            expect(result).toBe(input);
+            expect(result.userInfo).toBeUndefined();
+            expect(result.underlyingErrorMessage).toBeUndefined();
+            expect(result.userCancelled).toBeUndefined();
+        });
+
         it("does not touch an error that carries no code", () => {
             const input = new UninitializedPurchasesError();
 

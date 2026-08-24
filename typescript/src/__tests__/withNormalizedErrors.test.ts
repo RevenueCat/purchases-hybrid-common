@@ -59,6 +59,20 @@ describe("withNormalizedErrors", () => {
         expect(caught.userInfo).toBeUndefined();
     });
 
+    // Wrapping a UI plugin, whose rejections carry names rather than error
+    // codes, must leave those rejections untouched.
+    it("passes through a rejection carrying a named code", async () => {
+        const plugin = withNormalizedErrors({
+            presentPaywall: (): Promise<never> =>
+                Promise.reject(Object.assign(new Error("not supported"), { code: "PAYWALL_ERROR" })),
+        });
+
+        const caught = await plugin.presentPaywall().catch((error) => error);
+
+        expect(caught.code).toBe("PAYWALL_ERROR");
+        expect(caught.userInfo).toBeUndefined();
+    });
+
     it("passes through non promise return values", () => {
         const plugin = withNormalizedErrors(capacitorStylePlugin());
 
