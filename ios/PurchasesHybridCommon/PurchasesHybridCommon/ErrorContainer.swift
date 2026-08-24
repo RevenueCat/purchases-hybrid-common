@@ -17,7 +17,7 @@ import RevenueCat
     @objc public let error: NSError
 
     @objc public init(error: Error, extraPayload: [String: Any]) {
-        var nsError = error as NSError
+        let nsError = error as NSError
 
         var info = extraPayload
         info["code"] = nsError.code
@@ -41,12 +41,6 @@ import RevenueCat
             info["readableErrorCode"] = readableErrorCode
             info["readable_error_code"] = readableErrorCode
         }
-
-        // React Native rejects promises with the original error and forwards only that error's
-        // userInfo to the JS layer, never this info dictionary. Anything hybrids need therefore has
-        // to travel inside userInfo as well.
-        let mergedUserInfo = nsError.userInfo.merging(info) { _, new in new }
-        nsError = NSError(domain: nsError.domain, code: nsError.code, userInfo: mergedUserInfo)
 
         self.code = nsError.code
         self.message = nsError.localizedDescription

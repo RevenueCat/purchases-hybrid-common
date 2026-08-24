@@ -93,15 +93,11 @@ class ErrorContainerTests: QuickSpec {
                 expect(errorContainer.info["readableErrorCode"] as? String) == readableErrorKey
                 expect(errorContainer.info["readable_error_code"] as? String) == readableErrorKey
             }
-            it("user info contains the readable error code in both keys") {
+            it("forwards the error untouched") {
                 let error = ErrorUtils.missingAppUserIDError() as NSError
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo["readable_error_code"] as? String
-                expect(readableErrorKey).toNot(beNil())
-                expect(readableErrorKey) != ""
-                expect((errorContainer.error as NSError).userInfo["readableErrorCode"] as? String) == readableErrorKey
-                expect((errorContainer.error as NSError).userInfo["readable_error_code"] as? String) == readableErrorKey
+                expect(errorContainer.error) === error
             }
         }
 
@@ -127,24 +123,3 @@ class ErrorContainerTests: QuickSpec {
     }
 }
 
-// A separate spec because ErrorContainerTests.spec() is already at swiftlint's
-// function_body_length limit.
-class ErrorContainerUserInfoTests: QuickSpec {
-
-    override func spec() {
-        it("carries every info key without dropping the error's own") {
-            let skError = NSError(
-                domain: SKErrorDomain,
-                code: 2,
-                userInfo: [NSLocalizedDescriptionKey: "underlying error message"]
-            )
-            let error = ErrorUtils.purchasesError(withSKError: skError) as NSError
-            let container = ErrorContainer(error: error, extraPayload: ["extra": "payload"])
-
-            let userInfo = Set((container.error as NSError).userInfo.keys)
-            expect(container.info).toNot(beEmpty())
-            expect(Set(container.info.keys).subtracting(userInfo)) == []
-            expect(Set(error.userInfo.keys).subtracting(userInfo)) == []
-        }
-    }
-}
