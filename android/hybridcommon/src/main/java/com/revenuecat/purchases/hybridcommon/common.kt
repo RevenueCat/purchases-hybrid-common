@@ -1148,7 +1148,6 @@ fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.
 
 // region Ad Tracking
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdDisplayed(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1182,7 +1181,6 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdOpened(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1216,7 +1214,6 @@ fun trackAdOpened(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdOpened(openedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdRevenue(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1259,7 +1256,6 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdLoaded(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1293,7 +1289,6 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     val mediatorNameString = adData["mediatorName"] as? String
@@ -1772,13 +1767,11 @@ internal fun convertToInt(value: Any?): Int? {
 
 // region Reward verification
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
     return Purchases.sharedInstance.generateRewardVerificationToken(impressionId).map()
 }
 
 @JvmOverloads
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun pollRewardVerification(
     clientTransactionId: String,
