@@ -72,6 +72,17 @@ function capacitorError(): CapacitorException {
     });
 }
 
+// cordova and unity deliver info flat, and some callers already build errors in
+// the shape PurchasesError declares.
+function flatError(): Record<string, unknown> {
+    return {
+        code: "1",
+        message: "User cancelled",
+        readableErrorCode: "USER_CANCELLED",
+        underlyingErrorMessage: "The user cancelled",
+    };
+}
+
 // purchases-js-hybrid-mappings throws the result of mapPurchasesError, whose
 // code comes from a numeric enum.
 function webError(): Record<string, unknown> {
@@ -105,6 +116,7 @@ describe("normalizePurchasesError", () => {
         ["react native ios", reactNativeIosError],
         ["capacitor", capacitorError],
         ["web", webError],
+        ["already flat", flatError],
     ];
 
     it.each(fixtures)("satisfies PurchasesError for %s", (_name, makeFixture) => {
@@ -187,6 +199,14 @@ describe("normalizePurchasesError", () => {
 
             assertPurchasesError(result);
             expect(result.underlyingErrorMessage).toBe("");
+        });
+
+        it("derives userInfo from a top level readableErrorCode", () => {
+            const result = normalizePurchasesError(flatError());
+
+            assertPurchasesError(result);
+            expect(result.userInfo.readableErrorCode).toBe("USER_CANCELLED");
+            expect(result.readableErrorCode).toBe("USER_CANCELLED");
         });
 
         it("coerces the numeric code used on web", () => {

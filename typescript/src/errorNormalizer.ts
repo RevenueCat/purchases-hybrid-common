@@ -25,6 +25,15 @@ function asString(value: unknown, fallback: string): string {
     return typeof value === "string" ? value : fallback;
 }
 
+function firstString(values: unknown[]): string {
+    for (const value of values) {
+        if (typeof value === "string") {
+            return value;
+        }
+    }
+    return "";
+}
+
 /**
  * `purchases-js` types its error code as a numeric enum, while the native
  * bridges send it as a string.
@@ -68,12 +77,11 @@ export function normalizePurchasesError(error: unknown): unknown {
     }
 
     const existingUserInfo = isRecord(error.userInfo) ? error.userInfo : undefined;
-    const readableErrorCode = asString(
-        payload.readableErrorCode !== undefined
-            ? payload.readableErrorCode
-            : existingUserInfo && existingUserInfo.readableErrorCode,
-        ""
-    );
+    const readableErrorCode = firstString([
+        payload.readableErrorCode,
+        existingUserInfo && existingUserInfo.readableErrorCode,
+        error.readableErrorCode,
+    ]);
 
     error.code = code;
 
