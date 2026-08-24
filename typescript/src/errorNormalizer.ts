@@ -103,3 +103,53 @@ export function normalizePurchasesError(error: unknown): unknown {
 
     return error;
 }
+
+function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
+    return isRecord(value) && typeof value.then === "function";
+}
+
+function normalizeRejection(result: PromiseLike<unknown>): PromiseLike<unknown> {
+    const normalized = result.then(undefined, (error: unknown) => {
+        throw normalizePurchasesError(error);
+    });
+
+    // Capacitor's addListener resolves a promise that also carries a `remove`
+    // property, which chaining off it would otherwise drop.
+    const source = result as unknown as UnknownRecord;
+    const destination = normalized as unknown as UnknownRecord;
+    Object.keys(source).forEach((key) => {
+        destination[key] = source[key];
+    });
+
+    return normalized;
+}
+
+/**
+ * Wraps a native plugin so every method that rejects runs its error through
+ * {@link normalizePurchasesError} first.
+ *
+ * Methods are wrapped lazily and memoized, so repeated reads of the same
+ * method return the same function.
+ *
+ * @public
+ */
+export function withNormalizedErrors<T extends object>(plugin: T): T {
+    const wrapped = new Map<PropertyKey, unknown>();
+
+    return new Proxy(plugin, {
+        get(target, property, receiver) {
+            const value = Reflect.get(target, property, receiver);
+            if (typeof value !== "function") {
+                return value;
+            }
+
+            if (!wrapped.has(property)) {
+                wrapped.set(property, function (this: unknown, ...args: unknown[]): unknown {
+                    const result = (value as (...callArgs: unknown[]) => unknown).apply(target, args);
+                    return isPromiseLike(result) ? normalizeRejection(result) : result;
+                });
+            }
+            return wrapped.get(property);
+        },
+    });
+}

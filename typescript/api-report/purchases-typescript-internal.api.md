@@ -680,6 +680,9 @@ export enum WebPurchaseRedemptionResultType {
     SUCCESS = "SUCCESS"
 }
 
+// @public
+export function withNormalizedErrors<T extends object>(plugin: T): T;
+
 // (No @packageDocumentation comment for this package)
 
 ```
