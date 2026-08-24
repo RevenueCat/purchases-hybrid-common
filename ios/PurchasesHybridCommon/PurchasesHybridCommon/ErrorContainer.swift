@@ -40,20 +40,14 @@ import RevenueCat
         if let readableErrorCode = nsError.userInfo["readable_error_code"] {
             info["readableErrorCode"] = readableErrorCode
             info["readable_error_code"] = readableErrorCode
-
-            // Reason behind this is because React Native doesn't let reject the promises passing more information
-            // besides passing the original error, but it passes the extra userInfo from that error to the JS layer.
-            // Since we want to pass both readable_error_code (deprecated) and readableErrorCode when building the
-            // error JS object, and the error coming from purchases-ios only has the snake case version, we need to
-            // add readableErrorCode to the userInfo of the error. In a future project, we will remove the
-            // deprecated version and also improve error handling so it's easier to detect which errors come
-            // from RevenueCat and which don't
-
-            var fixedUserInfo = nsError.userInfo
-            fixedUserInfo["readableErrorCode"] = readableErrorCode
-
-            nsError = NSError(domain: nsError.domain, code: nsError.code, userInfo: fixedUserInfo)
         }
+
+        // React Native rejects promises with the original error and forwards only that error's
+        // userInfo to the JS layer, never this info dictionary. Anything hybrids need therefore has
+        // to travel inside userInfo as well.
+        var mergedUserInfo = nsError.userInfo
+        info.forEach { mergedUserInfo[$0.key] = $0.value }
+        nsError = NSError(domain: nsError.domain, code: nsError.code, userInfo: mergedUserInfo)
 
         self.code = nsError.code
         self.message = nsError.localizedDescription
