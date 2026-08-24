@@ -123,3 +123,36 @@ class ErrorContainerTests: QuickSpec {
     }
 }
 
+// A separate spec because ErrorContainerTests.spec() is already at swiftlint's
+// function_body_length limit.
+class ErrorContainerPayloadTests: QuickSpec {
+
+    // Every hybrid consumes this payload: react-native-purchases merges it into the
+    // rejected NSError, capacitor sends it as the reject data, and cordova, flutter and
+    // unity forward it as-is. Dropping a key here breaks all five, and only flutter,
+    // cordova and unity would notice without a JS-side normalizer.
+    override func spec() {
+        it("always carries the keys hybrids consume") {
+            let error = ErrorUtils.missingAppUserIDError()
+            let container = ErrorContainer(error: error, extraPayload: ["extra": "payload"])
+
+            let required: Set<String> = [
+                "code",
+                "message",
+                "readableErrorCode",
+                "readable_error_code",
+                "underlyingErrorMessage"
+            ]
+            let missing = required.subtracting(Set(container.info.keys))
+            expect(missing).to(beEmpty())
+        }
+
+        it("passes the extra payload through untouched") {
+            let error = ErrorUtils.missingAppUserIDError()
+            let container = ErrorContainer(error: error, extraPayload: ["userCancelled": true])
+
+            expect(container.info["userCancelled"] as? Bool) == true
+        }
+    }
+}
+
