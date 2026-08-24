@@ -74,9 +74,11 @@ export function normalizePurchasesError(error: unknown): unknown {
 
     error.code = code;
 
-    // Preserve the richer userInfo React Native already provides; only guarantee
-    // the one field ErrorInfo declares.
-    const userInfo = isRecord(error.userInfo) ? error.userInfo : {};
+    // Capacitor nests the payload under `data`, leaving userInfo empty, so lift it in.
+    // On React Native the payload already is userInfo, and spreading it last keeps
+    // everything the bridge put there.
+    const existingUserInfo = isRecord(error.userInfo) ? error.userInfo : undefined;
+    const userInfo: UnknownRecord = { ...payload, ...existingUserInfo };
     if (typeof userInfo.readableErrorCode !== "string") {
         userInfo.readableErrorCode = stringOrEmpty([payload.readableErrorCode, error.readableErrorCode]);
     }
@@ -99,11 +101,7 @@ export function normalizePurchasesError(error: unknown): unknown {
     return error;
 }
 
-function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
-    return isRecord(value) && typeof value.then === "function";
-}
-
-function normalizeRejection(result: PromiseLike<unknown>): PromiseLike<unknown> {
+function normalizeRejection(result: Promise<unknown>): Promise<unknown> {
     const normalized = result.then(undefined, (error: unknown) => {
         throw normalizePurchasesError(error);
     });
@@ -132,7 +130,7 @@ export function withNormalizedErrors<T extends object>(plugin: T): T {
 
             return function (this: unknown, ...args: unknown[]): unknown {
                 const result = (value as (...callArgs: unknown[]) => unknown).apply(target, args);
-                return isPromiseLike(result) ? normalizeRejection(result) : result;
+                return result instanceof Promise ? normalizeRejection(result) : result;
             };
         },
     });

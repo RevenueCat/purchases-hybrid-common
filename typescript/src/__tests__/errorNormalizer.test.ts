@@ -102,10 +102,21 @@ describe("normalizePurchasesError", () => {
         });
 
         it("defaults underlyingErrorMessage when the bridge omits it", () => {
-            const result = normalizePurchasesError(reactNativeIosError());
+            const result = normalizePurchasesError(webError());
 
             assertPurchasesError(result);
             expect(result.underlyingErrorMessage).toBe("");
+        });
+
+        // Capacitor nests everything under data, so without lifting it the two
+        // platforms would expose different userInfo.
+        it("gives capacitor the same userInfo react native gets", () => {
+            const result = normalizePurchasesError(capacitorError());
+
+            assertPurchasesError(result);
+            const userInfo = result.userInfo as unknown as Record<string, unknown>;
+            expect(userInfo.underlyingErrorMessage).toBe("Invalid API Key.");
+            expect(userInfo.readable_error_code).toBe("InvalidCredentialsError");
         });
 
         it("derives userInfo from a top level readableErrorCode", () => {

@@ -35,16 +35,19 @@ export function reactNativeAndroidError(): Error {
     });
 }
 
-// On iOS, React Native forwards NSError.userInfo, which carries readableErrorCode
-// but not underlyingErrorMessage.
+// On iOS, React Native forwards NSError.userInfo, into which RNPurchases.m merges
+// the error container's info payload. readable_error_code is ErrorCode.codeName.
 export function reactNativeIosError(): Error {
     return Object.assign(new Error("Store problem"), {
         code: "2",
         domain: "RevenueCat.ErrorCode",
         userInfo: {
             NSLocalizedDescription: "Store problem",
-            readable_error_code: "STORE_PROBLEM_ERROR",
-            readableErrorCode: "STORE_PROBLEM_ERROR",
+            code: 2,
+            message: "Store problem",
+            readable_error_code: "STORE_PROBLEM",
+            readableErrorCode: "STORE_PROBLEM",
+            underlyingErrorMessage: "",
         },
         nativeStackIOS: [],
     });
