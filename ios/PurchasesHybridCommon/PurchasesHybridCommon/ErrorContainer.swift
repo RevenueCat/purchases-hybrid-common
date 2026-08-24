@@ -45,8 +45,7 @@ import RevenueCat
         // React Native rejects promises with the original error and forwards only that error's
         // userInfo to the JS layer, never this info dictionary. Anything hybrids need therefore has
         // to travel inside userInfo as well.
-        var mergedUserInfo = nsError.userInfo
-        info.forEach { mergedUserInfo[$0.key] = $0.value }
+        let mergedUserInfo = nsError.userInfo.merging(info) { _, new in new }
         nsError = NSError(domain: nsError.domain, code: nsError.code, userInfo: mergedUserInfo)
 
         self.code = nsError.code

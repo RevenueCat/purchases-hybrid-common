@@ -1,11 +1,9 @@
 type UnknownRecord = Record<string, unknown>;
 
 /**
- * Each host framework nests `ErrorContainer.info` under a different key:
- * React Native under `userInfo`, Capacitor under `data`, and
- * purchases-js-hybrid-mappings under `info`.
+ * React Native nests `ErrorContainer.info` under `userInfo`, Capacitor under `data`.
  */
-const PAYLOAD_KEYS = ["userInfo", "data", "info"];
+const PAYLOAD_KEYS = ["userInfo", "data"];
 
 function isRecord(value: unknown): value is UnknownRecord {
     return typeof value === "object" && value !== null;
@@ -21,11 +19,7 @@ function readPayload(error: UnknownRecord): UnknownRecord {
     return {};
 }
 
-function asString(value: unknown, fallback: string): string {
-    return typeof value === "string" ? value : fallback;
-}
-
-function firstString(values: unknown[]): string {
+function stringOrEmpty(values: unknown[]): string {
     for (const value of values) {
         if (typeof value === "string") {
             return value;
@@ -35,17 +29,17 @@ function firstString(values: unknown[]): string {
 }
 
 /**
- * Every code the SDK emits is a PURCHASES_ERROR_CODE value, which is always
- * numeric. Plugin level rejections use names such as "UNIMPLEMENTED" or
- * "PAYWALL_ERROR" and are not ours to touch.
+ * Every code the SDK emits is a PURCHASES_ERROR_CODE value, which is always numeric.
+ * Plugin level rejections use names such as "UNIMPLEMENTED" or "PAYWALL_ERROR" and are
+ * not ours to touch. `purchases-js` sends the same value as a number.
  *
- * `purchases-js` types its code as a numeric enum, while the native bridges
- * send the same value as a string.
+ * Deliberately looser than PURCHASES_ERROR_CODE membership: that enum omits codes the
+ * native SDKs emit (36 to 41), and Android and iOS disagree on 28 and 36, so matching
+ * against it would reject genuine errors. See RevenueCat/purchases-error-codes#18.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
-    const raw = error.code !== undefined ? error.code : payload.code;
-    const code = typeof raw === "number" ? String(raw) : raw;
-    return typeof code === "string" && /^\d+$/.test(code) ? code : undefined;
+    const code = String(error.code !== undefined ? error.code : payload.code);
+    return /^\d+$/.test(code) ? code : undefined;
 }
 
 /**
@@ -78,33 +72,24 @@ export function normalizePurchasesError(error: unknown): unknown {
         return error;
     }
 
-    const existingUserInfo = isRecord(error.userInfo) ? error.userInfo : undefined;
-    const readableErrorCode = firstString([
-        payload.readableErrorCode,
-        existingUserInfo && existingUserInfo.readableErrorCode,
-        error.readableErrorCode,
-    ]);
-
     error.code = code;
 
     // Preserve the richer userInfo React Native already provides; only guarantee
     // the one field ErrorInfo declares.
-    if (existingUserInfo) {
-        if (typeof existingUserInfo.readableErrorCode !== "string") {
-            existingUserInfo.readableErrorCode = readableErrorCode;
-        }
-    } else {
-        error.userInfo = { readableErrorCode };
+    const userInfo = isRecord(error.userInfo) ? error.userInfo : {};
+    if (typeof userInfo.readableErrorCode !== "string") {
+        userInfo.readableErrorCode = stringOrEmpty([payload.readableErrorCode, error.readableErrorCode]);
     }
+    error.userInfo = userInfo;
 
     if (typeof error.message !== "string" || error.message === "") {
-        error.message = asString(payload.message, "");
+        error.message = stringOrEmpty([payload.message]);
     }
     if (typeof error.readableErrorCode !== "string") {
-        error.readableErrorCode = readableErrorCode;
+        error.readableErrorCode = userInfo.readableErrorCode;
     }
     if (typeof error.underlyingErrorMessage !== "string") {
-        error.underlyingErrorMessage = asString(payload.underlyingErrorMessage, "");
+        error.underlyingErrorMessage = stringOrEmpty([payload.underlyingErrorMessage]);
     }
     if (!("userCancelled" in error)) {
         const userCancelled = payload.userCancelled;
@@ -125,27 +110,19 @@ function normalizeRejection(result: PromiseLike<unknown>): PromiseLike<unknown> 
 
     // Capacitor's addListener resolves a promise that also carries a `remove`
     // property, which chaining off it would otherwise drop.
-    const source = result as unknown as UnknownRecord;
-    const destination = normalized as unknown as UnknownRecord;
-    Object.keys(source).forEach((key) => {
-        destination[key] = source[key];
-    });
-
-    return normalized;
+    return Object.assign(normalized, result);
 }
 
 /**
  * Wraps a native plugin so every method that rejects runs its error through
  * {@link normalizePurchasesError} first.
  *
- * Methods are wrapped lazily and memoized, so repeated reads of the same
- * method return the same function.
+ * Needs an ES2015 runtime: `Proxy` cannot be downlevelled to this package's es5
+ * target. Hermes and every browser the SDKs support provide it.
  *
  * @public
  */
 export function withNormalizedErrors<T extends object>(plugin: T): T {
-    const wrapped = new Map<PropertyKey, unknown>();
-
     return new Proxy(plugin, {
         get(target, property, receiver) {
             const value = Reflect.get(target, property, receiver);
@@ -153,13 +130,10 @@ export function withNormalizedErrors<T extends object>(plugin: T): T {
                 return value;
             }
 
-            if (!wrapped.has(property)) {
-                wrapped.set(property, function (this: unknown, ...args: unknown[]): unknown {
-                    const result = (value as (...callArgs: unknown[]) => unknown).apply(target, args);
-                    return isPromiseLike(result) ? normalizeRejection(result) : result;
-                });
-            }
-            return wrapped.get(property);
+            return function (this: unknown, ...args: unknown[]): unknown {
+                const result = (value as (...callArgs: unknown[]) => unknown).apply(target, args);
+                return isPromiseLike(result) ? normalizeRejection(result) : result;
+            };
         },
     });
 }

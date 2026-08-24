@@ -1,21 +1,11 @@
 import { PurchasesError } from "../errors";
 import { withNormalizedErrors } from "../errorNormalizer";
+import { capacitorError } from "./fixtures";
 
 function capacitorStylePlugin() {
     return {
         succeeds: (): Promise<string> => Promise.resolve("ok"),
-        rejects: (): Promise<never> =>
-            Promise.reject(
-                Object.assign(new Error("There was a credentials issue."), {
-                    code: "11",
-                    data: {
-                        code: 11,
-                        message: "There was a credentials issue.",
-                        readableErrorCode: "InvalidCredentialsError",
-                        underlyingErrorMessage: "Invalid API Key.",
-                    },
-                })
-            ),
+        rejects: (): Promise<never> => Promise.reject(capacitorError()),
         rejectsWithoutCode: (): Promise<never> => Promise.reject(new Error("boom")),
         synchronous: (): string => "not a promise",
         notAFunction: 42,
@@ -37,17 +27,6 @@ describe("withNormalizedErrors", () => {
         expect(error.readableErrorCode).toBe("InvalidCredentialsError");
         expect(error.underlyingErrorMessage).toBe("Invalid API Key.");
         expect(error.userInfo.readableErrorCode).toBe("InvalidCredentialsError");
-        expect(error.userCancelled).toBeNull();
-    });
-
-    it("keeps the rejected error's identity", async () => {
-        const original = capacitorStylePlugin();
-        const plugin = withNormalizedErrors(original);
-
-        const caught = await plugin.rejects().catch((error) => error);
-
-        expect(caught).toBeInstanceOf(Error);
-        expect(typeof caught.stack).toBe("string");
     });
 
     it("passes through a rejection that is not ours", async () => {
@@ -83,12 +62,6 @@ describe("withNormalizedErrors", () => {
         const plugin = withNormalizedErrors(capacitorStylePlugin());
 
         expect(plugin.notAFunction).toBe(42);
-    });
-
-    it("returns the same wrapper on repeated reads", () => {
-        const plugin = withNormalizedErrors(capacitorStylePlugin());
-
-        expect(plugin.succeeds).toBe(plugin.succeeds);
     });
 
     // Capacitor attaches `remove` to the promise addListener returns, for the

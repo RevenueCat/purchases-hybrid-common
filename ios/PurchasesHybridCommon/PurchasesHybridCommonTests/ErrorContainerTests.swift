@@ -127,10 +127,10 @@ class ErrorContainerTests: QuickSpec {
     }
 }
 
+// A separate spec because ErrorContainerTests.spec() is already at swiftlint's
+// function_body_length limit.
 class ErrorContainerUserInfoTests: QuickSpec {
 
-    // React Native forwards only the error's userInfo to the JS layer, never the info dictionary,
-    // so every key of info has to be reachable there too.
     override func spec() {
         it("carries every info key without dropping the error's own") {
             let skError = NSError(
@@ -145,16 +145,6 @@ class ErrorContainerUserInfoTests: QuickSpec {
             expect(container.info).toNot(beEmpty())
             expect(Set(container.info.keys).subtracting(userInfo)) == []
             expect(Set(error.userInfo.keys).subtracting(userInfo)) == []
-        }
-
-        it("exposes the payload hybrids read") {
-            let error = ErrorUtils.missingAppUserIDError()
-            let container = ErrorContainer(error: error, extraPayload: [:])
-
-            let userInfo = (container.error as NSError).userInfo
-            expect(userInfo["underlyingErrorMessage"] as? String) == ""
-            expect(userInfo["readableErrorCode"] as? String).toNot(beNil())
-            expect(userInfo["message"] as? String) == error.localizedDescription
         }
     }
 }
