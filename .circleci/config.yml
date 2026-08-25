@@ -595,7 +595,10 @@ workflows:
         - not:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
-      - revenuecat/danger
+      - revenuecat/danger:
+          filters:
+            branches:
+              ignore: main
 
   update-error-codes:
     when:
