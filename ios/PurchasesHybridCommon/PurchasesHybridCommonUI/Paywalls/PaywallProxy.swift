@@ -80,9 +80,15 @@ import UIKit
     private var purchaseLogicBridgeByVC: [PaywallViewController: HybridPurchaseLogicBridge] = [:]
 
     private static var pendingPurchaseInitiatedCallbacks: [String: (Bool) -> Void] = [:]
+    private static var pendingRestoreInitiatedCallbacks: [String: (Bool) -> Void] = [:]
 
     @objc public static func resumePurchasePackageInitiated(requestId: String, shouldProceed: Bool) {
         guard let callback = pendingPurchaseInitiatedCallbacks.removeValue(forKey: requestId) else { return }
+        callback(shouldProceed)
+    }
+
+    @objc public static func resumeRestoreInitiated(requestId: String, shouldProceed: Bool) {
+        guard let callback = pendingRestoreInitiatedCallbacks.removeValue(forKey: requestId) else { return }
         callback(shouldProceed)
     }
 
@@ -490,7 +496,14 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerDidStartRestore(_ controller: PaywallViewController) {
         self.delegate?.paywallViewControllerDidStartRestore?(controller)
-        
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
+                                      didInitiateRestoreWith resume: @escaping (Bool) -> Void) {
+        let requestId = UUID().uuidString
+        Self.pendingRestoreInitiatedCallbacks[requestId] = resume
+        self.delegate?.paywallViewController?(controller, didInitiateRestoreWithRequestId: requestId)
+            ?? Self.resumeRestoreInitiated(requestId: requestId, shouldProceed: true)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
