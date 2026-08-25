@@ -107,8 +107,15 @@ function normalizeRejection(result: Promise<unknown>): Promise<unknown> {
     });
 
     // Capacitor's addListener resolves a promise that also carries a `remove`
-    // property, which chaining off it would otherwise drop.
-    return Object.assign(normalized, result);
+    // property, which chaining off it would otherwise drop. Copy it by name:
+    // enumerating a React Native TurboModule promise's own keys throws inside
+    // Hermes ("Cannot read property 'length' of null").
+    const remove = (result as { remove?: unknown }).remove;
+    if (typeof remove === "function") {
+        (normalized as { remove?: unknown }).remove = remove;
+    }
+
+    return normalized;
 }
 
 /**

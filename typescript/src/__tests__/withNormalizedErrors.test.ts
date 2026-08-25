@@ -64,6 +64,22 @@ describe("withNormalizedErrors", () => {
         expect(plugin.notAFunction).toBe(42);
     });
 
+    // React Native's TurboModules return promises backed by JSI host objects.
+    // Copying their properties wholesale throws inside Hermes ("Cannot read
+    // property 'length' of null"), which took the app down at startup.
+    it("does not copy the properties of the returned promise wholesale", async () => {
+        const hostBacked = Promise.resolve("configured");
+        Object.defineProperty(hostBacked, "hostOnly", {
+            enumerable: true,
+            get() {
+                throw new TypeError("Cannot read property 'length' of null");
+            },
+        });
+        const plugin = withNormalizedErrors({ configure: () => hostBacked });
+
+        await expect(plugin.configure()).resolves.toBe("configured");
+    });
+
     // Capacitor attaches `remove` to the promise addListener returns, for the
     // deprecated call style that does not await it.
     it("preserves own properties attached to the returned promise", () => {
