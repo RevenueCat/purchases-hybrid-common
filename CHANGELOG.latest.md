@@ -1,3 +1,7 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 10.18.0 => 10.18.1 JS 1.53.0 => 1.53.1 (#1832) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.85.0 => 5.86.0 (#1840) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.10 to 2.1.11 (#1839) via dependabot[bot] (@dependabot[bot])
+* Update sdks-common-config orb to v4.6.1 (#1834) via Antonio Pallares (@ajpallares)
