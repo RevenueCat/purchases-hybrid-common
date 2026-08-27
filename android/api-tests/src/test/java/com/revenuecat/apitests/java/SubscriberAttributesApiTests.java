@@ -48,6 +48,11 @@ class SubscriberAttributesApiTests {
         SubscriberAttributesKt.setKochavaDeviceID(null);
     }
 
+    private void checkSingularDeviceID() {
+        SubscriberAttributesKt.setSingularDeviceID("singular_device_id");
+        SubscriberAttributesKt.setSingularDeviceID(null);
+    }
+
     private void checkSetPostHogUserID(String id) {
         SubscriberAttributesKt.setPostHogUserID(id);
         SubscriberAttributesKt.setPostHogUserID(null);

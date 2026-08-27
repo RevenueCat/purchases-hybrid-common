@@ -217,6 +217,8 @@ NS_ASSUME_NONNULL_BEGIN
     [RCCommonFunctionality setTenjinAnalyticsInstallationID:nil];
     [RCCommonFunctionality setKochavaDeviceID:@""];
     [RCCommonFunctionality setKochavaDeviceID:nil];
+    [RCCommonFunctionality setSingularDeviceID:@""];
+    [RCCommonFunctionality setSingularDeviceID:nil];
     [RCCommonFunctionality setMediaSource:@""];
     [RCCommonFunctionality setMediaSource:nil];
     [RCCommonFunctionality setCampaign:@""];

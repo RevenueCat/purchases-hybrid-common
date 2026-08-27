@@ -16,6 +16,7 @@ import com.revenuecat.purchases.hybridcommon.setEmail
 import com.revenuecat.purchases.hybridcommon.setFBAnonymousID
 import com.revenuecat.purchases.hybridcommon.setKeyword
 import com.revenuecat.purchases.hybridcommon.setKochavaDeviceID
+import com.revenuecat.purchases.hybridcommon.setSingularDeviceID
 import com.revenuecat.purchases.hybridcommon.setMediaSource
 import com.revenuecat.purchases.hybridcommon.setMparticleID
 import com.revenuecat.purchases.hybridcommon.setOnesignalID
@@ -77,6 +78,11 @@ private class SubscriberAttributesApiTests {
     fun checkSetAirbridgeDeviceID() {
         setAirbridgeDeviceID("airbridgeDeviceID")
         setAirbridgeDeviceID(null)
+    }
+
+    fun checkSetSingularDeviceID() {
+        setSingularDeviceID("singularDeviceID")
+        setSingularDeviceID(null)
     }
 
     // endregion
