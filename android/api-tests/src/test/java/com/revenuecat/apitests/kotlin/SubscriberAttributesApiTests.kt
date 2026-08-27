@@ -23,6 +23,7 @@ import com.revenuecat.purchases.hybridcommon.setOnesignalUserID
 import com.revenuecat.purchases.hybridcommon.setPhoneNumber
 import com.revenuecat.purchases.hybridcommon.setPostHogUserID
 import com.revenuecat.purchases.hybridcommon.setPushToken
+import com.revenuecat.purchases.hybridcommon.setSingularDeviceID
 import com.revenuecat.purchases.hybridcommon.setTenjinAnalyticsInstallationID
 
 @Suppress("unused")
@@ -77,6 +78,11 @@ private class SubscriberAttributesApiTests {
     fun checkSetAirbridgeDeviceID() {
         setAirbridgeDeviceID("airbridgeDeviceID")
         setAirbridgeDeviceID(null)
+    }
+
+    fun checkSetSingularDeviceID() {
+        setSingularDeviceID("singularDeviceID")
+        setSingularDeviceID(null)
     }
 
     // endregion

@@ -691,6 +691,9 @@ import StoreKit
     @objc static func setAirbridgeDeviceID(_ airbridgeDeviceID: String?) {
         Self.sharedInstance.attribution.setAirbridgeDeviceID(airbridgeDeviceID)
     }
+    @objc static func setSingularDeviceID(_ singularDeviceID: String?) {
+        Self.sharedInstance.attribution.setSingularDeviceID(singularDeviceID)
+    }
 
 }
 

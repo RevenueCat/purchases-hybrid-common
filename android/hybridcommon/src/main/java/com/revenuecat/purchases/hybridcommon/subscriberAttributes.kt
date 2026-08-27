@@ -64,6 +64,10 @@ fun setAirbridgeDeviceID(airbridgeDeviceID: String?) {
     Purchases.sharedInstance.setAirbridgeDeviceID(airbridgeDeviceID)
 }
 
+fun setSingularDeviceID(singularDeviceID: String?) {
+    Purchases.sharedInstance.setSingularDeviceID(singularDeviceID)
+}
+
 // endregion
 // region Campaign parameters
 
