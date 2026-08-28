@@ -393,18 +393,18 @@ lane :wait_for_pods_on_cdn do
   # behaviour we have today and each one can be rerun individually, whereas
   # failing here would leave every hybrid without a PR at all.
   #
-  # 45 minutes rather than the action's 3 hour default. CircleCI caps a job at
-  # 1h/3h/5h depending on plan, and blowing that cap cancels the job outright,
-  # which would skip the bump steps entirely and defeat the soft_fail above.
-  # 45m stays clear of the cap on any plan while still covering a normal
-  # propagation; a pathological one falls back to rerunning the hybrid jobs,
-  # which is what we do today anyway.
+  # Three hours. CircleCI cancels a job that exceeds its max runtime, which would
+  # skip the bump steps entirely and defeat the soft_fail above, so this has to
+  # stay clear of that cap. We're on the Scale plan, so the cap is 5 hours and
+  # three leaves a couple of hours of headroom. Set explicitly rather than
+  # inheriting the action's default so a change there can't silently push us
+  # over.
   wait_for_pods_in_cocoapods_cdn(
     pods: {
       'PurchasesHybridCommon' => version_number,
       'PurchasesHybridCommonUI' => version_number
     },
-    timeout: 45 * 60,
+    timeout: 3 * 60 * 60,
     soft_fail: true
   )
 end
