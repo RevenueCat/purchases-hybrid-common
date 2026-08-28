@@ -377,6 +377,10 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
+      # Blocks the bumps rather than each hybrid waiting on its own mac executors.
+      - run:
+          name: Wait for the new pods to reach the CocoaPods CDN
+          command: bundle exec fastlane wait_for_pods_on_cdn
       - run:
           name: Kick off Flutter automatic dependency update
           command: |
