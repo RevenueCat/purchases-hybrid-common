@@ -379,6 +379,36 @@ lane :run_pod_install do |options|
   end
 end
 
+desc "Waits until the pods for the current version are resolvable on the CocoaPods CDN"
+lane :wait_for_pods_on_cdn do
+  version_number = current_version_number
+
+  # push_pod_PHC/PHCUI have already pushed to trunk, but the CDN index takes a
+  # while to catch up and `pod install` can't resolve the new version until it
+  # does. Wait here so the hybrid bump PRs don't open against a pod their iOS
+  # jobs can't install yet, which otherwise leaves them red until someone reruns
+  # them by hand.
+  #
+  # soft_fail so a timeout still opens the bump PRs. That's no worse than the
+  # behaviour we have today and each one can be rerun individually, whereas
+  # failing here would leave every hybrid without a PR at all.
+  #
+  # Three hours. CircleCI cancels a job that exceeds its max runtime, which would
+  # skip the bump steps entirely and defeat the soft_fail above, so this has to
+  # stay clear of that cap. We're on the Scale plan, so the cap is 5 hours and
+  # three leaves a couple of hours of headroom. Set explicitly rather than
+  # inheriting the action's default so a change there can't silently push us
+  # over.
+  wait_for_pods_in_cocoapods_cdn(
+    pods: {
+      'PurchasesHybridCommon' => version_number,
+      'PurchasesHybridCommonUI' => version_number
+    },
+    timeout: 3 * 60 * 60,
+    soft_fail: true
+  )
+end
+
 desc "Run automatic bump in other repos"
 lane :bump_hybrid_dependencies do |options|
   version_number_for_bump = current_version_number

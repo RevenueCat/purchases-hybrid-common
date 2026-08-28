@@ -109,6 +109,14 @@ Tag current branch with current version number
 
 Run pod install
 
+### wait_for_pods_on_cdn
+
+```sh
+[bundle exec] fastlane wait_for_pods_on_cdn
+```
+
+Waits until the pods for the current version are resolvable on the CocoaPods CDN
+
 ### bump_hybrid_dependencies
 
 ```sh
