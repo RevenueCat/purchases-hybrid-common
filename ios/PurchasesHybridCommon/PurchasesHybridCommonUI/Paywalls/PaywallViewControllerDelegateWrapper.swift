@@ -98,6 +98,13 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
                                         didInitiatePurchaseWith packageDictionary: [String: Any],
                                         requestId: String)
 
+    /// Called when a restore is about to be initiated, before StoreKit restore starts.
+    /// The host must call ``PaywallProxy/resumeRestoreInitiated(requestId:shouldProceed:)`` with the
+    /// given `requestId` to continue or cancel the restore.
+    @objc(paywallViewController:didInitiateRestoreWithRequestId:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        didInitiateRestoreWithRequestId requestId: String)
+
     /// Called when the paywall requests a custom purchase to be performed.
     /// Used when `purchasesAreCompletedBy` is set to `.myApp`.
     @objc(paywallViewControllerDidRequestPerformPurchase:packageDictionary:requestId:)
