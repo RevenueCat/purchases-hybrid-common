@@ -388,11 +388,16 @@ lane :wait_for_pods_on_cdn do
   # does. Wait here so the hybrid bump PRs don't open against a pod their iOS
   # jobs can't install yet, which otherwise leaves them red until someone reruns
   # them by hand.
+  #
+  # soft_fail so a timeout still opens the bump PRs. That's no worse than the
+  # behaviour we have today and each one can be rerun individually, whereas
+  # failing here would leave every hybrid without a PR at all.
   wait_for_pods_in_cocoapods_cdn(
     pods: {
       'PurchasesHybridCommon' => version_number,
       'PurchasesHybridCommonUI' => version_number
-    }
+    },
+    soft_fail: true
   )
 end
 
