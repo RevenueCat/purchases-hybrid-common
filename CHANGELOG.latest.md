@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.87.0 => 5.87.1 Android 10.19.0 => 10.19.1 (#1849) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* fix: wait for pods to reach the CocoaPods CDN before triggering hybrid bumps (#1851) via Cesar de la Vega (@vegaro)

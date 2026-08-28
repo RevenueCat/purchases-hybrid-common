@@ -1,3 +1,8 @@
+## 18.33.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* fix: wait for pods to reach the CocoaPods CDN before triggering hybrid bumps (#1851) via Cesar de la Vega (@vegaro)
+
 ## 18.33.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
