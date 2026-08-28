@@ -378,9 +378,14 @@ jobs:
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
       # Blocks the bumps rather than each hybrid waiting on its own mac executors.
+      # The lane logs on every poll, so the default 10 minute no-output timeout
+      # wouldn't fire, but set it explicitly to sit just above the lane's own 45
+      # minute cap. If the step does fail, the bump steps below still run: they
+      # are all `when: always`.
       - run:
           name: Wait for the new pods to reach the CocoaPods CDN
           command: bundle exec fastlane wait_for_pods_on_cdn
+          no_output_timeout: 50m
       - run:
           name: Kick off Flutter automatic dependency update
           command: |
