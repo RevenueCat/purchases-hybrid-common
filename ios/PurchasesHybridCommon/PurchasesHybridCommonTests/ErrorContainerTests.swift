@@ -127,12 +127,8 @@ class ErrorContainerTests: QuickSpec {
 // function_body_length limit.
 class ErrorContainerPayloadTests: QuickSpec {
 
-    // Every hybrid consumes this payload: react-native-purchases merges it into the
-    // rejected NSError, capacitor sends it as the reject data, and cordova, flutter and
-    // unity forward it as-is. Dropping a key here breaks all five, and only flutter,
-    // cordova and unity would notice without a JS-side normalizer.
     override func spec() {
-        it("always carries the keys hybrids consume") {
+        it("carries the keys hybrids consume for errors raised by the SDK") {
             let error = ErrorUtils.missingAppUserIDError()
             let container = ErrorContainer(error: error, extraPayload: ["extra": "payload"])
 
@@ -145,6 +141,13 @@ class ErrorContainerPayloadTests: QuickSpec {
             ]
             let missing = required.subtracting(Set(container.info.keys))
             expect(missing).to(beEmpty())
+        }
+
+        it("falls back to the code name when the error is built straight from ErrorCode") {
+            let container = ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+
+            expect(container.info["readableErrorCode"] as? String) == "UNKNOWN"
+            expect(container.info["readable_error_code"] as? String) == "UNKNOWN"
         }
 
         it("passes the extra payload through untouched") {

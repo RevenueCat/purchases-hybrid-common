@@ -37,7 +37,11 @@ import RevenueCat
 
         // todo: remove "readable_error_code" and instead send whole user info instead
         // also: code name is already exposed as error.code
-        if let readableErrorCode = nsError.userInfo["readable_error_code"] {
+        //
+        // ErrorUtils sets "readable_error_code", but an error built straight from ErrorCode
+        // carries only "rc_code_name" from its CustomNSError conformance.
+        if let readableErrorCode = nsError.userInfo["readable_error_code"]
+            ?? nsError.userInfo["rc_code_name"] {
             info["readableErrorCode"] = readableErrorCode
             info["readable_error_code"] = readableErrorCode
         }
