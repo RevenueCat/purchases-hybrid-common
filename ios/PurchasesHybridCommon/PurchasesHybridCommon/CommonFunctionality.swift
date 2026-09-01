@@ -848,7 +848,7 @@ import StoreKit
         }
 
         let placement = adData["placement"] as? String
-        let mediatorErrorCode = adData["mediatorErrorCode"] as? Int
+        let mediatorErrorCode = (adData["mediatorErrorCode"] as? NSNumber)?.intValue
         let mediatorName = MediatorName(rawValue: mediatorNameString)
         let adFormat = AdFormat(rawValue: adFormatString)
         let adFailedToLoad = AdFailedToLoad(
