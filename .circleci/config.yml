@@ -419,7 +419,7 @@ jobs:
           tools: node
       - run:
           working_directory: typescript
-          command: yarn install --frozen-lockfile && yarn eslint
+          command: yarn install --frozen-lockfile && yarn lint
 
   typescript-tests:
     docker:
