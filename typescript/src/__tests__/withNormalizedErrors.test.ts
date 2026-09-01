@@ -64,6 +64,12 @@ describe("withNormalizedErrors", () => {
         expect(plugin.notAFunction).toBe(42);
     });
 
+    it("returns the same wrapper every time a method is read", () => {
+        const plugin = withNormalizedErrors(capacitorStylePlugin());
+
+        expect(plugin.synchronous).toBe(plugin.synchronous);
+    });
+
     // React Native's TurboModules return promises backed by JSI host objects.
     // Copying their properties wholesale throws inside Hermes ("Cannot read
     // property 'length' of null"), which took the app down at startup.

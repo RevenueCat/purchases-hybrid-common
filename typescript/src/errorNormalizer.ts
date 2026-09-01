@@ -134,6 +134,8 @@ function normalizeRejection(result: Promise<unknown>): Promise<unknown> {
  * @public
  */
 export function withNormalizedErrors<T extends object>(plugin: T): T {
+    const wrapped = new Map<unknown, unknown>();
+
     return new Proxy(plugin, {
         get(target, property, receiver) {
             const value = Reflect.get(target, property, receiver);
@@ -141,10 +143,17 @@ export function withNormalizedErrors<T extends object>(plugin: T): T {
                 return value;
             }
 
-            return function (this: unknown, ...args: unknown[]): unknown {
+            const cached = wrapped.get(value);
+            if (cached !== undefined) {
+                return cached;
+            }
+
+            const wrapper = function (this: unknown, ...args: unknown[]): unknown {
                 const result = (value as (...callArgs: unknown[]) => unknown).apply(target, args);
                 return result instanceof Promise ? normalizeRejection(result) : result;
             };
+            wrapped.set(value, wrapper);
+            return wrapper;
         },
     });
 }
