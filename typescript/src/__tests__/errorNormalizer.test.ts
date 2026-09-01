@@ -132,6 +132,27 @@ describe("normalizePurchasesError", () => {
             assertPurchasesError(result);
             expect(result.code).toBe("2");
         });
+
+        // mapPurchasesError nests the backend diagnostics under `info` rather than
+        // `userInfo`, so without reading that key web would be the one platform
+        // whose userInfo stays empty.
+        it("lifts the web payload into userInfo", () => {
+            const result = normalizePurchasesError(webError());
+
+            assertPurchasesError(result);
+            const userInfo = result.userInfo as unknown as Record<string, unknown>;
+            expect(userInfo.statusCode).toBe(503);
+            expect(userInfo.backendErrorCode).toBe(7638);
+        });
+
+        it("reads the code from the payload when the top level one is not a number", () => {
+            const input = { code: null, userInfo: { code: 2, message: "Store problem" } };
+
+            const result = normalizePurchasesError(input);
+
+            assertPurchasesError(result);
+            expect(result.code).toBe("2");
+        });
     });
 
     describe("values it leaves alone", () => {

@@ -1,9 +1,10 @@
 type UnknownRecord = Record<string, unknown>;
 
 /**
- * React Native nests `ErrorContainer.info` under `userInfo`, Capacitor under `data`.
+ * React Native nests `ErrorContainer.info` under `userInfo`, Capacitor under `data`,
+ * and `purchases-js-hybrid-mappings` under `info`.
  */
-const PAYLOAD_KEYS = ["userInfo", "data"];
+const PAYLOAD_KEYS = ["userInfo", "data", "info"];
 
 function isRecord(value: unknown): value is UnknownRecord {
     return typeof value === "object" && value !== null;
@@ -38,8 +39,13 @@ function stringOrEmpty(values: unknown[]): string {
  * against it would reject genuine errors. See RevenueCat/purchases-error-codes#18.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
-    const code = String(error.code !== undefined ? error.code : payload.code);
-    return /^\d+$/.test(code) ? code : undefined;
+    for (const candidate of [error.code, payload.code]) {
+        const code = String(candidate);
+        if (/^\d+$/.test(code)) {
+            return code;
+        }
+    }
+    return undefined;
 }
 
 /**
