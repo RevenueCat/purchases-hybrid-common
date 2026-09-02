@@ -350,6 +350,16 @@ jobs:
           name: Make GitHub release for current version
           command: bundle exec fastlane github_release_current
 
+  wait-for-ios-pods:
+    docker:
+      - image: cimg/ruby:3.3.0
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: Wait for RevenueCat pods to reach the CocoaPods CDN
+          command: ruby scripts/wait-for-cocoapods
+
   dependency-update:
     <<: *base-ios-job
     steps:
@@ -595,7 +605,10 @@ workflows:
             - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
         - equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - dependency-update
+      - wait-for-ios-pods
+      - dependency-update:
+          requires:
+            - wait-for-ios-pods
 
   danger:
     when:

@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require_relative "../fastlane/lib/cocoapods_propagation"
+
+podspec_path =
+  File.expand_path("../PurchasesHybridCommon.podspec", __dir__)
+current_version_text =
+  File.read(podspec_path)[/s\.dependency 'RevenueCat', '([^']+)'/, 1]
+abort("Could not read the current RevenueCat version") unless current_version_text
+
+http = CocoaPodsPropagation::NetHttpClient.new
+release_finder = CocoaPodsPropagation::ReleaseFinder.new(
+  http: http,
+  github_token: ENV["GITHUB_TOKEN"]
+)
+cdn_checker = CocoaPodsPropagation::CdnChecker.new(http: http)
+waiter = CocoaPodsPropagation::Waiter.new(
+  release_finder: release_finder,
+  cdn_checker: cdn_checker,
+  interval_seconds:
+    Integer(ENV.fetch("COCOAPODS_WAIT_INTERVAL_SECONDS", "300")),
+  max_seconds: Integer(ENV.fetch("COCOAPODS_WAIT_MAX_SECONDS", "3600")),
+  sleeper: ->(seconds) { sleep(seconds) },
+  logger: ->(message) { puts(message) }
+)
+
+begin
+  waiter.wait(Gem::Version.new(current_version_text))
+rescue CocoaPodsPropagation::TimeoutError => error
+  warn(error.message)
+  exit(1)
+end
