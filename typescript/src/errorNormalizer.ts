@@ -32,11 +32,11 @@ function stringOrEmpty(values: unknown[]): string {
 /**
  * Every code the SDK emits is a PURCHASES_ERROR_CODE value, which is always numeric.
  * Plugin level rejections use names such as "UNIMPLEMENTED" or "PAYWALL_ERROR" and are
- * not ours to touch. `purchases-js` sends the same value as a number.
+ * not ours to touch.
  *
  * Deliberately looser than PURCHASES_ERROR_CODE membership: that enum omits codes the
  * native SDKs emit (36 to 41), and Android and iOS disagree on 28 and 36, so matching
- * against it would reject genuine errors. See RevenueCat/purchases-error-codes#18.
+ * against it would reject genuine errors.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
     for (const candidate of [error.code, payload.code]) {

@@ -102,7 +102,7 @@ describe("normalizePurchasesError", () => {
         });
 
         it("defaults underlyingErrorMessage when the bridge omits it", () => {
-            const result = normalizePurchasesError(webError());
+            const result = normalizePurchasesError({ code: "2", message: "Store problem" });
 
             assertPurchasesError(result);
             expect(result.underlyingErrorMessage).toBe("");
@@ -126,8 +126,8 @@ describe("normalizePurchasesError", () => {
             expect(result.userInfo.readableErrorCode).toBe("USER_CANCELLED");
         });
 
-        it("coerces the numeric code used on web", () => {
-            const result = normalizePurchasesError(webError());
+        it("normalizes a numeric code to the string the enum uses", () => {
+            const result = normalizePurchasesError({ code: 2, message: "Store problem" });
 
             assertPurchasesError(result);
             expect(result.code).toBe("2");

@@ -74,13 +74,14 @@ export function flatError(): Record<string, unknown> {
     };
 }
 
-// purchases-js-hybrid-mappings throws the result of mapPurchasesError, whose
-// code comes from a numeric enum and whose payload is nested under `info`.
+// purchases-js-hybrid-mappings throws the result of mapPurchasesError, which
+// nests the backend diagnostics under `info`.
 export function webError(): Record<string, unknown> {
     return {
-        code: 2,
-        message: "Store problem",
-        underlyingErrorMessage: undefined,
+        code: "2",
+        message: "Unknown error.",
+        underlyingErrorMessage: "",
+        userCancelled: false,
         info: {
             statusCode: 503,
             backendErrorCode: 7638,
