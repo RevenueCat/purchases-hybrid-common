@@ -539,6 +539,8 @@ export interface PurchasesPromotionalOffer {
  * Holds the information about a Win-Back Offer in Apple's App Store.
  * @public
  */
+// Aliasing this to its supertype would change the exported API surface.
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PurchasesWinBackOffer extends PurchasesStoreProductDiscount {}
 
 /**

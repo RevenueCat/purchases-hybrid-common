@@ -93,15 +93,11 @@ class ErrorContainerTests: QuickSpec {
                 expect(errorContainer.info["readableErrorCode"] as? String) == readableErrorKey
                 expect(errorContainer.info["readable_error_code"] as? String) == readableErrorKey
             }
-            it("user info contains the readable error code in both keys") {
+            it("forwards the error untouched") {
                 let error = ErrorUtils.missingAppUserIDError() as NSError
                 let errorContainer = ErrorContainer(error: error, extraPayload: [:])
 
-                let readableErrorKey = error.userInfo["readable_error_code"] as? String
-                expect(readableErrorKey).toNot(beNil())
-                expect(readableErrorKey) != ""
-                expect((errorContainer.error as NSError).userInfo["readableErrorCode"] as? String) == readableErrorKey
-                expect((errorContainer.error as NSError).userInfo["readable_error_code"] as? String) == readableErrorKey
+                expect(errorContainer.error) === error
             }
         }
 
@@ -126,3 +122,40 @@ class ErrorContainerTests: QuickSpec {
         }
     }
 }
+
+// A separate spec because ErrorContainerTests.spec() is already at swiftlint's
+// function_body_length limit.
+class ErrorContainerPayloadTests: QuickSpec {
+
+    override func spec() {
+        it("carries the keys hybrids consume for errors raised by the SDK") {
+            let error = ErrorUtils.missingAppUserIDError()
+            let container = ErrorContainer(error: error, extraPayload: ["extra": "payload"])
+
+            let required: Set<String> = [
+                "code",
+                "message",
+                "readableErrorCode",
+                "readable_error_code",
+                "underlyingErrorMessage"
+            ]
+            let missing = required.subtracting(Set(container.info.keys))
+            expect(missing).to(beEmpty())
+        }
+
+        it("falls back to the code name when the error is built straight from ErrorCode") {
+            let container = ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:])
+
+            expect(container.info["readableErrorCode"] as? String) == "UNKNOWN"
+            expect(container.info["readable_error_code"] as? String) == "UNKNOWN"
+        }
+
+        it("passes the extra payload through untouched") {
+            let error = ErrorUtils.missingAppUserIDError()
+            let container = ErrorContainer(error: error, extraPayload: ["userCancelled": true])
+
+            expect(container.info["userCancelled"] as? Bool) == true
+        }
+    }
+}
+
