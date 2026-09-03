@@ -683,7 +683,7 @@ final class MockPurchases: PurchasesType {
         invokedSpendVirtualCurrencies = true
         invokedSpendVirtualCurrenciesCount += 1
 
-        switch getVirtualCurrenciesStub {
+        switch spendVirtualCurrenciesStub {
         case .success(let virtualCurrencies):
             completion(virtualCurrencies, nil)
         case .failure(let error):
