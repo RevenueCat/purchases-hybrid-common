@@ -1,9 +1,7 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] JS 1.54.0 => 1.55.0 (#1856) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.87.1 => 5.88.0 Android 10.19.1 => 10.20.0 JS 1.55.0 => 1.57.0 (#1866) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Bump fast-uri from 3.1.5 to 3.1.7 in /typescript (#1863) via dependabot[bot] (@dependabot[bot])
-* fix(ads): use the swift api for mediatorErrorCode (#1854) via Peter Porfy (@peterporfy)
-* Bump lefthook from 2.1.11 to 2.1.12 (#1858) via dependabot[bot] (@dependabot[bot])
-* fix: wait for pods to reach the CocoaPods CDN before triggering hybrid bumps (#1851) via Cesar de la Vega (@vegaro)
+* Bump browserslist from 4.28.4 to 4.28.8 in /purchases-js-hybrid-mappings (#1865) via dependabot[bot] (@dependabot[bot])
+* Bump fast-uri from 3.1.2 to 3.1.7 in /purchases-js-hybrid-mappings (#1862) via dependabot[bot] (@dependabot[bot])
