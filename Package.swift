@@ -22,7 +22,7 @@ let package = Package(
             targets: ["PurchasesHybridCommonUI"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/RevenueCat/purchases-ios-spm", exact: "5.87.1"),
+        .package(url: "https://github.com/RevenueCat/purchases-ios-spm", exact: "5.88.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
