@@ -675,6 +675,21 @@ final class MockPurchases: PurchasesType {
         invokedInvalidateVirtualCurrenciesCache = true
         invokedInvalidateVirtualCurrenciesCacheCount += 1
     }
+
+    var invokedSpendVirtualCurrencies = false
+    var invokedSpendVirtualCurrenciesCount = 0
+    var spendVirtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
+    func spendVirtualCurrencies(amounts: [String : Int], reference: String?, completion: @escaping (RevenueCat.VirtualCurrencies?, RevenueCat.PublicError?) -> Void) {
+        invokedSpendVirtualCurrencies = true
+        invokedSpendVirtualCurrenciesCount += 1
+
+        switch getVirtualCurrenciesStub {
+        case .success(let virtualCurrencies):
+            completion(virtualCurrencies, nil)
+        case .failure(let error):
+            completion(nil, error)
+        }
+    }
 }
 
 extension MockPurchases {
