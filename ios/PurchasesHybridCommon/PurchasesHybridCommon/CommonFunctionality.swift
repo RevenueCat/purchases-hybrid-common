@@ -1266,11 +1266,11 @@ private extension CommonFunctionality {
 @objc public extension CommonFunctionality {
 
     @objc(generateRewardVerificationTokenWithImpressionId:)
-    static func generateRewardVerificationToken(impressionId: String) -> [String: Any] {
+    static func generateRewardVerificationToken(impressionId: String) -> [String: Any]? {
         guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
             NSLog("[PurchasesHybridCommon] generateRewardVerificationToken: Reward verification requires " +
                   "iOS 15.0 or newer")
-            return [:]
+            return nil
         }
         return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
