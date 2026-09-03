@@ -1266,7 +1266,12 @@ private extension CommonFunctionality {
 @objc public extension CommonFunctionality {
 
     @objc(generateRewardVerificationTokenWithImpressionId:)
-    static func generateRewardVerificationToken(impressionId: String) -> [String: Any] {
+    static func generateRewardVerificationToken(impressionId: String) -> [String: Any]? {
+        guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
+            NSLog("[PurchasesHybridCommon] generateRewardVerificationToken: Reward verification requires " +
+                  "iOS 15.0 or newer")
+            return nil
+        }
         return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
 
@@ -1284,6 +1289,10 @@ private extension CommonFunctionality {
         trackingMetadata: [String: Any]? = nil,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
+        guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
+            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            return
+        }
         let metadata = trackingMetadata.flatMap { data -> RewardedAdTrackingMetadata? in
             guard let mediatorNameString = data["mediatorName"] as? String,
                   let adFormatString = data["adFormat"] as? String,
