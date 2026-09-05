@@ -128,19 +128,7 @@ import UIKit
             )
         }
 
-        params.customVariables?.forEach { key, value in
-            if let stringValue = value as? String {
-                controller.setCustomVariable(stringValue, forKey: key)
-            } else if let boolValue = value as? Bool {
-                controller.setCustomVariableBool(boolValue, forKey: key)
-            } else if let numberValue = (value as? NSNumber)?.doubleValue {
-                controller.setCustomVariableNumber(numberValue, forKey: key)
-            } else {
-                NSLog("Custom variable '%@' has unsupported type %@. " +
-                      "Only String, Number, and Boolean values are supported. This variable will be ignored.",
-                      key, String(describing: type(of: value)))
-            }
-        }
+        PaywallCustomVariables.apply(params.customVariables, to: controller)
 
         controller.delegate = self
         if let bridge = params.purchaseLogicBridge {
@@ -287,19 +275,7 @@ import UIKit
                                                performRestore: performRestore)
         }
 
-        params.customVariables?.forEach { key, value in
-            if let stringValue = value as? String {
-                controller.setCustomVariable(stringValue, forKey: key)
-            } else if let boolValue = value as? Bool {
-                controller.setCustomVariableBool(boolValue, forKey: key)
-            } else if let numberValue = (value as? NSNumber)?.doubleValue {
-                controller.setCustomVariableNumber(numberValue, forKey: key)
-            } else {
-                NSLog("Custom variable '%@' has unsupported type %@. " +
-                      "Only String, Number, and Boolean values are supported. This variable will be ignored.",
-                      key, String(describing: type(of: value)))
-            }
-        }
+        PaywallCustomVariables.apply(params.customVariables, to: controller)
 
         controller.delegate = self
         controller.modalPresentationStyle = params.modalPresentationStyle
