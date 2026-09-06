@@ -5,6 +5,8 @@
 //  Copyright © 2026 RevenueCat. All rights reserved.
 //
 
+#if !os(macOS) && !os(tvOS) && !os(watchOS)
+
 import Foundation
 import RevenueCatUI
 
@@ -49,3 +51,5 @@ enum PaywallCustomVariables {
     }
 
 }
+
+#endif
