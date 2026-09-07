@@ -24,9 +24,6 @@ class PaywallCustomVariablesTests: QuickSpec {
 
         describe("value(from:)") {
 
-            // Hybrid SDKs (Flutter, React Native, Capacitor, Unity) hand values over as
-            // `[String: Any]`. Every scalar has crossed the Objective-C bridge by then, so
-            // numbers and booleans both arrive as `NSNumber`. These cases mirror that.
             context("when the value is a number that crossed the Objective-C bridge") {
                 it("keeps 1 as a number, not a boolean") {
                     expect(value(NSNumber(value: 1))) == .number(1)
