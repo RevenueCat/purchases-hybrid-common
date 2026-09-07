@@ -20,7 +20,7 @@ enum PaywallCustomVariables {
         }
         if let number = raw as? NSNumber {
             // Numbers and booleans both arrive as NSNumber, and `as? Bool` succeeds for 0 and 1.
-            // Only a CFBoolean-backed NSNumber is a real boolean.
+            // Only an NSNumber that is a CFBoolean is a real boolean.
             if CFGetTypeID(number) == CFBooleanGetTypeID() {
                 return .bool(number.boolValue)
             }
