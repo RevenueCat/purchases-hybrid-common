@@ -5,6 +5,7 @@ import {
   Offering,
   Offerings,
   Package,
+  PaywallInteractionEvent,
   PresentedOfferingContext,
   PurchaseOption,
   PurchaseParams,
@@ -282,6 +283,7 @@ export class PurchasesCommon {
     offeringIdentifier?: string;
     presentedOfferingContext?: Record<string, unknown>;
     customerEmail?: string;
+    onInteraction?: (event: PaywallInteractionEvent) => void;
   }): Promise<string> {
     if (params?.requiredEntitlementIdentifier) {
       const customerInfo = await this.purchases.getCustomerInfo();
@@ -310,6 +312,7 @@ export class PurchasesCommon {
       await this.purchases.presentPaywall({
         offering: offering ? offering : undefined,
         customerEmail: params?.customerEmail,
+        listener: params?.onInteraction ? { onInteraction: params.onInteraction } : undefined,
       });
       return 'PURCHASED';
     } catch (e) {

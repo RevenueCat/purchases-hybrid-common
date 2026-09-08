@@ -48,6 +48,11 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     @objc(paywallViewController:didOpenURL:)
     optional func paywallViewController(_ controller: PaywallViewController, didOpenURL url: String)
 
+    /// Notifies that the user interacted with a paywall control.
+    @objc(paywallViewController:didTrackInteraction:)
+    optional func paywallViewController(_ controller: PaywallViewController,
+                                        didTrackInteraction eventDictionary: [String: Any])
+
     /// Notifies that the purchase operation has failed in a ``PaywallViewController``.
     @objc(paywallViewController:didFailPurchasingWithErrorDictionary:)
     optional func paywallViewController(_ controller: PaywallViewController,
