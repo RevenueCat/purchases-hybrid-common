@@ -737,6 +737,28 @@ describe('PurchasesCommon', () => {
       });
     });
 
+    it('forwards paywall interactions to onInteraction', async () => {
+      const onInteraction = jest.fn();
+      const event = {
+        timestamp: 1,
+        session_id: 'session',
+        offering_id: 'offering',
+        paywall_revision: 0,
+        component_type: 'tab',
+        component_value: 'annual',
+      };
+      mockPurchasesInstance.presentPaywall.mockImplementation(
+        async (options: { listener?: { onInteraction?: (event: unknown) => void } }) => {
+          options.listener?.onInteraction?.(event);
+          return mockPurchaseResult;
+        },
+      );
+
+      await purchasesCommon.presentPaywall({ onInteraction });
+
+      expect(onInteraction).toHaveBeenCalledWith(event);
+    });
+
     it('should return USER_CANCELLED when user cancels', async () => {
       const mockError = new PurchasesError(ErrorCode.UserCancelledError, 'User cancelled');
       mockPurchasesInstance.presentPaywall.mockRejectedValue(mockError);

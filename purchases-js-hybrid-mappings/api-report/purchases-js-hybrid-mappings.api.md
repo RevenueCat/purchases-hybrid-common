@@ -4,6 +4,8 @@
 
 ```ts
 
+import { PaywallInteractionEvent } from '@revenuecat/purchases-js';
+
 // @public (undocumented)
 export class PurchasesCommon {
     // (undocumented)
@@ -47,6 +49,7 @@ export class PurchasesCommon {
         offeringIdentifier?: string;
         presentedOfferingContext?: Record<string, unknown>;
         customerEmail?: string;
+        onInteraction?: (event: PaywallInteractionEvent) => void;
     }): Promise<string>;
     // (undocumented)
     purchasePackage(purchaseParams: {
