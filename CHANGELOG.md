@@ -1,3 +1,8 @@
+## 18.37.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.58.0 => 1.59.0 (#1876) via RevenueCat Git Bot (@RCGitBot)
+
 ## 18.36.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
