@@ -55,3 +55,43 @@ export class UnsupportedPlatformError extends Error {
         Object.setPrototypeOf(this, UnsupportedPlatformError.prototype);
     }
 }
+
+/**
+ * Returns whether the given value is a {@link PurchasesError} thrown by the SDK.
+ *
+ * A value qualifies when it's schema matches {@link PurchasesError} and a `code` that is one of the
+ * {@link PURCHASES_ERROR_CODE} values.
+ *
+ * @public
+ */
+export function isPurchasesError(error: unknown): error is PurchasesError {
+    if (typeof error !== "object" || error === null) {
+        return false;
+    }
+
+    if (!("code" in error) || typeof error.code !== "string") {
+        return false;
+    }
+
+    if (!("message" in error) || typeof error.message !== "string") {
+        return false;
+    }
+
+    if (!("userInfo" in error) || typeof error.userInfo !== "object" || error.userInfo == null) {
+        return false;
+    }
+
+    if (!(("readableErrorCode") in error.userInfo) || typeof error.userInfo.readableErrorCode !== "string") {
+        return false;
+    }
+
+    if (!("underlyingErrorMessage" in error) || typeof error.underlyingErrorMessage !== "string") {
+        return false;
+    }
+
+    const { code } = error;
+
+    const knownErrorCodes: ReadonlySet<string> = new Set(Object.values(PURCHASES_ERROR_CODE))
+
+    return typeof code === "string" && knownErrorCodes.has(code);
+}
