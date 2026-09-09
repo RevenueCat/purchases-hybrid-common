@@ -349,13 +349,13 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message: 'Need to provide a valid offering identifier',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -372,14 +372,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find offering with identifier: non_existent_offering. Found offering ids: ',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -396,14 +396,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find package with id: non_existent_package in offering with id: test_offering',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -420,14 +420,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find option with id: non_existent_option in package with id: test_package',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -531,13 +531,13 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.UserCancelledError,
+        code: String(ErrorCode.UserCancelledError),
         message: 'Purchase cancelled',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
   });
@@ -572,13 +572,13 @@ describe('PurchasesCommon', () => {
       mockPurchasesInstance.getVirtualCurrencies.mockRejectedValue(mockError);
 
       await expect(purchasesCommon.getVirtualCurrencies()).rejects.toMatchObject({
-        code: ErrorCode.NetworkError,
+        code: String(ErrorCode.NetworkError),
         message: 'Network error',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
   });
