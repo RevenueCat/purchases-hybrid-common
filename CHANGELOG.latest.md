@@ -1,3 +1,6 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] JS 1.58.0 => 1.59.0 (#1876) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* Fix web purchase cancellation error mapping (#1635) via Josh Holtz (@joshdholtz)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.238.0 to 2.239.0 (#1878) via dependabot[bot] (@dependabot[bot])
