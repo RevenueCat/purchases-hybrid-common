@@ -117,6 +117,9 @@ export type MakePurchaseResult = {
 };
 
 // @public
+export function normalizePurchasesError(error: unknown): unknown;
+
+// @public
 export enum OFFER_PAYMENT_MODE {
     DISCOUNTED_RECURRING_PAYMENT = "DISCOUNTED_RECURRING_PAYMENT",
     FREE_TRIAL = "FREE_TRIAL",
@@ -676,6 +679,9 @@ export enum WebPurchaseRedemptionResultType {
     PURCHASE_BELONGS_TO_OTHER_USER = "PURCHASE_BELONGS_TO_OTHER_USER",
     SUCCESS = "SUCCESS"
 }
+
+// @public
+export function withNormalizedErrors<T extends object>(plugin: T): T;
 
 // (No @packageDocumentation comment for this package)
 
