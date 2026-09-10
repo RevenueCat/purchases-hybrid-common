@@ -1,3 +1,5 @@
+import { PURCHASES_ERROR_CODE } from "./generated/error-codes";
+
 type UnknownRecord = Record<string, unknown>;
 
 /**
@@ -97,10 +99,9 @@ export function normalizePurchasesError(error: unknown): unknown {
     if (typeof error.underlyingErrorMessage !== "string") {
         error.underlyingErrorMessage = firstString(payload.underlyingErrorMessage);
     }
-    if (!("userCancelled" in error)) {
-        const userCancelled = payload.userCancelled;
-        error.userCancelled = typeof userCancelled === "boolean" ? userCancelled : null;
-    }
+    // The bridges only send a userCancelled flag on purchase flows, and each derives
+    // it from this same code, so the code is the one source worth reading.
+    error.userCancelled = code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
     return error;
 }

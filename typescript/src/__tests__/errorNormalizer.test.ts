@@ -20,7 +20,7 @@ function assertPurchasesError(value: unknown): asserts value is NormalizedError 
     expect(typeof candidate.underlyingErrorMessage).toBe("string");
     expect(typeof candidate.userInfo).toBe("object");
     expect(typeof (candidate.userInfo as Record<string, unknown>).readableErrorCode).toBe("string");
-    expect(["boolean", "object"]).toContain(typeof candidate.userCancelled);
+    expect(typeof candidate.userCancelled).toBe("boolean");
 }
 
 describe("normalizePurchasesError", () => {
@@ -100,7 +100,28 @@ describe("normalizePurchasesError", () => {
             expect(result.readableErrorCode).toBe("InvalidCredentialsError");
             expect(result.underlyingErrorMessage).toBe("Invalid API Key.");
             expect(result.userInfo.readableErrorCode).toBe("InvalidCredentialsError");
-            expect(result.userCancelled).toBeNull();
+            expect(result.userCancelled).toBe(false);
+        });
+
+        it("derives userCancelled from the code", () => {
+            const cancelled = normalizePurchasesError(flatError());
+            const notCancelled = normalizePurchasesError(reactNativeIosError());
+
+            assertPurchasesError(cancelled);
+            assertPurchasesError(notCancelled);
+            expect(cancelled.userCancelled).toBe(true);
+            expect(notCancelled.userCancelled).toBe(false);
+        });
+
+        it("overrides a userCancelled flag the bridge sent", () => {
+            const result = normalizePurchasesError({
+                code: "1",
+                message: "cancelled",
+                userInfo: { userCancelled: false },
+            });
+
+            assertPurchasesError(result);
+            expect(result.userCancelled).toBe(true);
         });
 
         it("defaults underlyingErrorMessage when the bridge omits it", () => {
