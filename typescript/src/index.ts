@@ -8,3 +8,4 @@ export * from './callbackTypes';
 export * from './webRedemption';
 export * from './storefront';
 export * from './virtualCurrency';
+export * from './paywallInteractionEvent';
