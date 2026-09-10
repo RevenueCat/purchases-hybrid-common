@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "jest",
+    "test": "tsc -p tests/tsconfig.json && jest",
     "api-test": "npm run build && api-extractor run --local --verbose",
     "api-test:ci": "npm run build && api-extractor run --verbose",
     "prepack": "npm run build && api-extractor run --local",
