@@ -56,7 +56,7 @@ import RevenueCat
         guard error.domain == ErrorCode.errorDomain, let code = ErrorCode(rawValue: error.code) else {
             return nil
         }
-        return (code as NSError).userInfo["rc_code_name"]
+        return code.errorUserInfo["rc_code_name"]
     }
 
     private static func findStoreKitErrorCodeIfAny(_ error: Error) -> NSError? {

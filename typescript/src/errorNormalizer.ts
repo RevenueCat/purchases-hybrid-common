@@ -82,9 +82,7 @@ export function normalizePurchasesError(error: unknown): unknown {
 
     error.code = code;
 
-    // Capacitor nests the payload under `data`, leaving userInfo empty, so lift it in.
-    const existingUserInfo = isRecord(error.userInfo) ? error.userInfo : undefined;
-    const userInfo: UnknownRecord = { ...payload, ...existingUserInfo };
+    const userInfo: UnknownRecord = { ...payload };
     if (typeof userInfo.readableErrorCode !== "string") {
         userInfo.readableErrorCode = firstString(payload.readableErrorCode, error.readableErrorCode);
     }
@@ -99,8 +97,7 @@ export function normalizePurchasesError(error: unknown): unknown {
     if (typeof error.underlyingErrorMessage !== "string") {
         error.underlyingErrorMessage = firstString(payload.underlyingErrorMessage);
     }
-    // The bridges only send a userCancelled flag on purchase flows, and each derives
-    // it from this same code, so the code is the one source worth reading.
+    // The bridges only send a userCancelled flag on purchase flows, derived from this code.
     error.userCancelled = code === PURCHASES_ERROR_CODE.PURCHASE_CANCELLED_ERROR;
 
     return error;
