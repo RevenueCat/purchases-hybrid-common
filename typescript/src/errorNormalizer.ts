@@ -151,8 +151,8 @@ export function withNormalizedErrors<T extends object>(plugin: T): T {
 
             let wrapper = wrapped.get(property);
             if (wrapper === undefined) {
+                const method = value as Method;
                 wrapper = function (this: unknown, ...args: unknown[]): unknown {
-                    const method = Reflect.get(target, property, receiver) as Method;
                     const result = method.apply(target, args);
                     return result instanceof Promise ? normalizeRejection(result) : result;
                 };

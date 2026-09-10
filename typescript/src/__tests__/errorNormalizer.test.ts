@@ -66,7 +66,7 @@ describe("normalizePurchasesError", () => {
             const result = normalizePurchasesError(reactNativeAndroidError());
 
             assertPurchasesError(result);
-            expect((result.userInfo as unknown as Record<string, unknown>).underlyingErrorMessage)
+            expect(result.userInfo.underlyingErrorMessage)
                 .toBe("Billing unavailable");
             expect(result.userInfo.readableErrorCode).toBe("StoreProblemError");
         });

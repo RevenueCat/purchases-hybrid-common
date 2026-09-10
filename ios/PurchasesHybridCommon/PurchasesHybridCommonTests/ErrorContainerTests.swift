@@ -123,8 +123,6 @@ class ErrorContainerTests: QuickSpec {
     }
 }
 
-// A separate spec because ErrorContainerTests.spec() is already at swiftlint's
-// function_body_length limit.
 class ErrorContainerPayloadTests: QuickSpec {
 
     override func spec() {
