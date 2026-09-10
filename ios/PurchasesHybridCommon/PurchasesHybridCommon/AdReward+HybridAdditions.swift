@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@_spi(Experimental) import RevenueCat
+import RevenueCat
 
 internal extension AdReward {
 

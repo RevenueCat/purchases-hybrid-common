@@ -3,7 +3,6 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -511,12 +510,10 @@ private class CommonApiTests {
         setAppstackAttributionParams(data, onResult)
     }
 
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     private fun checkGenerateRewardVerificationToken(impressionId: String) {
         val token: Map<String, Any> = generateRewardVerificationToken(impressionId)
     }
 
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     private fun checkPollRewardVerification(
         clientTransactionId: String,
         onResult: OnResult,

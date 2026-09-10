@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-@_spi(Internal) @_spi(Experimental) import RevenueCat
+@_spi(Internal) import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
