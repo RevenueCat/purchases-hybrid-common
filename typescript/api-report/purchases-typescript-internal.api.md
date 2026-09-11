@@ -117,6 +117,9 @@ export type MakePurchaseResult = {
 };
 
 // @public
+export function normalizePurchasesError(error: unknown): unknown;
+
+// @public
 export enum OFFER_PAYMENT_MODE {
     DISCOUNTED_RECURRING_PAYMENT = "DISCOUNTED_RECURRING_PAYMENT",
     FREE_TRIAL = "FREE_TRIAL",
