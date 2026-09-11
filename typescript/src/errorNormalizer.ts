@@ -41,13 +41,9 @@ function firstString(...values: unknown[]): string {
  * against it would reject genuine errors.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
-    for (const candidate of [error.code, payload.code]) {
-        const code = String(candidate);
-        if (/^\d+$/.test(code)) {
-            return code;
-        }
-    }
-    return undefined;
+    const candidate = error.code ?? payload.code;
+    const code = String(candidate);
+    return /^\d+$/.test(code) ? code : undefined;
 }
 
 /**

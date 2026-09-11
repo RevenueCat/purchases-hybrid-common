@@ -163,7 +163,7 @@ describe("normalizePurchasesError", () => {
             expect(userInfo.backendErrorCode).toBe(7638);
         });
 
-        it("reads the code from the payload when the top level one is not a number", () => {
+        it("reads the code from the payload when the top level one is missing", () => {
             const input = { code: null, userInfo: { code: 2, message: "Store problem" } };
 
             const result = normalizePurchasesError(input);
@@ -196,6 +196,16 @@ describe("normalizePurchasesError", () => {
             expect(result.userInfo).toBeUndefined();
             expect(result.underlyingErrorMessage).toBeUndefined();
             expect(result.userCancelled).toBeUndefined();
+        });
+
+        it("keeps a named code even when the payload carries a numeric one", () => {
+            const input = { code: "PAYWALL_ERROR", message: "not ours", data: { code: 2 } };
+
+            const result = normalizePurchasesError(input) as Record<string, unknown>;
+
+            expect(result).toBe(input);
+            expect(result.code).toBe("PAYWALL_ERROR");
+            expect(result.userInfo).toBeUndefined();
         });
 
         it("does not touch an error that carries no code", () => {
