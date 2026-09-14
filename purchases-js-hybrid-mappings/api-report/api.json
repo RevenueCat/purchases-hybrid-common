@@ -1,7 +1,7 @@
 {
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
-    "toolVersion": "7.53.0",
+    "toolVersion": "7.58.9",
     "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
@@ -113,6 +113,22 @@
         {
           "tagName": "@virtual",
           "syntaxKind": "modifier"
+        },
+        {
+          "tagName": "@jsx",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxRuntime",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxFrag",
+          "syntaxKind": "block"
+        },
+        {
+          "tagName": "@jsxImportSource",
+          "syntaxKind": "block"
         },
         {
           "tagName": "@betaDocumentation",
@@ -820,7 +836,16 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "<string, unknown>;\n        customerEmail?: string;\n    }"
+                  "text": "<string, unknown>;\n        customerEmail?: string;\n        onInteraction?: (event: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PaywallInteractionEvent",
+                  "canonicalReference": "@revenuecat/purchases-js!PaywallInteractionEvent:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ") => void;\n    }"
                 },
                 {
                   "kind": "Content",
@@ -842,8 +867,8 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 5,
-                "endIndex": 7
+                "startIndex": 7,
+                "endIndex": 9
               },
               "releaseTag": "Public",
               "isProtected": false,
@@ -853,7 +878,7 @@
                   "parameterName": "params",
                   "parameterTypeTokenRange": {
                     "startIndex": 1,
-                    "endIndex": 4
+                    "endIndex": 6
                   },
                   "isOptional": true
                 }

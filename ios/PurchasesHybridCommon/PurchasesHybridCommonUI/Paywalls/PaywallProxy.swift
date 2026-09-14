@@ -459,6 +459,11 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
+                                      didTrackInteraction event: PaywallInteractionEvent) {
+        self.delegate?.paywallViewController?(controller, didTrackInteraction: event.rawProperties)
+    }
+
+    public func paywallViewController(_ controller: PaywallViewController,
                                       didFailPurchasingWith error: NSError) {
         let errorContainer = ErrorContainer(error: error, extraPayload: [:])
         self.delegate?.paywallViewController?(controller, didFailPurchasingWith: errorContainer.info)
