@@ -7,6 +7,7 @@ import terser from '@rollup/plugin-terser';
 export default defineConfig([
   {
     input: 'src/index.ts',
+    external: ['@amazon-devices/keplerscript-appstore-iap-lib'],
     output: [
       {
         file: 'dist/index.js',
@@ -31,7 +32,13 @@ export default defineConfig([
         sourceMap: true,
         inlineSources: true
       }),
-      terser()
+      // Keep runtime-only imports as variables. Otherwise Terser turns them into
+      // static imports, causing web bundlers to require optional native SDKs.
+      terser({
+        compress: {
+          reduce_vars: false,
+        }
+      }),
     ]
   },
   {
