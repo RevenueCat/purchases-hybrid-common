@@ -499,7 +499,7 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  test_and_deploy:
     when:
       and:
         - not:
@@ -567,8 +567,9 @@ workflows:
       # Only run this workflow when the action is "build" (the default), 
       # so it doesn't run for other actions like "bump" on a release branch,
       # which should only open the release PR but not deploy it.
-      # (Deployment happens once the release branch is tagged, which the test
-      # workflow does after the release PR is approved and its tests pass.)
+      # (Deployment happens once the release branch is tagged, which the
+      # test_and_deploy workflow does after the release PR is approved and its
+      # tests pass.)
       - equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - deploy-ios-phc:
