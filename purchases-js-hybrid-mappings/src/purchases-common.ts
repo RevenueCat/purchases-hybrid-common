@@ -185,7 +185,12 @@ export class PurchasesCommon {
     try {
       const offerings = await this.purchases.getOfferings();
       this.offeringsCache = offerings;
-      const offering = offerings.all[offeringIdentifier];
+      // On native, `current` carries the targeting context and `all[identifier]` does not, so the
+      // two differ for the current offering. Mirror the native preference here to keep the result
+      // identical across platforms.
+      const current = offerings.current;
+      const offering =
+        current?.identifier === offeringIdentifier ? current : offerings.all[offeringIdentifier];
       return offering ? mapOffering(offering) : null;
     } catch (error) {
       this.handleError(error);
