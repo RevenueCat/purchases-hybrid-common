@@ -533,6 +533,31 @@ workflows:
       - web-tests
       - web-api-tests
       - web-lint
+      - wait-for-pr-approval:
+          type: approval
+          <<: *release-branches
+      - revenuecat/tag-current-branch:
+          ruby_version: "3.3.0"
+          requires:
+            - wait-for-pr-approval
+            - test-ios-16
+            - test-ios-17
+            - test-ios-18
+            - test-ios-26
+            - check-pods
+            - integration-test-ios
+            - test-android
+            - android-deploy-dry-run
+            - typescript-deploy-dry-run
+            - typescript-esm-deploy-dry-run
+            - js-mappings-deploy-dry-run
+            - detekt-android
+            - typescript-lint
+            - typescript-apitests
+            - web-tests
+            - web-api-tests
+            - web-lint
+          <<: *release-branches
 
   deploy:
     when:
@@ -542,17 +567,10 @@ workflows:
       # Only run this workflow when the action is "build" (the default), 
       # so it doesn't run for other actions like "bump" on a release branch,
       # which should only open the release PR but not deploy it.
-      # (Deployment happens after the hold job is approved on the release PR.)
+      # (Deployment happens once the release branch is tagged, which the test
+      # workflow does after the release PR is approved and its tests pass.)
       - equal: [ build, << pipeline.parameters.action >> ]
     jobs:
-      - hold:
-          type: approval
-          <<: *release-branches
-      - revenuecat/tag-current-branch:
-          ruby_version: "3.3.0"
-          requires:
-            - hold
-          <<: *release-branches
       - deploy-ios-phc:
           <<: *release-tags
       - deploy-ios-phcui:
