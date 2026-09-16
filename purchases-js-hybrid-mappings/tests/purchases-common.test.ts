@@ -542,6 +542,46 @@ describe('PurchasesCommon', () => {
     });
   });
 
+  describe('getOffering', () => {
+    beforeEach(() => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0',
+      });
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: mockOffering,
+      });
+    });
+
+    it('should return the same offering getOfferings returns for that identifier', async () => {
+      const offerings = await purchasesCommon.getOfferings();
+      const all = offerings.all as Record<string, unknown>;
+
+      const offering = await purchasesCommon.getOffering('test_offering');
+
+      expect(offering).toEqual(all.test_offering);
+    });
+
+    it('should return null when the offering does not exist', async () => {
+      const offering = await purchasesCommon.getOffering('unknown_offering');
+
+      expect(offering).toBeNull();
+    });
+
+    it('should propagate errors', async () => {
+      const mockError = new PurchasesError(ErrorCode.NetworkError, 'Network error');
+      mockPurchasesInstance.getOfferings.mockRejectedValue(mockError);
+
+      await expect(purchasesCommon.getOffering('test_offering')).rejects.toMatchObject({
+        code: String(ErrorCode.NetworkError),
+        message: 'Network error',
+      });
+    });
+  });
+
   describe('getVirtualCurrencies', () => {
     it('should successfully get virtual currencies', async () => {
       mockPurchasesInstance.getVirtualCurrencies.mockResolvedValue(mockVirtualCurrencies);

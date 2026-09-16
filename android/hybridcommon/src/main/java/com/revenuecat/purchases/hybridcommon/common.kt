@@ -88,6 +88,21 @@ fun getOfferings(
     }
 }
 
+fun getOffering(
+    offeringIdentifier: String,
+    onResult: OnNullableResult,
+) {
+    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) {
+        val offering = it.getOffering(offeringIdentifier)
+
+        if (offering != null) {
+            offering.mapAsync { map -> onResult.onReceived(map) }
+        } else {
+            onResult.onReceived(null)
+        }
+    }
+}
+
 fun getCurrentOfferingForPlacement(
     placementIdentifier: String,
     onResult: OnNullableResult,

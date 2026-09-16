@@ -181,6 +181,17 @@ export class PurchasesCommon {
     }
   }
 
+  public async getOffering(offeringIdentifier: string): Promise<Record<string, unknown> | null> {
+    try {
+      const offerings = await this.purchases.getOfferings();
+      this.offeringsCache = offerings;
+      const offering = offerings.all[offeringIdentifier];
+      return offering ? mapOffering(offering) : null;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
   public async getCurrentOfferingForPlacement(
     placementIdentifier: string,
   ): Promise<Record<string, unknown> | null> {

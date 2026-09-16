@@ -483,6 +483,23 @@ import StoreKit
         }
     }
 
+    @objc(getOfferingForIdentifier:completionBlock:)
+    static func getOffering(
+        forIdentifier offeringIdentifier: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.getOfferings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                let offering = offerings?.offering(identifier: offeringIdentifier)
+                let dict = offering?.dictionary
+                completion(dict, nil)
+            }
+        }
+    }
+
     @objc(getCurrentOfferingForPlacement:completionBlock:)
     static func getCurrentOffering(
         forPlacement placementIdentifier: String,

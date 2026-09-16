@@ -80,6 +80,14 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(offerings)
     }
 
+    func testCanGetOffering() async throws {
+        let offering = try await CommonFunctionality.offering(forIdentifier: "default")
+        let missingOffering = try await CommonFunctionality.offering(forIdentifier: "doesnt exist")
+
+        expect(offering?["identifier"] as? String) == "default"
+        expect(missingOffering).to(beNil())
+    }
+
     func testCanGetCurrentOfferingForPlacement() async throws {
         let onboardingOffering = try await CommonFunctionality.currentOffering(forPlacement: "onboarding")
         let settingsOffering = try await CommonFunctionality.currentOffering(forPlacement: "settings")
