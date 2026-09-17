@@ -565,6 +565,7 @@ workflows:
             - js-mappings-deploy-dry-run
             - detekt-android
             - typescript-lint
+            - typescript-tests
             - typescript-apitests
             - web-tests
             - web-api-tests
