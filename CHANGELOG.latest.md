@@ -1,9 +1,6 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 10.21.0 => 10.21.1 (#1888) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] JS 1.60.0 => 1.60.1 (#1886) via RevenueCat Git Bot (@RCGitBot)
-* chore(ads): remove experimental opt-ins for ads apis (#1837) via Peter Porfy (@peterporfy)
+* [AUTOMATIC] Android 10.21.1 => 10.22.0 JS 1.62.0 => 1.63.0 (#1896) via RevenueCat Git Bot (@RCGitBot)
 
-## RevenueCatUI SDK
-### 💥 Breaking Changes
-* feat(paywalls): Bridge onInteraction paywall callbacks (#1879) via Álvaro Brey (@AlvaroBrey)
+### 🔄 Other Changes
+* ci: approve the release hold automatically when the release PR is approved (#1894) via Álvaro Brey (@AlvaroBrey)
