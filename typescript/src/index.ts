@@ -1,4 +1,5 @@
 export * from './errors';
+export * from './errorNormalizer';
 export * from './customerInfo';
 export * from './offerings';
 export * from './enums';

@@ -117,6 +117,9 @@ export type MakePurchaseResult = {
 };
 
 // @public
+export function normalizePurchasesError(error: unknown): unknown;
+
+// @public
 export enum OFFER_PAYMENT_MODE {
     DISCOUNTED_RECURRING_PAYMENT = "DISCOUNTED_RECURRING_PAYMENT",
     FREE_TRIAL = "FREE_TRIAL",
@@ -149,6 +152,7 @@ export const PAYWALL_COMPONENT_TYPES: {
     readonly PACKAGE: "package";
     readonly PACKAGE_SELECTION_SHEET: "package_selection_sheet";
     readonly PURCHASE_BUTTON: "purchase_button";
+    readonly WALLET_BUTTON: "wallet_button";
 };
 
 // @public

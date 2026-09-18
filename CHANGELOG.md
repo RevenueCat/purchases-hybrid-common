@@ -1,3 +1,21 @@
+## 19.3.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Normalize hybrid bridge errors to the PurchasesError interface (#1838) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.12 to 2.1.14 (#1900) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.239.0 to 2.240.0 (#1901) via dependabot[bot] (@dependabot[bot])
+
+## 19.2.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.89.0 => 5.90.1 Android 10.22.0 => 10.22.1 JS 1.63.0 => 1.63.1 (#1898) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.21.1 => 10.22.0 JS 1.62.0 => 1.63.0 (#1896) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: approve the release hold automatically when the release PR is approved (#1894) via Álvaro Brey (@AlvaroBrey)
+
 ## 19.1.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
