@@ -542,6 +542,94 @@ describe('PurchasesCommon', () => {
     });
   });
 
+  describe('getOffering', () => {
+    // On native, `current` carries the targeting context while `all[identifier]` does not, so the
+    // two differ for the current offering. Model that asymmetry here, otherwise a test that reads
+    // the wrong one still passes.
+    const targetedProduct: Product = {
+      ...mockMonthlyProduct,
+      presentedOfferingContext: {
+        offeringIdentifier: 'test_offering',
+        targetingContext: { revision: 2, ruleId: 'test_rule' },
+        placementIdentifier: null,
+      },
+    };
+    const targetedPackage: Package = {
+      ...mockMonthlyPackage,
+      rcBillingProduct: targetedProduct,
+      webBillingProduct: targetedProduct,
+    };
+    const targetedOffering: Offering = {
+      ...mockOffering,
+      availablePackages: [targetedPackage],
+      packagesById: { [targetedPackage.identifier]: targetedPackage },
+      monthly: targetedPackage,
+    };
+
+    beforeEach(() => {
+      purchasesCommon = PurchasesCommon.configure({
+        apiKey: 'test_api_key',
+        appUserId: 'test_user_id',
+        flavor: 'test_flavor',
+        flavorVersion: '1.0.0',
+      });
+    });
+
+    it('should return the current offering with its targeting context', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: targetedOffering,
+      });
+
+      const offerings = await purchasesCommon.getOfferings();
+      const offering = await purchasesCommon.getOffering('test_offering');
+
+      expect(offering).toEqual(offerings.current);
+
+      const packages = offering?.availablePackages as Array<Record<string, unknown>>;
+      expect(packages[0].presentedOfferingContext).toEqual({
+        offeringIdentifier: 'test_offering',
+        placementIdentifier: null,
+        targetingContext: { revision: 2, ruleId: 'test_rule' },
+      });
+    });
+
+    it('should return the catalog entry when the offering is not the current one', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: { ...targetedOffering, identifier: 'another_offering' },
+      });
+
+      const offerings = await purchasesCommon.getOfferings();
+      const all = offerings.all as Record<string, unknown>;
+
+      const offering = await purchasesCommon.getOffering('test_offering');
+
+      expect(offering).toEqual(all.test_offering);
+    });
+
+    it('should return null when the offering does not exist', async () => {
+      mockPurchasesInstance.getOfferings.mockResolvedValue({
+        all: { test_offering: mockOffering },
+        current: targetedOffering,
+      });
+
+      const offering = await purchasesCommon.getOffering('unknown_offering');
+
+      expect(offering).toBeNull();
+    });
+
+    it('should propagate errors', async () => {
+      const mockError = new PurchasesError(ErrorCode.NetworkError, 'Network error');
+      mockPurchasesInstance.getOfferings.mockRejectedValue(mockError);
+
+      await expect(purchasesCommon.getOffering('test_offering')).rejects.toMatchObject({
+        code: String(ErrorCode.NetworkError),
+        message: 'Network error',
+      });
+    });
+  });
+
   describe('getVirtualCurrencies', () => {
     it('should successfully get virtual currencies', async () => {
       mockPurchasesInstance.getVirtualCurrencies.mockResolvedValue(mockVirtualCurrencies);
