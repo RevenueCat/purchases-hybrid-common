@@ -637,8 +637,10 @@ workflows:
     jobs:
       - revenuecat/update-error-codes:
           platform: hybridCommon
-          outputs: "error-codes.ts:typescript/src/generated/error-codes.ts"
-          commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
+          outputs: |
+            error-codes.ts:typescript/src/generated/error-codes.ts
+            js-error-codes.ts:purchases-js-hybrid-mappings/src/generated/js-error-codes.ts
+          commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report,purchases-js-hybrid-mappings/src/generated/js-error-codes.ts"
           update_api_steps:
             - revenuecat/install-mise-tools:
                 tools: node

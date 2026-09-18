@@ -36,9 +36,8 @@ function firstString(...values: unknown[]): string {
  * Plugin level rejections use names such as "UNIMPLEMENTED" or "PAYWALL_ERROR" and are
  * not ours to touch.
  *
- * Deliberately looser than PURCHASES_ERROR_CODE membership: that enum omits codes the
- * native SDKs emit (36 to 41), and Android and iOS disagree on 28 and 36, so matching
- * against it would reject genuine errors.
+ * Deliberately looser than PURCHASES_ERROR_CODE membership, so an error added to a native
+ * SDK before this package picks it up is still normalized instead of rejected.
  */
 function readCode(error: UnknownRecord, payload: UnknownRecord): string | undefined {
     const candidate = error.code ?? payload.code;
