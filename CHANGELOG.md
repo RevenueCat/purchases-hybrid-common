@@ -1,3 +1,12 @@
+## 19.3.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Normalize hybrid bridge errors to the PurchasesError interface (#1838) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.12 to 2.1.14 (#1900) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.239.0 to 2.240.0 (#1901) via dependabot[bot] (@dependabot[bot])
+
 ## 19.2.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
