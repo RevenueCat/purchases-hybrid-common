@@ -39,7 +39,7 @@ export interface PurchasesEntitlementInfo {
     /**
      * The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.
      */
-    readonly periodType: string;
+    readonly periodType: PeriodType;
     /**
      * The latest purchase or renewal date for the entitlement in ISO8601 format.
      */
@@ -58,12 +58,12 @@ export interface PurchasesEntitlementInfo {
     readonly originalPurchaseDateMillis: number;
     /**
      * The expiration date for the entitlement in ISO8601, can be `null` for lifetime access.
-     * If the `periodType` is `trial`, this is the trial expiration date.
+     * If the `periodType` is `TRIAL`, this is the trial expiration date.
      */
     readonly expirationDate: string | null;
     /**
      * The expiration date for the entitlement in milliseconds, can be `null` for lifetime access.
-     * If the `periodType` is `trial`, this is the trial expiration date.
+     * If the `periodType` is `TRIAL`, this is the trial expiration date.
      */
     readonly expirationDateMillis: number | null;
     /**

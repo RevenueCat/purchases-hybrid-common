@@ -440,7 +440,7 @@ export interface PurchasesEntitlementInfo {
     readonly originalPurchaseDate: string;
     readonly originalPurchaseDateMillis: number;
     readonly ownershipType: OwnershipType;
-    readonly periodType: string;
+    readonly periodType: PeriodType;
     readonly productIdentifier: string;
     readonly productPlanIdentifier: string | null;
     readonly store: Store;
