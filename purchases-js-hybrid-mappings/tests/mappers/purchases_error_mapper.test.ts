@@ -28,6 +28,15 @@ describe('mapPurchasesError', () => {
     });
   });
 
+  it.each([
+    [ErrorCode.CustomerInfoError, "29"],
+    [ErrorCode.SignatureVerificationError, "37"],
+    [ErrorCode.InvalidEmailError, "43"],
+    [ErrorCode.NetworkError, "10"],
+  ])('maps purchases-js code %s to the code shared by the other SDKs', (errorCode, expected) => {
+    expect(mapPurchasesError(new PurchasesError(errorCode)).code).toBe(expected);
+  });
+
   it('maps cancelled errors to hybrid-compatible shape', () => {
     const error = new PurchasesError(ErrorCode.UserCancelledError);
 
