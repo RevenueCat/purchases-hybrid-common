@@ -82,6 +82,9 @@ function mapProduct(product: Product): Record<string, unknown> {
         : null,
     presentedOfferingIdentifier: product.presentedOfferingContext.offeringIdentifier,
     presentedOfferingContext: mapPresentedOfferingContext(product.presentedOfferingContext),
+    // iOS-only (Apple billing plans), null on Web
+    productPlanIdentifier: null,
+    installmentsInfo: null,
   };
 }
 
