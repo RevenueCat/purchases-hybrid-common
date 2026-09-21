@@ -85,6 +85,9 @@ NS_ASSUME_NONNULL_BEGIN
         paramsWithOffering.purchaseLogicBridge = bridge;
         __unused RCPaywallViewController *view5 = [proxy createPaywallViewWithParams:paramsWithOffering];
 
+        [PaywallProxy resumePurchasePackageInitiatedWithRequestId:@"request-id" shouldProceed:YES];
+        [PaywallProxy resumeRestoreInitiatedWithRequestId:@"request-id" shouldProceed:YES];
+
     }
 }
 

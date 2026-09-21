@@ -23,6 +23,11 @@ abstract class PaywallListenerWrapper : PaywallListener {
         fun resumePurchasePackageInitiated(requestId: String, shouldProceed: Boolean) {
             pendingResumeCallbacks.remove(requestId)?.invoke(shouldProceed)
         }
+
+        @JvmStatic
+        fun resumeRestoreInitiated(requestId: String, shouldProceed: Boolean) {
+            pendingResumeCallbacks.remove(requestId)?.invoke(shouldProceed)
+        }
     }
 
     override fun onPurchasePackageInitiated(rcPackage: Package, resume: Resumable) {
@@ -33,6 +38,16 @@ abstract class PaywallListenerWrapper : PaywallListener {
 
     open fun onPurchasePackageInitiated(rcPackage: Map<String, Any?>, requestId: String) {
         resumePurchasePackageInitiated(requestId, true)
+    }
+
+    override fun onRestoreInitiated(resume: Resumable) {
+        val requestId = UUID.randomUUID().toString()
+        pendingResumeCallbacks[requestId] = { resume(it) }
+        onRestoreInitiated(requestId)
+    }
+
+    open fun onRestoreInitiated(requestId: String) {
+        resumeRestoreInitiated(requestId, true)
     }
 
     override fun onPurchaseStarted(rcPackage: Package) {
