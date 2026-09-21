@@ -28,6 +28,8 @@ export class PurchasesCommon {
     // (undocumented)
     static getInstance(): PurchasesCommon;
     // (undocumented)
+    getOffering(offeringIdentifier: string): Promise<Record<string, unknown> | null>;
+    // (undocumented)
     getOfferings(): Promise<Record<string, unknown>>;
     // (undocumented)
     getVirtualCurrencies(): Promise<Record<string, unknown>>;

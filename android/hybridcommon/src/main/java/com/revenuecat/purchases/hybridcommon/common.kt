@@ -88,6 +88,29 @@ fun getOfferings(
     }
 }
 
+fun getOffering(
+    offeringIdentifier: String,
+    onResult: OnNullableResult,
+) {
+    Purchases.sharedInstance.getOfferingsWith(onError = { onResult.onError(it.map()) }) { offerings ->
+        // `current` carries the targeting context on its packages, `getOffering` does not. Prefer
+        // it when the caller asks for the current offering, so purchases made from the result keep
+        // their targeting attribution.
+        val current = offerings.current
+        val offering = if (current?.identifier == offeringIdentifier) {
+            current
+        } else {
+            offerings.getOffering(offeringIdentifier)
+        }
+
+        if (offering != null) {
+            offering.mapAsync { map -> onResult.onReceived(map) }
+        } else {
+            onResult.onReceived(null)
+        }
+    }
+}
+
 fun getCurrentOfferingForPlacement(
     placementIdentifier: String,
     onResult: OnNullableResult,
