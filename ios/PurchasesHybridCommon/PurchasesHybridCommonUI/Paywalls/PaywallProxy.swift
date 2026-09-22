@@ -193,12 +193,10 @@ import UIKit
                             paywallResultHandler: paywallResultHandler)
     }
 
-    /// Presents a paywall that reports its events to `delegate` instead of the proxy-wide
-    /// ``delegate``, so overlapping presentations each receive only their own events.
+    /// Presents a paywall whose events go to `delegate` rather than the proxy-wide ``delegate``.
     ///
-    /// - Parameter delegate: retained until this presentation is dismissed. Pass an object
-    /// dedicated to this presentation, never one that retains this ``PaywallProxy``, and hold any
-    /// channel or emitter it forwards to weakly. The caller must not retain it.
+    /// - Parameter delegate: strongly retained until this presentation is dismissed, so it must
+    /// not retain this ``PaywallProxy``.
     @objc
     public func presentPaywall(options: [String: Any],
                                purchaseLogicBridge: HybridPurchaseLogicBridge?,
@@ -224,9 +222,6 @@ import UIKit
                                     paywallResultHandler: paywallResultHandler)
     }
 
-    /// Presents a paywall only if the user does not have the specified entitlement, reporting its
-    /// events to `delegate` instead of the proxy-wide ``delegate``.
-    ///
     /// See ``presentPaywall(options:purchaseLogicBridge:delegate:paywallResultHandler:)`` for the
     /// ownership rules that apply to `delegate`.
     @objc
@@ -474,8 +469,8 @@ extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didStartPurchaseWith package: Package) {
-        self.resolvedDelegate(for: controller)?.paywallViewController?(controller,
-                                              didStartPurchaseWith: package.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didStartPurchaseWith: package.dictionary)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
@@ -488,9 +483,10 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
-        self.resolvedDelegate(for: controller)?.paywallViewController?(controller,
-                                              didFinishPurchasingWith: customerInfo.dictionary,
-                                              transaction: transaction?.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller,
+                                    didFinishPurchasingWith: customerInfo.dictionary,
+                                    transaction: transaction?.dictionary)
     }
 
     public func paywallViewControllerDidCancelPurchase(_ controller: PaywallViewController) {
@@ -564,14 +560,17 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       resume: @escaping (Bool) -> Void) {
         let requestId = UUID().uuidString
         Self.pendingPurchaseInitiatedCallbacks[requestId] = resume
-        self.resolvedDelegate(for: controller)?.paywallViewController?(controller,
-                                              didInitiatePurchaseWith: package.dictionary,
-                                              requestId: requestId)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller,
+                                    didInitiatePurchaseWith: package.dictionary,
+                                    requestId: requestId)
             ?? Self.resumePurchasePackageInitiated(requestId: requestId, shouldProceed: true)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       willPresentExitOfferController exitOfferController: PaywallViewController) {
+        let eventDelegate = self.resolvedDelegate(for: controller)
+
         // Transfer result tracking from main paywall to exit offer controller.
         // This ensures the paywallResultHandler is called when the exit offer is dismissed.
         if let tracked = self.resultByVC.removeValue(forKey: controller) {
@@ -583,14 +582,12 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         if let bridge = self.purchaseLogicBridgeByVC.removeValue(forKey: controller) {
             self.purchaseLogicBridgeByVC[exitOfferController] = bridge
         }
-
-        self.resolvedDelegate(for: controller)?
-            .paywallViewController?(controller, willPresentExitOfferController: exitOfferController)
-
-        // Re-keyed after the dispatch above, which still resolves against the original controller.
-        if let delegate = self.delegateByVC.removeValue(forKey: controller) {
-            self.delegateByVC[exitOfferController] = delegate
+        if let presentationDelegate = self.delegateByVC.removeValue(forKey: controller) {
+            self.delegateByVC[exitOfferController] = presentationDelegate
         }
+
+        eventDelegate?.paywallViewController?(controller,
+                                              willPresentExitOfferController: exitOfferController)
     }
 
 }
