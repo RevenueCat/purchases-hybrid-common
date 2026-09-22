@@ -79,6 +79,9 @@ export enum INTRO_ELIGIBILITY_STATUS {
 export interface PurchasesStoreProduct {
   /**
    * Product Id.
+   * For a product that represents a billing plan on iOS (Apple's monthly billing with a commitment),
+   * this is `<productId>:<productPlanIdentifier>`, for example `annual:monthly`.
+   * For Google Play subscriptions, this is `<productId>:<basePlanId>`.
    */
   readonly identifier: string;
   /**
@@ -193,6 +196,75 @@ export interface PurchasesStoreProduct {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * Identifier of the billing plan this product represents, when the product is a specific billing plan
+   * of a StoreKit product: `"monthly"` for Apple's monthly billing with a commitment.
+   * Null for products without a billing plan. iOS 26.4+ only; null on Android and Web.
+   */
+  readonly productPlanIdentifier: string | null;
+  /**
+   * Details of the installments the customer commits to when this product represents a billing plan
+   * (Apple's monthly billing with a 12-month commitment). Apple requires both
+   * `installmentBillingDisplayPrice` and `commitmentTotalDisplayPrice` to be shown before purchase.
+   * Null for products without a billing plan and when using StoreKit 1. iOS 26.4+ only; null on Android
+   * and Web, where Google Play installment plans are exposed through `SubscriptionOption.installmentsInfo`.
+   */
+  readonly installmentsInfo: BillingPlanInstallmentsInfo | null;
+}
+
+/**
+ * Details of the installments a customer commits to when purchasing a product that represents a billing plan
+ * (Apple's monthly billing with a commitment). iOS 26.4+ only.
+ * @public
+ */
+export interface BillingPlanInstallmentsInfo {
+  /**
+   * Number of installments the customer commits to paying.
+   */
+  readonly commitmentInstallmentsCount: number;
+  /**
+   * The duration of each installment.
+   */
+  readonly commitmentInstallmentPeriod: Period;
+  /**
+   * Price charged for each installment billing period, in the local currency.
+   */
+  readonly installmentBillingPrice: number;
+  /**
+   * Formatted price of each installment, including its currency sign.
+   */
+  readonly installmentBillingDisplayPrice: string;
+  /**
+   * Total duration of the customer's installment commitment.
+   */
+  readonly commitmentTotalPeriod: Period;
+  /**
+   * Total price the customer commits to paying across all installments, in the local currency.
+   */
+  readonly commitmentTotalPrice: number;
+  /**
+   * Formatted total price the customer commits to, including its currency sign.
+   */
+  readonly commitmentTotalDisplayPrice: string;
+  /**
+   * The billing plan used for the installments.
+   */
+  readonly billingPlanType: BILLING_PLAN_TYPE;
+}
+
+/**
+ * Enum indicating the billing plan a product represents.
+ * @public
+ */
+export enum BILLING_PLAN_TYPE {
+  /**
+   * The customer pays in full when purchasing the product.
+   */
+  UP_FRONT = "UP_FRONT",
+  /**
+   * The customer pays in monthly installments across a commitment period.
+   */
+  MONTHLY = "MONTHLY",
 }
 
 /**
