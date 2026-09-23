@@ -19,7 +19,7 @@ detekt {
 
 android {
     namespace = "com.revenuecat.purchases.hybridcommon"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
