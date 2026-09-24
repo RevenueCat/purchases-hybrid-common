@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import RevenueCat
+@_spi(Internal) import RevenueCat
 @testable import PurchasesHybridCommon
 
 class PurchasesHybridAdditionsTests: QuickSpec {
@@ -226,5 +226,55 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                         }.notTo(raiseException())
                     }
                 }
+
+        context("configure with useExternalPurchaseCustomLinks") {
+            if #available(iOS 15.0, *) {
+                it("true") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil,
+                                            preferredLocale: nil,
+                                            useExternalPurchaseCustomLinks: true)
+
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beTrue())
+                }
+
+                it("false") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil,
+                                            preferredLocale: nil,
+                                            useExternalPurchaseCustomLinks: false)
+
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
+                }
+
+                it("not passed") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil)
+
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
+                }
+            }
+        }
     }
 }

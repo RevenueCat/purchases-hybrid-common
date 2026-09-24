@@ -7,13 +7,16 @@
 //
 
 import Foundation
-import RevenueCat
+@_spi(Experimental) import RevenueCat
 
 @objc public extension Purchases {
 
+    /// - Parameter useExternalPurchaseCustomLinks: Experimental. Whether a web purchase button that opens its link
+    /// in the external browser takes part in Apple's external purchase custom link programme.
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
-            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:)
+            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
+            useExternalPurchaseCustomLinks:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -26,7 +29,8 @@ import RevenueCat
                           verificationMode: String?,
                           diagnosticsEnabled: Bool = false,
                           automaticDeviceIdentifierCollectionEnabled: Bool = true,
-                          preferredLocale: String? = nil) -> Purchases {
+                          preferredLocale: String? = nil,
+                          useExternalPurchaseCustomLinks: Bool) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -83,10 +87,47 @@ import RevenueCat
             configurationBuilder = configurationBuilder.with(preferredUILocaleOverride: preferredLocale)
         }
 
+        configurationBuilder = configurationBuilder.with(
+            useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks
+        )
+
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases
 
         return purchases
+    }
+
+    @available(*, deprecated, message: "Use the full configure method instead")
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          purchasesAreCompletedBy: String?,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          storeKitVersion: String = "DEFAULT",
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String?,
+                          diagnosticsEnabled: Bool = false,
+                          automaticDeviceIdentifierCollectionEnabled: Bool = true,
+                          preferredLocale: String? = nil) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         storeKitVersion: storeKitVersion,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: verificationMode,
+                         diagnosticsEnabled: diagnosticsEnabled,
+                         automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
+                         preferredLocale: preferredLocale,
+                         useExternalPurchaseCustomLinks: false)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")
