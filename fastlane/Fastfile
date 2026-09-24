@@ -86,7 +86,10 @@ lane :automatic_bump do |options|
     UI.important("Skipping automatic bump since #{approved_release_pr['html_url']} is already approved")
     next
   end
-  close_pull_requests_and_delete_branches(release_prs, repo_name)
+  release_prs.each do |pull_request|
+    close_pull_request(pull_request, repo_name)
+    delete_remote_branch_if_present(pull_request['head']['ref'], repo_name)
+  end
 
   bump(options)
 end
@@ -633,23 +636,26 @@ def open_automatic_release_prs(repo_name)
   end
 end
 
-def close_pull_requests_and_delete_branches(pull_requests, repo_name)
-  pull_requests.each do |pull_request|
-    UI.message("Closing outdated release PR #{pull_request['html_url']}")
-    Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
-      server_url: 'https://api.github.com',
-      http_method: 'PATCH',
-      api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
-      path: "/repos/RevenueCat/#{repo_name}/pulls/#{pull_request['number']}",
-      body: { state: 'closed' }
-    )
-    Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
-      server_url: 'https://api.github.com',
-      http_method: 'DELETE',
-      api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
-      path: "/repos/RevenueCat/#{repo_name}/git/refs/heads/#{pull_request['head']['ref']}"
-    )
-  end
+def close_pull_request(pull_request, repo_name)
+  UI.message("Closing outdated release PR #{pull_request['html_url']}")
+  Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
+    server_url: 'https://api.github.com',
+    http_method: 'PATCH',
+    api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
+    path: "/repos/RevenueCat/#{repo_name}/pulls/#{pull_request['number']}",
+    body: { state: 'closed' }
+  )
+end
+
+def delete_remote_branch_if_present(branch, repo_name)
+  branch_missing = proc { UI.verbose("Branch #{branch} does not exist on the remote") }
+  Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
+    server_url: 'https://api.github.com',
+    http_method: 'DELETE',
+    api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
+    path: "/repos/RevenueCat/#{repo_name}/git/refs/heads/#{branch}",
+    error_handlers: { 404 => branch_missing, 422 => branch_missing }
+  )
 end
 
 def latest_published_version_number
