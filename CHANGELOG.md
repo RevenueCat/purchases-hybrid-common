@@ -1,3 +1,11 @@
+## 19.4.1
+## RevenueCatUI SDK
+### 🐞 Bugfixes
+* fix(paywalls): stop retaining listeners when presenting while not started (#1921) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* ci: keep at most one open automatic PHC release PR (#1917) via Álvaro Brey (@AlvaroBrey)
+
 ## 19.4.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
