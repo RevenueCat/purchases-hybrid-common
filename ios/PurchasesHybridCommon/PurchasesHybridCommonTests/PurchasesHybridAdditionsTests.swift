@@ -228,51 +228,53 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 }
 
         context("configure with useExternalPurchaseCustomLinks") {
-                    it("true") {
-                        _ = Purchases.configure(apiKey: "api key",
-                                                appUserID: nil,
-                                                purchasesAreCompletedBy: "REVENUECAT",
-                                                userDefaultsSuiteName: "test",
-                                                platformFlavor: "hybrid-platform",
-                                                platformFlavorVersion: "1.2.3",
-                                                storeKitVersion: "DEFAULT",
-                                                dangerousSettings: nil,
-                                                verificationMode: nil,
-                                                preferredLocale: nil,
-                                                useExternalPurchaseCustomLinks: true)
+            if #available(iOS 15.0, *) {
+                it("true") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil,
+                                            preferredLocale: nil,
+                                            useExternalPurchaseCustomLinks: true)
 
-                        expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beTrue())
-                    }
-
-                    it("false") {
-                        _ = Purchases.configure(apiKey: "api key",
-                                                appUserID: nil,
-                                                purchasesAreCompletedBy: "REVENUECAT",
-                                                userDefaultsSuiteName: "test",
-                                                platformFlavor: "hybrid-platform",
-                                                platformFlavorVersion: "1.2.3",
-                                                storeKitVersion: "DEFAULT",
-                                                dangerousSettings: nil,
-                                                verificationMode: nil,
-                                                preferredLocale: nil,
-                                                useExternalPurchaseCustomLinks: false)
-
-                        expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
-                    }
-
-                    it("not passed") {
-                        _ = Purchases.configure(apiKey: "api key",
-                                                appUserID: nil,
-                                                purchasesAreCompletedBy: "REVENUECAT",
-                                                userDefaultsSuiteName: "test",
-                                                platformFlavor: "hybrid-platform",
-                                                platformFlavorVersion: "1.2.3",
-                                                storeKitVersion: "DEFAULT",
-                                                dangerousSettings: nil,
-                                                verificationMode: nil)
-
-                        expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
-                    }
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beTrue())
                 }
+
+                it("false") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil,
+                                            preferredLocale: nil,
+                                            useExternalPurchaseCustomLinks: false)
+
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
+                }
+
+                it("not passed") {
+                    _ = Purchases.configure(apiKey: "api key",
+                                            appUserID: nil,
+                                            purchasesAreCompletedBy: "REVENUECAT",
+                                            userDefaultsSuiteName: "test",
+                                            platformFlavor: "hybrid-platform",
+                                            platformFlavorVersion: "1.2.3",
+                                            storeKitVersion: "DEFAULT",
+                                            dangerousSettings: nil,
+                                            verificationMode: nil)
+
+                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
+                }
+            }
+        }
     }
 }
