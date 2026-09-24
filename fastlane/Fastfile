@@ -78,6 +78,16 @@ lane :automatic_bump do |options|
     next
   end
 
+  release_prs = open_automatic_release_prs(repo_name)
+  approved_release_pr = release_prs.find do |pull_request|
+    Fastlane::Helper::GitHubHelper.pr_approved_by_org_member_with_write_permissions?(pull_request['html_url'], ENV['GITHUB_TOKEN'])
+  end
+  if approved_release_pr
+    UI.important("Skipping automatic bump since #{approved_release_pr['html_url']} is already approved")
+    next
+  end
+  close_pull_requests_and_delete_branches(release_prs, repo_name)
+
   bump(options)
 end
 
@@ -610,6 +620,36 @@ end
 
 def current_version_number
   File.read("../.version").strip
+end
+
+def open_automatic_release_prs(repo_name)
+  Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
+    server_url: 'https://api.github.com',
+    http_method: 'GET',
+    api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
+    path: "/repos/RevenueCat/#{repo_name}/pulls?state=open&base=main&per_page=100"
+  )[:json].select do |pull_request|
+    pull_request['head']['ref'].start_with?('release/') && pull_request['title'].start_with?('[AUTOMATIC]')
+  end
+end
+
+def close_pull_requests_and_delete_branches(pull_requests, repo_name)
+  pull_requests.each do |pull_request|
+    UI.message("Closing outdated release PR #{pull_request['html_url']}")
+    Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
+      server_url: 'https://api.github.com',
+      http_method: 'PATCH',
+      api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
+      path: "/repos/RevenueCat/#{repo_name}/pulls/#{pull_request['number']}",
+      body: { state: 'closed' }
+    )
+    Fastlane::Helper::GitHubHelper.github_api_call_with_retry(
+      server_url: 'https://api.github.com',
+      http_method: 'DELETE',
+      api_token: ENV['GITHUB_PULL_REQUEST_API_TOKEN'],
+      path: "/repos/RevenueCat/#{repo_name}/git/refs/heads/#{pull_request['head']['ref']}"
+    )
+  end
 end
 
 def latest_published_version_number
