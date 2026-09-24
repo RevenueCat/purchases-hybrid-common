@@ -423,6 +423,7 @@ export interface PurchasesConfiguration {
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
+    useExternalPurchaseCustomLinks?: boolean;
     userDefaultsSuiteName?: string;
 }
 

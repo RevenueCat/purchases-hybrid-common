@@ -120,7 +120,8 @@ private extension BaseIntegrationTests {
             verificationMode: nil,
             diagnosticsEnabled: false,
             automaticDeviceIdentifierCollectionEnabled: true,
-            preferredLocale: nil
+            preferredLocale: nil,
+            useExternalPurchaseCustomLinks: false
         )
         Purchases.logLevel = .debug
     }

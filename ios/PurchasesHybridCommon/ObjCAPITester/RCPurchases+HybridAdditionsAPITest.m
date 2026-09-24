@@ -30,6 +30,20 @@ NS_ASSUME_NONNULL_BEGIN
                                                       verificationMode:@""
                                                     diagnosticsEnabled:YES
                             automaticDeviceIdentifierCollectionEnabled:YES
+                                                       preferredLocale:nil
+                                        useExternalPurchaseCustomLinks:NO];
+    RCPurchases *purchasesWithPreferredLocale __unused = [RCPurchases configureWithAPIKey:@""
+                                                             appUserID:@""
+                                               purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
+                                                 userDefaultsSuiteName:nil
+                                                        platformFlavor:nil
+                                                 platformFlavorVersion:@""
+                                                       storeKitVersion:@""
+                                                     dangerousSettings:nil
+                                  shouldShowInAppMessagesAutomatically:NO
+                                                      verificationMode:@""
+                                                    diagnosticsEnabled:YES
+                            automaticDeviceIdentifierCollectionEnabled:YES
                                                        preferredLocale:nil];
     RCPurchases *purchases2 __unused = [RCPurchases configureWithAPIKey:@""
                                                              appUserID:@""
