@@ -1,3 +1,8 @@
+## 19.4.0
+## RevenueCatUI SDK
+### ✨ New Features
+* Support per-presentation delegates when presenting paywalls (#1911) via Álvaro Brey (@AlvaroBrey)
+
 ## 19.3.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates
