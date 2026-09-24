@@ -39,16 +39,6 @@ fun presentPaywallFromFragment(
     with(options) {
         val requestKey = System.identityHashCode(paywallResultListener).toString()
 
-        if (paywallListener != null || purchaseLogic != null) {
-            PaywallFragmentNonSerializableArgsStore.put(
-                requestKey,
-                PaywallFragmentNonSerializableArgs(
-                    paywallListener = paywallListener,
-                    purchaseLogic = purchaseLogic,
-                ),
-            )
-        }
-
         activity.runOnUiThread {
             activity.supportFragmentManager.setFragmentResultListener(requestKey, activity) { _, result ->
                 val paywallResult = result.getString(PaywallFragment.ResultKey.PAYWALL_RESULT.key)
@@ -58,6 +48,15 @@ fun presentPaywallFromFragment(
             }
 
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                if (paywallListener != null || purchaseLogic != null) {
+                    PaywallFragmentNonSerializableArgsStore.put(
+                        requestKey,
+                        PaywallFragmentNonSerializableArgs(
+                            paywallListener = paywallListener,
+                            purchaseLogic = purchaseLogic,
+                        ),
+                    )
+                }
                 activity
                     .supportFragmentManager
                     .beginTransaction()
