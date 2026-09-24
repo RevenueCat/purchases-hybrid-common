@@ -1,8 +1,7 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.90.1 => 5.90.2 (#1908) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.90.2 => 5.91.0 Android 10.22.1 => 10.23.0 JS 1.63.1 => 1.64.0 (#1916) via RevenueCat Git Bot (@RCGitBot)
 
-### 🔄 Other Changes
-* Bump fastlane-plugin-revenuecat_internal from `fc64a1a` to `9f7a03e` (#1909) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane-plugin-revenuecat_internal from `6db1da0` to `fc64a1a` (#1906) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.240.0 to 2.240.1 (#1905) via dependabot[bot] (@dependabot[bot])
+## RevenueCatUI SDK
+### ✨ New Features
+* Support per-presentation delegates when presenting paywalls (#1911) via Álvaro Brey (@AlvaroBrey)
