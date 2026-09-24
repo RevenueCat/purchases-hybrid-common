@@ -33,6 +33,14 @@ NS_ASSUME_NONNULL_BEGIN
                                  displayCloseButton:true
                                paywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallWithOptions:[NSDictionary new] paywallResultHandler:^(NSString * _Nonnull result) {}];
+        [proxy presentPaywallWithOptions:[NSDictionary new]
+                     purchaseLogicBridge:nil
+                                delegate:nil
+                    paywallResultHandler:^(NSString * _Nonnull result) {}];
+        [proxy presentPaywallIfNeededWithOptions:[NSDictionary new]
+                             purchaseLogicBridge:nil
+                                        delegate:nil
+                            paywallResultHandler:^(NSString * _Nonnull result) {}];
 
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@""];
         [proxy presentPaywallIfNeededWithRequiredEntitlementIdentifier:@"" displayCloseButton:YES];
