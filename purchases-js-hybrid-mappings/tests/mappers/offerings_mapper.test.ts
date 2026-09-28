@@ -627,6 +627,7 @@ describe('mapOfferings', () => {
       packageType: PackageType.Annual,
       webBillingProduct: product,
       rcBillingProduct: product,
+      product,
     };
 
     const offering: Offering = {
@@ -778,6 +779,7 @@ describe('mapOfferings', () => {
       packageType: PackageType.Annual,
       webBillingProduct: product,
       rcBillingProduct: product,
+      product,
     };
 
     const offering: Offering = {
@@ -951,7 +953,8 @@ describe('mapOfferings', () => {
       identifier: identifier,
       packageType: packageType,
       webBillingProduct: product,
-      rcBillingProduct: product
+      rcBillingProduct: product,
+      product
     };
   }
 });

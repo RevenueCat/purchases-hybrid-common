@@ -251,7 +251,7 @@ export class PurchasesCommon {
     try {
       const nativePurchaseParams: PurchaseParams =
         await this.createNativePurchaseParams(purchaseParams);
-      const product = nativePurchaseParams.rcPackage.webBillingProduct;
+      const product = nativePurchaseParams.rcPackage.product;
       // @ts-expect-error using an internal method
       const purchaseResult = await this.purchases._postSimulatedStoreReceipt(product);
       return mapPurchaseResult(purchaseResult);
@@ -352,13 +352,19 @@ export class PurchasesCommon {
       presentedOfferingContext,
     );
 
-    const updatePackage = (pkg: Package): Package => ({
-      ...pkg,
-      webBillingProduct: {
-        ...pkg.webBillingProduct,
+    const updatePackage = (pkg: Package): Package => {
+      const product = {
+        ...pkg.product,
         presentedOfferingContext: presentedOfferingContextObj,
-      },
-    });
+      };
+
+      return {
+        ...pkg,
+        product,
+        webBillingProduct: product,
+        rcBillingProduct: product,
+      };
+    };
 
     const updatedPackages = offering.availablePackages.map(updatePackage);
 
@@ -491,7 +497,7 @@ export class PurchasesCommon {
       );
       let nativePurchaseOption: PurchaseOption | null = null;
       if (purchaseParams.optionIdentifier) {
-        const product = rcPackage.webBillingProduct;
+        const product = rcPackage.product;
         const option = product.subscriptionOptions[purchaseParams.optionIdentifier];
         if (!option) {
           const purchasesError = new PurchasesError(
