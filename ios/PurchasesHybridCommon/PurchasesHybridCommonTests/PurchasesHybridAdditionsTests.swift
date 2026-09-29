@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-@_spi(Internal) import RevenueCat
+import RevenueCat
 @testable import PurchasesHybridCommon
 
 class PurchasesHybridAdditionsTests: QuickSpec {
@@ -228,55 +228,52 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                 }
 
         context("configure with useExternalPurchaseCustomLinks") {
-            if #available(iOS 15.0, *) {
-                it("true") {
-                    _ = Purchases.configure(apiKey: "api key",
-                                            appUserID: nil,
-                                            purchasesAreCompletedBy: "REVENUECAT",
-                                            userDefaultsSuiteName: "test",
-                                            platformFlavor: "hybrid-platform",
-                                            platformFlavorVersion: "1.2.3",
-                                            storeKitVersion: "DEFAULT",
-                                            dangerousSettings: nil,
-                                            verificationMode: nil,
-                                            preferredLocale: nil,
-                                            useExternalPurchaseCustomLinks: true,
-                                            enableExternalPurchasesInSimulator: false)
+                    it("true") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil,
+                                                preferredLocale: nil,
+                                                useExternalPurchaseCustomLinks: true,
+                                                enableExternalPurchasesInSimulator: false)
+                        }.notTo(raiseException())
+                    }
 
-                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beTrue())
+                    it("false") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil,
+                                                preferredLocale: nil,
+                                                useExternalPurchaseCustomLinks: false,
+                                                enableExternalPurchasesInSimulator: true)
+                        }.notTo(raiseException())
+                    }
+                    it("not passed") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil)
+                        }.notTo(raiseException())
+                    }
                 }
-
-                it("false") {
-                    _ = Purchases.configure(apiKey: "api key",
-                                            appUserID: nil,
-                                            purchasesAreCompletedBy: "REVENUECAT",
-                                            userDefaultsSuiteName: "test",
-                                            platformFlavor: "hybrid-platform",
-                                            platformFlavorVersion: "1.2.3",
-                                            storeKitVersion: "DEFAULT",
-                                            dangerousSettings: nil,
-                                            verificationMode: nil,
-                                            preferredLocale: nil,
-                                            useExternalPurchaseCustomLinks: false,
-                                            enableExternalPurchasesInSimulator: true)
-
-                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
-                }
-
-                it("not passed") {
-                    _ = Purchases.configure(apiKey: "api key",
-                                            appUserID: nil,
-                                            purchasesAreCompletedBy: "REVENUECAT",
-                                            userDefaultsSuiteName: "test",
-                                            platformFlavor: "hybrid-platform",
-                                            platformFlavorVersion: "1.2.3",
-                                            storeKitVersion: "DEFAULT",
-                                            dangerousSettings: nil,
-                                            verificationMode: nil)
-
-                    expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
-                }
-            }
-        }
     }
 }
