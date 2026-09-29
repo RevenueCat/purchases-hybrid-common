@@ -13,10 +13,12 @@ import Foundation
 
     /// - Parameter useExternalPurchaseCustomLinks: Experimental. Whether a web purchase button that opens its link
     /// in the external browser takes part in Apple's external purchase custom link programme.
+    /// - Parameter enableExternalPurchasesInSimulator: Experimental. Whether the simulator offers external purchases
+    /// in any storefront. Has no effect on a physical device, nor while `useExternalPurchaseCustomLinks` is `false`.
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
             verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
-            useExternalPurchaseCustomLinks:)
+            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -30,7 +32,8 @@ import Foundation
                           diagnosticsEnabled: Bool = false,
                           automaticDeviceIdentifierCollectionEnabled: Bool = true,
                           preferredLocale: String? = nil,
-                          useExternalPurchaseCustomLinks: Bool) -> Purchases {
+                          useExternalPurchaseCustomLinks: Bool,
+                          enableExternalPurchasesInSimulator: Bool) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -88,7 +91,8 @@ import Foundation
         }
 
         configurationBuilder = configurationBuilder.with(
-            useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks
+            useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks,
+            enableExternalPurchasesInSimulator: enableExternalPurchasesInSimulator
         )
 
         let purchases = self.configure(with: configurationBuilder.build())
@@ -127,7 +131,8 @@ import Foundation
                          diagnosticsEnabled: diagnosticsEnabled,
                          automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
                          preferredLocale: preferredLocale,
-                         useExternalPurchaseCustomLinks: false)
+                         useExternalPurchaseCustomLinks: false,
+                         enableExternalPurchasesInSimulator: true)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")

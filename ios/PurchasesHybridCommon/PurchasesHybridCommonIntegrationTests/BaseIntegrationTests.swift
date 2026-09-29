@@ -121,7 +121,8 @@ private extension BaseIntegrationTests {
             diagnosticsEnabled: false,
             automaticDeviceIdentifierCollectionEnabled: true,
             preferredLocale: nil,
-            useExternalPurchaseCustomLinks: false
+            useExternalPurchaseCustomLinks: false,
+            enableExternalPurchasesInSimulator: true
         )
         Purchases.logLevel = .debug
     }

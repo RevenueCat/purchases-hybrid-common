@@ -112,4 +112,17 @@ export interface PurchasesConfiguration {
    * @experimental This API is experimental and may be changed or removed in a future release.
    */
   useExternalPurchaseCustomLinks?: boolean;
+
+  /**
+   * iOS-only, will be ignored for Android.
+   *
+   * Whether the simulator offers external purchases in any storefront. When disabled, the simulator
+   * behaves as a device does for a customer who is not eligible.
+   *
+   * Enabled by default. Has no effect on a physical device, nor while `useExternalPurchaseCustomLinks`
+   * is disabled.
+   *
+   * @experimental This API is experimental and may be changed or removed in a future release.
+   */
+  enableExternalPurchasesInSimulator?: boolean;
 }

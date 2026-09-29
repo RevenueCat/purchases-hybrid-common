@@ -416,6 +416,7 @@ export interface PurchasesConfiguration {
     appUserID?: string | null;
     automaticDeviceIdentifierCollectionEnabled?: boolean;
     diagnosticsEnabled?: boolean;
+    enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     preferredUILocaleOverride?: string;

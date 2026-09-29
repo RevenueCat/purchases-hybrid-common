@@ -31,7 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
                                                     diagnosticsEnabled:YES
                             automaticDeviceIdentifierCollectionEnabled:YES
                                                        preferredLocale:nil
-                                        useExternalPurchaseCustomLinks:NO];
+                                        useExternalPurchaseCustomLinks:NO
+                                    enableExternalPurchasesInSimulator:YES];
     RCPurchases *purchasesWithPreferredLocale __unused = [RCPurchases configureWithAPIKey:@""
                                                              appUserID:@""
                                                purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat

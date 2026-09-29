@@ -240,7 +240,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                             dangerousSettings: nil,
                                             verificationMode: nil,
                                             preferredLocale: nil,
-                                            useExternalPurchaseCustomLinks: true)
+                                            useExternalPurchaseCustomLinks: true,
+                                            enableExternalPurchasesInSimulator: false)
 
                     expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beTrue())
                 }
@@ -256,7 +257,8 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                             dangerousSettings: nil,
                                             verificationMode: nil,
                                             preferredLocale: nil,
-                                            useExternalPurchaseCustomLinks: false)
+                                            useExternalPurchaseCustomLinks: false,
+                                            enableExternalPurchasesInSimulator: true)
 
                     expect(Purchases.shared.useExternalPurchaseCustomLinks).to(beFalse())
                 }
