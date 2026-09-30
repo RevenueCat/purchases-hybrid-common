@@ -416,6 +416,7 @@ export interface PurchasesConfiguration {
     appUserID?: string | null;
     automaticDeviceIdentifierCollectionEnabled?: boolean;
     diagnosticsEnabled?: boolean;
+    enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     preferredUILocaleOverride?: string;
@@ -423,6 +424,7 @@ export interface PurchasesConfiguration {
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
+    useExternalPurchaseCustomLinks?: boolean;
     userDefaultsSuiteName?: string;
 }
 
