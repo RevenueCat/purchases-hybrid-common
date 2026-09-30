@@ -118,6 +118,7 @@ describe('PurchasesCommon', () => {
     packageType: PackageType.Monthly,
     rcBillingProduct: mockMonthlyProduct,
     webBillingProduct: mockMonthlyProduct,
+    product: mockMonthlyProduct,
   };
 
   const mockOffering: Offering = {
@@ -452,9 +453,7 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption:
-          mockOffering.availablePackages[0].webBillingProduct.subscriptionOptions[
-            'test_monthly_option'
-          ],
+          mockOffering.availablePackages[0].product.subscriptionOptions['test_monthly_option'],
         customerEmail: 'test@example.com',
         selectedLocale: 'es-US',
         defaultLocale: 'en',
@@ -940,7 +939,7 @@ describe('PurchasesCommon', () => {
 
       // Check that presentedOfferingContext was applied to all packages
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -949,9 +948,15 @@ describe('PurchasesCommon', () => {
           ruleId: 'test_rule',
         },
       });
+      expect(calledOffering!.availablePackages[0].webBillingProduct).toBe(
+        calledOffering!.availablePackages[0].product,
+      );
+      expect(calledOffering!.availablePackages[0].rcBillingProduct).toBe(
+        calledOffering!.availablePackages[0].product,
+      );
 
       // Check that helper accessors were updated
-      expect(calledOffering!.monthly!.webBillingProduct.presentedOfferingContext).toEqual({
+      expect(calledOffering!.monthly!.product.presentedOfferingContext).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
         targetingContext: {
@@ -962,7 +967,7 @@ describe('PurchasesCommon', () => {
 
       // Check that packagesById was updated
       expect(
-        calledOffering!.packagesById['test_package'].webBillingProduct.presentedOfferingContext,
+        calledOffering!.packagesById['test_package'].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -991,7 +996,7 @@ describe('PurchasesCommon', () => {
       expect(result).toBe('PURCHASED');
       const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: null,
@@ -1021,7 +1026,7 @@ describe('PurchasesCommon', () => {
       expect(result).toBe('PURCHASED');
       const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: null,
@@ -1059,7 +1064,7 @@ describe('PurchasesCommon', () => {
 
       // Verify presentedOfferingContext was applied to the fetched offering
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -1234,8 +1239,7 @@ describe('PurchasesCommon', () => {
       expect(calledOffering).toBeDefined();
       expect(calledOffering!.identifier).toBe('test_offering');
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext
-          .placementIdentifier,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext.placementIdentifier,
       ).toBe('test_placement');
 
       expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({

@@ -78,6 +78,7 @@ import UIKit
                                                      result: PaywallResult)] = [:]
     private var requiredEntitlementIdentifierByVC: [PaywallViewController: String] = [:]
     private var purchaseLogicBridgeByVC: [PaywallViewController: HybridPurchaseLogicBridge] = [:]
+    internal var delegateByVC: [PaywallViewController: PaywallViewControllerDelegateWrapper] = [:]
 
     private static var pendingPurchaseInitiatedCallbacks: [String: (Bool) -> Void] = [:]
 
@@ -186,9 +187,25 @@ import UIKit
     public func presentPaywall(options: [String: Any],
                                purchaseLogicBridge: HybridPurchaseLogicBridge?,
                                paywallResultHandler: @escaping (String) -> Void) {
+        self.presentPaywall(options: options,
+                            purchaseLogicBridge: purchaseLogicBridge,
+                            delegate: nil,
+                            paywallResultHandler: paywallResultHandler)
+    }
+
+    /// Presents a paywall whose events go to `delegate` rather than the proxy-wide ``delegate``.
+    ///
+    /// - Parameter delegate: strongly retained until this presentation is dismissed, so it must
+    /// not retain this ``PaywallProxy``.
+    @objc
+    public func presentPaywall(options: [String: Any],
+                               purchaseLogicBridge: HybridPurchaseLogicBridge?,
+                               delegate: PaywallViewControllerDelegateWrapper?,
+                               paywallResultHandler: @escaping (String) -> Void) {
         let params = PaywallPresentationParams(options: options, content: createContent(from: options))
         self.privatePresentPaywall(params: params,
                                    purchaseLogicBridge: purchaseLogicBridge,
+                                   delegate: delegate,
                                    paywallResultHandler: paywallResultHandler)
     }
 
@@ -198,6 +215,19 @@ import UIKit
     @objc
     public func presentPaywallIfNeeded(options: [String: Any],
                                        purchaseLogicBridge: HybridPurchaseLogicBridge?,
+                                       paywallResultHandler: @escaping (String) -> Void) {
+        self.presentPaywallIfNeeded(options: options,
+                                    purchaseLogicBridge: purchaseLogicBridge,
+                                    delegate: nil,
+                                    paywallResultHandler: paywallResultHandler)
+    }
+
+    /// See ``presentPaywall(options:purchaseLogicBridge:delegate:paywallResultHandler:)`` for the
+    /// ownership rules that apply to `delegate`.
+    @objc
+    public func presentPaywallIfNeeded(options: [String: Any],
+                                       purchaseLogicBridge: HybridPurchaseLogicBridge?,
+                                       delegate: PaywallViewControllerDelegateWrapper?,
                                        paywallResultHandler: @escaping (String) -> Void) {
         guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
             print("Error: missing required entitlement identifier.")
@@ -213,6 +243,7 @@ import UIKit
                 if shouldDisplay {
                     self.privatePresentPaywall(params: params,
                                                purchaseLogicBridge: purchaseLogicBridge,
+                                               delegate: delegate,
                                                requiredEntitlementIdentifier: requiredEntitlementIdentifier,
                                                paywallResultHandler: paywallResultHandler)
                 } else {
@@ -226,6 +257,7 @@ import UIKit
 
     private func privatePresentPaywall(params: PaywallPresentationParams,
                                        purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
+                                       delegate: PaywallViewControllerDelegateWrapper? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
@@ -285,6 +317,10 @@ import UIKit
             self.purchaseLogicBridgeByVC[controller] = purchaseLogicBridge
         }
 
+        if let delegate {
+            self.delegateByVC[controller] = delegate
+        }
+
         if let requiredEntitlementIdentifier {
             self.requiredEntitlementIdentifierByVC[controller] = requiredEntitlementIdentifier
         }
@@ -319,9 +355,14 @@ import UIKit
 
     private func createDismissHandler() -> (PaywallViewController) -> Void {
         return { [weak self] controller in
-            guard let delegate = self?.delegate else { return }
+            guard let delegate = self?.resolvedDelegate(for: controller) else { return }
             delegate.paywallViewControllerRequestedDismissal?(controller)
         }
+    }
+
+    @nonobjc
+    private func resolvedDelegate(for controller: PaywallViewController) -> PaywallViewControllerDelegateWrapper? {
+        self.delegateByVC[controller] ?? self.delegate
     }
     
     private func createContent(from options: [String: Any]) -> Content {
@@ -423,61 +464,66 @@ import UIKit
 extension PaywallProxy: PaywallViewControllerDelegate {
 
     public func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerDidStartPurchase?(controller)
+        self.resolvedDelegate(for: controller)?.paywallViewControllerDidStartPurchase?(controller)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didStartPurchaseWith package: Package) {
-        self.delegate?.paywallViewController?(controller,
-                                              didStartPurchaseWith: package.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didStartPurchaseWith: package.dictionary)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .purchased
-        self.delegate?.paywallViewController?(controller, didFinishPurchasingWith: customerInfo.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didFinishPurchasingWith: customerInfo.dictionary)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
-        self.delegate?.paywallViewController?(controller,
-                                              didFinishPurchasingWith: customerInfo.dictionary,
-                                              transaction: transaction?.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller,
+                                    didFinishPurchasingWith: customerInfo.dictionary,
+                                    transaction: transaction?.dictionary)
     }
 
     public func paywallViewControllerDidCancelPurchase(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerDidCancelPurchase?(controller)
+        self.resolvedDelegate(for: controller)?.paywallViewControllerDidCancelPurchase?(controller)
     }
 
     public func paywallViewControllerDidOpenWebCheckout(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerDidOpenWebCheckout?(controller)
+        self.resolvedDelegate(for: controller)?.paywallViewControllerDidOpenWebCheckout?(controller)
     }
 
     public func paywallViewController(_ controller: PaywallViewController, didOpenURL url: URL) {
-        self.delegate?.paywallViewController?(controller, didOpenURL: url.absoluteString)
+        self.resolvedDelegate(for: controller)?.paywallViewController?(controller, didOpenURL: url.absoluteString)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didTrackInteraction event: PaywallInteractionEvent) {
-        self.delegate?.paywallViewController?(controller, didTrackInteraction: event.rawProperties)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didTrackInteraction: event.rawProperties)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFailPurchasingWith error: NSError) {
         let errorContainer = ErrorContainer(error: error, extraPayload: [:])
-        self.delegate?.paywallViewController?(controller, didFailPurchasingWith: errorContainer.info)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didFailPurchasingWith: errorContainer.info)
     }
 
     public func paywallViewControllerDidStartRestore(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerDidStartRestore?(controller)
+        self.resolvedDelegate(for: controller)?.paywallViewControllerDidStartRestore?(controller)
         
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishRestoringWith customerInfo: CustomerInfo) {
         self.resultByVC[controller]?.1 = .restored
-        self.delegate?.paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didFinishRestoringWith: customerInfo.dictionary)
 
         Purchases.shared.getCustomerInfo { customerInfo, error in
             if let customerInfo,
@@ -491,20 +537,22 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFailRestoringWith error: NSError) {
         let errorContainer = ErrorContainer(error: error, extraPayload: [:])
-        self.delegate?.paywallViewController?(controller, didFailRestoringWith: errorContainer.info)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller, didFailRestoringWith: errorContainer.info)
     }
 
     public func paywallViewControllerWasDismissed(_ controller: PaywallViewController) {
-        self.delegate?.paywallViewControllerWasDismissed?(controller)
+        self.resolvedDelegate(for: controller)?.paywallViewControllerWasDismissed?(controller)
         self.requiredEntitlementIdentifierByVC.removeValue(forKey: controller)
         self.purchaseLogicBridgeByVC.removeValue(forKey: controller)?.cancelPending()
+        self.delegateByVC.removeValue(forKey: controller)
         guard let (paywallResultHandler, result) = self.resultByVC.removeValue(forKey: controller) else { return }
         paywallResultHandler(result.name)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       didChangeSizeTo size: CGSize) {
-        self.delegate?.paywallViewController?(controller, didChangeSizeTo: size)
+        self.resolvedDelegate(for: controller)?.paywallViewController?(controller, didChangeSizeTo: size)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
@@ -512,14 +560,17 @@ extension PaywallProxy: PaywallViewControllerDelegate {
                                       resume: @escaping (Bool) -> Void) {
         let requestId = UUID().uuidString
         Self.pendingPurchaseInitiatedCallbacks[requestId] = resume
-        self.delegate?.paywallViewController?(controller,
-                                              didInitiatePurchaseWith: package.dictionary,
-                                              requestId: requestId)
+        self.resolvedDelegate(for: controller)?
+            .paywallViewController?(controller,
+                                    didInitiatePurchaseWith: package.dictionary,
+                                    requestId: requestId)
             ?? Self.resumePurchasePackageInitiated(requestId: requestId, shouldProceed: true)
     }
 
     public func paywallViewController(_ controller: PaywallViewController,
                                       willPresentExitOfferController exitOfferController: PaywallViewController) {
+        let eventDelegate = self.resolvedDelegate(for: controller)
+
         // Transfer result tracking from main paywall to exit offer controller.
         // This ensures the paywallResultHandler is called when the exit offer is dismissed.
         if let tracked = self.resultByVC.removeValue(forKey: controller) {
@@ -531,8 +582,12 @@ extension PaywallProxy: PaywallViewControllerDelegate {
         if let bridge = self.purchaseLogicBridgeByVC.removeValue(forKey: controller) {
             self.purchaseLogicBridgeByVC[exitOfferController] = bridge
         }
+        if let presentationDelegate = self.delegateByVC.removeValue(forKey: controller) {
+            self.delegateByVC[exitOfferController] = presentationDelegate
+        }
 
-        self.delegate?.paywallViewController?(controller, willPresentExitOfferController: exitOfferController)
+        eventDelegate?.paywallViewController?(controller,
+                                              willPresentExitOfferController: exitOfferController)
     }
 
 }

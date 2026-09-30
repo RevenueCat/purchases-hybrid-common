@@ -42,11 +42,9 @@ function mapPackage(pkg: Package): Record<string, unknown> {
   return {
     identifier: pkg.identifier,
     packageType: mapPackageType(pkg.packageType),
-    product: mapProduct(pkg.webBillingProduct),
-    offeringIdentifier: pkg.webBillingProduct.presentedOfferingContext.offeringIdentifier,
-    presentedOfferingContext: mapPresentedOfferingContext(
-      pkg.webBillingProduct.presentedOfferingContext,
-    ),
+    product: mapProduct(pkg.product),
+    offeringIdentifier: pkg.product.presentedOfferingContext.offeringIdentifier,
+    presentedOfferingContext: mapPresentedOfferingContext(pkg.product.presentedOfferingContext),
     webCheckoutUrl: null,
   };
 }

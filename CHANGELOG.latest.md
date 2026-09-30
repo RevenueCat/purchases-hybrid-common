@@ -1,7 +1,6 @@
-## RevenueCat SDK
-### ✨ New Features
-* feat: Normalize hybrid bridge errors to the PurchasesError interface (#1838) via Álvaro Brey (@AlvaroBrey)
+## RevenueCatUI SDK
+### 🐞 Bugfixes
+* fix(paywalls): stop retaining listeners when presenting while not started (#1921) via Álvaro Brey (@AlvaroBrey)
 
 ### 🔄 Other Changes
-* Bump lefthook from 2.1.12 to 2.1.14 (#1900) via dependabot[bot] (@dependabot[bot])
-* Bump fastlane from 2.239.0 to 2.240.0 (#1901) via dependabot[bot] (@dependabot[bot])
+* ci: keep at most one open automatic PHC release PR (#1917) via Álvaro Brey (@AlvaroBrey)
