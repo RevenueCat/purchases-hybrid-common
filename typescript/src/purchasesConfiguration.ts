@@ -102,12 +102,12 @@ export interface PurchasesConfiguration {
   /**
    * iOS-only, will be ignored for Android.
    *
-   * Whether a web purchase button that opens its link in the external browser takes part in Apple's
-   * external purchase custom link programme: the customer is shown Apple's disclosure notice, and the
+   * Whether a web purchase button that opens its link in the external browser goes through Apple's
+   * external purchase custom link flow: the customer is shown Apple's disclosure notice, and the
    * purchase is reported to Apple.
    *
-   * Disabled by default. Enabling it requires the app to be enrolled in the programme and to carry
-   * Apple's external purchase link entitlement, otherwise no purchase can be made outside the App Store.
+   * Disabled by default. Enabling it requires the app to carry Apple's external purchase link
+   * entitlement, otherwise no purchase can be made outside the App Store.
    *
    * @experimental This API is experimental and may be changed or removed in a future release.
    */

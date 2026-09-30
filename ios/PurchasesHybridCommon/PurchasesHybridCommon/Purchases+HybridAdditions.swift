@@ -12,7 +12,7 @@ import Foundation
 @objc public extension Purchases {
 
     /// - Parameter useExternalPurchaseCustomLinks: Experimental. Whether a web purchase button that opens its link
-    /// in the external browser takes part in Apple's external purchase custom link programme.
+    /// in the external browser goes through Apple's external purchase custom link flow.
     /// - Parameter enableExternalPurchasesInSimulator: Experimental. Whether the simulator offers external purchases
     /// in any storefront. Has no effect on a physical device, nor while `useExternalPurchaseCustomLinks` is `false`.
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
