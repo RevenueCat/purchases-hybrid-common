@@ -87,6 +87,9 @@ export interface IntroEligibility {
 }
 
 // @public
+export function isPurchasesError(error: unknown): error is PurchasesError;
+
+// @public
 export enum LOG_LEVEL {
     // (undocumented)
     DEBUG = "DEBUG",
