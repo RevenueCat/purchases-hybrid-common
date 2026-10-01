@@ -146,6 +146,68 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                     expect(mockPurchases.invokedPurchaseProductCount) == 1
                 }
 
+                // `StoreProduct.installmentsInfo` is only available from iOS 26.4, so this test only registers there.
+                if #available(iOS 26.4, *) {
+                    it("purchases a billing plan product by its compound identifier") {
+                        let installmentsInfo = InstallmentsInfo(
+                            commitmentInstallmentsCount: 12,
+                            commitmentInstallmentPeriod: SubscriptionPeriod(value: 1, unit: .month),
+                            installmentBillingPrice: 10,
+                            installmentBillingDisplayPrice: "$10.00",
+                            commitmentTotalPeriod: SubscriptionPeriod(value: 1, unit: .year),
+                            commitmentTotalPrice: 120,
+                            commitmentTotalDisplayPrice: "$120.00",
+                            billingPlanType: .monthly
+                        )
+                        let testProduct = TestStoreProduct(
+                            localizedTitle: "Annual, billed monthly",
+                            price: 120,
+                            currencyCode: "USD",
+                            localizedPriceString: "$120.00",
+                            productIdentifier: "annual",
+                            productType: .autoRenewableSubscription,
+                            localizedDescription: "An annual subscription billed monthly",
+                            locale: Locale(identifier: "en_US"),
+                            installmentsInfo: installmentsInfo
+                        )
+                        let storeProduct = testProduct.toStoreProduct()
+
+                        let mockTransaction = StoreTransaction(
+                            MockStoreTransaction(
+                                productIdentifier: "annual",
+                                purchaseDate: Date()
+                            )
+                        )
+
+                        // The app purchases by the identifier it was handed: `{productIdentifier}:{plan}`.
+                        let options: [String: Any] = ["productIdentifier": "annual:monthly"]
+                        var receivedResult: [String: Any]?
+                        var receivedError: ErrorContainer?
+
+                        waitUntil(timeout: .seconds(2)) { done in
+                            CommonFunctionality.purchase(options: options) { result, error in
+                                receivedResult = result
+                                receivedError = error
+                                done()
+                            }
+
+                            mockPurchases.invokedProductsParameters?.completion([storeProduct])
+
+                            DispatchQueue.main.async {
+                                if let purchaseParams = mockPurchases.invokedPurchaseProductParameters {
+                                    purchaseParams.completion(mockTransaction, mockCustomerInfo, nil, false)
+                                }
+                            }
+                        }
+
+                        expect(mockPurchases.invokedProductsParameters?.productIdentifiers) == ["annual:monthly"]
+                        expect(receivedError).to(beNil())
+                        expect(receivedResult).toNot(beNil())
+                        expect(mockPurchases.invokedPurchaseProductCount) == 1
+                        expect(mockPurchases.invokedPurchaseProductParameters?.product.productIdentifier) == "annual"
+                    }
+                }
+
                 it("successfully purchases a package") {
                     let testProduct = TestStoreProduct(
                         localizedTitle: "Monthly Package",

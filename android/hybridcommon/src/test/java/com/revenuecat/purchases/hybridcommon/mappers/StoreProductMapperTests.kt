@@ -240,7 +240,15 @@ internal class StoreProductMapperTests {
     @Test
     fun `map has correct size`() {
         TestUtilities.stubStoreProduct("monthly_product").map().let {
-            assertThat(it.size).isEqualTo(21)
+            assertThat(it.size).isEqualTo(23)
+        }
+    }
+
+    @Test
+    fun `maps iOS-only billing plan fields as null`() {
+        TestUtilities.stubStoreProduct("monthly_product").map().let {
+            assertThat(it).containsEntry("productPlanIdentifier", null)
+            assertThat(it).containsEntry("installmentsInfo", null)
         }
     }
 

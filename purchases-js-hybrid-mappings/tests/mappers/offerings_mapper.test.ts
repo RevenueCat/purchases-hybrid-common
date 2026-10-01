@@ -193,6 +193,8 @@ describe('mapOfferings', () => {
       subscriptionOptions: [expectedAnnualOption],
       description: 'A $rc_annual product with all features',
       discounts: null,
+      installmentsInfo: null,
+      productPlanIdentifier: null,
       identifier: 'product_annual_pkg',
       introPrice: {
         cycles: 1,
@@ -436,6 +438,8 @@ describe('mapOfferings', () => {
       defaultOption: null,
       description: 'A $rc_lifetime product with all features',
       discounts: null,
+      installmentsInfo: null,
+      productPlanIdentifier: null,
       identifier: 'product_lifetime_pkg',
       introPrice: null,
       presentedOfferingContext: {

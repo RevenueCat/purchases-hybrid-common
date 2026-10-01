@@ -61,6 +61,9 @@ fun StoreProduct.map(): Map<String, Any?> =
         "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
         "presentedOfferingIdentifier" to presentedOfferingContext?.offeringIdentifier,
         "presentedOfferingContext" to presentedOfferingContext?.map(),
+        // iOS-only (Apple billing plans), null on Android
+        "productPlanIdentifier" to null,
+        "installmentsInfo" to null,
     )
 
 private fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }

@@ -1128,7 +1128,9 @@ private extension CommonFunctionality {
 
     static func product(with identifier: String, completion: @escaping (StoreProduct?) -> Void) {
         Self.sharedInstance.getProducts([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier })
+            // Match on the compound identifier: a billing plan product is requested as `{productIdentifier}:monthly`,
+            // but its `productIdentifier` is the base StoreKit product's, so matching on that never finds it.
+            completion(products.first { $0.rc_compoundProductIdentifier == identifier })
         }
     }
 
