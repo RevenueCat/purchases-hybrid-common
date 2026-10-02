@@ -862,6 +862,40 @@ import StoreKit
         Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
     }
 
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackRewardedAdPromptShown(_ adData: [String: Any]) {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adUnitId = adData["adUnitId"] as? String else {
+            NSLog("[PurchasesHybridCommon] trackRewardedAdPromptShown: Missing required parameters - mediatorName or adUnitId")
+            return
+        }
+
+        let promptShown = AdRewardPromptShown(
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId
+        )
+
+        Purchases.shared.adTracker.trackRewardedAdPromptShown(promptShown)
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackRewardedAdPromptAccepted(_ adData: [String: Any]) {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adUnitId = adData["adUnitId"] as? String else {
+            NSLog("[PurchasesHybridCommon] trackRewardedAdPromptAccepted: Missing required parameters - mediatorName or adUnitId")
+            return
+        }
+
+        let promptAccepted = AdRewardPromptAccepted(
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId
+        )
+
+        Purchases.shared.adTracker.trackRewardedAdPromptAccepted(promptAccepted)
+    }
+
 }
 
 // MARK: - Custom Paywall Tracking
