@@ -44,6 +44,13 @@ import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
+import com.revenuecat.purchases.hybridcommon.trackAdDisplayed
+import com.revenuecat.purchases.hybridcommon.trackAdFailedToLoad
+import com.revenuecat.purchases.hybridcommon.trackAdLoaded
+import com.revenuecat.purchases.hybridcommon.trackAdOpened
+import com.revenuecat.purchases.hybridcommon.trackAdRevenue
+import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptAccepted
+import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptShown
 import com.revenuecat.purchases.models.InAppMessageType
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
@@ -521,5 +528,15 @@ private class CommonApiTests {
     ) {
         pollRewardVerification(clientTransactionId, onResult)
         pollRewardVerification(clientTransactionId, onResult, trackingMetadata)
+    }
+
+    private fun checkAdTracking(adData: Map<String, Any?>) {
+        trackAdDisplayed(adData)
+        trackAdOpened(adData)
+        trackAdRevenue(adData)
+        trackAdLoaded(adData)
+        trackAdFailedToLoad(adData)
+        trackRewardedAdPromptShown(adData)
+        trackRewardedAdPromptAccepted(adData)
     }
 }
