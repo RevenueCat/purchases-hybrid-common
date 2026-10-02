@@ -256,6 +256,8 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality trackAdRevenue:adData];
         [RCCommonFunctionality trackAdLoaded:adData];
         [RCCommonFunctionality trackAdFailedToLoad:adData];
+        [RCCommonFunctionality trackRewardedAdPromptShown:adData];
+        [RCCommonFunctionality trackRewardedAdPromptAccepted:adData];
     }
 
     // Test Custom Paywall Tracking
