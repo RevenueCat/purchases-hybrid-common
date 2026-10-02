@@ -80,6 +80,35 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
         await self.assertSnapshot(offerings)
     }
 
+    func testCanGetOffering() async throws {
+        let offerings = try await CommonFunctionality.offerings()
+        let currentOffering = try XCTUnwrap(offerings["current"] as? [String: Any])
+        let currentIdentifier = try XCTUnwrap(currentOffering["identifier"] as? String)
+
+        let offering = try await CommonFunctionality.offering(forIdentifier: currentIdentifier)
+
+        // Must match `current` exactly, targeting context included, not just the identifier.
+        expect(NSDictionary(dictionary: try XCTUnwrap(offering))) == NSDictionary(dictionary: currentOffering)
+    }
+
+    func testGetOfferingReturnsNilForUnknownIdentifier() async throws {
+        let offering = try await CommonFunctionality.offering(forIdentifier: "doesnt exist")
+
+        expect(offering).to(beNil())
+    }
+
+    func testGetOfferingMatchesTheCatalogEntryForNonCurrentOfferings() async throws {
+        let offerings = try await CommonFunctionality.offerings()
+        let all = try XCTUnwrap(offerings["all"] as? [String: [String: Any]])
+        let currentIdentifier = (offerings["current"] as? [String: Any])?["identifier"] as? String
+
+        for (identifier, expected) in all where identifier != currentIdentifier {
+            let offering = try await CommonFunctionality.offering(forIdentifier: identifier)
+
+            expect(NSDictionary(dictionary: try XCTUnwrap(offering))) == NSDictionary(dictionary: expected)
+        }
+    }
+
     func testCanGetCurrentOfferingForPlacement() async throws {
         let onboardingOffering = try await CommonFunctionality.currentOffering(forPlacement: "onboarding")
         let settingsOffering = try await CommonFunctionality.currentOffering(forPlacement: "settings")
