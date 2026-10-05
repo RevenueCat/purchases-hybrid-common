@@ -38,9 +38,10 @@ target 'ObjCAPITester' do
   pod 'RevenueCatUI', '5.92.0'
 end
 
-# Xcode 27 enforces a minimum deployment target of iOS 15, and CocoaPods derives each pod
-# target's deployment target from the `platform` declared above. Scoped to the Xcode 27 SDKs
-# so that older Xcode versions keep building the pods against the platforms declared above.
+# Xcode 27 enforces a minimum deployment target of iOS 15. CocoaPods takes each pod target's
+# deployment target from the podspec, not from the `platform` declared above, so pods that
+# declare less than iOS 15 need to be raised here. Resource bundle targets need this too.
+# Scoped to the Xcode 27 SDKs so older Xcode versions keep building the pods unchanged.
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
