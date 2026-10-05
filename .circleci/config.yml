@@ -71,6 +71,15 @@ commands:
           command: bundle exec pod install --repo-update
           working_directory: ios/PurchasesHybridCommon
 
+  # `pod lib lint` builds a project it generates from the podspec, so the deployment
+  # targets it uses can only be raised through a global xcconfig. Only needed on jobs
+  # running Xcode 27, which rejects the minimums the podspecs declare.
+  configure-xcode27-validation:
+    steps:
+      - run:
+          name: Use Xcode 27 deployment targets for build validation
+          command: printf 'export XCODE_XCCONFIG_FILE=%q\n' "$PWD/.circleci/xcode27-validation.xcconfig" >> "$BASH_ENV"
+
 jobs:
   test-ios-16:
     <<: *base-ios-job
@@ -150,6 +159,30 @@ jobs:
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 17 (26.2)
+      - store_test_results:
+          path: ios/PurchasesHybridCommon/test_output
+      - store_artifacts:
+          path: ios/PurchasesHybridCommon/test_output
+          destination: scan-output
+
+  test-ios-27:
+    <<: *base-ios-job
+    parameters:
+      xcode_version:
+        type: string
+        default: "27.0.0"
+    steps:
+      - checkout
+      - revenuecat/install-gem-mac-dependencies:
+          cache-version: v1
+      - install-cocoapods
+      - run:
+          name: Run ios tests
+          command: fastlane scan
+          working_directory: ios/PurchasesHybridCommon
+          environment:
+            SCAN_SCHEME: PurchasesHybridCommon
+            SCAN_DEVICE: iPhone 17 (27.0)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -486,8 +519,13 @@ jobs:
 
   check-pods:
     <<: *base-ios-job
+    parameters:
+      xcode_version:
+        type: string
+        default: "27.0.0"
     steps:
       - checkout
+      - configure-xcode27-validation
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
       - revenuecat/trust-github-key
@@ -523,6 +561,7 @@ workflows:
       - test-ios-17
       - test-ios-18
       - test-ios-26
+      - test-ios-27
       - check-pods
       - integration-test-ios
       - test-android
@@ -556,6 +595,7 @@ workflows:
             - test-ios-17
             - test-ios-18
             - test-ios-26
+            - test-ios-27
             - check-pods
             - integration-test-ios
             - test-android
