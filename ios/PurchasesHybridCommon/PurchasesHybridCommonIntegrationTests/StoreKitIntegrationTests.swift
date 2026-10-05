@@ -49,6 +49,7 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
         )
         var unwrappedDict = try XCTUnwrap(dict)
         removeDates(&unwrappedDict)
+        removeTransactionIdentifiers(&unwrappedDict)
         await self.assertSnapshot(unwrappedDict)
     }
 
@@ -93,6 +94,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     func testCanPurchasePackage() async throws {
         var data = try await self.purchaseMonthlyOffering()
         removeDates(&data)
+        removeTransactionIdentifiers(&data)
 
         await self.assertSnapshot(data)
     }
@@ -100,12 +102,18 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     func testCanPurchaseProduct() async throws {
         var data = try await self.purchase(productIdentifier: Self.productIdentifier)
         removeDates(&data)
+        removeTransactionIdentifiers(&data)
 
         await self.assertSnapshot(data)
     }
 
     @available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, visionOS 1.0, *)
     func testPurchaseFailuresAreReportedCorrectly() async throws {
+        try XCTSkipIf(
+            ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 27,
+            "StoreKitTest on iOS 27 reports a simulated .purchaseNotAllowed error as an unknown error"
+        )
+
         try await self.testSession.setSimulatedError(.purchase(.purchaseNotAllowed), forAPI: .purchase)
 
         do {
@@ -256,6 +264,17 @@ private func removeDates(_ data: inout [String: Any]) {
             "date",
             "firstSeen",
             "originalAppUserId"
+        ]
+    )
+}
+
+/// StoreKitTest on iOS 27 doesn't restart transaction identifiers at 0 when the session is reset.
+private func removeTransactionIdentifiers(_ data: inout [String: Any]) {
+    removeNonConstantData(
+        from: &data,
+        keysToRemove: [
+            "transactionId",
+            "revenueCatId"
         ]
     )
 }
