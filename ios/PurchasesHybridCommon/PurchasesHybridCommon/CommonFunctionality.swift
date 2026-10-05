@@ -8,7 +8,7 @@
 
 import Foundation
 import StoreKit
-@_spi(Internal) @_spi(Experimental) import RevenueCat
+@_spi(Internal) import RevenueCat
 
 
 @objc(RCCommonFunctionality) public class CommonFunctionality: NSObject {
@@ -848,7 +848,7 @@ import StoreKit
         }
 
         let placement = adData["placement"] as? String
-        let mediatorErrorCode = adData["mediatorErrorCode"] as? NSNumber
+        let mediatorErrorCode = (adData["mediatorErrorCode"] as? NSNumber)?.intValue
         let mediatorName = MediatorName(rawValue: mediatorNameString)
         let adFormat = AdFormat(rawValue: adFormatString)
         let adFailedToLoad = AdFailedToLoad(
@@ -860,6 +860,40 @@ import StoreKit
         )
 
         Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackRewardedAdPromptShown(_ adData: [String: Any]) {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adUnitId = adData["adUnitId"] as? String else {
+            NSLog("[PurchasesHybridCommon] trackRewardedAdPromptShown: Missing required parameters - mediatorName or adUnitId")
+            return
+        }
+
+        let promptShown = AdRewardPromptShown(
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId
+        )
+
+        Purchases.shared.adTracker.trackRewardedAdPromptShown(promptShown)
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackRewardedAdPromptAccepted(_ adData: [String: Any]) {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adUnitId = adData["adUnitId"] as? String else {
+            NSLog("[PurchasesHybridCommon] trackRewardedAdPromptAccepted: Missing required parameters - mediatorName or adUnitId")
+            return
+        }
+
+        let promptAccepted = AdRewardPromptAccepted(
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId
+        )
+
+        Purchases.shared.adTracker.trackRewardedAdPromptAccepted(promptAccepted)
     }
 
 }
@@ -1266,7 +1300,12 @@ private extension CommonFunctionality {
 @objc public extension CommonFunctionality {
 
     @objc(generateRewardVerificationTokenWithImpressionId:)
-    static func generateRewardVerificationToken(impressionId: String) -> [String: Any] {
+    static func generateRewardVerificationToken(impressionId: String) -> [String: Any]? {
+        guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
+            NSLog("[PurchasesHybridCommon] generateRewardVerificationToken: Reward verification requires " +
+                  "iOS 15.0 or newer")
+            return nil
+        }
         return Purchases.shared.generateRewardVerificationToken(impressionId: impressionId).rc_dictionary
     }
 
@@ -1284,6 +1323,10 @@ private extension CommonFunctionality {
         trackingMetadata: [String: Any]? = nil,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
+        guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
+            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            return
+        }
         let metadata = trackingMetadata.flatMap { data -> RewardedAdTrackingMetadata? in
             guard let mediatorNameString = data["mediatorName"] as? String,
                   let adFormatString = data["adFormat"] as? String,

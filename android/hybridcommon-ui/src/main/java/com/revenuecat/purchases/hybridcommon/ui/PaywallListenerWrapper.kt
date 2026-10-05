@@ -6,6 +6,7 @@ import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.models.StoreTransaction
+import com.revenuecat.purchases.ui.revenuecatui.PaywallInteractionEvent
 import com.revenuecat.purchases.ui.revenuecatui.PaywallListener
 import com.revenuecat.purchases.ui.revenuecatui.utils.Resumable
 import java.util.UUID
@@ -57,9 +58,14 @@ abstract class PaywallListenerWrapper : PaywallListener {
         this.onRestoreError(error = error.map().info)
     }
 
+    override fun onInteraction(event: PaywallInteractionEvent) {
+        this.onInteraction(event.rawProperties)
+    }
+
     abstract fun onPurchaseStarted(rcPackage: Map<String, Any?>)
     abstract fun onPurchaseCompleted(customerInfo: Map<String, Any?>, storeTransaction: Map<String, Any?>)
     abstract fun onPurchaseError(error: Map<String, Any?>)
     abstract fun onRestoreCompleted(customerInfo: Map<String, Any?>)
     abstract fun onRestoreError(error: Map<String, Any?>)
+    abstract fun onInteraction(event: Map<String, Any>)
 }

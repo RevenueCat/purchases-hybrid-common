@@ -3,7 +3,6 @@ package com.revenuecat.apitests.kotlin
 import android.app.Activity
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
@@ -45,6 +44,13 @@ import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
 import com.revenuecat.purchases.hybridcommon.syncPurchases
+import com.revenuecat.purchases.hybridcommon.trackAdDisplayed
+import com.revenuecat.purchases.hybridcommon.trackAdFailedToLoad
+import com.revenuecat.purchases.hybridcommon.trackAdLoaded
+import com.revenuecat.purchases.hybridcommon.trackAdOpened
+import com.revenuecat.purchases.hybridcommon.trackAdRevenue
+import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptAccepted
+import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptShown
 import com.revenuecat.purchases.models.InAppMessageType
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
@@ -511,12 +517,10 @@ private class CommonApiTests {
         setAppstackAttributionParams(data, onResult)
     }
 
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     private fun checkGenerateRewardVerificationToken(impressionId: String) {
         val token: Map<String, Any> = generateRewardVerificationToken(impressionId)
     }
 
-    @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
     private fun checkPollRewardVerification(
         clientTransactionId: String,
         onResult: OnResult,
@@ -524,5 +528,15 @@ private class CommonApiTests {
     ) {
         pollRewardVerification(clientTransactionId, onResult)
         pollRewardVerification(clientTransactionId, onResult, trackingMetadata)
+    }
+
+    private fun checkAdTracking(adData: Map<String, Any?>) {
+        trackAdDisplayed(adData)
+        trackAdOpened(adData)
+        trackAdRevenue(adData)
+        trackAdLoaded(adData)
+        trackAdFailedToLoad(adData)
+        trackRewardedAdPromptShown(adData)
+        trackRewardedAdPromptAccepted(adData)
     }
 }

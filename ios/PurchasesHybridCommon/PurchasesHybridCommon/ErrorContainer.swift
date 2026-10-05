@@ -17,7 +17,7 @@ import RevenueCat
     @objc public let error: NSError
 
     @objc public init(error: Error, extraPayload: [String: Any]) {
-        var nsError = error as NSError
+        let nsError = error as NSError
 
         var info = extraPayload
         info["code"] = nsError.code
@@ -35,24 +35,12 @@ import RevenueCat
             ]
         }
 
-        // todo: remove "readable_error_code" and instead send whole user info instead
-        // also: code name is already exposed as error.code
-        if let readableErrorCode = nsError.userInfo["readable_error_code"] {
+        // Only ErrorUtils sets "readable_error_code". Errors built from a bare ErrorCode or
+        // from NSError(domain: ErrorCode.errorDomain, code:) carry the code but not the name.
+        if let readableErrorCode = nsError.userInfo["readable_error_code"]
+            ?? ErrorContainer.codeName(for: nsError) {
             info["readableErrorCode"] = readableErrorCode
             info["readable_error_code"] = readableErrorCode
-
-            // Reason behind this is because React Native doesn't let reject the promises passing more information
-            // besides passing the original error, but it passes the extra userInfo from that error to the JS layer.
-            // Since we want to pass both readable_error_code (deprecated) and readableErrorCode when building the
-            // error JS object, and the error coming from purchases-ios only has the snake case version, we need to
-            // add readableErrorCode to the userInfo of the error. In a future project, we will remove the
-            // deprecated version and also improve error handling so it's easier to detect which errors come
-            // from RevenueCat and which don't
-
-            var fixedUserInfo = nsError.userInfo
-            fixedUserInfo["readableErrorCode"] = readableErrorCode
-
-            nsError = NSError(domain: nsError.domain, code: nsError.code, userInfo: fixedUserInfo)
         }
 
         self.code = nsError.code
@@ -60,6 +48,15 @@ import RevenueCat
         self.error = nsError
 
         self.info = info
+    }
+
+    // ErrorCode.codeName is internal to purchases-ios; its CustomNSError conformance
+    // exposes the same value under "rc_code_name".
+    private static func codeName(for error: NSError) -> Any? {
+        guard error.domain == ErrorCode.errorDomain, let code = ErrorCode(rawValue: error.code) else {
+            return nil
+        }
+        return code.errorUserInfo["rc_code_name"]
     }
 
     private static func findStoreKitErrorCodeIfAny(_ error: Error) -> NSError? {

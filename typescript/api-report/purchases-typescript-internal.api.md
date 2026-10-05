@@ -117,6 +117,9 @@ export type MakePurchaseResult = {
 };
 
 // @public
+export function normalizePurchasesError(error: unknown): unknown;
+
+// @public
 export enum OFFER_PAYMENT_MODE {
     DISCOUNTED_RECURRING_PAYMENT = "DISCOUNTED_RECURRING_PAYMENT",
     FREE_TRIAL = "FREE_TRIAL",
@@ -140,12 +143,83 @@ export enum PACKAGE_TYPE {
 }
 
 // @public
+export const PAYWALL_COMPONENT_TYPES: {
+    readonly TAB: "tab";
+    readonly SWITCH: "switch";
+    readonly CAROUSEL: "carousel";
+    readonly BUTTON: "button";
+    readonly TEXT: "text";
+    readonly PACKAGE: "package";
+    readonly PACKAGE_SELECTION_SHEET: "package_selection_sheet";
+    readonly PURCHASE_BUTTON: "purchase_button";
+    readonly WALLET_BUTTON: "wallet_button";
+};
+
+// @public
 export enum PAYWALL_RESULT {
     CANCELLED = "CANCELLED",
     ERROR = "ERROR",
     NOT_PRESENTED = "NOT_PRESENTED",
     PURCHASED = "PURCHASED",
     RESTORED = "RESTORED"
+}
+
+// @public
+export interface PaywallInteractionEvent {
+    // (undocumented)
+    readonly component_name?: string;
+    // (undocumented)
+    readonly component_type: string;
+    // (undocumented)
+    readonly component_url?: string;
+    // (undocumented)
+    readonly component_value: string;
+    // (undocumented)
+    readonly current_package_id?: string;
+    // (undocumented)
+    readonly current_product_id?: string;
+    // (undocumented)
+    readonly dark_mode?: boolean;
+    // (undocumented)
+    readonly default_index?: number;
+    // (undocumented)
+    readonly default_package_id?: string;
+    // (undocumented)
+    readonly default_product_id?: string;
+    // (undocumented)
+    readonly destination_context_name?: string;
+    // (undocumented)
+    readonly destination_index?: number;
+    // (undocumented)
+    readonly destination_package_id?: string;
+    // (undocumented)
+    readonly destination_product_id?: string;
+    // (undocumented)
+    readonly display_mode?: string;
+    // (undocumented)
+    readonly locale?: string;
+    // (undocumented)
+    readonly offering_id: string;
+    // (undocumented)
+    readonly origin_context_name?: string;
+    // (undocumented)
+    readonly origin_index?: number;
+    // (undocumented)
+    readonly origin_package_id?: string;
+    // (undocumented)
+    readonly origin_product_id?: string;
+    // (undocumented)
+    readonly paywall_id?: string;
+    // (undocumented)
+    readonly paywall_revision: number;
+    // (undocumented)
+    readonly resulting_package_id?: string;
+    // (undocumented)
+    readonly resulting_product_id?: string;
+    // (undocumented)
+    readonly session_id: string;
+    // (undocumented)
+    readonly timestamp: number;
 }
 
 // @public
@@ -342,6 +416,7 @@ export interface PurchasesConfiguration {
     appUserID?: string | null;
     automaticDeviceIdentifierCollectionEnabled?: boolean;
     diagnosticsEnabled?: boolean;
+    enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     preferredUILocaleOverride?: string;
@@ -349,6 +424,7 @@ export interface PurchasesConfiguration {
     shouldShowInAppMessagesAutomatically?: boolean;
     storeKitVersion?: STOREKIT_VERSION;
     useAmazon?: boolean;
+    useExternalPurchaseCustomLinks?: boolean;
     userDefaultsSuiteName?: string;
 }
 

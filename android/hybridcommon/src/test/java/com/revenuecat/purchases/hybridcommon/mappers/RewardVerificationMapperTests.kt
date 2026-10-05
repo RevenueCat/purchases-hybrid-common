@@ -1,6 +1,5 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.ads.rewardverification.RewardVerificationResult
 import com.revenuecat.purchases.ads.rewardverification.RewardVerificationToken
@@ -9,7 +8,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.Date
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 class RewardVerificationMapperTests {
 
     @Test

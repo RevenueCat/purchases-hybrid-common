@@ -1,3 +1,147 @@
+## 19.6.0
+## RevenueCat SDK
+### ✨ New Features
+* Bridge rewarded ad prompt shown and accepted (#1937) via Drago Crnjac (@popcorn)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.24.0 => 10.24.1 (#1935) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Add ad tracking functions to Android API tests (#1938) via Facundo Menzella (@facumenzella)
+
+## 19.5.0
+## RevenueCat SDK
+### ✨ New Features
+* Allow opting in to external purchase custom links (experimental) (#1915) via Antonio Pallares (@ajpallares)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.91.0 => 5.92.0 Android 10.23.4 => 10.24.0 JS 1.67.0 => 1.67.1 (#1933) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.23.3 => 10.23.4 JS 1.66.0 => 1.67.0 (#1931) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.65.0 => 1.66.0 (#1930) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.23.1 => 10.23.3 JS 1.64.0 => 1.65.0 (#1928) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.6.2 (#1926) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.23.0 => 10.23.1 (#1923) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.4.1
+## RevenueCatUI SDK
+### 🐞 Bugfixes
+* fix(paywalls): stop retaining listeners when presenting while not started (#1921) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* ci: keep at most one open automatic PHC release PR (#1917) via Álvaro Brey (@AlvaroBrey)
+
+## 19.4.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.90.2 => 5.91.0 Android 10.22.1 => 10.23.0 JS 1.63.1 => 1.64.0 (#1916) via RevenueCat Git Bot (@RCGitBot)
+
+## RevenueCatUI SDK
+### ✨ New Features
+* Support per-presentation delegates when presenting paywalls (#1911) via Álvaro Brey (@AlvaroBrey)
+
+## 19.3.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.90.1 => 5.90.2 (#1908) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane-plugin-revenuecat_internal from `fc64a1a` to `9f7a03e` (#1909) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane-plugin-revenuecat_internal from `6db1da0` to `fc64a1a` (#1906) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.240.0 to 2.240.1 (#1905) via dependabot[bot] (@dependabot[bot])
+
+## 19.3.0
+## RevenueCat SDK
+### ✨ New Features
+* feat: Normalize hybrid bridge errors to the PurchasesError interface (#1838) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Bump lefthook from 2.1.12 to 2.1.14 (#1900) via dependabot[bot] (@dependabot[bot])
+* Bump fastlane from 2.239.0 to 2.240.0 (#1901) via dependabot[bot] (@dependabot[bot])
+
+## 19.2.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.89.0 => 5.90.1 Android 10.22.0 => 10.22.1 JS 1.63.0 => 1.63.1 (#1898) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 10.21.1 => 10.22.0 JS 1.62.0 => 1.63.0 (#1896) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: approve the release hold automatically when the release PR is approved (#1894) via Álvaro Brey (@AlvaroBrey)
+
+## 19.1.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.60.1 => 1.62.0 (#1891) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.0.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.21.0 => 10.21.1 (#1888) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.60.0 => 1.60.1 (#1886) via RevenueCat Git Bot (@RCGitBot)
+* chore(ads): remove experimental opt-ins for ads apis (#1837) via Peter Porfy (@peterporfy)
+
+## RevenueCatUI SDK
+### 💥 Breaking Changes
+* feat(paywalls): Bridge onInteraction paywall callbacks (#1879) via Álvaro Brey (@AlvaroBrey)
+
+## 18.38.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix web purchase cancellation error mapping (#1635) via Josh Holtz (@joshdholtz)
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.59.0 => 1.60.0 (#1884) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.88.0 => 5.89.0 Android 10.20.0 => 10.21.0 (#1882) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fastlane from 2.238.0 to 2.239.0 (#1878) via dependabot[bot] (@dependabot[bot])
+
+## 18.37.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.58.0 => 1.59.0 (#1876) via RevenueCat Git Bot (@RCGitBot)
+
+## 18.36.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* PW-1363 | Fix numeric custom variables 0 and 1 rendering as booleans on iOS hybrid paywalls (#1874) via Facundo Menzella (@facumenzella)
+
+## 18.36.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.57.0 => 1.58.0 (#1871) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: bump external PR notifications workflow to v8 (#1870) via Álvaro Brey (@AlvaroBrey)
+* ci: notify external PRs feed on PRs from outside the org (#1869) via Álvaro Brey (@AlvaroBrey)
+* chore(ads): add ios availability check (#1868) via Peter Porfy (@peterporfy)
+
+## 18.36.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.57.0 => 1.58.0 (#1871) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: bump external PR notifications workflow to v8 (#1870) via Álvaro Brey (@AlvaroBrey)
+* ci: notify external PRs feed on PRs from outside the org (#1869) via Álvaro Brey (@AlvaroBrey)
+* chore(ads): add ios availability check (#1868) via Peter Porfy (@peterporfy)
+
+## 18.35.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.87.1 => 5.88.0 Android 10.19.1 => 10.20.0 JS 1.55.0 => 1.57.0 (#1866) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump browserslist from 4.28.4 to 4.28.8 in /purchases-js-hybrid-mappings (#1865) via dependabot[bot] (@dependabot[bot])
+* Bump fast-uri from 3.1.2 to 3.1.7 in /purchases-js-hybrid-mappings (#1862) via dependabot[bot] (@dependabot[bot])
+
+## 18.34.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.54.0 => 1.55.0 (#1856) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Bump fast-uri from 3.1.5 to 3.1.7 in /typescript (#1863) via dependabot[bot] (@dependabot[bot])
+* fix(ads): use the swift api for mediatorErrorCode (#1854) via Peter Porfy (@peterporfy)
+* Bump lefthook from 2.1.11 to 2.1.12 (#1858) via dependabot[bot] (@dependabot[bot])
+* fix: wait for pods to reach the CocoaPods CDN before triggering hybrid bumps (#1851) via Cesar de la Vega (@vegaro)
+
 ## 18.33.1
 ## RevenueCat SDK
 ### 📦 Dependency Updates

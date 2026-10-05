@@ -36,6 +36,8 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.events.types.AdRewardPromptAcceptedData
+import com.revenuecat.purchases.ads.events.types.AdRewardPromptShownData
 import com.revenuecat.purchases.ads.rewardverification.RewardedAdTrackingMetadata
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.galaxy.GalaxyBillingMode
@@ -1148,7 +1150,6 @@ fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.
 
 // region Ad Tracking
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdDisplayed(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1182,7 +1183,6 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdOpened(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1216,7 +1216,6 @@ fun trackAdOpened(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdOpened(openedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdRevenue(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1259,7 +1258,6 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdLoaded(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1293,7 +1291,6 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData)
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     val mediatorNameString = adData["mediatorName"] as? String
@@ -1322,6 +1319,42 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     )
 
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+fun trackRewardedAdPromptShown(adData: Map<String, Any?>) {
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+
+    if (mediatorNameString == null || adUnitId == null) {
+        errorLog("trackRewardedAdPromptShown: Missing required parameters - mediatorName or adUnitId")
+        return
+    }
+
+    val promptShownData = AdRewardPromptShownData(
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackRewardedAdPromptShown(promptShownData)
+}
+
+fun trackRewardedAdPromptAccepted(adData: Map<String, Any?>) {
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+
+    if (mediatorNameString == null || adUnitId == null) {
+        errorLog("trackRewardedAdPromptAccepted: Missing required parameters - mediatorName or adUnitId")
+        return
+    }
+
+    val promptAcceptedData = AdRewardPromptAcceptedData(
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackRewardedAdPromptAccepted(promptAcceptedData)
 }
 
 // endregion
@@ -1772,13 +1805,11 @@ internal fun convertToInt(value: Any?): Int? {
 
 // region Reward verification
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
     return Purchases.sharedInstance.generateRewardVerificationToken(impressionId).map()
 }
 
 @JvmOverloads
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("ComplexCondition")
 fun pollRewardVerification(
     clientTransactionId: String,

@@ -118,6 +118,7 @@ describe('PurchasesCommon', () => {
     packageType: PackageType.Monthly,
     rcBillingProduct: mockMonthlyProduct,
     webBillingProduct: mockMonthlyProduct,
+    product: mockMonthlyProduct,
   };
 
   const mockOffering: Offering = {
@@ -349,13 +350,13 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message: 'Need to provide a valid offering identifier',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -372,14 +373,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find offering with identifier: non_existent_offering. Found offering ids: ',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -396,14 +397,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find package with id: non_existent_package in offering with id: test_offering',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -420,14 +421,14 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.PurchaseInvalidError,
+        code: String(ErrorCode.PurchaseInvalidError),
         message:
           'Could not find option with id: non_existent_option in package with id: test_package',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
 
@@ -452,9 +453,7 @@ describe('PurchasesCommon', () => {
       expect(mockPurchasesInstance.purchase).toHaveBeenCalledWith({
         rcPackage: mockOffering.availablePackages[0],
         purchaseOption:
-          mockOffering.availablePackages[0].webBillingProduct.subscriptionOptions[
-            'test_monthly_option'
-          ],
+          mockOffering.availablePackages[0].product.subscriptionOptions['test_monthly_option'],
         customerEmail: 'test@example.com',
         selectedLocale: 'es-US',
         defaultLocale: 'en',
@@ -531,13 +530,13 @@ describe('PurchasesCommon', () => {
       };
 
       await expect(purchasesCommon.purchasePackage(purchaseParams)).rejects.toMatchObject({
-        code: ErrorCode.UserCancelledError,
+        code: String(ErrorCode.UserCancelledError),
         message: 'Purchase cancelled',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
   });
@@ -572,13 +571,13 @@ describe('PurchasesCommon', () => {
       mockPurchasesInstance.getVirtualCurrencies.mockRejectedValue(mockError);
 
       await expect(purchasesCommon.getVirtualCurrencies()).rejects.toMatchObject({
-        code: ErrorCode.NetworkError,
+        code: String(ErrorCode.NetworkError),
         message: 'Network error',
         info: {
           backendErrorCode: undefined,
           statusCode: undefined,
         },
-        underlyingErrorMessage: undefined,
+        underlyingErrorMessage: '',
       });
     });
   });
@@ -737,6 +736,28 @@ describe('PurchasesCommon', () => {
       });
     });
 
+    it('forwards paywall interactions to onInteraction', async () => {
+      const onInteraction = jest.fn();
+      const event = {
+        timestamp: 1,
+        session_id: 'session',
+        offering_id: 'offering',
+        paywall_revision: 0,
+        component_type: 'tab',
+        component_value: 'annual',
+      };
+      mockPurchasesInstance.presentPaywall.mockImplementation(
+        async (options: { listener?: { onInteraction?: (event: unknown) => void } }) => {
+          options.listener?.onInteraction?.(event);
+          return mockPurchaseResult;
+        },
+      );
+
+      await purchasesCommon.presentPaywall({ onInteraction });
+
+      expect(onInteraction).toHaveBeenCalledWith(event);
+    });
+
     it('should return USER_CANCELLED when user cancels', async () => {
       const mockError = new PurchasesError(ErrorCode.UserCancelledError, 'User cancelled');
       mockPurchasesInstance.presentPaywall.mockRejectedValue(mockError);
@@ -830,7 +851,7 @@ describe('PurchasesCommon', () => {
 
       // Check that presentedOfferingContext was applied to all packages
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -839,9 +860,15 @@ describe('PurchasesCommon', () => {
           ruleId: 'test_rule',
         },
       });
+      expect(calledOffering!.availablePackages[0].webBillingProduct).toBe(
+        calledOffering!.availablePackages[0].product,
+      );
+      expect(calledOffering!.availablePackages[0].rcBillingProduct).toBe(
+        calledOffering!.availablePackages[0].product,
+      );
 
       // Check that helper accessors were updated
-      expect(calledOffering!.monthly!.webBillingProduct.presentedOfferingContext).toEqual({
+      expect(calledOffering!.monthly!.product.presentedOfferingContext).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
         targetingContext: {
@@ -852,7 +879,7 @@ describe('PurchasesCommon', () => {
 
       // Check that packagesById was updated
       expect(
-        calledOffering!.packagesById['test_package'].webBillingProduct.presentedOfferingContext,
+        calledOffering!.packagesById['test_package'].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -881,7 +908,7 @@ describe('PurchasesCommon', () => {
       expect(result).toBe('PURCHASED');
       const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: null,
@@ -911,7 +938,7 @@ describe('PurchasesCommon', () => {
       expect(result).toBe('PURCHASED');
       const calledOffering = mockPurchasesInstance.presentPaywall.mock.calls[0][0].offering;
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: null,
@@ -949,7 +976,7 @@ describe('PurchasesCommon', () => {
 
       // Verify presentedOfferingContext was applied to the fetched offering
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext,
       ).toEqual({
         offeringIdentifier: 'test_offering',
         placementIdentifier: 'test_placement',
@@ -1124,8 +1151,7 @@ describe('PurchasesCommon', () => {
       expect(calledOffering).toBeDefined();
       expect(calledOffering!.identifier).toBe('test_offering');
       expect(
-        calledOffering!.availablePackages[0].webBillingProduct.presentedOfferingContext
-          .placementIdentifier,
+        calledOffering!.availablePackages[0].product.presentedOfferingContext.placementIdentifier,
       ).toBe('test_placement');
 
       expect(mockPurchasesInstance.presentPaywall).toHaveBeenCalledWith({
