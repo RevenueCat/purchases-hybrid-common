@@ -191,6 +191,10 @@ jobs:
 
   integration-test-ios:
     <<: *base-ios-job
+    parameters:
+      xcode_version:
+        type: string
+        default: "27.0.0"
     steps:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
@@ -204,7 +208,7 @@ jobs:
           command: bundle exec fastlane scan --result_bundle=true --testplan=CI
           working_directory: ios/PurchasesHybridCommon
           environment:
-            SCAN_DEVICE: iPhone 16 (18.5)
+            SCAN_DEVICE: iPhone 17 (27.0)
             SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
       - run:
           name: Compress result bundle
