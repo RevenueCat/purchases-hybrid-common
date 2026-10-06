@@ -71,6 +71,7 @@ internal extension StoreProduct {
             "productType": self.productTypeString,
             "title": self.localizedTitle,
             "subscriptionPeriod": NSNull(),
+            "installmentsInfo": NSNull(),
         ]
 
         dictionary["pricePerWeek"] = self.pricePerWeek
@@ -86,16 +87,14 @@ internal extension StoreProduct {
 
         dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
 
-        if #available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *) {
-            dictionary["installmentsInfo"] = self.installmentsInfo?.rc_dictionary ?? NSNull()
-        } else {
-            dictionary["installmentsInfo"] = NSNull()
-        }
-
         if let subscriptionPeriod = self.subscriptionPeriod {
             dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
         }
-        
+
+        if #available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *), let installmentsInfo {
+            dictionary["installmentsInfo"] = installmentsInfo.rc_dictionary
+        }
+
         return dictionary
     }
 
