@@ -86,6 +86,12 @@ internal extension StoreProduct {
 
         dictionary["discounts"] = self.discounts.map { $0.rc_dictionary }
 
+        if #available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *) {
+            dictionary["installmentsInfo"] = self.installmentsInfo?.rc_dictionary ?? NSNull()
+        } else {
+            dictionary["installmentsInfo"] = NSNull()
+        }
+
         if let subscriptionPeriod = self.subscriptionPeriod {
             dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
         }
@@ -148,6 +154,39 @@ private extension StoreProduct {
             return "NON_RENEWABLE_SUBSCRIPTION"
         case .autoRenewableSubscription:
             return "AUTO_RENEWABLE_SUBSCRIPTION"
+        }
+    }
+
+}
+
+internal extension InstallmentsInfo {
+
+    var rc_dictionary: [String: Any] {
+        return [
+            "commitmentPaymentsCount": self.commitmentInstallmentsCount,
+            "renewalCommitmentPaymentsCount": self.commitmentInstallmentsCount,
+            "commitmentInstallmentPeriod": StoreProduct.rc_normalized(
+                subscriptionPeriod: self.commitmentInstallmentPeriod
+            ),
+            "installmentBillingPrice": self.installmentBillingPrice,
+            "installmentBillingPriceString": self.installmentBillingDisplayPrice,
+            "commitmentTotalPeriod": StoreProduct.rc_normalized(
+                subscriptionPeriod: self.commitmentTotalPeriod
+            ),
+            "commitmentTotalPrice": self.commitmentTotalPrice,
+            "commitmentTotalPriceString": self.commitmentTotalDisplayPrice,
+            "billingPlanType": self.billingPlanTypeString,
+        ]
+    }
+
+    private var billingPlanTypeString: String {
+        switch self.billingPlanType {
+        case .upFront:
+            return "UP_FRONT"
+        case .monthly:
+            return "MONTHLY"
+        default:
+            return "UNKNOWN"
         }
     }
 

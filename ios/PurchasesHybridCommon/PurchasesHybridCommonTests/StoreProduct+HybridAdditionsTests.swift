@@ -133,10 +133,77 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .year))
                 expect(receivedDictionary["subscriptionPeriod"] as? NSString) == "P1Y"
             }
+            it("maps installmentsInfo to null when there is none") {
+                let receivedDictionary = self.storeProductDictionary()
+
+                expect(receivedDictionary["installmentsInfo"]) == NSNull()
+            }
+            it("populates installmentsInfo on the product when present") {
+                guard #available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *) else {
+                    return
+                }
+
+                let storeProduct = TestStoreProduct(
+                    localizedTitle: "Installments Product",
+                    price: Decimal(0.99),
+                    currencyCode: "USD",
+                    localizedPriceString: "$0.99",
+                    productIdentifier: "installments_monthly",
+                    productType: .autoRenewableSubscription,
+                    localizedDescription: "A product with installments",
+                    subscriptionPeriod: SubscriptionPeriod(value: 1, unit: .month),
+                    locale: Locale(identifier: "en_US"),
+                    installmentsInfo: InstallmentsInfo(
+                        commitmentInstallmentsCount: 12,
+                        commitmentInstallmentPeriod: SubscriptionPeriod(value: 1, unit: .month),
+                        installmentBillingPrice: Decimal(0.99),
+                        installmentBillingDisplayPrice: "$0.99",
+                        commitmentTotalPeriod: SubscriptionPeriod(value: 1, unit: .year),
+                        commitmentTotalPrice: Decimal(11.88),
+                        commitmentTotalDisplayPrice: "$11.88",
+                        billingPlanType: .monthly
+                    )
+                ).toStoreProduct()
+
+                let installmentsInfo = storeProduct.rc_dictionary["installmentsInfo"] as? [String: Any]
+
+                expect(installmentsInfo).toNot(beNil())
+                expect(installmentsInfo?["commitmentPaymentsCount"] as? Int) == 12
+                expect(installmentsInfo?["renewalCommitmentPaymentsCount"] as? Int) == 12
+                expect(installmentsInfo?["commitmentInstallmentPeriod"] as? String) == "P1M"
+                expect(installmentsInfo?["installmentBillingPriceString"] as? String) == "$0.99"
+                expect(installmentsInfo?["commitmentTotalPeriod"] as? String) == "P1Y"
+                expect(installmentsInfo?["commitmentTotalPriceString"] as? String) == "$11.88"
+                expect(installmentsInfo?["billingPlanType"] as? String) == "MONTHLY"
+            }
+            it("maps installmentsInfo correctly") {
+                let installmentsInfo = InstallmentsInfo(
+                    commitmentInstallmentsCount: 12,
+                    commitmentInstallmentPeriod: SubscriptionPeriod(value: 1, unit: .month),
+                    installmentBillingPrice: Decimal(0.99),
+                    installmentBillingDisplayPrice: "$0.99",
+                    commitmentTotalPeriod: SubscriptionPeriod(value: 1, unit: .year),
+                    commitmentTotalPrice: Decimal(11.88),
+                    commitmentTotalDisplayPrice: "$11.88",
+                    billingPlanType: .monthly
+                )
+
+                let dictionary = installmentsInfo.rc_dictionary
+
+                expect(dictionary["commitmentPaymentsCount"] as? Int) == 12
+                expect(dictionary["renewalCommitmentPaymentsCount"] as? Int) == 12
+                expect(dictionary["commitmentInstallmentPeriod"] as? String) == "P1M"
+                expect(dictionary["installmentBillingPrice"] as? Decimal) == Decimal(0.99)
+                expect(dictionary["installmentBillingPriceString"] as? String) == "$0.99"
+                expect(dictionary["commitmentTotalPeriod"] as? String) == "P1Y"
+                expect(dictionary["commitmentTotalPrice"] as? Decimal) == Decimal(11.88)
+                expect(dictionary["commitmentTotalPriceString"] as? String) == "$11.88"
+                expect(dictionary["billingPlanType"] as? String) == "MONTHLY"
+            }
             it("rc_dictionary has correct size") {
                 let receivedDictionary = self.storeProductDictionary()
 
-                expect(receivedDictionary.count) == 11
+                expect(receivedDictionary.count) == 12
             }
         }
     }

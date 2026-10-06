@@ -152,6 +152,16 @@ internal class StoreProductMapperTests {
     }
 
     @Test
+    fun `maps product installmentsInfo as null`() {
+        TestUtilities.stubStoreProduct(
+            productId = exptectedProductId,
+        ).map().let {
+            assertThat(it.containsKey("installmentsInfo")).isTrue
+            assertThat(it["installmentsInfo"]).isNull()
+        }
+    }
+
+    @Test
     fun `maps product type correctly`() {
         val duration = Period(1, Period.Unit.MONTH, "P1M")
 
@@ -240,7 +250,7 @@ internal class StoreProductMapperTests {
     @Test
     fun `map has correct size`() {
         TestUtilities.stubStoreProduct("monthly_product").map().let {
-            assertThat(it.size).isEqualTo(21)
+            assertThat(it.size).isEqualTo(22)
         }
     }
 

@@ -193,6 +193,13 @@ export interface PurchasesStoreProduct {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * For installment subscriptions, the details of the installment plan the customer commits to.
+   * Null for non-installment subscriptions.
+   * iOS only. Always null on Android, use the installmentsInfo of the defaultOption or
+   * subscriptionOptions instead.
+   */
+  readonly installmentsInfo: InstallmentsInfo | null;
 }
 
 /**
@@ -715,7 +722,29 @@ export interface SubscriptionOption {
 }
 
 /**
- * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ * Enum indicating the billing plan type of an installment subscription. iOS only.
+ * @public
+ */
+export enum BILLING_PLAN_TYPE {
+  /**
+   * The customer pays in full when purchasing the product.
+   */
+  UP_FRONT = "UP_FRONT",
+
+  /**
+   * The customer pays in monthly installments.
+   */
+  MONTHLY = "MONTHLY",
+
+  /**
+   * Unable to determine the billing plan type.
+   */
+  UNKNOWN = "UNKNOWN",
+}
+
+/**
+ * Type containing information of installment subscriptions.
+ * Supported in Google Play (via SubscriptionOption) and iOS (via PurchasesStoreProduct).
  * @public
  */
 export interface InstallmentsInfo {
@@ -725,8 +754,44 @@ export interface InstallmentsInfo {
   readonly commitmentPaymentsCount: number;
   /**
    * After the commitment payments are complete, the number of payments the user commits to upon a renewal.
+   * On iOS this is always equal to commitmentPaymentsCount.
    */
   readonly renewalCommitmentPaymentsCount: number;
+  /**
+   * Duration of each installment, specified in ISO 8601 format. For example, P1M equates to one month.
+   * iOS only. Undefined on Android.
+   */
+  readonly commitmentInstallmentPeriod?: string;
+  /**
+   * Price charged for each installment billing period.
+   * iOS only. Undefined on Android.
+   */
+  readonly installmentBillingPrice?: number;
+  /**
+   * Formatted price charged for each installment billing period, including its currency sign.
+   * iOS only. Undefined on Android.
+   */
+  readonly installmentBillingPriceString?: string;
+  /**
+   * Total duration of the customer's installment commitment, specified in ISO 8601 format.
+   * iOS only. Undefined on Android.
+   */
+  readonly commitmentTotalPeriod?: string;
+  /**
+   * Total price the customer commits to paying across all installments.
+   * iOS only. Undefined on Android.
+   */
+  readonly commitmentTotalPrice?: number;
+  /**
+   * Formatted total price the customer commits to paying across all installments, including its currency sign.
+   * iOS only. Undefined on Android.
+   */
+  readonly commitmentTotalPriceString?: string;
+  /**
+   * The billing plan used for the installments.
+   * iOS only. Undefined on Android.
+   */
+  readonly billingPlanType?: BILLING_PLAN_TYPE;
 }
 
 /**
