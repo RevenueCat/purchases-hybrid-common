@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RevenueCat
+@_spi(Internal) import RevenueCat
 import StoreKit
 
 @objc public extension StoreProduct {
@@ -57,7 +57,7 @@ internal extension StoreProduct {
             "currencyCode": self.currencyCode ?? NSNull(),
             "description": self.localizedDescription,
             "discounts": NSNull(),
-            "identifier": self.productIdentifier,
+            "identifier": self.id,
             "introPrice": NSNull(),
             "price": self.price,
             "priceString": self.localizedPriceString,
