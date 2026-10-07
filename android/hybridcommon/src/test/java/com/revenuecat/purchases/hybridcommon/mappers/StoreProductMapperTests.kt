@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon.mappers
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.hybridcommon.TestUtilities
+import com.revenuecat.purchases.models.InstallmentsInfo
 import com.revenuecat.purchases.models.OfferPaymentMode
 import com.revenuecat.purchases.models.Period
 import com.revenuecat.purchases.models.Price
@@ -158,6 +159,38 @@ internal class StoreProductMapperTests {
         ).map().let {
             assertThat(it.containsKey("installmentsInfo")).isTrue
             assertThat(it["installmentsInfo"]).isNull()
+        }
+    }
+
+    @Test
+    fun `maps subscription option installmentsInfo with iOS-only fields as null`() {
+        val installmentsInfo = object : InstallmentsInfo {
+            override val commitmentPaymentsCount: Int = 12
+            override val renewalCommitmentPaymentsCount: Int = 1
+        }
+        TestUtilities.stubStoreProduct(
+            productId = exptectedProductId,
+            defaultOption = TestUtilities.stubSubscriptionOption(
+                "monthly_base_plan",
+                exptectedProductId,
+                installmentsInfo = installmentsInfo,
+            ),
+        ).map().let {
+            val defaultOption = it["defaultOption"] as Map<String, Any?>
+            val mappedInstallmentsInfo = defaultOption["installmentsInfo"] as Map<String, Any?>
+            assertThat(mappedInstallmentsInfo).isEqualTo(
+                mapOf(
+                    "commitmentPaymentsCount" to 12,
+                    "renewalCommitmentPaymentsCount" to 1,
+                    "commitmentInstallmentPeriod" to null,
+                    "installmentBillingPrice" to null,
+                    "installmentBillingPriceString" to null,
+                    "commitmentTotalPeriod" to null,
+                    "commitmentTotalPrice" to null,
+                    "commitmentTotalPriceString" to null,
+                    "billingPlanType" to null,
+                ),
+            )
         }
     }
 

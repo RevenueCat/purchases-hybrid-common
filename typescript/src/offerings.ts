@@ -765,39 +765,39 @@ export interface InstallmentsInfo {
   readonly renewalCommitmentPaymentsCount: number;
   /**
    * Duration of each installment, specified in ISO 8601 format. For example, P1M equates to one month.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly commitmentInstallmentPeriod?: string;
+  readonly commitmentInstallmentPeriod: string | null;
   /**
    * Price charged for each installment billing period.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly installmentBillingPrice?: number;
+  readonly installmentBillingPrice: number | null;
   /**
    * Formatted price charged for each installment billing period, including its currency sign.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly installmentBillingPriceString?: string;
+  readonly installmentBillingPriceString: string | null;
   /**
    * Total duration of the customer's installment commitment, specified in ISO 8601 format.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly commitmentTotalPeriod?: string;
+  readonly commitmentTotalPeriod: string | null;
   /**
    * Total price the customer commits to paying across all installments.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly commitmentTotalPrice?: number;
+  readonly commitmentTotalPrice: number | null;
   /**
    * Formatted total price the customer commits to paying across all installments, including its currency sign.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly commitmentTotalPriceString?: string;
+  readonly commitmentTotalPriceString: string | null;
   /**
    * The billing plan used for the installments.
-   * iOS only. Undefined on Android.
+   * iOS only. Null on Android.
    */
-  readonly billingPlanType?: BILLING_PLAN_TYPE;
+  readonly billingPlanType: BILLING_PLAN_TYPE | null;
 }
 
 /**

@@ -75,14 +75,14 @@ export enum IN_APP_MESSAGE_TYPE {
 
 // @public
 export interface InstallmentsInfo {
-    readonly billingPlanType?: BILLING_PLAN_TYPE;
-    readonly commitmentInstallmentPeriod?: string;
+    readonly billingPlanType: BILLING_PLAN_TYPE | null;
+    readonly commitmentInstallmentPeriod: string | null;
     readonly commitmentPaymentsCount: number;
-    readonly commitmentTotalPeriod?: string;
-    readonly commitmentTotalPrice?: number;
-    readonly commitmentTotalPriceString?: string;
-    readonly installmentBillingPrice?: number;
-    readonly installmentBillingPriceString?: string;
+    readonly commitmentTotalPeriod: string | null;
+    readonly commitmentTotalPrice: number | null;
+    readonly commitmentTotalPriceString: string | null;
+    readonly installmentBillingPrice: number | null;
+    readonly installmentBillingPriceString: string | null;
     readonly renewalCommitmentPaymentsCount: number;
 }
 
