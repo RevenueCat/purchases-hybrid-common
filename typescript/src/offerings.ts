@@ -92,11 +92,17 @@ export interface PurchasesStoreProduct {
   /**
    * Price of the product in the local currency.
    * Contains the price value of defaultOption for Google Play.
+   * 
+   * For monthly subscriptions with a 12-month commitment on the Apple App Store, the
+   * price will reflect the total amount paid across the commitment.
    */
   readonly price: number;
   /**
    * Formatted price of the item, including its currency sign.
    * Contains the formatted price value of defaultOption for Google Play.
+   * 
+   * For monthly subscriptions with a 12-month commitment on the Apple App Store, the
+   * price string will reflect the total amount paid across the commitment.
    */
   readonly priceString: string;
   /**
