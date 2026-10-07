@@ -82,7 +82,21 @@ export interface PurchasesStoreProduct {
    */
   readonly identifier: string;
   /**
-   * Description of the product.
+   * Description of the product, sourced from the underlying store.
+   *
+   * Platform behavior:
+   * - **iOS:** sourced from StoreKit's product description
+   *   (`SKProduct.localizedDescription` for StoreKit 1, `Product.description`
+   *   for StoreKit 2 on iOS 15+). Both reflect the App Store Connect
+   *   description field.
+   * - **Android:** sourced from Google Play Billing's
+   *   `ProductDetails.getDescription()`. Returns an empty string when no
+   *   description is set in the Play Console.
+   * - **Web (RevenueCat Test Store):** may be empty even for live products.
+   *
+   * Treat this as effectively optional even though the type is `string`:
+   * in some store configurations it can be empty even for live products.
+   * See https://github.com/RevenueCat/react-native-purchases/issues/1753.
    */
   readonly description: string;
   /**
