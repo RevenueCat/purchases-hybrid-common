@@ -49,6 +49,7 @@ class StoreKit2ObserverModeIntegrationTests: BaseIntegrationTests {
         )
         var unwrappedDict = try XCTUnwrap(dict)
         removeDates(&unwrappedDict)
+        verifyAndRemoveTransactionIdentifiers(["revenueCatId", "transactionIdentifier"], from: &unwrappedDict)
         await self.assertSnapshot(unwrappedDict)
     }
 
@@ -93,6 +94,7 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     func testCanPurchasePackage() async throws {
         var data = try await self.purchaseMonthlyOffering()
         removeDates(&data)
+        verifyAndRemoveTransactionIdentifiers(purchaseTransactionIdentifierKeys, from: &data)
 
         await self.assertSnapshot(data)
     }
@@ -100,12 +102,18 @@ class StoreKit1IntegrationTests: BaseIntegrationTests {
     func testCanPurchaseProduct() async throws {
         var data = try await self.purchase(productIdentifier: Self.productIdentifier)
         removeDates(&data)
+        verifyAndRemoveTransactionIdentifiers(purchaseTransactionIdentifierKeys, from: &data)
 
         await self.assertSnapshot(data)
     }
 
     @available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, visionOS 1.0, *)
     func testPurchaseFailuresAreReportedCorrectly() async throws {
+        try XCTSkipIf(
+            ProcessInfo.processInfo.operatingSystemVersion.majorVersion == 27,
+            "StoreKitTest on iOS 27 reports a simulated .purchaseNotAllowed error as an unknown error"
+        )
+
         try await self.testSession.setSimulatedError(.purchase(.purchaseNotAllowed), forAPI: .purchase)
 
         do {
@@ -258,6 +266,41 @@ private func removeDates(_ data: inout [String: Any]) {
             "originalAppUserId"
         ]
     )
+}
+
+private let purchaseTransactionIdentifierKeys: Set<String> = [
+    "revenueCatId",
+    "transactionIdentifier",
+    "storeTransactionId"
+]
+
+/// StoreKitTest on iOS 27 doesn't restart transaction identifiers at 0 when the session is reset, so their values
+/// can't be snapshotted. Instead, this checks that each of `keys` is present with a non-empty value, then removes it.
+private func verifyAndRemoveTransactionIdentifiers(_ keys: Set<String>, from data: inout [String: Any]) {
+    var removedKeys: Set<String> = []
+    removeTransactionIdentifiers(keys, from: &data, removedKeys: &removedKeys)
+    expect(removedKeys).to(
+        equal(keys),
+        description: "Missing or empty transaction identifiers: \(keys.subtracting(removedKeys).sorted())"
+    )
+}
+
+private func removeTransactionIdentifiers(
+    _ keys: Set<String>,
+    from data: inout [String: Any],
+    removedKeys: inout Set<String>
+) {
+    for (key, value) in data {
+        if keys.contains(key) {
+            if let identifier = value as? String, !identifier.isEmpty {
+                data.removeValue(forKey: key)
+                removedKeys.insert(key)
+            }
+        } else if var dictionary = value as? [String: Any] {
+            removeTransactionIdentifiers(keys, from: &dictionary, removedKeys: &removedKeys)
+            data[key] = dictionary
+        }
+    }
 }
 
 private func removeVaryingPromotionalOfferData(from data: inout [String: Any]) {
