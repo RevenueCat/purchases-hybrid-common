@@ -80,6 +80,7 @@ function mapProduct(product: Product): Record<string, unknown> {
         : null,
     presentedOfferingIdentifier: product.presentedOfferingContext.offeringIdentifier,
     presentedOfferingContext: mapPresentedOfferingContext(product.presentedOfferingContext),
+    installmentsInfo: null,
   };
 }
 

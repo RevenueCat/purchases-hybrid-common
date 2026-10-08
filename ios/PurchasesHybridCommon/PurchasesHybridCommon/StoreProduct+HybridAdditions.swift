@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RevenueCat
+@_spi(Internal) import RevenueCat
 import StoreKit
 
 @objc public extension StoreProduct {
@@ -57,7 +57,7 @@ internal extension StoreProduct {
             "currencyCode": self.currencyCode ?? NSNull(),
             "description": self.localizedDescription,
             "discounts": NSNull(),
-            "identifier": self.productIdentifier,
+            "identifier": self.id,
             "introPrice": NSNull(),
             "price": self.price,
             "priceString": self.localizedPriceString,
@@ -71,6 +71,7 @@ internal extension StoreProduct {
             "productType": self.productTypeString,
             "title": self.localizedTitle,
             "subscriptionPeriod": NSNull(),
+            "installmentsInfo": NSNull(),
         ]
 
         dictionary["pricePerWeek"] = self.pricePerWeek
@@ -89,7 +90,11 @@ internal extension StoreProduct {
         if let subscriptionPeriod = self.subscriptionPeriod {
             dictionary["subscriptionPeriod"] = StoreProduct.rc_normalized(subscriptionPeriod: subscriptionPeriod)
         }
-        
+
+        if #available(iOS 26.4, macOS 26.4, tvOS 26.4, watchOS 26.4, visionOS 26.4, *), let installmentsInfo {
+            dictionary["installmentsInfo"] = installmentsInfo.rc_dictionary
+        }
+
         return dictionary
     }
 
@@ -148,6 +153,39 @@ private extension StoreProduct {
             return "NON_RENEWABLE_SUBSCRIPTION"
         case .autoRenewableSubscription:
             return "AUTO_RENEWABLE_SUBSCRIPTION"
+        }
+    }
+
+}
+
+internal extension InstallmentsInfo {
+
+    var rc_dictionary: [String: Any] {
+        return [
+            "commitmentPaymentsCount": self.commitmentInstallmentsCount,
+            "renewalCommitmentPaymentsCount": self.commitmentInstallmentsCount,
+            "commitmentInstallmentPeriod": StoreProduct.rc_normalized(
+                subscriptionPeriod: self.commitmentInstallmentPeriod
+            ),
+            "installmentBillingPrice": self.installmentBillingPrice,
+            "installmentBillingPriceString": self.installmentBillingDisplayPrice,
+            "commitmentTotalPeriod": StoreProduct.rc_normalized(
+                subscriptionPeriod: self.commitmentTotalPeriod
+            ),
+            "commitmentTotalPrice": self.commitmentTotalPrice,
+            "commitmentTotalPriceString": self.commitmentTotalDisplayPrice,
+            "billingPlanType": self.billingPlanTypeString,
+        ]
+    }
+
+    private var billingPlanTypeString: String {
+        switch self.billingPlanType {
+        case .upFront:
+            return "UP_FRONT"
+        case .monthly:
+            return "MONTHLY"
+        default:
+            return "UNKNOWN"
         }
     }
 
