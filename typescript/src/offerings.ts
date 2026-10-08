@@ -79,6 +79,12 @@ export enum INTRO_ELIGIBILITY_STATUS {
 export interface PurchasesStoreProduct {
   /**
    * Product Id.
+   * 
+   * For Google Play subscriptions with a base plan, this is `productId:basePlanId`.
+   * 
+   * For App Store products with a billing plan 
+   * (like monthly subscriptions with a 12-month commitment), this is 
+   * `productId:billingPlan` (like `productId:monthly`).
    */
   readonly identifier: string;
   /**
