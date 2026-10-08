@@ -385,8 +385,7 @@ export class PurchasesCommon {
     const placementIdentifier =
       (presentedOfferingContext['placementIdentifier'] as string | undefined) ?? null;
     const targetingContext = presentedOfferingContext['targetingContext'] as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
     let targetingContextObj: TargetingContext | null = null;
     if (targetingContext) {
       const targetingRevision = targetingContext['revision'] as number | undefined;
