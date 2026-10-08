@@ -524,6 +524,11 @@
 * Bump addressable from 2.8.8 to 2.9.0 (#1594) via dependabot[bot] (@dependabot[bot])
 * Bump fastlane-plugin-revenuecat_internal from `6289be1` to `ceecf91` (#1593) via dependabot[bot] (@dependabot[bot])
 
+## 17.55.2
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (#1956) via Álvaro Brey (@AlvaroBrey)
+
 ## 17.55.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
