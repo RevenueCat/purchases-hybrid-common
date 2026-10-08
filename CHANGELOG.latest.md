@@ -1,5 +1,6 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (#1956) via Álvaro Brey (@AlvaroBrey)
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.92.0 => 5.93.0 Android 10.25.0 => 10.26.0 JS 1.68.0 => 1.70.0 (#1955) via RevenueCat Git Bot (@RCGitBot)
+### ✨ New Features
+* feat(iOS): expose installment infos on StoreProduct for iOS (#1948) via Will Taylor (@fire-at-will)
+
+### 🔄 Other Changes
+* Bump CI to Ruby 3.3 (#1961) via Josh Holtz (@joshdholtz)
