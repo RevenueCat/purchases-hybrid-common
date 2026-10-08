@@ -160,6 +160,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 "Purchases is not configured. " +
                     "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
             )
+            setFragmentResult("ERROR")
             removeFragment()
             return
         }
