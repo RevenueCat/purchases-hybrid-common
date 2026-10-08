@@ -483,6 +483,29 @@ import StoreKit
         }
     }
 
+    @objc(getOfferingForIdentifier:completionBlock:)
+    static func getOffering(
+        forIdentifier offeringIdentifier: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        Self.sharedInstance.getOfferings { offerings, error in
+            if let error = error {
+                let errorContainer = ErrorContainer(error: error, extraPayload: [:])
+                completion(nil, errorContainer)
+            } else {
+                // `current` applies the targeting context to its packages, `offering(identifier:)`
+                // does not. Prefer it when the caller asks for the current offering, so purchases
+                // made from the result keep their targeting attribution.
+                let current = offerings?.current
+                let offering = current?.identifier == offeringIdentifier
+                    ? current
+                    : offerings?.offering(identifier: offeringIdentifier)
+                let dict = offering?.dictionary
+                completion(dict, nil)
+            }
+        }
+    }
+
     @objc(getCurrentOfferingForPlacement:completionBlock:)
     static func getCurrentOffering(
         forPlacement placementIdentifier: String,
