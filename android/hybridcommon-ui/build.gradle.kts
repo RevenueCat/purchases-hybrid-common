@@ -51,4 +51,5 @@ dependencies {
     api(libs.purchases.ui)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
 }

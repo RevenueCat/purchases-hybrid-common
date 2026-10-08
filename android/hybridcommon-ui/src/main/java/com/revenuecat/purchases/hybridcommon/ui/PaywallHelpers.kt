@@ -78,7 +78,7 @@ fun presentPaywallFromFragment(
                     "Purchases",
                     "Tried to present a paywall while the activity was paused or finished. Not presenting.",
                 )
-                options.paywallResultListener.onPaywallResult("ERROR")
+                options.paywallResultListener.onPaywallResult(ERROR_PAYWALL_RESULT)
             }
         }
     }
