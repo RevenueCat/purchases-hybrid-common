@@ -256,6 +256,7 @@ NS_ASSUME_NONNULL_BEGIN
         [RCCommonFunctionality trackAdRevenue:adData];
         [RCCommonFunctionality trackAdLoaded:adData];
         [RCCommonFunctionality trackAdFailedToLoad:adData];
+        [RCCommonFunctionality trackAdRewardEarnedUnverified:adData];
         [RCCommonFunctionality trackRewardedAdPromptShown:adData];
         [RCCommonFunctionality trackRewardedAdPromptAccepted:adData];
     }

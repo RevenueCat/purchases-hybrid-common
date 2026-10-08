@@ -36,6 +36,7 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.events.types.AdRewardEarnedUnverifiedData
 import com.revenuecat.purchases.ads.events.types.AdRewardPromptAcceptedData
 import com.revenuecat.purchases.ads.events.types.AdRewardPromptShownData
 import com.revenuecat.purchases.ads.rewardverification.RewardedAdTrackingMetadata
@@ -1319,6 +1320,38 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     )
 
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+@Suppress("ComplexCondition")
+fun trackAdRewardEarnedUnverified(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+
+    if (mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null
+    ) {
+        errorLog(
+            "trackAdRewardEarnedUnverified: Missing required parameters - " +
+                "mediatorName, adFormat, adUnitId, or impressionId",
+        )
+        return
+    }
+
+    val rewardEarnedData = AdRewardEarnedUnverifiedData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdRewardEarnedUnverified(rewardEarnedData)
 }
 
 fun trackRewardedAdPromptShown(adData: Map<String, Any?>) {

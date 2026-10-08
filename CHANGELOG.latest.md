@@ -1,4 +1,6 @@
 ## RevenueCat SDK
+### ✨ New Features
+* Add bridge functions for manually tracking unverified rewarded-ad rewards
 ### 🐞 Bugfixes
 * Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (#1956) via Álvaro Brey (@AlvaroBrey)
 ### 📦 Dependency Updates
