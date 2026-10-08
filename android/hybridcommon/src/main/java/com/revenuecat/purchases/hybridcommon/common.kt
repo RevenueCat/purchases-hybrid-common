@@ -36,6 +36,8 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.events.types.AdRewardPromptAcceptedData
+import com.revenuecat.purchases.ads.events.types.AdRewardPromptShownData
 import com.revenuecat.purchases.ads.rewardverification.RewardedAdTrackingMetadata
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.galaxy.GalaxyBillingMode
@@ -1340,6 +1342,42 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     )
 
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+}
+
+fun trackRewardedAdPromptShown(adData: Map<String, Any?>) {
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+
+    if (mediatorNameString == null || adUnitId == null) {
+        errorLog("trackRewardedAdPromptShown: Missing required parameters - mediatorName or adUnitId")
+        return
+    }
+
+    val promptShownData = AdRewardPromptShownData(
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackRewardedAdPromptShown(promptShownData)
+}
+
+fun trackRewardedAdPromptAccepted(adData: Map<String, Any?>) {
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+
+    if (mediatorNameString == null || adUnitId == null) {
+        errorLog("trackRewardedAdPromptAccepted: Missing required parameters - mediatorName or adUnitId")
+        return
+    }
+
+    val promptAcceptedData = AdRewardPromptAcceptedData(
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+    )
+
+    Purchases.sharedInstance.adTracker.trackRewardedAdPromptAccepted(promptAcceptedData)
 }
 
 // endregion

@@ -10,6 +10,7 @@ import PurchasesHybridCommon
 
 @_spi(Internal) @testable import RevenueCat
 import SnapshotTesting
+import StoreKit
 import StoreKitTest
 import XCTest
 
@@ -93,6 +94,25 @@ class BaseIntegrationTests: XCTestCase {
 
 }
 
+/// On iOS 27, the first test process can keep its purchase connection in Sandbox even after
+/// `SKTestSession` is configured. CI runs this alone in its own process before the integration tests,
+/// so they start with the local StoreKit configuration active.
+class StoreKitTestPreflightTests: XCTestCase {
+
+    func testInitializesLocalStoreKitSession() async throws {
+        let session = try SKTestSession(configurationFileNamed: Constants.storeKitConfigFileName)
+        session.resetToDefaultState()
+        session.disableDialogs = true
+        session.clearTransactions()
+
+        let productIdentifier = BaseIntegrationTests.productIdentifier
+        let products = try await StoreKit.Product.products(for: [productIdentifier])
+        XCTAssertEqual(products.map(\.id), [productIdentifier])
+        withExtendedLifetime(session) {}
+    }
+
+}
+
 private extension BaseIntegrationTests {
 
     func clearReceiptIfExists() {
@@ -120,7 +140,9 @@ private extension BaseIntegrationTests {
             verificationMode: nil,
             diagnosticsEnabled: false,
             automaticDeviceIdentifierCollectionEnabled: true,
-            preferredLocale: nil
+            preferredLocale: nil,
+            useExternalPurchaseCustomLinks: false,
+            enableExternalPurchasesInSimulator: true
         )
         Purchases.logLevel = .debug
     }

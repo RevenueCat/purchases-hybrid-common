@@ -226,5 +226,54 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                         }.notTo(raiseException())
                     }
                 }
+
+        context("configure with useExternalPurchaseCustomLinks") {
+                    it("true") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil,
+                                                preferredLocale: nil,
+                                                useExternalPurchaseCustomLinks: true,
+                                                enableExternalPurchasesInSimulator: false)
+                        }.notTo(raiseException())
+                    }
+
+                    it("false") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil,
+                                                preferredLocale: nil,
+                                                useExternalPurchaseCustomLinks: false,
+                                                enableExternalPurchasesInSimulator: true)
+                        }.notTo(raiseException())
+                    }
+                    it("not passed") {
+                        expect {
+                            Purchases.configure(apiKey: "api key",
+                                                appUserID: nil,
+                                                purchasesAreCompletedBy: "REVENUECAT",
+                                                userDefaultsSuiteName: "test",
+                                                platformFlavor: "hybrid-platform",
+                                                platformFlavorVersion: "1.2.3",
+                                                storeKitVersion: "DEFAULT",
+                                                dangerousSettings: nil,
+                                                verificationMode: nil)
+                        }.notTo(raiseException())
+                    }
+                }
     }
 }
