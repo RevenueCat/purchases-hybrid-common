@@ -1,6 +1,6 @@
+> [!WARNING]
+> This release fixes a bug where the iOS SDK collected device identifiers (`$idfa`, `$idfv`, `$ip`, `$deviceVersion`) when setting an attribution ID, even with `automaticDeviceIdentifierCollectionEnabled` set to `false`. Identifiers already collected are not cleared automatically; the app must clear them.
+
 ## RevenueCat SDK
 ### 🐞 Bugfixes
-* Pass storeKitVersion in all configure() functions (#1591) via Will Taylor (@fire-at-will)
-
-### 🔄 Other Changes
-* Bump lefthook from 2.1.4 to 2.1.5 (#1590) via dependabot[bot] (@dependabot[bot])
+* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (#1956) via Álvaro Brey (@AlvaroBrey)
