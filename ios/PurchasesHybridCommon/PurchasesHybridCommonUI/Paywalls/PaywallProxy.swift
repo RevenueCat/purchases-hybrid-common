@@ -231,6 +231,7 @@ import UIKit
                                        paywallResultHandler: @escaping (String) -> Void) {
         guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
             print("Error: missing required entitlement identifier.")
+            paywallResultHandler(PaywallResult.error.name)
             return
         }
 
@@ -251,6 +252,7 @@ import UIKit
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
+                paywallResultHandler(PaywallResult.notPresented.name)
             }
         }
     }
@@ -259,9 +261,10 @@ import UIKit
                                        purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                        delegate: PaywallViewControllerDelegateWrapper? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
-                                       paywallResultHandler: ((String) -> Void)? = nil) {
+                                       paywallResultHandler: @escaping (String) -> Void) {
         guard var rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
+            paywallResultHandler(PaywallResult.error.name)
             return
         }
 
@@ -325,9 +328,7 @@ import UIKit
             self.requiredEntitlementIdentifierByVC[controller] = requiredEntitlementIdentifier
         }
 
-        if let paywallResultHandler {
-            self.resultByVC[controller] = (paywallResultHandler, .cancelled)
-        }
+        self.resultByVC[controller] = (paywallResultHandler, .cancelled)
 
         rootController.present(controller, animated: true)
     }
