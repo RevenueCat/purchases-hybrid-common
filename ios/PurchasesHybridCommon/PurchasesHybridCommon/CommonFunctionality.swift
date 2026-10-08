@@ -863,6 +863,28 @@ import StoreKit
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackAdRewardEarnedUnverified(_ adData: [String: Any]) {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
+              let adUnitId = adData["adUnitId"] as? String,
+              let impressionId = adData["impressionId"] as? String else {
+            NSLog("[PurchasesHybridCommon] trackAdRewardEarnedUnverified: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
+            return
+        }
+
+        let rewardEarned = AdRewardEarnedUnverified(
+            networkName: adData["networkName"] as? String,
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            adFormat: AdFormat(rawValue: adFormatString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId,
+            impressionId: impressionId
+        )
+
+        Purchases.shared.adTracker.trackAdRewardEarnedUnverified(rewardEarned)
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackRewardedAdPromptShown(_ adData: [String: Any]) {
         guard let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String else {
