@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import RevenueCat
+@testable import RevenueCat
 @testable import PurchasesHybridCommon
 
 class PurchasesHybridAdditionsTests: QuickSpec {
@@ -224,6 +224,38 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 dangerousSettings: nil,
                                                 verificationMode: "INFORMATIONAL")
                         }.notTo(raiseException())
+                    }
+
+                    func unsyncedAttributeKeysAfterSettingAdjustID(
+                        automaticDeviceIdentifierCollectionEnabled: Bool
+                    ) -> Set<String> {
+                        let purchases = Purchases.configure(apiKey: "api key",
+                                                            appUserID: nil,
+                                                            purchasesAreCompletedBy: "REVENUECAT",
+                                                            userDefaultsSuiteName: UUID().uuidString,
+                                                            platformFlavor: "hybrid-platform",
+                                                            platformFlavorVersion: "1.2.3",
+                                                            dangerousSettings: nil,
+                                                            verificationMode: nil,
+                                                            automaticDeviceIdentifierCollectionEnabled:
+                                                                automaticDeviceIdentifierCollectionEnabled)
+                        purchases.attribution.setAdjustID("adjust-id")
+                        return Set(purchases.attribution.unsyncedAttributesByKey(appUserID: purchases.appUserID).keys)
+                    }
+
+                    it("collects device identifiers when true") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: true
+                        )
+                        expect(keys).to(contain("$adjustId", "$ip"))
+                    }
+
+                    it("does not collect device identifiers when false") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: false
+                        )
+                        expect(keys).to(contain("$adjustId"))
+                        expect(keys.intersection(["$ip", "$idfv", "$idfa", "$deviceVersion"])).to(beEmpty())
                     }
                 }
     }
