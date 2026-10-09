@@ -244,7 +244,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 expect(dictionary["billingPlanType"] as? String) == "MONTHLY"
             }
 
-            it("maps every billingPlanType to its hybrid string") {
+            it("maps every BillingPlanType to its hybrid string") {
                 let expectedMappings: [(BillingPlanType, String)] = [
                     (.upFront, "UP_FRONT"),
                     (.monthly, "MONTHLY")
