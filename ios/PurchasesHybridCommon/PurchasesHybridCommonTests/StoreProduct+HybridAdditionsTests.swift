@@ -244,6 +244,28 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 expect(dictionary["billingPlanType"] as? String) == "MONTHLY"
             }
 
+            it("maps every billingPlanType to its hybrid string") {
+                let expectedMappings: [(BillingPlanType, String)] = [
+                    (.upFront, "UP_FRONT"),
+                    (.monthly, "MONTHLY")
+                ]
+
+                for (billingPlanType, expected) in expectedMappings {
+                    let installmentsInfo = InstallmentsInfo(
+                        commitmentInstallmentsCount: 12,
+                        commitmentInstallmentPeriod: SubscriptionPeriod(value: 1, unit: .month),
+                        installmentBillingPrice: Decimal(0.99),
+                        installmentBillingDisplayPrice: "$0.99",
+                        commitmentTotalPeriod: SubscriptionPeriod(value: 1, unit: .year),
+                        commitmentTotalPrice: Decimal(11.88),
+                        commitmentTotalDisplayPrice: "$11.88",
+                        billingPlanType: billingPlanType
+                    )
+
+                    expect(installmentsInfo.rc_dictionary["billingPlanType"] as? String) == expected
+                }
+            }
+
             it("rc_dictionary has correct size") {
                 let receivedDictionary = self.storeProductDictionary()
 
