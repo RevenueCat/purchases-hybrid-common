@@ -13,6 +13,7 @@ internal enum PaywallResult {
     case purchased
     case restored
     case cancelled
+    case error
 
     var name: String {
         switch self {
@@ -20,6 +21,7 @@ internal enum PaywallResult {
         case .purchased: return "PURCHASED"
         case .restored: return "RESTORED"
         case .cancelled: return "CANCELLED"
+        case .error: return "ERROR"
         }
     }
 }

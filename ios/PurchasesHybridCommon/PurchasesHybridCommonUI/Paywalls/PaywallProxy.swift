@@ -231,6 +231,7 @@ import UIKit
                                        paywallResultHandler: @escaping (String) -> Void) {
         guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
             print("Error: missing required entitlement identifier.")
+            paywallResultHandler(PaywallResult.error.name)
             return
         }
 
@@ -251,6 +252,7 @@ import UIKit
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
+                paywallResultHandler(PaywallResult.error.name)
             }
         }
     }
@@ -262,6 +264,7 @@ import UIKit
                                        paywallResultHandler: ((String) -> Void)? = nil) {
         guard var rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
+            paywallResultHandler?(PaywallResult.error.name)
             return
         }
 
