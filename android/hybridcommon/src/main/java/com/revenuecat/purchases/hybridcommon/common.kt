@@ -1349,6 +1349,7 @@ fun trackAdRewardEarnedUnverified(adData: Map<String, Any?>) {
         placement = adData["placement"] as? String,
         adUnitId = adUnitId,
         impressionId = impressionId,
+        rewardVerificationEnabled = adData["rewardVerificationEnabled"] as? Boolean ?: false,
     )
 
     Purchases.sharedInstance.adTracker.trackAdRewardEarnedUnverified(rewardEarnedData)

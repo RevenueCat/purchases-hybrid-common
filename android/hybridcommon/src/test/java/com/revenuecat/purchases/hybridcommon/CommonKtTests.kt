@@ -23,6 +23,8 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.WebPurchaseRedemption
+import com.revenuecat.purchases.ads.events.AdTracker
+import com.revenuecat.purchases.ads.events.types.AdRewardEarnedUnverifiedData
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -2323,6 +2325,45 @@ internal class CommonKtTests {
         }
 
         assertThat(actualCachedVirtualCurrenciesMap).isNull()
+    }
+
+    @Test
+    fun `trackAdRewardEarnedUnverified forwards reward verification enabled`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedData = slot<AdRewardEarnedUnverifiedData>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData)) } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+                "rewardVerificationEnabled" to true,
+            ),
+        )
+
+        assertThat(capturedData.captured.rewardVerificationEnabled).isTrue()
+    }
+
+    @Test
+    fun `trackAdRewardEarnedUnverified defaults reward verification enabled to false`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedData = slot<AdRewardEarnedUnverifiedData>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData)) } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+            ),
+        )
+
+        assertThat(capturedData.captured.rewardVerificationEnabled).isFalse()
     }
 
     @OptIn(InternalRevenueCatAPI::class)

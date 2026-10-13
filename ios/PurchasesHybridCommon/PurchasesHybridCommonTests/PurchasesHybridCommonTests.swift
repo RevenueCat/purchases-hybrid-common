@@ -573,5 +573,31 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect(NSDictionary(dictionary: cachedVirtualCurrencies2!)).to(equal(expectedVirtualCurrenciesDictionary))
             }
         }
+
+        if #available(iOS 15.0, *) {
+            context("trackAdRewardEarnedUnverified") {
+                let requiredAdData: [String: Any] = [
+                    "mediatorName": "admob",
+                    "adFormat": "rewarded",
+                    "adUnitId": "ad-unit-id",
+                    "impressionId": "impression-id"
+                ]
+
+                it("forwards rewardVerificationEnabled") {
+                    var adData = requiredAdData
+                    adData["rewardVerificationEnabled"] = true
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beTrue())
+                }
+
+                it("defaults rewardVerificationEnabled to false") {
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: requiredAdData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beFalse())
+                }
+            }
+        }
     }
 }
