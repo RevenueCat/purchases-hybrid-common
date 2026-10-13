@@ -1157,8 +1157,8 @@ fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.
  * ad data they bridge. Missing or unrecognized values fall back to [AdCaptureMethod.MANUAL].
  */
 @OptIn(InternalRevenueCatAPI::class)
-internal fun Map<String, Any?>?.adCaptureMethod(): AdCaptureMethod {
-    val rawValue = this?.get("captureMethod") as? String ?: return AdCaptureMethod.MANUAL
+internal fun Map<String, Any?>.adCaptureMethod(): AdCaptureMethod {
+    val rawValue = this["captureMethod"] as? String ?: return AdCaptureMethod.MANUAL
     return AdCaptureMethod.values().firstOrNull { it.value == rawValue } ?: run {
         errorLog("Unrecognized captureMethod '$rawValue', falling back to manual")
         AdCaptureMethod.MANUAL
@@ -1902,7 +1902,7 @@ fun pollRewardVerification(
         clientTransactionId = clientTransactionId,
         callback = { result -> onResult.onReceived(result.map()) },
         trackingMetadata = metadata,
-        captureMethod = trackingMetadata.adCaptureMethod(),
+        captureMethod = trackingMetadata?.adCaptureMethod() ?: AdCaptureMethod.MANUAL,
     )
 }
 
