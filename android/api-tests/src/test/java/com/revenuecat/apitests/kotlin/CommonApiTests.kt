@@ -49,6 +49,7 @@ import com.revenuecat.purchases.hybridcommon.trackAdFailedToLoad
 import com.revenuecat.purchases.hybridcommon.trackAdLoaded
 import com.revenuecat.purchases.hybridcommon.trackAdOpened
 import com.revenuecat.purchases.hybridcommon.trackAdRevenue
+import com.revenuecat.purchases.hybridcommon.trackAdRewardEarnedUnverified
 import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptAccepted
 import com.revenuecat.purchases.hybridcommon.trackRewardedAdPromptShown
 import com.revenuecat.purchases.models.InAppMessageType
@@ -536,6 +537,7 @@ private class CommonApiTests {
         trackAdRevenue(adData)
         trackAdLoaded(adData)
         trackAdFailedToLoad(adData)
+        trackAdRewardEarnedUnverified(adData)
         trackRewardedAdPromptShown(adData)
         trackRewardedAdPromptAccepted(adData)
     }

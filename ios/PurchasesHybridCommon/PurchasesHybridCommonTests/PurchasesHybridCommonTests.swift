@@ -573,5 +573,68 @@ class PurchasesHybridCommonTests: QuickSpec {
                 expect(NSDictionary(dictionary: cachedVirtualCurrencies2!)).to(equal(expectedVirtualCurrenciesDictionary))
             }
         }
+
+        if #available(iOS 15.0, *) {
+            context("trackAdRewardEarnedUnverified") {
+                let requiredAdData: [String: Any] = [
+                    "mediatorName": "admob",
+                    "adFormat": "rewarded",
+                    "adUnitId": "ad-unit-id",
+                    "impressionId": "impression-id"
+                ]
+
+                it("forwards all fields") {
+                    var adData = requiredAdData
+                    adData["networkName"] = "network-name"
+                    adData["placement"] = "placement"
+                    adData["rewardVerificationEnabled"] = true
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned).to(equal(AdRewardEarnedUnverified(
+                        networkName: "network-name",
+                        mediatorName: MediatorName(rawValue: "admob"),
+                        adFormat: AdFormat(rawValue: "rewarded"),
+                        placement: "placement",
+                        adUnitId: "ad-unit-id",
+                        impressionId: "impression-id",
+                        rewardVerificationEnabled: true
+                    )))
+                }
+
+                it("defaults rewardVerificationEnabled to false") {
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: requiredAdData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beFalse())
+                }
+
+                it("accepts a boolean NSNumber") {
+                    var adData = requiredAdData
+                    adData["rewardVerificationEnabled"] = NSNumber(value: true)
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beTrue())
+                }
+
+                it("does not treat a numeric NSNumber as a boolean") {
+                    var adData = requiredAdData
+                    adData["rewardVerificationEnabled"] = NSNumber(value: 1)
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beFalse())
+                }
+
+                it("rejects data missing any required field") {
+                    for requiredKey in requiredAdData.keys {
+                        var adData = requiredAdData
+                        adData.removeValue(forKey: requiredKey)
+
+                        expect(CommonFunctionality.adRewardEarnedUnverified(from: adData)).to(beNil())
+                    }
+                }
+            }
+        }
     }
 }

@@ -863,6 +863,45 @@ import StoreKit
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackAdRewardEarnedUnverified(_ adData: [String: Any]) {
+        guard let rewardEarned = Self.adRewardEarnedUnverified(from: adData) else {
+            NSLog("[PurchasesHybridCommon] trackAdRewardEarnedUnverified: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
+            return
+        }
+
+        Purchases.shared.adTracker.trackAdRewardEarnedUnverified(rewardEarned)
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @nonobjc internal static func adRewardEarnedUnverified(
+        from adData: [String: Any]
+    ) -> AdRewardEarnedUnverified? {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
+              let adUnitId = adData["adUnitId"] as? String,
+              let impressionId = adData["impressionId"] as? String else {
+            return nil
+        }
+        let rewardVerificationEnabled: Bool
+        if let number = adData["rewardVerificationEnabled"] as? NSNumber,
+           CFGetTypeID(number) == CFBooleanGetTypeID() {
+            rewardVerificationEnabled = number.boolValue
+        } else {
+            rewardVerificationEnabled = false
+        }
+
+        return AdRewardEarnedUnverified(
+            networkName: adData["networkName"] as? String,
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            adFormat: AdFormat(rawValue: adFormatString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId,
+            impressionId: impressionId,
+            rewardVerificationEnabled: rewardVerificationEnabled
+        )
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     @objc static func trackRewardedAdPromptShown(_ adData: [String: Any]) {
         guard let mediatorNameString = adData["mediatorName"] as? String,
               let adUnitId = adData["adUnitId"] as? String else {
