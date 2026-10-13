@@ -608,6 +608,24 @@ class PurchasesHybridCommonTests: QuickSpec {
                     expect(rewardEarned?.rewardVerificationEnabled).to(beFalse())
                 }
 
+                it("accepts a boolean NSNumber") {
+                    var adData = requiredAdData
+                    adData["rewardVerificationEnabled"] = NSNumber(value: true)
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beTrue())
+                }
+
+                it("does not treat a numeric NSNumber as a boolean") {
+                    var adData = requiredAdData
+                    adData["rewardVerificationEnabled"] = NSNumber(value: 1)
+
+                    let rewardEarned = CommonFunctionality.adRewardEarnedUnverified(from: adData)
+
+                    expect(rewardEarned?.rewardVerificationEnabled).to(beFalse())
+                }
+
                 it("rejects data missing any required field") {
                     for requiredKey in requiredAdData.keys {
                         var adData = requiredAdData

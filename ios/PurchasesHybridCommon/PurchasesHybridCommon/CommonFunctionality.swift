@@ -882,6 +882,13 @@ import StoreKit
               let impressionId = adData["impressionId"] as? String else {
             return nil
         }
+        let rewardVerificationEnabled: Bool
+        if let number = adData["rewardVerificationEnabled"] as? NSNumber,
+           CFGetTypeID(number) == CFBooleanGetTypeID() {
+            rewardVerificationEnabled = number.boolValue
+        } else {
+            rewardVerificationEnabled = false
+        }
 
         return AdRewardEarnedUnverified(
             networkName: adData["networkName"] as? String,
@@ -890,7 +897,7 @@ import StoreKit
             placement: adData["placement"] as? String,
             adUnitId: adUnitId,
             impressionId: impressionId,
-            rewardVerificationEnabled: adData["rewardVerificationEnabled"] as? Bool ?? false
+            rewardVerificationEnabled: rewardVerificationEnabled
         )
     }
 
