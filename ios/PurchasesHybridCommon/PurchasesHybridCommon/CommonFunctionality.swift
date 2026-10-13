@@ -1162,7 +1162,7 @@ private extension CommonFunctionality {
 
     static func product(with identifier: String, completion: @escaping (StoreProduct?) -> Void) {
         Self.sharedInstance.getProducts([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier })
+            completion(products.first { $0.id == identifier })
         }
     }
 

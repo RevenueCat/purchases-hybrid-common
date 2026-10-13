@@ -1,3 +1,21 @@
+## 19.11.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.94.0 => 5.95.0 Android 10.26.0 => 10.27.0 (#1972) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.10.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.93.0 => 5.94.0 (#1965) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.9.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(iOS): expose installment infos on StoreProduct for iOS (#1948) via Will Taylor (@fire-at-will)
+
+### 🔄 Other Changes
+* Bump CI to Ruby 3.3 (#1961) via Josh Holtz (@joshdholtz)
+
 ## 19.8.0
 ## RevenueCat SDK
 ### 🐞 Bugfixes

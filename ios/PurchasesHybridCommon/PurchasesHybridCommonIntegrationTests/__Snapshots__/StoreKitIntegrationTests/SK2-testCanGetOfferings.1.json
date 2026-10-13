@@ -17,6 +17,7 @@
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+          "installmentsInfo" : null,
           "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
@@ -57,6 +58,7 @@
 
             ],
             "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+            "installmentsInfo" : null,
             "introPrice" : {
               "cycles" : 1,
               "period" : "P1W",
@@ -104,6 +106,7 @@
               }
             ],
             "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+            "installmentsInfo" : null,
             "introPrice" : {
               "cycles" : 1,
               "period" : "P1W",
@@ -156,6 +159,7 @@
             }
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "installmentsInfo" : null,
           "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
@@ -203,6 +207,7 @@
 
         ],
         "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+        "installmentsInfo" : null,
         "introPrice" : {
           "cycles" : 1,
           "period" : "P1W",
@@ -246,6 +251,7 @@
 
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.annual_39.99_.1_week_intro",
+          "installmentsInfo" : null,
           "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
@@ -296,6 +302,7 @@
             }
           ],
           "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+          "installmentsInfo" : null,
           "introPrice" : {
             "cycles" : 1,
             "period" : "P1W",
@@ -351,6 +358,7 @@
           }
         ],
         "identifier" : "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro",
+        "installmentsInfo" : null,
         "introPrice" : {
           "cycles" : 1,
           "period" : "P1W",

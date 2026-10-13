@@ -61,6 +61,7 @@ fun StoreProduct.map(): Map<String, Any?> =
         "subscriptionOptions" to subscriptionOptions?.map { it.mapSubscriptionOption(this) },
         "presentedOfferingIdentifier" to presentedOfferingContext?.offeringIdentifier,
         "presentedOfferingContext" to presentedOfferingContext?.map(),
+        "installmentsInfo" to null,
     )
 
 private fun List<StoreProduct>.map(): List<Map<String, Any?>> = this.map { it.map() }
@@ -260,5 +261,13 @@ private fun InstallmentsInfo.map(): Map<String, Any?> {
     return mapOf(
         "commitmentPaymentsCount" to commitmentPaymentsCount,
         "renewalCommitmentPaymentsCount" to renewalCommitmentPaymentsCount,
+        // The following fields are only available on iOS
+        "commitmentInstallmentPeriod" to null,
+        "installmentBillingPrice" to null,
+        "installmentBillingPriceString" to null,
+        "commitmentTotalPeriod" to null,
+        "commitmentTotalPrice" to null,
+        "commitmentTotalPriceString" to null,
+        "billingPlanType" to null,
     )
 }

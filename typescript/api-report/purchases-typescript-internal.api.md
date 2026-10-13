@@ -14,6 +14,13 @@ export enum BILLING_FEATURE {
 }
 
 // @public
+export enum BILLING_PLAN_TYPE {
+    MONTHLY = "MONTHLY",
+    UNKNOWN = "UNKNOWN",
+    UP_FRONT = "UP_FRONT"
+}
+
+// @public
 export interface CustomerInfo {
     readonly activeSubscriptions: string[];
     readonly allExpirationDates: {
@@ -68,7 +75,14 @@ export enum IN_APP_MESSAGE_TYPE {
 
 // @public
 export interface InstallmentsInfo {
+    readonly billingPlanType: BILLING_PLAN_TYPE | null;
+    readonly commitmentInstallmentPeriod: string | null;
     readonly commitmentPaymentsCount: number;
+    readonly commitmentTotalPeriod: string | null;
+    readonly commitmentTotalPrice: number | null;
+    readonly commitmentTotalPriceString: string | null;
+    readonly installmentBillingPrice: number | null;
+    readonly installmentBillingPriceString: string | null;
     readonly renewalCommitmentPaymentsCount: number;
 }
 
@@ -547,6 +561,7 @@ export interface PurchasesStoreProduct {
     readonly description: string;
     readonly discounts: PurchasesStoreProductDiscount[] | null;
     readonly identifier: string;
+    readonly installmentsInfo: InstallmentsInfo | null;
     readonly introPrice: PurchasesIntroPrice | null;
     readonly presentedOfferingContext: PresentedOfferingContext | null;
     // @deprecated
