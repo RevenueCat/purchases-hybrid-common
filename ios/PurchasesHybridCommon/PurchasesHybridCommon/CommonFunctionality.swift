@@ -873,7 +873,9 @@ import StoreKit
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @nonobjc static func adRewardEarnedUnverified(from adData: [String: Any]) -> AdRewardEarnedUnverified? {
+    @nonobjc internal static func adRewardEarnedUnverified(
+        from adData: [String: Any]
+    ) -> AdRewardEarnedUnverified? {
         guard let mediatorNameString = adData["mediatorName"] as? String,
               let adFormatString = adData["adFormat"] as? String,
               let adUnitId = adData["adUnitId"] as? String,

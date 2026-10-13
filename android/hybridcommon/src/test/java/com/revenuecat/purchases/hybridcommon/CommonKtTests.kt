@@ -24,6 +24,8 @@ import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.WebPurchaseRedemption
 import com.revenuecat.purchases.ads.events.AdTracker
+import com.revenuecat.purchases.ads.events.types.AdFormat
+import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdRewardEarnedUnverifiedData
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
@@ -2336,15 +2338,27 @@ internal class CommonKtTests {
 
         trackAdRewardEarnedUnverified(
             mapOf(
+                "networkName" to "network-name",
                 "mediatorName" to "admob",
                 "adFormat" to "rewarded",
+                "placement" to "placement",
                 "adUnitId" to "ad-unit-id",
                 "impressionId" to "impression-id",
                 "rewardVerificationEnabled" to true,
             ),
         )
 
-        assertThat(capturedData.captured.rewardVerificationEnabled).isTrue()
+        assertThat(capturedData.captured).isEqualTo(
+            AdRewardEarnedUnverifiedData(
+                networkName = "network-name",
+                mediatorName = AdMediatorName.fromString("admob"),
+                adFormat = AdFormat.fromString("rewarded"),
+                placement = "placement",
+                adUnitId = "ad-unit-id",
+                impressionId = "impression-id",
+                rewardVerificationEnabled = true,
+            ),
+        )
     }
 
     @Test
@@ -2364,6 +2378,24 @@ internal class CommonKtTests {
         )
 
         assertThat(capturedData.captured.rewardVerificationEnabled).isFalse()
+    }
+
+    @Test
+    fun `trackAdRewardEarnedUnverified ignores data missing required fields`() {
+        val mockAdTracker = mockk<AdTracker>(relaxed = true)
+        every { mockPurchases.adTracker } returns mockAdTracker
+        val requiredAdData = mapOf(
+            "mediatorName" to "admob",
+            "adFormat" to "rewarded",
+            "adUnitId" to "ad-unit-id",
+            "impressionId" to "impression-id",
+        )
+
+        requiredAdData.keys.forEach { requiredKey ->
+            trackAdRewardEarnedUnverified(requiredAdData - requiredKey)
+        }
+
+        verify(exactly = 0) { mockAdTracker.trackAdRewardEarnedUnverified(any()) }
     }
 
     @OptIn(InternalRevenueCatAPI::class)
