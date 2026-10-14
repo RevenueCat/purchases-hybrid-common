@@ -196,7 +196,7 @@
         "offeringIdentifier" : "default",
         "placementIdentifier" : null,
         "targetingContext" : {
-          "revision" : 2,
+          "revision" : 3,
           "ruleId" : "J1RgmSUMEy"
         }
       },
@@ -240,7 +240,7 @@
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
           "targetingContext" : {
-            "revision" : 2,
+            "revision" : 3,
             "ruleId" : "J1RgmSUMEy"
           }
         },
@@ -283,7 +283,7 @@
           "offeringIdentifier" : "default",
           "placementIdentifier" : null,
           "targetingContext" : {
-            "revision" : 2,
+            "revision" : 3,
             "ruleId" : "J1RgmSUMEy"
           }
         },
@@ -339,7 +339,7 @@
         "offeringIdentifier" : "default",
         "placementIdentifier" : null,
         "targetingContext" : {
-          "revision" : 2,
+          "revision" : 3,
           "ruleId" : "J1RgmSUMEy"
         }
       },
