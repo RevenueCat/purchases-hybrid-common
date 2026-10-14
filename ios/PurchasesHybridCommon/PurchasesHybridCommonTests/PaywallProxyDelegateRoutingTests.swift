@@ -18,7 +18,7 @@ import UIKit
 private final class PaywallDelegateSpy: NSObject, PaywallViewControllerDelegateWrapper {
 
     var startedPurchases: [PaywallViewController] = []
-    var completedTransactions: [[String: Any]?] = []
+    var completedTransactions: [[String: Any]] = []
 
     func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController) {
         self.startedPurchases.append(controller)
@@ -26,7 +26,7 @@ private final class PaywallDelegateSpy: NSObject, PaywallViewControllerDelegateW
 
     func paywallViewController(_ controller: PaywallViewController,
                                didFinishPurchasingWith customerInfoDictionary: [String: Any],
-                               transaction transactionDictionary: [String: Any]?) {
+                               transaction transactionDictionary: [String: Any]) {
         self.completedTransactions.append(transactionDictionary)
     }
 
@@ -136,7 +136,7 @@ class PaywallProxyDelegateRoutingTests: QuickSpec {
                                             didFinishPurchasingWith: customerInfo,
                                             transaction: transaction)
 
-                expect(proxyWideDelegate.completedTransactions.map { $0?["transactionIdentifier"] as? String })
+                expect(proxyWideDelegate.completedTransactions.map { $0["transactionIdentifier"] as? String })
                     == ["transaction"]
             }
 
