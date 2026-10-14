@@ -199,7 +199,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     private fun finish(paywallResult: String) {
         setFragmentResult(paywallResult)
         PaywallFragmentNonSerializableArgsStore.remove(requestKey)
-        parentFragmentManager.beginTransaction().remove(this).commit()
+        parentFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
     }
 
     private fun convertToCustomVariableValues(
