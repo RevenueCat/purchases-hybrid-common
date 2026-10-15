@@ -484,10 +484,14 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
+        guard let transaction else {
+            NSLog("Not reporting purchase completed: the purchase has no transaction.")
+            return
+        }
         self.resolvedDelegate(for: controller)?
             .paywallViewController?(controller,
                                     didFinishPurchasingWith: customerInfo.dictionary,
-                                    transaction: transaction?.dictionary)
+                                    transaction: transaction.dictionary)
     }
 
     public func paywallViewControllerDidCancelPurchase(_ controller: PaywallViewController) {
