@@ -240,7 +240,7 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
 }
 
 // MARK: - Mock Transaction Helper
-private final class MockStoreTransaction: StoreTransactionType {
+final class MockStoreTransaction: StoreTransactionType {
     let productIdentifier: String
     let purchaseDate: Date
     let transactionIdentifier: String

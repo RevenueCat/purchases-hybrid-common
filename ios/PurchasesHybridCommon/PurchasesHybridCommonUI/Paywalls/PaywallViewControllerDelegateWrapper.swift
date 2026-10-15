@@ -33,7 +33,7 @@ public protocol PaywallViewControllerDelegateWrapper: AnyObject {
     @objc(paywallViewController:didFinishPurchasingWithCustomerInfoDictionary:transactionDictionary:)
     optional func paywallViewController(_ controller: PaywallViewController,
                                         didFinishPurchasingWith customerInfoDictionary: [String: Any],
-                                        transaction transactionDictionary: [String: Any]?)
+                                        transaction transactionDictionary: [String: Any])
 
     /// Notifies that a purchase has been cancelled in a ``PaywallViewController``.
     @objc(paywallViewControllerDidCancelPurchase:)
