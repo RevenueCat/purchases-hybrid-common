@@ -1,8 +1,13 @@
 ## RevenueCat SDK
 ### ✨ New Features
-* Add unverified rewarded ad tracking bridge (#1958) via Pol Miro (@polmiro)
+* feat(ads): map possible new capture methods (#1970) via Peter Porfy (@peterporfy)
+### 🐞 Bugfixes
+* Resolve paywall presentation when it exits before showing (#1954) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.27.0 => 10.27.1 (#1977) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* chore(deps): bump lefthook from 2.1.16 to 2.1.17 (#1963) via dependabot[bot] (@dependabot[bot])
-* chore(deps): bump handlebars from 4.7.9 to 4.7.10 in /typescript (#1974) via dependabot[bot] (@dependabot[bot])
-* chore(deps): bump handlebars from 4.7.9 to 4.7.10 in /purchases-js-hybrid-mappings (#1966) via dependabot[bot] (@dependabot[bot])
+* [AUTOMATIC] Update generated error codes (#1978) via RevenueCat Git Bot (@RCGitBot)
+* chore(deps): bump lefthook from 2.1.17 to 2.2.1 (#1976) via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump fastlane from 2.240.1 to 2.241.0 (#1983) via dependabot[bot] (@dependabot[bot])
+* Update iOS integration test offerings snapshots (#1980) via Álvaro Brey (@AlvaroBrey)
