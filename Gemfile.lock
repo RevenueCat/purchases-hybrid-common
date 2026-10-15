@@ -281,7 +281,7 @@ GEM
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    lefthook (2.1.17)
+    lefthook (2.2.1)
     logger (1.7.0)
     mime-types (3.7.0)
       logger
@@ -412,7 +412,7 @@ DEPENDENCIES
   fastlane
   fastlane-plugin-revenuecat_internal!
   fastlane-plugin-versioning_android
-  lefthook (~> 2.1)
+  lefthook (~> 2.2)
   rest-client
 
 BUNDLED WITH
