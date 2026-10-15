@@ -725,6 +725,21 @@ import StoreKit
 }
 
 // MARK: - Ad Tracking
+private extension CommonFunctionality {
+
+    /// Resolves the optional `captureMethod` key that the official RevenueCat hybrid AdMob adapters put
+    /// in the ad data they bridge. Missing or unrecognized values fall back to `.manual`.
+    static func adCaptureMethod(from data: [String: Any]?) -> AdEventCaptureMethod {
+        guard let rawValue = data?["captureMethod"] as? String else { return .manual }
+        guard let captureMethod = AdEventCaptureMethod(rawValue: rawValue) else {
+            NSLog("[PurchasesHybridCommon] Unrecognized captureMethod '\(rawValue)', falling back to manual")
+            return .manual
+        }
+        return captureMethod
+    }
+
+}
+
 @objc public extension CommonFunctionality {
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -750,7 +765,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed)
+        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -776,7 +791,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdOpened(adOpened)
+        Purchases.shared.adTracker.trackAdOpened(adOpened, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -809,7 +824,7 @@ import StoreKit
             precision: precision
         )
 
-        Purchases.shared.adTracker.trackAdRevenue(adRevenue)
+        Purchases.shared.adTracker.trackAdRevenue(adRevenue, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -835,7 +850,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdLoaded(adLoaded)
+        Purchases.shared.adTracker.trackAdLoaded(adLoaded, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -859,7 +874,7 @@ import StoreKit
             mediatorErrorCode: mediatorErrorCode
         )
 
-        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
+        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -1389,7 +1404,8 @@ private extension CommonFunctionality {
         _ = Task<Void, Never> {
             let result = await Purchases.shared.pollRewardVerification(
                 clientTransactionID: clientTransactionId,
-                trackingMetadata: metadata
+                trackingMetadata: metadata,
+                captureMethod: Self.adCaptureMethod(from: trackingMetadata)
             )
             completion(result.rc_dictionary, nil)
         }
