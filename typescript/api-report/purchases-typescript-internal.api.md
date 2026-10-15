@@ -352,6 +352,12 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     EMPTY_SUBSCRIBER_ATTRIBUTES_ERROR = "25",
     // (undocumented)
+    EXPIRED_WEB_PURCHASE_TOKEN = "41",
+    // (undocumented)
+    FEATURE_NOT_AVAILABLE_IN_CUSTOM_ENTITLEMENTS_COMPUTATION_MODE = "36",
+    // (undocumented)
+    FEATURE_NOT_SUPPORTED_WITH_STORE_KIT_1 = "38",
+    // (undocumented)
     INELIGIBLE_ERROR = "18",
     // (undocumented)
     INSUFFICIENT_PERMISSIONS_ERROR = "19",
@@ -367,6 +373,8 @@ export enum PURCHASES_ERROR_CODE {
     INVALID_RECEIPT_ERROR = "8",
     // (undocumented)
     INVALID_SUBSCRIBER_ATTRIBUTES_ERROR = "21",
+    // (undocumented)
+    INVALID_WEB_PURCHASE_TOKEN = "39",
     // (undocumented)
     LOG_OUT_ANONYMOUS_USER_ERROR = "22",
     // (undocumented)
@@ -390,6 +398,8 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     PRODUCT_REQUEST_TIMED_OUT_ERROR = "32",
     // (undocumented)
+    PURCHASE_BELONGS_TO_OTHER_USER = "40",
+    // (undocumented)
     PURCHASE_CANCELLED_ERROR = "1",
     // (undocumented)
     PURCHASE_INVALID_ERROR = "4",
@@ -399,6 +409,8 @@ export enum PURCHASES_ERROR_CODE {
     RECEIPT_ALREADY_IN_USE_ERROR = "7",
     // (undocumented)
     RECEIPT_IN_USE_BY_OTHER_SUBSCRIBER_ERROR = "13",
+    // (undocumented)
+    SIGNATURE_VERIFICATION_ERROR = "37",
     // (undocumented)
     STORE_PROBLEM_ERROR = "2",
     // (undocumented)
