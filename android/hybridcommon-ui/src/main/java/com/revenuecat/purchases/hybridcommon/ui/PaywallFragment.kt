@@ -160,7 +160,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 "Purchases is not configured. " +
                     "Make sure to call Purchases.configure() before launching the paywall. Dismissing.",
             )
-            removeFragment()
+            finish(ERROR_PAYWALL_RESULT)
             return
         }
 
@@ -178,8 +178,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
                 "Non-serializable paywall args (purchaseLogic/paywallListener) were lost after " +
                     "process death. Dismissing paywall to prevent a broken state.",
             )
-            setFragmentResult("ERROR")
-            removeFragment()
+            finish(ERROR_PAYWALL_RESULT)
             return
         }
 
@@ -194,11 +193,11 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
     }
 
     override fun onActivityResult(result: PaywallResult) {
-        setFragmentResult(result)
-        removeFragment()
+        finish(result.name)
     }
 
-    private fun removeFragment() {
+    private fun finish(paywallResult: String) {
+        setFragmentResult(paywallResult)
         PaywallFragmentNonSerializableArgsStore.remove(requestKey)
         parentFragmentManager.beginTransaction().remove(this).commit()
     }
@@ -238,8 +237,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val paywallDisplayCallback = object : PaywallDisplayCallback {
             override fun onPaywallDisplayResult(wasDisplayed: Boolean) {
                 if (!wasDisplayed) {
-                    setFragmentResult(notPresentedPaywallResult)
-                    removeFragment()
+                    finish(notPresentedPaywallResult)
                 }
             }
         }
@@ -289,9 +287,6 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
 
         launcher.launchWithOptions(optionsBuilder.build())
     }
-
-    private fun setFragmentResult(paywallResult: PaywallResult) =
-        setFragmentResult(paywallResult = paywallResult.name)
 
     private fun setFragmentResult(paywallResult: String) =
         setFragmentResult(
