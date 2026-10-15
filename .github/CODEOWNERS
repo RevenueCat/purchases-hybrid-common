@@ -1,4 +1,48 @@
 # CODEOWNERS for purchases-hybrid-common
+#
+# The last matching pattern takes precedence, so rules go from broadest to most specific.
+# Code owner review is not required to merge: these rules only decide who gets a review request.
 
-# Default owners
+# Fallback for anything not matched below (build config, CI, release files, root podspecs and Package.swift)
 * @RevenueCat/sdk
+
+# Core bridge code (Android, iOS, TypeScript types and purchases-js mappings)
+/android/ @RevenueCat/coresdk
+/ios/ @RevenueCat/coresdk
+/typescript/ @RevenueCat/coresdk
+/purchases-js-hybrid-mappings/ @RevenueCat/coresdk
+
+# Paywalls
+/android/hybridcommon-ui/ @RevenueCat/paywalls
+/ios/PurchasesHybridCommon/PurchasesHybridCommonUI/ @RevenueCat/paywalls
+/ios/PurchasesHybridCommon/PurchasesHybridCommonTests/Paywall*.swift @RevenueCat/paywalls
+/typescript/src/paywallInteractionEvent.ts @RevenueCat/paywalls
+/purchases-js-hybrid-mappings/tests/paywall-interaction-event-*.ts @RevenueCat/paywalls
+
+# Ads
+/android/hybridcommon/src/**/RewardVerification* @RevenueCat/ads
+/ios/PurchasesHybridCommon/**/AdReward+HybridAdditions*.swift @RevenueCat/ads
+/ios/PurchasesHybridCommon/**/RewardVerification*+HybridAdditions*.swift @RevenueCat/ads
+
+# Customer Center
+/android/hybridcommon-ui/src/**/CustomerCenter* @RevenueCat/customer-center
+/ios/PurchasesHybridCommon/PurchasesHybridCommonUI/CustomerCenter/ @RevenueCat/customer-center
+
+# Version, dependency and generated files, mostly touched by automatic release and bump PRs
+/android/gradle.properties @RevenueCat/sdk
+/android/gradle/libs.versions.toml @RevenueCat/sdk
+/ios/PurchasesHybridCommon/Podfile @RevenueCat/sdk
+/ios/PurchasesHybridCommon/Podfile.lock @RevenueCat/sdk
+/ios/PurchasesHybridCommon/**/Info.plist @RevenueCat/sdk
+/ios/PurchasesHybridCommon/PurchasesHybridCommon/Constants.swift @RevenueCat/sdk
+/typescript/package.json @RevenueCat/sdk
+/typescript/yarn.lock @RevenueCat/sdk
+/purchases-js-hybrid-mappings/package.json @RevenueCat/sdk
+/purchases-js-hybrid-mappings/yarn.lock @RevenueCat/sdk
+/typescript/src/generated/ @RevenueCat/sdk
+
+# Public API surface: changes here should stay visible to the whole SDK team
+/android/api-tests/ @RevenueCat/sdk
+/ios/PurchasesHybridCommon/ObjCAPITester/ @RevenueCat/sdk
+/typescript/api-report/ @RevenueCat/sdk
+/purchases-js-hybrid-mappings/api-report/ @RevenueCat/sdk
