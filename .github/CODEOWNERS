@@ -23,6 +23,9 @@
 /android/hybridcommon/src/**/RewardVerification* @RevenueCat/ads
 /ios/PurchasesHybridCommon/**/AdReward+HybridAdditions*.swift @RevenueCat/ads
 /ios/PurchasesHybridCommon/**/RewardVerification*+HybridAdditions*.swift @RevenueCat/ads
+# Shared bridge files where most ads changes land, so both teams get the request
+/android/hybridcommon/src/main/java/com/revenuecat/purchases/hybridcommon/common.kt @RevenueCat/coresdk @RevenueCat/ads
+/ios/PurchasesHybridCommon/PurchasesHybridCommon/CommonFunctionality.swift @RevenueCat/coresdk @RevenueCat/ads
 
 # Customer Center
 /android/hybridcommon-ui/src/**/CustomerCenter* @RevenueCat/customer-center
