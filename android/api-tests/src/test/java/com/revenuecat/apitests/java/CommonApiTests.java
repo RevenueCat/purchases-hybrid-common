@@ -11,6 +11,7 @@ import com.revenuecat.purchases.Store;
 import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
 import com.revenuecat.purchases.hybridcommon.ErrorContainer;
+import com.revenuecat.purchases.hybridcommon.OnNullableResult;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
@@ -30,6 +31,10 @@ class CommonApiTests {
 
     private void checkGetOfferings(OnResult onResult) {
         CommonKt.getOfferings(onResult);
+    }
+
+    private void checkGetOffering(String offeringIdentifier, OnNullableResult onResult) {
+        CommonKt.getOffering(offeringIdentifier, onResult);
     }
 
     private void checkGetProductInfo(List<String> productIDs,

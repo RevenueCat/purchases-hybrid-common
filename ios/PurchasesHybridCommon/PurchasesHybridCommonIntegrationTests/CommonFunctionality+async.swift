@@ -32,6 +32,23 @@ extension CommonFunctionality {
         }
     }
 
+    static func offering(forIdentifier identifier: String) async throws -> [String: Any]? {
+        let value: PlacementOffering = try await withCheckedThrowingContinuation { continuation in
+            Self.getOffering(forIdentifier: identifier) { dictionary, error in
+                let result: PlacementOffering
+                if let dictionary {
+                    result = .offering(dictionary)
+                } else {
+                    result = .none
+                }
+
+                continuation.resume(with: Result(result, error?.error))
+            }
+        }
+
+        return value.rawValue
+    }
+
     static func currentOffering(forPlacement placement: String) async throws -> [String: Any]? {
         let value: PlacementOffering = try await withCheckedThrowingContinuation { continuation in
             Self.getCurrentOffering(forPlacement: placement) { dictionary, error in
