@@ -640,10 +640,13 @@ workflows:
           <<: *release-tags
           context: maven-central-publishing
       - deploy-typescript:
+          context: npm-publishing
           <<: *release-tags
       - deploy-typescript-esm:
+          context: npm-publishing
           <<: *release-tags
       - deploy-js-mappings:
+          context: npm-publishing
           <<: *release-tags
       - make-github-release:
           <<: *release-tags
