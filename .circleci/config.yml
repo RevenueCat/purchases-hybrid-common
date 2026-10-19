@@ -336,7 +336,10 @@ jobs:
           tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - copy-npm-rc
+      - unless:
+          condition: << parameters.dry_run >>
+          steps:
+            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package
           command: bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
@@ -354,7 +357,10 @@ jobs:
           tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - copy-npm-rc
+      - unless:
+          condition: << parameters.dry_run >>
+          steps:
+            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces ESNext NPM package
           command: bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
@@ -372,7 +378,10 @@ jobs:
           tools: node
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - copy-npm-rc
+      - unless:
+          condition: << parameters.dry_run >>
+          steps:
+            - copy-npm-rc
       - run:
           name: Deploy js-mappings NPM package
           command: bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
