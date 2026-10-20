@@ -59,7 +59,7 @@ export class UnsupportedPlatformError extends Error {
 /**
  * Returns whether the given value is a {@link PurchasesError} thrown by the SDK.
  *
- * A value qualifies when it's schema matches {@link PurchasesError} and a `code` that is one of the
+ * A value qualifies when its schema matches {@link PurchasesError} and its `code` is one of the
  * {@link PURCHASES_ERROR_CODE} values.
  *
  * @public
