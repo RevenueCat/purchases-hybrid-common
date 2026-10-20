@@ -852,7 +852,7 @@ describe('mapOfferings', () => {
     expect(mappedOption.pricingPhases).toEqual([freePhase, introPhase, basePhase]);
   });
 
-  describe('QA public currency-unit contract', () => {
+  describe('period prices in currency units', () => {
     it.each(['Week', 'Month', 'Year'])('maps pricePer%s to major currency units', period => {
       const pkg = createPackage('qa', 'qa', PackageType.Monthly);
       const offering = {
