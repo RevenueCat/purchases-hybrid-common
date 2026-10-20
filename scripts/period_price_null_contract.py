@@ -5,7 +5,7 @@ b=Path(tempfile.mkdtemp(prefix='period-price-contract-')); w=b/'ios-period-harne
 repo=str(Path(__file__).resolve().parents[1])
 source=(Path(repo)/'ios/PurchasesHybridCommon/PurchasesHybridCommon/StoreProduct+HybridAdditions.swift').read_text()
 (w/'StoreProduct+HybridAdditions.swift').write_text(source)
-# Minimal dependency types supply nullable period prices, but all serialization is unmodified historical production code.
+# Dependency declarations supply nullable product properties; serialization uses the SDK mapper.
 (w/'RevenueCat.swift').write_text('''import Foundation
 public enum ProductCategory { case nonSubscription, subscription }
 public enum ProductType { case consumable, nonConsumable, nonRenewableSubscription, autoRenewableSubscription }

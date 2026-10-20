@@ -69,12 +69,12 @@ class StoreProductHybridAdditionsTests: QuickSpec {
 
     override func spec() {
 
-        describe("QA non-subscription period-price null contract") {
+        describe("non-subscription period-price null contract") {
             let fields = ["pricePerWeek", "pricePerMonth", "pricePerYear", "pricePerWeekString", "pricePerMonthString", "pricePerYearString"]
             for field in fields {
                 it("serializes explicit null for " + field) {
                     let product = TestStoreProduct(
-                        localizedTitle: "QA Lifetime", price: Decimal(19.99), currencyCode: "USD",
+                        localizedTitle: "Lifetime", price: Decimal(19.99), currencyCode: "USD",
                         localizedPriceString: "$19.99", productIdentifier: "qa_lifetime",
                         productType: .nonConsumable, localizedDescription: "Lifetime control",
                         subscriptionPeriod: nil, locale: Locale(identifier: "en_US")
