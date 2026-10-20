@@ -74,12 +74,12 @@ internal extension StoreProduct {
             "installmentsInfo": NSNull(),
         ]
 
-        dictionary["pricePerWeek"] = self.pricePerWeek
-        dictionary["pricePerMonth"] = self.pricePerMonth
-        dictionary["pricePerYear"] = self.pricePerYear
-        dictionary["pricePerWeekString"] = self.localizedPricePerWeek
-        dictionary["pricePerMonthString"] = self.localizedPricePerMonth
-        dictionary["pricePerYearString"] = self.localizedPricePerYear
+        dictionary["pricePerWeek"] = self.pricePerWeek ?? NSNull()
+        dictionary["pricePerMonth"] = self.pricePerMonth ?? NSNull()
+        dictionary["pricePerYear"] = self.pricePerYear ?? NSNull()
+        dictionary["pricePerWeekString"] = self.localizedPricePerWeek ?? NSNull()
+        dictionary["pricePerMonthString"] = self.localizedPricePerMonth ?? NSNull()
+        dictionary["pricePerYearString"] = self.localizedPricePerYear ?? NSNull()
 
         if let introductoryDiscount = self.introductoryDiscount {
             dictionary["introPrice"] = introductoryDiscount.rc_dictionary
