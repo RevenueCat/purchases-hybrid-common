@@ -11,7 +11,7 @@ export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "P
  * The supported ownership types for an entitlement.
  * @public
  */
-export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "ASSIGNED" | "UNKNOWN";
 
 /**
  * The supported period types for an entitlement.
@@ -112,6 +112,7 @@ export interface PurchasesEntitlementInfo {
      * Supported ownership types for an entitlement.
      * PURCHASED if the purchase was made directly by this user.
      * FAMILY_SHARED if the purchase has been shared to this user by a family member.
+     * ASSIGNED if the purchase has been assigned to this user through an organization.
      * UNKNOWN if the purchase has no or an unknown ownership type.
      */
     readonly ownershipType: OwnershipType;
@@ -296,6 +297,7 @@ export interface PurchasesSubscriptionInfo {
      * How the Customer received access to this subscription:
      * - [OwnershipType.PURCHASED]: The customer bought the subscription.
      * - [OwnershipType.FAMILY_SHARED]: The Customer has access to the product via their family.
+     * - [OwnershipType.ASSIGNED]: The Customer has been assigned access to the product through an organization.
      */
     readonly ownershipType: OwnershipType;
     /**

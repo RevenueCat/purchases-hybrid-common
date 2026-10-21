@@ -141,7 +141,7 @@ export enum OFFER_PAYMENT_MODE {
 }
 
 // @public
-export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "ASSIGNED" | "UNKNOWN";
 
 // @public
 export enum PACKAGE_TYPE {

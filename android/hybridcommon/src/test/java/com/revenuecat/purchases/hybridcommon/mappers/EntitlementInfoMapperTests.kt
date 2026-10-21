@@ -45,6 +45,20 @@ class EntitlementInfoMapperTests {
     }
 
     @Test
+    fun `EntitlementInfo OwnershipType is correctly added to the dictionary`() {
+        val expectations = arrayOf(
+            Pair(OwnershipType.PURCHASED, "PURCHASED"),
+            Pair(OwnershipType.FAMILY_SHARED, "FAMILY_SHARED"),
+            Pair(OwnershipType.ASSIGNED, "ASSIGNED"),
+            Pair(OwnershipType.UNKNOWN, "UNKNOWN"),
+        )
+        for ((ownershipType, expected) in expectations) {
+            val resultMap = generateMockEntitlementInfo(store = Store.PLAY_STORE, ownershipType = ownershipType).map()
+            assertThat(resultMap["ownershipType"]).isEqualTo(expected)
+        }
+    }
+
+    @Test
     fun `EntitlementInfo Store is correctly added to the dictionary`() {
         val expectations = arrayOf(
             Pair(Store.APP_STORE, "APP_STORE"),
@@ -74,7 +88,10 @@ class EntitlementInfoMapperTests {
         }
     }
 
-    private fun generateMockEntitlementInfo(store: Store): EntitlementInfo {
+    private fun generateMockEntitlementInfo(
+        store: Store,
+        ownershipType: OwnershipType = OwnershipType.PURCHASED,
+    ): EntitlementInfo {
         val purchaseDate = Date.from(Instant.EPOCH)
 
         return EntitlementInfo(
@@ -91,7 +108,7 @@ class EntitlementInfoMapperTests {
             isSandbox = false,
             unsubscribeDetectedAt = null,
             billingIssueDetectedAt = null,
-            ownershipType = OwnershipType.PURCHASED,
+            ownershipType = ownershipType,
             jsonObject = JSONObject(),
             verification = VerificationResult.VERIFIED,
         )
