@@ -53,6 +53,30 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                 }
             }
 
+            context("ownershipType") {
+                it("is properly set") {
+                    let expectations: [(PurchaseOwnershipType, String)] = [
+                        (.purchased, "PURCHASED"),
+                        (.familyShared, "FAMILY_SHARED"),
+                        (.assigned, "ASSIGNED"),
+                        (.unknown, "UNKNOWN")
+                    ]
+
+                    for (ownershipType, expectedDictionaryValue) in expectations {
+                        let mockEntitlementInfo = self.mockEntitlementInfo(
+                            store: .appStore,
+                            ownershipType: ownershipType
+                        )
+
+                        let dictionary = mockEntitlementInfo.dictionary
+                        expect(dictionary["ownershipType"] as? String).to(
+                            equal(expectedDictionaryValue),
+                            description: "Expected \(ownershipType) to be encoded as \(expectedDictionaryValue)."
+                        )
+                    }
+                }
+            }
+
             context("verification") {
                 it("is properly set") {
                     let mockEntitlementInfo = self.mockEntitlementInfo(store: Store.appStore)
@@ -64,7 +88,10 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
         }
     }
 
-    private func mockEntitlementInfo(store: Store) -> EntitlementInfo {
+    private func mockEntitlementInfo(
+        store: Store,
+        ownershipType: PurchaseOwnershipType = .purchased
+    ) -> EntitlementInfo {
         return EntitlementInfo(
             identifier: "",
             entitlement: .init(productIdentifier: "productId", rawData: self.mockEntitlementData),
@@ -77,7 +104,7 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                 isSandbox: false,
                 unsubscribeDetectedAt: nil,
                 billingIssuesDetectedAt: nil,
-                ownershipType: .purchased
+                ownershipType: ownershipType
             ),
             sandboxEnvironmentDetector: MockSandboxEnvironmentDetector(),
             verification: .notRequested,
