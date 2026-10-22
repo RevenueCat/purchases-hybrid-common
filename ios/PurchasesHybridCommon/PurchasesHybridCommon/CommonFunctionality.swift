@@ -370,7 +370,12 @@ import StoreKit
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package in
+        ) { package, error in
+            if let error {
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                return
+            }
+
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -1078,7 +1083,12 @@ private extension CommonFunctionality {
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package in
+        ) { package, error in
+            if let error {
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                return
+            }
+
             guard let package = package else {
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
@@ -1260,12 +1270,16 @@ private extension CommonFunctionality {
 
     static func package(withIdentifier packageIdentifier: String,
                         presentedOfferingContext: PresentedOfferingContext?,
-                        completion: @escaping(Package?) -> Void) {
+                        completion: @escaping(Package?, PublicError?) -> Void) {
         guard let presentedOfferingContext else {
-            return completion(nil)
+            return completion(nil, nil)
         }
 
         Self.sharedInstance.getOfferings { offerings, error in
+            if let error {
+                return completion(nil, error)
+            }
+
             let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
             let foundPackage = offering?.package(identifier: packageIdentifier)
 
@@ -1279,7 +1293,7 @@ private extension CommonFunctionality {
                 )
             }
 
-            completion(package)
+            completion(package, nil)
         }
     }
 
