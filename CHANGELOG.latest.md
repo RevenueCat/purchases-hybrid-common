@@ -1,7 +1,7 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.96.0 => 5.96.1 (#2002) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.71.0 => 1.72.0 (#2009) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.96.1 => 5.97.0 Android 10.28.1 => 10.29.0 + handle OwnershipType.assigned (#2005) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Skip npmrc copy in npm deploy dry runs (#1999) via Álvaro Brey (@AlvaroBrey)
-* Read npm token from `npm-publishing` CircleCI context (#1997) via Álvaro Brey (@AlvaroBrey)
+* Run iOS 26 tests on Xcode 26.6 (#2004) via Antonio Pallares (@ajpallares)
