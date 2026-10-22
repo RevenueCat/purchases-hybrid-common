@@ -279,13 +279,6 @@ import UIKit
 
         let controller: PaywallViewController
         switch params.content {
-        case let .offering(offering):
-            controller = PaywallViewController(offering: offering,
-                                               fonts: params.fontProvider,
-                                               displayCloseButton: params.displayCloseButton,
-                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
-                                               performRestore: performRestore)
         case let .offeringIdentifier(identifier):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: .init(offeringIdentifier: identifier),
@@ -346,7 +339,6 @@ import UIKit
     // `internal` (rather than `private`) because it is referenced by the now-`internal` `PaywallPresentationParams`.
     enum Content {
 
-        case offering(Offering)
         case offeringIdentifierWithPresentedOfferingContext(String, presentedOfferingContext: PresentedOfferingContext)
         // `offeringIdentifierWithPresentedOfferingContext` is preferred, but this case is necessary for backwards compatibility
         case offeringIdentifier(String)
@@ -650,20 +642,6 @@ extension PaywallProxy {
                             paywallResultHandler: { _ in })
     }
 
-    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
-    @objc
-    public func presentPaywall(offering: Offering) {
-        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: { _ in })
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
-    @objc
-    public func presentPaywall(offering: Offering, displayCloseButton: Bool) {
-        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
-                            purchaseLogicBridge: nil,
-                            paywallResultHandler: { _ in })
-    }
-
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(paywallResultHandler: @escaping (String) -> Void) {
@@ -673,22 +651,6 @@ extension PaywallProxy {
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(displayCloseButton: Bool, paywallResultHandler: @escaping (String) -> Void) {
-        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
-                            purchaseLogicBridge: nil,
-                            paywallResultHandler: paywallResultHandler)
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with options instead")
-    @objc
-    public func presentPaywall(offering: Offering, paywallResultHandler: @escaping (String) -> Void) {
-        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with options instead")
-    @objc
-    public func presentPaywall(offering: Offering,
-                               displayCloseButton: Bool,
-                               paywallResultHandler: @escaping (String) -> Void) {
         self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
                             purchaseLogicBridge: nil,
                             paywallResultHandler: paywallResultHandler)
