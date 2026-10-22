@@ -23,6 +23,7 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.WebPurchaseRedemption
+import com.revenuecat.purchases.ads.events.AdCaptureMethod
 import com.revenuecat.purchases.ads.events.AdTracker
 import com.revenuecat.purchases.ads.events.types.AdFormat
 import com.revenuecat.purchases.ads.events.types.AdMediatorName
@@ -2330,11 +2331,12 @@ internal class CommonKtTests {
     }
 
     @Test
+    @OptIn(InternalRevenueCatAPI::class)
     fun `trackAdRewardEarnedUnverified forwards reward verification enabled`() {
         val mockAdTracker = mockk<AdTracker>()
         val capturedData = slot<AdRewardEarnedUnverifiedData>()
         every { mockPurchases.adTracker } returns mockAdTracker
-        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData)) } just runs
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData), any()) } just runs
 
         trackAdRewardEarnedUnverified(
             mapOf(
@@ -2362,11 +2364,12 @@ internal class CommonKtTests {
     }
 
     @Test
+    @OptIn(InternalRevenueCatAPI::class)
     fun `trackAdRewardEarnedUnverified defaults reward verification enabled to false`() {
         val mockAdTracker = mockk<AdTracker>()
         val capturedData = slot<AdRewardEarnedUnverifiedData>()
         every { mockPurchases.adTracker } returns mockAdTracker
-        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData)) } just runs
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData), any()) } just runs
 
         trackAdRewardEarnedUnverified(
             mapOf(
@@ -2378,6 +2381,29 @@ internal class CommonKtTests {
         )
 
         assertThat(capturedData.captured.rewardVerificationEnabled).isFalse()
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackAdRewardEarnedUnverified forwards capture method`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedCaptureMethod = slot<AdCaptureMethod>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every {
+            mockAdTracker.trackAdRewardEarnedUnverified(any(), capture(capturedCaptureMethod))
+        } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+                "captureMethod" to "flutter_admob_adapter",
+            ),
+        )
+
+        assertThat(capturedCaptureMethod.captured).isEqualTo(AdCaptureMethod.FLUTTER_ADMOB_ADAPTER)
     }
 
     @Test
