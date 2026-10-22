@@ -278,6 +278,16 @@ jobs:
           command: ./gradlew detekt
       - android/save-gradle-cache
 
+  lint-ios:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-mise-tools:
+          tools: swiftlint
+      - run:
+          name: SwiftLint
+          command: swiftlint lint --strict
+
   test-android:
     executor:
       name: android/android-machine
@@ -603,6 +613,7 @@ workflows:
           name: js-mappings-deploy-dry-run
           dry_run: true
       - detekt-android
+      - lint-ios
       - typescript-lint
       - typescript-tests
       - typescript-apitests
@@ -629,6 +640,7 @@ workflows:
             - typescript-esm-deploy-dry-run
             - js-mappings-deploy-dry-run
             - detekt-android
+            - lint-ios
             - typescript-lint
             - typescript-tests
             - typescript-apitests
