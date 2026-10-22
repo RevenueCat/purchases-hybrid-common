@@ -319,6 +319,10 @@ jobs:
       dry_run:
         type: boolean
         default: false
+      lane:
+        type: enum
+        enum: [ deploy, deploy_snapshot ]
+        default: deploy
     steps:
       - checkout
       - revenuecat/install-mise-tools:
@@ -331,7 +335,7 @@ jobs:
       - android/restore-build-cache
       - run:
           name: Deployment
-          command: bundle exec fastlane android deploy dry_run:<< parameters.dry_run >>
+          command: bundle exec fastlane android << parameters.lane >> dry_run:<< parameters.dry_run >>
 
   deploy-typescript:
     docker:
@@ -603,6 +607,16 @@ workflows:
       - deploy-android:
           name: android-deploy-dry-run
           dry_run: true
+      # TODO: remove before merging 20.0-dev into main
+      - deploy-android:
+          name: android-deploy-snapshot
+          lane: deploy_snapshot
+          context: maven-central-publishing
+          requires:
+            - test-android
+          filters:
+            branches:
+              only: 20.0-dev
       - deploy-typescript:
           name: typescript-deploy-dry-run
           dry_run: true

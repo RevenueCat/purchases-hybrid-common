@@ -235,12 +235,64 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                     expect(mockPurchases.invokedPurchasePackageCount) == 1
                 }
             }
+
+            context("package lookup") {
+                var mockPurchases: MockPurchases!
+
+                beforeEach {
+                    mockPurchases = MockPurchases()
+                    CommonFunctionality.sharedInstance = mockPurchases
+                }
+
+                func purchasePackage(offeringsResult: (Offerings?, PublicError?)) -> ErrorContainer? {
+                    let options: [String: Any] = [
+                        "packageIdentifier": "$rc_monthly",
+                        "presentedOfferingContext": ["offeringIdentifier": "default"]
+                    ]
+                    var receivedError: ErrorContainer?
+
+                    CommonFunctionality.purchase(options: options) { _, error in
+                        receivedError = error
+                    }
+                    mockPurchases.invokedOfferingsParameters?.completion(offeringsResult.0, offeringsResult.1)
+
+                    return receivedError
+                }
+
+                it("forwards the offerings error") {
+                    let receivedError = purchasePackage(offeringsResult: (nil, ErrorCode.networkError as NSError))
+
+                    expect(receivedError?.code) == ErrorCode.networkError.rawValue
+                    expect(mockPurchases.invokedPurchasePackageCount) == 0
+                }
+
+                it("forwards the offerings error when purchasing with a win-back offer") {
+                    var receivedError: ErrorContainer?
+
+                    CommonFunctionality.purchase(package: "$rc_monthly",
+                                                 presentedOfferingContext: ["offeringIdentifier": "default"],
+                                                 winBackOfferID: "win_back_offer") { _, error in
+                        receivedError = error
+                    }
+                    mockPurchases.invokedOfferingsParameters?.completion(nil, ErrorCode.networkError as NSError)
+
+                    expect(receivedError?.code) == ErrorCode.networkError.rawValue
+                }
+
+                it("reports a missing package when offerings load without it") {
+                    let receivedError = purchasePackage(offeringsResult: (nil, nil))
+
+                    expect(receivedError?.code) == ErrorCode.productNotAvailableForPurchaseError.rawValue
+                    expect(receivedError?.message).to(contain("Couldn't find package"))
+                    expect(mockPurchases.invokedPurchasePackageCount) == 0
+                }
+            }
         }
     }
 }
 
 // MARK: - Mock Transaction Helper
-private final class MockStoreTransaction: StoreTransactionType {
+final class MockStoreTransaction: StoreTransactionType {
     let productIdentifier: String
     let purchaseDate: Date
     let transactionIdentifier: String
