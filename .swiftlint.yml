@@ -1,0 +1,37 @@
+included:
+  - ios
+
+baseline: swiftlint-baseline.json
+
+only_rules:
+  - blanket_disable_command
+  - class_delegate_protocol
+  - comment_spacing
+  - compiler_protocol_init
+  - deployment_target
+  - discouraged_direct_init
+  - duplicate_conditions
+  - duplicate_enum_cases
+  - duplicated_key_in_dictionary_literal
+  - dynamic_inline
+  - invalid_swiftlint_command
+  - mark
+  - non_optional_string_data_conversion
+  - notification_center_detachment
+  - ns_number_init_as_function_reference
+  - nsobject_prefer_isequal
+  - optional_data_string_conversion
+  - orphaned_doc_comment
+  - private_unit_test
+  - redundant_sendable
+  - self_in_property_initialization
+  - superfluous_disable_command
+  - unneeded_override
+  - unused_closure_parameter
+  - unused_control_flow_label
+  - unused_setter_value
+  - valid_ibinspectable
+  - unneeded_escaping
+  - unused_parameter
+  - variable_shadowing
+  - weak_delegate
