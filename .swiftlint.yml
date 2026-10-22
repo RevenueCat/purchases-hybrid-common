@@ -33,5 +33,4 @@ only_rules:
   - valid_ibinspectable
   - unneeded_escaping
   - unused_parameter
-  - variable_shadowing
   - weak_delegate
