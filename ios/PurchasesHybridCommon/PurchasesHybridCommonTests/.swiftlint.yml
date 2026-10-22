@@ -1,0 +1,5 @@
+disabled_rules:
+  - unneeded_escaping
+  - unused_parameter
+  - unused_setter_value
+  - weak_delegate
