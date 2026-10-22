@@ -370,16 +370,18 @@ import StoreKit
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package, error in
-            if let error {
+        ) { result in
+            let package: Package
+            switch result {
+            case let .failure(error):
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
                 return
-            }
-
-            guard let package = package else {
+            case .success(nil):
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
                 return
+            case let .success(foundPackage?):
+                package = foundPackage
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
@@ -1083,16 +1085,18 @@ private extension CommonFunctionality {
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package, error in
-            if let error {
+        ) { result in
+            let package: Package
+            switch result {
+            case let .failure(error):
                 completion(nil, ErrorContainer(error: error, extraPayload: [:]))
                 return
-            }
-
-            guard let package = package else {
+            case .success(nil):
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
                 return
+            case let .success(foundPackage?):
+                package = foundPackage
             }
 
             if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
@@ -1270,14 +1274,14 @@ private extension CommonFunctionality {
 
     static func package(withIdentifier packageIdentifier: String,
                         presentedOfferingContext: PresentedOfferingContext?,
-                        completion: @escaping(Package?, PublicError?) -> Void) {
+                        completion: @escaping(Result<Package?, PublicError>) -> Void) {
         guard let presentedOfferingContext else {
-            return completion(nil, nil)
+            return completion(.success(nil))
         }
 
         Self.sharedInstance.getOfferings { offerings, error in
             if let error {
-                return completion(nil, error)
+                return completion(.failure(error))
             }
 
             let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
@@ -1293,7 +1297,7 @@ private extension CommonFunctionality {
                 )
             }
 
-            completion(package, nil)
+            completion(.success(package))
         }
     }
 
