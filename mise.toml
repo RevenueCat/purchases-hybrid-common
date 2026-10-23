@@ -10,5 +10,5 @@ compile = false
 [tools]
 java = "liberica-17.0.6"
 ruby = "3.3.0"
-node = "24.18.0"
+node = "24.22.1"
 swiftlint = "0.65.1"
