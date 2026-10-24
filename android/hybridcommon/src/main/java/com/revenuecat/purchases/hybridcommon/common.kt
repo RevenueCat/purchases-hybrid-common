@@ -1341,6 +1341,7 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData, adData.adCaptureMethod())
 }
 
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdRewardEarnedUnverified(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1371,7 +1372,7 @@ fun trackAdRewardEarnedUnverified(adData: Map<String, Any?>) {
         rewardVerificationEnabled = adData["rewardVerificationEnabled"] as? Boolean ?: false,
     )
 
-    Purchases.sharedInstance.adTracker.trackAdRewardEarnedUnverified(rewardEarnedData)
+    Purchases.sharedInstance.adTracker.trackAdRewardEarnedUnverified(rewardEarnedData, adData.adCaptureMethod())
 }
 
 fun trackRewardedAdPromptShown(adData: Map<String, Any?>) {

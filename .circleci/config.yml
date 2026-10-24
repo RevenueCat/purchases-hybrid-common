@@ -146,7 +146,7 @@ jobs:
     parameters:
       xcode_version:
         type: string
-        default: "26.2"
+        default: "26.6"
     steps:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
@@ -158,7 +158,7 @@ jobs:
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
-            SCAN_DEVICE: iPhone 17 (26.2)
+            SCAN_DEVICE: iPhone 17 (26.5)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -277,6 +277,16 @@ jobs:
           working_directory: android
           command: ./gradlew detekt
       - android/save-gradle-cache
+
+  lint-ios:
+    <<: *base-ios-job
+    steps:
+      - checkout
+      - revenuecat/install-mise-tools:
+          tools: swiftlint
+      - run:
+          name: SwiftLint
+          command: swiftlint lint --strict
 
   test-android:
     executor:
@@ -603,6 +613,7 @@ workflows:
           name: js-mappings-deploy-dry-run
           dry_run: true
       - detekt-android
+      - lint-ios
       - typescript-lint
       - typescript-tests
       - typescript-apitests
@@ -629,6 +640,7 @@ workflows:
             - typescript-esm-deploy-dry-run
             - js-mappings-deploy-dry-run
             - detekt-android
+            - lint-ios
             - typescript-lint
             - typescript-tests
             - typescript-apitests
