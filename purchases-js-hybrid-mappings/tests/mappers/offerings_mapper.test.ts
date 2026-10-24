@@ -854,13 +854,13 @@ describe('mapOfferings', () => {
 
   describe('period prices in currency units', () => {
     it.each(['Week', 'Month', 'Year'])('maps pricePer%s to major currency units', period => {
-      const pkg = createPackage('qa', 'qa', PackageType.Monthly);
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Monthly);
       const offering = {
-        identifier: 'qa',
-        serverDescription: 'qa',
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
         availablePackages: [pkg],
       } as Offering;
-      const result = mapOfferings({ all: { qa: offering }, current: offering });
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
       const mapped = (
         result.current as { availablePackages: { product: Record<string, unknown> }[] }
       ).availablePackages[0].product;
@@ -874,13 +874,13 @@ describe('mapOfferings', () => {
       expect(mapped['pricePer' + period + 'String']).toBe(input.formattedPrice);
     });
     it('preserves null period prices on lifetime products', () => {
-      const pkg = createPackage('qa', 'qa', PackageType.Lifetime);
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Lifetime);
       const offering = {
-        identifier: 'qa',
-        serverDescription: 'qa',
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
         availablePackages: [pkg],
       } as Offering;
-      const result = mapOfferings({ all: { qa: offering }, current: offering });
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
       const mapped = (
         result.current as { availablePackages: { product: Record<string, unknown> }[] }
       ).availablePackages[0].product;
@@ -888,7 +888,7 @@ describe('mapOfferings', () => {
         expect(mapped['pricePer' + period]).toBeNull();
     });
     it('preserves zero period prices', () => {
-      const pkg = createPackage('qa', 'qa', PackageType.Monthly);
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Monthly);
       const base = pkg.product.defaultSubscriptionOption!.base;
       for (const period of ['Week', 'Month', 'Year']) {
         (base as unknown as Record<string, unknown>)['pricePer' + period] = {
@@ -899,11 +899,11 @@ describe('mapOfferings', () => {
         };
       }
       const offering = {
-        identifier: 'qa',
-        serverDescription: 'qa',
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
         availablePackages: [pkg],
       } as Offering;
-      const result = mapOfferings({ all: { qa: offering }, current: offering });
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
       const mapped = (
         result.current as { availablePackages: { product: Record<string, unknown> }[] }
       ).availablePackages[0].product;
