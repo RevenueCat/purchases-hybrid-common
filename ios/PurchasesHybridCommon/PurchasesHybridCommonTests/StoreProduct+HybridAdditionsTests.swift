@@ -75,7 +75,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
                 it("serializes explicit null for " + field) {
                     let product = TestStoreProduct(
                         localizedTitle: "Lifetime", price: Decimal(19.99), currencyCode: "USD",
-                        localizedPriceString: "$19.99", productIdentifier: "qa_lifetime",
+                        localizedPriceString: "$19.99", productIdentifier: "lifetime",
                         productType: .nonConsumable, localizedDescription: "Lifetime control",
                         subscriptionPeriod: nil, locale: Locale(identifier: "en_US")
                     ).toStoreProduct()
