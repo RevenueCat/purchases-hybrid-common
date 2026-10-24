@@ -884,7 +884,7 @@ private extension CommonFunctionality {
             return
         }
 
-        Purchases.shared.adTracker.trackAdRewardEarnedUnverified(rewardEarned)
+        Purchases.shared.adTracker.trackAdRewardEarnedUnverified(rewardEarned, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
