@@ -29,8 +29,6 @@ SPM_VERSION_PATTERNS = ['.package(url: "https://github.com/RevenueCat/purchases-
 files_to_update_ios_dependency = {
     'PurchasesHybridCommon.podspec' => POD_VERSION_PATTERNS,
     'PurchasesHybridCommonUI.podspec' => POD_VERSION_PATTERNS,
-    'ios/PurchasesHybridCommon/Podfile' => POD_VERSION_PATTERNS,
-    'DEVELOPMENT.md' => POD_VERSION_PATTERNS,
     'Package.swift' => SPM_VERSION_PATTERNS,
 }
 
@@ -260,7 +258,6 @@ lane :update_native_dependencies_to_latest do |options|
       sh("yarn install")
     end
   end
-  run_pod_install
 
   new_versions = {
     new_ios_version: latest_ios_release,
@@ -320,9 +317,21 @@ private_lane :update_ios_native_version do |options|
   # Regenerate Package.resolved from Package.swift instead of text-replacing
   # the previous version, so an out-of-sync file self-heals on the next bump.
   if previous_version_number != new_version_number
+    require 'xcodeproj'
+    project_path = File.join(get_root_folder, 'ios/PurchasesHybridCommon/PurchasesHybridCommon.xcodeproj')
+    project = Xcodeproj::Project.open(project_path)
+    native_package = project.root_object.package_references.find do |package|
+      package.is_a?(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference) &&
+        package.repositoryURL == 'https://github.com/RevenueCat/purchases-ios-spm'
+    end
+    UI.user_error!('Missing purchases-ios-spm dependency in the iOS test project') unless native_package
+    native_package.requirement = { 'kind' => 'exactVersion', 'version' => new_version_number }
+    project.save
+
     Dir.chdir(get_root_folder) do
       sh("swift package resolve")
     end
+    resolve_ios_packages
   end
 end
 
@@ -385,10 +394,11 @@ private_lane :update_native_version do |options|
   new_version_number
 end
 
-desc "Run pod install"
-lane :run_pod_install do |options|
+desc "Resolve the iOS test project's Swift packages"
+lane :resolve_ios_packages do
   Dir.chdir(File.expand_path('ios/PurchasesHybridCommon', get_root_folder)) do
-    sh("pod install --repo-update")
+    sh('xcodebuild', '-resolvePackageDependencies',
+       '-workspace', 'PurchasesHybridCommon.xcworkspace', '-scheme', 'PurchasesHybridCommon')
   end
 end
 
@@ -494,7 +504,7 @@ platform :ios do
 
   desc "Lint Podspec"
   lane :pod_lint do |options|
-    check_pods
+    check_pods(platforms: options[:platforms] || 'ios,osx,tvos,visionos')
   end
 
   desc "replace API KEY for integration tests"
@@ -675,20 +685,32 @@ def latest_published_version_number
     .max
 end
 
-def check_pods
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommonUI.podspec',
-    include_podspecs: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
+def check_pods(platforms:)
+  require 'tmpdir'
+
+  # Validate against the pinned native release even before its pods reach trunk.
+  Dir.mktmpdir('phc-pod-lint') do |directory|
+    native_sdk = File.join(directory, 'purchases-ios')
+    sh('git', 'clone', '--depth', '1', '--branch', parse_previous_ios_native_version,
+       'https://github.com/RevenueCat/purchases-ios.git', native_sdk)
+    native_podspec = File.join(native_sdk, 'RevenueCat.podspec')
+    native_ui_podspec = File.join(native_sdk, 'RevenueCatUI.podspec')
+
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommon.podspec',
+      include_podspecs: native_podspec,
+      platforms: platforms,
+      fail_fast: true
+    )
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommonUI.podspec',
+      include_podspecs: "{#{native_podspec},#{native_ui_podspec},PurchasesHybridCommon.podspec}",
+      platforms: platforms,
+      fail_fast: true
+    )
+  end
 end
 
 def is_snapshot_version?(version_name)

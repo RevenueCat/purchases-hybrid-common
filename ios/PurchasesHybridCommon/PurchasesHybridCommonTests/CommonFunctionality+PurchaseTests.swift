@@ -7,6 +7,7 @@
 //
 
 import Quick
+import Foundation
 import Nimble
 @_spi(Internal) @testable import PurchasesHybridCommon
 @_spi(Internal) @testable import RevenueCat

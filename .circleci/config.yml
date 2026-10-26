@@ -75,11 +75,15 @@ commands:
           name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
           command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
 
-  install-cocoapods:
+  resolve-ios-packages:
     steps:
       - run:
-          name: Install pods
-          command: bundle exec pod install --repo-update
+          name: Resolve Swift packages
+          command: >-
+            xcodebuild -resolvePackageDependencies
+            -workspace PurchasesHybridCommon.xcworkspace
+            -scheme PurchasesHybridCommon
+            -onlyUsePackageVersionsFromResolvedFile
           working_directory: ios/PurchasesHybridCommon
 
   # `pod lib lint` builds a project it generates from the podspec, so the deployment
@@ -98,7 +102,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -118,7 +122,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -138,7 +142,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -162,7 +166,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -186,7 +190,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Run ios tests
           command: fastlane scan
@@ -213,7 +217,7 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
+      - resolve-ios-packages
       - run:
           name: Update API key
           command: bundle exec fastlane ios replace_api_key_integration_tests
@@ -615,8 +619,7 @@ workflows:
       - test-ios-18
       - test-ios-26
       - test-ios-27
-      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
-      # - check-pods
+      - check-pods
       - integration-test-ios
       - test-android
       - deploy-android:
@@ -661,8 +664,7 @@ workflows:
             - test-ios-18
             - test-ios-26
             - test-ios-27
-            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
-            # - check-pods
+            - check-pods
             - integration-test-ios
             - test-android
             - android-deploy-dry-run

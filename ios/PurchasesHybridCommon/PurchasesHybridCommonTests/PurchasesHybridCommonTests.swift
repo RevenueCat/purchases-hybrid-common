@@ -6,6 +6,7 @@
 //  Copyright © 2020 RevenueCat. All rights reserved.
 //
 
+import XCTest
 import Quick
 import Nimble
 @_spi(Internal) @testable import PurchasesHybridCommon

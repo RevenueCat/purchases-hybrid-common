@@ -6,6 +6,7 @@
 //  Copyright © 2022 RevenueCat. All rights reserved.
 //
 
+import XCTest
 import Quick
 import Nimble
 import StoreKit
@@ -135,7 +136,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
             it("maps intro price correctly") {
                 var receivedDictionary = self.storeProductDictionary()
 
-                expect(receivedDictionary["introPrice"] as? SKProductDiscount?) == nil
+                expect(receivedDictionary["introPrice"] as? SKProductDiscount).to(beNil())
                 let subscriptionPeriod = SKProductSubscriptionPeriod(numberOfUnits: 3, unit: .month)
                 let productDiscount = SKProductDiscount(price: 10.99,
                                                         priceLocale: Locale.current,
@@ -151,7 +152,7 @@ class StoreProductHybridAdditionsTests: QuickSpec {
             it("maps subscription period correctly") {
                 var receivedDictionary = self.storeProductDictionary()
 
-                expect(receivedDictionary["subscriptionPeriod"] as? NSString) == nil
+                expect(receivedDictionary["subscriptionPeriod"] as? NSString).to(beNil())
 
                 receivedDictionary = self.storeProductDictionary(subscriptionPeriod: SKProductSubscriptionPeriod(numberOfUnits: 1, unit: .month))
                 expect(receivedDictionary["subscriptionPeriod"] as? NSString) == "P1M"
