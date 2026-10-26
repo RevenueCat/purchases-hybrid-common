@@ -619,7 +619,8 @@ workflows:
       - test-ios-18
       - test-ios-26
       - test-ios-27
-      - check-pods
+      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+      # - check-pods
       - integration-test-ios
       - test-android
       - deploy-android:
@@ -664,7 +665,8 @@ workflows:
             - test-ios-18
             - test-ios-26
             - test-ios-27
-            - check-pods
+            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+            # - check-pods
             - integration-test-ios
             - test-android
             - android-deploy-dry-run

@@ -504,7 +504,7 @@ platform :ios do
 
   desc "Lint Podspec"
   lane :pod_lint do |options|
-    check_pods(platforms: options[:platforms] || 'ios,osx,tvos,visionos')
+    check_pods
   end
 
   desc "replace API KEY for integration tests"
@@ -685,32 +685,20 @@ def latest_published_version_number
     .max
 end
 
-def check_pods(platforms:)
-  require 'tmpdir'
-
-  # Validate against the pinned native release even before its pods reach trunk.
-  Dir.mktmpdir('phc-pod-lint') do |directory|
-    native_sdk = File.join(directory, 'purchases-ios')
-    sh('git', 'clone', '--depth', '1', '--branch', parse_previous_ios_native_version,
-       'https://github.com/RevenueCat/purchases-ios.git', native_sdk)
-    native_podspec = File.join(native_sdk, 'RevenueCat.podspec')
-    native_ui_podspec = File.join(native_sdk, 'RevenueCatUI.podspec')
-
-    pod_lib_lint(
-      verbose: true,
-      podspec: 'PurchasesHybridCommon.podspec',
-      include_podspecs: native_podspec,
-      platforms: platforms,
-      fail_fast: true
-    )
-    pod_lib_lint(
-      verbose: true,
-      podspec: 'PurchasesHybridCommonUI.podspec',
-      include_podspecs: "{#{native_podspec},#{native_ui_podspec},PurchasesHybridCommon.podspec}",
-      platforms: platforms,
-      fail_fast: true
-    )
-  end
+def check_pods
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommon.podspec',
+    platforms: 'ios,osx,tvos,visionos',
+    fail_fast: true
+  )
+  pod_lib_lint(
+    verbose: true,
+    podspec: 'PurchasesHybridCommonUI.podspec',
+    include_podspecs: 'PurchasesHybridCommon.podspec',
+    platforms: 'ios,osx,tvos,visionos',
+    fail_fast: true
+  )
 end
 
 def is_snapshot_version?(version_name)

@@ -20,16 +20,6 @@ In Xcode, add your purchases-ios checkout with **File > Add Package Dependencies
 Add Local** to override the remote package while developing. Remove the local
 override before committing.
 
-## Validate CocoaPods compatibility
-
-```sh
-bundle exec fastlane ios pod_lint
-```
-
-This checks both PHC podspecs using a temporary checkout of the exact native SDK
-tag pinned in the podspecs. It does not require that native version on CocoaPods
-trunk. The podspecs remain part of each release for CocoaPods publishing.
-
 # Android
 
 ## Point to a local `Purchases` project
