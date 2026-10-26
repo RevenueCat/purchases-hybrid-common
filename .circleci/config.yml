@@ -105,7 +105,7 @@ jobs:
       - resolve-ios-packages
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
@@ -125,7 +125,7 @@ jobs:
       - resolve-ios-packages
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
@@ -145,7 +145,7 @@ jobs:
       - resolve-ios-packages
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
@@ -169,7 +169,7 @@ jobs:
       - resolve-ios-packages
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
@@ -193,7 +193,7 @@ jobs:
       - resolve-ios-packages
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
