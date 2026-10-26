@@ -1,6 +1,3 @@
 ## RevenueCat SDK
 ### 📦 Dependency Updates
-* [AUTOMATIC] JS 1.73.0 => 1.73.1 (#2020) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* ci: bump Node to 24.22.1 (#2019) via Álvaro Brey (@AlvaroBrey)
+* [AUTOMATIC] iOS 5.98.0 => 5.99.0 (#2027) via RevenueCat Git Bot (@RCGitBot)
