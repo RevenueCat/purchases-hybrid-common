@@ -47,6 +47,17 @@ parameters:
     default: build
 
 commands:
+  # TODO: remove after Nov 7, 2026, once CocoaPods trunk is writable again.
+  fail-if-cocoapods-publish-disabled:
+    steps:
+      - run:
+          name: Fail if CocoaPods publishing is disabled
+          command: |
+            if [ "${COCOAPODS_PUBLISH_DISABLED:-}" = "true" ]; then
+              echo "COCOAPODS_PUBLISH_DISABLED is true in the CircleCI project settings. Unset it to publish pods."
+              exit 1
+            fi
+
   setup-git-credentials:
      steps:
        - run:
@@ -238,6 +249,7 @@ jobs:
   deploy-ios-phc:
     <<: *base-ios-job
     steps:
+      - fail-if-cocoapods-publish-disabled
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
@@ -250,6 +262,7 @@ jobs:
   deploy-ios-phcui:
     <<: *base-ios-job
     steps:
+      - fail-if-cocoapods-publish-disabled
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
@@ -449,16 +462,17 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
+      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
       # Blocks the bumps rather than each hybrid waiting on its own mac executors.
       # The lane logs on every poll, so the default 10 minute no-output timeout
       # wouldn't fire, but set it explicitly to sit just above the lane's own 3
       # hour cap, otherwise a stalled CDN request kills the step at 10 minutes.
       # If the step does fail, the bump steps below still run: they are all
       # `when: always`.
-      - run:
-          name: Wait for the new pods to reach the CocoaPods CDN
-          command: bundle exec fastlane wait_for_pods_on_cdn
-          no_output_timeout: 190m
+      # - run:
+      #     name: Wait for the new pods to reach the CocoaPods CDN
+      #     command: bundle exec fastlane wait_for_pods_on_cdn
+      #     no_output_timeout: 190m
       - run:
           name: Kick off Flutter automatic dependency update
           command: |
@@ -601,7 +615,8 @@ workflows:
       - test-ios-18
       - test-ios-26
       - test-ios-27
-      - check-pods
+      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+      # - check-pods
       - integration-test-ios
       - test-android
       - deploy-android:
@@ -646,7 +661,8 @@ workflows:
             - test-ios-18
             - test-ios-26
             - test-ios-27
-            - check-pods
+            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+            # - check-pods
             - integration-test-ios
             - test-android
             - android-deploy-dry-run
@@ -690,8 +706,9 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
             - deploy-js-mappings
-            - deploy-ios-phc
-            - deploy-ios-phcui
+            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+            # - deploy-ios-phc
+            # - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:
