@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.98.0 => 5.99.0 (#2027) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* [EXTERNAL] Fix iOS product serialization of null period prices (#2023) via @manyoneek (#2032) via Álvaro Brey (@AlvaroBrey)
