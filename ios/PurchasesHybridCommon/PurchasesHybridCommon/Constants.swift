@@ -9,5 +9,5 @@
 import Foundation
 
 internal struct Constants {
-    static let hybridCommonVersion = "20.0.0-SNAPSHOT"
+    static let hybridCommonVersion = "20.0.0"
 }
