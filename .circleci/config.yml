@@ -75,13 +75,6 @@ commands:
           name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
           command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
 
-  install-cocoapods:
-    steps:
-      - run:
-          name: Install pods
-          command: bundle exec pod install --repo-update
-          working_directory: ios/PurchasesHybridCommon
-
   # `pod lib lint` builds a project it generates from the podspec, so the deployment
   # targets it uses can only be raised through a global xcconfig. Only needed on jobs
   # running Xcode 27, which rejects the minimums the podspecs declare.
@@ -98,14 +91,14 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 14 (16.4)
+            SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -118,14 +111,14 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 15 (17.2)
+            SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -138,14 +131,14 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 16 (18.5)
+            SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -162,14 +155,14 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 17 (26.5)
+            SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -186,14 +179,14 @@ jobs:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Run ios tests
-          command: fastlane scan
+          command: bundle exec fastlane scan
           working_directory: ios/PurchasesHybridCommon
           environment:
             SCAN_SCHEME: PurchasesHybridCommon
             SCAN_DEVICE: iPhone 17 (27.0)
+            SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
       - store_artifacts:
@@ -209,11 +202,11 @@ jobs:
     environment:
       SCAN_DEVICE: iPhone 17 (27.0)
       SCAN_SCHEME: PurchasesHybridCommonIntegrationTests
+      SCAN_DISABLE_PACKAGE_AUTOMATIC_UPDATES: "true"
     steps:
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
-      - install-cocoapods
       - run:
           name: Update API key
           command: bundle exec fastlane ios replace_api_key_integration_tests

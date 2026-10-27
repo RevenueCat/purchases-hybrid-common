@@ -6,6 +6,7 @@
 //  Copyright © 2020 RevenueCat. All rights reserved.
 //
 
+import Foundation
 import Quick
 import Nimble
 @testable import RevenueCat
@@ -24,7 +25,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         platformFlavorVersion: "1.2.3",
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil)
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
             it("initializes without raising exceptions if a suite name is passed") {
                 expect {
@@ -36,7 +37,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         platformFlavorVersion: "1.2.3",
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil)
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
         }
         context("configure with verification mode") {
@@ -51,7 +52,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "DISABLED")
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
 
             it("informational") {
@@ -65,7 +66,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "INFORMATIONAL")
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
             it("enforced") {
                 expect {
@@ -78,7 +79,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: nil,
                                         verificationMode: "ENFORCED")
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
         }
         context("configure with dangerous settings") {
@@ -92,7 +93,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                         platformFlavorVersion: "1.2.3",
                                         storeKitVersion: "DEFAULT",
                                         dangerousSettings: DangerousSettings(autoSyncPurchases: false))
-                }.notTo(raiseException())
+                }.toNot(beNil())
             }
         }
 
@@ -107,7 +108,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "DEFAULT",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
 
                     it("STOREKIT_2") {
@@ -120,7 +121,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "STOREKIT_2",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
                     it("STOREKIT_1") {
                         expect {
@@ -132,7 +133,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "STOREKIT_1",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
                 }
 
@@ -147,7 +148,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "DEFAULT",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
 
                         expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.revenueCat))
                     }
@@ -162,7 +163,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "STOREKIT_2",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
 
                         expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.myApp))
                     }
@@ -176,7 +177,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 platformFlavorVersion: "1.2.3",
                                                 storeKitVersion: "STOREKIT_1",
                                                 dangerousSettings: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
 
                         expect(Purchases.shared.purchasesAreCompletedBy).to(equal(PurchasesAreCompletedBy.revenueCat))
                     }
@@ -195,7 +196,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 dangerousSettings: nil,
                                                 verificationMode: "INFORMATIONAL",
                                                 automaticDeviceIdentifierCollectionEnabled: true)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
 
                     it("false") {
@@ -210,7 +211,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 dangerousSettings: nil,
                                                 verificationMode: "INFORMATIONAL",
                                                 automaticDeviceIdentifierCollectionEnabled: false)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
                     it("not passed") {
                         expect {
@@ -223,7 +224,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 storeKitVersion: "DEFAULT",
                                                 dangerousSettings: nil,
                                                 verificationMode: "INFORMATIONAL")
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
 
                     func unsyncedAttributeKeysAfterSettingAdjustID(
@@ -276,7 +277,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 preferredLocale: nil,
                                                 useExternalPurchaseCustomLinks: true,
                                                 enableExternalPurchasesInSimulator: false)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
 
                     it("false") {
@@ -293,7 +294,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 preferredLocale: nil,
                                                 useExternalPurchaseCustomLinks: false,
                                                 enableExternalPurchasesInSimulator: true)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
                     it("not passed") {
                         expect {
@@ -306,7 +307,7 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 storeKitVersion: "DEFAULT",
                                                 dangerousSettings: nil,
                                                 verificationMode: nil)
-                        }.notTo(raiseException())
+                        }.toNot(beNil())
                     }
                 }
     }
