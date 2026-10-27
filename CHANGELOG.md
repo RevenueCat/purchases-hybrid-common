@@ -1,3 +1,8 @@
+## 19.17.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.29.0 => 10.30.0 (#2037) via RevenueCat Git Bot (@RCGitBot)
+
 ## 19.16.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
