@@ -1,3 +1,6 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.98.0 => 5.99.0 (#2027) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* [EXTERNAL] Fix iOS product serialization of null period prices (#2023) via @manyoneek (#2032) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* chore(deps): bump fast-uri from 3.1.7 to 3.1.9 in /purchases-js-hybrid-mappings (#2029) via dependabot[bot] (@dependabot[bot])
