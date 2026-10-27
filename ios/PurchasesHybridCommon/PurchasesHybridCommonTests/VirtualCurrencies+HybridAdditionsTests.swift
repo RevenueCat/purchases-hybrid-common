@@ -8,6 +8,7 @@
 
 import Foundation
 import Quick
+import XCTest
 import Nimble
 
 @testable import PurchasesHybridCommon

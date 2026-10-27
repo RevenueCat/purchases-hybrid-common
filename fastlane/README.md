@@ -101,13 +101,13 @@ Update dependencies to latest GitHub releases
 
 Tag current branch with current version number
 
-### run_pod_install
+### resolve_ios_packages
 
 ```sh
-[bundle exec] fastlane run_pod_install
+[bundle exec] fastlane resolve_ios_packages
 ```
 
-Run pod install
+Resolve the iOS test project's Swift packages
 
 ### wait_for_pods_on_cdn
 

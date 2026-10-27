@@ -21,14 +21,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testAPI {
     if (@available(iOS 15.0, *)) {
-        RCOffering *offering;
-
         PaywallProxy *proxy = [PaywallProxy new];
         [proxy presentPaywall];
         [proxy presentPaywallWithDisplayCloseButton:true];
         [proxy presentPaywallWithPaywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallWithDisplayCloseButton:true paywallResultHandler:^(NSString *result) {}];
-        [proxy presentPaywallWithOffering:offering displayCloseButton:true paywallResultHandler:^(NSString *result) {}];
         [proxy presentPaywallWithOfferingIdentifier:@"offering" 
                                  displayCloseButton:true
                                paywallResultHandler:^(NSString *result) {}];
