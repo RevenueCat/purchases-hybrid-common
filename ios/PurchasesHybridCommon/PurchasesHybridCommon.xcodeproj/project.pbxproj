@@ -47,6 +47,9 @@
 		35D80E7B2BEA4D37008EA3F3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 35B0D31E2BEA4ABF000CDE3F /* PrivacyInfo.xcprivacy */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
+		A1E3C0DE0002F1F1E2E2D3D3 /* EmbeddedCheckpointProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3C0DE0001F1F1E2E2D3D3 /* EmbeddedCheckpointProxy.swift */; };
+		A1E3C0DE0004F1F1E2E2D3D3 /* CheckpointSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3C0DE0003F1F1E2E2D3D3 /* CheckpointSerialization.swift */; };
+		A1E3C0DE0006F1F1E2E2D3D3 /* EmbeddedCheckpointProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E3C0DE0005F1F1E2E2D3D3 /* EmbeddedCheckpointProxyTests.swift */; };
 		3F7F287D27E208F39745436C /* Pods_ObjCAPITester.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAA49047A2AE8963CF73C94 /* Pods_ObjCAPITester.framework */; };
 		440DCC15D5D41E46856D84C4 /* RewardVerificationResult+HybridAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0A6D0871522AA838569D8B /* RewardVerificationResult+HybridAdditions.swift */; };
 		4F79746A2B5EDF82003085E7 /* PurchasesHybridCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D54BF002437AD5800FF4EE4 /* PurchasesHybridCommon.framework */; };
@@ -169,6 +172,9 @@
 		1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums+HybridAdditions.swift"; sourceTree = "<group>"; };
 		21013A2D5F7BCDB086F7B742 /* Pods-PurchasesHybridCommonSwift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PurchasesHybridCommonSwift.release.xcconfig"; path = "Target Support Files/Pods-PurchasesHybridCommonSwift/Pods-PurchasesHybridCommonSwift.release.xcconfig"; sourceTree = "<group>"; };
 		26ADD358A91D0AEFD86DB95C /* AdReward+HybridAdditionsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AdReward+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		A1E3C0DE0001F1F1E2E2D3D3 /* EmbeddedCheckpointProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EmbeddedCheckpointProxy.swift; sourceTree = "<group>"; };
+		A1E3C0DE0003F1F1E2E2D3D3 /* CheckpointSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointSerialization.swift; sourceTree = "<group>"; };
+		A1E3C0DE0005F1F1E2E2D3D3 /* EmbeddedCheckpointProxyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EmbeddedCheckpointProxyTests.swift; sourceTree = "<group>"; };
 		2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offering+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
@@ -391,6 +397,7 @@
 				9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */,
 				F7FCE821769F7B4719CE2313 /* RewardVerificationResult+HybridAdditionsTests.swift */,
 				26ADD358A91D0AEFD86DB95C /* AdReward+HybridAdditionsTests.swift */,
+				A1E3C0DE0005F1F1E2E2D3D3 /* EmbeddedCheckpointProxyTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
 			sourceTree = "<group>";
@@ -487,6 +494,7 @@
 				57E97CA62D66236C007EB1C2 /* CustomerCenter */,
 				57E97CAA2D66236C007EB1C2 /* Paywalls */,
 				4F7974742B5EE002003085E7 /* PurchasesHybridCommonUI.h */,
+				A1E3C0DE0007F1F1E2E2D3D3 /* Checkpoints */,
 			);
 			path = PurchasesHybridCommonUI;
 			sourceTree = "<group>";
@@ -553,6 +561,15 @@
 				57FFDE31286A57580089A57B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		A1E3C0DE0007F1F1E2E2D3D3 /* Checkpoints */ = {
+			isa = PBXGroup;
+			children = (
+				A1E3C0DE0001F1F1E2E2D3D3 /* EmbeddedCheckpointProxy.swift */,
+				A1E3C0DE0003F1F1E2E2D3D3 /* CheckpointSerialization.swift */,
+			);
+			path = Checkpoints;
 			sourceTree = "<group>";
 		};
 		DF227D6163AC4EAD40A6905D /* Pods */ = {
@@ -1057,6 +1074,7 @@
 				BE27455A29A0A87CFEBB7546 /* RewardVerificationToken+HybridAdditionsTests.swift in Sources */,
 				2B45C2493A8D481AEC9AA42A /* RewardVerificationResult+HybridAdditionsTests.swift in Sources */,
 				EF9D99EB4AEF99FE54B126CE /* AdReward+HybridAdditionsTests.swift in Sources */,
+				A1E3C0DE0006F1F1E2E2D3D3 /* EmbeddedCheckpointProxyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1073,6 +1091,8 @@
 				57E97CAF2D66236C007EB1C2 /* PaywallProxy.swift in Sources */,
 				B7B43FFF7EF629350D68D998 /* PaywallCustomVariables.swift in Sources */,
 				A1B2C3D62026021600AABBCC /* HybridPurchaseLogicBridge.swift in Sources */,
+				A1E3C0DE0002F1F1E2E2D3D3 /* EmbeddedCheckpointProxy.swift in Sources */,
+				A1E3C0DE0004F1F1E2E2D3D3 /* CheckpointSerialization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
