@@ -177,6 +177,38 @@ final class EmbeddedCheckpointProxyTests: XCTestCase {
         XCTAssertEqual(self.types, ["error", "finished"])
     }
 
+    func testWithoutPresentingErrorsTheSDKGetsNoPresenterAndNoErrorEventsAreEmitted() throws {
+        let proxy = self.proxy()
+
+        proxy.start(callId: "A", identifier: "test", customVariables: [:], parentViewController: self.parent,
+                    presentsErrors: false)
+
+        let call = try XCTUnwrap(self.calls.first)
+        XCTAssertNil(call.errorHandler)
+        call.passed(Self.result())
+        call.finished()
+        XCTAssertEqual(self.types, ["passed", "finished"])
+    }
+
+    func testWithoutPresentingErrorsEarlyFailuresAreLoggedAndFinishWithoutAnErrorEvent() {
+        let unusable = self.proxy()
+        unusable.start(callId: "A", identifier: "test", customVariables: [:], parentViewController: UIViewController(),
+                       presentsErrors: false)
+        XCTAssertTrue(self.calls.isEmpty)
+        XCTAssertEqual(self.types, ["finished"])
+
+        self.events = []
+        let unconfigured = EmbeddedCheckpointProxy(
+            onEvent: { [weak self] in self?.events.append($0) },
+            start: { _, _, _, _, _, _ in XCTFail("Must not start"); fatalError() },
+            makeRequestId: { "r" },
+            isConfigured: { false }
+        )
+        unconfigured.start(callId: "B", identifier: "test", customVariables: [:], parentViewController: self.parent,
+                           presentsErrors: false)
+        XCTAssertEqual(self.types, ["finished"])
+    }
+
     func testUnconfiguredSDKFailsThroughAnErrorEvent() {
         let proxy = EmbeddedCheckpointProxy(
             onEvent: { [weak self] in self?.events.append($0) },
@@ -267,18 +299,19 @@ final class EmbeddedCheckpointProxyTests: XCTestCase {
         let identifier: String
         let variables: [String: CustomVariableValue]
         let parent: UIViewController
-        let error: ErrorPresentationHandler
+        let errorHandler: ErrorPresentationHandler?
+        var error: ErrorPresentationHandler { self.errorHandler! }
         let passed: (CheckpointResult) -> Void
         let finished: () -> Void
         let execution: EmbeddedCheckpointExecution
 
         init(identifier: String, variables: [String: CustomVariableValue], parent: UIViewController,
-             error: @escaping ErrorPresentationHandler, passed: @escaping (CheckpointResult) -> Void,
+             error: ErrorPresentationHandler?, passed: @escaping (CheckpointResult) -> Void,
              finished: @escaping () -> Void) {
             self.identifier = identifier
             self.variables = variables
             self.parent = parent
-            self.error = error
+            self.errorHandler = error
             self.passed = passed
             self.finished = finished
             self.execution = EmbeddedCheckpointExecution(parentViewController: parent, onFinished: finished)

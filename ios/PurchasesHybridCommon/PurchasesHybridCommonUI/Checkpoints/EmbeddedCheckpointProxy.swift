@@ -30,7 +30,7 @@ import UIKit
 
     typealias Start = (
         String, [String: CustomVariableValue], UIViewController,
-        @escaping ErrorPresentationHandler, @escaping (CheckpointResult) -> Void, @escaping () -> Void
+        ErrorPresentationHandler?, @escaping (CheckpointResult) -> Void, @escaping () -> Void
     ) -> EmbeddedCheckpointExecution
 
     private let onEvent: (Event) -> Void
@@ -70,11 +70,14 @@ import UIKit
 
     /// `parentViewController` is the controller the framework is showing. Passing `nil` or an unusable
     /// controller fails the call through an `error` event followed by `finished` once acknowledged.
+    ///
+    /// With `presentsErrors` set to `false` the bridge shows no error UI: purchases-ios presents its own default
+    /// errors and no `error` events are emitted. Failures before a flow starts are logged and end with `finished`.
     public func start(callId: String, identifier: String, customVariables: [String: Any]?,
-                      parentViewController: UIViewController?) {
+                      parentViewController: UIViewController?, presentsErrors: Bool = true) {
         // Never reuse a call id: a late acknowledgement must not reach a successor.
         guard self.usedCallIds.insert(callId).inserted else { return }
-        let session = Session(id: callId)
+        let session = Session(id: callId, presentsErrors: presentsErrors)
         self.sessions[callId] = session
         guard self.isConfigured() else {
             self.fail(session, message: "Configure Purchases before calling a checkpoint.")
@@ -85,11 +88,9 @@ import UIKit
             return
         }
 
-        let execution = self.startNative(
-            identifier,
-            CheckpointSerialization.customVariables(from: customVariables),
-            parentViewController,
-            { [weak self, weak session] params, completion in
+        var errorHandler: ErrorPresentationHandler?
+        if presentsErrors {
+            errorHandler = { [weak self, weak session] params, completion in
                 guard let self, let session, self.isActive(session) else {
                     completion.complete()
                     return
@@ -101,7 +102,13 @@ import UIKit
                     "kind": CheckpointSerialization.name(for: params.kind),
                     "error": ErrorContainer(error: params.error, extraPayload: [:]).info
                 ])
-            },
+            }
+        }
+        let execution = self.startNative(
+            identifier,
+            CheckpointSerialization.customVariables(from: customVariables),
+            parentViewController,
+            errorHandler,
             { [weak self, weak session] result in
                 guard let self, let session, self.isActive(session), !session.passed else { return }
                 session.passed = true
@@ -140,6 +147,11 @@ import UIKit
     }
 
     private func fail(_ session: Session, message: String) {
+        guard session.presentsErrors else {
+            NSLog("[RevenueCatUI] %@", message)
+            self.finish(session)
+            return
+        }
         let error = NSError(domain: "PurchasesHybridCommon.EmbeddedCheckpoint", code: 1,
                             userInfo: [NSLocalizedDescriptionKey: message])
         let requestId = self.makeRequestId()
@@ -181,7 +193,11 @@ import UIKit
         var execution: EmbeddedCheckpointExecution?
         var errors: [String: () -> Void] = [:]
         var passed = false
-        init(id: String) { self.id = id }
+        let presentsErrors: Bool
+        init(id: String, presentsErrors: Bool) {
+            self.id = id
+            self.presentsErrors = presentsErrors
+        }
     }
 
 }
