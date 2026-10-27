@@ -54,7 +54,7 @@ commands:
           name: Fail if CocoaPods publishing is disabled
           command: |
             if [ "${COCOAPODS_PUBLISH_DISABLED:-}" = "true" ]; then
-              echo "COCOAPODS_PUBLISH_DISABLED is true in the CircleCI project settings. Unset it to publish pods."
+              echo "COCOAPODS_PUBLISH_DISABLED is true in the CircleCI project settings. Remove after Nov 7, 2026, once CocoaPods trunk is writable again."
               exit 1
             fi
 
