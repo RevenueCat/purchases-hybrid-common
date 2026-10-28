@@ -22,15 +22,14 @@ import RevenueCat
     public static let notConfiguredErrorCode = "NOT_CONFIGURED"
     public static let unsupportedOSVersionErrorCode = "UNSUPPORTED_OS_VERSION"
 
-    /// Registers that `identifier` was hit, which may present a flow. Call on the main thread.
+    /// Registers that `identifier` was hit, which may present a flow.
     ///
-    /// - `onPassed` is called at most once, only when the user passes the checkpoint, with
+    /// - `onPassed` is called at most once, on the main actor, only when the user passes the checkpoint, with
     ///   `{ customer, flow: { obtainedEntitlements: [{ entitlementInfo }], obtainedProducts: [{ product }] } | null }`.
     ///   Backing out, a blocking failure, or another checkpoint owning presentation never calls it.
     /// - `onError` is called when the checkpoint could not be started: not configured, or below iOS 15.
     ///
     /// Custom variables support String, Number and Boolean values. Other values are ignored.
-    @MainActor
     public static func present(
         identifier: String,
         customVariables: [String: Any]?,
@@ -58,7 +57,6 @@ import RevenueCat
     }
 
     @available(iOS 15.0, *)
-    @MainActor
     static func present(
         identifier: String,
         customVariables: [String: Any]?,
