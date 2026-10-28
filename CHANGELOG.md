@@ -1,3 +1,11 @@
+## 20.1.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(checkpoints): add checkpoint bridge (#2041) via Cesar de la Vega (@vegaro)
+
+### 🔄 Other Changes
+* chore: register custom Fastlane platforms (#2030) via Cesar de la Vega (@vegaro)
+
 ## 20.0.0
 This release adopts purchases-android 11.0.0 and drops deprecated paywall presentation overloads on iOS. Hybrid SDKs picking it up need the native floors below and the iOS delegate signature change.
 
