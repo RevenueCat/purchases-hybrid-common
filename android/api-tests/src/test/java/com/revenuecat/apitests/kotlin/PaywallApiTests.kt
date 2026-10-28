@@ -3,9 +3,12 @@ package com.revenuecat.apitests.kotlin
 import androidx.fragment.app.FragmentActivity
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.PresentedOfferingContext
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointErrorCode
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
+import com.revenuecat.purchases.hybridcommon.ui.presentCheckpoint
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 
@@ -20,6 +23,19 @@ private class PaywallApiTests {
             override fun onPaywallResult(paywallResult: String) {
             }
         }
+    }
+
+    fun checkCheckpoint() {
+        val listener: CheckpointListener = object : CheckpointListener {
+            override fun onCheckpointPassed(result: Map<String, Any?>) {
+            }
+
+            override fun onCheckpointError(code: String, message: String) {
+            }
+        }
+        presentCheckpoint("identifier", listener = listener)
+        presentCheckpoint("identifier", mapOf("key" to "value"), "MODAL_SHEET", listener)
+        val notConfigured: String = CheckpointErrorCode.NOT_CONFIGURED
     }
 
     fun checkPaywallSource(paywallSource: PaywallSource) {
