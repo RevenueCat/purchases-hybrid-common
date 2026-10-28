@@ -39,7 +39,9 @@ import RevenueCat
         onError: @escaping (_ code: String, _ message: String) -> Void
     ) {
         guard #available(iOS 15.0, *) else {
-            onError(Self.unsupportedOSVersionErrorCode, "Checkpoints require iOS 15 or later.")
+            let message = "Checkpoints require iOS 15 or later."
+            NSLog("[RevenueCatUI] %@", message)
+            onError(Self.unsupportedOSVersionErrorCode, message)
             return
         }
         Self.present(
