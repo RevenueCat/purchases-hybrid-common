@@ -68,6 +68,7 @@ private fun startNativeCheckpoint(
     Purchases.sharedInstance.checkpoint(identifier, params, callback)
 }
 
+@Suppress("LongParameterList") // isConfigured and start are test seams over the public overload.
 internal fun presentCheckpoint(
     identifier: String,
     customVariables: Map<String, Any?>?,
