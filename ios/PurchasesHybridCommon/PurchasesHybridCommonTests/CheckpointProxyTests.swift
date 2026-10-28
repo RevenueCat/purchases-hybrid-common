@@ -123,11 +123,22 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertEqual(variables, ["level": .number(1), "pro": .bool(true), "name": .string("a")])
     }
 
-    func testMapsPresentationMode() {
-        XCTAssertEqual(CheckpointProxy.mode(for: "MODAL_FULL_SCREEN"), .modalFullScreen)
-        XCTAssertEqual(CheckpointProxy.mode(for: "MODAL_SHEET"), .modalSheet)
-        XCTAssertEqual(CheckpointProxy.mode(for: "DEFAULT"), .default)
-        XCTAssertEqual(CheckpointProxy.mode(for: nil), .default)
+    func testPassesEachPresentationModeToStart() throws {
+        let expected: [(String?, FlowPresentationMode)] = [
+            (CheckpointProxy.presentationModeFullScreen, .modalFullScreen),
+            (CheckpointProxy.presentationModeSheet, .modalSheet),
+            ("DEFAULT", .default),
+            ("unknown", .default),
+            (nil, .default)
+        ]
+
+        for (presentationMode, mode) in expected {
+            self.starts = []
+            self.present(presentationMode: presentationMode)
+
+            let started = try XCTUnwrap(self.starts.first)
+            XCTAssertEqual(started.mode, mode, "presentationMode: \(String(describing: presentationMode))")
+        }
     }
 
 }
