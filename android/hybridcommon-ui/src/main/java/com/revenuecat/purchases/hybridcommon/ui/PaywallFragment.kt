@@ -8,7 +8,6 @@ import androidx.fragment.app.setFragmentResult
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.ExperimentalPreviewRevenueCatUIPurchasesAPI
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLaunchIfNeededOptions
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallActivityLaunchOptions
@@ -202,36 +201,12 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         parentFragmentManager.beginTransaction().remove(this).commitAllowingStateLoss()
     }
 
-    private fun convertToCustomVariableValues(
-        customVariables: Map<String, Any?>?,
-    ): Map<String, CustomVariableValue>? {
-        return customVariables
-            ?.mapNotNull { (key, value) ->
-                when (value) {
-                    is String -> key to CustomVariableValue.String(value)
-                    is Boolean -> key to CustomVariableValue.Boolean(value)
-                    is Number -> key to CustomVariableValue.Number(value.toDouble())
-                    null -> null
-                    else -> {
-                        Log.w(
-                            "Purchases",
-                            "Custom variable '$key' has unsupported type ${value::class.simpleName}. " +
-                                "Only String, Number, and Boolean values are supported. This variable will be ignored.",
-                        )
-                        null
-                    }
-                }
-            }
-            ?.toMap()
-            ?.takeIf { it.isNotEmpty() }
-    }
-
     private fun launchPaywallIfNeeded(requiredEntitlementIdentifier: String) {
         val displayDismissButton = shouldDisplayDismissButtonArg
         val offering = offeringIdentifierArg
         val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
-        val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
+        val customVariables = customVariablesArg.toCustomVariableValues() ?: emptyMap()
         val nonSerializableArgs = PaywallFragmentNonSerializableArgsStore.get(requestKey)
 
         val paywallDisplayCallback = object : PaywallDisplayCallback {
@@ -267,7 +242,7 @@ internal class PaywallFragment : Fragment(), PaywallResultHandler {
         val presentedOfferingContext = presentedOfferingContextArg ?: offering?.let { PresentedOfferingContext(it) }
         val displayDismissButton = shouldDisplayDismissButtonArg
         val fontProvider = fontFamily?.let { CustomParcelizableFontProvider(it) }
-        val customVariables = convertToCustomVariableValues(customVariablesArg) ?: emptyMap()
+        val customVariables = customVariablesArg.toCustomVariableValues() ?: emptyMap()
         val nonSerializableArgs = PaywallFragmentNonSerializableArgsStore.get(requestKey)
 
         val optionsBuilder = PaywallActivityLaunchOptions.Builder()

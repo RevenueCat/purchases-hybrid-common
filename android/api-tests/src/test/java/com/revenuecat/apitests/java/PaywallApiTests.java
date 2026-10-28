@@ -5,6 +5,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.revenuecat.purchases.Offering;
 import com.revenuecat.purchases.PresentedOfferingContext;
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointErrorCode;
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointHelpersKt;
+import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallHelpersKt;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource;
@@ -16,6 +19,21 @@ import java.util.Map;
 
 @SuppressWarnings({"unused"})
 class PaywallApiTests {
+
+    private void checkCheckpoint() {
+        CheckpointListener listener = new CheckpointListener() {
+            @Override
+            public void onCheckpointPassed(@NonNull Map<String, ?> result) {
+            }
+
+            @Override
+            public void onCheckpointError(@NonNull String code, @NonNull String message) {
+            }
+        };
+        Map<String, Object> customVariables = new HashMap<>();
+        CheckpointHelpersKt.presentCheckpoint("identifier", customVariables, "MODAL_SHEET", listener);
+        String notConfigured = CheckpointErrorCode.NOT_CONFIGURED;
+    }
 
     private void checkPaywallResultListener() {
         PaywallResultListener listener = new PaywallResultListener() {
