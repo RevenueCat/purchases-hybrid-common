@@ -56,6 +56,12 @@ import RevenueCat
         )
     }
 
+    /// The testable core of ``present(identifier:customVariables:presentationMode:onPassed:onError:)``.
+    ///
+    /// This is a separate overload because the public one must stay callable from hybrid SDKs that deploy to iOS 13,
+    /// so it can't be `@available(iOS 15.0, *)` and can't mention iOS 15 types (`CustomVariableValue`,
+    /// `FlowPresentationMode`, `CheckpointResult`) in its signature. This one can, which lets tests inject
+    /// `isConfigured` and `start` instead of needing a configured `Purchases.shared`.
     @available(iOS 15.0, *)
     static func present(
         identifier: String,
