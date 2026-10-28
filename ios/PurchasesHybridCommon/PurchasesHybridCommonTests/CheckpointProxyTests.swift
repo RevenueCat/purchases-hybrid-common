@@ -9,7 +9,8 @@
 
 import XCTest
 @testable import PurchasesHybridCommonUI
-@_spi(InviteOnlyCheckpointsApi) import RevenueCatUI
+@_spi(Internal) @testable import RevenueCat
+@_spi(InviteOnlyCheckpointsApi) @testable import RevenueCatUI
 
 @MainActor
 @available(iOS 15.0, *)
@@ -19,7 +20,7 @@ final class CheckpointProxyTests: XCTestCase {
         let identifier: String
         let variables: [String: CustomVariableValue]
         let mode: FlowPresentationMode
-        let passed: ([String: Any]) -> Void
+        let passed: (CheckpointResult) -> Void
     }
 
     private var starts: [Start] = []
@@ -66,12 +67,19 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertTrue(self.errors.isEmpty)
     }
 
-    func testForwardsPassedResult() throws {
+    func testSerializesPassedResult() throws {
         self.present()
 
-        try XCTUnwrap(self.starts.first).passed(["customer": [:], "flow": NSNull()])
+        let customer = CustomerInfo(entitlements: EntitlementInfos(entitlements: [:]),
+                                    requestDate: Date(timeIntervalSince1970: 0),
+                                    firstSeen: Date(timeIntervalSince1970: 0),
+                                    originalAppUserId: "user")
+        try XCTUnwrap(self.starts.first).passed(CheckpointResult(flow: nil, customer: customer))
 
+        let result = try XCTUnwrap(self.passed.first)
         XCTAssertEqual(self.passed.count, 1)
+        XCTAssertTrue(result["flow"] is NSNull)
+        XCTAssertNotNil(result["customer"])
     }
 
     func testMapsCustomVariablesKeepingBooleansDistinctFromNumbers() throws {
