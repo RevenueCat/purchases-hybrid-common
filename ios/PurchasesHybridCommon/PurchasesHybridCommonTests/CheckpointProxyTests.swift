@@ -82,6 +82,35 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertNotNil(result["customer"])
     }
 
+    func testSerializesObtainedEntitlementsFromTheCustomersEntitlementMap() throws {
+        let pro = EntitlementInfo(
+            identifier: "pro",
+            isActive: true,
+            willRenew: true,
+            periodType: .normal,
+            latestPurchaseDate: Date(timeIntervalSince1970: 0),
+            expirationDate: Date(timeIntervalSince1970: 4_102_444_800),
+            store: .appStore,
+            productIdentifier: "pro_product",
+            isSandbox: true,
+            ownershipType: .purchased
+        )
+        let customer = CustomerInfo(entitlements: EntitlementInfos(entitlements: ["pro": pro]),
+                                    requestDate: Date(timeIntervalSince1970: 0),
+                                    firstSeen: Date(timeIntervalSince1970: 0),
+                                    originalAppUserId: "user")
+        let flow = FlowResult(obtainedEntitlements: [ObtainedEntitlement(entitlementInfo: pro)],
+                              obtainedProducts: [])
+
+        let result = CheckpointSerialization.dictionary(for: CheckpointResult(flow: flow, customer: customer))
+
+        let obtained = try XCTUnwrap((result["flow"] as? [String: Any])?["obtainedEntitlements"]
+                                     as? [[String: Any]])
+        let info = try XCTUnwrap(obtained.first?["entitlementInfo"] as? [String: Any])
+        XCTAssertEqual(obtained.count, 1)
+        XCTAssertEqual(info["identifier"] as? String, "pro")
+    }
+
     func testMapsCustomVariablesKeepingBooleansDistinctFromNumbers() throws {
         self.present(customVariables: [
             "level": NSNumber(value: 1),
