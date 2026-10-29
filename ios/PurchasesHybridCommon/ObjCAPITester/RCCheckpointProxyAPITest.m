@@ -22,11 +22,39 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *notConfigured = CheckpointProxy.notConfiguredErrorCode;
     NSString *unsupported = CheckpointProxy.unsupportedOSVersionErrorCode;
 
+    // No-factory overload (original API)
     [CheckpointProxy presentWithIdentifier:@"identifier"
                            customVariables:@{@"key": @"value"}
                           presentationMode:sheet
                                   onPassed:^(NSDictionary<NSString *, id> *result) {}
                                    onError:^(NSString *code, NSString *message) {}];
+
+    // Error-dialog-factory overload
+    [CheckpointProxy presentWithIdentifier:@"identifier"
+                                    callId:@"call-1"
+                           customVariables:@{@"key": @"value"}
+                          presentationMode:fullScreen
+                                  onPassed:^(NSDictionary<NSString *, id> *result) {}
+                                   onError:^(NSString *code, NSString *message) {}
+                    onErrorDialogRequested:^(NSString *requestId, NSDictionary<NSString *, id> *error) {
+                        // Resolve with dialog content.
+                        [CheckpointProxy resolveErrorDialogWithRequestId:requestId
+                                                                  dialog:@{@"message": @"Try again",
+                                                                           @"buttonTitle": @"OK"}];
+                    }];
+
+    // Resolve with nil (SDK default content).
+    [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" dialog:nil];
+
+    // Cancel pending requests for a specific callId.
+    [CheckpointProxy cancelErrorDialogsWithCallId:@"call-1"];
+
+    // Cancel all pending requests.
+    [CheckpointProxy cancelErrorDialogsWithCallId:nil];
+
+    // Suppress unused-variable warnings.
+    (void)notConfigured;
+    (void)unsupported;
 }
 
 @end
