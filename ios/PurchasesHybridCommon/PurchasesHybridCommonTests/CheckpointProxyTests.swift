@@ -115,7 +115,7 @@ final class CheckpointProxyTests: XCTestCase {
 
     /// Returns a new `ErrorDialogFactoryCompletion` whose resolved dialog is appended to `resolvedDialogs`.
     private func makeCompletion() -> ErrorDialogFactoryCompletion {
-        ErrorDialogFactoryCompletion(timeoutInterval: 30) { [unowned self] dialog in
+        ErrorDialogFactoryCompletion { [unowned self] dialog in
             self.resolvedDialogs.append(dialog)
         }
     }
