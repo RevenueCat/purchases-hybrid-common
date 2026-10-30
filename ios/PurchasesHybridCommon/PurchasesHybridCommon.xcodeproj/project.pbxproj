@@ -28,7 +28,6 @@
 		35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
-		C0DE0C4B0000000000000006 /* CheckpointProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */; };
 		3BF79C840BA1C60FC5BAB44A /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = C4689DB181C4E40F59E642DD /* Nimble */; };
 		4B2F33BEFA94BEF3853961D7 /* PurchasesHybridCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 5C95F22DCD9FA6BC836B1AD8 /* PurchasesHybridCommon */; };
 		4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */; };
@@ -46,13 +45,14 @@
 		7DCC8085126043DF85C4FF45 /* PaywallProxyDelegateRoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC549B5A8564650A513058C /* PaywallProxyDelegateRoutingTests.swift */; };
 		8D7E9A16717774CB710220ED /* PaywallPresentationStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */; };
 		A1B2C3D42026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */; };
-		C0DE0C4B0000000000000009 /* RCCheckpointProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000008 /* RCCheckpointProxyAPITest.m */; };
 		A706CE00EE14886794CDD54C /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = DBE76503973A76ED36C721F9 /* Quick */; };
 		ABE6A8EBE26766CE90BF6484 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 8213150EA2D831D3AF5BAA52 /* RevenueCat */; };
 		B3105D7A287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */; };
 		B75B0D138C7D71EE64495CC6 /* PaywallCustomVariablesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA42CB2C6B5A644D147C90C /* PaywallCustomVariablesTests.swift */; };
 		BD86A6F779A9165FA9FA8D75 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 6E0057CD0F754BBE96DE51A2 /* RevenueCat */; };
 		BE27455A29A0A87CFEBB7546 /* RewardVerificationToken+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */; };
+		C0DE0C4B0000000000000006 /* CheckpointProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */; };
+		C0DE0C4B0000000000000009 /* RCCheckpointProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000008 /* RCCheckpointProxyAPITest.m */; };
 		CD31AF907C9D87F84C45451F /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = AE5CF307428C6E049EDBFE18 /* RevenueCatUI */; };
 		D2651B6A64F2F1C748023D64 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 98549EB7046281B8C8D630E5 /* Nimble */; };
 		DCADC3169670A67C52961A8B /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 284291E22AE337485C17B79C /* Quick */; };
@@ -84,9 +84,6 @@
 		1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums+HybridAdditions.swift"; sourceTree = "<group>"; };
 		26ADD358A91D0AEFD86DB95C /* AdReward+HybridAdditionsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AdReward+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
-		C0DE0C4B0000000000000001 /* CheckpointProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointProxy.swift; sourceTree = "<group>"; };
-		C0DE0C4B0000000000000003 /* CheckpointSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointSerialization.swift; sourceTree = "<group>"; };
-		C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointProxyTests.swift; sourceTree = "<group>"; };
 		2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Offering+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerInfo+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
@@ -154,11 +151,14 @@
 		8461699F3DFCE64D7E1C312B /* RewardVerificationToken+HybridAdditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "RewardVerificationToken+HybridAdditions.swift"; sourceTree = "<group>"; };
 		9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "RewardVerificationToken+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridPurchaseLogicBridgeAPITest.m; sourceTree = "<group>"; };
-		C0DE0C4B0000000000000008 /* RCCheckpointProxyAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCCheckpointProxyAPITest.m; sourceTree = "<group>"; };
 		A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridPurchaseLogicBridge.swift; sourceTree = "<group>"; };
 		B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSandboxEnvironmentDetector.swift; sourceTree = "<group>"; };
 		BC0A6D0871522AA838569D8B /* RewardVerificationResult+HybridAdditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "RewardVerificationResult+HybridAdditions.swift"; sourceTree = "<group>"; };
 		BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallPresentationStyleTests.swift; sourceTree = "<group>"; };
+		C0DE0C4B0000000000000001 /* CheckpointProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointProxy.swift; sourceTree = "<group>"; };
+		C0DE0C4B0000000000000003 /* CheckpointSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointSerialization.swift; sourceTree = "<group>"; };
+		C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CheckpointProxyTests.swift; sourceTree = "<group>"; };
+		C0DE0C4B0000000000000008 /* RCCheckpointProxyAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCCheckpointProxyAPITest.m; sourceTree = "<group>"; };
 		D2FBD756B53F8ACF48839443 /* AdReward+HybridAdditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AdReward+HybridAdditions.swift"; sourceTree = "<group>"; };
 		E04AED59E55B135D4E4055BE /* PaywallProxyResultTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallProxyResultTests.swift; sourceTree = "<group>"; };
 		EFC549B5A8564650A513058C /* PaywallProxyDelegateRoutingTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PaywallProxyDelegateRoutingTests.swift; sourceTree = "<group>"; };
@@ -389,15 +389,6 @@
 			path = CustomerCenter;
 			sourceTree = "<group>";
 		};
-		C0DE0C4B0000000000000007 /* Checkpoints */ = {
-			isa = PBXGroup;
-			children = (
-				C0DE0C4B0000000000000001 /* CheckpointProxy.swift */,
-				C0DE0C4B0000000000000003 /* CheckpointSerialization.swift */,
-			);
-			path = Checkpoints;
-			sourceTree = "<group>";
-		};
 		57E97CAA2D66236C007EB1C2 /* Paywalls */ = {
 			isa = PBXGroup;
 			children = (
@@ -441,6 +432,15 @@
 				57FFDE31286A57580089A57B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C0DE0C4B0000000000000007 /* Checkpoints */ = {
+			isa = PBXGroup;
+			children = (
+				C0DE0C4B0000000000000001 /* CheckpointProxy.swift */,
+				C0DE0C4B0000000000000003 /* CheckpointSerialization.swift */,
+			);
+			path = Checkpoints;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -725,16 +725,16 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx27*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.ObjCAPITester;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -744,13 +744,13 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 				TVOS_DEPLOYMENT_TARGET = 13.0;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 			};
 			name = Debug;
 		};
@@ -772,16 +772,16 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2022 RevenueCat. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx27*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.ObjCAPITester;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -791,13 +791,13 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 				TVOS_DEPLOYMENT_TARGET = 13.0;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 			};
 			name = Release;
 		};
@@ -809,26 +809,26 @@
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.2;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 			};
 			name = Debug;
 		};
@@ -840,26 +840,26 @@
 				DEVELOPMENT_TEAM = 8SXR2327BM;
 				INFOPLIST_FILE = PurchasesHybridCommonTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.revenuecat.PurchasesHybridCommonTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TVOS_DEPLOYMENT_TARGET = 11.2;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 			};
 			name = Release;
 		};
@@ -914,10 +914,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -925,11 +925,11 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4,6";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Debug;
@@ -979,22 +979,22 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = "15.0";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = "15.0";
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos27*]" = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator27*]" = 15.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = "12.0";
+				"MACOSX_DEPLOYMENT_TARGET[sdk=macosx27*]" = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4,6";
 				TVOS_DEPLOYMENT_TARGET = 11.0;
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = "15.0";
-				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = "15.0";
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvos27*]" = 15.0;
+				"TVOS_DEPLOYMENT_TARGET[sdk=appletvsimulator27*]" = 15.0;
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 6.2;
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = "9.0";
-				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = "9.0";
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchos27*]" = 9.0;
+				"WATCHOS_DEPLOYMENT_TARGET[sdk=watchsimulator27*]" = 9.0;
 				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
@@ -1178,7 +1178,7 @@
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
 			requirement = {
 				kind = exactVersion;
-				version = 5.99.0;
+				version = 5.99.2;
 			};
 		};
 		57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
