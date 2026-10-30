@@ -8,8 +8,10 @@ import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
+import com.revenuecat.purchases.hybridcommon.ui.cancelErrorDialogs
 import com.revenuecat.purchases.hybridcommon.ui.presentCheckpoint
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
+import com.revenuecat.purchases.hybridcommon.ui.resolveErrorDialog
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
 
 @Suppress("unused", "UNUSED_VARIABLE", "EmptyFunctionBlock")
@@ -32,10 +34,27 @@ private class PaywallApiTests {
 
             override fun onCheckpointError(code: String, message: String) {
             }
+
+            override fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {
+                val kind: Any? = error["kind"]
+                val code: Any? = error["code"]
+                val message: Any? = error["message"]
+                resolveErrorDialog(requestId, mapOf(
+                    "type" to "show",
+                    "dialog" to mapOf("message" to "err", "buttonTitle" to "OK"),
+                ))
+                resolveErrorDialog(requestId, mapOf("type" to "useDefault"))
+                resolveErrorDialog(requestId, mapOf("type" to "suppress"))
+                resolveErrorDialog(requestId, null)
+            }
         }
         presentCheckpoint("identifier", listener = listener)
         presentCheckpoint("identifier", mapOf("key" to "value"), "MODAL_SHEET", listener)
+        presentCheckpoint("identifier", callId = "c1", listener = listener)
+        presentCheckpoint("identifier", callId = "c1", customVariables = mapOf("k" to "v"), presentationMode = "MODAL_SHEET", listener = listener)
         val notConfigured: String = CheckpointErrorCode.NOT_CONFIGURED
+        cancelErrorDialogs("c1")
+        cancelErrorDialogs(null)
     }
 
     fun checkPaywallSource(paywallSource: PaywallSource) {
