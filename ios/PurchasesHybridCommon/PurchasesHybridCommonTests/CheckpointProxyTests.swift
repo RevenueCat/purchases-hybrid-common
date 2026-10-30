@@ -41,7 +41,7 @@ final class CheckpointProxyTests: XCTestCase {
 
     private var factoryStarts: [FactoryStart] = []
     private var requestedErrors: [(requestId: String, error: [String: Any])] = []
-    private var resolvedDialogs: [CheckpointErrorDialog?] = []
+    private var resolvedOutcomes: [ErrorDialogFactoryOutcome] = []
 
     // MARK: - Setup / teardown
 
@@ -52,7 +52,7 @@ final class CheckpointProxyTests: XCTestCase {
         self.errors = []
         self.factoryStarts = []
         self.requestedErrors = []
-        self.resolvedDialogs = []
+        self.resolvedOutcomes = []
     }
 
     override func tearDown() {
@@ -113,10 +113,10 @@ final class CheckpointProxyTests: XCTestCase {
         )
     }
 
-    /// Returns a new `ErrorDialogFactoryCompletion` whose resolved dialog is appended to `resolvedDialogs`.
+    /// Returns a new `ErrorDialogFactoryCompletion` whose resolved outcome is appended to `resolvedOutcomes`.
     private func makeCompletion() -> ErrorDialogFactoryCompletion {
-        ErrorDialogFactoryCompletion { [unowned self] dialog in
-            self.resolvedDialogs.append(dialog)
+        ErrorDialogFactoryCompletion { [unowned self] outcome in
+            self.resolvedOutcomes.append(outcome)
         }
     }
 
@@ -308,59 +308,96 @@ final class CheckpointProxyTests: XCTestCase {
 
         CheckpointProxy.resolveErrorDialog(
             requestId: requestId,
-            dialog: ["message": "Try again", "buttonTitle": "OK"]
+            outcome: ["type": "show", "dialog": ["message": "Try again", "buttonTitle": "OK"]]
         )
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        let dialog = try XCTUnwrap(self.resolvedDialogs[0])
-        XCTAssertEqual(dialog.message, "Try again")
-        XCTAssertEqual(dialog.buttonTitle, "OK")
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Try again", buttonTitle: "OK")))
     }
 
-    func testResolveWithNilCompletesWithNil() throws {
+    func testResolveWithNilCompletesWithUseDefault() throws {
         self.presentWithFactory()
         let start = try XCTUnwrap(self.factoryStarts.first)
         start.factory?(self.makeParams(), self.makeCompletion())
         let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
 
-        CheckpointProxy.resolveErrorDialog(requestId: requestId, dialog: nil)
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: nil)
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        XCTAssertNil(self.resolvedDialogs[0])
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
     }
 
-    func testResolveWithMissingButtonTitleFallsBackToNil() throws {
+    func testResolveWithMissingButtonTitleFallsBackToUseDefault() throws {
         self.presentWithFactory()
         let start = try XCTUnwrap(self.factoryStarts.first)
         start.factory?(self.makeParams(), self.makeCompletion())
         let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
 
         // dialog dict is missing "buttonTitle"
-        CheckpointProxy.resolveErrorDialog(requestId: requestId, dialog: ["message": "Try again"])
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: ["type": "show", "dialog": ["message": "Try again"]])
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        XCTAssertNil(self.resolvedDialogs[0])
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
     }
 
-    func testResolveWithEmptyMessageFallsBackToNil() throws {
+    func testResolveWithEmptyMessageFallsBackToUseDefault() throws {
         self.presentWithFactory()
         let start = try XCTUnwrap(self.factoryStarts.first)
         start.factory?(self.makeParams(), self.makeCompletion())
         let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
 
-        CheckpointProxy.resolveErrorDialog(requestId: requestId, dialog: ["message": "", "buttonTitle": "OK"])
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: ["type": "show", "dialog": ["message": "", "buttonTitle": "OK"]])
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        XCTAssertNil(self.resolvedDialogs[0])
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
+    }
+
+    func testResolveExplicitOutcomesAndInvalidPayloads() throws {
+        let cases: [([String: Any], ErrorDialogFactoryOutcome)] = [
+            (["type": "useDefault"], .useDefault),
+            (["type": "suppress"], .suppress),
+            (["type": "unknown"], .useDefault),
+            ([:], .useDefault),
+            (["type": 1], .useDefault),
+            (["type": "show"], .useDefault),
+            (["type": "show", "dialog": "invalid"], .useDefault),
+            (["type": "show", "dialog": ["message": 1, "buttonTitle": "OK"]], .useDefault),
+            (["type": "show", "dialog": ["message": "Oops", "buttonTitle": ""]], .useDefault)
+        ]
+        for (payload, expected) in cases {
+            self.presentWithFactory()
+            let start = try XCTUnwrap(self.factoryStarts.last)
+            start.factory?(self.makeParams(), self.makeCompletion())
+            let requestId = try XCTUnwrap(self.requestedErrors.last?.requestId)
+            let previousCount = self.resolvedOutcomes.count
+
+            CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: payload)
+
+            XCTAssertEqual(self.resolvedOutcomes.count, previousCount + 1)
+            XCTAssertEqual(self.resolvedOutcomes.last, expected, "Payload: \(payload)")
+        }
+    }
+
+    func testSuppressIgnoresLaterResolutionsAndCancellation() throws {
+        self.presentWithFactory()
+        let start = try XCTUnwrap(self.factoryStarts.first)
+        start.factory?(self.makeParams(), self.makeCompletion())
+        let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
+
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: ["type": "suppress"])
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: ["type": "useDefault"])
+        CheckpointProxy.cancelErrorDialogs(callId: "call-1")
+
+        XCTAssertEqual(self.resolvedOutcomes, [.suppress])
     }
 
     func testResolveUnknownRequestIdIsIgnored() {
         self.presentWithFactory()
 
         // Should not crash or produce a resolved dialog.
-        CheckpointProxy.resolveErrorDialog(requestId: "unknown-request-id", dialog: nil)
+        CheckpointProxy.resolveErrorDialog(requestId: "unknown-request-id", outcome: nil)
 
-        XCTAssertTrue(self.resolvedDialogs.isEmpty)
+        XCTAssertTrue(self.resolvedOutcomes.isEmpty)
     }
 
     func testResolveSecondCallForSameRequestIdIsIgnored() throws {
@@ -369,14 +406,14 @@ final class CheckpointProxyTests: XCTestCase {
         start.factory?(self.makeParams(), self.makeCompletion())
         let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
 
-        CheckpointProxy.resolveErrorDialog(requestId: requestId, dialog: nil)
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: nil)
         // Second call — requestId has been removed from pendingRequests, so this is silently ignored.
         CheckpointProxy.resolveErrorDialog(
             requestId: requestId,
-            dialog: ["message": "Try again", "buttonTitle": "OK"]
+            outcome: ["type": "show", "dialog": ["message": "Try again", "buttonTitle": "OK"]]
         )
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
     }
 
     func testSeveralErrorsAnsweredIndependently() throws {
@@ -396,13 +433,13 @@ final class CheckpointProxyTests: XCTestCase {
 
         CheckpointProxy.resolveErrorDialog(
             requestId: requestIdA,
-            dialog: ["message": "Error A", "buttonTitle": "Close"]
+            outcome: ["type": "show", "dialog": ["message": "Error A", "buttonTitle": "Close"]]
         )
-        CheckpointProxy.resolveErrorDialog(requestId: requestIdB, dialog: nil)
+        CheckpointProxy.resolveErrorDialog(requestId: requestIdB, outcome: nil)
 
-        XCTAssertEqual(self.resolvedDialogs.count, 2)
-        XCTAssertEqual(self.resolvedDialogs[0]?.message, "Error A")
-        XCTAssertNil(self.resolvedDialogs[1])
+        XCTAssertEqual(self.resolvedOutcomes.count, 2)
+        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Error A", buttonTitle: "Close")))
+        XCTAssertEqual(self.resolvedOutcomes[1], .useDefault)
     }
 
     // MARK: - Factory path: cancelErrorDialogs
@@ -414,8 +451,8 @@ final class CheckpointProxyTests: XCTestCase {
 
         CheckpointProxy.cancelErrorDialogs(callId: "call-1")
 
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        XCTAssertNil(self.resolvedDialogs[0])
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
     }
 
     func testCancelForCallIdDoesNotAffectOtherCallIds() throws {
@@ -431,28 +468,28 @@ final class CheckpointProxyTests: XCTestCase {
         CheckpointProxy.cancelErrorDialogs(callId: "call-1")
 
         // Only call-1's request completed; call-2's is still pending.
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
 
         // Resolve call-2 manually.
         let requestId2 = self.requestedErrors[1].requestId
-        CheckpointProxy.resolveErrorDialog(requestId: requestId2, dialog: nil)
-        XCTAssertEqual(self.resolvedDialogs.count, 2)
+        CheckpointProxy.resolveErrorDialog(requestId: requestId2, outcome: nil)
+        XCTAssertEqual(self.resolvedOutcomes.count, 2)
     }
 
-    func testCancelMarksCallIdDetachedSoSubsequentFactoryCallsCompleteWithNilImmediately() throws {
+    func testCancelMarksCallIdDetachedSoSubsequentFactoryCallsCompleteWithUseDefaultImmediately() throws {
         self.presentWithFactory(callId: "call-1")
 
         // Cancel before any factory call.
         CheckpointProxy.cancelErrorDialogs(callId: "call-1")
 
-        // Now trigger the factory — it should complete with nil immediately without
+        // Now trigger the factory — it should complete with UseDefault immediately without
         // calling onErrorDialogRequested.
         let start = try XCTUnwrap(self.factoryStarts.first)
         start.factory?(self.makeParams(), self.makeCompletion())
 
         XCTAssertTrue(self.requestedErrors.isEmpty)
-        XCTAssertEqual(self.resolvedDialogs.count, 1)
-        XCTAssertNil(self.resolvedDialogs[0])
+        XCTAssertEqual(self.resolvedOutcomes.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
     }
 
     func testDetachedMarkerClearedWhenCallPasses() throws {
@@ -474,7 +511,7 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertEqual(self.requestedErrors.count, 1)
     }
 
-    func testCancelNilCompleteAllPendingRequestsWithNil() throws {
+    func testCancelNilCompleteAllPendingRequestsWithUseDefault() throws {
         self.presentWithFactory(callId: "call-a")
         self.presentWithFactory(callId: "call-b")
 
@@ -485,9 +522,9 @@ final class CheckpointProxyTests: XCTestCase {
 
         CheckpointProxy.cancelErrorDialogs(callId: nil)
 
-        XCTAssertEqual(self.resolvedDialogs.count, 2)
-        XCTAssertNil(self.resolvedDialogs[0])
-        XCTAssertNil(self.resolvedDialogs[1])
+        XCTAssertEqual(self.resolvedOutcomes.count, 2)
+        XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
+        XCTAssertEqual(self.resolvedOutcomes[1], .useDefault)
     }
 
     func testCancelNilClearsAllDetachedMarkersAlreadySet() throws {

@@ -16,6 +16,7 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointParams
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointPassedCallback
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointResult
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowPresentationMode
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowResult
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ObtainedEntitlement
@@ -317,7 +318,7 @@ class CheckpointHelpersTest {
 
     @Test
     fun `resolveErrorDialog with content completes the factory completion with the dialog`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+        val completions = mutableListOf<Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val capturedRequestId = mutableListOf<String>()
         val recordingListener = object : CheckpointListener {
@@ -333,17 +334,17 @@ class CheckpointHelpersTest {
 
         resolveErrorDialog(
             capturedRequestId.single(),
-            mapOf("message" to "Something went wrong", "buttonTitle" to "OK"),
+            showOutcome("Something went wrong"),
             registry,
         )
 
         assertEquals(1, completions.size)
-        assertEquals(CheckpointErrorDialog("Something went wrong", "OK"), completions.single())
+        assertEquals(Outcome.Show(CheckpointErrorDialog("Something went wrong", "OK")), completions.single())
     }
 
     @Test
-    fun `resolveErrorDialog with null dialog completes with null`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+    fun `resolveErrorDialog with null dialog completes with UseDefault`() {
+        val completions = mutableListOf<Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val capturedRequestId = mutableListOf<String>()
         val recordingListener = object : CheckpointListener {
@@ -360,12 +361,12 @@ class CheckpointHelpersTest {
         resolveErrorDialog(capturedRequestId.single(), null, registry)
 
         assertEquals(1, completions.size)
-        assertNull(completions.single())
+        assertEquals(Outcome.UseDefault, completions.single())
     }
 
     @Test
-    fun `resolveErrorDialog with invalid content logs a warning and completes with null`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+    fun `resolveErrorDialog with invalid content logs a warning and completes with UseDefault`() {
+        val completions = mutableListOf<Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val capturedRequestId = mutableListOf<String>()
         val recordingListener = object : CheckpointListener {
@@ -380,21 +381,56 @@ class CheckpointHelpersTest {
         ) { completions += it }
 
         // missing buttonTitle key
-        resolveErrorDialog(capturedRequestId.single(), mapOf("message" to "oops"), registry)
+        resolveErrorDialog(
+            capturedRequestId.single(),
+            mapOf("type" to "show", "dialog" to mapOf("message" to "oops")),
+            registry,
+        )
 
-        assertNull(completions.single())
+        assertEquals(Outcome.UseDefault, completions.single())
     }
+
+    @Test
+    fun `resolveErrorDialog maps explicit outcomes and invalid payloads`() {
+        val cases = listOf(
+            mapOf("type" to "useDefault") to Outcome.UseDefault,
+            mapOf("type" to "suppress") to Outcome.Suppress,
+            mapOf("type" to "unknown") to Outcome.UseDefault,
+            emptyMap<String, Any?>() to Outcome.UseDefault,
+            mapOf("type" to 1) to Outcome.UseDefault,
+            mapOf("type" to "show") to Outcome.UseDefault,
+            mapOf("type" to "show", "dialog" to "invalid") to Outcome.UseDefault,
+            mapOf("type" to "show", "dialog" to mapOf("message" to 1, "buttonTitle" to "OK")) to Outcome.UseDefault,
+            showOutcome("") to Outcome.UseDefault,
+            mapOf("type" to "show", "dialog" to mapOf("message" to "Oops", "buttonTitle" to "")) to Outcome.UseDefault,
+        )
+        cases.forEachIndexed { index, (payload, expected) ->
+            val registry = CheckpointErrorDialogRegistry()
+            val completions = mutableListOf<Outcome>()
+            val requestId = "request-$index"
+            registry.register(requestId, "call", ErrorDialogFactory.Completion { completions += it })
+
+            resolveErrorDialog(requestId, payload, registry)
+
+            assertEquals("Payload: $payload", listOf(expected), completions)
+        }
+    }
+
+    private fun showOutcome(message: String): Map<String, Any?> = mapOf(
+        "type" to "show",
+        "dialog" to mapOf("message" to message, "buttonTitle" to "OK"),
+    )
 
     @Test
     fun `resolveErrorDialog with unknown requestId is ignored`() {
         val registry = CheckpointErrorDialogRegistry()
         // Should not throw; the warning is logged
-        resolveErrorDialog("nonexistent", mapOf("message" to "msg", "buttonTitle" to "OK"), registry)
+        resolveErrorDialog("nonexistent", showOutcome("msg"), registry)
     }
 
     @Test
     fun `double resolveErrorDialog ignores the second call`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+        val completions = mutableListOf<Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val capturedRequestId = mutableListOf<String>()
         val recordingListener = object : CheckpointListener {
@@ -409,16 +445,16 @@ class CheckpointHelpersTest {
         ) { completions += it }
         val requestId = capturedRequestId.single()
 
-        resolveErrorDialog(requestId, mapOf("message" to "first", "buttonTitle" to "OK"), registry)
-        resolveErrorDialog(requestId, mapOf("message" to "second", "buttonTitle" to "OK"), registry)
+        resolveErrorDialog(requestId, showOutcome("first"), registry)
+        resolveErrorDialog(requestId, showOutcome("second"), registry)
 
         assertEquals(1, completions.size)
-        assertEquals("first", (completions.single() as CheckpointErrorDialog).message)
+        assertEquals("first", (completions.single() as Outcome.Show).dialog.message)
     }
 
     @Test
     fun `several independent errors are handled independently`() {
-        val completions = mutableMapOf<String, CheckpointErrorDialog?>()
+        val completions = mutableMapOf<String, Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val capturedRequestIds = mutableListOf<String>()
         val recordingListener = object : CheckpointListener {
@@ -433,16 +469,16 @@ class CheckpointHelpersTest {
         started.params.errorDialogFactory!!.createDialog(fp) { completions["req2"] = it }
         val (id1, id2) = capturedRequestIds.take(2)
 
-        resolveErrorDialog(id1, mapOf("message" to "Dialog 1", "buttonTitle" to "OK"), registry)
+        resolveErrorDialog(id1, showOutcome("Dialog 1"), registry)
         resolveErrorDialog(id2, null, registry)
 
-        assertEquals(CheckpointErrorDialog("Dialog 1", "OK"), completions["req1"])
-        assertNull(completions["req2"])
+        assertEquals(Outcome.Show(CheckpointErrorDialog("Dialog 1", "OK")), completions["req1"])
+        assertEquals(Outcome.UseDefault, completions["req2"])
     }
 
     @Test
-    fun `cancelErrorDialogs(callId) completes pending requests with null and detaches the callId`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+    fun `cancelErrorDialogs(callId) completes pending requests with UseDefault and detaches the callId`() {
+        val completions = mutableListOf<Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val recordingListener = object : CheckpointListener {
             override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
@@ -455,13 +491,13 @@ class CheckpointHelpersTest {
         cancelErrorDialogs("c1", registry)
 
         assertEquals(1, completions.size)
-        assertNull(completions.single())
+        assertEquals(Outcome.UseDefault, completions.single())
         assertTrue(registry.isDetached("c1"))
     }
 
     @Test
-    fun `cancelErrorDialogs(callId) causes later factory invocations to complete immediately with null`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+    fun `cancelErrorDialogs(callId) causes later factory invocations to complete immediately with UseDefault`() {
+        val completions = mutableListOf<Outcome>()
         val requestIds = mutableListOf<String>()
         val registry = CheckpointErrorDialogRegistry()
         val recordingListener = object : CheckpointListener {
@@ -474,19 +510,19 @@ class CheckpointHelpersTest {
 
         cancelErrorDialogs("c1", registry)
 
-        // Factory should now complete immediately with null, not call onErrorDialogRequested
+        // Factory should now complete immediately with UseDefault, not call onErrorDialogRequested
         started.params.errorDialogFactory!!.createDialog(
             mockFactoryParams(kind = CheckpointFailureKind.FLOW_COULD_NOT_BE_SHOWN),
         ) { completions += it }
 
         assertEquals(1, completions.size)
-        assertNull(completions.single())
+        assertEquals(Outcome.UseDefault, completions.single())
         assertTrue(requestIds.isEmpty())
     }
 
     @Test
     fun `cancelErrorDialogs(null) cancels all pending requests`() {
-        val completions = mutableMapOf<String, CheckpointErrorDialog?>()
+        val completions = mutableMapOf<String, Outcome>()
         val registry = CheckpointErrorDialogRegistry()
         val fp = mockFactoryParams(kind = CheckpointFailureKind.FLOW_COULD_NOT_BE_SHOWN)
         val noopListener = object : CheckpointListener {
@@ -499,8 +535,8 @@ class CheckpointHelpersTest {
 
         cancelErrorDialogs(null, registry)
 
-        assertNull(completions["c1"])
-        assertNull(completions["c2"])
+        assertEquals(Outcome.UseDefault, completions["c1"])
+        assertEquals(Outcome.UseDefault, completions["c2"])
         assertTrue(registry.isDetached("c1"))
         assertTrue(registry.isDetached("c2"))
     }

@@ -39,7 +39,12 @@ private class PaywallApiTests {
                 val kind: Any? = error["kind"]
                 val code: Any? = error["code"]
                 val message: Any? = error["message"]
-                resolveErrorDialog(requestId, mapOf("message" to "err", "buttonTitle" to "OK"))
+                resolveErrorDialog(requestId, mapOf(
+                    "type" to "show",
+                    "dialog" to mapOf("message" to "err", "buttonTitle" to "OK"),
+                ))
+                resolveErrorDialog(requestId, mapOf("type" to "useDefault"))
+                resolveErrorDialog(requestId, mapOf("type" to "suppress"))
                 resolveErrorDialog(requestId, null)
             }
         }

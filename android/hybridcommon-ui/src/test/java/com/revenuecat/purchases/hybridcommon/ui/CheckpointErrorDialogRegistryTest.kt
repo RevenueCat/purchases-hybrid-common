@@ -3,9 +3,9 @@ package com.revenuecat.purchases.hybridcommon.ui
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointErrorDialog
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -18,26 +18,26 @@ class CheckpointErrorDialogRegistryTest {
 
     @Test
     fun `resolve calls completion with the supplied dialog`() {
-        var received: CheckpointErrorDialog? = CheckpointErrorDialog("sentinel", "x")
+        var received: Outcome = Outcome.Suppress
         val completion = recordingCompletion { received = it }
         registry.register("req1", "call1", completion)
 
-        val result = registry.resolve("req1", CheckpointErrorDialog("Error!", "OK"))
+        val result = registry.resolve("req1", Outcome.Show(CheckpointErrorDialog("Error!", "OK")))
 
         assertTrue(result)
-        assertEquals(CheckpointErrorDialog("Error!", "OK"), received)
+        assertEquals(Outcome.Show(CheckpointErrorDialog("Error!", "OK")), received)
     }
 
     @Test
-    fun `resolve calls completion with null when dialog is null`() {
-        var received: CheckpointErrorDialog? = CheckpointErrorDialog("sentinel", "x")
+    fun `resolve calls completion with UseDefault`() {
+        var received: Outcome = Outcome.Suppress
         val completion = recordingCompletion { received = it }
         registry.register("req1", "call1", completion)
 
-        val result = registry.resolve("req1", null)
+        val result = registry.resolve("req1", Outcome.UseDefault)
 
         assertTrue(result)
-        assertNull(received)
+        assertEquals(Outcome.UseDefault, received)
     }
 
     @Test
@@ -45,41 +45,52 @@ class CheckpointErrorDialogRegistryTest {
         val completion = recordingCompletion { }
         registry.register("req1", "call1", completion)
 
-        val result = registry.resolve("unknown", CheckpointErrorDialog("msg", "OK"))
+        val result = registry.resolve("unknown", Outcome.Show(CheckpointErrorDialog("msg", "OK")))
 
         assertFalse(result)
         // req1 is still pending
-        assertTrue(registry.resolve("req1", null))
+        assertTrue(registry.resolve("req1", Outcome.UseDefault))
     }
 
     @Test
     fun `resolve returns false on the second call for the same requestId`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+        val completions = mutableListOf<Outcome>()
         val completion = recordingCompletion { completions += it }
         registry.register("req1", "call1", completion)
 
-        val first = registry.resolve("req1", CheckpointErrorDialog("msg", "OK"))
-        val second = registry.resolve("req1", null)
+        val first = registry.resolve("req1", Outcome.Show(CheckpointErrorDialog("msg", "OK")))
+        val second = registry.resolve("req1", Outcome.UseDefault)
 
         assertTrue(first)
         assertFalse(second)
         assertEquals(1, completions.size)
-        assertEquals(CheckpointErrorDialog("msg", "OK"), completions[0])
+        assertEquals(Outcome.Show(CheckpointErrorDialog("msg", "OK")), completions[0])
     }
 
     @Test
     fun `several pending requests for the same callId resolve independently`() {
-        val dialogs = mutableMapOf<String, CheckpointErrorDialog?>()
+        val dialogs = mutableMapOf<String, Outcome>()
         val c1 = recordingCompletion { dialogs["req1"] = it }
         val c2 = recordingCompletion { dialogs["req2"] = it }
         registry.register("req1", "call1", c1)
         registry.register("req2", "call1", c2)
 
-        registry.resolve("req1", CheckpointErrorDialog("msg1", "OK"))
-        registry.resolve("req2", null)
+        registry.resolve("req1", Outcome.Show(CheckpointErrorDialog("msg1", "OK")))
+        registry.resolve("req2", Outcome.UseDefault)
 
-        assertEquals(CheckpointErrorDialog("msg1", "OK"), dialogs["req1"])
-        assertNull(dialogs["req2"])
+        assertEquals(Outcome.Show(CheckpointErrorDialog("msg1", "OK")), dialogs["req1"])
+        assertEquals(Outcome.UseDefault, dialogs["req2"])
+    }
+
+    @Test
+    fun `resolve forwards Suppress without replacing it with UseDefault`() {
+        val completions = mutableListOf<Outcome>()
+        registry.register("request", "call", recordingCompletion { completions += it })
+
+        assertTrue(registry.resolve("request", Outcome.Suppress))
+        assertFalse(registry.resolve("request", Outcome.UseDefault))
+
+        assertEquals(listOf(Outcome.Suppress), completions)
     }
 
     // endregion
@@ -87,16 +98,16 @@ class CheckpointErrorDialogRegistryTest {
     // region cancel(callId)
 
     @Test
-    fun `cancel(callId) completes all pending requests for that callId with null`() {
-        val completions = mutableMapOf<String, CheckpointErrorDialog?>()
+    fun `cancel(callId) completes all pending requests for that callId with UseDefault`() {
+        val completions = mutableMapOf<String, Outcome>()
         registry.register("req1", "call1", recordingCompletion { completions["req1"] = it })
         registry.register("req2", "call1", recordingCompletion { completions["req2"] = it })
         registry.register("req3", "call2", recordingCompletion { completions["req3"] = it })
 
         registry.cancel("call1")
 
-        assertNull(completions["req1"])
-        assertNull(completions["req2"])
+        assertEquals(Outcome.UseDefault, completions["req1"])
+        assertEquals(Outcome.UseDefault, completions["req2"])
         assertFalse(completions.containsKey("req3")) // call2 unaffected
     }
 
@@ -109,18 +120,18 @@ class CheckpointErrorDialogRegistryTest {
 
     @Test
     fun `cancel(callId) leaves later resolves for that requestId ignored`() {
-        val completions = mutableListOf<CheckpointErrorDialog?>()
+        val completions = mutableListOf<Outcome>()
         val completion = recordingCompletion { completions += it }
         registry.register("req1", "call1", completion)
         registry.cancel("call1")
 
         // req1 was already cancelled; resolve should find nothing
-        val result = registry.resolve("req1", CheckpointErrorDialog("msg", "OK"))
+        val result = registry.resolve("req1", Outcome.Show(CheckpointErrorDialog("msg", "OK")))
 
         assertFalse(result)
-        // Only the cancel completion (null) was delivered
+        // Only the cancel completion (UseDefault) was delivered
         assertEquals(1, completions.size)
-        assertNull(completions[0])
+        assertEquals(Outcome.UseDefault, completions[0])
     }
 
     @Test
@@ -134,17 +145,17 @@ class CheckpointErrorDialogRegistryTest {
     // region cancel(null)
 
     @Test
-    fun `cancel(null) completes all pending requests with null and detaches all callIds`() {
-        val completions = mutableMapOf<String, CheckpointErrorDialog?>()
+    fun `cancel(null) completes all pending requests with UseDefault and detaches all callIds`() {
+        val completions = mutableMapOf<String, Outcome>()
         registry.register("req1", "call1", recordingCompletion { completions["req1"] = it })
         registry.register("req2", "call2", recordingCompletion { completions["req2"] = it })
         registry.register("req3", "call2", recordingCompletion { completions["req3"] = it })
 
         registry.cancel(null)
 
-        assertNull(completions["req1"])
-        assertNull(completions["req2"])
-        assertNull(completions["req3"])
+        assertEquals(Outcome.UseDefault, completions["req1"])
+        assertEquals(Outcome.UseDefault, completions["req2"])
+        assertEquals(Outcome.UseDefault, completions["req3"])
         assertTrue(registry.isDetached("call1"))
         assertTrue(registry.isDetached("call2"))
     }
@@ -179,7 +190,7 @@ class CheckpointErrorDialogRegistryTest {
     // region helpers
 
     private fun recordingCompletion(
-        block: (CheckpointErrorDialog?) -> Unit,
+        block: (Outcome) -> Unit,
     ): ErrorDialogFactory.Completion = ErrorDialogFactory.Completion { block(it) }
 
     // endregion

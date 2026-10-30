@@ -39,7 +39,15 @@ class PaywallApiTests {
                 Map<String, Object> dialog = new HashMap<>();
                 dialog.put("message", "err");
                 dialog.put("buttonTitle", "OK");
-                CheckpointHelpersKt.resolveErrorDialog(requestId, dialog);
+                Map<String, Object> outcome = new HashMap<>();
+                outcome.put("type", "show");
+                outcome.put("dialog", dialog);
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
+                outcome = new HashMap<>();
+                outcome.put("type", "useDefault");
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
+                outcome.put("type", "suppress");
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
                 CheckpointHelpersKt.resolveErrorDialog(requestId, null);
             }
         };

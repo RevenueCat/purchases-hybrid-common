@@ -3,8 +3,8 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import com.revenuecat.purchases.InternalRevenueCatAPI
-import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointErrorDialog
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 
@@ -15,7 +15,7 @@ internal val defaultCheckpointErrorDialogRegistry = CheckpointErrorDialogRegistr
  *
  * Each pending entry also records the [callId] supplied by the hybrid layer, so that entries
  * can be bulk-cancelled when a call ends or the JS runtime is invalidated. Cancelled call IDs
- * are marked "detached" so that any later errors for them are silently completed with null
+ * are marked "detached" so that any later errors for them are silently completed with UseDefault
  * instead of reaching the hybrid handler.
  */
 internal class CheckpointErrorDialogRegistry {
@@ -38,12 +38,12 @@ internal class CheckpointErrorDialogRegistry {
     }
 
     /**
-     * Removes and completes the pending entry for [requestId] with [dialog].
+     * Removes and completes the pending entry for [requestId] with [outcome].
      * Returns true when found, false when unknown or already resolved (ignored).
      */
-    fun resolve(requestId: String, dialog: CheckpointErrorDialog?): Boolean {
+    fun resolve(requestId: String, outcome: Outcome): Boolean {
         val request = pending.remove(requestId) ?: return false
-        request.completion.complete(dialog)
+        request.completion.complete(outcome)
         return true
     }
 
@@ -58,14 +58,14 @@ internal class CheckpointErrorDialogRegistry {
             pending.clear()
             snapshot.values.forEach { req ->
                 detachedCallIds.add(req.callId)
-                req.completion.complete(null)
+                req.completion.complete(Outcome.UseDefault)
             }
         } else {
             detachedCallIds.add(callId)
             val keys = pending.entries
                 .filter { it.value.callId == callId }
                 .map { it.key }
-            keys.forEach { key -> pending.remove(key)?.completion?.complete(null) }
+            keys.forEach { key -> pending.remove(key)?.completion?.complete(Outcome.UseDefault) }
         }
     }
 

@@ -37,14 +37,17 @@ NS_ASSUME_NONNULL_BEGIN
                                   onPassed:^(NSDictionary<NSString *, id> *result) {}
                                    onError:^(NSString *code, NSString *message) {}
                     onErrorDialogRequested:^(NSString *requestId, NSDictionary<NSString *, id> *error) {
-                        // Resolve with dialog content.
+                        // Resolve with custom dialog content.
                         [CheckpointProxy resolveErrorDialogWithRequestId:requestId
-                                                                  dialog:@{@"message": @"Try again",
-                                                                           @"buttonTitle": @"OK"}];
+                                                                 outcome:@{@"type": @"show",
+                                                                           @"dialog": @{@"message": @"Try again",
+                                                                                        @"buttonTitle": @"OK"}}];
                     }];
 
-    // Resolve with nil (SDK default content).
-    [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" dialog:nil];
+    // Resolve with an explicit default or suppressed outcome.
+    [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" outcome:@{@"type": @"useDefault"}];
+    [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" outcome:@{@"type": @"suppress"}];
+    [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" outcome:nil];
 
     // Cancel pending requests for a specific callId.
     [CheckpointProxy cancelErrorDialogsWithCallId:@"call-1"];

@@ -34,7 +34,7 @@ import RevenueCat
     @available(iOS 15.0, *)
     private static var pendingRequests: [String: PendingRequest] = [:]
 
-    /// Set of callIds marked detached; requests for them complete immediately with nil.
+    /// Set of callIds marked detached; requests for them immediately use the default dialog.
     /// Must only be accessed from the main actor.
     @available(iOS 15.0, *)
     private static var detachedCallIds: Set<String> = []
@@ -93,7 +93,7 @@ import RevenueCat
     ///   an error dialog. PHC passes a unique `requestId` and an `error` dictionary with keys:
     ///   `kind` (`"flowCouldNotBeShown"` | `"flowActionFailed"` | `"flowResultSyncFailed"`),
     ///   `code` (NSError code), `message` (localizedDescription).
-    ///   The hybrid must call ``resolveErrorDialog(requestId:dialog:)`` exactly once.
+    ///   The hybrid must call ``resolveErrorDialog(requestId:outcome:)`` exactly once.
     ///
     /// Custom variables support String, Number and Boolean values. Other values are ignored.
     public static func present(
@@ -137,50 +137,63 @@ import RevenueCat
 
     // MARK: - Error dialog resolution
 
-    /// Delivers error-dialog content for a pending request identified by `requestId`.
+    /// Applies the outcome for a pending error-dialog request identified by `requestId`.
     ///
-    /// Must be called on the main thread. PHC removes the pending entry and calls the native
-    /// completion with the supplied dialog (or nil to fall back to the SDK's default).
-    /// Unknown or already-answered `requestId`s are silently ignored.
+    /// Must be called on the main thread. Unknown or already-answered request IDs are ignored.
     ///
-    /// `dialog` is a dictionary with two required keys:
-    /// - `message` (String): the dialog message.
-    /// - `buttonTitle` (String): the dismiss button title.
+    /// `outcome` is one of:
+    /// - `{ type: "show", dialog: { message: String, buttonTitle: String } }` for custom dialog content.
+    /// - `{ type: "useDefault" }` for the SDK's own localized dialog.
+    /// - `{ type: "suppress" }` to continue without showing a dialog.
     ///
-    /// Pass `nil` for `dialog` to use the SDK's default content.
+    /// Nil or invalid outcomes use the SDK's default dialog.
     @MainActor
-    public static func resolveErrorDialog(requestId: String, dialog: [String: Any]?) {
+    public static func resolveErrorDialog(requestId: String, outcome: [String: Any]?) {
         guard #available(iOS 15.0, *) else { return }
         guard let request = Self.pendingRequests.removeValue(forKey: requestId) else {
             NSLog("[RevenueCatUI] resolveErrorDialog: unknown or already-answered requestId '%@'", requestId)
             return
         }
-        let nativeDialog: CheckpointErrorDialog?
-        if let dialog = dialog {
-            if let message = dialog["message"] as? String,
-               let buttonTitle = dialog["buttonTitle"] as? String,
-               !message.isEmpty,
-               !buttonTitle.isEmpty {
-                nativeDialog = CheckpointErrorDialog(message: message, buttonTitle: buttonTitle)
-            } else {
-                NSLog("[RevenueCatUI] resolveErrorDialog: invalid dialog content; falling back to SDK default.")
-                nativeDialog = nil
+        request.completion.complete(with: Self.errorDialogOutcome(from: outcome))
+    }
+
+    @available(iOS 15.0, *)
+    private static func errorDialogOutcome(from outcome: [String: Any]?) -> ErrorDialogFactoryOutcome {
+        guard let outcome = outcome else { return .useDefault }
+        switch outcome["type"] as? String {
+        case "useDefault":
+            return .useDefault
+        case "suppress":
+            return .suppress
+        case "show":
+            guard let dialog = outcome["dialog"] as? [String: Any],
+                  let message = dialog["message"] as? String,
+                  let buttonTitle = dialog["buttonTitle"] as? String,
+                  !message.isEmpty,
+                  !buttonTitle.isEmpty else {
+                return Self.invalidErrorDialogOutcome()
             }
-        } else {
-            nativeDialog = nil
+            return .show(CheckpointErrorDialog(message: message, buttonTitle: buttonTitle))
+        default:
+            return Self.invalidErrorDialogOutcome()
         }
-        request.completion.complete(with: nativeDialog)
+    }
+
+    @available(iOS 15.0, *)
+    private static func invalidErrorDialogOutcome() -> ErrorDialogFactoryOutcome {
+        NSLog("[RevenueCatUI] resolveErrorDialog: invalid outcome; falling back to SDK default.")
+        return .useDefault
     }
 
     // MARK: - Cancellation
 
-    /// Completes all pending error-dialog requests for `callId` with nil (SDK default).
+    /// Completes all pending error-dialog requests for `callId` with the SDK default outcome.
     ///
     /// Must be called on the main thread.
     ///
     /// - If `callId` is non-nil, only requests matching that callId are completed.
-    ///   The callId is marked detached so future requests for it complete immediately with nil.
-    /// - If `callId` is nil, ALL pending requests are completed with nil.
+    ///   The callId is marked detached so future requests for it immediately use the SDK default outcome.
+    /// - If `callId` is nil, ALL pending requests are completed with the SDK default outcome.
     ///
     /// The detached marker is cleared when the matching call's `onPassed` fires.
     @MainActor
@@ -194,7 +207,7 @@ import RevenueCat
         }
         for requestId in toCancel {
             if let request = Self.pendingRequests.removeValue(forKey: requestId) {
-                request.completion.complete(with: nil)
+                request.completion.complete(with: .useDefault)
             }
         }
         if let callId = callId {
@@ -268,9 +281,9 @@ import RevenueCat
         // The ErrorDialogFactory typealias is @MainActor, so this closure's body runs on the
         // main actor whenever the native SDK calls it.
         let factory: ErrorDialogFactory = { params, completion in
-            // If the callId is detached (JS runtime torn down), complete immediately with nil.
+            // If the callId is detached (JS runtime torn down), immediately use the SDK default outcome.
             guard !Self.detachedCallIds.contains(callId) else {
-                completion.complete(with: nil)
+                completion.complete(with: .useDefault)
                 return
             }
             let requestId = UUID().uuidString

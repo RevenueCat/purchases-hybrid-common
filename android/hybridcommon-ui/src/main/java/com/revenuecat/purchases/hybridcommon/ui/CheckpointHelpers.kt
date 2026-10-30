@@ -13,6 +13,7 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointFailureKin
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointParams
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointPassedCallback
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowPresentationMode
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowResult
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.checkpoint
@@ -39,7 +40,7 @@ interface CheckpointListener {
     /**
      * Called when the native SDK needs custom error-dialog content for a checkpoint error.
      * Only called when [presentCheckpoint] was invoked with a [callId].
-     * Respond by calling [resolveErrorDialog] with the [requestId] and optional dialog content.
+     * Respond by calling [resolveErrorDialog] with the [requestId] and an outcome.
      *
      * [error] is `{ kind: String, code: Int, message: String }` where [kind] is one of
      * `"flowCouldNotBeShown"`, `"flowActionFailed"`, or `"flowResultSyncFailed"`.
@@ -80,8 +81,7 @@ fun presentCheckpoint(
  * [callId] identifies this call for [resolveErrorDialog] and [cancelErrorDialogs].
  *
  * When a checkpoint error occurs and the SDK needs dialog content, [CheckpointListener.onErrorDialogRequested]
- * is called with a unique [requestId]. Respond by calling [resolveErrorDialog] to supply custom dialog content
- * or null to use the SDK's own localized copy.
+ * is called with a unique [requestId]. Respond by calling [resolveErrorDialog] with the outcome to apply.
  *
  * Must be called on the main thread. See [CheckpointListener] for when the listener is called.
  *
@@ -108,19 +108,22 @@ fun presentCheckpoint(
 /**
  * Resolves a pending error-dialog request created by [presentCheckpoint] (the overload with a `callId`).
  *
- * [dialog] may contain `message` and `buttonTitle` string entries to supply custom dialog content,
- * or be null to let the SDK use its own localized copy. Invalid entries (non-string values) are
- * logged and treated as null. Unknown or already-resolved [requestId]s are silently ignored.
+ * [outcome] is one of:
+ * - `{ type: "show", dialog: { message: String, buttonTitle: String } }` for custom dialog content.
+ * - `{ type: "useDefault" }` for the SDK's own localized dialog.
+ * - `{ type: "suppress" }` to continue without showing a dialog.
+ *
+ * Null or invalid outcomes use the SDK's default dialog. Unknown or already-resolved [requestId]s are ignored.
  */
-fun resolveErrorDialog(requestId: String, dialog: Map<String, Any?>?) {
-    resolveErrorDialog(requestId, dialog, defaultCheckpointErrorDialogRegistry)
+fun resolveErrorDialog(requestId: String, outcome: Map<String, Any?>?) {
+    resolveErrorDialog(requestId, outcome, defaultCheckpointErrorDialogRegistry)
 }
 
 /**
  * Cancels pending error-dialog requests.
  *
  * When [callId] is non-null, only requests for that call are cancelled and the call is marked
- * detached — future errors for it silently complete with null without calling the handler.
+ * detached — future errors for it silently complete with UseDefault without calling the handler.
  * When [callId] is null, all pending requests are cancelled and all their call IDs are marked
  * detached. Use null when the JS runtime is invalidated.
  *
@@ -186,7 +189,7 @@ internal fun presentCheckpoint(
     }
     val factory = ErrorDialogFactory { params, completion ->
         if (registry.isDetached(callId)) {
-            completion.complete(null)
+            completion.complete(Outcome.UseDefault)
             return@ErrorDialogFactory
         }
         val requestId = UUID.randomUUID().toString()
@@ -218,10 +221,10 @@ internal fun presentCheckpoint(
 
 internal fun resolveErrorDialog(
     requestId: String,
-    dialog: Map<String, Any?>?,
+    outcome: Map<String, Any?>?,
     registry: CheckpointErrorDialogRegistry,
 ) {
-    val resolved = registry.resolve(requestId, dialog.toCheckpointErrorDialog())
+    val resolved = registry.resolve(requestId, outcome.toCheckpointErrorDialogOutcome())
     if (!resolved) {
         Log.w(TAG, "resolveErrorDialog: unknown or already-resolved requestId '$requestId'; ignoring.")
     }
@@ -231,20 +234,28 @@ internal fun cancelErrorDialogs(callId: String?, registry: CheckpointErrorDialog
     registry.cancel(callId)
 }
 
-private fun Map<String, Any?>?.toCheckpointErrorDialog(): CheckpointErrorDialog? {
-    if (this == null) return null
-    val message = this["message"]
-    val buttonTitle = this["buttonTitle"]
-    return if (message is String && buttonTitle is String) {
-        CheckpointErrorDialog(message, buttonTitle)
-    } else {
-        Log.w(
-            TAG,
-            "resolveErrorDialog: 'message' and 'buttonTitle' must be non-null strings; " +
-                "using the SDK's default dialog instead.",
-        )
-        null
+private fun Map<String, Any?>?.toCheckpointErrorDialogOutcome(): Outcome {
+    if (this == null) return Outcome.UseDefault
+    return when (this["type"]) {
+        "useDefault" -> Outcome.UseDefault
+        "suppress" -> Outcome.Suppress
+        "show" -> {
+            val dialog = this["dialog"] as? Map<*, *>
+            val message = dialog?.get("message") as? String
+            val buttonTitle = dialog?.get("buttonTitle") as? String
+            if (!message.isNullOrEmpty() && !buttonTitle.isNullOrEmpty()) {
+                Outcome.Show(CheckpointErrorDialog(message, buttonTitle))
+            } else {
+                invalidErrorDialogOutcome()
+            }
+        }
+        else -> invalidErrorDialogOutcome()
     }
+}
+
+private fun invalidErrorDialogOutcome(): Outcome {
+    Log.w(TAG, "resolveErrorDialog: invalid outcome; using the SDK's default dialog instead.")
+    return Outcome.UseDefault
 }
 
 private fun String?.toFlowPresentationMode(): FlowPresentationMode = when (this) {
