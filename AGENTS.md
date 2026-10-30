@@ -55,7 +55,7 @@ purchases-hybrid-common/
 
 ### Android
 
-Tool setup: install [mise](https://mise.jdx.dev/) and run `mise install` in the project root (Java, Ruby, Node from `mise.toml`; Yarn via corepack).
+Tool setup: install [mise](https://mise.jdx.dev/) and run `mise install` in the project root (Java, Ruby, Node from `mise.toml` and `.node-version`; Yarn from each JS package's `packageManager`, installed by running `mise install` in that package's directory).
 
 ```bash
 # Build
