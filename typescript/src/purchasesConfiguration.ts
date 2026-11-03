@@ -125,4 +125,24 @@ export interface PurchasesConfiguration {
    * @experimental This API is experimental and may be changed or removed in a future release.
    */
   enableExternalPurchasesInSimulator?: boolean;
+
+  /**
+   * Whether the SDK prefers token-based (IAM) user sessions. Required for logging in with an
+   * {@link IdentityCredential}.
+   *
+   * Disabled by default.
+   *
+   * @experimental This API is experimental and may be changed or removed in a future release.
+   */
+  iamEnabled?: boolean;
+
+  /**
+   * iOS-only, will be ignored for Android.
+   *
+   * The keychain access group IAM tokens are stored in, to share them with app extensions. Ignored
+   * unless `iamEnabled` is `true`.
+   *
+   * @experimental This API is experimental and may be changed or removed in a future release.
+   */
+  keychainAccessGroup?: string;
 }

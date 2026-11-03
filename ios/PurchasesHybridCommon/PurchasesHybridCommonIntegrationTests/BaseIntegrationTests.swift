@@ -142,7 +142,9 @@ private extension BaseIntegrationTests {
             automaticDeviceIdentifierCollectionEnabled: true,
             preferredLocale: nil,
             useExternalPurchaseCustomLinks: false,
-            enableExternalPurchasesInSimulator: true
+            enableExternalPurchasesInSimulator: true,
+            iamEnabled: false,
+            keychainAccessGroup: nil
         )
         Purchases.logLevel = .debug
     }

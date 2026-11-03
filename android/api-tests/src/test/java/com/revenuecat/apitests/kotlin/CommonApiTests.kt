@@ -429,6 +429,7 @@ private class CommonApiTests {
         automaticDeviceIdentifierCollectionEnabled: Boolean?,
         preferredLocale: String?,
         galaxyBillingMode: String?,
+        iamEnabled: Boolean?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -484,6 +485,23 @@ private class CommonApiTests {
             automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
             preferredLocale = preferredLocale,
             galaxyBillingMode = galaxyBillingMode,
+        )
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            purchasesAreCompletedBy,
+            platformInfo,
+            store,
+            dangerousSettings,
+            shouldShowInAppMessagesAutomatically,
+            verificationMode,
+            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
+            diagnosticsEnabled = diagnosticsEnabled,
+            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
+            preferredLocale = preferredLocale,
+            galaxyBillingMode = galaxyBillingMode,
+            iamEnabled = iamEnabled,
         )
     }
 
