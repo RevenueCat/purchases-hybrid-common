@@ -32,7 +32,9 @@ Install [mise](https://mise.jdx.dev/), then from the repo root:
 mise install
 ```
 
-That installs Java, Ruby, and Node from `mise.toml` / `mise.lock`. Yarn is provided via corepack.
+That installs Java, Ruby, Yarn, and SwiftLint from `mise.toml`, and Node from `.node-version`. Resolved versions are pinned in `mise.lock`.
+
+The Yarn version is also set in the packageManager field of each `package.json`. CI installs tools from the repo root, where there is no package.json, so mise needs the version in mise.toml.
 
 **Exceptions (not managed by mise):** Xcode for iOS work, Android SDK for local Android builds.
 
