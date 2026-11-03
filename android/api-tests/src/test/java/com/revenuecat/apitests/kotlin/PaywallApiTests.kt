@@ -39,10 +39,13 @@ private class PaywallApiTests {
                 val kind: Any? = error["kind"]
                 val code: Any? = error["code"]
                 val message: Any? = error["message"]
-                resolveErrorDialog(requestId, mapOf(
-                    "type" to "show",
-                    "dialog" to mapOf("message" to "err", "buttonTitle" to "OK"),
-                ))
+                resolveErrorDialog(
+                    requestId,
+                    mapOf(
+                        "type" to "show",
+                        "dialog" to mapOf("message" to "err", "buttonTitle" to "OK"),
+                    ),
+                )
                 resolveErrorDialog(requestId, mapOf("type" to "useDefault"))
                 resolveErrorDialog(requestId, mapOf("type" to "suppress"))
                 resolveErrorDialog(requestId, null)
@@ -51,7 +54,13 @@ private class PaywallApiTests {
         presentCheckpoint("identifier", listener = listener)
         presentCheckpoint("identifier", mapOf("key" to "value"), "MODAL_SHEET", listener)
         presentCheckpoint("identifier", callId = "c1", listener = listener)
-        presentCheckpoint("identifier", callId = "c1", customVariables = mapOf("k" to "v"), presentationMode = "MODAL_SHEET", listener = listener)
+        presentCheckpoint(
+            "identifier",
+            callId = "c1",
+            customVariables = mapOf("k" to "v"),
+            presentationMode = "MODAL_SHEET",
+            listener = listener,
+        )
         val notConfigured: String = CheckpointErrorCode.NOT_CONFIGURED
         cancelErrorDialogs("c1")
         cancelErrorDialogs(null)
