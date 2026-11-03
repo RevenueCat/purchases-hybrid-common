@@ -33,6 +33,23 @@ NS_ASSUME_NONNULL_BEGIN
                                                        preferredLocale:nil
                                         useExternalPurchaseCustomLinks:NO
                                     enableExternalPurchasesInSimulator:YES];
+    RCPurchases *purchasesWithIAM __unused = [RCPurchases configureWithAPIKey:@""
+                                                                    appUserID:@""
+                                                      purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
+                                                        userDefaultsSuiteName:nil
+                                                               platformFlavor:nil
+                                                        platformFlavorVersion:@""
+                                                              storeKitVersion:@""
+                                                            dangerousSettings:nil
+                                         shouldShowInAppMessagesAutomatically:NO
+                                                             verificationMode:@""
+                                                           diagnosticsEnabled:YES
+                                   automaticDeviceIdentifierCollectionEnabled:YES
+                                                              preferredLocale:nil
+                                               useExternalPurchaseCustomLinks:NO
+                                           enableExternalPurchasesInSimulator:YES
+                                                                   iamEnabled:YES
+                                                          keychainAccessGroup:nil];
     RCPurchases *purchasesWithPreferredLocale __unused = [RCPurchases configureWithAPIKey:@""
                                                              appUserID:@""
                                                purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat

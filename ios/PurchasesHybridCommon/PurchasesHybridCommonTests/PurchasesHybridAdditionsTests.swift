@@ -241,7 +241,9 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                             automaticDeviceIdentifierCollectionEnabled:
                                                                 automaticDeviceIdentifierCollectionEnabled,
                                                             useExternalPurchaseCustomLinks: false,
-                                                            enableExternalPurchasesInSimulator: true)
+                                                            enableExternalPurchasesInSimulator: true,
+                                                            iamEnabled: false,
+                                                            keychainAccessGroup: nil)
                         purchases.attribution.setAdjustID("adjust-id")
                         return Set(purchases.attribution.unsyncedAttributesByKey(appUserID: purchases.appUserID).keys)
                     }
@@ -276,7 +278,9 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 verificationMode: nil,
                                                 preferredLocale: nil,
                                                 useExternalPurchaseCustomLinks: true,
-                                                enableExternalPurchasesInSimulator: false)
+                                                enableExternalPurchasesInSimulator: false,
+                                                iamEnabled: false,
+                                                keychainAccessGroup: nil)
                         }.toNot(beNil())
                     }
 
@@ -293,7 +297,9 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                                                 verificationMode: nil,
                                                 preferredLocale: nil,
                                                 useExternalPurchaseCustomLinks: false,
-                                                enableExternalPurchasesInSimulator: true)
+                                                enableExternalPurchasesInSimulator: true,
+                                                iamEnabled: false,
+                                                keychainAccessGroup: nil)
                         }.toNot(beNil())
                     }
                     it("not passed") {

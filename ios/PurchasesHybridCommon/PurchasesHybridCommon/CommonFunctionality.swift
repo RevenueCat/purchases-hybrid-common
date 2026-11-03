@@ -1211,7 +1211,7 @@ private extension WebPurchaseRedemptionResult {
     }
 }
 
-private extension CommonFunctionality {
+internal extension CommonFunctionality {
 
     static func customerInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
     -> ((CustomerInfo?, Error?) -> Void) {
