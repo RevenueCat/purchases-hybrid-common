@@ -312,7 +312,7 @@ final class CheckpointProxyTests: XCTestCase {
         )
 
         XCTAssertEqual(self.resolvedOutcomes.count, 1)
-        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Try again", buttonTitle: "OK")))
+        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Try again", dismissButtonTitle: "OK")))
     }
 
     func testResolveWithNilCompletesWithUseDefault() throws {
@@ -438,7 +438,7 @@ final class CheckpointProxyTests: XCTestCase {
         CheckpointProxy.resolveErrorDialog(requestId: requestIdB, outcome: nil)
 
         XCTAssertEqual(self.resolvedOutcomes.count, 2)
-        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Error A", buttonTitle: "Close")))
+        XCTAssertEqual(self.resolvedOutcomes[0], .show(CheckpointErrorDialog(message: "Error A", dismissButtonTitle: "Close")))
         XCTAssertEqual(self.resolvedOutcomes[1], .useDefault)
     }
 

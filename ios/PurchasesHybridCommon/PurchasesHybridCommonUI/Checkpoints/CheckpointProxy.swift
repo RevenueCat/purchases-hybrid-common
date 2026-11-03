@@ -173,7 +173,7 @@ import RevenueCat
                   !buttonTitle.isEmpty else {
                 return Self.invalidErrorDialogOutcome()
             }
-            return .show(CheckpointErrorDialog(message: message, buttonTitle: buttonTitle))
+            return .show(CheckpointErrorDialog(message: message, dismissButtonTitle: buttonTitle))
         default:
             return Self.invalidErrorDialogOutcome()
         }
