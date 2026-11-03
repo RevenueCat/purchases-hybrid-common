@@ -19,32 +19,18 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowResult
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.checkpoint
 import java.util.UUID
 
-/**
- * Experimental. Receives the outcome of [presentCheckpoint].
- */
+/** Experimental checkpoint callbacks. */
 interface CheckpointListener {
     /**
-     * Called at most once, only when the user passes the checkpoint. Backing out of the flow, a blocking failure,
-     * or another checkpoint owning presentation never calls it.
-     *
-     * [result] is `{ customer, flow: { obtainedEntitlements: [{ entitlementInfo }],
-     * obtainedProducts: [{ product }] } | null }`.
+     * Called once when the user passes the checkpoint. [result] contains `customer` and `flow`
+     * (`obtainedEntitlements` and `obtainedProducts`), or a null `flow`.
      */
     fun onCheckpointPassed(result: Map<String, Any?>)
 
-    /**
-     * Called when the checkpoint could not be started, e.g. [CheckpointErrorCode.NOT_CONFIGURED].
-     */
+    /** Called when the checkpoint cannot start, e.g. [CheckpointErrorCode.NOT_CONFIGURED]. */
     fun onCheckpointError(code: String, message: String) {}
 
-    /**
-     * Called when the native SDK needs custom error-dialog content for a checkpoint error.
-     * Only called when [presentCheckpoint] was invoked with a [callId].
-     * Respond by calling [resolveErrorDialog] with the [requestId] and an outcome.
-     *
-     * [error] is `{ kind: String, code: Int, message: String }` where [kind] is one of
-     * `"flowCouldNotBeShown"`, `"flowActionFailed"`, or `"flowResultSyncFailed"`.
-     */
+    /** Called for requests from the overload with `callId`; resolve [requestId] with [resolveErrorDialog]. */
     fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {}
 }
 
@@ -55,10 +41,8 @@ object CheckpointErrorCode {
 private const val TAG = "Purchases"
 
 /**
- * Experimental, invite-only. Registers that [identifier] was hit, which may present a dashboard-defined flow.
- * Must be called on the main thread. See [CheckpointListener] for when the listener is called.
- *
- * @param presentationMode One of `MODAL_FULL_SCREEN`, `MODAL_SHEET`. Anything else uses the default presentation.
+ * Experimental, invite-only. Registers a checkpoint hit; call on the main thread.
+ * `presentationMode` accepts `MODAL_FULL_SCREEN` or `MODAL_SHEET`; other values use the default.
  */
 fun presentCheckpoint(
     identifier: String,
@@ -77,15 +61,8 @@ fun presentCheckpoint(
 }
 
 /**
- * Experimental, invite-only. Registers that [identifier] was hit with error-dialog-factory support.
- * [callId] identifies this call for [resolveErrorDialog] and [cancelErrorDialogs].
- *
- * When a checkpoint error occurs and the SDK needs dialog content, [CheckpointListener.onErrorDialogRequested]
- * is called with a unique [requestId]. Respond by calling [resolveErrorDialog] with the outcome to apply.
- *
- * Must be called on the main thread. See [CheckpointListener] for when the listener is called.
- *
- * @param presentationMode One of `MODAL_FULL_SCREEN`, `MODAL_SHEET`. Anything else uses the default presentation.
+ * Experimental, invite-only. Registers a checkpoint with custom error dialogs.
+ * `callId` identifies it for request resolution and cancellation.
  */
 fun presentCheckpoint(
     identifier: String,
@@ -106,28 +83,16 @@ fun presentCheckpoint(
 }
 
 /**
- * Resolves a pending error-dialog request created by [presentCheckpoint] (the overload with a `callId`).
- *
- * [outcome] is one of:
- * - `{ type: "show", dialog: { message: String, buttonTitle: String } }` for custom dialog content.
- * - `{ type: "useDefault" }` for the SDK's own localized dialog.
- * - `{ type: "suppress" }` to continue without showing a dialog.
- *
- * Null or invalid outcomes use the SDK's default dialog. Unknown or already-resolved [requestId]s are ignored.
+ * Resolves a request with `show` (using `dialog.message` and `dialog.buttonTitle`), `useDefault`, or `suppress`.
+ * Null or invalid outcomes use the SDK default; unknown request IDs are ignored.
  */
 fun resolveErrorDialog(requestId: String, outcome: Map<String, Any?>?) {
     resolveErrorDialog(requestId, outcome, defaultCheckpointErrorDialogRegistry)
 }
 
 /**
- * Cancels pending error-dialog requests.
- *
- * When [callId] is non-null, only requests for that call are cancelled and the call is marked
- * detached — future errors for it silently complete with UseDefault without calling the handler.
- * When [callId] is null, all existing factories are detached and all pending requests are cancelled.
- * New checkpoint calls can reach the handler again. Use null when the JS runtime is invalidated.
- *
- * The detached marker for a call is cleared when that call's [CheckpointListener.onCheckpointPassed] fires.
+ * Cancels requests for [callId], or all requests when null. Canceled requests use the SDK default.
+ * A call stays detached until it passes; null invalidates all existing factories.
  */
 fun cancelErrorDialogs(callId: String?) {
     cancelErrorDialogs(callId, defaultCheckpointErrorDialogRegistry)

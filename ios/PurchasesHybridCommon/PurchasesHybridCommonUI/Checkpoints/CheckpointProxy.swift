@@ -30,12 +30,11 @@ import RevenueCat
         let completion: ErrorDialogFactoryCompletion
     }
 
-    /// Maps requestId → pending error-dialog request. Must only be accessed from the main actor.
+    /// Main-actor-only pending requests.
     @available(iOS 15.0, *)
     private static var pendingRequests: [String: PendingRequest] = [:]
 
-    /// Set of callIds marked detached; requests for them immediately use the default dialog.
-    /// Must only be accessed from the main actor.
+    /// Main-actor-only set of detached call IDs.
     @available(iOS 15.0, *)
     private static var detachedCallIds: Set<String> = []
 
@@ -43,7 +42,7 @@ import RevenueCat
     private static let errorDialogGenerationLock = NSLock()
     private static var currentErrorDialogGeneration = UUID()
 
-    /// Identifies the current hybrid runtime. Factories from earlier generations remain detached.
+    /// Factories from older generations remain detached after runtime invalidation.
     private static var errorDialogGeneration: UUID {
         get {
             Self.errorDialogGenerationLock.lock()
@@ -59,14 +58,8 @@ import RevenueCat
 
     // MARK: - Public API (no-factory path)
 
-    /// Registers that `identifier` was hit, which may present a flow.
-    ///
-    /// - `onPassed` is called at most once, on the main actor, only when the user passes the checkpoint, with
-    ///   `{ customer, flow: { obtainedEntitlements: [{ entitlementInfo }], obtainedProducts: [{ product }] } | null }`.
-    ///   Backing out, a blocking failure, or another checkpoint owning presentation never calls it.
-    /// - `onError` is called when the checkpoint could not be started: not configured, or below iOS 15.
-    ///
-    /// Custom variables support String, Number and Boolean values. Other values are ignored.
+    /// Registers a checkpoint hit. `onPassed` runs only when the user passes; `onError` reports setup failures.
+    /// Custom variables accept String, Number, and Boolean values; other values are ignored.
     public static func present(
         identifier: String,
         customVariables: [String: Any]?,
@@ -101,19 +94,9 @@ import RevenueCat
 
     // MARK: - Public API (error-dialog-factory path)
 
-    /// Registers that `identifier` was hit, which may present a flow.
-    ///
-    /// Like the no-factory overload, but allows the hybrid to supply custom error dialog content.
-    ///
-    /// - `callId` is an opaque identifier for this particular call; used to cancel pending
-    ///   requests when the JS runtime tears down.
-    /// - `onErrorDialogRequested` is called (on the main thread) whenever the SDK wants to show
-    ///   an error dialog. PHC passes a unique `requestId` and an `error` dictionary with keys:
-    ///   `kind` (`"flowCouldNotBeShown"` | `"flowActionFailed"` | `"flowResultSyncFailed"`),
-    ///   `code` (NSError code), `message` (localizedDescription).
-    ///   The hybrid must call ``resolveErrorDialog(requestId:outcome:)`` exactly once.
-    ///
-    /// Custom variables support String, Number and Boolean values. Other values are ignored.
+    /// Registers a checkpoint with custom error-dialog support. `callId` identifies the call for cancellation.
+    /// The handler receives a unique request ID and an error (`kind`, `code`, and `message`); resolve it with
+    /// ``resolveErrorDialog(requestId:outcome:)``. Custom variables accept String, Number, and Boolean values.
     public static func present(
         identifier: String,
         callId: String,
@@ -136,7 +119,6 @@ import RevenueCat
             presentationMode: presentationMode,
             isConfigured: { Purchases.isConfigured },
             start: { identifier, variables, mode, factory, passed in
-                // checkpoint(errorDialogFactory:) is @MainActor; dispatch onto the main actor.
                 Task { @MainActor in
                     Purchases.shared.checkpoint(
                         identifier,
@@ -155,16 +137,8 @@ import RevenueCat
 
     // MARK: - Error dialog resolution
 
-    /// Applies the outcome for a pending error-dialog request identified by `requestId`.
-    ///
-    /// Must be called on the main thread. Unknown or already-answered request IDs are ignored.
-    ///
-    /// `outcome` is one of:
-    /// - `{ type: "show", dialog: { message: String, buttonTitle: String } }` for custom dialog content.
-    /// - `{ type: "useDefault" }` for the SDK's own localized dialog.
-    /// - `{ type: "suppress" }` to continue without showing a dialog.
-    ///
-    /// Nil or invalid outcomes use the SDK's default dialog.
+    /// Resolves a pending request with `show` (message and button title), `useDefault`, or `suppress`.
+    /// Nil or invalid outcomes use the SDK default; unknown request IDs are ignored.
     @MainActor
     public static func resolveErrorDialog(requestId: String, outcome: [String: Any]?) {
         guard #available(iOS 15.0, *) else { return }
@@ -205,20 +179,11 @@ import RevenueCat
 
     // MARK: - Cancellation
 
-    /// Completes all pending error-dialog requests for `callId` with the SDK default outcome.
-    ///
-    /// Must be called on the main thread.
-    ///
-    /// - If `callId` is non-nil, only requests matching that callId are completed.
-    ///   The callId is marked detached so future requests for it immediately use the SDK default outcome.
-    /// - If `callId` is nil, all existing factories are detached and all pending requests are completed
-    ///   with the SDK default outcome. New checkpoint calls may supply a handler again.
-    ///
-    /// The detached marker is cleared when the matching call's `onPassed` fires.
+    /// Cancels requests for `callId`, or all requests when nil. Canceled requests use the SDK default.
+    /// The call stays detached until it passes; nil invalidates existing factories so new calls can use a handler.
     @MainActor
     public static func cancelErrorDialogs(callId: String?) {
         guard #available(iOS 15.0, *) else { return }
-        // Invalidate factories before completing requests, including calls without a pending error.
         if let callId = callId {
             Self.detachedCallIds.insert(callId)
         } else {
@@ -240,12 +205,7 @@ import RevenueCat
 
     // MARK: - Internal testable core (no-factory path)
 
-    /// The testable core of ``present(identifier:customVariables:presentationMode:onPassed:onError:)``.
-    ///
-    /// This is a separate overload because the public one must stay callable from hybrid SDKs that deploy to iOS 13,
-    /// so it can't be `@available(iOS 15.0, *)` and can't mention iOS 15 types (`CustomVariableValue`,
-    /// `FlowPresentationMode`, `CheckpointResult`) in its signature. This one can, which lets tests inject
-    /// `isConfigured` and `start` instead of needing a configured `Purchases.shared`.
+    /// iOS 15 test seam; keeps the public overload compatible with iOS 13 clients and lets tests inject native calls.
     @available(iOS 15.0, *)
     static func present(
         identifier: String,
@@ -272,7 +232,7 @@ import RevenueCat
 
     // MARK: - Internal testable core (error-dialog-factory path)
 
-    /// The testable core of ``present(identifier:callId:customVariables:presentationMode:onPassed:onError:onErrorDialogRequested:)``.
+    /// iOS 15 test seam for the error-dialog overload.
     @available(iOS 15.0, *)
     static func present(
         identifier: String,
@@ -299,10 +259,8 @@ import RevenueCat
         }
         let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
         let generation = Self.errorDialogGeneration
-        // The ErrorDialogFactory typealias is @MainActor, so this closure's body runs on the
-        // main actor whenever the native SDK calls it.
         let factory: ErrorDialogFactory = { params, completion in
-            // If the callId is detached (JS runtime torn down), immediately use the SDK default outcome.
+            // Detached calls may outlive the hybrid runtime; fall back to the SDK dialog.
             guard generation == Self.errorDialogGeneration,
                   !Self.detachedCallIds.contains(callId) else {
                 completion.complete(with: .useDefault)
@@ -327,8 +285,6 @@ import RevenueCat
             onErrorDialogRequested(requestId, errorDict)
         }
         start(identifier, variables, Self.mode(for: presentationMode), factory) { result in
-            // When the call passes, clear the detached marker so future uses of the same callId
-            // are not silently swallowed.
             if generation == Self.errorDialogGeneration {
                 Self.detachedCallIds.remove(callId)
             }
