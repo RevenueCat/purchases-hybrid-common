@@ -7,6 +7,7 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 
 internal val defaultCheckpointErrorDialogRegistry = CheckpointErrorDialogRegistry()
 
@@ -29,8 +30,14 @@ internal class CheckpointErrorDialogRegistry {
     private val detachedCallIds: MutableSet<String> =
         Collections.newSetFromMap(ConcurrentHashMap())
 
-    /** Returns true when [callId] has been marked detached via [cancel]. */
-    fun isDetached(callId: String): Boolean = callId in detachedCallIds
+    private val currentGeneration = AtomicLong()
+
+    /** Captured by each factory so global cancellation also detaches calls without pending errors. */
+    val generation: Long get() = currentGeneration.get()
+
+    /** Returns true when the factory's generation or [callId] has been detached via [cancel]. */
+    fun isDetached(callId: String, generation: Long = this.generation): Boolean =
+        generation != this.generation || callId in detachedCallIds
 
     /** Stores a pending [completion] for later resolution via [resolve]. */
     fun register(requestId: String, callId: String, completion: ErrorDialogFactory.Completion) {
@@ -49,15 +56,16 @@ internal class CheckpointErrorDialogRegistry {
 
     /**
      * Cancels and marks detached all pending requests for [callId].
-     * When [callId] is null, all pending requests are cancelled and all their call IDs are
-     * marked detached. Subsequent [isDetached] checks for those call IDs return true.
+     * When [callId] is null, all existing factory generations are detached and all pending
+     * requests are cancelled. New factories can reach the hybrid handler again.
      */
     fun cancel(callId: String?) {
         if (callId == null) {
+            currentGeneration.incrementAndGet()
+            detachedCallIds.clear()
             val snapshot = pending.toMap()
             pending.clear()
             snapshot.values.forEach { req ->
-                detachedCallIds.add(req.callId)
                 req.completion.complete(Outcome.UseDefault)
             }
         } else {
@@ -71,9 +79,12 @@ internal class CheckpointErrorDialogRegistry {
 
     /**
      * Removes the detached marker for [callId], allowing future requests to reach the handler again.
-     * Called when the checkpoint for [callId] passes successfully.
+     * Called when the checkpoint for [callId] passes successfully. Older factory generations
+     * cannot clear cancellation markers belonging to the current runtime.
      */
-    fun clearDetached(callId: String) {
-        detachedCallIds.remove(callId)
+    fun clearDetached(callId: String, generation: Long = this.generation) {
+        if (generation == this.generation) {
+            detachedCallIds.remove(callId)
+        }
     }
 }

@@ -39,6 +39,24 @@ import RevenueCat
     @available(iOS 15.0, *)
     private static var detachedCallIds: Set<String> = []
 
+    // Public present calls may arrive off the main thread, before native work is dispatched.
+    private static let errorDialogGenerationLock = NSLock()
+    private static var currentErrorDialogGeneration = UUID()
+
+    /// Identifies the current hybrid runtime. Factories from earlier generations remain detached.
+    private static var errorDialogGeneration: UUID {
+        get {
+            Self.errorDialogGenerationLock.lock()
+            defer { Self.errorDialogGenerationLock.unlock() }
+            return Self.currentErrorDialogGeneration
+        }
+        set {
+            Self.errorDialogGenerationLock.lock()
+            defer { Self.errorDialogGenerationLock.unlock() }
+            Self.currentErrorDialogGeneration = newValue
+        }
+    }
+
     // MARK: - Public API (no-factory path)
 
     /// Registers that `identifier` was hit, which may present a flow.
@@ -193,12 +211,20 @@ import RevenueCat
     ///
     /// - If `callId` is non-nil, only requests matching that callId are completed.
     ///   The callId is marked detached so future requests for it immediately use the SDK default outcome.
-    /// - If `callId` is nil, ALL pending requests are completed with the SDK default outcome.
+    /// - If `callId` is nil, all existing factories are detached and all pending requests are completed
+    ///   with the SDK default outcome. New checkpoint calls may supply a handler again.
     ///
     /// The detached marker is cleared when the matching call's `onPassed` fires.
     @MainActor
     public static func cancelErrorDialogs(callId: String?) {
         guard #available(iOS 15.0, *) else { return }
+        // Invalidate factories before completing requests, including calls without a pending error.
+        if let callId = callId {
+            Self.detachedCallIds.insert(callId)
+        } else {
+            Self.errorDialogGeneration = UUID()
+            Self.detachedCallIds.removeAll()
+        }
         var toCancel: [String] = []
         for (requestId, request) in Self.pendingRequests {
             if callId == nil || request.callId == callId {
@@ -209,12 +235,6 @@ import RevenueCat
             if let request = Self.pendingRequests.removeValue(forKey: requestId) {
                 request.completion.complete(with: .useDefault)
             }
-        }
-        if let callId = callId {
-            Self.detachedCallIds.insert(callId)
-        } else {
-            // Cancel all: clear all accumulated detached markers too.
-            Self.detachedCallIds.removeAll()
         }
     }
 
@@ -278,11 +298,13 @@ import RevenueCat
             return
         }
         let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
+        let generation = Self.errorDialogGeneration
         // The ErrorDialogFactory typealias is @MainActor, so this closure's body runs on the
         // main actor whenever the native SDK calls it.
         let factory: ErrorDialogFactory = { params, completion in
             // If the callId is detached (JS runtime torn down), immediately use the SDK default outcome.
-            guard !Self.detachedCallIds.contains(callId) else {
+            guard generation == Self.errorDialogGeneration,
+                  !Self.detachedCallIds.contains(callId) else {
                 completion.complete(with: .useDefault)
                 return
             }
@@ -307,7 +329,9 @@ import RevenueCat
         start(identifier, variables, Self.mode(for: presentationMode), factory) { result in
             // When the call passes, clear the detached marker so future uses of the same callId
             // are not silently swallowed.
-            Self.detachedCallIds.remove(callId)
+            if generation == Self.errorDialogGeneration {
+                Self.detachedCallIds.remove(callId)
+            }
             onPassed(CheckpointSerialization.dictionary(for: result))
         }
     }

@@ -528,6 +528,7 @@ class CheckpointHelpersTest {
         val noopListener = object : CheckpointListener {
             override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
         }
+        val generation = registry.generation
         val started1 = presentWithCallId(callId = "c1", listener = noopListener, registry = registry)
         val started2 = presentWithCallId(callId = "c2", listener = noopListener, registry = registry)
         started1.params.errorDialogFactory!!.createDialog(fp) { completions["c1"] = it }
@@ -537,8 +538,86 @@ class CheckpointHelpersTest {
 
         assertEquals(Outcome.UseDefault, completions["c1"])
         assertEquals(Outcome.UseDefault, completions["c2"])
-        assertTrue(registry.isDetached("c1"))
-        assertTrue(registry.isDetached("c2"))
+        assertTrue(registry.isDetached("c1", generation))
+        assertTrue(registry.isDetached("c2", generation))
+    }
+
+    @Test
+    fun `cancelErrorDialogs(null) detaches factories with and without pending requests`() {
+        for (hasPendingRequest in listOf(false, true)) {
+            val completions = mutableListOf<Outcome>()
+            val requestIds = mutableListOf<String>()
+            val registry = CheckpointErrorDialogRegistry()
+            val listener = object : CheckpointListener {
+                override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
+                override fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {
+                    requestIds += requestId
+                }
+            }
+            val started = presentWithCallId(listener = listener, registry = registry)
+            val params = mockFactoryParams()
+            if (hasPendingRequest) {
+                started.params.errorDialogFactory!!.createDialog(params) { completions += it }
+            }
+
+            cancelErrorDialogs(null, registry)
+            started.params.errorDialogFactory!!.createDialog(params) { completions += it }
+
+            assertEquals(if (hasPendingRequest) 1 else 0, requestIds.size)
+            assertEquals(List(if (hasPendingRequest) 2 else 1) { Outcome.UseDefault }, completions)
+        }
+    }
+
+    @Test
+    fun `cancelErrorDialogs(null) allows new factories with the same callId and keeps old ones detached`() {
+        val completions = mutableListOf<Outcome>()
+        val requestIds = mutableListOf<String>()
+        val registry = CheckpointErrorDialogRegistry()
+        val listener = object : CheckpointListener {
+            override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
+            override fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {
+                requestIds += requestId
+            }
+        }
+        val params = mockFactoryParams()
+        val old = presentWithCallId(listener = listener, registry = registry)
+        old.params.errorDialogFactory!!.createDialog(params) { completions += it }
+        cancelErrorDialogs("call1", registry)
+        cancelErrorDialogs(null, registry)
+
+        val new = presentWithCallId(listener = listener, registry = registry)
+        new.params.errorDialogFactory!!.createDialog(params) { completions += it }
+        old.params.errorDialogFactory!!.createDialog(params) { completions += it }
+
+        assertEquals(2, requestIds.size)
+        assertEquals(listOf(Outcome.UseDefault, Outcome.UseDefault), completions)
+        resolveErrorDialog(requestIds.last(), mapOf("type" to "suppress"), registry)
+        assertEquals(listOf(Outcome.UseDefault, Outcome.UseDefault, Outcome.Suppress), completions)
+    }
+
+    @Test
+    fun `old onCheckpointPassed does not clear cancellation in a new runtime`() {
+        val completions = mutableListOf<Outcome>()
+        val requestIds = mutableListOf<String>()
+        val registry = CheckpointErrorDialogRegistry()
+        val listener = object : CheckpointListener {
+            override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
+            override fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {
+                requestIds += requestId
+            }
+        }
+        val customer = mockk<CustomerInfo>()
+        every { customer.map() } returns mapOf("originalAppUserId" to "user")
+        val old = presentWithCallId(listener = listener, registry = registry)
+        cancelErrorDialogs(null, registry)
+        val new = presentWithCallId(listener = listener, registry = registry)
+        cancelErrorDialogs("call1", registry)
+
+        old.callback.onCheckpointPassed(result(customer, flow = null))
+        new.params.errorDialogFactory!!.createDialog(mockFactoryParams()) { completions += it }
+
+        assertTrue(requestIds.isEmpty())
+        assertEquals(listOf(Outcome.UseDefault), completions)
     }
 
     @Test

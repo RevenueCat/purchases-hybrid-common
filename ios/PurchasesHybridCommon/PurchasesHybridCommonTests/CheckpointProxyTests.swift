@@ -527,18 +527,72 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertEqual(self.resolvedOutcomes[1], .useDefault)
     }
 
-    func testCancelNilClearsAllDetachedMarkersAlreadySet() throws {
-        // Mark call-1 as detached.
+    func testCancelNilDetachesFactoriesWithoutPendingRequests() throws {
+        self.presentWithFactory()
+        let oldStart = try XCTUnwrap(self.factoryStarts.first)
+
+        CheckpointProxy.cancelErrorDialogs(callId: nil)
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
+
+        XCTAssertTrue(self.requestedErrors.isEmpty)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
+    }
+
+    func testCancelNilKeepsPreviouslyCancelledFactoriesDetached() throws {
+        self.presentWithFactory()
+        let oldStart = try XCTUnwrap(self.factoryStarts.first)
         CheckpointProxy.cancelErrorDialogs(callId: "call-1")
 
-        // Cancel all — should also clear the existing detached marker for call-1.
         CheckpointProxy.cancelErrorDialogs(callId: nil)
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
 
-        // A new call with call-1 should now work normally.
-        self.presentWithFactory(callId: "call-1")
-        try XCTUnwrap(self.factoryStarts.first).factory?(self.makeParams(), self.makeCompletion())
+        XCTAssertTrue(self.requestedErrors.isEmpty)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
+    }
+
+    func testCancelNilDetachesFactoriesAfterResolvingPendingRequests() throws {
+        self.presentWithFactory()
+        let oldStart = try XCTUnwrap(self.factoryStarts.first)
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
+
+        CheckpointProxy.cancelErrorDialogs(callId: nil)
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
 
         XCTAssertEqual(self.requestedErrors.count, 1)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault])
+    }
+
+    func testOldPassedCallbackDoesNotClearNewRuntimeCancellation() throws {
+        self.presentWithFactory()
+        let oldStart = try XCTUnwrap(self.factoryStarts.first)
+        CheckpointProxy.cancelErrorDialogs(callId: nil)
+        self.presentWithFactory()
+        let newStart = try XCTUnwrap(self.factoryStarts.last)
+        CheckpointProxy.cancelErrorDialogs(callId: "call-1")
+
+        oldStart.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
+        newStart.factory?(self.makeParams(), self.makeCompletion())
+
+        XCTAssertTrue(self.requestedErrors.isEmpty)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
+    }
+
+    func testCancelNilAllowsNewFactoriesWithTheSameCallId() throws {
+        self.presentWithFactory()
+        let oldStart = try XCTUnwrap(self.factoryStarts.first)
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
+        CheckpointProxy.cancelErrorDialogs(callId: "call-1")
+        CheckpointProxy.cancelErrorDialogs(callId: nil)
+
+        self.presentWithFactory()
+        try XCTUnwrap(self.factoryStarts.last).factory?(self.makeParams(), self.makeCompletion())
+        oldStart.factory?(self.makeParams(), self.makeCompletion())
+
+        XCTAssertEqual(self.requestedErrors.count, 2)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault])
+        CheckpointProxy.resolveErrorDialog(requestId: self.requestedErrors[1].requestId,
+                                          outcome: ["type": "suppress"])
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault, .suppress])
     }
 
 }

@@ -145,7 +145,8 @@ class CheckpointErrorDialogRegistryTest {
     // region cancel(null)
 
     @Test
-    fun `cancel(null) completes all pending requests with UseDefault and detaches all callIds`() {
+    fun `cancel(null) completes all pending requests with UseDefault and detaches all factories`() {
+        val generation = registry.generation
         val completions = mutableMapOf<String, Outcome>()
         registry.register("req1", "call1", recordingCompletion { completions["req1"] = it })
         registry.register("req2", "call2", recordingCompletion { completions["req2"] = it })
@@ -156,13 +157,33 @@ class CheckpointErrorDialogRegistryTest {
         assertEquals(Outcome.UseDefault, completions["req1"])
         assertEquals(Outcome.UseDefault, completions["req2"])
         assertEquals(Outcome.UseDefault, completions["req3"])
-        assertTrue(registry.isDetached("call1"))
-        assertTrue(registry.isDetached("call2"))
+        assertTrue(registry.isDetached("call1", generation))
+        assertTrue(registry.isDetached("call2", generation))
     }
 
     @Test
     fun `cancel(null) with no pending requests does not throw`() {
         registry.cancel(null) // should be a no-op
+    }
+
+    @Test
+    fun `cancel(null) detaches factories without pending requests`() {
+        val generation = registry.generation
+
+        registry.cancel(null)
+
+        assertTrue(registry.isDetached("call1", generation))
+    }
+
+    @Test
+    fun `cancel(null) allows a new factory to reuse a cancelled callId`() {
+        val oldGeneration = registry.generation
+        registry.cancel("call1")
+
+        registry.cancel(null)
+
+        assertTrue(registry.isDetached("call1", oldGeneration))
+        assertFalse(registry.isDetached("call1", registry.generation))
     }
 
     // endregion
@@ -177,6 +198,17 @@ class CheckpointErrorDialogRegistryTest {
         registry.clearDetached("call1")
 
         assertFalse(registry.isDetached("call1"))
+    }
+
+    @Test
+    fun `clearDetached from an old factory does not clear cancellation in the current runtime`() {
+        val oldGeneration = registry.generation
+        registry.cancel(null)
+        registry.cancel("call1")
+
+        registry.clearDetached("call1", oldGeneration)
+
+        assertTrue(registry.isDetached("call1", registry.generation))
     }
 
     @Test

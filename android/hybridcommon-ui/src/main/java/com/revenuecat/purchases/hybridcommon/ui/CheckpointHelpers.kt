@@ -124,8 +124,8 @@ fun resolveErrorDialog(requestId: String, outcome: Map<String, Any?>?) {
  *
  * When [callId] is non-null, only requests for that call are cancelled and the call is marked
  * detached — future errors for it silently complete with UseDefault without calling the handler.
- * When [callId] is null, all pending requests are cancelled and all their call IDs are marked
- * detached. Use null when the JS runtime is invalidated.
+ * When [callId] is null, all existing factories are detached and all pending requests are cancelled.
+ * New checkpoint calls can reach the handler again. Use null when the JS runtime is invalidated.
  *
  * The detached marker for a call is cleared when that call's [CheckpointListener.onCheckpointPassed] fires.
  */
@@ -187,8 +187,9 @@ internal fun presentCheckpoint(
         listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
         return
     }
+    val generation = registry.generation
     val factory = ErrorDialogFactory { params, completion ->
-        if (registry.isDetached(callId)) {
+        if (registry.isDetached(callId, generation)) {
             completion.complete(Outcome.UseDefault)
             return@ErrorDialogFactory
         }
@@ -209,7 +210,7 @@ internal fun presentCheckpoint(
         .setErrorDialogFactory(factory)
         .build()
     start(identifier, checkpointParams) { result ->
-        registry.clearDetached(callId)
+        registry.clearDetached(callId, generation)
         listener.onCheckpointPassed(
             mapOf(
                 "customer" to result.customer.map(),
