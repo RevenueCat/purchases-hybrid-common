@@ -446,6 +446,9 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
+      - run:
+          name: Wait for the Android artifacts to reach Maven Central
+          command: bundle exec fastlane wait_for_android_artifacts_on_maven_central
       # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
       # Blocks the bumps rather than each hybrid waiting on its own mac executors.
       # The lane logs on every poll, so the default 10 minute no-output timeout
