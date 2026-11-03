@@ -1,6 +1,6 @@
 ## RevenueCat SDK
-### ✨ New Features
-* feat(checkpoints): add checkpoint bridge (#2041) via Cesar de la Vega (@vegaro)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.100.0 => 5.101.0 (#2055) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* chore: register custom Fastlane platforms (#2030) via Cesar de la Vega (@vegaro)
+* chore(deps): update to node 26 lts/lithium (#2047) via Nihal Gonsalves (@nihalgonsalves)
