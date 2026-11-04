@@ -1,6 +1,5 @@
 package com.revenuecat.purchases.hybridcommon.mappers
 
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.ads.AdRewardConfiguration
 import com.revenuecat.purchases.ads.ConfiguredAdRewards
 import io.mockk.every
@@ -9,7 +8,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 class ConfiguredAdRewardsMapperTests {
 
     @Test

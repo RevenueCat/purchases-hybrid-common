@@ -1,6 +1,5 @@
 package com.revenuecat.purchases.hybridcommon
 
-import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.ads.AdRewardConfiguration
 import com.revenuecat.purchases.ads.ConfiguredAdRewards
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 class ConfiguredAdRewardsTests {
     private val purchases = mockk<Purchases>()
     private val onResult = mockk<OnNullableResult>(relaxed = true)
