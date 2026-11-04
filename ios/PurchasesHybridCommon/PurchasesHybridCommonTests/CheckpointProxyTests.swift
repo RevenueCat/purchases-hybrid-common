@@ -246,6 +246,37 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertTrue(self.errors.isEmpty)
     }
 
+    func testFactoryPathMapsCustomVariablesKeepingBooleansDistinctFromNumbers() throws {
+        self.presentWithFactory(customVariables: [
+            "level": NSNumber(value: 1),
+            "pro": NSNumber(value: true),
+            "name": "a",
+            "ignored": [1, 2]
+        ])
+
+        let started = try XCTUnwrap(self.factoryStarts.first)
+        XCTAssertEqual(started.variables, ["level": .number(1), "pro": .bool(true), "name": .string("a")])
+        XCTAssertNotNil(started.factory)
+    }
+
+    func testFactoryPathPassesEachPresentationModeToStart() throws {
+        let expected: [(String?, FlowPresentationMode)] = [
+            (CheckpointProxy.presentationModeFullScreen, .modalFullScreen),
+            (CheckpointProxy.presentationModeSheet, .modalSheet),
+            ("DEFAULT", .default),
+            ("unknown", .default),
+            (nil, .default)
+        ]
+
+        for (presentationMode, mode) in expected {
+            self.factoryStarts = []
+            self.presentWithFactory(presentationMode: presentationMode)
+
+            let started = try XCTUnwrap(self.factoryStarts.first)
+            XCTAssertEqual(started.mode, mode, "presentationMode: \(String(describing: presentationMode))")
+        }
+    }
+
     func testFactoryPathSerializesPassedResult() throws {
         self.presentWithFactory()
 

@@ -261,11 +261,76 @@ class CheckpointHelpersTest {
     }
 
     @Test
-    fun `presentCheckpoint with callId sets an error dialog factory on the params`() {
+    fun `presentCheckpoint with callId maps the identifier variables and mode and sets a factory`() {
         val registry = CheckpointErrorDialogRegistry()
-        val started = presentWithCallId(callId = "c1", registry = registry)
+        val started = presentWithCallId(
+            callId = "c1",
+            registry = registry,
+            customVariables = mapOf("level" to 12, "name" to "a", "pro" to true, "ignored" to listOf(1)),
+            presentationMode = "MODAL_SHEET",
+        )
 
+        assertEquals("upgrade", started.identifier)
+        assertEquals(
+            mapOf(
+                "level" to CustomVariableValue.Number(12.0),
+                "name" to CustomVariableValue.String("a"),
+                "pro" to CustomVariableValue.Boolean(true),
+            ),
+            started.params.customVariables,
+        )
+        assertEquals(FlowPresentationMode.MODAL_SHEET, started.params.presentationMode)
         assertNotNull(started.params.errorDialogFactory)
+    }
+
+    @Test
+    fun `callId overload maps each presentation mode`() {
+        val modes = mapOf(
+            "MODAL_FULL_SCREEN" to FlowPresentationMode.MODAL_FULL_SCREEN,
+            "MODAL_SHEET" to FlowPresentationMode.MODAL_SHEET,
+            "DEFAULT" to FlowPresentationMode.DEFAULT,
+            "unknown" to FlowPresentationMode.DEFAULT,
+            null to FlowPresentationMode.DEFAULT,
+        )
+
+        modes.forEach { (input, expected) ->
+            val started = presentWithCallId(presentationMode = input)
+            assertEquals(expected, started.params.presentationMode)
+            assertEquals(emptyMap<String, CustomVariableValue>(), started.params.customVariables)
+        }
+    }
+
+    @Test
+    fun `callId overload reports the serialized customer and sorted flow result`() {
+        val listener = RecordingListener()
+        val started = presentWithCallId(listener = listener)
+        val customer = mockk<CustomerInfo>()
+        every { customer.map() } returns mapOf("originalAppUserId" to "user")
+        val flow = mockk<FlowResult>()
+        every { flow.obtainedEntitlements } returns setOf(obtained(entitlement("pro")), obtained(entitlement("plus")))
+        every { flow.obtainedProducts } returns setOf(obtained(product("monthly")), obtained(product("annual")))
+
+        started.callback.onCheckpointPassed(result(customer, flow))
+
+        assertEquals(
+            listOf(
+                mapOf(
+                    "customer" to mapOf("originalAppUserId" to "user"),
+                    "flow" to mapOf(
+                        "obtainedEntitlements" to listOf(
+                            mapOf("entitlementInfo" to mapOf("identifier" to "plus")),
+                            mapOf("entitlementInfo" to mapOf("identifier" to "pro")),
+                        ),
+                        "obtainedProducts" to listOf(
+                            mapOf("product" to mapOf("identifier" to "annual")),
+                            mapOf("product" to mapOf("identifier" to "monthly")),
+                        ),
+                    ),
+                ),
+            ),
+            listener.passed,
+        )
+        assertTrue(listener.errors.isEmpty())
     }
 
     @Test
@@ -634,6 +699,10 @@ class CheckpointHelpersTest {
         started.callback.onCheckpointPassed(result(customer, flow = null))
 
         assertFalse(registry.isDetached("c1"))
+        assertEquals(
+            listOf(mapOf("customer" to mapOf("originalAppUserId" to "user"), "flow" to null)),
+            listener.passed,
+        )
     }
 
     @Test
@@ -643,6 +712,7 @@ class CheckpointHelpersTest {
     }
 
     private class StartedWithCallId(
+        val identifier: String,
         val params: CheckpointParams,
         val callback: CheckpointPassedCallback,
     )
@@ -651,16 +721,18 @@ class CheckpointHelpersTest {
         callId: String = "call1",
         listener: CheckpointListener = RecordingListener(),
         registry: CheckpointErrorDialogRegistry = CheckpointErrorDialogRegistry(),
+        customVariables: Map<String, Any?>? = null,
+        presentationMode: String? = null,
     ): StartedWithCallId {
         var started: StartedWithCallId? = null
         presentCheckpoint(
             identifier = "upgrade",
             callId = callId,
-            customVariables = null,
-            presentationMode = null,
+            customVariables = customVariables,
+            presentationMode = presentationMode,
             listener = listener,
             isConfigured = { true },
-            start = { _, params, callback -> started = StartedWithCallId(params, callback) },
+            start = { id, params, callback -> started = StartedWithCallId(id, params, callback) },
             registry = registry,
         )
         return checkNotNull(started) { "presentCheckpoint did not start the checkpoint" }

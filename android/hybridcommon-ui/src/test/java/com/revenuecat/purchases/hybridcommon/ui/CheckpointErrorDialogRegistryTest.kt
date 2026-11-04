@@ -8,6 +8,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(InternalRevenueCatAPI::class)
 class CheckpointErrorDialogRegistryTest {
@@ -140,6 +144,19 @@ class CheckpointErrorDialogRegistryTest {
         assertTrue(registry.isDetached("call1"))
     }
 
+    @Test
+    fun `registration after cancellation completes immediately instead of leaving a pending request`() {
+        val completions = mutableListOf<Outcome>()
+        // Cancellation can happen after a factory checks isDetached but before it registers.
+        assertFalse(registry.isDetached("call1"))
+        registry.cancel("call1")
+
+        registry.register("req1", "call1", recordingCompletion { completions += it })
+
+        assertEquals(listOf(Outcome.UseDefault), completions)
+        assertFalse(registry.resolve("req1", Outcome.Suppress))
+    }
+
     // endregion
 
     // region cancel(null)
@@ -184,6 +201,90 @@ class CheckpointErrorDialogRegistryTest {
 
         assertTrue(registry.isDetached("call1", oldGeneration))
         assertFalse(registry.isDetached("call1", registry.generation))
+    }
+
+    @Test
+    fun `registration from an old generation completes immediately after global cancellation`() {
+        val generation = registry.generation
+        val completions = mutableListOf<Outcome>()
+        registry.cancel(null)
+
+        val registered = registry.register("req1", "call1", recordingCompletion { completions += it }, generation)
+
+        assertFalse(registered)
+        assertEquals(listOf(Outcome.UseDefault), completions)
+        assertFalse(registry.resolve("req1", Outcome.Suppress))
+    }
+
+    @Test
+    fun `concurrent registration and cancellation complete each request once`() {
+        val executor = Executors.newFixedThreadPool(2)
+        try {
+            for (callId in listOf("call1", null)) {
+                repeat(100) {
+                    val registry = CheckpointErrorDialogRegistry()
+                    val generation = registry.generation
+                    val completions = AtomicInteger()
+                    val start = CountDownLatch(1)
+                    val registration = executor.submit {
+                        check(start.await(5, TimeUnit.SECONDS))
+                        registry.register(
+                            "req1",
+                            "call1",
+                            recordingCompletion { completions.incrementAndGet() },
+                            generation,
+                        )
+                    }
+                    val cancellation = executor.submit {
+                        check(start.await(5, TimeUnit.SECONDS))
+                        registry.cancel(callId)
+                    }
+                    start.countDown()
+                    registration.get(5, TimeUnit.SECONDS)
+                    cancellation.get(5, TimeUnit.SECONDS)
+
+                    assertEquals(1, completions.get())
+                    assertFalse(registry.resolve("req1", Outcome.Suppress))
+                }
+            }
+        } finally {
+            executor.shutdownNow()
+        }
+    }
+
+    @Test
+    fun `concurrent resolution and cancellation never complete a request twice`() {
+        val executor = Executors.newFixedThreadPool(2)
+        try {
+            for (callId in listOf("call1", null)) {
+                repeat(100) {
+                    val registry = CheckpointErrorDialogRegistry()
+                    val completions = List(100) { AtomicInteger() }
+                    completions.forEachIndexed { index, count ->
+                        registry.register("req$index", "call1", recordingCompletion { count.incrementAndGet() })
+                    }
+                    val start = CountDownLatch(1)
+                    val resolution = executor.submit {
+                        check(start.await(5, TimeUnit.SECONDS))
+                        completions.indices.forEach { registry.resolve("req$it", Outcome.Suppress) }
+                    }
+                    val cancellation = executor.submit {
+                        check(start.await(5, TimeUnit.SECONDS))
+                        registry.cancel(callId)
+                    }
+                    start.countDown()
+                    resolution.get(5, TimeUnit.SECONDS)
+                    cancellation.get(5, TimeUnit.SECONDS)
+
+                    completions.forEachIndexed { index, count ->
+                        assertEquals("req$index", 1, count.get())
+                        assertFalse(registry.resolve("req$index", Outcome.Suppress))
+                    }
+                }
+            }
+        } finally {
+            executor.shutdownNow()
+        }
     }
 
     // endregion

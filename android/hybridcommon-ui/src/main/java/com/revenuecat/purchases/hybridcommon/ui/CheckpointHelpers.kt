@@ -154,12 +154,10 @@ internal fun presentCheckpoint(
     }
     val generation = registry.generation
     val factory = ErrorDialogFactory { params, completion ->
-        if (registry.isDetached(callId, generation)) {
-            completion.complete(Outcome.UseDefault)
+        val requestId = UUID.randomUUID().toString()
+        if (!registry.register(requestId, callId, completion, generation)) {
             return@ErrorDialogFactory
         }
-        val requestId = UUID.randomUUID().toString()
-        registry.register(requestId, callId, completion)
         listener.onErrorDialogRequested(
             requestId,
             mapOf(
