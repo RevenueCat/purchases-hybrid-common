@@ -66,15 +66,6 @@ commands:
              git config user.email $GIT_EMAIL
              git config user.name $GIT_USERNAME
 
-  copy-npm-rc:
-    steps:
-      - run:
-          name: Copy npmrc sample file to final location
-          command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
-      - run:
-          name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
-          command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
-
   # `pod lib lint` builds a project it generates from the podspec, so the deployment
   # targets it uses can only be raised through a global xcconfig. Only needed on jobs
   # running Xcode 27, which rejects the minimums the podspecs declare.
@@ -356,13 +347,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package
-          command: bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
 
   deploy-typescript-esm:
     docker:
@@ -377,13 +368,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces ESNext NPM package
-          command: bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
 
   deploy-js-mappings:
     docker:
@@ -398,13 +389,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy js-mappings NPM package
-          command: bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
       - run:
           name: Compute js-mappings bundle sha256
           command: |
