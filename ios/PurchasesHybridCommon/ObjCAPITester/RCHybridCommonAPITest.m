@@ -164,6 +164,10 @@ NS_ASSUME_NONNULL_BEGIN
     NSDictionary<NSString *, NSObject *> __unused *tokenDictionary =
         [RCCommonFunctionality generateRewardVerificationTokenWithImpressionId:@""];
 
+    [RCCommonFunctionality getAdRewardsWithAdUnitId:@"ad-unit"
+                                       completion:^(NSDictionary<NSString *, id> * _Nullable result,
+                                                    RCErrorContainer * _Nullable error) {}];
+
     [RCCommonFunctionality pollRewardVerificationWithClientTransactionId:@""
                                                         trackingMetadata:nil
                                                                 completion:^(

@@ -1857,6 +1857,22 @@ internal fun convertToInt(value: Any?): Int? {
     }
 }
 
+// region Configured ad rewards
+
+/**
+ * Resolves configured rewards for an exact, case-sensitive ad unit ID using the native SDK's cache
+ * or on-demand fetch. A null result means configuration is unavailable or malformed. A map with a
+ * null reward and empty moreRewards means configuration resolved successfully with no reward.
+ */
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+fun getAdRewards(adUnitId: String, onResult: OnNullableResult) {
+    Purchases.sharedInstance.getAdRewards(adUnitId) { rewards ->
+        onResult.onReceived(rewards?.map())
+    }
+}
+
+// endregion
+
 // region Reward verification
 
 fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {

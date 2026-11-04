@@ -65,6 +65,7 @@
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 		FDB8426E2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */; };
 		FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */; };
+		A10CF6000000000000000004 /* ConfiguredAdRewards+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConfiguredAdRewards+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +280,7 @@
 				9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */,
 				F7FCE821769F7B4719CE2313 /* RewardVerificationResult+HybridAdditionsTests.swift */,
 				26ADD358A91D0AEFD86DB95C /* AdReward+HybridAdditionsTests.swift */,
+				A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */,
 				C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */,
 			);
 			path = PurchasesHybridCommonTests;
@@ -672,6 +675,7 @@
 				BE27455A29A0A87CFEBB7546 /* RewardVerificationToken+HybridAdditionsTests.swift in Sources */,
 				2B45C2493A8D481AEC9AA42A /* RewardVerificationResult+HybridAdditionsTests.swift in Sources */,
 				EF9D99EB4AEF99FE54B126CE /* AdReward+HybridAdditionsTests.swift in Sources */,
+				A10CF6000000000000000004 /* ConfiguredAdRewards+HybridAdditionsTests.swift in Sources */,
 				C0DE0C4B0000000000000006 /* CheckpointProxyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
