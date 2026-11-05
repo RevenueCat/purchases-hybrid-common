@@ -86,7 +86,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalRevenueCatAPI::class)
 internal class CommonKtTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
