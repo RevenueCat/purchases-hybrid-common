@@ -18,8 +18,10 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowPresentationMode
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowResult
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.checkpoint
 import java.util.UUID
+import kotlin.jvm.JvmDefaultWithCompatibility
 
 /** Experimental checkpoint callbacks. */
+@JvmDefaultWithCompatibility
 interface CheckpointListener {
     /**
      * Called once when the user passes the checkpoint. [result] contains `customer` and `flow`
