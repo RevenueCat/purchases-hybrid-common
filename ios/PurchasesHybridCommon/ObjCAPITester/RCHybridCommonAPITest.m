@@ -201,6 +201,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testSubscriberAttributes {
     [RCCommonFunctionality setAttributes:@{}];
+    NSArray<NSDictionary<NSString *, id> *> *attributes __unused = [RCCommonFunctionality getAttributesForCurrentUser];
     [RCCommonFunctionality setEmail:@""];
     [RCCommonFunctionality setEmail:nil];
     [RCCommonFunctionality setPhoneNumber:@""];

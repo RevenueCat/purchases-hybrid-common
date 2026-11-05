@@ -1,6 +1,7 @@
 package com.revenuecat.apitests.kotlin
 
 import com.revenuecat.purchases.hybridcommon.collectDeviceIdentifiers
+import com.revenuecat.purchases.hybridcommon.getAttributesForCurrentUser
 import com.revenuecat.purchases.hybridcommon.setAd
 import com.revenuecat.purchases.hybridcommon.setAdGroup
 import com.revenuecat.purchases.hybridcommon.setAdjustID
@@ -122,6 +123,10 @@ private class SubscriberAttributesApiTests {
 
     fun checkSetAttributes(attributes: Map<String, String?>) {
         setAttributes(attributes)
+    }
+
+    fun checkGetAttributesForCurrentUser() {
+        val attributes: List<Map<String, Any?>> = getAttributesForCurrentUser()
     }
 
     fun checkSetEmail(email: String?) {

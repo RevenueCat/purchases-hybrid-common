@@ -2,6 +2,7 @@ package com.revenuecat.apitests.java;
 
 import com.revenuecat.purchases.hybridcommon.SubscriberAttributesKt;
 
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -95,6 +96,10 @@ class SubscriberAttributesApiTests {
 
     private void checkSetAttributes(Map<String, String> attributes) {
         SubscriberAttributesKt.setAttributes(attributes);
+    }
+
+    private void checkGetAttributesForCurrentUser() {
+        List<Map<String, Object>> attributes = SubscriberAttributesKt.getAttributesForCurrentUser();
     }
 
     private void checkSetEmail(String email) {

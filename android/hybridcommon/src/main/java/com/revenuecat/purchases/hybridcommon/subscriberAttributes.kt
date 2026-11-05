@@ -1,6 +1,8 @@
 package com.revenuecat.purchases.hybridcommon
 
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.hybridcommon.mappers.map
 
 // region Attribution IDs
 
@@ -121,5 +123,18 @@ fun setDisplayName(displayName: String?) {
 fun setPushToken(fcmToken: String?) {
     Purchases.sharedInstance.setPushToken(fcmToken)
 }
+
+/**
+ * Experimental. The current user's subscriber attributes, sorted by key, each a map of `key`, `value`,
+ * `lastUpdatedDate` (ISO 8601) and `lastUpdatedDateMillis`. Deleted attributes aren't included.
+ *
+ * Usually only attributes set on this device. For a user logged in through IAM, all readable attributes on
+ * their customer profile, as of the last CustomerInfo fetch.
+ */
+@OptIn(InternalRevenueCatAPI::class)
+fun getAttributesForCurrentUser(): List<Map<String, Any?>> =
+    Purchases.sharedInstance.attributesForCurrentUser
+        .sortedBy { it.key }
+        .map { it.map() }
 
 // endregion
