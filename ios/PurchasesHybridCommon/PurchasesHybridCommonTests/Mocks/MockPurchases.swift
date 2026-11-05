@@ -678,10 +678,12 @@ final class MockPurchases: PurchasesType {
 
     var invokedSpendVirtualCurrencies = false
     var invokedSpendVirtualCurrenciesCount = 0
+    var invokedSpendVirtualCurrenciesParameters: (amounts: [String: Int], reference: String?)?
     var spendVirtualCurrenciesStub: Result<VirtualCurrencies, PublicError> = .failure(NSError(domain: "", code: -1))
     func spendVirtualCurrencies(amounts: [String : Int], reference: String?, completion: @escaping (RevenueCat.VirtualCurrencies?, RevenueCat.PublicError?) -> Void) {
         invokedSpendVirtualCurrencies = true
         invokedSpendVirtualCurrenciesCount += 1
+        invokedSpendVirtualCurrenciesParameters = (amounts, reference)
 
         switch spendVirtualCurrenciesStub {
         case .success(let virtualCurrencies):
