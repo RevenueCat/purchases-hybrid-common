@@ -41,6 +41,7 @@ android {
         jvmTarget = "1.8"
         languageVersion = libs.versions.kotlinLanguage.get()
         apiVersion = libs.versions.kotlinLanguage.get()
+        freeCompilerArgs += "-Xjvm-default=all"
     }
 }
 
