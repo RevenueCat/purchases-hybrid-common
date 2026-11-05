@@ -429,7 +429,6 @@ private class CommonApiTests {
         automaticDeviceIdentifierCollectionEnabled: Boolean?,
         preferredLocale: String?,
         galaxyBillingMode: String?,
-        iamEnabled: Boolean?,
     ) {
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo)
         configure(context, apiKey, appUserID, purchasesAreCompletedBy, platformInfo, store, dangerousSettings)
@@ -486,23 +485,16 @@ private class CommonApiTests {
             preferredLocale = preferredLocale,
             galaxyBillingMode = galaxyBillingMode,
         )
-        configure(
-            context,
-            apiKey,
-            appUserID,
-            purchasesAreCompletedBy,
-            platformInfo,
-            store,
-            dangerousSettings,
-            shouldShowInAppMessagesAutomatically,
-            verificationMode,
-            pendingTransactionsForPrepaidPlansEnabled = pendingTransactionsForPrepaidPlansEnabled,
-            diagnosticsEnabled = diagnosticsEnabled,
-            automaticDeviceIdentifierCollectionEnabled = automaticDeviceIdentifierCollectionEnabled,
-            preferredLocale = preferredLocale,
-            galaxyBillingMode = galaxyBillingMode,
-            iamEnabled = iamEnabled,
-        )
+    }
+
+    fun checkConfigureWithIamEnabled(
+        context: Context,
+        apiKey: String,
+        appUserID: String?,
+        platformInfo: PlatformInfo,
+        iamEnabled: Boolean?,
+    ) {
+        configure(context, apiKey, appUserID, platformInfo = platformInfo, iamEnabled = iamEnabled)
     }
 
     fun checkGetPromotionalOffer() {
