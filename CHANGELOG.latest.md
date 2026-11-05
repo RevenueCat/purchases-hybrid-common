@@ -1,7 +1,7 @@
 ## RevenueCat SDK
-### 📦 Dependency Updates
-* [AUTOMATIC] JS 1.73.2 => 1.74.0 (#2067) via RevenueCat Git Bot (@RCGitBot)
+### 🐞 Bugfixes
+* fix(android): preserve PaywallResultListener compatibility (#2069) via Cesar de la Vega (@vegaro)
 
 ### 🔄 Other Changes
-* ci: use circleci npm trusted publishing (#2066) via Nihal Gonsalves (@nihalgonsalves)
-* chore(deps): bump fastlane-plugin-revenuecat_internal from `996879c` to `1e7875c` (#2061) via dependabot[bot] (@dependabot[bot])
+* feat(checkpoints): Add error dialog factory support to checkpoints (#2043) via Cesar de la Vega (@vegaro)
+* ci: wait for Maven Central before opening hybrid bump PRs (#2060) via Álvaro Brey (@AlvaroBrey)
