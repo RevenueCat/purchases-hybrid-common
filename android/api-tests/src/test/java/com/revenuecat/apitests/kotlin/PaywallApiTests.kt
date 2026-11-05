@@ -8,6 +8,9 @@ import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource
 import com.revenuecat.purchases.hybridcommon.ui.PresentPaywallOptions
+import com.revenuecat.purchases.hybridcommon.ui.completePaywallPresentation
+import com.revenuecat.purchases.hybridcommon.ui.detachCheckpoint
+import com.revenuecat.purchases.hybridcommon.ui.invalidateCheckpointPresentations
 import com.revenuecat.purchases.hybridcommon.ui.cancelErrorDialogs
 import com.revenuecat.purchases.hybridcommon.ui.presentCheckpoint
 import com.revenuecat.purchases.hybridcommon.ui.presentPaywallFromFragment
@@ -33,6 +36,16 @@ private class PaywallApiTests {
             }
 
             override fun onCheckpointError(code: String, message: String) {
+            }
+
+            override fun onPaywallPresentationRequested(requestId: String, params: Map<String, Any?>) {
+                val offering: Any? = params["offering"]
+                val identifier: Any? = params["checkpointIdentifier"]
+                val variables: Any? = params["customVariables"]
+                val mode: Any? = params["presentationMode"]
+                completePaywallPresentation(requestId, "CONTINUED")
+                completePaywallPresentation(requestId, "CLOSED")
+                completePaywallPresentation(requestId, "NAVIGATED_BACK")
             }
 
             override fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {
@@ -61,6 +74,11 @@ private class PaywallApiTests {
             presentationMode = "MODAL_SHEET",
             listener = listener,
         )
+        presentCheckpoint("identifier", "custom-call", null, null, true, true, listener)
+        presentCheckpoint("identifier", "native-call", null, null, false, false, listener)
+        detachCheckpoint("custom-call", "active-request")
+        detachCheckpoint("native-call", null)
+        invalidateCheckpointPresentations()
         val notConfigured: String = CheckpointErrorCode.NOT_CONFIGURED
         cancelErrorDialogs("c1")
         cancelErrorDialogs(null)

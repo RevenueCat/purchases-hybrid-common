@@ -7,6 +7,8 @@ import android.util.Log
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
+import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.InviteOnlyCheckpointsAPI
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointErrorDialog
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointFailureKind
@@ -16,6 +18,7 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.ErrorDialogFactory.Outcome
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowPresentationMode
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.FlowResult
+import com.revenuecat.purchases.ui.revenuecatui.checkpoints.PaywallPresenter
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.checkpoint
 import java.util.UUID
 import kotlin.jvm.JvmDefaultWithCompatibility
@@ -34,6 +37,9 @@ interface CheckpointListener {
 
     /** Called for requests from the overload with `callId`; resolve [requestId] with [resolveErrorDialog]. */
     fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {}
+
+    /** Called only when custom presentation was requested; complete it with [completePaywallPresentation]. */
+    fun onPaywallPresentationRequested(requestId: String, params: Map<String, Any?>) {}
 }
 
 object CheckpointErrorCode {
@@ -82,6 +88,68 @@ fun presentCheckpoint(
         isConfigured = { Purchases.isConfigured },
         start = { id, params, callback -> startNativeCheckpoint(id, params, callback) },
     )
+}
+
+/**
+ * Registers a checkpoint with independently optional app-owned paywall and error-dialog callbacks.
+ * Call on the main thread and use a unique [callId] for each invocation. When [useCustomPaywallPresenter] is true,
+ * implement [CheckpointListener.onPaywallPresentationRequested] and complete every delivered presentation after
+ * dismissing its UI. Otherwise the native SDK presents paywalls. [hasErrorDialogFactory] independently enables
+ * [CheckpointListener.onErrorDialogRequested], including synchronization errors after custom paywall completion.
+ */
+@Suppress("LongParameterList") // Required flags keep existing overloads source and binary compatible.
+fun presentCheckpoint(
+    identifier: String,
+    callId: String,
+    customVariables: Map<String, Any?>?,
+    presentationMode: String?,
+    useCustomPaywallPresenter: Boolean,
+    hasErrorDialogFactory: Boolean,
+    listener: CheckpointListener,
+) {
+    presentCheckpoint(
+        identifier,
+        callId,
+        customVariables,
+        presentationMode,
+        useCustomPaywallPresenter,
+        hasErrorDialogFactory,
+        listener,
+        isConfigured = { Purchases.isConfigured },
+        start = { id, params, callback -> startNativeCheckpoint(id, params, callback) },
+        registry = defaultCheckpointErrorDialogRegistry,
+        paywallRegistry = defaultCheckpointPaywallRegistry,
+    )
+}
+
+/**
+ * Reports CONTINUED or CLOSED to continue through native purchase synchronization, or NAVIGATED_BACK to back out.
+ * Unrecognized outcomes back out; repeated or unknown request IDs are ignored. Call on the main thread.
+ */
+fun completePaywallPresentation(requestId: String, result: String) {
+    completePaywallPresentation(requestId, result, defaultCheckpointPaywallRegistry)
+}
+
+/**
+ * Detaches both callback protocols. Preserve only the [activePaywallRequestId] whose app-owned handler actually ran;
+ * its UI stays open and must still complete after dismissal. Null cancels queued presentations as well as late
+ * native requests. Pending and future errors use default dialogs. Call on the main thread.
+ */
+fun detachCheckpoint(callId: String, activePaywallRequestId: String?) {
+    detachCheckpoint(
+        callId,
+        activePaywallRequestId,
+        defaultCheckpointErrorDialogRegistry,
+        defaultCheckpointPaywallRegistry,
+    )
+}
+
+/**
+ * Invalidates both protocols on runtime teardown. Pending paywalls back out and dialogs use defaults. Captured old
+ * calls stay detached, including late native callbacks; new calls work normally. Call on the main thread.
+ */
+fun invalidateCheckpointPresentations() {
+    invalidateCheckpointPresentations(defaultCheckpointErrorDialogRegistry, defaultCheckpointPaywallRegistry)
 }
 
 /**
@@ -148,14 +216,74 @@ internal fun presentCheckpoint(
     start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
     registry: CheckpointErrorDialogRegistry = defaultCheckpointErrorDialogRegistry,
 ) {
+    presentCheckpoint(
+        identifier, callId, customVariables, presentationMode, false, true, listener,
+        isConfigured, start, registry, defaultCheckpointPaywallRegistry, trackCall = false,
+    )
+}
+
+@Suppress("LongParameterList") // Flags and injected native dependencies keep older overloads binary compatible.
+internal fun presentCheckpoint(
+    identifier: String,
+    callId: String,
+    customVariables: Map<String, Any?>?,
+    presentationMode: String?,
+    useCustomPaywallPresenter: Boolean,
+    hasErrorDialogFactory: Boolean,
+    listener: CheckpointListener,
+    isConfigured: () -> Boolean,
+    start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
+    registry: CheckpointErrorDialogRegistry,
+    paywallRegistry: CheckpointPaywallRegistry,
+    trackCall: Boolean = true,
+) {
     if (!isConfigured()) {
         val message = "Configure Purchases before calling a checkpoint."
         Log.e(TAG, message)
         listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
         return
     }
+    val call = if (trackCall) paywallRegistry.begin(callId) else null
     val generation = registry.generation
-    val factory = ErrorDialogFactory { params, completion ->
+    val builder = CheckpointParams.Builder()
+        .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
+        .setPresentationMode(presentationMode.toFlowPresentationMode())
+    if (hasErrorDialogFactory) {
+        builder.setErrorDialogFactory(createErrorDialogFactory(callId, generation, listener, registry))
+    }
+    if (useCustomPaywallPresenter) {
+        builder.setPaywallPresenter(
+            PaywallPresenter { params, completion ->
+                val requestId = UUID.randomUUID().toString()
+                if (paywallRegistry.register(requestId, checkNotNull(call), completion)) {
+                    params.offering.mapAsync { offering ->
+                        // Mapping happens asynchronously. Teardown may have already completed the native request.
+                        if (paywallRegistry.isPending(requestId)) {
+                            listener.onPaywallPresentationRequested(requestId, params.toHybridMap(offering))
+                        }
+                    }
+                }
+            },
+        )
+    }
+    start(identifier, builder.build()) { result ->
+        if (call == null || paywallRegistry.isAttached(call)) {
+            if (call != null) paywallRegistry.finish(call)
+            registry.clearDetached(callId, generation)
+            listener.onCheckpointPassed(
+                mapOf("customer" to result.customer.map(), "flow" to result.flow?.toMap()),
+            )
+        }
+    }
+}
+
+private fun createErrorDialogFactory(
+    callId: String,
+    generation: Long,
+    listener: CheckpointListener,
+    registry: CheckpointErrorDialogRegistry,
+): ErrorDialogFactory {
+    return ErrorDialogFactory { params, completion ->
         val requestId = UUID.randomUUID().toString()
         if (!registry.register(requestId, callId, completion, generation)) {
             return@ErrorDialogFactory
@@ -169,21 +297,55 @@ internal fun presentCheckpoint(
             ),
         )
     }
-    val checkpointParams = CheckpointParams.Builder()
-        .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
-        .setPresentationMode(presentationMode.toFlowPresentationMode())
-        .setErrorDialogFactory(factory)
-        .build()
-    start(identifier, checkpointParams) { result ->
-        registry.clearDetached(callId, generation)
-        listener.onCheckpointPassed(
-            mapOf(
-                "customer" to result.customer.map(),
-                "flow" to result.flow?.toMap(),
-            ),
-        )
-    }
 }
+
+internal fun completePaywallPresentation(requestId: String, result: String, registry: CheckpointPaywallRegistry) {
+    val outcome = when (result) {
+        "CONTINUED" -> PaywallPresenter.Completion.Result.Continued
+        "CLOSED" -> PaywallPresenter.Completion.Result.Closed
+        else -> PaywallPresenter.Completion.Result.NavigatedBack
+    }
+    registry.resolve(requestId, outcome)
+}
+
+internal fun detachCheckpoint(
+    callId: String,
+    activePaywallRequestId: String?,
+    errors: CheckpointErrorDialogRegistry,
+    paywalls: CheckpointPaywallRegistry,
+) {
+    errors.cancel(callId)
+    paywalls.detach(callId, activePaywallRequestId)
+}
+
+internal fun invalidateCheckpointPresentations(
+    errors: CheckpointErrorDialogRegistry,
+    paywalls: CheckpointPaywallRegistry,
+) {
+    // Invalidate both generations before completing requests, which may start work for a new runtime.
+    val errorCompletions = errors.takeCancelled(null)
+    val paywallCompletions = paywalls.takePendingOnInvalidation()
+    errorCompletions.forEach { it.complete(Outcome.UseDefault) }
+    paywallCompletions.forEach { it.complete(PaywallPresenter.Completion.Result.NavigatedBack) }
+}
+
+private fun PaywallPresenter.Params.toHybridMap(offering: Map<String, Any?>): Map<String, Any?> = mapOf(
+    "checkpointIdentifier" to checkpointIdentifier,
+    "customVariables" to customVariables.mapValues { (_, value) ->
+        when (value) {
+            is CustomVariableValue.String -> value.value
+            is CustomVariableValue.Number -> value.value
+            is CustomVariableValue.Boolean -> value.value
+            else -> null
+        }
+    },
+    "presentationMode" to when (presentationMode) {
+        FlowPresentationMode.MODAL_FULL_SCREEN -> "MODAL_FULL_SCREEN"
+        FlowPresentationMode.MODAL_SHEET -> "MODAL_SHEET"
+        else -> "DEFAULT"
+    },
+    "offering" to offering,
+)
 
 internal fun resolveErrorDialog(
     requestId: String,
