@@ -43,6 +43,7 @@ import com.revenuecat.purchases.hybridcommon.setLogLevel
 import com.revenuecat.purchases.hybridcommon.setProxyURLString
 import com.revenuecat.purchases.hybridcommon.setPurchasesAreCompletedBy
 import com.revenuecat.purchases.hybridcommon.showInAppMessagesIfNeeded
+import com.revenuecat.purchases.hybridcommon.spendVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.syncPurchases
 import com.revenuecat.purchases.hybridcommon.trackAdDisplayed
 import com.revenuecat.purchases.hybridcommon.trackAdFailedToLoad
@@ -518,6 +519,10 @@ private class CommonApiTests {
 
     private fun checkGetCachedVirtualCurrencies() {
         val cachedVirtualCurrencies: Map<String, Any?>? = getCachedVirtualCurrencies()
+    }
+
+    private fun checkSpendVirtualCurrencies(amounts: Map<String, Any?>, reference: String?, onResult: OnResult) {
+        spendVirtualCurrencies(amounts, reference, onResult)
     }
 
     private fun checkOverridePreferredLocale(locale: String?) {
