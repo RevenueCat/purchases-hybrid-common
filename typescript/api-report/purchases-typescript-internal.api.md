@@ -5,6 +5,9 @@
 ```ts
 
 // @public
+export type AdRewardConfiguration = VirtualCurrencyRewardConfiguration | EntitlementRewardConfiguration | UnsupportedAdRewardConfiguration;
+
+// @public
 export enum BILLING_FEATURE {
     IN_APP_ITEMS_ON_VR = 2,
     PRICE_CHANGE_CONFIRMATION = 4,
@@ -19,6 +22,15 @@ export enum BILLING_PLAN_TYPE {
     UNKNOWN = "UNKNOWN",
     UP_FRONT = "UP_FRONT"
 }
+
+// @public
+export type ConfiguredAdRewards = {
+    readonly reward: AdRewardConfiguration;
+    readonly moreRewards: readonly AdRewardConfiguration[];
+} | {
+    readonly reward: null;
+    readonly moreRewards: readonly [];
+};
 
 // @public
 export interface CustomerInfo {
@@ -51,6 +63,15 @@ export type CustomerInfoUpdateListener = (customerInfo: CustomerInfo) => void;
 export enum ENTITLEMENT_VERIFICATION_MODE {
     DISABLED = "DISABLED",
     INFORMATIONAL = "INFORMATIONAL"
+}
+
+// @public
+export interface EntitlementRewardConfiguration {
+    readonly durationSeconds: number;
+    // (undocumented)
+    readonly identifier: string;
+    // (undocumented)
+    readonly type: 'entitlement';
 }
 
 // @public
@@ -732,6 +753,12 @@ export class UninitializedPurchasesError extends Error {
     constructor();
 }
 
+// @public
+export interface UnsupportedAdRewardConfiguration {
+    // (undocumented)
+    readonly type: 'unsupported_reward';
+}
+
 // Warning: (ae-internal-missing-underscore) The name "UnsupportedPlatformError" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
@@ -751,6 +778,16 @@ export enum VERIFICATION_RESULT {
     NOT_REQUESTED = "NOT_REQUESTED",
     VERIFIED = "VERIFIED",
     VERIFIED_ON_DEVICE = "VERIFIED_ON_DEVICE"
+}
+
+// @public
+export interface VirtualCurrencyRewardConfiguration {
+    // (undocumented)
+    readonly amount: number;
+    // (undocumented)
+    readonly code: string;
+    // (undocumented)
+    readonly type: 'virtual_currency';
 }
 
 // @public

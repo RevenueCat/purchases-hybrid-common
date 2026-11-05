@@ -1367,6 +1367,46 @@ private extension CommonFunctionality {
 
 }
 
+// MARK: Configured ad rewards
+
+@objc public extension CommonFunctionality {
+
+    /// Returns configured rewards for an exact, case-sensitive ad unit ID.
+    /// A nil result means configuration is unavailable or malformed. A dictionary with a null
+    /// reward and empty moreRewards means configuration resolved successfully with no reward.
+    /// The native SDK uses cached configuration or fetches it on demand.
+    @objc(getAdRewardsWithAdUnitId:completion:)
+    static func getAdRewards(
+        adUnitId: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
+            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            return
+        }
+        Self.getAdRewards(adUnitId: adUnitId, completion: completion) { adUnitId in
+            await Purchases.shared.adRewards(forAdUnitId: adUnitId)
+        }
+    }
+
+}
+
+internal extension CommonFunctionality {
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @nonobjc static func getAdRewards(
+        adUnitId: String,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void,
+        fetch: @escaping (String) async -> ConfiguredAdRewards?
+    ) {
+        _ = Task<Void, Never> {
+            let rewards = await fetch(adUnitId)
+            completion(rewards?.rc_dictionary, nil)
+        }
+    }
+
+}
+
 // MARK: Reward verification
 
 @objc public extension CommonFunctionality {
