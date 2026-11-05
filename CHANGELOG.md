@@ -1,3 +1,18 @@
+## 20.6.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.73.2 => 1.74.0 (#2067) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: use circleci npm trusted publishing (#2066) via Nihal Gonsalves (@nihalgonsalves)
+* chore(deps): bump fastlane-plugin-revenuecat_internal from `996879c` to `1e7875c` (#2061) via dependabot[bot] (@dependabot[bot])
+
+## 20.5.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 11.0.1 => 11.1.0 (#2062) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.101.0 => 5.102.0 (#2058) via RevenueCat Git Bot (@RCGitBot)
+
 ## 20.4.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates

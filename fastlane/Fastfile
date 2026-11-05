@@ -434,6 +434,21 @@ lane :wait_for_pods_on_cdn do
   )
 end
 
+desc "Waits until the Android artifacts for the current version are resolvable from Maven Central"
+lane :wait_for_android_artifacts_on_maven_central do
+  wait_for_artifacts_in_maven_central(
+    group_id: 'com.revenuecat.purchases',
+    artifact_ids: [
+      'purchases-hybrid-common',
+      'purchases-hybrid-common-ui',
+      'purchases-hybrid-common-store-galaxy'
+    ],
+    version: current_version_number,
+    timeout: 60 * 60,
+    soft_fail: true
+  )
+end
+
 desc "Run automatic bump in other repos"
 lane :bump_hybrid_dependencies do |options|
   version_number_for_bump = current_version_number
