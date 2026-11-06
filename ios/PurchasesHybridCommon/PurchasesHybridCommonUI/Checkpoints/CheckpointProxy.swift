@@ -157,9 +157,15 @@ final class CheckpointPaywallCall {
         }
     }
 
-    /// Detaches both callbacks. Pass only the request whose app-owned handler actually ran as `activePaywallRequestId`.
-    /// That UI remains open and must still complete after dismissal. Nil cancels every queued paywall request;
-    /// pending and future error requests use the default dialog. Late native presentation requests are rejected.
+    /// Stops checkpoint callbacks when the wrapper no longer listens for this call.
+    /// For example, a React Native screen can unmount while a separately presented paywall is still open.
+    /// The wrapper calls this when cleaning up the screen and passes that paywall's request ID as
+    /// `activePaywallRequestId`. This preserves the open presentation so the wrapper can dismiss it and call
+    /// `completePaywallPresentation(requestId:result:)` afterward, without notifying the unmounted screen.
+    ///
+    /// Preserve only a request whose app-owned presentation handler has already run. All other pending paywall
+    /// requests back out. Pass nil if there is no active presentation to preserve. Pending and future error
+    /// requests use the SDK's default dialog, and late native presentation requests are rejected.
     @MainActor
     public static func detachCheckpoint(callId: String, activePaywallRequestId: String?) {
         guard #available(iOS 15.0, *) else { return }
