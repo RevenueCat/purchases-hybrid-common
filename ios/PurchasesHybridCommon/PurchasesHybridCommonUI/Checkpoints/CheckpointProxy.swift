@@ -13,13 +13,11 @@ import RevenueCat
 @_spi(Internal) @_spi(InviteOnlyCheckpointsApi) import RevenueCatUI
 
 @available(iOS 15.0, *)
-final class CheckpointPaywallCall {
+final class CheckpointCall {
     let callId: String
-    let errorGeneration: UUID
 
-    init(callId: String, errorGeneration: UUID) {
+    init(callId: String) {
         self.callId = callId
-        self.errorGeneration = errorGeneration
     }
 }
 
@@ -45,57 +43,52 @@ final class CheckpointPaywallCall {
     @available(iOS 15.0, *)
     private static var pendingRequests: [String: PendingRequest] = [:]
 
-    /// Main-actor-only set of detached call IDs.
-    @available(iOS 15.0, *)
-    private static var detachedCallIds: Set<String> = []
-
     // Public present calls may arrive off the main thread, before native work is dispatched.
-    private static let errorDialogGenerationLock = NSLock()
-    private static var currentErrorDialogGeneration = UUID()
+    private static let callsLock = NSLock()
 
-    /// Factories from older generations remain detached after runtime invalidation.
-    private static var errorDialogGeneration: UUID {
-        get {
-            Self.errorDialogGenerationLock.lock()
-            defer { Self.errorDialogGenerationLock.unlock() }
-            return Self.currentErrorDialogGeneration
-        }
-        set {
-            Self.errorDialogGenerationLock.lock()
-            defer { Self.errorDialogGenerationLock.unlock() }
-            Self.currentErrorDialogGeneration = newValue
-        }
-    }
+    @available(iOS 15.0, *)
+    private static var errorDialogCalls: [String: CheckpointCall] = [:]
 
     // Calls are recorded before scheduling main-actor work, so runtime invalidation also cancels queued calls.
     @available(iOS 15.0, *)
-    private static var paywallCalls: [String: CheckpointPaywallCall] = [:]
+    private static var paywallCalls: [String: CheckpointCall] = [:]
     @available(iOS 15.0, *)
-    private static var pendingPaywalls: [String: (call: CheckpointPaywallCall,
+    private static var pendingPaywalls: [String: (call: CheckpointCall,
                                                 completion: PaywallPresentationCompletion)] = [:]
 
     @available(iOS 15.0, *)
-    static func beginPaywallCall(callId: String) -> CheckpointPaywallCall {
-        Self.errorDialogGenerationLock.lock()
-        defer { Self.errorDialogGenerationLock.unlock() }
-        let call = CheckpointPaywallCall(callId: callId, errorGeneration: Self.currentErrorDialogGeneration)
+    static func beginCall(callId: String) -> CheckpointCall {
+        Self.callsLock.lock()
+        defer { Self.callsLock.unlock() }
+        let call = CheckpointCall(callId: callId)
         Self.paywallCalls[callId] = call
+        Self.errorDialogCalls[callId] = call
         return call
     }
 
     @available(iOS 15.0, *)
-    private static func isAttached(_ call: CheckpointPaywallCall) -> Bool {
-        Self.errorDialogGenerationLock.lock()
-        defer { Self.errorDialogGenerationLock.unlock() }
+    private static func isAttached(_ call: CheckpointCall) -> Bool {
+        Self.callsLock.lock()
+        defer { Self.callsLock.unlock() }
         return Self.paywallCalls[call.callId] === call
     }
 
     @available(iOS 15.0, *)
-    private static func finish(_ call: CheckpointPaywallCall) {
-        Self.errorDialogGenerationLock.lock()
-        defer { Self.errorDialogGenerationLock.unlock() }
+    private static func isErrorDialogAttached(_ call: CheckpointCall) -> Bool {
+        Self.callsLock.lock()
+        defer { Self.callsLock.unlock() }
+        return Self.errorDialogCalls[call.callId] === call
+    }
+
+    @available(iOS 15.0, *)
+    private static func finish(_ call: CheckpointCall) {
+        Self.callsLock.lock()
+        defer { Self.callsLock.unlock() }
         if Self.paywallCalls[call.callId] === call {
             Self.paywallCalls.removeValue(forKey: call.callId)
+        }
+        if Self.errorDialogCalls[call.callId] === call {
+            Self.errorDialogCalls.removeValue(forKey: call.callId)
         }
     }
 
@@ -127,7 +120,7 @@ final class CheckpointPaywallCall {
             onError(Self.unsupportedOSVersionErrorCode, "Checkpoints require iOS 15 or later.")
             return
         }
-        let call = Self.beginPaywallCall(callId: callId)
+        let call = Self.beginCall(callId: callId)
         Task { @MainActor in
             Self.present(
                 identifier: identifier, callId: callId, customVariables: customVariables,
@@ -174,9 +167,9 @@ final class CheckpointPaywallCall {
     @MainActor
     public static func detachCheckpoint(callId: String, activePaywallRequestId: String?) {
         guard #available(iOS 15.0, *) else { return }
-        Self.errorDialogGenerationLock.lock()
+        Self.callsLock.lock()
         Self.paywallCalls.removeValue(forKey: callId)
-        Self.errorDialogGenerationLock.unlock()
+        Self.callsLock.unlock()
         Self.cancelErrorDialogs(callId: callId)
         let requestIds = Self.pendingPaywalls.compactMap { id, request in
             request.call.callId == callId && id != activePaywallRequestId ? id : nil
@@ -195,13 +188,12 @@ final class CheckpointPaywallCall {
     @MainActor
     public static func invalidateCheckpointPresentations() {
         guard #available(iOS 15.0, *) else { return }
-        Self.errorDialogGenerationLock.lock()
-        Self.currentErrorDialogGeneration = UUID()
+        Self.callsLock.lock()
         Self.paywallCalls.removeAll()
-        Self.errorDialogGenerationLock.unlock()
+        Self.errorDialogCalls.removeAll()
+        Self.callsLock.unlock()
         let pending = Array(Self.pendingPaywalls.values)
         Self.pendingPaywalls.removeAll()
-        Self.detachedCallIds.removeAll()
         let errors = Array(Self.pendingRequests.values)
         Self.pendingRequests.removeAll()
         for request in errors { request.completion.complete(with: .useDefault) }
@@ -257,16 +249,17 @@ final class CheckpointPaywallCall {
     /// The wrapper calls this on the main actor to stop custom error-dialog handling for `callId`, or all calls
     /// when nil. Canceled requests use the SDK's default dialog. This does not cancel paywall presentations;
     /// use `detachCheckpoint` when a screen stops listening or `invalidateCheckpointPresentations` on runtime reload.
-    /// The call stays detached until it passes; nil invalidates existing factories so new calls can use a handler.
+    /// Canceled factories remain inactive; new checkpoint calls can install their own handlers.
     @MainActor
     public static func cancelErrorDialogs(callId: String?) {
         guard #available(iOS 15.0, *) else { return }
+        Self.callsLock.lock()
         if let callId = callId {
-            Self.detachedCallIds.insert(callId)
+            Self.errorDialogCalls.removeValue(forKey: callId)
         } else {
-            Self.errorDialogGeneration = UUID()
-            Self.detachedCallIds.removeAll()
+            Self.errorDialogCalls.removeAll()
         }
+        Self.callsLock.unlock()
         var toCancel: [String] = []
         for (requestId, request) in Self.pendingRequests {
             if callId == nil || request.callId == callId {
@@ -282,19 +275,17 @@ final class CheckpointPaywallCall {
 
     @available(iOS 15.0, *)
     private static func makeErrorDialogFactory(
-        callId: String,
-        generation: UUID,
+        call: CheckpointCall,
         onErrorDialogRequested: @escaping (String, [String: Any]) -> Void
     ) -> ErrorDialogFactory {
         return { params, completion in
             // Detached calls may outlive the hybrid runtime; fall back to the SDK dialog.
-            guard generation == Self.errorDialogGeneration,
-                  !Self.detachedCallIds.contains(callId) else {
+            guard Self.isErrorDialogAttached(call) else {
                 completion.complete(with: .useDefault)
                 return
             }
             let requestId = UUID().uuidString
-            Self.pendingRequests[requestId] = PendingRequest(callId: callId, completion: completion)
+            Self.pendingRequests[requestId] = PendingRequest(callId: call.callId, completion: completion)
             let kind: String
             if params.kind == .flowCouldNotBeShown {
                 kind = "flowCouldNotBeShown"
@@ -328,16 +319,15 @@ final class CheckpointPaywallCall {
         onErrorDialogRequested: ((String, [String: Any]) -> Void)?,
         onPassed: @escaping ([String: Any]) -> Void,
         onError: (String, String) -> Void,
-        call: CheckpointPaywallCall? = nil
+        call: CheckpointCall? = nil
     ) {
-        let call = call ?? Self.beginPaywallCall(callId: callId)
+        let call = call ?? Self.beginCall(callId: callId)
         guard Self.isAttached(call) else { return }
         guard isConfigured() else {
             Self.finish(call)
             onError(Self.notConfiguredErrorCode, "Configure Purchases before calling a checkpoint.")
             return
         }
-        let generation = call.errorGeneration
         let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
         let presenter: PaywallPresentationHandler?
         if let onRequested = onPaywallPresentationRequested {
@@ -355,12 +345,11 @@ final class CheckpointPaywallCall {
             presenter = nil
         }
         let factory = onErrorDialogRequested.map {
-            Self.makeErrorDialogFactory(callId: callId, generation: generation, onErrorDialogRequested: $0)
+            Self.makeErrorDialogFactory(call: call, onErrorDialogRequested: $0)
         }
         start(identifier, variables, Self.mode(for: presentationMode), presenter, factory) { result in
             guard Self.isAttached(call) else { return }
             Self.finish(call)
-            if generation == Self.errorDialogGeneration { Self.detachedCallIds.remove(callId) }
             onPassed(CheckpointSerialization.dictionary(for: result))
         }
     }

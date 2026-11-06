@@ -482,6 +482,39 @@ final class CheckpointProxyTests: XCTestCase {
 
     // MARK: - Factory path: cancelErrorDialogs
 
+    func testReplacedErrorFactoryUsesDefaultWhileNewFactoryRemainsAttached() throws {
+        self.presentWithFactory(callId: "reused-call")
+        let old = try XCTUnwrap(self.factoryStarts.first)
+        self.presentWithFactory(callId: "reused-call")
+        let new = try XCTUnwrap(self.factoryStarts.last)
+
+        old.factory?(self.makeParams(), self.makeCompletion())
+        XCTAssertTrue(self.requestedErrors.isEmpty)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
+
+        new.factory?(self.makeParams(), self.makeCompletion())
+        XCTAssertEqual(self.requestedErrors.count, 1)
+        let requestId = try XCTUnwrap(self.requestedErrors.first?.requestId)
+        CheckpointProxy.resolveErrorDialog(requestId: requestId, outcome: ["type": "suppress"])
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .suppress])
+    }
+
+    func testCancelErrorDialogsDoesNotDetachPaywallOrPassedCallback() throws {
+        self.presentWithPresenter(errorFactory: true)
+        let start = try XCTUnwrap(self.presenterStarts.first)
+        CheckpointProxy.cancelErrorDialogs(callId: "presenter-call")
+
+        start.factory?(self.makeParams(), self.makeCompletion())
+        XCTAssertTrue(self.requestedErrors.isEmpty)
+        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
+        self.requestPaywall(start)
+        let requestId = try XCTUnwrap(self.requestedPaywalls.first?.requestId)
+        CheckpointProxy.completePaywallPresentation(requestId: requestId, result: "CONTINUED")
+        start.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
+        XCTAssertEqual(self.presentationResults, [.continued])
+        XCTAssertEqual(self.passed.count, 1)
+    }
+
     func testCancelForCallIdCompletesPendingRequestWithNil() throws {
         self.presentWithFactory(callId: "call-1")
         let start = try XCTUnwrap(self.factoryStarts.first)
@@ -530,13 +563,13 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertEqual(self.resolvedOutcomes[0], .useDefault)
     }
 
-    func testDetachedMarkerClearedWhenCallPasses() throws {
+    func testNewFactoryWithSameCallIdWorksAfterCancelledCallPasses() throws {
         self.presentWithFactory(callId: "call-1")
 
-        // Mark the callId as detached.
+        // Cancel the original call's error handler.
         CheckpointProxy.cancelErrorDialogs(callId: "call-1")
 
-        // Simulate the checkpoint passing — this clears the detached marker.
+        // Simulate the original checkpoint passing before starting another call.
         try XCTUnwrap(self.factoryStarts.first).passed(
             CheckpointResult(flow: nil, customer: self.makeCustomer())
         )
@@ -862,7 +895,7 @@ final class CheckpointProxyTests: XCTestCase {
     }
 
     func testInvalidationRejectsCallsCapturedBeforeMainQueueDispatch() {
-        let call = CheckpointProxy.beginPaywallCall(callId: "queued-call")
+        let call = CheckpointProxy.beginCall(callId: "queued-call")
         CheckpointProxy.invalidateCheckpointPresentations()
         var started = false
         CheckpointProxy.present(
