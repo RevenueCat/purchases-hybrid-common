@@ -87,6 +87,10 @@ NS_ASSUME_NONNULL_BEGIN
                                              RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality purchase:@{@"productIdentifier": @"product"}
+        introductoryOfferEligibilityJWS:@"header.payload.signature"
+        completionBlock:^(NSDictionary * _Nullable result, RCErrorContainer * _Nullable error) {}];
+
     [RCCommonFunctionality purchase:@{} completionBlock:^(NSDictionary * _Nullable customerInfo,
                                                           RCErrorContainer * _Nullable error) {
     }];
