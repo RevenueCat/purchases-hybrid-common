@@ -1,10 +1,12 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import android.util.Log
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Offering
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
+import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.InviteOnlyCheckpointsAPI
@@ -34,9 +36,19 @@ class CheckpointPresenterHelpersTest {
     private val requested = mutableListOf<Pair<String, Map<String, Any?>>>()
     private val errorRequests = mutableListOf<String>()
     private val results = mutableListOf<PaywallPresenter.Completion.Result>()
+    private val passed = mutableListOf<Map<String, Any?>>()
+    private val setupErrors = mutableListOf<Pair<String, String>>()
     private val offering = mockk<Offering>()
+    private val customer = mockk<CustomerInfo>()
+    private val checkpointResult = mockk<CheckpointResult>()
+    private val passedResult = mapOf("customer" to mapOf("originalAppUserId" to "user"), "flow" to null)
     private val listener = object : CheckpointListener {
-        override fun onCheckpointPassed(result: Map<String, Any?>) = Unit
+        override fun onCheckpointPassed(result: Map<String, Any?>) {
+            passed += result
+        }
+        override fun onCheckpointError(code: String, message: String) {
+            setupErrors += code to message
+        }
         override fun onPaywallPresentationRequested(requestId: String, params: Map<String, Any?>) {
             requested += requestId to params
         }
@@ -50,6 +62,10 @@ class CheckpointPresenterHelpersTest {
         mockkStatic(Log::class)
         every { Log.e(any<String>(), any<String>()) } returns 0
         every { Log.w(any<String>(), any<String>()) } returns 0
+        mockkStatic("com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt")
+        every { customer.map() } returns mapOf("originalAppUserId" to "user")
+        every { checkpointResult.customer } returns customer
+        every { checkpointResult.flow } returns null
         mockkStatic("com.revenuecat.purchases.hybridcommon.mappers.OfferingsMapperKt")
         every { offering.mapAsync(any()) } answers {
             secondArg<OfferingMapCallback>()(mapOf("identifier" to "premium", "availablePackages" to emptyList<Any>()))
@@ -59,6 +75,7 @@ class CheckpointPresenterHelpersTest {
     @After
     fun tearDown() {
         unmockkStatic(Log::class)
+        unmockkStatic("com.revenuecat.purchases.hybridcommon.mappers.CustomerInfoMapperKt")
         unmockkStatic("com.revenuecat.purchases.hybridcommon.mappers.OfferingsMapperKt")
     }
 
@@ -99,8 +116,9 @@ class CheckpointPresenterHelpersTest {
     }
 
     @Test
-    fun `presenter serializes resolved context and waits for explicit outcome`() {
-        request(present())
+    fun `presenter serializes resolved context and passes only on native callback`() {
+        val started = present()
+        request(started)
         assertEquals(
             mapOf(
                 "checkpointIdentifier" to "upgrade",
@@ -111,20 +129,27 @@ class CheckpointPresenterHelpersTest {
             requested.single().second,
         )
         assertEquals(emptyList<PaywallPresenter.Completion.Result>(), results)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
         completePaywallPresentation(requested.single().first, "CLOSED", paywalls)
         completePaywallPresentation(requested.single().first, "CONTINUED", paywalls)
         assertEquals(listOf(PaywallPresenter.Completion.Result.Closed), results)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
+        started.callback.onCheckpointPassed(checkpointResult)
+        assertEquals(listOf(passedResult), passed)
     }
 
     @Test
     fun `detach during asynchronous offering mapping cancels native and suppresses late event`() {
         var mapped: OfferingMapCallback? = null
         every { offering.mapAsync(any()) } answers { mapped = secondArg() }
-        request(present())
+        val started = present()
+        request(started)
         detachCheckpoint("call", null, errors, paywalls)
         checkNotNull(mapped)(mapOf("identifier" to "premium"))
         assertEquals(emptyList<Pair<String, Map<String, Any?>>>(), requested)
         assertEquals(listOf(PaywallPresenter.Completion.Result.NavigatedBack), results)
+        started.callback.onCheckpointPassed(checkpointResult)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
     }
 
     @Test
@@ -132,6 +157,7 @@ class CheckpointPresenterHelpersTest {
         val started = present(factory = true)
         request(started)
         completePaywallPresentation(requested.single().first, "CONTINUED", paywalls)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
         val params = mockk<ErrorDialogFactory.Params>()
         every { params.kind } returns CheckpointFailureKind.FLOW_RESULT_SYNC_FAILED
         every { params.error } returns PurchasesError(PurchasesErrorCode.NetworkError, "offline")
@@ -139,13 +165,19 @@ class CheckpointPresenterHelpersTest {
         checkNotNull(started.params.errorDialogFactory).createDialog(params) { outcomes += it }
         resolveErrorDialog(errorRequests.single(), mapOf("type" to "suppress"), errors)
         assertEquals(listOf(ErrorDialogFactory.Outcome.Suppress), outcomes)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
+        started.callback.onCheckpointPassed(checkpointResult)
+        assertEquals(listOf(passedResult), passed)
     }
 
     @Test
     fun `invalid outcome backs out and setup failure never starts`() {
-        request(present())
+        val checkpoint = present()
+        request(checkpoint)
         completePaywallPresentation(requested.single().first, "invalid", paywalls)
         assertEquals(listOf(PaywallPresenter.Completion.Result.NavigatedBack), results)
+        checkpoint.callback.onCheckpointPassed(checkpointResult)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
         var started = false
         presentCheckpoint(
             "upgrade", "unconfigured", null, null, true, false, listener,
@@ -153,6 +185,11 @@ class CheckpointPresenterHelpersTest {
             registry = errors, paywallRegistry = paywalls,
         )
         assertFalse(started)
+        assertEquals(
+            listOf(CheckpointErrorCode.NOT_CONFIGURED to "Configure Purchases before calling a checkpoint."),
+            setupErrors,
+        )
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
     }
 
     @Test
@@ -171,7 +208,8 @@ class CheckpointPresenterHelpersTest {
 
         invalidateCheckpointPresentations(errors, paywalls)
         request(old)
-        old.callback.onCheckpointPassed(mockk<CheckpointResult>())
+        old.callback.onCheckpointPassed(checkpointResult)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
         checkNotNull(old.params.errorDialogFactory).createDialog(params) { outcomes += it }
         request(checkNotNull(successor))
         checkNotNull(successor?.params?.errorDialogFactory).createDialog(params) { outcomes += it }
@@ -179,6 +217,9 @@ class CheckpointPresenterHelpersTest {
         assertEquals(2, errorRequests.size)
         completePaywallPresentation(requested.last().first, "CONTINUED", paywalls)
         resolveErrorDialog(errorRequests.last(), mapOf("type" to "suppress"), errors)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
+        checkNotNull(successor).callback.onCheckpointPassed(checkpointResult)
+        assertEquals(listOf(passedResult), passed)
         assertEquals(
             listOf(
                 PaywallPresenter.Completion.Result.NavigatedBack,
