@@ -216,10 +216,41 @@ internal fun presentCheckpoint(
     start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
     registry: CheckpointErrorDialogRegistry = defaultCheckpointErrorDialogRegistry,
 ) {
-    presentCheckpoint(
-        identifier, callId, customVariables, presentationMode, false, true, listener,
-        isConfigured, start, registry, defaultCheckpointPaywallRegistry, trackCall = false,
-    )
+    if (!isConfigured()) {
+        val message = "Configure Purchases before calling a checkpoint."
+        Log.e(TAG, message)
+        listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
+        return
+    }
+    val generation = registry.generation
+    val factory = ErrorDialogFactory { params, completion ->
+        val requestId = UUID.randomUUID().toString()
+        if (!registry.register(requestId, callId, completion, generation)) {
+            return@ErrorDialogFactory
+        }
+        listener.onErrorDialogRequested(
+            requestId,
+            mapOf(
+                "kind" to params.kind.toHybridString(),
+                "code" to params.error.code.code,
+                "message" to params.error.message,
+            ),
+        )
+    }
+    val checkpointParams = CheckpointParams.Builder()
+        .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
+        .setPresentationMode(presentationMode.toFlowPresentationMode())
+        .setErrorDialogFactory(factory)
+        .build()
+    start(identifier, checkpointParams) { result ->
+        registry.clearDetached(callId, generation)
+        listener.onCheckpointPassed(
+            mapOf(
+                "customer" to result.customer.map(),
+                "flow" to result.flow?.toMap(),
+            ),
+        )
+    }
 }
 
 @Suppress("LongParameterList") // Flags and injected native dependencies keep older overloads binary compatible.
@@ -235,7 +266,6 @@ internal fun presentCheckpoint(
     start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
     registry: CheckpointErrorDialogRegistry,
     paywallRegistry: CheckpointPaywallRegistry,
-    trackCall: Boolean = true,
 ) {
     if (!isConfigured()) {
         val message = "Configure Purchases before calling a checkpoint."
@@ -243,7 +273,7 @@ internal fun presentCheckpoint(
         listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
         return
     }
-    val call = if (trackCall) paywallRegistry.begin(callId) else null
+    val call = paywallRegistry.begin(callId)
     val generation = registry.generation
     val builder = CheckpointParams.Builder()
         .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
@@ -267,8 +297,8 @@ internal fun presentCheckpoint(
         )
     }
     start(identifier, builder.build()) { result ->
-        if (call == null || paywallRegistry.isAttached(call)) {
-            if (call != null) paywallRegistry.finish(call)
+        if (paywallRegistry.isAttached(call)) {
+            paywallRegistry.finish(call)
             registry.clearDetached(callId, generation)
             listener.onCheckpointPassed(
                 mapOf("customer" to result.customer.map(), "flow" to result.flow?.toMap()),

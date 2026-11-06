@@ -396,8 +396,31 @@ final class CheckpointPaywallCall {
         }
         let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
         let generation = Self.errorDialogGeneration
-        let factory = Self.makeErrorDialogFactory(callId: callId, generation: generation,
-                                                  onErrorDialogRequested: onErrorDialogRequested)
+        let factory: ErrorDialogFactory = { params, completion in
+            // Detached calls may outlive the hybrid runtime; fall back to the SDK dialog.
+            guard generation == Self.errorDialogGeneration,
+                  !Self.detachedCallIds.contains(callId) else {
+                completion.complete(with: .useDefault)
+                return
+            }
+            let requestId = UUID().uuidString
+            Self.pendingRequests[requestId] = PendingRequest(callId: callId, completion: completion)
+            let kind: String
+            if params.kind == .flowCouldNotBeShown {
+                kind = "flowCouldNotBeShown"
+            } else if params.kind == .flowActionFailed {
+                kind = "flowActionFailed"
+            } else {
+                kind = "flowResultSyncFailed"
+            }
+            let nsError = params.error as NSError
+            let errorDict: [String: Any] = [
+                "kind": kind,
+                "code": nsError.code,
+                "message": nsError.localizedDescription
+            ]
+            onErrorDialogRequested(requestId, errorDict)
+        }
         start(identifier, variables, Self.mode(for: presentationMode), factory) { result in
             if generation == Self.errorDialogGeneration {
                 Self.detachedCallIds.remove(callId)
