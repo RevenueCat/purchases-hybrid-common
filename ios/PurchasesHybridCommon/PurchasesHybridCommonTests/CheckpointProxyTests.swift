@@ -730,6 +730,27 @@ final class CheckpointProxyTests: XCTestCase {
         }
     }
 
+    func testReplacedCallCannotPresentOrPassWhileNewCallRemainsAttached() throws {
+        self.presentWithPresenter(callId: "reused-call")
+        let old = try XCTUnwrap(self.presenterStarts.first)
+        self.presentWithPresenter(callId: "reused-call")
+        let new = try XCTUnwrap(self.presenterStarts.last)
+
+        self.requestPaywall(old)
+        old.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
+        XCTAssertTrue(self.requestedPaywalls.isEmpty)
+        XCTAssertTrue(self.passed.isEmpty)
+        XCTAssertEqual(self.presentationResults, [.navigatedBack])
+
+        self.requestPaywall(new)
+        XCTAssertEqual(self.requestedPaywalls.count, 1)
+        let requestId = try XCTUnwrap(self.requestedPaywalls.first?.requestId)
+        CheckpointProxy.completePaywallPresentation(requestId: requestId, result: "CONTINUED")
+        new.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
+        XCTAssertEqual(self.presentationResults, [.navigatedBack, .continued])
+        XCTAssertEqual(self.passed.count, 1)
+    }
+
     func testDetachBeforeResolutionRejectsLatePresenter() throws {
         self.presentWithPresenter()
         let start = try XCTUnwrap(self.presenterStarts.first)

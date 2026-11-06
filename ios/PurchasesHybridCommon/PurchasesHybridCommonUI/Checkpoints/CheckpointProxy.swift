@@ -15,13 +15,10 @@ import RevenueCat
 @available(iOS 15.0, *)
 final class CheckpointPaywallCall {
     let callId: String
-    let generation: UUID
     let errorGeneration: UUID
-    var detached = false
 
-    init(callId: String, generation: UUID, errorGeneration: UUID) {
+    init(callId: String, errorGeneration: UUID) {
         self.callId = callId
-        self.generation = generation
         self.errorGeneration = errorGeneration
     }
 }
@@ -70,8 +67,7 @@ final class CheckpointPaywallCall {
         }
     }
 
-    // Call tokens are registered before dispatching work to the main actor, so teardown also cancels queued calls.
-    private static var paywallGeneration = UUID()
+    // Calls are recorded before scheduling main-actor work, so runtime invalidation also cancels queued calls.
     @available(iOS 15.0, *)
     private static var paywallCalls: [String: CheckpointPaywallCall] = [:]
     @available(iOS 15.0, *)
@@ -82,8 +78,7 @@ final class CheckpointPaywallCall {
     static func beginPaywallCall(callId: String) -> CheckpointPaywallCall {
         Self.errorDialogGenerationLock.lock()
         defer { Self.errorDialogGenerationLock.unlock() }
-        let call = CheckpointPaywallCall(callId: callId, generation: Self.paywallGeneration,
-                                         errorGeneration: Self.currentErrorDialogGeneration)
+        let call = CheckpointPaywallCall(callId: callId, errorGeneration: Self.currentErrorDialogGeneration)
         Self.paywallCalls[callId] = call
         return call
     }
@@ -92,14 +87,13 @@ final class CheckpointPaywallCall {
     private static func isAttached(_ call: CheckpointPaywallCall) -> Bool {
         Self.errorDialogGenerationLock.lock()
         defer { Self.errorDialogGenerationLock.unlock() }
-        return call.generation == Self.paywallGeneration && !call.detached
+        return Self.paywallCalls[call.callId] === call
     }
 
     @available(iOS 15.0, *)
     private static func finish(_ call: CheckpointPaywallCall) {
         Self.errorDialogGenerationLock.lock()
         defer { Self.errorDialogGenerationLock.unlock() }
-        call.detached = true
         if Self.paywallCalls[call.callId] === call {
             Self.paywallCalls.removeValue(forKey: call.callId)
         }
@@ -181,8 +175,7 @@ final class CheckpointPaywallCall {
     public static func detachCheckpoint(callId: String, activePaywallRequestId: String?) {
         guard #available(iOS 15.0, *) else { return }
         Self.errorDialogGenerationLock.lock()
-        let call = Self.paywallCalls.removeValue(forKey: callId)
-        call?.detached = true
+        Self.paywallCalls.removeValue(forKey: callId)
         Self.errorDialogGenerationLock.unlock()
         Self.cancelErrorDialogs(callId: callId)
         let requestIds = Self.pendingPaywalls.compactMap { id, request in
@@ -203,7 +196,6 @@ final class CheckpointPaywallCall {
     public static func invalidateCheckpointPresentations() {
         guard #available(iOS 15.0, *) else { return }
         Self.errorDialogGenerationLock.lock()
-        Self.paywallGeneration = UUID()
         Self.currentErrorDialogGeneration = UUID()
         Self.paywallCalls.removeAll()
         Self.errorDialogGenerationLock.unlock()
