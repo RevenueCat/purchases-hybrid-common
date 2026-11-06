@@ -5,7 +5,6 @@ package com.revenuecat.purchases.hybridcommon.ui
 import android.util.Log
 import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.hybridcommon.mappers.map
-import com.revenuecat.purchases.ui.revenuecatui.CustomVariableValue
 import com.revenuecat.purchases.ui.revenuecatui.InviteOnlyCheckpointsAPI
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointErrorDialog
 import com.revenuecat.purchases.ui.revenuecatui.checkpoints.CheckpointFailureKind
@@ -16,14 +15,7 @@ import com.revenuecat.purchases.ui.revenuecatui.checkpoints.PaywallPresenter
 
 internal fun PaywallPresenter.Params.toHybridMap(offering: Map<String, Any?>): Map<String, Any?> = mapOf(
     "checkpointIdentifier" to checkpointIdentifier,
-    "customVariables" to customVariables.mapValues { (_, value) ->
-        when (value) {
-            is CustomVariableValue.String -> value.value
-            is CustomVariableValue.Number -> value.value
-            is CustomVariableValue.Boolean -> value.value
-            else -> null
-        }
-    },
+    "customVariables" to customVariables.toHybridMap(),
     "presentationMode" to when (presentationMode) {
         FlowPresentationMode.MODAL_FULL_SCREEN -> "MODAL_FULL_SCREEN"
         FlowPresentationMode.MODAL_SHEET -> "MODAL_SHEET"
