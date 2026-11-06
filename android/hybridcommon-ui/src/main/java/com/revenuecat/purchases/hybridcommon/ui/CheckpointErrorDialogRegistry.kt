@@ -55,20 +55,22 @@ internal class CheckpointErrorDialogRegistry {
 
     /** Cancels pending requests and detaches [callId], or all existing factories when null. */
     fun cancel(callId: String?) {
-        val cancelled = synchronized(lock) {
-            if (callId == null) {
-                currentGeneration++
-                detachedCallIds.clear()
-                pending.values.toList().also { pending.clear() }
-            } else {
-                detachedCallIds.add(callId)
-                val requests = pending.values.filter { it.callId == callId }
-                pending.entries.removeAll { it.value.callId == callId }
-                requests
-            }
-        }
-        cancelled.forEach { it.completion.complete(Outcome.UseDefault) }
+        takeCancelled(callId).forEach { it.complete(Outcome.UseDefault) }
     }
+
+    /** Separates invalidation from callbacks so both checkpoint protocols can be invalidated before either resumes. */
+    fun takeCancelled(callId: String?): List<ErrorDialogFactory.Completion> = synchronized(lock) {
+        if (callId == null) {
+            currentGeneration++
+            detachedCallIds.clear()
+            pending.values.toList().also { pending.clear() }
+        } else {
+            detachedCallIds.add(callId)
+            val requests = pending.values.filter { it.callId == callId }
+            pending.entries.removeAll { it.value.callId == callId }
+            requests
+        }
+    }.map { it.completion }
 
     /** Clears [callId]'s detached marker unless this factory belongs to an older generation. */
     fun clearDetached(callId: String, generation: Long = this.generation) {

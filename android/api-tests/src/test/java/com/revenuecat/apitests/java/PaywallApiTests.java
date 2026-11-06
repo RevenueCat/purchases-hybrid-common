@@ -32,6 +32,17 @@ class PaywallApiTests {
             }
 
             @Override
+            public void onPaywallPresentationRequested(@NonNull String requestId, @NonNull Map<String, ?> params) {
+                Object offering = params.get("offering");
+                Object identifier = params.get("checkpointIdentifier");
+                Object variables = params.get("customVariables");
+                Object mode = params.get("presentationMode");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "CONTINUED");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "CLOSED");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "NAVIGATED_BACK");
+            }
+
+            @Override
             public void onErrorDialogRequested(@NonNull String requestId, @NonNull Map<String, ?> error) {
                 @Nullable Object kind = error.get("kind");
                 @Nullable Object errorCode = error.get("code");
@@ -52,9 +63,14 @@ class PaywallApiTests {
             }
         };
         Map<String, Object> customVariables = new HashMap<>();
-        CheckpointHelpersKt.presentCheckpoint("identifier", customVariables, "MODAL_SHEET", listener);
-        CheckpointHelpersKt.presentCheckpoint("identifier", "c1", null, null, listener);
-        CheckpointHelpersKt.presentCheckpoint("identifier", "c1", customVariables, "MODAL_SHEET", listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "error-call", customVariables, "MODAL_SHEET",
+                false, true, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "paywall-call", null, null, true, false, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "custom-call", null, null, true, true, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "native-call", null, null, false, false, listener);
+        CheckpointHelpersKt.detachCheckpoint("custom-call", "active-request");
+        CheckpointHelpersKt.detachCheckpoint("native-call", null);
+        CheckpointHelpersKt.invalidateCheckpointPresentations();
         String notConfigured = CheckpointErrorCode.NOT_CONFIGURED;
         CheckpointHelpersKt.cancelErrorDialogs("c1");
         CheckpointHelpersKt.cancelErrorDialogs(null);
