@@ -92,7 +92,10 @@ class CheckpointPresenterHelpersTest {
         return checkNotNull(started)
     }
 
-    private fun request(started: Started) {
+    private fun request(
+        started: Started,
+        onCompletion: (PaywallPresenter.Completion.Result) -> Unit = { results += it },
+    ) {
         val params = mockk<PaywallPresenter.Params>()
         every { params.offering } returns offering
         every { params.checkpointIdentifier } returns "upgrade"
@@ -101,7 +104,7 @@ class CheckpointPresenterHelpersTest {
             "name" to CustomVariableValue.String("Taylor"), "level" to CustomVariableValue.Number(12),
             "premium" to CustomVariableValue.Boolean(false),
         )
-        checkNotNull(started.params.paywallPresenter).present(params) { results += it }
+        checkNotNull(started.params.paywallPresenter).present(params) { onCompletion(it) }
     }
 
     @Test
@@ -150,6 +153,46 @@ class CheckpointPresenterHelpersTest {
         assertEquals(listOf(PaywallPresenter.Completion.Result.NavigatedBack), results)
         started.callback.onCheckpointPassed(checkpointResult)
         assertEquals(emptyList<Map<String, Any?>>(), passed)
+    }
+
+    @Test
+    fun `detach suppresses callbacks reentered from error completion`() {
+        val started = present(factory = true)
+        val params = mockk<ErrorDialogFactory.Params>()
+        every { params.kind } returns CheckpointFailureKind.FLOW_RESULT_SYNC_FAILED
+        every { params.error } returns PurchasesError(PurchasesErrorCode.NetworkError, "offline")
+        val outcomes = mutableListOf<ErrorDialogFactory.Outcome>()
+        checkNotNull(started.params.errorDialogFactory).createDialog(params) {
+            outcomes += it
+            request(started)
+            started.callback.onCheckpointPassed(checkpointResult)
+        }
+
+        detachCheckpoint("call", null, errors, paywalls)
+
+        assertEquals(emptyList<Pair<String, Map<String, Any?>>>(), requested)
+        assertEquals(emptyList<Map<String, Any?>>(), passed)
+        assertEquals(listOf(PaywallPresenter.Completion.Result.NavigatedBack), results)
+        assertEquals(listOf(ErrorDialogFactory.Outcome.UseDefault), outcomes)
+    }
+
+    @Test
+    fun `detach defaults error requests reentered from paywall completion`() {
+        val started = present(factory = true)
+        val params = mockk<ErrorDialogFactory.Params>()
+        every { params.kind } returns CheckpointFailureKind.FLOW_RESULT_SYNC_FAILED
+        every { params.error } returns PurchasesError(PurchasesErrorCode.NetworkError, "offline")
+        val outcomes = mutableListOf<ErrorDialogFactory.Outcome>()
+        request(started) { result ->
+            results += result
+            checkNotNull(started.params.errorDialogFactory).createDialog(params) { outcomes += it }
+        }
+
+        detachCheckpoint("call", null, errors, paywalls)
+
+        assertEquals(emptyList<String>(), errorRequests)
+        assertEquals(listOf(ErrorDialogFactory.Outcome.UseDefault), outcomes)
+        assertEquals(listOf(PaywallPresenter.Completion.Result.NavigatedBack), results)
     }
 
     @Test

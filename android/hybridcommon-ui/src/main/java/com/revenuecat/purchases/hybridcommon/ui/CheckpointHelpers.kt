@@ -227,8 +227,9 @@ internal fun detachCheckpoint(
     errors: CheckpointErrorDialogRegistry,
     paywalls: CheckpointPaywallRegistry,
 ) {
-    errors.cancel(callId)
+    val errorCompletions = errors.takeCancelled(callId)
     paywalls.detach(callId, activePaywallRequestId)
+    errorCompletions.forEach { it.complete(Outcome.UseDefault) }
 }
 
 internal fun invalidateCheckpointPresentations(
