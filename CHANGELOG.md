@@ -1,3 +1,8 @@
+## 20.8.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.102.2 => 5.102.3 Android 11.1.0 => 11.2.0 (#2083) via RevenueCat Git Bot (@RCGitBot)
+
 ## 20.7.0
 ## RevenueCat SDK
 ### ✨ New Features
