@@ -418,6 +418,21 @@ class CommonApiTests {
                 diagnosticsEnabled,
                 automaticDeviceIdentifierCollectionEnabled,
                 preferredLocale,
+                galaxyBillingMode);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                purchasesAreCompletedBy,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically,
+                verificationMode,
+                pendingTransactionsForPrepaidPlansEnabled,
+                diagnosticsEnabled,
+                automaticDeviceIdentifierCollectionEnabled,
+                preferredLocale,
                 galaxyBillingMode,
                 iamEnabled);
     }
