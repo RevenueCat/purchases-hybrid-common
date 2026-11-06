@@ -49,8 +49,10 @@ object CheckpointErrorCode {
 private const val TAG = "Purchases"
 
 /**
- * Registers a checkpoint with independently optional app-owned paywall and error-dialog callbacks.
- * Call on the main thread and use a unique [callId] for each invocation. When [useCustomPaywallPresenter] is true,
+ * Experimental, invite-only. Registers a checkpoint hit; call on the main thread.
+ * [presentationMode] accepts `MODAL_FULL_SCREEN` or `MODAL_SHEET`; other values use the default.
+ * Supports independently optional app-owned paywall and error-dialog callbacks.
+ * Use a unique [callId] for each invocation. When [useCustomPaywallPresenter] is true,
  * implement [CheckpointListener.onPaywallPresentationRequested] and complete every delivered presentation after
  * dismissing its UI. Otherwise the native SDK presents paywalls. [hasErrorDialogFactory] independently enables
  * [CheckpointListener.onErrorDialogRequested], including synchronization errors after custom paywall completion.
