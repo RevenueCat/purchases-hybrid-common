@@ -22,20 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *notConfigured = CheckpointProxy.notConfiguredErrorCode;
     NSString *unsupported = CheckpointProxy.unsupportedOSVersionErrorCode;
 
-    // No-factory overload (original API)
-    [CheckpointProxy presentWithIdentifier:@"identifier"
-                           customVariables:@{@"key": @"value"}
-                          presentationMode:sheet
-                                  onPassed:^(NSDictionary<NSString *, id> *result) {}
-                                   onError:^(NSString *code, NSString *message) {}];
-
-    // Error-dialog-factory overload
+    // Native paywall presentation with custom error dialogs
     [CheckpointProxy presentWithIdentifier:@"identifier"
                                     callId:@"call-1"
                            customVariables:@{@"key": @"value"}
                           presentationMode:fullScreen
                                   onPassed:^(NSDictionary<NSString *, id> *result) {}
                                    onError:^(NSString *code, NSString *message) {}
+            onPaywallPresentationRequested:nil
                     onErrorDialogRequested:^(NSString *requestId, NSDictionary<NSString *, id> *error) {
                         // Resolve with custom dialog content.
                         [CheckpointProxy resolveErrorDialogWithRequestId:requestId
@@ -43,6 +37,29 @@ NS_ASSUME_NONNULL_BEGIN
                                                                            @"dialog": @{@"message": @"Try again",
                                                                                         @"buttonTitle": @"OK"}}];
                     }];
+
+    // Custom paywall presentation composes with the existing error-dialog factory.
+    [CheckpointProxy presentWithIdentifier:@"identifier"
+                                    callId:@"presenter-call"
+                           customVariables:@{@"key": @"value"}
+                          presentationMode:sheet
+                                  onPassed:^(NSDictionary<NSString *, id> *result) {}
+                                   onError:^(NSString *code, NSString *message) {}
+            onPaywallPresentationRequested:^(NSString *requestId, NSDictionary<NSString *, id> *params) {
+                [CheckpointProxy completePaywallPresentationWithRequestId:requestId result:@"CONTINUED"];
+            }
+                    onErrorDialogRequested:^(NSString *requestId, NSDictionary<NSString *, id> *error) {
+                [CheckpointProxy resolveErrorDialogWithRequestId:requestId outcome:@{@"type": @"suppress"}];
+            }];
+    [CheckpointProxy presentWithIdentifier:@"identifier" callId:@"native-call" customVariables:nil
+                          presentationMode:nil onPassed:^(NSDictionary<NSString *, id> *result) {}
+                                   onError:^(NSString *code, NSString *message) {}
+            onPaywallPresentationRequested:nil onErrorDialogRequested:nil];
+    [CheckpointProxy completePaywallPresentationWithRequestId:@"request" result:@"CLOSED"];
+    [CheckpointProxy completePaywallPresentationWithRequestId:@"request" result:@"NAVIGATED_BACK"];
+    [CheckpointProxy detachCheckpointWithCallId:@"presenter-call" activePaywallRequestId:@"request"];
+    [CheckpointProxy detachCheckpointWithCallId:@"native-call" activePaywallRequestId:nil];
+    [CheckpointProxy invalidateCheckpointPresentations];
 
     // Resolve with an explicit default or suppressed outcome.
     [CheckpointProxy resolveErrorDialogWithRequestId:@"some-request-id" outcome:@{@"type": @"useDefault"}];
