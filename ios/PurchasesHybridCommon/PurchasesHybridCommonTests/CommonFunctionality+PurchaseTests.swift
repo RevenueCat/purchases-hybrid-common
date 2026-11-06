@@ -8,6 +8,9 @@
 
 import Quick
 import Foundation
+import StoreKit
+import StoreKitTest
+import XCTest
 import Nimble
 @_spi(Internal) @testable import PurchasesHybridCommon
 @_spi(Internal) @testable import RevenueCat
@@ -237,6 +240,32 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                 }
             }
 
+            context("introductory offer eligibility on unsupported products") {
+                it("does not fall back to purchasing a StoreKit 1 or Test Store product") {
+                    let sk1Product = SKProduct()
+                    sk1Product.setValue("test_product", forKey: "productIdentifier")
+                    let products = [
+                        StoreProduct(sk1Product: sk1Product),
+                        TestStoreProduct(localizedTitle: "Test", price: 1, currencyCode: "USD", localizedPriceString: "$1",
+                                         productIdentifier: "test_product", productType: .autoRenewableSubscription,
+                                         localizedDescription: "Test", locale: Locale(identifier: "en_US")).toStoreProduct()
+                    ]
+                    for product in products {
+                        let mockPurchases = MockPurchases()
+                        CommonFunctionality.sharedInstance = mockPurchases
+                        var receivedError: ErrorContainer?
+                        CommonFunctionality.purchase(options: ["productIdentifier": "test_product"],
+                                                     introductoryOfferEligibilityJWS: "header.deny-intro.signature") {
+                            _, error in receivedError = error
+                        }
+                        mockPurchases.invokedProductsParameters?.completion([product])
+                        expect(receivedError?.code) == ErrorCode.unsupportedError.rawValue
+                        expect(mockPurchases.invokedPurchaseProductCount) == 0
+                        expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 0
+                    }
+                }
+            }
+
             context("package lookup") {
                 var mockPurchases: MockPurchases!
 
@@ -292,13 +321,105 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
     }
 }
 
+// Uses local StoreKit products and a mocked Purchases boundary. No backend or signing credentials are needed.
+#if compiler(>=6.1)
+@available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, visionOS 1.0, *)
+final class IntroductoryOfferEligibilityPurchaseTests: XCTestCase {
+
+    private var session: SKTestSession!
+    private var purchases: MockPurchases!
+    private var product: StoreProduct!
+    private let token = "header.deny-intro.signature"
+
+    override func setUp() async throws {
+        try await super.setUp()
+        guard #available(iOS 15.0, macOS 15.4, tvOS 18.4, watchOS 11.4, visionOS 2.4, *) else {
+            throw XCTSkip("Introductory offer eligibility JWS is unsupported on this OS.")
+        }
+        self.session = try SKTestSession(configurationFileNamed: "PurchasesHybridCommon")
+        self.session.resetToDefaultState()
+        self.purchases = MockPurchases()
+        CommonFunctionality.sharedInstance = self.purchases
+        let products = try await Product.products(for: [Self.productIdentifier])
+        self.product = StoreProduct(sk2Product: try XCTUnwrap(products.first))
+    }
+
+    @MainActor
+    func testForwardsTokenForProductAndPreservesNativeErrors() async throws {
+        var receivedError: ErrorContainer?
+        CommonFunctionality.purchase(options: ["productIdentifier": Self.productIdentifier],
+                                     introductoryOfferEligibilityJWS: self.token) { _, error in
+            receivedError = error
+        }
+        self.purchases.invokedProductsParameters?.completion([self.product])
+        let invocation = try XCTUnwrap(self.purchases.invokedPurchaseParamsCompletionParameters)
+        XCTAssertEqual(invocation.params.introductoryOfferEligibilityJWS, self.token)
+        XCTAssertEqual(invocation.params.product, self.product)
+        invocation.completion(nil, nil, ErrorCode.purchaseInvalidError as NSError, false)
+        XCTAssertEqual(receivedError?.code, ErrorCode.purchaseInvalidError.rawValue)
+        XCTAssertEqual(self.purchases.invokedPurchaseProductCount, 0)
+    }
+
+    func testForwardsTokenAndOfferingContextForPackage() throws {
+        let context: [String: Any] = ["offeringIdentifier": "default", "placementIdentifier": "onboarding"]
+        CommonFunctionality.purchase(options: [
+            "packageIdentifier": "$rc_monthly",
+            "presentedOfferingContext": context,
+            "introductoryOfferEligibilityJWS": self.token
+        ]) { _, _ in }
+        self.purchases.invokedOfferingsParameters?.completion(self.offerings(product: self.product), nil)
+        let params = try XCTUnwrap(self.purchases.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertEqual(params.introductoryOfferEligibilityJWS, self.token)
+        XCTAssertEqual(params.package?.identifier, "$rc_monthly")
+        XCTAssertEqual(params.package?.presentedOfferingContext.offeringIdentifier, "default")
+        XCTAssertEqual(params.package?.presentedOfferingContext.placementIdentifier, "onboarding")
+        XCTAssertEqual(self.purchases.invokedPurchasePackageCount, 0)
+    }
+
+    func testDoesNotPurchaseUnsupportedPackage() {
+        let product = TestStoreProduct(localizedTitle: "Test", price: 1, currencyCode: "USD", localizedPriceString: "$1",
+                                       productIdentifier: Self.productIdentifier, productType: .autoRenewableSubscription,
+                                       localizedDescription: "Test", locale: Locale(identifier: "en_US")).toStoreProduct()
+        var receivedError: ErrorContainer?
+        CommonFunctionality.purchase(options: [
+            "packageIdentifier": "$rc_monthly",
+            "presentedOfferingContext": ["offeringIdentifier": "default"],
+            "introductoryOfferEligibilityJWS": self.token
+        ]) { _, error in receivedError = error }
+        self.purchases.invokedOfferingsParameters?.completion(self.offerings(product: product), nil)
+        XCTAssertEqual(receivedError?.code, ErrorCode.unsupportedError.rawValue)
+        XCTAssertEqual(self.purchases.invokedPurchasePackageCount, 0)
+        XCTAssertEqual(self.purchases.invokedPurchaseParamsCompletionCount, 0)
+    }
+
+    private func offerings(product: StoreProduct) -> Offerings {
+        let package = Package(identifier: "$rc_monthly", packageType: .monthly, storeProduct: product,
+                              offeringIdentifier: "default", webCheckoutUrl: nil)
+        let offering = Offering(identifier: "default", serverDescription: "Default", metadata: [:],
+                                availablePackages: [package], webCheckoutUrl: nil)
+        return Offerings(offerings: ["default": offering], currentOfferingID: "default", placements: nil,
+                         targeting: nil,
+                         contents: Offerings.Contents(
+                            response: OfferingsResponse(currentOfferingId: "default", offerings: [], placements: nil,
+                                                       targeting: nil, uiConfig: nil),
+                            httpResponseOriginalSource: HTTPResponseOriginalSource(isFallbackUrlResponse: false,
+                                                                                  isLoadShedderResponse: false)),
+                         loadedFromDiskCache: false)
+    }
+
+    private static let productIdentifier =
+        "com.revenuecat.purchases_hybrid_common.monthly_19.99_.1_week_intro"
+}
+
+#endif
+
 // MARK: - Mock Transaction Helper
 final class MockStoreTransaction: StoreTransactionType {
     let productIdentifier: String
     let purchaseDate: Date
     let transactionIdentifier: String
     let quantity: Int
-    let storefront: Storefront?
+    let storefront: RevenueCat.Storefront?
     let jwsRepresentation: String?
     let environment: StoreEnvironment?
     let hasKnownPurchaseDate: Bool
@@ -312,7 +433,7 @@ final class MockStoreTransaction: StoreTransactionType {
         purchaseDate: Date,
         transactionIdentifier: String = UUID().uuidString,
         quantity: Int = 1,
-        storefront: Storefront? = nil,
+        storefront: RevenueCat.Storefront? = nil,
         jwsRepresentation: String? = nil,
         environment: StoreEnvironment? = nil
     ) {
