@@ -802,6 +802,44 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault, .suppress])
     }
 
+    func testInvalidationRejectsPublicPresentBeforeItsTaskRuns() async {
+        let previousPurchases = Purchases.isConfigured ? Purchases.shared : nil
+        let previousDelegate = previousPurchases?.delegate
+        Purchases.clearSingleton()
+        defer {
+            if let previousPurchases = previousPurchases {
+                Purchases.setDefaultInstance(previousPurchases)
+                previousPurchases.delegate = previousDelegate
+            }
+        }
+
+        let invalidatedCallback = self.expectation(description: "Invalidated call must not notify the wrapper")
+        invalidatedCallback.isInverted = true
+        CheckpointProxy.present(
+            identifier: "upgrade", callId: "queued-public-call", customVariables: nil, presentationMode: nil,
+            onPassed: { _ in invalidatedCallback.fulfill() },
+            onError: { _, _ in invalidatedCallback.fulfill() },
+            onPaywallPresentationRequested: { _, _ in invalidatedCallback.fulfill() },
+            onErrorDialogRequested: { _, _ in invalidatedCallback.fulfill() }
+        )
+        // This test holds the main actor, so the public method's task cannot run before invalidation.
+        CheckpointProxy.invalidateCheckpointPresentations()
+
+        let newCallError = self.expectation(description: "New public call reaches configuration check")
+        CheckpointProxy.present(
+            identifier: "upgrade", callId: "new-public-call", customVariables: nil, presentationMode: nil,
+            onPassed: { _ in XCTFail("Unconfigured call must not pass") },
+            onError: { code, _ in
+                XCTAssertEqual(code, CheckpointProxy.notConfiguredErrorCode)
+                newCallError.fulfill()
+            },
+            onPaywallPresentationRequested: { _, _ in XCTFail("Unconfigured call must not present") },
+            onErrorDialogRequested: { _, _ in XCTFail("Unconfigured call must not request a dialog") }
+        )
+
+        await self.fulfillment(of: [newCallError, invalidatedCallback], timeout: 1)
+    }
+
     func testInvalidationRejectsCallsCapturedBeforeMainQueueDispatch() {
         let call = CheckpointProxy.beginPaywallCall(callId: "queued-call")
         CheckpointProxy.invalidateCheckpointPresentations()
