@@ -107,11 +107,18 @@ final class CheckpointPaywallCall {
 
     // MARK: - Presentation
 
-    /// Registers a checkpoint with independently optional app-owned paywall and error-dialog callbacks.
+    /// The hybrid wrapper calls this when the app hits a checkpoint. Native work runs on the main actor.
+    /// Paywall presentation and error-dialog callbacks are independently optional.
     /// Use a unique `callId` for each invocation. A nil paywall callback uses the SDK presenter; a nil error callback
     /// uses its default error handling. Paywall requests contain `checkpointIdentifier`, primitive `customVariables`,
     /// resolved `presentationMode`, and the serialized `offering`. The wrapper owns dismissal and must complete
     /// every delivered presentation with ``completePaywallPresentation(requestId:result:)``.
+    /// `onPassed` runs when the native checkpoint passes, after any required purchase synchronization;
+    /// completing the paywall alone does not pass the checkpoint. `onError` reports failures to start the call.
+    ///
+    /// Call ``detachCheckpoint(callId:activePaywallRequestId:)`` when the owning screen stops listening, such as
+    /// when a React Native screen unmounts. Call ``invalidateCheckpointPresentations()`` when the whole hybrid
+    /// runtime reloads or shuts down.
     public static func present(
         identifier: String,
         callId: String,
@@ -142,8 +149,12 @@ final class CheckpointPaywallCall {
         }
     }
 
-    /// Completes one app-owned presentation. `CONTINUED` and `CLOSED` let native purchase synchronization proceed;
-    /// `NAVIGATED_BACK` and unrecognized values back out without passing. Repeated or unknown requests are ignored.
+    /// The wrapper calls this on the main actor after dismissing a paywall shown by its presentation handler.
+    /// Use the `requestId` received by `onPaywallPresentationRequested` and report how that presentation ended.
+    /// `CONTINUED` and `CLOSED` let the native flow proceed with purchase synchronization; neither directly calls
+    /// `onPassed`. `NAVIGATED_BACK` and unrecognized values back out without passing the checkpoint.
+    /// Complete every delivered presentation, including one preserved by `detachCheckpoint`, after dismissal.
+    /// Repeated or unknown requests are ignored.
     @MainActor
     public static func completePaywallPresentation(requestId: String, result: String) {
         guard #available(iOS 15.0, *) else { return }
@@ -157,7 +168,7 @@ final class CheckpointPaywallCall {
         }
     }
 
-    /// Stops checkpoint callbacks when the wrapper no longer listens for this call.
+    /// The wrapper calls this on the main actor when it no longer listens for this checkpoint call.
     /// For example, a React Native screen can unmount while a separately presented paywall is still open.
     /// The wrapper calls this when cleaning up the screen and passes that paywall's request ID as
     /// `activePaywallRequestId`. This preserves the open presentation so the wrapper can dismiss it and call
@@ -182,8 +193,12 @@ final class CheckpointPaywallCall {
         }
     }
 
-    /// Invalidates both callback protocols on runtime teardown. Pending paywalls back out and dialogs use defaults.
-    /// Captured calls from the old runtime remain detached, including work queued before teardown; new calls work normally.
+    /// The wrapper calls this on the main actor when the whole hybrid runtime reloads or shuts down.
+    /// For example, call it when the React Native bridge is invalidated, so pending native work cannot call
+    /// JavaScript in the old runtime. Use `detachCheckpoint` instead when only one screen stops listening.
+    ///
+    /// All pending paywalls back out and error requests use the SDK's default dialogs. Calls from the old runtime
+    /// remain invalid, including calls still waiting to start on the main actor. Calls from a new runtime work normally.
     @MainActor
     public static func invalidateCheckpointPresentations() {
         guard #available(iOS 15.0, *) else { return }
@@ -203,7 +218,9 @@ final class CheckpointPaywallCall {
 
     // MARK: - Error dialog resolution
 
-    /// Resolves a pending request with `show` (message and button title), `useDefault`, or `suppress`.
+    /// The wrapper calls this on the main actor after its error-dialog handler chooses an outcome.
+    /// Use the `requestId` received by `onErrorDialogRequested`. `show` supplies a message and button title for
+    /// the SDK to display, `useDefault` uses the SDK's default dialog, and `suppress` shows no dialog.
     /// Nil or invalid outcomes use the SDK default; unknown request IDs are ignored.
     @MainActor
     public static func resolveErrorDialog(requestId: String, outcome: [String: Any]?) {
@@ -245,7 +262,9 @@ final class CheckpointPaywallCall {
 
     // MARK: - Cancellation
 
-    /// Cancels requests for `callId`, or all requests when nil. Canceled requests use the SDK default.
+    /// The wrapper calls this on the main actor to stop custom error-dialog handling for `callId`, or all calls
+    /// when nil. Canceled requests use the SDK's default dialog. This does not cancel paywall presentations;
+    /// use `detachCheckpoint` when a screen stops listening or `invalidateCheckpointPresentations` on runtime reload.
     /// The call stays detached until it passes; nil invalidates existing factories so new calls can use a handler.
     @MainActor
     public static func cancelErrorDialogs(callId: String?) {
