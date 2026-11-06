@@ -11,6 +11,7 @@
 		1204D41D866494A505556F16 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 7A688D2C3FB51D6E7E82D76B /* RevenueCat */; };
 		1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */; };
 		1E6A6C292E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */; };
+		1E6A6C2B2E8BEEEA006C69B9 /* CommonFunctionality+OfferingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C2A2E8BEEEA006C69B9 /* CommonFunctionality+OfferingTests.swift */; };
 		2257429095AF286EA731AC1D /* PurchasesHybridCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 58BFD52BB107060499E42805 /* PurchasesHybridCommon */; };
 		2740C51F41A5883046233F70 /* PaywallProxyResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04AED59E55B135D4E4055BE /* PaywallProxyResultTests.swift */; };
 		2B45C2493A8D481AEC9AA42A /* RewardVerificationResult+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7FCE821769F7B4719CE2313 /* RewardVerificationResult+HybridAdditionsTests.swift */; };
@@ -81,6 +82,7 @@
 		1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParams.swift; sourceTree = "<group>"; };
 		1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParamsTests.swift; sourceTree = "<group>"; };
 		1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+PurchaseTests.swift"; sourceTree = "<group>"; };
+		1E6A6C2A2E8BEEEA006C69B9 /* CommonFunctionality+OfferingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+OfferingTests.swift"; sourceTree = "<group>"; };
 		1EF418B02D75E3F4005E6702 /* SubscriptionInfo+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionInfo+HybridAdditions.swift"; sourceTree = "<group>"; };
 		1EF418B22D75E5FE005E6702 /* Enums+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Enums+HybridAdditions.swift"; sourceTree = "<group>"; };
 		26ADD358A91D0AEFD86DB95C /* AdReward+HybridAdditionsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AdReward+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				2DC85B57246B2A7B003CD22E /* PurchasesHybridAdditionsTests.swift */,
 				2D0D207F245797B900614E47 /* Date+HybridAdditionsTests.swift */,
 				1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */,
+				1E6A6C2A2E8BEEEA006C69B9 /* CommonFunctionality+OfferingTests.swift */,
 				1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */,
 				2D44523D2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift */,
 				2CC09B242A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift */,
@@ -659,6 +662,7 @@
 				2D6E333C2450F7A60022A971 /* StoreProductDiscount+HybridAdditionsTests.swift in Sources */,
 				2D44523E2491198A006AA26F /* CustomerInfo+HybridAdditionsTests.swift in Sources */,
 				1E6A6C292E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift in Sources */,
+				1E6A6C2B2E8BEEEA006C69B9 /* CommonFunctionality+OfferingTests.swift in Sources */,
 				35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */,
 				37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */,
 				FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */,
