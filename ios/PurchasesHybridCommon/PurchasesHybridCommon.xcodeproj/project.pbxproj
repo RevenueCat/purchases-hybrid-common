@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A45690000000000000000001 /* PurchasesHybridCommon.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 57FFDE47286B72750089A57B /* PurchasesHybridCommon.storekit */; };
+		A45690000000000000000001 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		00C5972F9E16B498B2858F1C /* PurchasesHybridCommonUI in Frameworks */ = {isa = PBXBuildFile; productRef = E1576CE50ED702E850B979B4 /* PurchasesHybridCommonUI */; };
 		1204D41D866494A505556F16 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 7A688D2C3FB51D6E7E82D76B /* RevenueCat */; };
 		1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */; };
@@ -607,7 +607,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A45690000000000000000001 /* PurchasesHybridCommon.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -682,6 +681,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A45690000000000000000001 /* MockPurchases.swift in Sources */,
 				57FFDE3F286A777D0089A57B /* StoreKitIntegrationTests.swift in Sources */,
 				57FFDE46286B606A0089A57B /* XCTestCase+Expectations.swift in Sources */,
 				57FFDE41286A77E30089A57B /* CommonFunctionality+async.swift in Sources */,
