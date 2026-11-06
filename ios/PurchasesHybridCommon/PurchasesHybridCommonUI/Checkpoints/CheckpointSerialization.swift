@@ -17,23 +17,6 @@ import PurchasesHybridCommon
 @available(iOS 15.0, *)
 enum CheckpointSerialization {
 
-    @MainActor
-    static func dictionary(for params: PaywallPresentationParams,
-                           customVariables: [String: Any]) -> [String: Any] {
-        let mode: String
-        switch params.presentationMode {
-        case .modalFullScreen: mode = "MODAL_FULL_SCREEN"
-        case .modalSheet: mode = "MODAL_SHEET"
-        default: mode = "DEFAULT"
-        }
-        return [
-            "checkpointIdentifier": params.checkpointIdentifier,
-            "customVariables": customVariables.filter { params.customVariables[$0.key] != nil },
-            "presentationMode": mode,
-            "offering": params.offering.dictionary
-        ]
-    }
-
     /// `{ flow: { obtainedEntitlements: [{ entitlementInfo }], obtainedProducts: [{ product }] } | null, customer }`.
     static func dictionary(for result: CheckpointResult) -> [String: Any] {
         let customer = result.customer.dictionary

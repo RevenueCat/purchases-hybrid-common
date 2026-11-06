@@ -53,14 +53,11 @@ final class CheckpointProxyTests: XCTestCase {
         self.factoryStarts = []
         self.requestedErrors = []
         self.resolvedOutcomes = []
-        self.presenterStarts = []
-        self.requestedPaywalls = []
-        self.presentationResults = []
     }
 
     override func tearDown() {
         // Cancel any pending factory requests to avoid static state leaking between tests.
-        CheckpointProxy.invalidateCheckpointPresentations()
+        CheckpointProxy.cancelErrorDialogs(callId: nil)
         super.tearDown()
     }
 
@@ -73,15 +70,12 @@ final class CheckpointProxyTests: XCTestCase {
     ) {
         CheckpointProxy.present(
             identifier: "upgrade",
-            callId: "native-call",
             customVariables: customVariables,
             presentationMode: presentationMode,
             isConfigured: { isConfigured },
-            start: { [unowned self] identifier, variables, mode, _, _, passed in
+            start: { [unowned self] identifier, variables, mode, passed in
                 self.starts.append(Start(identifier: identifier, variables: variables, mode: mode, passed: passed))
             },
-            onPaywallPresentationRequested: nil,
-            onErrorDialogRequested: nil,
             onPassed: { [unowned self] in self.passed.append($0) },
             onError: { [unowned self] in self.errors.append(($0, $1)) }
         )
@@ -102,7 +96,7 @@ final class CheckpointProxyTests: XCTestCase {
             customVariables: customVariables,
             presentationMode: presentationMode,
             isConfigured: { isConfigured },
-            start: { [unowned self] identifier, variables, mode, _, factory, passed in
+            start: { [unowned self] identifier, variables, mode, factory, passed in
                 self.factoryStarts.append(FactoryStart(
                     identifier: identifier,
                     variables: variables,
@@ -111,7 +105,6 @@ final class CheckpointProxyTests: XCTestCase {
                     passed: passed
                 ))
             },
-            onPaywallPresentationRequested: nil,
             onErrorDialogRequested: { [unowned self] requestId, error in
                 self.requestedErrors.append((requestId: requestId, error: error))
             },
@@ -631,189 +624,6 @@ final class CheckpointProxyTests: XCTestCase {
         CheckpointProxy.resolveErrorDialog(requestId: self.requestedErrors[1].requestId,
                                           outcome: ["type": "suppress"])
         XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault, .suppress])
-    }
-
-    // MARK: - Custom paywall presenter
-
-    private struct PresenterStart {
-        let presenter: PaywallPresentationHandler?
-        let factory: ErrorDialogFactory?
-        let passed: (CheckpointResult) -> Void
-    }
-
-    private var presenterStarts: [PresenterStart] = []
-    private var requestedPaywalls: [(requestId: String, params: [String: Any])] = []
-    private var presentationResults: [PaywallPresentationResult] = []
-
-    private func presentWithPresenter(
-        callId: String = "presenter-call",
-        customPresenter: Bool = true,
-        errorFactory: Bool = false,
-        isConfigured: Bool = true
-    ) {
-        CheckpointProxy.present(
-            identifier: "upgrade",
-            callId: callId,
-            customVariables: ["name": "Taylor", "level": 12, "premium": false],
-            presentationMode: "MODAL_SHEET",
-            isConfigured: { isConfigured },
-            start: { [unowned self] _, _, _, presenter, factory, passed in
-                self.presenterStarts.append(PresenterStart(presenter: presenter, factory: factory, passed: passed))
-            },
-            onPaywallPresentationRequested: customPresenter ? { [unowned self] requestId, params in
-                self.requestedPaywalls.append((requestId, params))
-            } : nil,
-            onErrorDialogRequested: errorFactory ? { [unowned self] requestId, error in
-                self.requestedErrors.append((requestId, error))
-            } : nil,
-            onPassed: { [unowned self] in self.passed.append($0) },
-            onError: { [unowned self] in self.errors.append(($0, $1)) }
-        )
-    }
-
-    private func requestPaywall(_ start: PresenterStart) {
-        let offering = Offering(identifier: "premium", serverDescription: "Premium", metadata: [:],
-                                availablePackages: [], webCheckoutUrl: nil)
-        start.presenter?(
-            PaywallPresentationParams(checkpointIdentifier: "upgrade",
-                                      customVariables: ["name": .string("Taylor"), "level": .number(12),
-                                                        "premium": .bool(false)],
-                                      presentationMode: .modalFullScreen, offering: offering)
-        ) { [unowned self] in self.presentationResults.append($0) }
-    }
-
-    func testPresenterMapsResolvedContextAndDoesNotPassBeforeNativeCallback() throws {
-        self.presentWithPresenter()
-        self.requestPaywall(try XCTUnwrap(self.presenterStarts.first))
-        let params = try XCTUnwrap(self.requestedPaywalls.first?.params)
-
-        XCTAssertEqual(params["checkpointIdentifier"] as? String, "upgrade")
-        XCTAssertEqual(params["presentationMode"] as? String, "MODAL_FULL_SCREEN")
-        XCTAssertEqual(params["customVariables"] as? NSDictionary,
-                       ["name": "Taylor", "level": 12, "premium": false] as NSDictionary)
-        XCTAssertEqual((params["offering"] as? [String: Any])?["identifier"] as? String, "premium")
-        XCTAssertEqual((params["offering"] as? [String: Any])?["availablePackages"] as? NSArray, [])
-        XCTAssertTrue(self.presentationResults.isEmpty)
-        XCTAssertTrue(self.passed.isEmpty)
-    }
-
-    func testPresenterAndFactoryAreIndependentlyOptional() throws {
-        for customPresenter in [false, true] {
-            for errorFactory in [false, true] {
-                self.presentWithPresenter(customPresenter: customPresenter, errorFactory: errorFactory)
-                let start = try XCTUnwrap(self.presenterStarts.last)
-                XCTAssertEqual(start.presenter != nil, customPresenter)
-                XCTAssertEqual(start.factory != nil, errorFactory)
-            }
-        }
-    }
-
-    func testPresenterSetupFailureDoesNotStart() {
-        self.presentWithPresenter(isConfigured: false)
-        XCTAssertTrue(self.presenterStarts.isEmpty)
-        XCTAssertEqual(self.errors.map(\.code), [CheckpointProxy.notConfiguredErrorCode])
-    }
-
-    func testPresenterOutcomesAreExplicitAndIdempotent() throws {
-        for (result, expected) in [("CONTINUED", PaywallPresentationResult.continued),
-                                   ("CLOSED", .closed), ("NAVIGATED_BACK", .navigatedBack),
-                                   ("invalid", .navigatedBack)] {
-            self.presentWithPresenter()
-            self.requestPaywall(try XCTUnwrap(self.presenterStarts.last))
-            let requestId = try XCTUnwrap(self.requestedPaywalls.last?.requestId)
-            let previous = self.presentationResults.count
-            CheckpointProxy.completePaywallPresentation(requestId: requestId, result: result)
-            CheckpointProxy.completePaywallPresentation(requestId: requestId, result: "CONTINUED")
-            XCTAssertEqual(self.presentationResults.count, previous + 1)
-            XCTAssertEqual(self.presentationResults.last, expected)
-            XCTAssertTrue(self.passed.isEmpty)
-        }
-    }
-
-    func testDetachBeforeResolutionRejectsLatePresenter() throws {
-        self.presentWithPresenter()
-        let start = try XCTUnwrap(self.presenterStarts.first)
-        CheckpointProxy.detachCheckpoint(callId: "presenter-call", activePaywallRequestId: nil)
-        self.requestPaywall(start)
-        XCTAssertTrue(self.requestedPaywalls.isEmpty)
-        XCTAssertEqual(self.presentationResults, [.navigatedBack])
-    }
-
-    func testDetachCancelsQueuedEventButPreservesDeliveredUI() throws {
-        self.presentWithPresenter(callId: "queued")
-        self.presentWithPresenter(callId: "active")
-        self.requestPaywall(self.presenterStarts[0])
-        self.requestPaywall(self.presenterStarts[1])
-        let activeId = self.requestedPaywalls[1].requestId
-
-        CheckpointProxy.detachCheckpoint(callId: "queued", activePaywallRequestId: nil)
-        CheckpointProxy.detachCheckpoint(callId: "active", activePaywallRequestId: activeId)
-        XCTAssertEqual(self.presentationResults, [.navigatedBack])
-        CheckpointProxy.completePaywallPresentation(requestId: activeId, result: "CONTINUED")
-        XCTAssertEqual(self.presentationResults, [.navigatedBack, .continued])
-    }
-
-    func testFactoryStillHandlesSyncFailureAfterPaywallCompletion() throws {
-        self.presentWithPresenter(errorFactory: true)
-        let start = try XCTUnwrap(self.presenterStarts.first)
-        self.requestPaywall(start)
-        let requestId = try XCTUnwrap(self.requestedPaywalls.first?.requestId)
-        CheckpointProxy.completePaywallPresentation(requestId: requestId, result: "CONTINUED")
-        start.factory?(self.makeParams(kind: .flowResultSyncFailed), self.makeCompletion())
-        let errorId = try XCTUnwrap(self.requestedErrors.first?.requestId)
-        CheckpointProxy.resolveErrorDialog(requestId: errorId, outcome: ["type": "suppress"])
-        XCTAssertEqual(self.resolvedOutcomes, [.suppress])
-        start.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
-        XCTAssertEqual(self.passed.count, 1)
-    }
-
-    func testDetachFallsBackForPendingAndLateCustomPresenterErrors() throws {
-        self.presentWithPresenter(errorFactory: true)
-        let start = try XCTUnwrap(self.presenterStarts.first)
-        start.factory?(self.makeParams(), self.makeCompletion())
-        CheckpointProxy.detachCheckpoint(callId: "presenter-call", activePaywallRequestId: nil)
-        start.factory?(self.makeParams(), self.makeCompletion())
-        XCTAssertEqual(self.requestedErrors.count, 1)
-        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault])
-    }
-
-    func testInvalidationDrainsBothProtocolsRejectsOldCallsAndAllowsNewRuntime() throws {
-        self.presentWithPresenter(errorFactory: true)
-        let old = try XCTUnwrap(self.presenterStarts.first)
-        self.requestPaywall(old)
-        old.factory?(self.makeParams(), self.makeCompletion())
-        CheckpointProxy.invalidateCheckpointPresentations()
-        XCTAssertEqual(self.presentationResults, [.navigatedBack])
-        XCTAssertEqual(self.resolvedOutcomes, [.useDefault])
-
-        self.presentWithPresenter(errorFactory: true)
-        let new = try XCTUnwrap(self.presenterStarts.last)
-        self.requestPaywall(old)
-        old.factory?(self.makeParams(), self.makeCompletion())
-        old.passed(CheckpointResult(flow: nil, customer: self.makeCustomer()))
-        XCTAssertTrue(self.passed.isEmpty)
-        self.requestPaywall(new)
-        new.factory?(self.makeParams(), self.makeCompletion())
-        XCTAssertEqual(self.requestedPaywalls.count, 2)
-        XCTAssertEqual(self.requestedErrors.count, 2)
-        CheckpointProxy.completePaywallPresentation(requestId: self.requestedPaywalls.last!.requestId, result: "CLOSED")
-        CheckpointProxy.resolveErrorDialog(requestId: self.requestedErrors.last!.requestId, outcome: ["type": "suppress"])
-        XCTAssertEqual(self.presentationResults, [.navigatedBack, .navigatedBack, .closed])
-        XCTAssertEqual(self.resolvedOutcomes, [.useDefault, .useDefault, .suppress])
-    }
-
-    func testInvalidationRejectsCallsCapturedBeforeMainQueueDispatch() {
-        let call = CheckpointProxy.beginPaywallCall(callId: "queued-call")
-        CheckpointProxy.invalidateCheckpointPresentations()
-        var started = false
-        CheckpointProxy.present(
-            identifier: "upgrade", callId: "queued-call", customVariables: nil, presentationMode: nil,
-            isConfigured: { true }, start: { _, _, _, _, _, _ in started = true },
-            onPaywallPresentationRequested: { _, _ in XCTFail("Old queued call must not present") },
-            onErrorDialogRequested: { _, _ in XCTFail("Old queued call must not request a dialog") },
-            onPassed: { _ in XCTFail("Old queued call must not pass") }, onError: { _, _ in }, call: call
-        )
-        XCTAssertFalse(started)
     }
 
 }
