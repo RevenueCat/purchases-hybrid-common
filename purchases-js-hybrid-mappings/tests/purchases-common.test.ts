@@ -557,6 +557,7 @@ describe('PurchasesCommon', () => {
       ...mockMonthlyPackage,
       rcBillingProduct: targetedProduct,
       webBillingProduct: targetedProduct,
+      product: targetedProduct,
     };
     const targetedOffering: Offering = {
       ...mockOffering,
