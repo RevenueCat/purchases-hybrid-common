@@ -132,7 +132,7 @@ fun setPushToken(fcmToken: String?) {
  * their customer profile, as of the last CustomerInfo fetch.
  */
 @OptIn(InternalRevenueCatAPI::class)
-fun getAttributesForCurrentUser(): List<Map<String, Any?>> =
+fun getAttributesForCurrentUser(): List<Map<String, Any>> =
     Purchases.sharedInstance.attributesForCurrentUser
         .sortedBy { it.key }
         .map { it.map() }

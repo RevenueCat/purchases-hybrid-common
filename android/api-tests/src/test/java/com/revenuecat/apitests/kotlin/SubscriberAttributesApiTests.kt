@@ -126,7 +126,7 @@ private class SubscriberAttributesApiTests {
     }
 
     fun checkGetAttributesForCurrentUser() {
-        val attributes: List<Map<String, Any?>> = getAttributesForCurrentUser()
+        val attributes: List<Map<String, Any>> = getAttributesForCurrentUser()
     }
 
     fun checkSetEmail(email: String?) {
