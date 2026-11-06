@@ -73,12 +73,15 @@ final class CheckpointProxyTests: XCTestCase {
     ) {
         CheckpointProxy.present(
             identifier: "upgrade",
+            callId: "native-call",
             customVariables: customVariables,
             presentationMode: presentationMode,
             isConfigured: { isConfigured },
-            start: { [unowned self] identifier, variables, mode, passed in
+            start: { [unowned self] identifier, variables, mode, _, _, passed in
                 self.starts.append(Start(identifier: identifier, variables: variables, mode: mode, passed: passed))
             },
+            onPaywallPresentationRequested: nil,
+            onErrorDialogRequested: nil,
             onPassed: { [unowned self] in self.passed.append($0) },
             onError: { [unowned self] in self.errors.append(($0, $1)) }
         )
@@ -99,7 +102,7 @@ final class CheckpointProxyTests: XCTestCase {
             customVariables: customVariables,
             presentationMode: presentationMode,
             isConfigured: { isConfigured },
-            start: { [unowned self] identifier, variables, mode, factory, passed in
+            start: { [unowned self] identifier, variables, mode, _, factory, passed in
                 self.factoryStarts.append(FactoryStart(
                     identifier: identifier,
                     variables: variables,
@@ -108,6 +111,7 @@ final class CheckpointProxyTests: XCTestCase {
                     passed: passed
                 ))
             },
+            onPaywallPresentationRequested: nil,
             onErrorDialogRequested: { [unowned self] requestId, error in
                 self.requestedErrors.append((requestId: requestId, error: error))
             },
@@ -693,7 +697,7 @@ final class CheckpointProxyTests: XCTestCase {
         XCTAssertTrue(self.passed.isEmpty)
     }
 
-    func testNewOverloadKeepsNativePresenterAndFactoryIndependentlyOptional() throws {
+    func testPresenterAndFactoryAreIndependentlyOptional() throws {
         for customPresenter in [false, true] {
             for errorFactory in [false, true] {
                 self.presentWithPresenter(customPresenter: customPresenter, errorFactory: errorFactory)

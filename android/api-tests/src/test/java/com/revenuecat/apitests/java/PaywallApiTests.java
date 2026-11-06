@@ -63,9 +63,9 @@ class PaywallApiTests {
             }
         };
         Map<String, Object> customVariables = new HashMap<>();
-        CheckpointHelpersKt.presentCheckpoint("identifier", customVariables, "MODAL_SHEET", listener);
-        CheckpointHelpersKt.presentCheckpoint("identifier", "c1", null, null, listener);
-        CheckpointHelpersKt.presentCheckpoint("identifier", "c1", customVariables, "MODAL_SHEET", listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "error-call", customVariables, "MODAL_SHEET",
+                false, true, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "paywall-call", null, null, true, false, listener);
         CheckpointHelpersKt.presentCheckpoint("identifier", "custom-call", null, null, true, true, listener);
         CheckpointHelpersKt.presentCheckpoint("identifier", "native-call", null, null, false, false, listener);
         CheckpointHelpersKt.detachCheckpoint("custom-call", "active-request");

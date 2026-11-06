@@ -105,84 +105,7 @@ final class CheckpointPaywallCall {
         }
     }
 
-    // MARK: - Public API (no-factory path)
-
-    /// Registers a checkpoint hit. `onPassed` runs only when the user passes; `onError` reports setup failures.
-    /// Custom variables accept String, Number, and Boolean values; other values are ignored.
-    public static func present(
-        identifier: String,
-        customVariables: [String: Any]?,
-        presentationMode: String?,
-        onPassed: @escaping ([String: Any]) -> Void,
-        onError: @escaping (_ code: String, _ message: String) -> Void
-    ) {
-        guard #available(iOS 15.0, *) else {
-            let message = "Checkpoints require iOS 15 or later."
-            NSLog("[RevenueCatUI] %@", message)
-            onError(Self.unsupportedOSVersionErrorCode, message)
-            return
-        }
-        Self.present(
-            identifier: identifier,
-            customVariables: customVariables,
-            presentationMode: presentationMode,
-            isConfigured: { Purchases.isConfigured },
-            start: { identifier, variables, mode, passed in
-                Purchases.shared.checkpoint(
-                    identifier,
-                    customVariables: variables,
-                    presentationMode: mode,
-                    errorPresenter: nil,
-                    passed
-                )
-            },
-            onPassed: onPassed,
-            onError: onError
-        )
-    }
-
-    // MARK: - Public API (error-dialog-factory path)
-
-    /// Registers a checkpoint with custom error-dialog support. `callId` identifies the call for cancellation.
-    /// The handler receives a unique request ID and an error (`kind`, `code`, and `message`); resolve it with
-    /// ``resolveErrorDialog(requestId:outcome:)``. Custom variables accept String, Number, and Boolean values.
-    public static func present(
-        identifier: String,
-        callId: String,
-        customVariables: [String: Any]?,
-        presentationMode: String?,
-        onPassed: @escaping ([String: Any]) -> Void,
-        onError: @escaping (_ code: String, _ message: String) -> Void,
-        onErrorDialogRequested: @escaping (_ requestId: String, _ error: [String: Any]) -> Void
-    ) {
-        guard #available(iOS 15.0, *) else {
-            let message = "Checkpoints require iOS 15 or later."
-            NSLog("[RevenueCatUI] %@", message)
-            onError(Self.unsupportedOSVersionErrorCode, message)
-            return
-        }
-        Self.present(
-            identifier: identifier,
-            callId: callId,
-            customVariables: customVariables,
-            presentationMode: presentationMode,
-            isConfigured: { Purchases.isConfigured },
-            start: { identifier, variables, mode, factory, passed in
-                Task { @MainActor in
-                    Purchases.shared.checkpoint(
-                        identifier,
-                        customVariables: variables,
-                        presentationMode: mode,
-                        errorDialogFactory: factory,
-                        passed
-                    )
-                }
-            },
-            onErrorDialogRequested: onErrorDialogRequested,
-            onPassed: onPassed,
-            onError: onError
-        )
-    }
+    // MARK: - Presentation
 
     /// Registers a checkpoint with independently optional app-owned paywall and error-dialog callbacks.
     /// Use a unique `callId` for each invocation. A nil paywall callback uses the SDK presenter; a nil error callback
@@ -340,95 +263,6 @@ final class CheckpointPaywallCall {
         }
     }
 
-    // MARK: - Internal testable core (no-factory path)
-
-    /// iOS 15 test seam; keeps the public overload compatible with iOS 13 clients and lets tests inject native calls.
-    @available(iOS 15.0, *)
-    static func present(
-        identifier: String,
-        customVariables: [String: Any]?,
-        presentationMode: String?,
-        isConfigured: () -> Bool,
-        start: (
-            String, [String: CustomVariableValue], FlowPresentationMode, @escaping (CheckpointResult) -> Void
-        ) -> Void,
-        onPassed: @escaping ([String: Any]) -> Void,
-        onError: (_ code: String, _ message: String) -> Void
-    ) {
-        guard isConfigured() else {
-            let message = "Configure Purchases before calling a checkpoint."
-            NSLog("[RevenueCatUI] %@", message)
-            onError(Self.notConfiguredErrorCode, message)
-            return
-        }
-        let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
-        start(identifier, variables, Self.mode(for: presentationMode)) {
-            onPassed(CheckpointSerialization.dictionary(for: $0))
-        }
-    }
-
-    // MARK: - Internal testable core (error-dialog-factory path)
-
-    /// iOS 15 test seam for the error-dialog overload.
-    @available(iOS 15.0, *)
-    static func present(
-        identifier: String,
-        callId: String,
-        customVariables: [String: Any]?,
-        presentationMode: String?,
-        isConfigured: () -> Bool,
-        start: (
-            String,
-            [String: CustomVariableValue],
-            FlowPresentationMode,
-            ErrorDialogFactory?,
-            @escaping (CheckpointResult) -> Void
-        ) -> Void,
-        onErrorDialogRequested: @escaping (_ requestId: String, _ error: [String: Any]) -> Void,
-        onPassed: @escaping ([String: Any]) -> Void,
-        onError: (_ code: String, _ message: String) -> Void
-    ) {
-        guard isConfigured() else {
-            let message = "Configure Purchases before calling a checkpoint."
-            NSLog("[RevenueCatUI] %@", message)
-            onError(Self.notConfiguredErrorCode, message)
-            return
-        }
-        let variables = (customVariables ?? [:]).compactMapValues(PaywallCustomVariables.value(from:))
-        let generation = Self.errorDialogGeneration
-        let factory: ErrorDialogFactory = { params, completion in
-            // Detached calls may outlive the hybrid runtime; fall back to the SDK dialog.
-            guard generation == Self.errorDialogGeneration,
-                  !Self.detachedCallIds.contains(callId) else {
-                completion.complete(with: .useDefault)
-                return
-            }
-            let requestId = UUID().uuidString
-            Self.pendingRequests[requestId] = PendingRequest(callId: callId, completion: completion)
-            let kind: String
-            if params.kind == .flowCouldNotBeShown {
-                kind = "flowCouldNotBeShown"
-            } else if params.kind == .flowActionFailed {
-                kind = "flowActionFailed"
-            } else {
-                kind = "flowResultSyncFailed"
-            }
-            let nsError = params.error as NSError
-            let errorDict: [String: Any] = [
-                "kind": kind,
-                "code": nsError.code,
-                "message": nsError.localizedDescription
-            ]
-            onErrorDialogRequested(requestId, errorDict)
-        }
-        start(identifier, variables, Self.mode(for: presentationMode), factory) { result in
-            if generation == Self.errorDialogGeneration {
-                Self.detachedCallIds.remove(callId)
-            }
-            onPassed(CheckpointSerialization.dictionary(for: result))
-        }
-    }
-
     @available(iOS 15.0, *)
     private static func makeErrorDialogFactory(
         callId: String,
@@ -462,7 +296,7 @@ final class CheckpointPaywallCall {
         }
     }
 
-    /// Testable shared core for the additive presenter overload.
+    /// Testable presentation core with injectable native dependencies.
     @available(iOS 15.0, *)
     @MainActor
     static func present(

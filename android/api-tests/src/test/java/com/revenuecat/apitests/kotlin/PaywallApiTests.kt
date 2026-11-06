@@ -64,16 +64,16 @@ private class PaywallApiTests {
                 resolveErrorDialog(requestId, null)
             }
         }
-        presentCheckpoint("identifier", listener = listener)
-        presentCheckpoint("identifier", mapOf("key" to "value"), "MODAL_SHEET", listener)
-        presentCheckpoint("identifier", callId = "c1", listener = listener)
+        presentCheckpoint("identifier", "default-call", listener = listener)
         presentCheckpoint(
             "identifier",
-            callId = "c1",
+            callId = "error-call",
             customVariables = mapOf("k" to "v"),
             presentationMode = "MODAL_SHEET",
+            hasErrorDialogFactory = true,
             listener = listener,
         )
+        presentCheckpoint("identifier", "paywall-call", useCustomPaywallPresenter = true, listener = listener)
         presentCheckpoint("identifier", "custom-call", null, null, true, true, listener)
         presentCheckpoint("identifier", "native-call", null, null, false, false, listener)
         detachCheckpoint("custom-call", "active-request")

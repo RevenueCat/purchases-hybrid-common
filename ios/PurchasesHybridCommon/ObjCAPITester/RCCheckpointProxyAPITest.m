@@ -22,20 +22,14 @@ NS_ASSUME_NONNULL_BEGIN
     NSString *notConfigured = CheckpointProxy.notConfiguredErrorCode;
     NSString *unsupported = CheckpointProxy.unsupportedOSVersionErrorCode;
 
-    // No-factory overload (original API)
-    [CheckpointProxy presentWithIdentifier:@"identifier"
-                           customVariables:@{@"key": @"value"}
-                          presentationMode:sheet
-                                  onPassed:^(NSDictionary<NSString *, id> *result) {}
-                                   onError:^(NSString *code, NSString *message) {}];
-
-    // Error-dialog-factory overload
+    // Native paywall presentation with custom error dialogs
     [CheckpointProxy presentWithIdentifier:@"identifier"
                                     callId:@"call-1"
                            customVariables:@{@"key": @"value"}
                           presentationMode:fullScreen
                                   onPassed:^(NSDictionary<NSString *, id> *result) {}
                                    onError:^(NSString *code, NSString *message) {}
+            onPaywallPresentationRequested:nil
                     onErrorDialogRequested:^(NSString *requestId, NSDictionary<NSString *, id> *error) {
                         // Resolve with custom dialog content.
                         [CheckpointProxy resolveErrorDialogWithRequestId:requestId

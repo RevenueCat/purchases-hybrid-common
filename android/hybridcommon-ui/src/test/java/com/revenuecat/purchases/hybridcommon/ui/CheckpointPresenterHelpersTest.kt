@@ -88,7 +88,7 @@ class CheckpointPresenterHelpersTest {
     }
 
     @Test
-    fun `new overload selects presenter and error factory independently`() {
+    fun `selects presenter and error factory independently`() {
         listOf(false, true).forEach { custom ->
             listOf(false, true).forEach { factory ->
                 val started = present(custom, factory)

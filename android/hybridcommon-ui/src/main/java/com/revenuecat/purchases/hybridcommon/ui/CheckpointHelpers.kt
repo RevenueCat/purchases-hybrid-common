@@ -35,7 +35,7 @@ interface CheckpointListener {
     /** Called when the checkpoint cannot start, e.g. [CheckpointErrorCode.NOT_CONFIGURED]. */
     fun onCheckpointError(code: String, message: String) {}
 
-    /** Called for requests from the overload with `callId`; resolve [requestId] with [resolveErrorDialog]. */
+    /** Called when `hasErrorDialogFactory` is enabled; resolve [requestId] with [resolveErrorDialog]. */
     fun onErrorDialogRequested(requestId: String, error: Map<String, Any?>) {}
 
     /** Called only when custom presentation was requested; complete it with [completePaywallPresentation]. */
@@ -49,62 +49,20 @@ object CheckpointErrorCode {
 private const val TAG = "Purchases"
 
 /**
- * Experimental, invite-only. Registers a checkpoint hit; call on the main thread.
- * `presentationMode` accepts `MODAL_FULL_SCREEN` or `MODAL_SHEET`; other values use the default.
- */
-fun presentCheckpoint(
-    identifier: String,
-    customVariables: Map<String, Any?>? = null,
-    presentationMode: String? = null,
-    listener: CheckpointListener,
-) {
-    presentCheckpoint(
-        identifier,
-        customVariables,
-        presentationMode,
-        listener,
-        isConfigured = { Purchases.isConfigured },
-        start = { id, params, callback -> startNativeCheckpoint(id, params, callback) },
-    )
-}
-
-/**
- * Experimental, invite-only. Registers a checkpoint with custom error dialogs.
- * `callId` identifies it for request resolution and cancellation.
- */
-fun presentCheckpoint(
-    identifier: String,
-    callId: String,
-    customVariables: Map<String, Any?>? = null,
-    presentationMode: String? = null,
-    listener: CheckpointListener,
-) {
-    presentCheckpoint(
-        identifier,
-        callId,
-        customVariables,
-        presentationMode,
-        listener,
-        isConfigured = { Purchases.isConfigured },
-        start = { id, params, callback -> startNativeCheckpoint(id, params, callback) },
-    )
-}
-
-/**
  * Registers a checkpoint with independently optional app-owned paywall and error-dialog callbacks.
  * Call on the main thread and use a unique [callId] for each invocation. When [useCustomPaywallPresenter] is true,
  * implement [CheckpointListener.onPaywallPresentationRequested] and complete every delivered presentation after
  * dismissing its UI. Otherwise the native SDK presents paywalls. [hasErrorDialogFactory] independently enables
  * [CheckpointListener.onErrorDialogRequested], including synchronization errors after custom paywall completion.
  */
-@Suppress("LongParameterList") // Required flags keep existing overloads source and binary compatible.
+@Suppress("LongParameterList") // Paywall presentation and error dialogs are independently optional.
 fun presentCheckpoint(
     identifier: String,
     callId: String,
-    customVariables: Map<String, Any?>?,
-    presentationMode: String?,
-    useCustomPaywallPresenter: Boolean,
-    hasErrorDialogFactory: Boolean,
+    customVariables: Map<String, Any?>? = null,
+    presentationMode: String? = null,
+    useCustomPaywallPresenter: Boolean = false,
+    hasErrorDialogFactory: Boolean = false,
     listener: CheckpointListener,
 ) {
     presentCheckpoint(
@@ -176,84 +134,7 @@ private fun startNativeCheckpoint(
     Purchases.sharedInstance.checkpoint(identifier, params, callback)
 }
 
-@Suppress("LongParameterList") // isConfigured and start are test seams over the public overload.
-internal fun presentCheckpoint(
-    identifier: String,
-    customVariables: Map<String, Any?>?,
-    presentationMode: String?,
-    listener: CheckpointListener,
-    isConfigured: () -> Boolean,
-    start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
-) {
-    if (!isConfigured()) {
-        val message = "Configure Purchases before calling a checkpoint."
-        Log.e(TAG, message)
-        listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
-        return
-    }
-    val params = CheckpointParams.Builder()
-        .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
-        .setPresentationMode(presentationMode.toFlowPresentationMode())
-        .build()
-    start(identifier, params) { result ->
-        listener.onCheckpointPassed(
-            mapOf(
-                "customer" to result.customer.map(),
-                "flow" to result.flow?.toMap(),
-            ),
-        )
-    }
-}
-
-@Suppress("LongParameterList") // isConfigured, start, and registry are test seams.
-internal fun presentCheckpoint(
-    identifier: String,
-    callId: String,
-    customVariables: Map<String, Any?>?,
-    presentationMode: String?,
-    listener: CheckpointListener,
-    isConfigured: () -> Boolean,
-    start: (String, CheckpointParams, CheckpointPassedCallback) -> Unit,
-    registry: CheckpointErrorDialogRegistry = defaultCheckpointErrorDialogRegistry,
-) {
-    if (!isConfigured()) {
-        val message = "Configure Purchases before calling a checkpoint."
-        Log.e(TAG, message)
-        listener.onCheckpointError(CheckpointErrorCode.NOT_CONFIGURED, message)
-        return
-    }
-    val generation = registry.generation
-    val factory = ErrorDialogFactory { params, completion ->
-        val requestId = UUID.randomUUID().toString()
-        if (!registry.register(requestId, callId, completion, generation)) {
-            return@ErrorDialogFactory
-        }
-        listener.onErrorDialogRequested(
-            requestId,
-            mapOf(
-                "kind" to params.kind.toHybridString(),
-                "code" to params.error.code.code,
-                "message" to params.error.message,
-            ),
-        )
-    }
-    val checkpointParams = CheckpointParams.Builder()
-        .setCustomVariables(customVariables.toCustomVariableValues() ?: emptyMap())
-        .setPresentationMode(presentationMode.toFlowPresentationMode())
-        .setErrorDialogFactory(factory)
-        .build()
-    start(identifier, checkpointParams) { result ->
-        registry.clearDetached(callId, generation)
-        listener.onCheckpointPassed(
-            mapOf(
-                "customer" to result.customer.map(),
-                "flow" to result.flow?.toMap(),
-            ),
-        )
-    }
-}
-
-@Suppress("LongParameterList") // Flags and injected native dependencies keep older overloads binary compatible.
+@Suppress("LongParameterList") // isConfigured, start, and registries are test seams.
 internal fun presentCheckpoint(
     identifier: String,
     callId: String,
@@ -285,7 +166,7 @@ internal fun presentCheckpoint(
         builder.setPaywallPresenter(
             PaywallPresenter { params, completion ->
                 val requestId = UUID.randomUUID().toString()
-                if (paywallRegistry.register(requestId, checkNotNull(call), completion)) {
+                if (paywallRegistry.register(requestId, call, completion)) {
                     params.offering.mapAsync { offering ->
                         // Mapping happens asynchronously. Teardown may have already completed the native request.
                         if (paywallRegistry.isPending(requestId)) {
