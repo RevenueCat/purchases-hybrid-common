@@ -28,6 +28,7 @@ import com.revenuecat.purchases.PurchasesException
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.TrackedEventListener
 import com.revenuecat.purchases.WebPurchaseRedemption
+import com.revenuecat.purchases.ads.events.AdCaptureMethod
 import com.revenuecat.purchases.ads.events.types.AdDisplayedData
 import com.revenuecat.purchases.ads.events.types.AdFailedToLoadData
 import com.revenuecat.purchases.ads.events.types.AdFormat
@@ -36,6 +37,7 @@ import com.revenuecat.purchases.ads.events.types.AdMediatorName
 import com.revenuecat.purchases.ads.events.types.AdOpenedData
 import com.revenuecat.purchases.ads.events.types.AdRevenueData
 import com.revenuecat.purchases.ads.events.types.AdRevenuePrecision
+import com.revenuecat.purchases.ads.events.types.AdRewardEarnedUnverifiedData
 import com.revenuecat.purchases.ads.events.types.AdRewardPromptAcceptedData
 import com.revenuecat.purchases.ads.events.types.AdRewardPromptShownData
 import com.revenuecat.purchases.ads.rewardverification.RewardedAdTrackingMetadata
@@ -1173,6 +1175,20 @@ fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.
 
 // region Ad Tracking
 
+/**
+ * Resolves the optional `captureMethod` key that the official RevenueCat hybrid AdMob adapters put in the
+ * ad data they bridge. Missing or unrecognized values fall back to [AdCaptureMethod.MANUAL].
+ */
+@OptIn(InternalRevenueCatAPI::class)
+internal fun Map<String, Any?>.adCaptureMethod(): AdCaptureMethod {
+    val rawValue = this["captureMethod"] as? String ?: return AdCaptureMethod.MANUAL
+    return AdCaptureMethod.values().firstOrNull { it.value == rawValue } ?: run {
+        errorLog("Unrecognized captureMethod '$rawValue', falling back to manual")
+        AdCaptureMethod.MANUAL
+    }
+}
+
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdDisplayed(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1203,9 +1219,10 @@ fun trackAdDisplayed(adData: Map<String, Any?>) {
         impressionId = impressionId,
     )
 
-    Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData)
+    Purchases.sharedInstance.adTracker.trackAdDisplayed(displayedData, adData.adCaptureMethod())
 }
 
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdOpened(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1236,9 +1253,10 @@ fun trackAdOpened(adData: Map<String, Any?>) {
         impressionId = impressionId,
     )
 
-    Purchases.sharedInstance.adTracker.trackAdOpened(openedData)
+    Purchases.sharedInstance.adTracker.trackAdOpened(openedData, adData.adCaptureMethod())
 }
 
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdRevenue(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1278,9 +1296,10 @@ fun trackAdRevenue(adData: Map<String, Any?>) {
         precision = AdRevenuePrecision.fromString(precisionString),
     )
 
-    Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData)
+    Purchases.sharedInstance.adTracker.trackAdRevenue(revenueData, adData.adCaptureMethod())
 }
 
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdLoaded(adData: Map<String, Any?>) {
     val networkName = adData["networkName"] as? String
@@ -1311,9 +1330,10 @@ fun trackAdLoaded(adData: Map<String, Any?>) {
         impressionId = impressionId,
     )
 
-    Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData)
+    Purchases.sharedInstance.adTracker.trackAdLoaded(loadedData, adData.adCaptureMethod())
 }
 
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun trackAdFailedToLoad(adData: Map<String, Any?>) {
     val mediatorNameString = adData["mediatorName"] as? String
@@ -1341,7 +1361,41 @@ fun trackAdFailedToLoad(adData: Map<String, Any?>) {
         mediatorErrorCode = mediatorErrorCode,
     )
 
-    Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData)
+    Purchases.sharedInstance.adTracker.trackAdFailedToLoad(failedToLoadData, adData.adCaptureMethod())
+}
+
+@OptIn(InternalRevenueCatAPI::class)
+@Suppress("ComplexCondition")
+fun trackAdRewardEarnedUnverified(adData: Map<String, Any?>) {
+    val networkName = adData["networkName"] as? String
+    val mediatorNameString = adData["mediatorName"] as? String
+    val adFormatString = adData["adFormat"] as? String
+    val adUnitId = adData["adUnitId"] as? String
+    val impressionId = adData["impressionId"] as? String
+
+    if (mediatorNameString == null ||
+        adFormatString == null ||
+        adUnitId == null ||
+        impressionId == null
+    ) {
+        errorLog(
+            "trackAdRewardEarnedUnverified: Missing required parameters - " +
+                "mediatorName, adFormat, adUnitId, or impressionId",
+        )
+        return
+    }
+
+    val rewardEarnedData = AdRewardEarnedUnverifiedData(
+        networkName = networkName,
+        mediatorName = AdMediatorName.fromString(mediatorNameString),
+        adFormat = AdFormat.fromString(adFormatString),
+        placement = adData["placement"] as? String,
+        adUnitId = adUnitId,
+        impressionId = impressionId,
+        rewardVerificationEnabled = adData["rewardVerificationEnabled"] as? Boolean ?: false,
+    )
+
+    Purchases.sharedInstance.adTracker.trackAdRewardEarnedUnverified(rewardEarnedData, adData.adCaptureMethod())
 }
 
 fun trackRewardedAdPromptShown(adData: Map<String, Any?>) {
@@ -1833,6 +1887,7 @@ fun generateRewardVerificationToken(impressionId: String): Map<String, Any> {
 }
 
 @JvmOverloads
+@OptIn(InternalRevenueCatAPI::class)
 @Suppress("ComplexCondition")
 fun pollRewardVerification(
     clientTransactionId: String,
@@ -1871,6 +1926,7 @@ fun pollRewardVerification(
         clientTransactionId = clientTransactionId,
         callback = { result -> onResult.onReceived(result.map()) },
         trackingMetadata = metadata,
+        captureMethod = trackingMetadata?.adCaptureMethod() ?: AdCaptureMethod.MANUAL,
     )
 }
 

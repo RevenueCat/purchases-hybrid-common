@@ -16,7 +16,7 @@ detekt {
 
 android {
     namespace = "com.revenuecat.api_tests"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24

@@ -1,20 +1,24 @@
 # iOS
 
-## Point to a local `Purchases` project
+Open `ios/PurchasesHybridCommon/PurchasesHybridCommon.xcworkspace`. The test targets
+use the local PHC Swift package, with RevenueCat, RevenueCatUI, Quick, Nimble, and
+SnapshotTesting also resolved through Swift Package Manager.
+Run the `PurchasesHybridCommon` scheme for unit tests and the Objective-C API build,
+or `PurchasesHybridCommonIntegrationTests` for the StoreKit integration tests.
 
-In `ios/PurchasesHybridCommon/Podfile` replace:
+Resolve dependencies from the repository root with:
 
-```
-  pod 'RevenueCat', '4.37.0'
-```
-
-with:
-
-```
-  pod 'RevenueCat', :path => '~/Development/repos/ios/purchases-ios'
+```sh
+bundle exec fastlane resolve_ios_packages
 ```
 
-Remember to change `'~/Development/repos/ios/purchases-ios'` with your local purchases-ios path.
+Quick 5.0.1 requires Nimble 9.x through SwiftPM; the test project pins Nimble 9.2.1.
+
+## Point to a local purchases-ios checkout
+
+In Xcode, add your purchases-ios checkout with **File > Add Package Dependencies >
+Add Local** to override the remote package while developing. Remove the local
+override before committing.
 
 # Android
 

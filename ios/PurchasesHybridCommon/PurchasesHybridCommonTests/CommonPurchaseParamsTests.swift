@@ -7,6 +7,7 @@
 //
 
 import Quick
+import Foundation
 import Nimble
 @testable import PurchasesHybridCommon
 @testable import RevenueCat

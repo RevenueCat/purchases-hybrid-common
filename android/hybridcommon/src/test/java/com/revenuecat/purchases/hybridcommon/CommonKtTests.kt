@@ -23,6 +23,11 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.WebPurchaseRedemption
+import com.revenuecat.purchases.ads.events.AdCaptureMethod
+import com.revenuecat.purchases.ads.events.AdTracker
+import com.revenuecat.purchases.ads.events.types.AdFormat
+import com.revenuecat.purchases.ads.events.types.AdMediatorName
+import com.revenuecat.purchases.ads.events.types.AdRewardEarnedUnverifiedData
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
@@ -2323,6 +2328,100 @@ internal class CommonKtTests {
         }
 
         assertThat(actualCachedVirtualCurrenciesMap).isNull()
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackAdRewardEarnedUnverified forwards reward verification enabled`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedData = slot<AdRewardEarnedUnverifiedData>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData), any()) } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "networkName" to "network-name",
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "placement" to "placement",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+                "rewardVerificationEnabled" to true,
+            ),
+        )
+
+        assertThat(capturedData.captured).isEqualTo(
+            AdRewardEarnedUnverifiedData(
+                networkName = "network-name",
+                mediatorName = AdMediatorName.fromString("admob"),
+                adFormat = AdFormat.fromString("rewarded"),
+                placement = "placement",
+                adUnitId = "ad-unit-id",
+                impressionId = "impression-id",
+                rewardVerificationEnabled = true,
+            ),
+        )
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackAdRewardEarnedUnverified defaults reward verification enabled to false`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedData = slot<AdRewardEarnedUnverifiedData>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every { mockAdTracker.trackAdRewardEarnedUnverified(capture(capturedData), any()) } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+            ),
+        )
+
+        assertThat(capturedData.captured.rewardVerificationEnabled).isFalse()
+    }
+
+    @Test
+    @OptIn(InternalRevenueCatAPI::class)
+    fun `trackAdRewardEarnedUnverified forwards capture method`() {
+        val mockAdTracker = mockk<AdTracker>()
+        val capturedCaptureMethod = slot<AdCaptureMethod>()
+        every { mockPurchases.adTracker } returns mockAdTracker
+        every {
+            mockAdTracker.trackAdRewardEarnedUnverified(any(), capture(capturedCaptureMethod))
+        } just runs
+
+        trackAdRewardEarnedUnverified(
+            mapOf(
+                "mediatorName" to "admob",
+                "adFormat" to "rewarded",
+                "adUnitId" to "ad-unit-id",
+                "impressionId" to "impression-id",
+                "captureMethod" to "flutter_admob_adapter",
+            ),
+        )
+
+        assertThat(capturedCaptureMethod.captured).isEqualTo(AdCaptureMethod.FLUTTER_ADMOB_ADAPTER)
+    }
+
+    @Test
+    fun `trackAdRewardEarnedUnverified ignores data missing required fields`() {
+        val mockAdTracker = mockk<AdTracker>(relaxed = true)
+        every { mockPurchases.adTracker } returns mockAdTracker
+        val requiredAdData = mapOf(
+            "mediatorName" to "admob",
+            "adFormat" to "rewarded",
+            "adUnitId" to "ad-unit-id",
+            "impressionId" to "impression-id",
+        )
+
+        requiredAdData.keys.forEach { requiredKey ->
+            trackAdRewardEarnedUnverified(requiredAdData - requiredKey)
+        }
+
+        verify(exactly = 0) { mockAdTracker.trackAdRewardEarnedUnverified(any()) }
     }
 
     @OptIn(InternalRevenueCatAPI::class)

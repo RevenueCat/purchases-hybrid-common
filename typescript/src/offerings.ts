@@ -79,6 +79,12 @@ export enum INTRO_ELIGIBILITY_STATUS {
 export interface PurchasesStoreProduct {
   /**
    * Product Id.
+   * 
+   * For Google Play subscriptions with a base plan, this is `productId:basePlanId`.
+   * 
+   * For App Store products with a billing plan 
+   * (like monthly subscriptions with a 12-month commitment), this is 
+   * `productId:billingPlan` (like `productId:monthly`).
    */
   readonly identifier: string;
   /**
@@ -92,11 +98,17 @@ export interface PurchasesStoreProduct {
   /**
    * Price of the product in the local currency.
    * Contains the price value of defaultOption for Google Play.
+   * 
+   * For monthly subscriptions with a 12-month commitment on the Apple App Store, the
+   * price will reflect the total amount paid across the commitment.
    */
   readonly price: number;
   /**
    * Formatted price of the item, including its currency sign.
    * Contains the formatted price value of defaultOption for Google Play.
+   * 
+   * For monthly subscriptions with a 12-month commitment on the Apple App Store, the
+   * price string will reflect the total amount paid across the commitment.
    */
   readonly priceString: string;
   /**
@@ -193,6 +205,13 @@ export interface PurchasesStoreProduct {
    * Null if not using offerings or if fetched directly from store via getProducts.
    */
   readonly presentedOfferingContext: PresentedOfferingContext | null;
+  /**
+   * For installment subscriptions, the details of the installment plan the customer commits to.
+   * Null for non-installment subscriptions.
+   * iOS only. Always null on Android, use the installmentsInfo of the defaultOption or
+   * subscriptionOptions instead.
+   */
+  readonly installmentsInfo: InstallmentsInfo | null;
 }
 
 /**
@@ -715,7 +734,29 @@ export interface SubscriptionOption {
 }
 
 /**
- * Type containing information of installment subscriptions. Currently only supported in Google Play.
+ * Enum indicating the billing plan type of an installment subscription. iOS only.
+ * @public
+ */
+export enum BILLING_PLAN_TYPE {
+  /**
+   * The customer pays in full when purchasing the product.
+   */
+  UP_FRONT = "UP_FRONT",
+
+  /**
+   * The customer pays in monthly installments.
+   */
+  MONTHLY = "MONTHLY",
+
+  /**
+   * Unable to determine the billing plan type.
+   */
+  UNKNOWN = "UNKNOWN",
+}
+
+/**
+ * Type containing information of installment subscriptions.
+ * Supported in Google Play (via SubscriptionOption) and iOS (via PurchasesStoreProduct).
  * @public
  */
 export interface InstallmentsInfo {
@@ -725,8 +766,44 @@ export interface InstallmentsInfo {
   readonly commitmentPaymentsCount: number;
   /**
    * After the commitment payments are complete, the number of payments the user commits to upon a renewal.
+   * On iOS this is always equal to commitmentPaymentsCount.
    */
   readonly renewalCommitmentPaymentsCount: number;
+  /**
+   * Duration of each installment, specified in ISO 8601 format. For example, P1M equates to one month.
+   * iOS only. Null on Android.
+   */
+  readonly commitmentInstallmentPeriod: string | null;
+  /**
+   * Price charged for each installment billing period.
+   * iOS only. Null on Android.
+   */
+  readonly installmentBillingPrice: number | null;
+  /**
+   * Formatted price charged for each installment billing period, including its currency sign.
+   * iOS only. Null on Android.
+   */
+  readonly installmentBillingPriceString: string | null;
+  /**
+   * Total duration of the customer's installment commitment, specified in ISO 8601 format.
+   * iOS only. Null on Android.
+   */
+  readonly commitmentTotalPeriod: string | null;
+  /**
+   * Total price the customer commits to paying across all installments.
+   * iOS only. Null on Android.
+   */
+  readonly commitmentTotalPrice: number | null;
+  /**
+   * Formatted total price the customer commits to paying across all installments, including its currency sign.
+   * iOS only. Null on Android.
+   */
+  readonly commitmentTotalPriceString: string | null;
+  /**
+   * The billing plan used for the installments.
+   * iOS only. Null on Android.
+   */
+  readonly billingPlanType: BILLING_PLAN_TYPE | null;
 }
 
 /**

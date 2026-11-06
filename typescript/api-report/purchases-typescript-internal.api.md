@@ -14,6 +14,13 @@ export enum BILLING_FEATURE {
 }
 
 // @public
+export enum BILLING_PLAN_TYPE {
+    MONTHLY = "MONTHLY",
+    UNKNOWN = "UNKNOWN",
+    UP_FRONT = "UP_FRONT"
+}
+
+// @public
 export interface CustomerInfo {
     readonly activeSubscriptions: string[];
     readonly allExpirationDates: {
@@ -68,7 +75,14 @@ export enum IN_APP_MESSAGE_TYPE {
 
 // @public
 export interface InstallmentsInfo {
+    readonly billingPlanType: BILLING_PLAN_TYPE | null;
+    readonly commitmentInstallmentPeriod: string | null;
     readonly commitmentPaymentsCount: number;
+    readonly commitmentTotalPeriod: string | null;
+    readonly commitmentTotalPrice: number | null;
+    readonly commitmentTotalPriceString: string | null;
+    readonly installmentBillingPrice: number | null;
+    readonly installmentBillingPriceString: string | null;
     readonly renewalCommitmentPaymentsCount: number;
 }
 
@@ -85,6 +99,9 @@ export interface IntroEligibility {
     readonly description: string;
     readonly status: INTRO_ELIGIBILITY_STATUS;
 }
+
+// @public
+export function isPurchasesError(error: unknown): error is PurchasesError;
 
 // @public
 export enum LOG_LEVEL {
@@ -127,7 +144,7 @@ export enum OFFER_PAYMENT_MODE {
 }
 
 // @public
-export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "ASSIGNED" | "UNKNOWN";
 
 // @public
 export enum PACKAGE_TYPE {
@@ -338,6 +355,12 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     EMPTY_SUBSCRIBER_ATTRIBUTES_ERROR = "25",
     // (undocumented)
+    EXPIRED_WEB_PURCHASE_TOKEN = "41",
+    // (undocumented)
+    FEATURE_NOT_AVAILABLE_IN_CUSTOM_ENTITLEMENTS_COMPUTATION_MODE = "36",
+    // (undocumented)
+    FEATURE_NOT_SUPPORTED_WITH_STORE_KIT_1 = "38",
+    // (undocumented)
     INELIGIBLE_ERROR = "18",
     // (undocumented)
     INSUFFICIENT_PERMISSIONS_ERROR = "19",
@@ -353,6 +376,8 @@ export enum PURCHASES_ERROR_CODE {
     INVALID_RECEIPT_ERROR = "8",
     // (undocumented)
     INVALID_SUBSCRIBER_ATTRIBUTES_ERROR = "21",
+    // (undocumented)
+    INVALID_WEB_PURCHASE_TOKEN = "39",
     // (undocumented)
     LOG_OUT_ANONYMOUS_USER_ERROR = "22",
     // (undocumented)
@@ -376,6 +401,8 @@ export enum PURCHASES_ERROR_CODE {
     // (undocumented)
     PRODUCT_REQUEST_TIMED_OUT_ERROR = "32",
     // (undocumented)
+    PURCHASE_BELONGS_TO_OTHER_USER = "40",
+    // (undocumented)
     PURCHASE_CANCELLED_ERROR = "1",
     // (undocumented)
     PURCHASE_INVALID_ERROR = "4",
@@ -385,6 +412,8 @@ export enum PURCHASES_ERROR_CODE {
     RECEIPT_ALREADY_IN_USE_ERROR = "7",
     // (undocumented)
     RECEIPT_IN_USE_BY_OTHER_SUBSCRIBER_ERROR = "13",
+    // (undocumented)
+    SIGNATURE_VERIFICATION_ERROR = "37",
     // (undocumented)
     STORE_PROBLEM_ERROR = "2",
     // (undocumented)
@@ -442,7 +471,7 @@ export interface PurchasesEntitlementInfo {
     readonly originalPurchaseDate: string;
     readonly originalPurchaseDateMillis: number;
     readonly ownershipType: OwnershipType;
-    readonly periodType: string;
+    readonly periodType: PeriodType;
     readonly productIdentifier: string;
     readonly productPlanIdentifier: string | null;
     readonly store: Store;
@@ -547,6 +576,7 @@ export interface PurchasesStoreProduct {
     readonly description: string;
     readonly discounts: PurchasesStoreProductDiscount[] | null;
     readonly identifier: string;
+    readonly installmentsInfo: InstallmentsInfo | null;
     readonly introPrice: PurchasesIntroPrice | null;
     readonly presentedOfferingContext: PresentedOfferingContext | null;
     // @deprecated

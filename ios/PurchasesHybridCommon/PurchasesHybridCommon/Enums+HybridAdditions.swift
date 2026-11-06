@@ -34,6 +34,8 @@ internal extension PurchaseOwnershipType {
         switch self {
         case .familyShared:
             return "FAMILY_SHARED"
+        case .assigned:
+            return "ASSIGNED"
         case .unknown:
             return "UNKNOWN"
         case .purchased:

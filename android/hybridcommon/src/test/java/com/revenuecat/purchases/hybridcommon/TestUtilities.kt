@@ -129,13 +129,14 @@ internal object TestUtilities {
         }
     }
 
-    @SuppressWarnings("EmptyFunctionBlock")
+    @SuppressWarnings("EmptyFunctionBlock", "LongParameterList")
     fun stubSubscriptionOption(
         id: String,
         productId: String,
         duration: Period = Period(1, Period.Unit.MONTH, "P1M"),
         pricingPhases: List<PricingPhase> = listOf(stubPricingPhase(billingPeriod = duration)),
         presentedOfferingContext: PresentedOfferingContext? = null,
+        installmentsInfo: InstallmentsInfo? = null,
     ): SubscriptionOption = object : SubscriptionOption {
         override val id: String
             get() = id
@@ -152,7 +153,7 @@ internal object TestUtilities {
                 productId = productId,
             )
         override val installmentsInfo: InstallmentsInfo?
-            get() = null
+            get() = installmentsInfo
     }
 
     @Suppress("LongParameterList")

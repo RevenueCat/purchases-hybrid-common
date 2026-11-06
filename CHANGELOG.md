@@ -1,3 +1,213 @@
+## 20.7.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(android): Add custom checkpoint paywall presenters (#2072) via Cesar de la Vega (@vegaro)
+* feat(ios): Add custom checkpoint paywall presenters (#2076) via Cesar de la Vega (@vegaro)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.102.0 => 5.102.2 (#2078) via RevenueCat Git Bot (@RCGitBot)
+
+## 20.6.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* fix(android): preserve PaywallResultListener compatibility (#2069) via Cesar de la Vega (@vegaro)
+
+### 🔄 Other Changes
+* feat(checkpoints): Add error dialog factory support to checkpoints (#2043) via Cesar de la Vega (@vegaro)
+* ci: wait for Maven Central before opening hybrid bump PRs (#2060) via Álvaro Brey (@AlvaroBrey)
+
+## 20.6.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.73.2 => 1.74.0 (#2067) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: use circleci npm trusted publishing (#2066) via Nihal Gonsalves (@nihalgonsalves)
+* chore(deps): bump fastlane-plugin-revenuecat_internal from `996879c` to `1e7875c` (#2061) via dependabot[bot] (@dependabot[bot])
+
+## 20.5.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 11.0.1 => 11.1.0 (#2062) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.101.0 => 5.102.0 (#2058) via RevenueCat Git Bot (@RCGitBot)
+
+## 20.4.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.100.0 => 5.101.0 (#2055) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* chore(deps): update to node 26 lts/lithium (#2047) via Nihal Gonsalves (@nihalgonsalves)
+
+## 20.3.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.99.2 => 5.100.0 (#2050) via RevenueCat Git Bot (@RCGitBot)
+* [RENOVATE] Update dependency revenuecat to v4.7.1 (#2049) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: lint GitHub Actions workflows with actionlint (#2052) via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump fastlane from 2.241.1 to 2.241.2 (#2048) via dependabot[bot] (@dependabot[bot])
+
+## 20.2.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.99.0 => 5.99.2 Android 11.0.0 => 11.0.1 JS 1.73.1 => 1.73.2 (#2044) via RevenueCat Git Bot (@RCGitBot)
+
+## 20.1.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(checkpoints): add checkpoint bridge (#2041) via Cesar de la Vega (@vegaro)
+
+### 🔄 Other Changes
+* chore: register custom Fastlane platforms (#2030) via Cesar de la Vega (@vegaro)
+
+## 20.0.0
+This release adopts purchases-android 11.0.0 and drops deprecated paywall presentation overloads on iOS. Hybrid SDKs picking it up need the native floors below and the iOS delegate signature change.
+
+### Android
+- Depends on purchases-android 11.0.0. `compileSdk` is 36 on every module; Kotlin 2.2.21 (AGP 8.13.2, minSdk unchanged).
+
+### iOS
+- `PaywallProxy` no longer calls `paywallViewController:didFinishPurchasingWithCustomerInfoDictionary:transactionDictionary:` for purchases without a `StoreTransaction` (purchases made through the app's own purchase logic). This matches Android.
+- `PaywallViewControllerDelegateWrapper`'s `transactionDictionary` parameter is now non-optional. Implementers declaring `[String: Any]?` get an optionality warning until they drop the `?`.
+- Removed the deprecated `presentPaywall(offering:)` overloads. Use `presentPaywall(options:)` or `presentPaywall(offeringIdentifier:...)`.
+- Purchasing a package now reports the real error when offerings fail to load (for example a network error) instead of `productNotAvailableForPurchaseError`.
+- Not published to CocoaPods: trunk is read-only until after Nov 7, so 20.0.0 is available on iOS through Swift Package Manager only until then.
+
+### TypeScript
+- `PurchasesEntitlementInfo.periodType` is typed as `PeriodType` (`"NORMAL" | "INTRO" | "TRIAL" | "PREPAID"`) instead of `string`.
+
+## RevenueCat SDK
+### 💥 Breaking Changes
+* Report the real error when offerings fail to load during a package purchase (#2013) via Álvaro Brey (@AlvaroBrey)
+* Remove deprecated presentPaywall(offering:) overloads (#2012) via Álvaro Brey (@AlvaroBrey)
+* [EXTERNAL] Type PurchasesEntitlementInfo.periodType as PeriodType (#1895) via @okcoker (#1919) via Álvaro Brey (@AlvaroBrey)
+* build: update Kotlin to 2.2.20 and purchases to 11-snapshot (#1844) via Álvaro Brey (@AlvaroBrey)
+
+## RevenueCatUI SDK
+### 💥 Breaking Changes
+* Stop calling onPurchaseCompleted on iOS for purchases without a transaction (#1979) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* Run iOS CI and native dependency updates through SPM (#2034) via Antonio Pallares (@ajpallares)
+* Pause publishing to CocoaPods for 20.0.0 (#2031) via Álvaro Brey (@AlvaroBrey)
+* Publish Android 20.0.0-SNAPSHOT from 20.0-dev (#2000) via Álvaro Brey (@AlvaroBrey)
+
+## 19.17.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.29.0 => 10.30.0 (#2037) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.16.1
+## RevenueCat SDK
+### 🐞 Bugfixes
+* [EXTERNAL] Fix iOS product serialization of null period prices (#2023) via @manyoneek (#2032) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* chore(deps): bump fast-uri from 3.1.7 to 3.1.9 in /purchases-js-hybrid-mappings (#2029) via dependabot[bot] (@dependabot[bot])
+
+## 19.16.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.98.0 => 5.99.0 (#2027) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.15.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] JS 1.73.0 => 1.73.1 (#2020) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: bump Node to 24.22.1 (#2019) via Álvaro Brey (@AlvaroBrey)
+
+## 19.15.0
+## RevenueCat SDK
+### ✨ New Features
+* [EXTERNAL] Add isPurchasesError type guard (#1836) via @TheRogue76 (#2001) via Álvaro Brey (@AlvaroBrey)
+### 🐞 Bugfixes
+* fix(ads): forward captureMethod on trackAdRewardEarnedUnverified (#2015) via Peter Porfy (@peterporfy)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.97.0 => 5.98.0 (#2017) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.72.0 => 1.73.0 (#2016) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] JS 1.71.0 => 1.72.0 (#2009) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.96.1 => 5.97.0 Android 10.28.1 => 10.29.0 + handle OwnershipType.assigned (#2005) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* ci: fail lint on unused parameters on iOS and TS/JS (#2011) via Álvaro Brey (@AlvaroBrey)
+* chore(deps): bump fastlane from 2.241.0 to 2.241.1 (#1998) via dependabot[bot] (@dependabot[bot])
+* Run iOS 26 tests on Xcode 26.6 (#2004) via Antonio Pallares (@ajpallares)
+
+## 19.14.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.96.0 => 5.96.1 (#2002) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* Skip npmrc copy in npm deploy dry runs (#1999) via Álvaro Brey (@AlvaroBrey)
+* Read npm token from `npm-publishing` CircleCI context (#1997) via Álvaro Brey (@AlvaroBrey)
+
+## 19.14.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.95.0 => 5.96.0 Android 10.27.1 => 10.28.1 JS 1.70.0 => 1.71.0 (#1995) via RevenueCat Git Bot (@RCGitBot)
+
+## RevenueCatUI SDK
+### 🐞 Bugfixes
+* Fix crash when the paywall is not presented after the app goes to background (Android) (#1982) via Álvaro Brey (@AlvaroBrey)
+
+### 🔄 Other Changes
+* chore(deps): bump lefthook from 2.2.1 to 2.2.2 (#1993) via dependabot[bot] (@dependabot[bot])
+* chore: route CODEOWNERS review requests to owning teams (#1990) via Cesar de la Vega (@vegaro)
+
+## 19.13.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(ads): map possible new capture methods (#1970) via Peter Porfy (@peterporfy)
+### 🐞 Bugfixes
+* Resolve paywall presentation when it exits before showing (#1954) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 10.27.0 => 10.27.1 (#1977) via RevenueCat Git Bot (@RCGitBot)
+
+### 🔄 Other Changes
+* [AUTOMATIC] Update generated error codes (#1978) via RevenueCat Git Bot (@RCGitBot)
+* chore(deps): bump lefthook from 2.1.17 to 2.2.1 (#1976) via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump fastlane from 2.240.1 to 2.241.0 (#1983) via dependabot[bot] (@dependabot[bot])
+* Update iOS integration test offerings snapshots (#1980) via Álvaro Brey (@AlvaroBrey)
+
+## 19.12.0
+## RevenueCat SDK
+### ✨ New Features
+* Add unverified rewarded ad tracking bridge (#1958) via Pol Miro (@polmiro)
+
+### 🔄 Other Changes
+* chore(deps): bump lefthook from 2.1.16 to 2.1.17 (#1963) via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump handlebars from 4.7.9 to 4.7.10 in /typescript (#1974) via dependabot[bot] (@dependabot[bot])
+* chore(deps): bump handlebars from 4.7.9 to 4.7.10 in /purchases-js-hybrid-mappings (#1966) via dependabot[bot] (@dependabot[bot])
+
+## 19.11.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.94.0 => 5.95.0 Android 10.26.0 => 10.27.0 (#1972) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.10.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.93.0 => 5.94.0 (#1965) via RevenueCat Git Bot (@RCGitBot)
+
+## 19.9.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(iOS): expose installment infos on StoreProduct for iOS (#1948) via Will Taylor (@fire-at-will)
+
+### 🔄 Other Changes
+* Bump CI to Ruby 3.3 (#1961) via Josh Holtz (@joshdholtz)
+
+## 19.8.0
+## RevenueCat SDK
+### 🐞 Bugfixes
+* Fix iOS ignoring `automaticDeviceIdentifierCollectionEnabled` in `configure` (#1956) via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.92.0 => 5.93.0 Android 10.25.0 => 10.26.0 JS 1.68.0 => 1.70.0 (#1955) via RevenueCat Git Bot (@RCGitBot)
+
 ## 19.6.0
 ## RevenueCat SDK
 ### ✨ New Features

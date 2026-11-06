@@ -53,9 +53,9 @@ purchases-hybrid-common/
 
 ## Common Development Commands
 
-### Android
+Tool setup: install [mise](https://mise.jdx.dev/) and run `mise install` in the project root. Java, Ruby, Yarn, and SwiftLint come from `mise.toml`, Node from `.node-version`, and versions are locked in `mise.lock`.
 
-Tool setup: install [mise](https://mise.jdx.dev/) and run `mise install` in the project root (Java, Ruby, Node from `mise.toml`; Yarn via corepack).
+### Android
 
 ```bash
 # Build

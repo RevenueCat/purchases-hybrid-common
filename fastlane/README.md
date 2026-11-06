@@ -101,13 +101,13 @@ Update dependencies to latest GitHub releases
 
 Tag current branch with current version number
 
-### run_pod_install
+### resolve_ios_packages
 
 ```sh
-[bundle exec] fastlane run_pod_install
+[bundle exec] fastlane resolve_ios_packages
 ```
 
-Run pod install
+Resolve the iOS test project's Swift packages
 
 ### wait_for_pods_on_cdn
 
@@ -116,6 +116,14 @@ Run pod install
 ```
 
 Waits until the pods for the current version are resolvable on the CocoaPods CDN
+
+### wait_for_android_artifacts_on_maven_central
+
+```sh
+[bundle exec] fastlane wait_for_android_artifacts_on_maven_central
+```
+
+Waits until the Android artifacts for the current version are resolvable from Maven Central
 
 ### bump_hybrid_dependencies
 
@@ -174,6 +182,14 @@ replace API KEY for integration tests
 ```
 
 Upload and close a release
+
+### android deploy_snapshot
+
+```sh
+[bundle exec] fastlane android deploy_snapshot
+```
+
+Upload a snapshot release
 
 ----
 

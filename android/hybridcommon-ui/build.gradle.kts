@@ -18,7 +18,7 @@ detekt {
 
 android {
     namespace = "com.revenuecat.purchases.hybridcommon.ui"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
@@ -41,6 +41,7 @@ android {
         jvmTarget = "1.8"
         languageVersion = libs.versions.kotlinLanguage.get()
         apiVersion = libs.versions.kotlinLanguage.get()
+        freeCompilerArgs += "-Xjvm-default=all"
     }
 }
 
@@ -51,4 +52,5 @@ dependencies {
     api(libs.purchases.ui)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
 }

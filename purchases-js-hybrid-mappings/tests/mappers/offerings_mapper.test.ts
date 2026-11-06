@@ -222,6 +222,7 @@ describe('mapOfferings', () => {
       productCategory: 'SUBSCRIPTION',
       productType: 'AUTO_RENEWABLE_SUBSCRIPTION',
       subscriptionPeriod: 'P1Y',
+      installmentsInfo: null,
       title: '$rc_annual Product'
     };
 
@@ -325,6 +326,7 @@ describe('mapOfferings', () => {
       pricePerYear: 59880000,
       pricePerYearString: '$59.88',
       subscriptionPeriod: 'P1M',
+      installmentsInfo: null,
       title: '$rc_monthly Product'
     };
 
@@ -428,6 +430,7 @@ describe('mapOfferings', () => {
       pricePerYear: 59880000,
       pricePerYearString: '$59.88',
       subscriptionPeriod: 'P1W',
+      installmentsInfo: null,
       title: '$rc_weekly Product'
     };
 
@@ -459,6 +462,7 @@ describe('mapOfferings', () => {
       productType: 'NON_CONSUMABLE',
       subscriptionOptions: null,
       subscriptionPeriod: null,
+      installmentsInfo: null,
       title: '$rc_lifetime Product'
     };
 

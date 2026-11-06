@@ -76,6 +76,10 @@ import Foundation
             configurationBuilder = configurationBuilder.with(diagnosticsEnabled: diagnosticsEnabled)
         }
 
+        configurationBuilder = configurationBuilder.with(
+            automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled
+        )
+
         if let verificationMode {
             if let mode = Configuration.EntitlementVerificationMode(name: verificationMode) {
                 if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.2, *) {

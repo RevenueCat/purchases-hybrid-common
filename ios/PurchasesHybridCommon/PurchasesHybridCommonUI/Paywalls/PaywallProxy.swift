@@ -231,6 +231,7 @@ import UIKit
                                        paywallResultHandler: @escaping (String) -> Void) {
         guard let requiredEntitlementIdentifier = options[PaywallOptionsKeys.requiredEntitlementIdentifier] as? String else {
             print("Error: missing required entitlement identifier.")
+            paywallResultHandler(PaywallResult.error.name)
             return
         }
 
@@ -251,6 +252,7 @@ import UIKit
                 }
             } catch {
                 NSLog("Failed presenting paywall: \(error)")
+                paywallResultHandler(PaywallResult.notPresented.name)
             }
         }
     }
@@ -259,9 +261,10 @@ import UIKit
                                        purchaseLogicBridge: HybridPurchaseLogicBridge? = nil,
                                        delegate: PaywallViewControllerDelegateWrapper? = nil,
                                        requiredEntitlementIdentifier: String? = nil,
-                                       paywallResultHandler: ((String) -> Void)? = nil) {
+                                       paywallResultHandler: @escaping (String) -> Void) {
         guard var rootController = Self.rootViewController else {
             NSLog("Unable to find root UIViewController")
+            paywallResultHandler(PaywallResult.error.name)
             return
         }
 
@@ -276,13 +279,6 @@ import UIKit
 
         let controller: PaywallViewController
         switch params.content {
-        case let .offering(offering):
-            controller = PaywallViewController(offering: offering,
-                                               fonts: params.fontProvider,
-                                               displayCloseButton: params.displayCloseButton,
-                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
-                                               performRestore: performRestore)
         case let .offeringIdentifier(identifier):
             controller = PaywallViewController(offeringIdentifier: identifier,
                                                presentedOfferingContext: .init(offeringIdentifier: identifier),
@@ -325,9 +321,7 @@ import UIKit
             self.requiredEntitlementIdentifierByVC[controller] = requiredEntitlementIdentifier
         }
 
-        if let paywallResultHandler {
-            self.resultByVC[controller] = (paywallResultHandler, .cancelled)
-        }
+        self.resultByVC[controller] = (paywallResultHandler, .cancelled)
 
         rootController.present(controller, animated: true)
     }
@@ -345,7 +339,6 @@ import UIKit
     // `internal` (rather than `private`) because it is referenced by the now-`internal` `PaywallPresentationParams`.
     enum Content {
 
-        case offering(Offering)
         case offeringIdentifierWithPresentedOfferingContext(String, presentedOfferingContext: PresentedOfferingContext)
         // `offeringIdentifierWithPresentedOfferingContext` is preferred, but this case is necessary for backwards compatibility
         case offeringIdentifier(String)
@@ -483,10 +476,14 @@ extension PaywallProxy: PaywallViewControllerDelegate {
     public func paywallViewController(_ controller: PaywallViewController,
                                       didFinishPurchasingWith customerInfo: CustomerInfo,
                                       transaction: StoreTransaction?) {
+        guard let transaction else {
+            NSLog("Not reporting purchase completed: the purchase has no transaction.")
+            return
+        }
         self.resolvedDelegate(for: controller)?
             .paywallViewController?(controller,
                                     didFinishPurchasingWith: customerInfo.dictionary,
-                                    transaction: transaction?.dictionary)
+                                    transaction: transaction.dictionary)
     }
 
     public func paywallViewControllerDidCancelPurchase(_ controller: PaywallViewController) {
@@ -645,20 +642,6 @@ extension PaywallProxy {
                             paywallResultHandler: { _ in })
     }
 
-    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
-    @objc
-    public func presentPaywall(offering: Offering) {
-        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: { _ in })
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with paywallResultHandler instead")
-    @objc
-    public func presentPaywall(offering: Offering, displayCloseButton: Bool) {
-        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
-                            purchaseLogicBridge: nil,
-                            paywallResultHandler: { _ in })
-    }
-
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(paywallResultHandler: @escaping (String) -> Void) {
@@ -668,22 +651,6 @@ extension PaywallProxy {
     @available(*, deprecated, message: "Use presentPaywall with options instead")
     @objc
     public func presentPaywall(displayCloseButton: Bool, paywallResultHandler: @escaping (String) -> Void) {
-        self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
-                            purchaseLogicBridge: nil,
-                            paywallResultHandler: paywallResultHandler)
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with options instead")
-    @objc
-    public func presentPaywall(offering: Offering, paywallResultHandler: @escaping (String) -> Void) {
-        self.presentPaywall(options: [:], purchaseLogicBridge: nil, paywallResultHandler: paywallResultHandler)
-    }
-
-    @available(*, deprecated, message: "Use presentPaywall with options instead")
-    @objc
-    public func presentPaywall(offering: Offering,
-                               displayCloseButton: Bool,
-                               paywallResultHandler: @escaping (String) -> Void) {
         self.presentPaywall(options: [PaywallOptionsKeys.displayCloseButton: displayCloseButton],
                             purchaseLogicBridge: nil,
                             paywallResultHandler: paywallResultHandler)

@@ -11,7 +11,7 @@ export type Store = "PLAY_STORE" | "APP_STORE" | "STRIPE" | "MAC_APP_STORE" | "P
  * The supported ownership types for an entitlement.
  * @public
  */
-export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "UNKNOWN";
+export type OwnershipType = "PURCHASED" | "FAMILY_SHARED" | "ASSIGNED" | "UNKNOWN";
 
 /**
  * The supported period types for an entitlement.
@@ -39,7 +39,7 @@ export interface PurchasesEntitlementInfo {
     /**
      * The last period type this entitlement was in. Either: NORMAL, INTRO, TRIAL, PREPAID.
      */
-    readonly periodType: string;
+    readonly periodType: PeriodType;
     /**
      * The latest purchase or renewal date for the entitlement in ISO8601 format.
      */
@@ -58,12 +58,12 @@ export interface PurchasesEntitlementInfo {
     readonly originalPurchaseDateMillis: number;
     /**
      * The expiration date for the entitlement in ISO8601, can be `null` for lifetime access.
-     * If the `periodType` is `trial`, this is the trial expiration date.
+     * If the `periodType` is `TRIAL`, this is the trial expiration date.
      */
     readonly expirationDate: string | null;
     /**
      * The expiration date for the entitlement in milliseconds, can be `null` for lifetime access.
-     * If the `periodType` is `trial`, this is the trial expiration date.
+     * If the `periodType` is `TRIAL`, this is the trial expiration date.
      */
     readonly expirationDateMillis: number | null;
     /**
@@ -112,6 +112,7 @@ export interface PurchasesEntitlementInfo {
      * Supported ownership types for an entitlement.
      * PURCHASED if the purchase was made directly by this user.
      * FAMILY_SHARED if the purchase has been shared to this user by a family member.
+     * ASSIGNED if the purchase has been assigned to this user through an organization.
      * UNKNOWN if the purchase has no or an unknown ownership type.
      */
     readonly ownershipType: OwnershipType;
@@ -296,6 +297,7 @@ export interface PurchasesSubscriptionInfo {
      * How the Customer received access to this subscription:
      * - [OwnershipType.PURCHASED]: The customer bought the subscription.
      * - [OwnershipType.FAMILY_SHARED]: The Customer has access to the product via their family.
+     * - [OwnershipType.ASSIGNED]: The Customer has been assigned access to the product through an organization.
      */
     readonly ownershipType: OwnershipType;
     /**

@@ -370,11 +370,18 @@ import StoreKit
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package in
-            guard let package = package else {
+        ) { result in
+            let package: Package
+            switch result {
+            case let .failure(error):
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                return
+            case .success(nil):
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
                 return
+            case let .success(foundPackage?):
+                package = foundPackage
             }
 
             if let signedDiscountTimestamp = signedDiscountTimestamp {
@@ -748,6 +755,21 @@ import StoreKit
 }
 
 // MARK: - Ad Tracking
+private extension CommonFunctionality {
+
+    /// Resolves the optional `captureMethod` key that the official RevenueCat hybrid AdMob adapters put
+    /// in the ad data they bridge. Missing or unrecognized values fall back to `.manual`.
+    static func adCaptureMethod(from data: [String: Any]?) -> AdEventCaptureMethod {
+        guard let rawValue = data?["captureMethod"] as? String else { return .manual }
+        guard let captureMethod = AdEventCaptureMethod(rawValue: rawValue) else {
+            NSLog("[PurchasesHybridCommon] Unrecognized captureMethod '\(rawValue)', falling back to manual")
+            return .manual
+        }
+        return captureMethod
+    }
+
+}
+
 @objc public extension CommonFunctionality {
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -773,7 +795,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed)
+        Purchases.shared.adTracker.trackAdDisplayed(adDisplayed, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -799,7 +821,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdOpened(adOpened)
+        Purchases.shared.adTracker.trackAdOpened(adOpened, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -832,7 +854,7 @@ import StoreKit
             precision: precision
         )
 
-        Purchases.shared.adTracker.trackAdRevenue(adRevenue)
+        Purchases.shared.adTracker.trackAdRevenue(adRevenue, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -858,7 +880,7 @@ import StoreKit
             impressionId: impressionId
         )
 
-        Purchases.shared.adTracker.trackAdLoaded(adLoaded)
+        Purchases.shared.adTracker.trackAdLoaded(adLoaded, captureMethod: Self.adCaptureMethod(from: adData))
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -882,7 +904,46 @@ import StoreKit
             mediatorErrorCode: mediatorErrorCode
         )
 
-        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad)
+        Purchases.shared.adTracker.trackAdFailedToLoad(adFailedToLoad, captureMethod: Self.adCaptureMethod(from: adData))
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @objc static func trackAdRewardEarnedUnverified(_ adData: [String: Any]) {
+        guard let rewardEarned = Self.adRewardEarnedUnverified(from: adData) else {
+            NSLog("[PurchasesHybridCommon] trackAdRewardEarnedUnverified: Missing required parameters - mediatorName, adFormat, adUnitId, or impressionId")
+            return
+        }
+
+        Purchases.shared.adTracker.trackAdRewardEarnedUnverified(rewardEarned, captureMethod: Self.adCaptureMethod(from: adData))
+    }
+
+    @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
+    @nonobjc internal static func adRewardEarnedUnverified(
+        from adData: [String: Any]
+    ) -> AdRewardEarnedUnverified? {
+        guard let mediatorNameString = adData["mediatorName"] as? String,
+              let adFormatString = adData["adFormat"] as? String,
+              let adUnitId = adData["adUnitId"] as? String,
+              let impressionId = adData["impressionId"] as? String else {
+            return nil
+        }
+        let rewardVerificationEnabled: Bool
+        if let number = adData["rewardVerificationEnabled"] as? NSNumber,
+           CFGetTypeID(number) == CFBooleanGetTypeID() {
+            rewardVerificationEnabled = number.boolValue
+        } else {
+            rewardVerificationEnabled = false
+        }
+
+        return AdRewardEarnedUnverified(
+            networkName: adData["networkName"] as? String,
+            mediatorName: MediatorName(rawValue: mediatorNameString),
+            adFormat: AdFormat(rawValue: adFormatString),
+            placement: adData["placement"] as? String,
+            adUnitId: adUnitId,
+            impressionId: impressionId,
+            rewardVerificationEnabled: rewardVerificationEnabled
+        )
     }
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
@@ -1047,11 +1108,18 @@ import StoreKit
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
-        ) { package in
-            guard let package = package else {
+        ) { result in
+            let package: Package
+            switch result {
+            case let .failure(error):
+                completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                return
+            case .success(nil):
                 let error = productNotFoundError(description: "Couldn't find package", userCancelled: false)
                 completion(nil, error)
                 return
+            case let .success(foundPackage?):
+                package = foundPackage
             }
 
             if #available(iOS 18.0, macOS 15.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *) {
@@ -1185,7 +1253,7 @@ private extension CommonFunctionality {
 
     static func product(with identifier: String, completion: @escaping (StoreProduct?) -> Void) {
         Self.sharedInstance.getProducts([identifier]) { products in
-            completion(products.first { $0.productIdentifier == identifier })
+            completion(products.first { $0.id == identifier })
         }
     }
 
@@ -1229,12 +1297,16 @@ private extension CommonFunctionality {
 
     static func package(withIdentifier packageIdentifier: String,
                         presentedOfferingContext: PresentedOfferingContext?,
-                        completion: @escaping(Package?) -> Void) {
+                        completion: @escaping(Result<Package?, PublicError>) -> Void) {
         guard let presentedOfferingContext else {
-            return completion(nil)
+            return completion(.success(nil))
         }
 
         Self.sharedInstance.getOfferings { offerings, error in
+            if let error {
+                return completion(.failure(error))
+            }
+
             let offering = offerings?.offering(identifier: presentedOfferingContext.offeringIdentifier)
             let foundPackage = offering?.package(identifier: packageIdentifier)
 
@@ -1248,7 +1320,7 @@ private extension CommonFunctionality {
                 )
             }
 
-            completion(package)
+            completion(.success(package))
         }
     }
 
@@ -1373,7 +1445,8 @@ private extension CommonFunctionality {
         _ = Task<Void, Never> {
             let result = await Purchases.shared.pollRewardVerification(
                 clientTransactionID: clientTransactionId,
-                trackingMetadata: metadata
+                trackingMetadata: metadata,
+                captureMethod: Self.adCaptureMethod(from: trackingMetadata)
             )
             completion(result.rc_dictionary, nil)
         }

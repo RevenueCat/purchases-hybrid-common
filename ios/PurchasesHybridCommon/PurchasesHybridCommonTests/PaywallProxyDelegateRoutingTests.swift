@@ -12,14 +12,22 @@ import Nimble
 import RevenueCatUI
 import UIKit
 @testable import PurchasesHybridCommonUI
+@testable import RevenueCat
 
 @available(iOS 15.0, *)
 private final class PaywallDelegateSpy: NSObject, PaywallViewControllerDelegateWrapper {
 
     var startedPurchases: [PaywallViewController] = []
+    var completedTransactions: [[String: Any]] = []
 
     func paywallViewControllerDidStartPurchase(_ controller: PaywallViewController) {
         self.startedPurchases.append(controller)
+    }
+
+    func paywallViewController(_ controller: PaywallViewController,
+                               didFinishPurchasingWith customerInfoDictionary: [String: Any],
+                               transaction transactionDictionary: [String: Any]) {
+        self.completedTransactions.append(transactionDictionary)
     }
 
 }
@@ -97,6 +105,47 @@ class PaywallProxyDelegateRoutingTests: QuickSpec {
 
                 expect(firstDelegate.startedPurchases) == [secondController]
                 expect(proxyWideDelegate.startedPurchases).to(beEmpty())
+            }
+
+        }
+
+        describe("purchase completed") {
+
+            let customerInfo = try! CustomerInfo.fromJSON(
+                """
+                {
+                    "request_date": "2019-08-16T10:30:42Z",
+                    "subscriber": {
+                        "first_seen": "2019-07-17T00:05:54Z",
+                        "original_app_user_id": "",
+                        "subscriptions": {},
+                        "other_purchases": {}
+                    }
+                }
+                """
+            )
+
+            it("forwards a purchase with a transaction") {
+                let transaction = StoreTransaction(
+                    MockStoreTransaction(productIdentifier: "product",
+                                         purchaseDate: Date(timeIntervalSince1970: 1000),
+                                         transactionIdentifier: "transaction")
+                )
+
+                proxy.paywallViewController(firstController,
+                                            didFinishPurchasingWith: customerInfo,
+                                            transaction: transaction)
+
+                expect(proxyWideDelegate.completedTransactions.map { $0["transactionIdentifier"] as? String })
+                    == ["transaction"]
+            }
+
+            it("does not forward a purchase without a transaction") {
+                proxy.paywallViewController(firstController,
+                                            didFinishPurchasingWith: customerInfo,
+                                            transaction: nil)
+
+                expect(proxyWideDelegate.completedTransactions).to(beEmpty())
             }
 
         }
