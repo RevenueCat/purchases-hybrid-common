@@ -1,3 +1,8 @@
+## 20.7.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(ios): Add custom checkpoint paywall presenters (#2076) via Cesar de la Vega (@vegaro)
+
 ## 20.6.1
 ## RevenueCat SDK
 ### 🐞 Bugfixes
