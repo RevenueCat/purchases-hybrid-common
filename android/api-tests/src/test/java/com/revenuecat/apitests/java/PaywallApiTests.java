@@ -8,6 +8,7 @@ import com.revenuecat.purchases.PresentedOfferingContext;
 import com.revenuecat.purchases.hybridcommon.ui.CheckpointErrorCode;
 import com.revenuecat.purchases.hybridcommon.ui.CheckpointHelpersKt;
 import com.revenuecat.purchases.hybridcommon.ui.CheckpointListener;
+import androidx.annotation.Nullable;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallHelpersKt;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallResultListener;
 import com.revenuecat.purchases.hybridcommon.ui.PaywallSource;
@@ -29,10 +30,50 @@ class PaywallApiTests {
             @Override
             public void onCheckpointError(@NonNull String code, @NonNull String message) {
             }
+
+            @Override
+            public void onPaywallPresentationRequested(@NonNull String requestId, @NonNull Map<String, ?> params) {
+                Object offering = params.get("offering");
+                Object identifier = params.get("checkpointIdentifier");
+                Object variables = params.get("customVariables");
+                Object mode = params.get("presentationMode");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "CONTINUED");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "CLOSED");
+                CheckpointHelpersKt.completePaywallPresentation(requestId, "NAVIGATED_BACK");
+            }
+
+            @Override
+            public void onErrorDialogRequested(@NonNull String requestId, @NonNull Map<String, ?> error) {
+                @Nullable Object kind = error.get("kind");
+                @Nullable Object errorCode = error.get("code");
+                @Nullable Object errorMessage = error.get("message");
+                Map<String, Object> dialog = new HashMap<>();
+                dialog.put("message", "err");
+                dialog.put("buttonTitle", "OK");
+                Map<String, Object> outcome = new HashMap<>();
+                outcome.put("type", "show");
+                outcome.put("dialog", dialog);
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
+                outcome = new HashMap<>();
+                outcome.put("type", "useDefault");
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
+                outcome.put("type", "suppress");
+                CheckpointHelpersKt.resolveErrorDialog(requestId, outcome);
+                CheckpointHelpersKt.resolveErrorDialog(requestId, null);
+            }
         };
         Map<String, Object> customVariables = new HashMap<>();
-        CheckpointHelpersKt.presentCheckpoint("identifier", customVariables, "MODAL_SHEET", listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "error-call", customVariables, "MODAL_SHEET",
+                false, true, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "paywall-call", null, null, true, false, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "custom-call", null, null, true, true, listener);
+        CheckpointHelpersKt.presentCheckpoint("identifier", "native-call", null, null, false, false, listener);
+        CheckpointHelpersKt.detachCheckpoint("custom-call", "active-request");
+        CheckpointHelpersKt.detachCheckpoint("native-call", null);
+        CheckpointHelpersKt.invalidateCheckpointPresentations();
         String notConfigured = CheckpointErrorCode.NOT_CONFIGURED;
+        CheckpointHelpersKt.cancelErrorDialogs("c1");
+        CheckpointHelpersKt.cancelErrorDialogs(null);
     }
 
     private void checkPaywallResultListener() {

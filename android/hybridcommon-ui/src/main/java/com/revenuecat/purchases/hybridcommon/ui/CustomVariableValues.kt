@@ -27,3 +27,13 @@ internal fun Map<String, Any?>?.toCustomVariableValues(): Map<String, CustomVari
         ?.toMap()
         ?.takeIf { it.isNotEmpty() }
 }
+
+/** Maps native custom variables to values that hybrid SDKs can serialize. */
+internal fun Map<String, CustomVariableValue>.toHybridMap(): Map<String, Any?> = mapValues { (_, value) ->
+    when (value) {
+        is CustomVariableValue.String -> value.value
+        is CustomVariableValue.Number -> value.value
+        is CustomVariableValue.Boolean -> value.value
+        else -> null
+    }
+}

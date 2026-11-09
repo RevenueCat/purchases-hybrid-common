@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@4.7.1
+  revenuecat: revenuecat/sdks-common-config@4.8.0
   macos: circleci/macos@2.0.1
 
 version: 2.1
@@ -47,17 +47,6 @@ parameters:
     default: build
 
 commands:
-  # TODO: remove after Nov 7, 2026, once CocoaPods trunk is writable again.
-  fail-if-cocoapods-publish-disabled:
-    steps:
-      - run:
-          name: Fail if CocoaPods publishing is disabled
-          command: |
-            if [ "${COCOAPODS_PUBLISH_DISABLED:-}" = "true" ]; then
-              echo "COCOAPODS_PUBLISH_DISABLED is true in the CircleCI project settings. Remove after Nov 7, 2026, once CocoaPods trunk is writable again."
-              exit 1
-            fi
-
   setup-git-credentials:
      steps:
        - run:
@@ -65,15 +54,6 @@ commands:
            command: |
              git config user.email $GIT_EMAIL
              git config user.name $GIT_USERNAME
-
-  copy-npm-rc:
-    steps:
-      - run:
-          name: Copy npmrc sample file to final location
-          command: cp typescript/.npmrc.SAMPLE typescript/.npmrc
-      - run:
-          name: Copy purchases-js-hybrid-mappings/.npmrc sample file to final location
-          command: cp purchases-js-hybrid-mappings/.npmrc.SAMPLE purchases-js-hybrid-mappings/.npmrc
 
   # `pod lib lint` builds a project it generates from the podspec, so the deployment
   # targets it uses can only be raised through a global xcconfig. Only needed on jobs
@@ -242,7 +222,6 @@ jobs:
   deploy-ios-phc:
     <<: *base-ios-job
     steps:
-      - fail-if-cocoapods-publish-disabled
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
@@ -255,7 +234,6 @@ jobs:
   deploy-ios-phcui:
     <<: *base-ios-job
     steps:
-      - fail-if-cocoapods-publish-disabled
       - checkout
       - revenuecat/install-gem-mac-dependencies:
           cache-version: v1
@@ -356,13 +334,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces NPM package
-          command: bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane typescript deploy dry_run:<< parameters.dry_run >>
 
   deploy-typescript-esm:
     docker:
@@ -377,13 +355,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy typescript interfaces ESNext NPM package
-          command: bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane typescript deploy_esm dry_run:<< parameters.dry_run >>
 
   deploy-js-mappings:
     docker:
@@ -398,13 +376,13 @@ jobs:
           tools: node,yarn
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      - unless:
-          condition: << parameters.dry_run >>
-          steps:
-            - copy-npm-rc
       - run:
           name: Deploy js-mappings NPM package
-          command: bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
+          command: |
+            if [ "<< parameters.dry_run >>" != "true" ]; then
+              export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            fi
+            bundle exec fastlane web deploy_js_mappings dry_run:<< parameters.dry_run >>
       - run:
           name: Compute js-mappings bundle sha256
           command: |
@@ -455,17 +433,19 @@ jobs:
       - revenuecat/trust-github-key
       - revenuecat/install-gem-unix-dependencies:
           cache-version: v1
-      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
+      - run:
+          name: Wait for the Android artifacts to reach Maven Central
+          command: bundle exec fastlane wait_for_android_artifacts_on_maven_central
       # Blocks the bumps rather than each hybrid waiting on its own mac executors.
       # The lane logs on every poll, so the default 10 minute no-output timeout
       # wouldn't fire, but set it explicitly to sit just above the lane's own 3
       # hour cap, otherwise a stalled CDN request kills the step at 10 minutes.
       # If the step does fail, the bump steps below still run: they are all
       # `when: always`.
-      # - run:
-      #     name: Wait for the new pods to reach the CocoaPods CDN
-      #     command: bundle exec fastlane wait_for_pods_on_cdn
-      #     no_output_timeout: 190m
+      - run:
+          name: Wait for the new pods to reach the CocoaPods CDN
+          command: bundle exec fastlane wait_for_pods_on_cdn
+          no_output_timeout: 190m
       - run:
           name: Kick off Flutter automatic dependency update
           command: |
@@ -608,8 +588,7 @@ workflows:
       - test-ios-18
       - test-ios-26
       - test-ios-27
-      # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
-      # - check-pods
+      - check-pods
       - integration-test-ios
       - test-android
       - deploy-android:
@@ -636,6 +615,7 @@ workflows:
           type: approval
           <<: *release-branches
       - revenuecat/tag-current-branch:
+          context: github-bot-public
           ruby_version: "3.3.0"
           requires:
             - wait-for-pr-approval
@@ -644,8 +624,7 @@ workflows:
             - test-ios-18
             - test-ios-26
             - test-ios-27
-            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
-            # - check-pods
+            - check-pods
             - integration-test-ios
             - test-android
             - android-deploy-dry-run
@@ -683,20 +662,21 @@ workflows:
           context: npm-publishing
           <<: *release-tags
       - make-github-release:
+          context: github-bot-public
           <<: *release-tags
           requires:
             - deploy-android
             - deploy-typescript
             - deploy-typescript-esm
             - deploy-js-mappings
-            # TODO: restore after Nov 7, 2026, once CocoaPods trunk is writable again.
-            # - deploy-ios-phc
-            # - deploy-ios-phcui
+            - deploy-ios-phc
+            - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:
             - make-github-release
       - revenuecat/merge-release-pr:
+          context: github-bot-public
           repo_name: purchases-hybrid-common
           requires:
             - trigger-dependent-updates
@@ -710,7 +690,8 @@ workflows:
             - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
         - equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - dependency-update
+      - dependency-update:
+          context: github-bot-public
 
   danger:
     when:
@@ -721,6 +702,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/danger:
+          context: danger-bot
           filters:
             branches:
               ignore: main
@@ -730,6 +712,7 @@ workflows:
       equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/update-error-codes:
+          context: github-bot-public
           platform: hybridCommon
           outputs: "error-codes.ts:typescript/src/generated/error-codes.ts"
           commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
@@ -759,6 +742,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
+          context: github-bot-public
           ruby_version: "3.3.0"
           filters:
             tags:
@@ -771,4 +755,5 @@ workflows:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
+          context: github-bot-public
           ruby_version: "3.3.0"

@@ -1,7 +1,9 @@
 package com.revenuecat.purchases.hybridcommon.ui
 
 import com.revenuecat.purchases.ui.revenuecatui.activity.PaywallResult
+import kotlin.jvm.JvmDefaultWithCompatibility
 
+@JvmDefaultWithCompatibility
 interface PaywallResultListener {
     // Keeping for now to avoid a breaking change but will be unused.
     @Deprecated(

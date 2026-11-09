@@ -1,6 +1,6 @@
 ## RevenueCat SDK
+### ✨ New Features
+* feat(android): Add custom checkpoint paywall presenters (#2072) via Cesar de la Vega (@vegaro)
+* feat(ios): Add custom checkpoint paywall presenters (#2076) via Cesar de la Vega (@vegaro)
 ### 📦 Dependency Updates
-* [AUTOMATIC] iOS 5.100.0 => 5.101.0 (#2055) via RevenueCat Git Bot (@RCGitBot)
-
-### 🔄 Other Changes
-* chore(deps): update to node 26 lts/lithium (#2047) via Nihal Gonsalves (@nihalgonsalves)
+* [AUTOMATIC] iOS 5.102.0 => 5.102.2 (#2078) via RevenueCat Git Bot (@RCGitBot)
