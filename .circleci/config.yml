@@ -624,6 +624,7 @@ workflows:
           type: approval
           <<: *release-branches
       - revenuecat/tag-current-branch:
+          context: github-bot-public
           ruby_version: "3.3.0"
           requires:
             - wait-for-pr-approval
@@ -670,6 +671,7 @@ workflows:
           context: npm-publishing
           <<: *release-tags
       - make-github-release:
+          context: github-bot-public
           <<: *release-tags
           requires:
             - deploy-android
@@ -683,6 +685,7 @@ workflows:
           requires:
             - make-github-release
       - revenuecat/merge-release-pr:
+          context: github-bot-public
           repo_name: purchases-hybrid-common
           requires:
             - trigger-dependent-updates
@@ -696,7 +699,8 @@ workflows:
             - equal: [ "update-native-dependencies", << pipeline.schedule.name >> ]
         - equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
-      - dependency-update
+      - dependency-update:
+          context: github-bot-public
 
   danger:
     when:
@@ -707,6 +711,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/danger:
+          context: danger-bot
           filters:
             branches:
               ignore: main
@@ -716,6 +721,7 @@ workflows:
       equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/update-error-codes:
+          context: github-bot-public
           platform: hybridCommon
           outputs: "error-codes.ts:typescript/src/generated/error-codes.ts"
           commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
@@ -745,6 +751,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
+          context: github-bot-public
           ruby_version: "3.3.0"
           filters:
             tags:
@@ -757,4 +764,5 @@ workflows:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
+          context: github-bot-public
           ruby_version: "3.3.0"
