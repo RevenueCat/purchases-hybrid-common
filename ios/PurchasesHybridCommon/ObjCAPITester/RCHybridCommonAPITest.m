@@ -166,6 +166,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                              RCErrorContainer * _Nullable errorContainer) {}];
 
     NSDictionary<NSString *, NSObject *> __unused  * _Nullable vcDictionary = [RCCommonFunctionality getCachedVirtualCurrencies];
+    [RCCommonFunctionality spendVirtualCurrenciesWithAmounts:@{@"GLD": @5}
+                                                   reference:nil
+                                                  completion:^(NSDictionary * _Nullable virtualCurrencies,
+                                                               RCErrorContainer * _Nullable error) {
+    }];
 
     [RCCommonFunctionality invalidateVirtualCurrenciesCache];
 
