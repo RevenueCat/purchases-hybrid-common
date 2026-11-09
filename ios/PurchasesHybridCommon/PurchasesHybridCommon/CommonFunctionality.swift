@@ -632,6 +632,17 @@ import StoreKit
         Self.sharedInstance.attribution.setAttributes(attributes.mapValues { $0 as? String ?? "" })
     }
 
+    /// Experimental. The current user's subscriber attributes, sorted by key, each a dictionary of `key`,
+    /// `value` and `lastUpdatedDate` (ISO 8601). Deleted attributes aren't included.
+    ///
+    /// Usually only attributes set on this device. For a user logged in through IAM, all readable attributes on
+    /// their customer profile.
+    @objc static func getAttributesForCurrentUser() -> [[String: Any]] {
+        return Self.sharedInstance.attribution.attributesForCurrentUser
+            .sorted { $0.key < $1.key }
+            .map(\.rc_dictionary)
+    }
+
     @objc static func setEmail(_ email: String?) {
         Self.sharedInstance.attribution.setEmail(email)
     }

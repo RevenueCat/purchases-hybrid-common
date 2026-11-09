@@ -27,6 +27,13 @@ export enum BILLING_PLAN_TYPE {
 }
 
 // @public
+export interface CustomerAttribute {
+    readonly key: string;
+    readonly lastUpdatedDate: string;
+    readonly value: string;
+}
+
+// @public
 export interface CustomerInfo {
     readonly activeSubscriptions: string[];
     readonly allExpirationDates: {
