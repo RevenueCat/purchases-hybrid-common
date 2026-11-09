@@ -719,6 +719,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/danger:
+          context: danger-bot
           filters:
             branches:
               ignore: main
