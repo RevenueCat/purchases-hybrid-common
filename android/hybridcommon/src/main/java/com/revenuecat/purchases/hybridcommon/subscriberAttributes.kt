@@ -125,8 +125,8 @@ fun setPushToken(fcmToken: String?) {
 }
 
 /**
- * Experimental. The current user's subscriber attributes, sorted by key, each a map of `key`, `value`,
- * `lastUpdatedDate` (ISO 8601) and `lastUpdatedDateMillis`. Deleted attributes aren't included.
+ * Experimental. The current user's subscriber attributes, sorted by key, each a map of `key`, `value`
+ * and `lastUpdatedDate` (ISO 8601). Deleted attributes aren't included.
  *
  * Usually only attributes set on this device. For a user logged in through IAM, all readable attributes on
  * their customer profile, as of the last CustomerInfo fetch.

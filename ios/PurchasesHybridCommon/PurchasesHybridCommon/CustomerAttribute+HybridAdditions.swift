@@ -14,8 +14,7 @@ internal extension CustomerInfo.Attribute {
         return [
             "key": self.key,
             "value": self.value,
-            "lastUpdatedDate": self.lastUpdatedDate.rc_formattedAsISO8601(),
-            "lastUpdatedDateMillis": self.lastUpdatedDate.rc_millisecondsSince1970AsDouble()
+            "lastUpdatedDate": self.lastUpdatedDate.rc_formattedAsISO8601()
         ]
     }
 

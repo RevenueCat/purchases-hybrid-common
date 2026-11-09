@@ -9,5 +9,4 @@ internal fun CustomerAttribute.map(): Map<String, Any> = mapOf(
     "key" to key,
     "value" to value,
     "lastUpdatedDate" to lastUpdatedDate.toIso8601(),
-    "lastUpdatedDateMillis" to lastUpdatedDate.toMillis(),
 )

@@ -30,7 +30,6 @@ export enum BILLING_PLAN_TYPE {
 export interface CustomerAttribute {
     readonly key: string;
     readonly lastUpdatedDate: string;
-    readonly lastUpdatedDateMillis: number;
     readonly value: string;
 }
 

@@ -633,7 +633,7 @@ import StoreKit
     }
 
     /// Experimental. The current user's subscriber attributes, sorted by key, each a dictionary of `key`,
-    /// `value`, `lastUpdatedDate` (ISO 8601) and `lastUpdatedDateMillis`. Deleted attributes aren't included.
+    /// `value` and `lastUpdatedDate` (ISO 8601). Deleted attributes aren't included.
     ///
     /// Usually only attributes set on this device. For a user logged in through IAM, all readable attributes on
     /// their customer profile.

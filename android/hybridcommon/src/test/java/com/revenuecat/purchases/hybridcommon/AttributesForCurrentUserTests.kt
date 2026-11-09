@@ -36,7 +36,6 @@ internal class AttributesForCurrentUserTests {
                 "key" to "\$email",
                 "value" to "a@b.com",
                 "lastUpdatedDate" to date.toIso8601(),
-                "lastUpdatedDateMillis" to 1_700_000_000_123,
             ),
         )
     }

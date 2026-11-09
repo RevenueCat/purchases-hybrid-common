@@ -19,9 +19,4 @@ export interface CustomerAttribute {
    * When the value was last modified, as an ISO 8601 date string.
    */
   readonly lastUpdatedDate: string;
-
-  /**
-   * When the value was last modified, in milliseconds since the Unix epoch.
-   */
-  readonly lastUpdatedDateMillis: number;
 }
