@@ -57,7 +57,6 @@ import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
-import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.InAppMessageType
@@ -832,10 +831,10 @@ fun logIn(
     )
 }
 
+// Goes through Authentication so an IAM logout doesn't also report its error to the authentication listener.
+@OptIn(InternalRevenueCatAPI::class)
 fun logOut(onResult: OnResult) {
-    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
-        customerInfo.mapAsync { map -> onResult.onReceived(map) }
-    }
+    Purchases.sharedInstance.authentication.logOut(customerInfoCallback(onResult))
 }
 
 @Deprecated(message = "Use setLogLevel instead")
@@ -986,7 +985,10 @@ fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InApp
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+/**
+ * @param iamEnabled Experimental. Prefer token-based (IAM) user sessions. Disabled by default.
+ */
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class, InternalRevenueCatAPI::class)
 @Suppress("LongParameterList")
 @JvmOverloads
 fun configure(
@@ -1004,6 +1006,7 @@ fun configure(
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
     preferredLocale: String? = null,
     galaxyBillingMode: String? = null,
+    iamEnabled: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -1026,6 +1029,7 @@ fun configure(
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
             configureGalaxyBillingModeIfNeeded(store, galaxyBillingMode)
+            iamEnabled?.let { iamEnabled(it) }
         }.also { Purchases.configure(it.build()) }
 }
 

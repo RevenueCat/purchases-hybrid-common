@@ -5,6 +5,12 @@
 ```ts
 
 // @public
+export type AccessTokenUpdatedListener = (accessToken: string | null) => void;
+
+// @public
+export type AuthenticationErrorListener = (error: PurchasesError) => void;
+
+// @public
 export enum BILLING_FEATURE {
     IN_APP_ITEMS_ON_VR = 2,
     PRICE_CHANGE_CONFIRMATION = 4,
@@ -63,6 +69,22 @@ export interface ErrorInfo {
 export interface GoogleProductChangeInfo {
     readonly oldProductIdentifier: string;
     readonly prorationMode?: PRORATION_MODE;
+}
+
+// @public
+export enum IDENTITY_SOURCE {
+    FACEBOOK = "facebook",
+    FIREBASE = "firebase",
+    GOOGLE = "google",
+    OIDC = "oidc",
+    SIGN_IN_WITH_APPLE = "apple"
+}
+
+// @public
+export interface IdentityCredential {
+    email?: string;
+    source: IDENTITY_SOURCE;
+    token: string;
 }
 
 // @public
@@ -447,6 +469,8 @@ export interface PurchasesConfiguration {
     diagnosticsEnabled?: boolean;
     enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+    iamEnabled?: boolean;
+    keychainAccessGroup?: string;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     preferredUILocaleOverride?: string;
     purchasesAreCompletedBy?: PurchasesAreCompletedBy;

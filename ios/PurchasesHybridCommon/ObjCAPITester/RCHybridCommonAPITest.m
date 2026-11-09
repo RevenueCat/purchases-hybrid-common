@@ -45,6 +45,16 @@ NS_ASSUME_NONNULL_BEGIN
                                                        RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality logInWithIdentity:@{@"source": @"google", @"token": @"token"}
+                             completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                               RCErrorContainer * _Nullable error) {
+    }];
+    NSString * _Nullable accessToken __unused = RCCommonFunctionality.currentAccessToken;
+    [RCCommonFunctionality setAuthenticationListenerWithOnError:^(RCErrorContainer * _Nonnull error) {
+    } onAccessTokenUpdated:^(NSString * _Nullable newAccessToken) {
+    }];
+    [RCCommonFunctionality removeAuthenticationListener];
+
     [RCCommonFunctionality setDebugLogsEnabled:NO];
     [RCCommonFunctionality setLogLevel:@"WARN"];
     [RCCommonFunctionality setLogHanderOnLogReceived:^(NSDictionary<NSString *,NSString *> * _Nonnull logDetails) {

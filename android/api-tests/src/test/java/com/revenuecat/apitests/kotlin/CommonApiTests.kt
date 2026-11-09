@@ -487,6 +487,16 @@ private class CommonApiTests {
         )
     }
 
+    fun checkConfigureWithIamEnabled(
+        context: Context,
+        apiKey: String,
+        appUserID: String?,
+        platformInfo: PlatformInfo,
+        iamEnabled: Boolean?,
+    ) {
+        configure(context, apiKey, appUserID, platformInfo = platformInfo, iamEnabled = iamEnabled)
+    }
+
     fun checkGetPromotionalOffer() {
         val errorContainer: ErrorContainer = getPromotionalOffer()
     }
