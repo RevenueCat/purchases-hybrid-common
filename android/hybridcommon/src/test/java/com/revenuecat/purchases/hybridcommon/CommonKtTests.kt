@@ -32,6 +32,7 @@ import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
+import com.revenuecat.purchases.identity.Authentication
 import com.revenuecat.purchases.interfaces.Callback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
@@ -85,12 +86,13 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalRevenueCatAPI::class)
 internal class CommonKtTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
     private val mockContext = mockk<Context>(relaxed = true)
     private val mockPurchases = mockk<Purchases>()
+    private val mockAuthentication = mockk<Authentication>()
     private val mockActivity = mockk<Activity>(relaxed = true)
 
     @BeforeEach
@@ -103,6 +105,7 @@ internal class CommonKtTests {
         every { mockContext.applicationContext } returns mockApplicationContext
         every { Purchases.sharedInstance } returns mockPurchases
         every { mockPurchases.store } returns Store.PLAY_STORE
+        every { mockPurchases.authentication } returns mockAuthentication
         val testDispatcher = UnconfinedTestDispatcher()
         overrideMapperDispatcher = testDispatcher
         Dispatchers.setMain(testDispatcher)
@@ -481,7 +484,7 @@ internal class CommonKtTests {
     }
 
     @Test
-    fun `calling logOut correctly passes call to Purchases`() {
+    fun `calling logOut passes call to Authentication`() {
         configure(
             context = mockContext,
             apiKey = "api_key",
@@ -490,7 +493,7 @@ internal class CommonKtTests {
             platformInfo = PlatformInfo("flavor", "version"),
         )
 
-        every { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) } just runs
+        every { mockAuthentication.logOut(any() as ReceiveCustomerInfoCallback?) } just runs
 
         logOut(
             onResult = object : OnResult {
@@ -499,7 +502,7 @@ internal class CommonKtTests {
             },
         )
 
-        verify(exactly = 1) { mockPurchases.logOut(any() as ReceiveCustomerInfoCallback?) }
+        verify(exactly = 1) { mockAuthentication.logOut(any() as ReceiveCustomerInfoCallback?) }
     }
 
     @Test
@@ -515,7 +518,7 @@ internal class CommonKtTests {
         val mockInfo = mockk<CustomerInfo>(relaxed = true)
         val receiveCustomerInfoListener = slot<ReceiveCustomerInfoCallback>()
 
-        every { mockPurchases.logOut(capture(receiveCustomerInfoListener)) } just runs
+        every { mockAuthentication.logOut(capture(receiveCustomerInfoListener)) } just runs
         val onResult = mockk<OnResult>()
         every { onResult.onReceived(any()) } just runs
         every { onResult.onError(any()) } just runs
@@ -541,7 +544,7 @@ internal class CommonKtTests {
         val mockError = mockk<PurchasesError>(relaxed = true)
         val receiveCustomerInfoListener = slot<ReceiveCustomerInfoCallback>()
 
-        every { mockPurchases.logOut(capture(receiveCustomerInfoListener)) } just runs
+        every { mockAuthentication.logOut(capture(receiveCustomerInfoListener)) } just runs
         val onResult = mockk<OnResult>()
         every { onResult.onReceived(any()) } just runs
         every { onResult.onError(any()) } just runs

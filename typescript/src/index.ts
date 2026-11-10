@@ -10,3 +10,5 @@ export * from './webRedemption';
 export * from './storefront';
 export * from './virtualCurrency';
 export * from './paywallInteractionEvent';
+export * from './authentication';
+export * from './customerAttribute';

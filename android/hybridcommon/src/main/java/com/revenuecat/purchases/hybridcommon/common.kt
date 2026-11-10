@@ -54,10 +54,10 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
+import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
-import com.revenuecat.purchases.logOutWith
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
 import com.revenuecat.purchases.models.InAppMessageType
@@ -832,10 +832,10 @@ fun logIn(
     )
 }
 
+// Goes through Authentication so an IAM logout doesn't also report its error to the authentication listener.
+@OptIn(InternalRevenueCatAPI::class)
 fun logOut(onResult: OnResult) {
-    Purchases.sharedInstance.logOutWith(onError = { onResult.onError(it.map()) }) { customerInfo ->
-        customerInfo.mapAsync { map -> onResult.onReceived(map) }
-    }
+    Purchases.sharedInstance.authentication.logOut(customerInfoCallback(onResult))
 }
 
 @Deprecated(message = "Use setLogLevel instead")
@@ -986,7 +986,10 @@ fun showInAppMessagesIfNeeded(activity: Activity?, inAppMessageTypes: List<InApp
     }
 }
 
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
+/**
+ * @param iamEnabled Experimental. Prefer token-based (IAM) user sessions. Disabled by default.
+ */
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class, InternalRevenueCatAPI::class)
 @Suppress("LongParameterList")
 @JvmOverloads
 fun configure(
@@ -1004,6 +1007,7 @@ fun configure(
     automaticDeviceIdentifierCollectionEnabled: Boolean? = null,
     preferredLocale: String? = null,
     galaxyBillingMode: String? = null,
+    iamEnabled: Boolean? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -1026,6 +1030,7 @@ fun configure(
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
             configureGalaxyBillingModeIfNeeded(store, galaxyBillingMode)
+            iamEnabled?.let { iamEnabled(it) }
         }.also { Purchases.configure(it.build()) }
 }
 
@@ -1149,6 +1154,54 @@ fun invalidateVirtualCurrenciesCache() {
 }
 
 fun getCachedVirtualCurrencies(): Map<String, Any?>? = Purchases.sharedInstance.cachedVirtualCurrencies?.map()
+
+/**
+ * Experimental. Spends virtual currencies for the current user. Requires configuring with `iamEnabled`.
+ *
+ * @param amounts Whole-number amounts keyed by currency code. Non-positive amounts are ignored; if none are left,
+ * nothing is spent and [onResult] receives the current balances.
+ * @param reference An optional app-specific reference for this transaction.
+ * @param onResult Receives the user's virtual currencies after the spend.
+ */
+@OptIn(InternalRevenueCatAPI::class)
+fun spendVirtualCurrencies(
+    amounts: Map<String, Any?>,
+    reference: String?,
+    onResult: OnResult,
+) {
+    val spendAmounts = amounts.toSpendAmounts() ?: run {
+        val error = PurchasesError(
+            PurchasesErrorCode.PurchaseInvalidError,
+            "Virtual currency amounts must be whole numbers.",
+        )
+        onResult.onError(error.map())
+        return
+    }
+    Purchases.sharedInstance.spendVirtualCurrencies(
+        spendAmounts,
+        reference,
+        object : GetVirtualCurrenciesCallback {
+            override fun onReceived(virtualCurrencies: VirtualCurrencies) {
+                onResult.onReceived(virtualCurrencies.map())
+            }
+
+            override fun onError(error: PurchasesError) {
+                onResult.onError(error.map())
+            }
+        },
+    )
+}
+
+// Hybrid number types vary (e.g. React Native sends doubles), so accept any whole number that fits in an Int.
+private fun Map<String, Any?>.toSpendAmounts(): Map<String, Int>? {
+    return mapValues { (_, amount) -> (amount as? Number)?.toWholeIntOrNull() ?: return null }
+}
+
+private fun Number.toWholeIntOrNull(): Int? = when (this) {
+    is Int -> this
+    is Long, is Short, is Byte -> toLong().takeIf { it in Int.MIN_VALUE..Int.MAX_VALUE }?.toInt()
+    else -> toDouble().takeIf { it % 1.0 == 0.0 && it >= Int.MIN_VALUE && it <= Int.MAX_VALUE }?.toInt()
+}
 
 // region Ad Tracking
 

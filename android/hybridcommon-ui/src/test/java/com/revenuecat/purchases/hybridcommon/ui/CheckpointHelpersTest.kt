@@ -79,11 +79,16 @@ class CheckpointHelpersTest {
 
         presentCheckpoint(
             identifier = "upgrade",
+            callId = "native-call",
             customVariables = null,
             presentationMode = null,
+            useCustomPaywallPresenter = false,
+            hasErrorDialogFactory = false,
             listener = listener,
             isConfigured = { false },
             start = { _, _, _ -> started = true },
+            registry = CheckpointErrorDialogRegistry(),
+            paywallRegistry = CheckpointPaywallRegistry(),
         )
 
         assertTrue(!started)
@@ -194,11 +199,16 @@ class CheckpointHelpersTest {
         var started: Started? = null
         presentCheckpoint(
             identifier = "upgrade",
+            callId = "native-call",
             customVariables = customVariables,
             presentationMode = presentationMode,
+            useCustomPaywallPresenter = false,
+            hasErrorDialogFactory = false,
             listener = listener,
             isConfigured = { true },
             start = { id, params, callback -> started = Started(id, params, callback) },
+            registry = CheckpointErrorDialogRegistry(),
+            paywallRegistry = CheckpointPaywallRegistry(),
         )
         return checkNotNull(started) { "presentCheckpoint did not start the checkpoint" }
     }
@@ -239,7 +249,7 @@ class CheckpointHelpersTest {
     // region error-dialog-factory path
 
     @Test
-    fun `reports NOT_CONFIGURED and does not start when Purchases is not configured (callId overload)`() {
+    fun `reports NOT_CONFIGURED and does not start when Purchases is not configured (error factory enabled)`() {
         val listener = RecordingListener()
         var started = false
         val registry = CheckpointErrorDialogRegistry()
@@ -249,10 +259,13 @@ class CheckpointHelpersTest {
             callId = "c1",
             customVariables = null,
             presentationMode = null,
+            useCustomPaywallPresenter = false,
+            hasErrorDialogFactory = true,
             listener = listener,
             isConfigured = { false },
             start = { _, _, _ -> started = true },
             registry = registry,
+            paywallRegistry = CheckpointPaywallRegistry(),
         )
 
         assertFalse(started)
@@ -261,7 +274,7 @@ class CheckpointHelpersTest {
     }
 
     @Test
-    fun `presentCheckpoint with callId maps the identifier variables and mode and sets a factory`() {
+    fun `presentCheckpoint with error factory maps the identifier variables and mode and sets a factory`() {
         val registry = CheckpointErrorDialogRegistry()
         val started = presentWithCallId(
             callId = "c1",
@@ -284,7 +297,7 @@ class CheckpointHelpersTest {
     }
 
     @Test
-    fun `callId overload maps each presentation mode`() {
+    fun `error factory path maps each presentation mode`() {
         val modes = mapOf(
             "MODAL_FULL_SCREEN" to FlowPresentationMode.MODAL_FULL_SCREEN,
             "MODAL_SHEET" to FlowPresentationMode.MODAL_SHEET,
@@ -301,7 +314,7 @@ class CheckpointHelpersTest {
     }
 
     @Test
-    fun `callId overload reports the serialized customer and sorted flow result`() {
+    fun `error factory path reports the serialized customer and sorted flow result`() {
         val listener = RecordingListener()
         val started = presentWithCallId(listener = listener)
         val customer = mockk<CustomerInfo>()
@@ -706,7 +719,7 @@ class CheckpointHelpersTest {
     }
 
     @Test
-    fun `no-handler path (presentCheckpoint without callId) sets no errorDialogFactory`() {
+    fun `no-handler path sets no errorDialogFactory`() {
         val started = present()
         assertNull(started.params.errorDialogFactory)
     }
@@ -730,10 +743,13 @@ class CheckpointHelpersTest {
             callId = callId,
             customVariables = customVariables,
             presentationMode = presentationMode,
+            useCustomPaywallPresenter = false,
+            hasErrorDialogFactory = true,
             listener = listener,
             isConfigured = { true },
             start = { id, params, callback -> started = StartedWithCallId(id, params, callback) },
             registry = registry,
+            paywallRegistry = CheckpointPaywallRegistry(),
         )
         return checkNotNull(started) { "presentCheckpoint did not start the checkpoint" }
     }

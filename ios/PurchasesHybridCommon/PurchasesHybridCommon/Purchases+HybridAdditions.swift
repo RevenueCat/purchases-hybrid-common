@@ -7,7 +7,7 @@
 //
 
 import Foundation
-@_spi(Experimental) import RevenueCat
+@_spi(Experimental) @_spi(Internal) import RevenueCat
 
 @objc public extension Purchases {
 
@@ -15,10 +15,13 @@ import Foundation
     /// in the external browser goes through Apple's external purchase custom link flow.
     /// - Parameter enableExternalPurchasesInSimulator: Experimental. Whether the simulator offers external purchases
     /// in any storefront. Has no effect on a physical device, nor while `useExternalPurchaseCustomLinks` is `false`.
+    /// - Parameter iamEnabled: Experimental. Whether the SDK prefers token-based (IAM) user sessions.
+    /// - Parameter keychainAccessGroup: Experimental. The keychain access group for IAM tokens, to share them with
+    /// app extensions. Ignored unless `iamEnabled` is `true`.
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
             verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
-            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:)
+            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:iamEnabled:keychainAccessGroup:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -33,7 +36,9 @@ import Foundation
                           automaticDeviceIdentifierCollectionEnabled: Bool = true,
                           preferredLocale: String? = nil,
                           useExternalPurchaseCustomLinks: Bool,
-                          enableExternalPurchasesInSimulator: Bool) -> Purchases {
+                          enableExternalPurchasesInSimulator: Bool,
+                          iamEnabled: Bool,
+                          keychainAccessGroup: String?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -99,10 +104,56 @@ import Foundation
             enableExternalPurchasesInSimulator: enableExternalPurchasesInSimulator
         )
 
+        if let keychainAccessGroup, iamEnabled {
+            configurationBuilder = configurationBuilder.with(iamEnabled: iamEnabled,
+                                                             keychainAccessGroup: keychainAccessGroup)
+        } else {
+            configurationBuilder = configurationBuilder.with(iamEnabled: iamEnabled)
+        }
+
         let purchases = self.configure(with: configurationBuilder.build())
         CommonFunctionality.sharedInstance = purchases
 
         return purchases
+    }
+
+    @available(*, deprecated, message: "Use the full configure method instead")
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
+            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          purchasesAreCompletedBy: String?,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          storeKitVersion: String = "DEFAULT",
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String?,
+                          diagnosticsEnabled: Bool = false,
+                          automaticDeviceIdentifierCollectionEnabled: Bool = true,
+                          preferredLocale: String? = nil,
+                          useExternalPurchaseCustomLinks: Bool,
+                          enableExternalPurchasesInSimulator: Bool) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         storeKitVersion: storeKitVersion,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: verificationMode,
+                         diagnosticsEnabled: diagnosticsEnabled,
+                         automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
+                         preferredLocale: preferredLocale,
+                         useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks,
+                         enableExternalPurchasesInSimulator: enableExternalPurchasesInSimulator,
+                         iamEnabled: false,
+                         keychainAccessGroup: nil)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")
@@ -136,7 +187,9 @@ import Foundation
                          automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled,
                          preferredLocale: preferredLocale,
                          useExternalPurchaseCustomLinks: false,
-                         enableExternalPurchasesInSimulator: true)
+                         enableExternalPurchasesInSimulator: true,
+                         iamEnabled: false,
+                         keychainAccessGroup: nil)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")
