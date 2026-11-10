@@ -1389,7 +1389,7 @@ private extension CommonFunctionality {
             }
             return
         }
-        Self.getAdRewards(adUnitId: adUnitId, completion: completion) { adUnitId in
+        Self.fetchAdRewards(adUnitId: adUnitId, completion: completion) { adUnitId in
             await Purchases.shared.adRewards(forAdUnitId: adUnitId)
         }
     }
@@ -1399,7 +1399,7 @@ private extension CommonFunctionality {
 internal extension CommonFunctionality {
 
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
-    @nonobjc static func getAdRewards(
+    @nonobjc static func fetchAdRewards(
         adUnitId: String,
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void,
         fetch: @escaping (String) async -> ConfiguredAdRewards?
