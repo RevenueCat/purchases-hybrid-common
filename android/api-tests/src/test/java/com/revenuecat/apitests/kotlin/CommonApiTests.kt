@@ -6,6 +6,7 @@ import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.ErrorContainer
+import com.revenuecat.purchases.hybridcommon.OnNullableResult
 import com.revenuecat.purchases.hybridcommon.OnResult
 import com.revenuecat.purchases.hybridcommon.OnResultAny
 import com.revenuecat.purchases.hybridcommon.OnResultList
@@ -13,6 +14,7 @@ import com.revenuecat.purchases.hybridcommon.canMakePayments
 import com.revenuecat.purchases.hybridcommon.checkTrialOrIntroductoryPriceEligibility
 import com.revenuecat.purchases.hybridcommon.configure
 import com.revenuecat.purchases.hybridcommon.generateRewardVerificationToken
+import com.revenuecat.purchases.hybridcommon.getAdRewards
 import com.revenuecat.purchases.hybridcommon.getAppUserID
 import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo
@@ -57,6 +59,10 @@ import com.revenuecat.purchases.models.InAppMessageType
 
 @Suppress("unused", "DEPRECATION", "LongParameterList", "UNUSED_VARIABLE")
 private class CommonApiTests {
+    fun checkGetAdRewards(adUnitId: String, onResult: OnNullableResult) {
+        getAdRewards(adUnitId, onResult)
+    }
+
     fun checkSetAllowSharingAppStoreAccount(allow: Boolean) {
         setAllowSharingAppStoreAccount(allow)
     }

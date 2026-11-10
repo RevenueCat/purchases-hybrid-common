@@ -11,6 +11,7 @@ import com.revenuecat.purchases.Store;
 import com.revenuecat.purchases.common.PlatformInfo;
 import com.revenuecat.purchases.hybridcommon.CommonKt;
 import com.revenuecat.purchases.hybridcommon.ErrorContainer;
+import com.revenuecat.purchases.hybridcommon.OnNullableResult;
 import com.revenuecat.purchases.hybridcommon.OnResult;
 import com.revenuecat.purchases.hybridcommon.OnResultAny;
 import com.revenuecat.purchases.hybridcommon.OnResultList;
@@ -24,6 +25,10 @@ import kotlin.jvm.functions.Function1;
 
 @SuppressWarnings({"unused", "deprecation"})
 class CommonApiTests {
+    private void checkGetAdRewards(String adUnitId, OnNullableResult onResult) {
+        CommonKt.getAdRewards(adUnitId, onResult);
+    }
+
     private void checkCheckSetAllowSharingAppStoreAccount(boolean enabled) {
         CommonKt.setAllowSharingAppStoreAccount(enabled);
     }
