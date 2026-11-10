@@ -522,13 +522,14 @@ platform :android do
     dry_run = options[:dry_run] || false
     dry_run_flag = dry_run ? " --dry-run" : ""
     gradleProperties = dry_run ? {} : {
-      "signing.keyId" => ENV['GPG_SIGNING_KEY_ID'],
-      "signing.password" => ENV['GPG_SIGNING_KEY_PW'],
-      "signing.secretKeyRingFile" => "#{File.expand_path('android', get_root_folder)}/secring.gpg",
       "mavenCentralUsername" => ENV['MAVEN_CENTRAL_PORTAL_USERNAME'],
       "mavenCentralPassword" => ENV['MAVEN_CENTRAL_PORTAL_PASSWORD'],
       "RELEASE_SIGNING_ENABLED" => true
     }
+    unless dry_run
+      ENV["ORG_GRADLE_PROJECT_signingInMemoryKey"] = ENV["SIGNING_GPG_IN_MEMORY"]
+      ENV["ORG_GRADLE_PROJECT_signingInMemoryKeyPassword"] = ENV["GPG_SIGNING_KEY_PW_NEW"]
+    end
     UI.verbose("#{dry_run ? "Dry-run deploying" : "Deploying"} #{version}")
 
     gradle(
@@ -603,20 +604,20 @@ def build_and_publish_npm_package(folder, dry_run: false)
     'yarn install --frozen-lockfile && yarn build'
   ]
 
-  publish_args = [
-    'npm',
-    'publish',
-    '--access public',
-    is_prerelease ? '--tag next' : nil
-  ].compact
-
   Dir.chdir(File.expand_path(folder, get_root_folder)) do
     sh(build_args)
     if dry_run
       sh(['npm', 'pack'])
       UI.message("ℹ️  npm pack dry-run for #{folder}; nothing published.")
     else
-      sh(publish_args)
+      publish_tag = 'next'
+      unless is_prerelease
+        package_name = JSON.parse(File.read('package.json')).fetch('name')
+        latest_version = sh(['npm', 'view', package_name, 'dist-tags.latest'], log: false).strip
+        is_backport = Gem::Version.new(version_number) < Gem::Version.new(latest_version)
+        publish_tag = is_backport ? "release-#{Gem::Version.new(version_number).segments.first}" : 'latest'
+      end
+      sh(['npm', 'publish', '--access public', "--tag #{publish_tag}"])
     end
   end
 end

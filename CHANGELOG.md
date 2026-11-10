@@ -1,3 +1,8 @@
+## 19.17.1
+## RevenueCat SDK
+### 📦 Dependency Updates
+* Android 10.30.0 => 10.30.2
+
 ## 19.17.0
 ## RevenueCat SDK
 ### 📦 Dependency Updates
