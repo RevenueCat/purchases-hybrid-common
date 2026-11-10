@@ -38,7 +38,7 @@ export type AdRewardConfiguration = VirtualCurrencyRewardConfiguration
 
 /**
  * Successfully resolved rewards for an exact, case-sensitive ad unit ID.
- * A null accessor result means configuration is unavailable or malformed.
+ * A null accessor result means configuration is unavailable or malformed, or the ad unit ID is empty.
  * A null primary reward with an empty moreRewards array means no reward is configured.
  * Additional rewards retain their configured order.
  * @public

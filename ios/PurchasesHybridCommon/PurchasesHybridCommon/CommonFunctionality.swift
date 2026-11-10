@@ -1372,8 +1372,8 @@ private extension CommonFunctionality {
 @objc public extension CommonFunctionality {
 
     /// Returns configured rewards for an exact, case-sensitive ad unit ID.
-    /// A nil result means configuration is unavailable or malformed. A dictionary with a null
-    /// reward and empty moreRewards means configuration resolved successfully with no reward.
+    /// A nil result means configuration is unavailable or malformed, or the ad unit ID is empty.
+    /// A dictionary with a null reward and empty moreRewards means configuration resolved successfully with no reward.
     /// The native SDK uses cached configuration or fetches it on demand.
     @objc(getAdRewardsWithAdUnitId:completion:)
     static func getAdRewards(
