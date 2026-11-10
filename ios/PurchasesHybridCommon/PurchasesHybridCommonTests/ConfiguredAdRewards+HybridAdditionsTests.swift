@@ -61,14 +61,17 @@ class ConfiguredAdRewardsHybridAdditionsTests: XCTestCase {
     @available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *)
     func testAccessorPreservesExactAdUnitIDAndUnavailableResult() {
         let completed = self.expectation(description: "unavailable")
-        CommonFunctionality.getAdRewards(adUnitId: " Ad-Unit-ID ", completion: { result, error in
-            XCTAssertNil(result)
-            XCTAssertNil(error)
-            completed.fulfill()
-        }, fetch: { adUnitId in
-            XCTAssertEqual(adUnitId, " Ad-Unit-ID ")
-            return nil
-        })
+        DispatchQueue.global().async {
+            CommonFunctionality.getAdRewards(adUnitId: " Ad-Unit-ID ", completion: { result, error in
+                XCTAssertTrue(Thread.isMainThread)
+                XCTAssertNil(result)
+                XCTAssertNil(error)
+                completed.fulfill()
+            }, fetch: { adUnitId in
+                XCTAssertEqual(adUnitId, " Ad-Unit-ID ")
+                return nil
+            })
+        }
 
         self.waitForExpectations(timeout: 2)
     }
@@ -77,6 +80,7 @@ class ConfiguredAdRewardsHybridAdditionsTests: XCTestCase {
     func testAccessorMapsNoConfiguredRewardAndDoesNotCachePreviousResult() {
         let first = self.expectation(description: "configured")
         CommonFunctionality.getAdRewards(adUnitId: "unit", completion: { result, error in
+            XCTAssertTrue(Thread.isMainThread)
             XCTAssertTrue(result?["reward"] is NSNull)
             XCTAssertNil(error)
             first.fulfill()
@@ -85,6 +89,7 @@ class ConfiguredAdRewardsHybridAdditionsTests: XCTestCase {
 
         let second = self.expectation(description: "unavailable after configured")
         CommonFunctionality.getAdRewards(adUnitId: "unit", completion: { result, error in
+            XCTAssertTrue(Thread.isMainThread)
             XCTAssertNil(result)
             XCTAssertNil(error)
             second.fulfill()

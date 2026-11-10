@@ -1375,6 +1375,7 @@ private extension CommonFunctionality {
     /// A nil result means configuration is unavailable or malformed, or the ad unit ID is empty.
     /// A dictionary with a null reward and empty moreRewards means configuration resolved successfully with no reward.
     /// The native SDK uses cached configuration or fetches it on demand.
+    /// The completion is called on the main thread.
     @objc(getAdRewardsWithAdUnitId:completion:)
     static func getAdRewards(
         adUnitId: String,
@@ -1383,7 +1384,9 @@ private extension CommonFunctionality {
         guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
             NSLog("[PurchasesHybridCommon] getAdRewards: Configured ad rewards require " +
                   "iOS 15.0, tvOS 15.0, macOS 12.0, or watchOS 8.0 or newer")
-            completion(nil, nil)
+            DispatchQueue.main.async {
+                completion(nil, nil)
+            }
             return
         }
         Self.getAdRewards(adUnitId: adUnitId, completion: completion) { adUnitId in
@@ -1403,7 +1406,9 @@ internal extension CommonFunctionality {
     ) {
         _ = Task<Void, Never> {
             let rewards = await fetch(adUnitId)
-            completion(rewards?.rc_dictionary, nil)
+            await MainActor.run {
+                completion(rewards?.rc_dictionary, nil)
+            }
         }
     }
 
