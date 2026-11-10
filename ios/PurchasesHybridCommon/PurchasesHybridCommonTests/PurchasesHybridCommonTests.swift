@@ -433,11 +433,19 @@ class PurchasesHybridCommonTests: QuickSpec {
             let expectedMessage = "a message"
             for level in LogLevel.levels {
                 it("\(level) logs work") {
+                    var receivedLogDetails: [String: String]?
                     CommonFunctionality.setLogHander(onLogReceived: { logDetails in
-                        expect(logDetails["logLevel"]) == level.description.uppercased()
-                        expect(logDetails["message"]) == expectedMessage
+                        // The global handler can also receive unrelated logs from background SDK work.
+                        guard logDetails["message"] == expectedMessage else { return }
+                        receivedLogDetails = logDetails
                     })
+                    Purchases.logHandler(.error, "an unrelated SDK log")
                     Purchases.logHandler(level, expectedMessage)
+
+                    expect(receivedLogDetails) == [
+                        "logLevel": level.description.uppercased(),
+                        "message": expectedMessage
+                    ]
                 }
             }
         }
