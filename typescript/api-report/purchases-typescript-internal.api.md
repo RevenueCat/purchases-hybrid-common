@@ -68,9 +68,7 @@ export enum ENTITLEMENT_VERIFICATION_MODE {
 // @public
 export interface EntitlementRewardConfiguration {
     readonly durationSeconds: number;
-    // (undocumented)
     readonly identifier: string;
-    // (undocumented)
     readonly type: 'entitlement';
 }
 
@@ -755,7 +753,6 @@ export class UninitializedPurchasesError extends Error {
 
 // @public
 export interface UnsupportedAdRewardConfiguration {
-    // (undocumented)
     readonly type: 'unsupported_reward';
 }
 
@@ -782,11 +779,8 @@ export enum VERIFICATION_RESULT {
 
 // @public
 export interface VirtualCurrencyRewardConfiguration {
-    // (undocumented)
     readonly amount: number;
-    // (undocumented)
     readonly code: string;
-    // (undocumented)
     readonly type: 'virtual_currency';
 }
 

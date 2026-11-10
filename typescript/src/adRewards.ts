@@ -3,8 +3,11 @@
  * @public
  */
 export interface VirtualCurrencyRewardConfiguration {
+  /** Identifies a virtual currency reward. */
   readonly type: 'virtual_currency';
+  /** The virtual currency code defined in the RevenueCat dashboard. */
   readonly code: string;
+  /** The positive integer amount configured to be granted. */
   readonly amount: number;
 }
 
@@ -13,7 +16,9 @@ export interface VirtualCurrencyRewardConfiguration {
  * @public
  */
 export interface EntitlementRewardConfiguration {
+  /** Identifies an entitlement reward. */
   readonly type: 'entitlement';
+  /** The entitlement identifier defined in the RevenueCat dashboard. */
   readonly identifier: string;
   /** The configured entitlement duration in seconds. */
   readonly durationSeconds: number;
@@ -24,6 +29,7 @@ export interface EntitlementRewardConfiguration {
  * @public
  */
 export interface UnsupportedAdRewardConfiguration {
+  /** Identifies a reward the native SDK cannot represent. */
   readonly type: 'unsupported_reward';
 }
 
@@ -44,9 +50,13 @@ export type AdRewardConfiguration = VirtualCurrencyRewardConfiguration
  * @public
  */
 export type ConfiguredAdRewards = {
+  /** The primary configured reward. */
   readonly reward: AdRewardConfiguration;
+  /** Additional rewards configured alongside the primary reward, in their configured order. */
   readonly moreRewards: readonly AdRewardConfiguration[];
 } | {
+  /** No primary reward is configured for the ad unit. */
   readonly reward: null;
+  /** Empty when no reward is configured. */
   readonly moreRewards: readonly [];
 };
