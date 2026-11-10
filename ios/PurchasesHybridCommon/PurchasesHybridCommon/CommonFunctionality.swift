@@ -1381,7 +1381,9 @@ private extension CommonFunctionality {
         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
     ) {
         guard #available(iOS 15.0, tvOS 15.0, macOS 12.0, watchOS 8.0, *) else {
-            completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+            NSLog("[PurchasesHybridCommon] getAdRewards: Configured ad rewards require " +
+                  "iOS 15.0, tvOS 15.0, macOS 12.0, or watchOS 8.0 or newer")
+            completion(nil, nil)
             return
         }
         Self.getAdRewards(adUnitId: adUnitId, completion: completion) { adUnitId in
