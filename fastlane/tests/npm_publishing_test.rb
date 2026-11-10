@@ -24,19 +24,19 @@ class NpmPublishingTest < Minitest::Test
 
   def test_backport_keeps_latest_on_the_newer_release
     build_and_publish_npm_package('package')
-    assert_equal ['npm', 'publish', '--access public', '--tag release-19'], @commands.last
+    assert_equal ['npm', 'publish', '--access', 'public', '--tag', 'release-19'], @commands.last
   end
 
   def test_new_release_uses_latest_explicitly
     @version = '20.8.0'
     build_and_publish_npm_package('package')
-    assert_equal ['npm', 'publish', '--access public', '--tag latest'], @commands.last
+    assert_equal ['npm', 'publish', '--access', 'public', '--tag', 'latest'], @commands.last
   end
 
   def test_older_release_within_the_same_major_keeps_latest
     @version = '20.6.2'
     build_and_publish_npm_package('package')
-    assert_equal ['npm', 'publish', '--access public', '--tag release-20'], @commands.last
+    assert_equal ['npm', 'publish', '--access', 'public', '--tag', 'release-20'], @commands.last
   end
 
   def test_invalid_registry_version_prevents_publishing
@@ -48,7 +48,7 @@ class NpmPublishingTest < Minitest::Test
   def test_prerelease_uses_next_without_querying_latest
     @version = '21.0.0-beta.1'
     build_and_publish_npm_package('package')
-    assert_equal ['npm', 'publish', '--access public', '--tag next'], @commands.last
+    assert_equal ['npm', 'publish', '--access', 'public', '--tag', 'next'], @commands.last
     refute @commands.any? { |command| command[0..1] == ['npm', 'view'] }
   end
 
@@ -61,7 +61,8 @@ class NpmPublishingTest < Minitest::Test
   def current_version_number = @version
   def get_root_folder = @root
 
-  def sh(command, **_options)
+  def sh(*command, **_options)
+    command = command.first if command.length == 1 && command.first.is_a?(Array)
     @commands << command
     command[0..1] == ['npm', 'view'] ? @latest : ''
   end

@@ -653,7 +653,7 @@ def build_and_publish_npm_package(folder, dry_run: false)
         is_backport = Gem::Version.new(version_number) < Gem::Version.new(latest_version)
         publish_tag = is_backport ? "release-#{Gem::Version.new(version_number).segments.first}" : 'latest'
       end
-      sh(['npm', 'publish', '--access public', "--tag #{publish_tag}"])
+      sh('npm', 'publish', '--access', 'public', '--tag', publish_tag)
     end
   end
 end
