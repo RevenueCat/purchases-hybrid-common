@@ -20,5 +20,5 @@ Sometimes you might need to release a patch on a version that's not the latest. 
 1. When the PR is approved, the `wait-for-pr-approval` job is approved automatically, and CircleCI tags the release when the tests pass. If there is no such job because the release is older than when we introduced it, manually tag the last commit in `release/3.9.1` with `3.9.1`.
 1. CircleCI will start the deployment process
 1. Merge the PR after the release has been completed and delete both `release/3.9.0` and `release/3.9.1` branches.
-1. Do `npm dist-tag add @revenuecat/purchases-typescript-internal-esm@x.x.x latest` and `npm dist-tag add @revenuecat/purchases-typescript-internal@x.x.x latest`. Being x.x.x the latest version of purchases-typescript-internal. When doing the publish to npm, the latest version is overriden with the hotfix, so we need to set it back to the latest version.
+1. Verify that the npm `latest` tags still point to the newest release for `@revenuecat/purchases-typescript-internal`, `@revenuecat/purchases-typescript-internal-esm`, and `@revenuecat/purchases-js-hybrid-mappings`. Fastlane publishes versions older than each package's current `latest` under `release-<major>` (for example, `release-19`), leaving `latest` unchanged.
 1. Remember to edit the CHANGELOG.md in `main` to include the version that has been just released
