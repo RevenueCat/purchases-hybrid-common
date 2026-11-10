@@ -11,3 +11,5 @@ export * from './storefront';
 export * from './virtualCurrency';
 export * from './paywallInteractionEvent';
 export * from './adRewards';
+export * from './authentication';
+export * from './customerAttribute';

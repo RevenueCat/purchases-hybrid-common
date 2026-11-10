@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A3B0C4B0000000000000006 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */; };
+		1A3B0C4B0000000000000008 /* CommonFunctionality+AttributesForCurrentUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */; };
+		1A3B0C4B0000000000000003 /* CommonFunctionality+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */; };
 		00C5972F9E16B498B2858F1C /* PurchasesHybridCommonUI in Frameworks */ = {isa = PBXBuildFile; productRef = E1576CE50ED702E850B979B4 /* PurchasesHybridCommonUI */; };
 		1204D41D866494A505556F16 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 7A688D2C3FB51D6E7E82D76B /* RevenueCat */; };
 		1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */; };
@@ -79,6 +82,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A3B0C4B0000000000000004 /* CustomerAttribute+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerAttribute+HybridAdditions.swift"; sourceTree = "<group>"; };
+		1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+SpendVirtualCurrenciesTests.swift"; sourceTree = "<group>"; };
+		1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+AttributesForCurrentUserTests.swift"; sourceTree = "<group>"; };
+		1A3B0C4B0000000000000001 /* CommonFunctionality+Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+Authentication.swift"; sourceTree = "<group>"; };
+		1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+AuthenticationTests.swift"; sourceTree = "<group>"; };
 		1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParams.swift; sourceTree = "<group>"; };
 		1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParamsTests.swift; sourceTree = "<group>"; };
 		1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+PurchaseTests.swift"; sourceTree = "<group>"; };
@@ -273,6 +281,9 @@
 				FD3652E02C53FA7A00B513F6 /* PurchasesAreCompletedByHybridAdditionsTests.swift */,
 				FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */,
 				FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */,
+				1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */,
+				1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */,
+				1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */,
 				BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */,
 				2FA42CB2C6B5A644D147C90C /* PaywallCustomVariablesTests.swift */,
 				EFC549B5A8564650A513058C /* PaywallProxyDelegateRoutingTests.swift */,
@@ -346,6 +357,8 @@
 				7720A9292D520021009EA43C /* IntroEligibility+HybridExtensions.swift */,
 				FDB842692E09D1B2007DCB4C /* VirtualCurrency+HybridAdditions.swift */,
 				FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */,
+				1A3B0C4B0000000000000001 /* CommonFunctionality+Authentication.swift */,
+				1A3B0C4B0000000000000004 /* CustomerAttribute+HybridAdditions.swift */,
 				1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */,
 				8461699F3DFCE64D7E1C312B /* RewardVerificationToken+HybridAdditions.swift */,
 				BC0A6D0871522AA838569D8B /* RewardVerificationResult+HybridAdditions.swift */,
@@ -650,6 +663,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FDB8426E2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */,
+				1A3B0C4B0000000000000003 /* CommonFunctionality+AuthenticationTests.swift in Sources */,
+				1A3B0C4B0000000000000006 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift in Sources */,
+				1A3B0C4B0000000000000008 /* CommonFunctionality+AttributesForCurrentUserTests.swift in Sources */,
 				FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */,
 				2D0D2080245797B900614E47 /* Date+HybridAdditionsTests.swift in Sources */,
 				2CC09B252A27E35B0047DA34 /* Offering+HybridAdditionsTests.swift in Sources */,

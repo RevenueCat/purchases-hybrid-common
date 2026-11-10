@@ -379,7 +379,11 @@ class CommonApiTests {
                                 Boolean shouldShowInAppMessagesAutomatically,
                                 String verificationMode,
                                 Boolean pendingTransactionsForPrepaidPlansEnabled,
-                                Boolean diagnosticsEnabled
+                                Boolean diagnosticsEnabled,
+                                Boolean automaticDeviceIdentifierCollectionEnabled,
+                                String preferredLocale,
+                                String galaxyBillingMode,
+                                Boolean iamEnabled
     ) {
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store);
@@ -405,6 +409,37 @@ class CommonApiTests {
                 verificationMode,
                 pendingTransactionsForPrepaidPlansEnabled,
                 diagnosticsEnabled);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                purchasesAreCompletedBy,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically,
+                verificationMode,
+                pendingTransactionsForPrepaidPlansEnabled,
+                diagnosticsEnabled,
+                automaticDeviceIdentifierCollectionEnabled,
+                preferredLocale,
+                galaxyBillingMode);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                purchasesAreCompletedBy,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically,
+                verificationMode,
+                pendingTransactionsForPrepaidPlansEnabled,
+                diagnosticsEnabled,
+                automaticDeviceIdentifierCollectionEnabled,
+                preferredLocale,
+                galaxyBillingMode,
+                iamEnabled);
     }
 
     private void checkGetPromotionalOffer() {
@@ -421,6 +456,11 @@ class CommonApiTests {
 
     private void checkGetCachedVirtualCurrencies() {
         Map<String, Object> cachedVirtualCurrencies = CommonKt.getCachedVirtualCurrencies();
+    }
+
+    private void checkSpendVirtualCurrencies(Map<String, Object> amounts, String reference, OnResult onResult) {
+        CommonKt.spendVirtualCurrencies(amounts, reference, onResult);
+        CommonKt.spendVirtualCurrencies(amounts, null, onResult);
     }
 
     private void checkErrorContainer(Integer code, String message, Map<String, Object> info) {

@@ -45,6 +45,16 @@ NS_ASSUME_NONNULL_BEGIN
                                                        RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality logInWithIdentity:@{@"source": @"google", @"token": @"token"}
+                             completionBlock:^(NSDictionary * _Nullable customerInfo,
+                                               RCErrorContainer * _Nullable error) {
+    }];
+    NSString * _Nullable accessToken __unused = RCCommonFunctionality.currentAccessToken;
+    [RCCommonFunctionality setAuthenticationListenerWithOnError:^(RCErrorContainer * _Nonnull error) {
+    } onAccessTokenUpdated:^(NSString * _Nullable newAccessToken) {
+    }];
+    [RCCommonFunctionality removeAuthenticationListener];
+
     [RCCommonFunctionality setDebugLogsEnabled:NO];
     [RCCommonFunctionality setLogLevel:@"WARN"];
     [RCCommonFunctionality setLogHanderOnLogReceived:^(NSDictionary<NSString *,NSString *> * _Nonnull logDetails) {
@@ -156,6 +166,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                              RCErrorContainer * _Nullable errorContainer) {}];
 
     NSDictionary<NSString *, NSObject *> __unused  * _Nullable vcDictionary = [RCCommonFunctionality getCachedVirtualCurrencies];
+    [RCCommonFunctionality spendVirtualCurrenciesWithAmounts:@{@"GLD": @5}
+                                                   reference:nil
+                                                  completion:^(NSDictionary * _Nullable virtualCurrencies,
+                                                               RCErrorContainer * _Nullable error) {
+    }];
 
     [RCCommonFunctionality invalidateVirtualCurrenciesCache];
 
@@ -190,6 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)testSubscriberAttributes {
     [RCCommonFunctionality setAttributes:@{}];
+    NSArray<NSDictionary<NSString *, id> *> *attributes __unused = [RCCommonFunctionality getAttributesForCurrentUser];
     [RCCommonFunctionality setEmail:@""];
     [RCCommonFunctionality setEmail:nil];
     [RCCommonFunctionality setPhoneNumber:@""];

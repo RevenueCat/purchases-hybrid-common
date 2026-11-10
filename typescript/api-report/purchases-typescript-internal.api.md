@@ -5,7 +5,13 @@
 ```ts
 
 // @public
+export type AccessTokenUpdatedListener = (accessToken: string | null) => void;
+
+// @public
 export type AdRewardConfiguration = VirtualCurrencyRewardConfiguration | EntitlementRewardConfiguration | UnsupportedAdRewardConfiguration;
+
+// @public
+export type AuthenticationErrorListener = (error: PurchasesError) => void;
 
 // @public
 export enum BILLING_FEATURE {
@@ -31,6 +37,13 @@ export type ConfiguredAdRewards = {
     readonly reward: null;
     readonly moreRewards: readonly [];
 };
+
+// @public
+export interface CustomerAttribute {
+    readonly key: string;
+    readonly lastUpdatedDate: string;
+    readonly value: string;
+}
 
 // @public
 export interface CustomerInfo {
@@ -82,6 +95,22 @@ export interface ErrorInfo {
 export interface GoogleProductChangeInfo {
     readonly oldProductIdentifier: string;
     readonly prorationMode?: PRORATION_MODE;
+}
+
+// @public
+export enum IDENTITY_SOURCE {
+    FACEBOOK = "facebook",
+    FIREBASE = "firebase",
+    GOOGLE = "google",
+    OIDC = "oidc",
+    SIGN_IN_WITH_APPLE = "apple"
+}
+
+// @public
+export interface IdentityCredential {
+    email?: string;
+    source: IDENTITY_SOURCE;
+    token: string;
 }
 
 // @public
@@ -466,6 +495,8 @@ export interface PurchasesConfiguration {
     diagnosticsEnabled?: boolean;
     enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
+    iamEnabled?: boolean;
+    keychainAccessGroup?: string;
     pendingTransactionsForPrepaidPlansEnabled?: boolean;
     preferredUILocaleOverride?: string;
     purchasesAreCompletedBy?: PurchasesAreCompletedBy;

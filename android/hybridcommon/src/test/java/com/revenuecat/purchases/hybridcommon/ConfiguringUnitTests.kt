@@ -19,6 +19,7 @@ import io.mockk.slot
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
@@ -296,6 +297,47 @@ internal class ConfiguringUnitTests {
         )
         assertEquals(GalaxyBillingMode.PRODUCTION, purchasesConfigurationSlot.captured.galaxyBillingMode)
     }
+
+    @Test
+    fun `calling configure with iamEnabled true forwards it to Android SDK`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = null,
+            platformInfo = expectedPlatformInfo,
+            iamEnabled = true,
+        )
+        assertTrue(purchasesConfigurationSlot.captured.iamEnabledValue())
+    }
+
+    @Test
+    fun `calling configure with iamEnabled false forwards it to Android SDK`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = null,
+            platformInfo = expectedPlatformInfo,
+            iamEnabled = false,
+        )
+        assertFalse(purchasesConfigurationSlot.captured.iamEnabledValue())
+    }
+
+    @Test
+    fun `calling configure without iamEnabled leaves IAM disabled`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = null,
+            platformInfo = expectedPlatformInfo,
+        )
+        assertFalse(purchasesConfigurationSlot.captured.iamEnabledValue())
+    }
+
+    // iamEnabled is internal to the purchases module.
+    private fun PurchasesConfiguration.iamEnabledValue(): Boolean =
+        PurchasesConfiguration::class.java.getDeclaredField("iamEnabled")
+            .apply { isAccessible = true }
+            .getBoolean(this)
 
     private fun assertConfiguration(
         purchasesConfigurationSlot: CapturingSlot<PurchasesConfiguration>,

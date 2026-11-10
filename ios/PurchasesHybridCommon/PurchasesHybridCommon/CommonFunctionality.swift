@@ -632,6 +632,17 @@ import StoreKit
         Self.sharedInstance.attribution.setAttributes(attributes.mapValues { $0 as? String ?? "" })
     }
 
+    /// Experimental. The current user's subscriber attributes, sorted by key, each a dictionary of `key`,
+    /// `value` and `lastUpdatedDate` (ISO 8601). Deleted attributes aren't included.
+    ///
+    /// Usually only attributes set on this device. For a user logged in through IAM, all readable attributes on
+    /// their customer profile.
+    @objc static func getAttributesForCurrentUser() -> [[String: Any]] {
+        return Self.sharedInstance.attribution.attributesForCurrentUser
+            .sorted { $0.key < $1.key }
+            .map(\.rc_dictionary)
+    }
+
     @objc static func setEmail(_ email: String?) {
         Self.sharedInstance.attribution.setEmail(email)
     }
@@ -1206,12 +1217,42 @@ private extension WebPurchaseRedemptionResult {
         Self.sharedInstance.invalidateVirtualCurrenciesCache()
     }
 
+    /// Experimental. Spends virtual currencies for the current user. Requires configuring with `iamEnabled`.
+    ///
+    /// - Parameters:
+    ///   - amounts: Whole-number amounts keyed by currency code. Non-positive amounts are ignored; if none are
+    ///   left, nothing is spent and the completion receives the current balances.
+    ///   - reference: An optional app-specific reference for this transaction.
+    ///   - completion: Receives the user's virtual currencies after the spend.
+    @objc(spendVirtualCurrenciesWithAmounts:reference:completion:)
+    static func spendVirtualCurrencies(
+        amounts: [String: Any],
+        reference: String?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        guard let spendAmounts = Self.spendAmounts(from: amounts) else {
+            completion(nil, Self.purchaseInvalidError("Virtual currency amounts must be whole numbers."))
+            return
+        }
+
+        Self.sharedInstance.spendVirtualCurrencies(amounts: spendAmounts,
+                                                   reference: reference) { virtualCurrencies, error in
+            if let error = error {
+                completion(nil, Self.createErrorContainer(error: error))
+            } else if let virtualCurrencies = virtualCurrencies {
+                completion(virtualCurrencies.rc_dictionary, nil)
+            } else {
+                completion(nil, ErrorContainer(error: ErrorCode.unknownError as NSError, extraPayload: [:]))
+            }
+        }
+    }
+
     @objc static func overridePreferredLocale(_ locale: String?) {
         Purchases.shared.overridePreferredUILocale(locale)
     }
 }
 
-private extension CommonFunctionality {
+internal extension CommonFunctionality {
 
     static func customerInfoCompletionBlock(from block: @escaping ([String: Any]?, ErrorContainer?) -> Void)
     -> ((CustomerInfo?, Error?) -> Void) {
@@ -1492,6 +1533,27 @@ private class TrackedEventListener: EventsListener {
         DispatchQueue.main.async { [callback] in
             callback(event)
         }
+    }
+
+}
+
+// MARK: - Virtual currency amounts
+
+private extension CommonFunctionality {
+
+    /// Hybrid number types vary (e.g. React Native sends doubles), so accept any whole number. Booleans aren't
+    /// amounts, even though they bridge to `NSNumber`.
+    static func spendAmounts(from amounts: [String: Any]) -> [String: Int]? {
+        var result: [String: Int] = [:]
+        for (code, amount) in amounts {
+            guard let number = amount as? NSNumber,
+                  CFGetTypeID(number) != CFBooleanGetTypeID(),
+                  let value = Int(exactly: number.doubleValue) else {
+                return nil
+            }
+            result[code] = value
+        }
+        return result
     }
 
 }
