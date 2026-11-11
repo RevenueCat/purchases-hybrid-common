@@ -9,6 +9,7 @@
 
 import Quick
 import Nimble
+import RevenueCat
 import RevenueCatUI
 import UIKit
 @testable import PurchasesHybridCommonUI
@@ -85,6 +86,25 @@ class PaywallCustomVariablesTests: QuickSpec {
         }
 
         describe("createPaywallView(params:)") {
+            for hasPurchaseLogic in [false, true] {
+                let purchaseLogicDescription = hasPurchaseLogic ? "with" : "without"
+                it("sets variables before loading an offering \(purchaseLogicDescription) custom purchase logic") {
+                    let params = PaywallViewCreationParams()
+                    params.offeringIdentifier = "offering"
+                    params.customVariables = ["tier": "premium"]
+                    if hasPurchaseLogic {
+                        params.purchaseLogicBridge = HybridPurchaseLogicBridge(
+                            onPerformPurchase: nil, onPerformRestore: nil
+                        )
+                    }
+
+                    let controller = PaywallProxy().createPaywallView(params: params)
+                    controller.loadViewIfNeeded()
+
+                    expect(controller.customVariables) == ["tier": .string("premium")]
+                }
+            }
+
             it("applies the bridged custom variables to the controller with their bridged types") {
                 let params = PaywallViewCreationParams()
                 params.customVariables = [
@@ -112,6 +132,43 @@ class PaywallCustomVariablesTests: QuickSpec {
                 let controller = PaywallProxy().createPaywallView(params: params)
 
                 expect(controller.customVariables) == ["count": .number(3)]
+            }
+        }
+
+        describe("modal controller creation") {
+            let contents: [(String, PaywallProxy.Content)] = [
+                ("default offering", .defaultOffering),
+                ("offering identifier", .offeringIdentifier("offering")),
+                ("offering context", .offeringIdentifierWithPresentedOfferingContext(
+                    "offering", presentedOfferingContext: .init(
+                        offeringIdentifier: "offering", placementIdentifier: "placement", targetingContext: nil
+                    )
+                )),
+            ]
+
+            for (name, content) in contents {
+                for hasPurchaseLogic in [false, true] {
+                    let purchaseLogicDescription = hasPurchaseLogic ? "with" : "without"
+                    it("sets variables before loading \(name) \(purchaseLogicDescription) custom purchase logic") {
+                        let params = PaywallProxy.PaywallPresentationParams(options: [
+                            PaywallProxy.PaywallOptionsKeys.customVariables: [
+                                "tier": "premium", "count": NSNumber(value: 1), "is_pro": NSNumber(value: true),
+                            ],
+                        ], content: content)
+                        let bridge = hasPurchaseLogic ? HybridPurchaseLogicBridge(
+                            onPerformPurchase: nil, onPerformRestore: nil
+                        ) : nil
+
+                        let controller = PaywallProxy().makePaywallViewController(
+                            params: params, purchaseLogicBridge: bridge
+                        )
+                        controller.loadViewIfNeeded()
+
+                        expect(controller.customVariables) == [
+                            "tier": .string("premium"), "count": .number(1), "is_pro": .bool(true),
+                        ]
+                    }
+                }
             }
         }
     }
