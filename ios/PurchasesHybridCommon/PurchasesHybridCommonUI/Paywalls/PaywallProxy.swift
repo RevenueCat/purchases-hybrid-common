@@ -96,20 +96,19 @@ import UIKit
         switch (params.offeringIdentifier, params.purchaseLogicBridge) {
         case let (offeringId?, bridge?):
             controller = PaywallViewController(
-                offeringIdentifier: offeringId,
-                presentedOfferingContext: createPresentedOfferingContext(
-                    for: offeringId, data: params.presentedOfferingContext
-                ),
                 displayCloseButton: displayCloseButton,
-                performPurchase: bridge.makePerformPurchase(),
+                performPurchaseWithContext: bridge.makePerformPurchase(),
                 performRestore: bridge.makePerformRestore(),
                 dismissRequestedHandler: dismissHandler
             )
+            controller.update(with: offeringId, presentedOfferingContext: createPresentedOfferingContext(
+                for: offeringId, data: params.presentedOfferingContext
+            ))
         case let (nil, bridge?):
             controller = PaywallViewController(
                 fonts: DefaultPaywallFontProvider(),
                 displayCloseButton: displayCloseButton,
-                performPurchase: bridge.makePerformPurchase(),
+                performPurchaseWithContext: bridge.makePerformPurchase(),
                 performRestore: bridge.makePerformRestore(),
                 dismissRequestedHandler: dismissHandler
             )
@@ -274,32 +273,30 @@ import UIKit
             rootController = presentedVC
         }
 
-        let performPurchase = purchaseLogicBridge?.makePerformPurchase()
+        let performPurchaseWithContext = purchaseLogicBridge?.makePerformPurchase()
         let performRestore = purchaseLogicBridge?.makePerformRestore()
 
         let controller: PaywallViewController
         switch params.content {
         case let .offeringIdentifier(identifier):
-            controller = PaywallViewController(offeringIdentifier: identifier,
-                                               presentedOfferingContext: .init(offeringIdentifier: identifier),
-                                               fonts: params.fontProvider,
+            controller = PaywallViewController(fonts: params.fontProvider,
                                                displayCloseButton: params.displayCloseButton,
                                                shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
+                                               performPurchaseWithContext: performPurchaseWithContext,
                                                performRestore: performRestore)
+            controller.update(with: identifier, presentedOfferingContext: .init(offeringIdentifier: identifier))
         case let .offeringIdentifierWithPresentedOfferingContext(identifier, presentedOfferingContext):
-            controller = PaywallViewController(offeringIdentifier: identifier,
-                                               presentedOfferingContext: presentedOfferingContext,
-                                               fonts: params.fontProvider,
+            controller = PaywallViewController(fonts: params.fontProvider,
                                                displayCloseButton: params.displayCloseButton,
                                                shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
+                                               performPurchaseWithContext: performPurchaseWithContext,
                                                performRestore: performRestore)
+            controller.update(with: identifier, presentedOfferingContext: presentedOfferingContext)
         case .defaultOffering:
             controller = PaywallViewController(fonts: params.fontProvider,
                                                displayCloseButton: params.displayCloseButton,
                                                shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
+                                               performPurchaseWithContext: performPurchaseWithContext,
                                                performRestore: performRestore)
         }
 

@@ -9,6 +9,9 @@ import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.hybridcommon.mappers.map
+import com.revenuecat.purchases.hybridcommon.mappers.mapSubscriptionOption
+import com.revenuecat.purchases.models.GoogleSubscriptionOption
+import com.revenuecat.purchases.ui.revenuecatui.PaywallPurchaseLogicParams
 import com.revenuecat.purchases.ui.revenuecatui.PurchaseLogic
 import com.revenuecat.purchases.ui.revenuecatui.PurchaseLogicResult
 import kotlinx.coroutines.CompletableDeferred
@@ -23,6 +26,9 @@ class HybridPurchaseLogicBridge(
     companion object {
         const val EVENT_KEY_REQUEST_ID = "requestId"
         const val EVENT_KEY_PACKAGE_BEING_PURCHASED = "packageBeingPurchased"
+        const val EVENT_KEY_SUBSCRIPTION_OPTION = "subscriptionOption"
+        const val EVENT_KEY_OLD_PRODUCT_ID = "oldProductId"
+        const val EVENT_KEY_STORE_REPLACEMENT_MODE = "storeReplacementMode"
 
         const val RESULT_SUCCESS = "SUCCESS"
         const val RESULT_CANCELLATION = "CANCELLATION"
@@ -81,6 +87,10 @@ class HybridPurchaseLogicBridge(
     }
 
     override suspend fun performPurchase(activity: Activity, rcPackage: Package): PurchaseLogicResult {
+        return performPurchase(activity, PaywallPurchaseLogicParams.Builder(rcPackage).build())
+    }
+
+    override suspend fun performPurchase(activity: Activity, params: PaywallPurchaseLogicParams): PurchaseLogicResult {
         val handler = onPerformPurchase
         if (handler == null) {
             Log.w(TAG, "No onPerformPurchase handler registered")
@@ -96,10 +106,19 @@ class HybridPurchaseLogicBridge(
         val deferred = CompletableDeferred<PurchaseLogicResult>()
         pendingRequests[requestId] = PendingRequest.Purchase(deferred, this)
 
-        val eventData = mapOf<String, Any?>(
+        val eventData = mutableMapOf<String, Any?>(
             EVENT_KEY_REQUEST_ID to requestId,
-            EVENT_KEY_PACKAGE_BEING_PURCHASED to rcPackage.map(),
+            EVENT_KEY_PACKAGE_BEING_PURCHASED to params.rcPackage.map(),
         )
+        params.subscriptionOption?.let { option ->
+            val optionData = option.mapSubscriptionOption(params.rcPackage.product).toMutableMap()
+            if (option is GoogleSubscriptionOption) {
+                optionData["offerToken"] = option.offerToken
+            }
+            eventData[EVENT_KEY_SUBSCRIPTION_OPTION] = optionData
+        }
+        params.oldProductId?.let { eventData[EVENT_KEY_OLD_PRODUCT_ID] = it }
+        params.replacementMode?.let { eventData[EVENT_KEY_STORE_REPLACEMENT_MODE] = it.name }
 
         Handler(Looper.getMainLooper()).post {
             handler(eventData)
