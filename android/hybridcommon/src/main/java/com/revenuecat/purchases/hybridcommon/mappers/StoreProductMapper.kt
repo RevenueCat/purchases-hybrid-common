@@ -208,7 +208,7 @@ private fun Period.mapPeriod(): Map<String, Any?>? {
     } + mapOf("iso8601" to this.iso8601)
 }
 
-private fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
+fun SubscriptionOption.mapSubscriptionOption(storeProduct: StoreProduct): Map<String, Any?> {
     return mapOf(
         // For Google subscriptions, <basePlanId>:<offerId>
         // For Google and Amazon INAPPs, <productId>

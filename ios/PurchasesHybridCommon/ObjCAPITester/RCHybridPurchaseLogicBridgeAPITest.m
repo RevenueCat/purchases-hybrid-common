@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
         __unused NSString *requestIdKey = HybridPurchaseLogicBridge.eventKeyRequestId;
         __unused NSString *packageKey = HybridPurchaseLogicBridge.eventKeyPackageBeingPurchased;
+        __unused NSString *promotionalOfferKey = HybridPurchaseLogicBridge.eventKeyPromotionalOffer;
         __unused NSString *success = HybridPurchaseLogicBridge.resultSuccess;
         __unused NSString *cancellation = HybridPurchaseLogicBridge.resultCancellation;
         __unused NSString *error = HybridPurchaseLogicBridge.resultError;

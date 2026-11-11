@@ -20,6 +20,8 @@ import RevenueCatUI
 
     @objc public static let eventKeyRequestId = "requestId"
     @objc public static let eventKeyPackageBeingPurchased = "packageBeingPurchased"
+    /// Included in purchase events only when the paywall selected a promotional offer.
+    @objc public static let eventKeyPromotionalOffer = "promotionalOffer"
 
     @objc public static let resultSuccess = "SUCCESS"
     @objc public static let resultCancellation = "CANCELLATION"
@@ -62,15 +64,20 @@ import RevenueCatUI
         cancelPending()
     }
 
-    func makePerformPurchase() -> PerformPurchase {
-        return { [weak self] packageToPurchase in
+    func makePerformPurchase() -> PerformPurchaseWithContext {
+        return { [weak self] context in
             guard let self = self else {
                 return (userCancelled: true, error: nil)
             }
 
+            var data: [String: Any] = [Self.eventKeyPackageBeingPurchased: context.package.dictionary]
+            if let promotionalOffer = context.promotionalOffer {
+                data[Self.eventKeyPromotionalOffer] = promotionalOffer.rc_dictionary
+            }
+
             return await self.sendRequest(
                 createRequest: { .purchase($0) },
-                data: [Self.eventKeyPackageBeingPurchased: packageToPurchase.dictionary],
+                data: data,
                 handler: self.onPerformPurchase,
                 fallbackError: "No onPerformPurchase handler registered"
             )
