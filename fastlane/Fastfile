@@ -12,6 +12,7 @@
 
 add_extra_platforms(platforms: [:typescript, :web])
 
+# TODO: before merging 21.0-dev into main, replace the snapshot using all version sources below. (SDK-4600)
 files_with_version_number = {
     './.version' => ['{x}'],
     './PurchasesHybridCommon.podspec' => ['s.version          = "{x}"'],
