@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A3B0C4B0000000000000006 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */; };
-		1A3B0C4B0000000000000008 /* CommonFunctionality+AttributesForCurrentUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */; };
-		1A3B0C4B0000000000000003 /* CommonFunctionality+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */; };
 		00C5972F9E16B498B2858F1C /* PurchasesHybridCommonUI in Frameworks */ = {isa = PBXBuildFile; productRef = E1576CE50ED702E850B979B4 /* PurchasesHybridCommonUI */; };
 		1204D41D866494A505556F16 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 7A688D2C3FB51D6E7E82D76B /* RevenueCat */; };
+		1A3B0C4B0000000000000003 /* CommonFunctionality+AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */; };
+		1A3B0C4B0000000000000006 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */; };
+		1A3B0C4B0000000000000008 /* CommonFunctionality+AttributesForCurrentUserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */; };
 		1E6A6C272E8BED79006C69B9 /* CommonPurchaseParamsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */; };
 		1E6A6C292E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */; };
 		2257429095AF286EA731AC1D /* PurchasesHybridCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 58BFD52BB107060499E42805 /* PurchasesHybridCommon */; };
@@ -47,6 +47,7 @@
 		72D36BAD9DD6C79E5CD0A1E2 /* PurchasesHybridCommonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8A09627F07B3A4F760B20A58 /* PurchasesHybridCommonUI */; };
 		7DCC8085126043DF85C4FF45 /* PaywallProxyDelegateRoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC549B5A8564650A513058C /* PaywallProxyDelegateRoutingTests.swift */; };
 		8D7E9A16717774CB710220ED /* PaywallPresentationStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5DB0D9EDF7E18D1D358ABE /* PaywallPresentationStyleTests.swift */; };
+		A10CF6000000000000000004 /* ConfiguredAdRewards+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */; };
 		A1B2C3D42026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */; };
 		A706CE00EE14886794CDD54C /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = DBE76503973A76ED36C721F9 /* Quick */; };
 		ABE6A8EBE26766CE90BF6484 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 8213150EA2D831D3AF5BAA52 /* RevenueCat */; };
@@ -68,7 +69,6 @@
 		FD922B66283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD922B65283D7493009E36C3 /* EntitlementInfo+HybridAdditionsTests.swift */; };
 		FDB8426E2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */; };
 		FDB842702E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */; };
-		A10CF6000000000000000004 /* ConfiguredAdRewards+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,11 +82,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A3B0C4B0000000000000001 /* CommonFunctionality+Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+Authentication.swift"; sourceTree = "<group>"; };
+		1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+AuthenticationTests.swift"; sourceTree = "<group>"; };
 		1A3B0C4B0000000000000004 /* CustomerAttribute+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomerAttribute+HybridAdditions.swift"; sourceTree = "<group>"; };
 		1A3B0C4B0000000000000005 /* CommonFunctionality+SpendVirtualCurrenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+SpendVirtualCurrenciesTests.swift"; sourceTree = "<group>"; };
 		1A3B0C4B0000000000000007 /* CommonFunctionality+AttributesForCurrentUserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+AttributesForCurrentUserTests.swift"; sourceTree = "<group>"; };
-		1A3B0C4B0000000000000001 /* CommonFunctionality+Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+Authentication.swift"; sourceTree = "<group>"; };
-		1A3B0C4B0000000000000002 /* CommonFunctionality+AuthenticationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+AuthenticationTests.swift"; sourceTree = "<group>"; };
 		1E6A6C242E7A5C8F006C69B9 /* CommonPurchaseParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParams.swift; sourceTree = "<group>"; };
 		1E6A6C262E8BED79006C69B9 /* CommonPurchaseParamsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPurchaseParamsTests.swift; sourceTree = "<group>"; };
 		1E6A6C282E8BEEEA006C69B9 /* CommonFunctionality+PurchaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CommonFunctionality+PurchaseTests.swift"; sourceTree = "<group>"; };
@@ -159,6 +159,7 @@
 		77D5E7292C233E2C002ECC77 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8461699F3DFCE64D7E1C312B /* RewardVerificationToken+HybridAdditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "RewardVerificationToken+HybridAdditions.swift"; sourceTree = "<group>"; };
 		9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "RewardVerificationToken+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
+		A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConfiguredAdRewards+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		A1B2C3D32026021600AABBCC /* RCHybridPurchaseLogicBridgeAPITest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCHybridPurchaseLogicBridgeAPITest.m; sourceTree = "<group>"; };
 		A1B2C3D52026021600AABBCC /* HybridPurchaseLogicBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HybridPurchaseLogicBridge.swift; sourceTree = "<group>"; };
 		B3105D79287E3CC200CA935B /* MockSandboxEnvironmentDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSandboxEnvironmentDetector.swift; sourceTree = "<group>"; };
@@ -186,7 +187,6 @@
 		FDB8426B2E09D1D3007DCB4C /* VirtualCurrencies+HybridAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditions.swift"; sourceTree = "<group>"; };
 		FDB8426D2E09D3F4007DCB4C /* VirtualCurrencies+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrencies+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 		FDB8426F2E09D43E007DCB4C /* VirtualCurrency+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VirtualCurrency+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
-		A10CF6000000000000000003 /* ConfiguredAdRewards+HybridAdditionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConfiguredAdRewards+HybridAdditionsTests.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1198,7 +1198,7 @@
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
 			requirement = {
 				kind = exactVersion;
-				version = 5.102.3;
+				version = 5.103.0;
 			};
 		};
 		57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
