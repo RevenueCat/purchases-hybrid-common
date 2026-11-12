@@ -77,6 +77,13 @@ import RevenueCatUI
         }
     }
 
+    func makePerformPurchaseWithContext() -> PerformPurchaseWithContext {
+        let performPurchase = makePerformPurchase()
+        return { context in
+            await performPurchase(context.package)
+        }
+    }
+
     func makePerformRestore() -> PerformRestore {
         return { [weak self] in
             guard let self = self else {

@@ -109,7 +109,7 @@ import UIKit
             controller = PaywallViewController(
                 fonts: DefaultPaywallFontProvider(),
                 displayCloseButton: displayCloseButton,
-                performPurchase: bridge.makePerformPurchase(),
+                performPurchaseWithContext: bridge.makePerformPurchaseWithContext(),
                 performRestore: bridge.makePerformRestore(),
                 dismissRequestedHandler: dismissHandler
             )
@@ -275,6 +275,7 @@ import UIKit
         }
 
         let performPurchase = purchaseLogicBridge?.makePerformPurchase()
+        let performPurchaseWithContext = purchaseLogicBridge?.makePerformPurchaseWithContext()
         let performRestore = purchaseLogicBridge?.makePerformRestore()
 
         let controller: PaywallViewController
@@ -299,7 +300,7 @@ import UIKit
             controller = PaywallViewController(fonts: params.fontProvider,
                                                displayCloseButton: params.displayCloseButton,
                                                shouldBlockTouchEvents: params.shouldBlockTouchEvents,
-                                               performPurchase: performPurchase,
+                                               performPurchaseWithContext: performPurchaseWithContext,
                                                performRestore: performRestore)
         }
 
