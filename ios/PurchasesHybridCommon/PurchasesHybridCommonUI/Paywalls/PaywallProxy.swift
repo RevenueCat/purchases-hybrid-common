@@ -94,8 +94,12 @@ import UIKit
         let controller: PaywallViewController
 
         switch (params.offeringIdentifier, params.purchaseLogicBridge) {
-        case let (_?, bridge?):
+        case let (offeringId?, bridge?):
             controller = PaywallViewController(
+                offeringIdentifier: offeringId,
+                presentedOfferingContext: createPresentedOfferingContext(
+                    for: offeringId, data: params.presentedOfferingContext
+                ),
                 displayCloseButton: displayCloseButton,
                 performPurchaseWithContext: bridge.makePerformPurchase(),
                 performRestore: bridge.makePerformRestore(),
@@ -126,12 +130,6 @@ import UIKit
         }
 
         PaywallCustomVariables.apply(params.customVariables, to: controller)
-
-        if let offeringId = params.offeringIdentifier, params.purchaseLogicBridge != nil {
-            controller.update(with: offeringId, presentedOfferingContext: createPresentedOfferingContext(
-                for: offeringId, data: params.presentedOfferingContext
-            ))
-        }
 
         controller.delegate = self
         if let bridge = params.purchaseLogicBridge {
@@ -262,23 +260,33 @@ import UIKit
     @nonobjc
     func makePaywallViewController(params: PaywallPresentationParams,
                                   purchaseLogicBridge: HybridPurchaseLogicBridge?) -> PaywallViewController {
-        let controller = PaywallViewController(fonts: params.fontProvider,
+        let controller: PaywallViewController
+        switch params.content {
+        case let .offeringIdentifier(identifier):
+            controller = PaywallViewController(offeringIdentifier: identifier,
+                                               presentedOfferingContext: .init(offeringIdentifier: identifier),
+                                               fonts: params.fontProvider,
                                                displayCloseButton: params.displayCloseButton,
                                                shouldBlockTouchEvents: params.shouldBlockTouchEvents,
                                                performPurchaseWithContext: purchaseLogicBridge?.makePerformPurchase(),
                                                performRestore: purchaseLogicBridge?.makePerformRestore())
-
-        // Updating the offering creates the hosting controller, which captures the custom variables.
-        PaywallCustomVariables.apply(params.customVariables, to: controller)
-
-        switch params.content {
-        case let .offeringIdentifier(identifier):
-            controller.update(with: identifier, presentedOfferingContext: .init(offeringIdentifier: identifier))
         case let .offeringIdentifierWithPresentedOfferingContext(identifier, presentedOfferingContext):
-            controller.update(with: identifier, presentedOfferingContext: presentedOfferingContext)
+            controller = PaywallViewController(offeringIdentifier: identifier,
+                                               presentedOfferingContext: presentedOfferingContext,
+                                               fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
+                                               performPurchaseWithContext: purchaseLogicBridge?.makePerformPurchase(),
+                                               performRestore: purchaseLogicBridge?.makePerformRestore())
         case .defaultOffering:
-            break
+            controller = PaywallViewController(fonts: params.fontProvider,
+                                               displayCloseButton: params.displayCloseButton,
+                                               shouldBlockTouchEvents: params.shouldBlockTouchEvents,
+                                               performPurchaseWithContext: purchaseLogicBridge?.makePerformPurchase(),
+                                               performRestore: purchaseLogicBridge?.makePerformRestore())
         }
+
+        PaywallCustomVariables.apply(params.customVariables, to: controller)
 
         return controller
     }

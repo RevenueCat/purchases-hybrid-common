@@ -88,7 +88,7 @@ class PaywallCustomVariablesTests: QuickSpec {
         describe("createPaywallView(params:)") {
             for hasPurchaseLogic in [false, true] {
                 let purchaseLogicDescription = hasPurchaseLogic ? "with" : "without"
-                it("sets variables before loading an offering \(purchaseLogicDescription) custom purchase logic") {
+                it("keeps an offering configurable after creation \(purchaseLogicDescription) custom purchase logic") {
                     let params = PaywallViewCreationParams()
                     params.offeringIdentifier = "offering"
                     params.customVariables = ["tier": "premium"]
@@ -99,9 +99,15 @@ class PaywallCustomVariablesTests: QuickSpec {
                     }
 
                     let controller = PaywallProxy().createPaywallView(params: params)
+                    expect(controller.isViewLoaded) == false
+                    controller.setCustomVariable("updated", forKey: "tier")
+                    controller.setCustomVariableBool(true, forKey: "after_creation")
+                    expect(controller.isViewLoaded) == false
                     controller.loadViewIfNeeded()
 
-                    expect(controller.customVariables) == ["tier": .string("premium")]
+                    expect(controller.customVariables) == [
+                        "tier": .string("updated"), "after_creation": .bool(true),
+                    ]
                 }
             }
 
@@ -149,7 +155,7 @@ class PaywallCustomVariablesTests: QuickSpec {
             for (name, content) in contents {
                 for hasPurchaseLogic in [false, true] {
                     let purchaseLogicDescription = hasPurchaseLogic ? "with" : "without"
-                    it("sets variables before loading \(name) \(purchaseLogicDescription) custom purchase logic") {
+                    it("keeps \(name) configurable after creation \(purchaseLogicDescription) custom purchase logic") {
                         let params = PaywallProxy.PaywallPresentationParams(options: [
                             PaywallProxy.PaywallOptionsKeys.customVariables: [
                                 "tier": "premium", "count": NSNumber(value: 1), "is_pro": NSNumber(value: true),
@@ -162,10 +168,15 @@ class PaywallCustomVariablesTests: QuickSpec {
                         let controller = PaywallProxy().makePaywallViewController(
                             params: params, purchaseLogicBridge: bridge
                         )
+                        expect(controller.isViewLoaded) == false
+                        controller.setCustomVariable("updated", forKey: "tier")
+                        controller.setCustomVariableBool(true, forKey: "after_creation")
+                        expect(controller.isViewLoaded) == false
                         controller.loadViewIfNeeded()
 
                         expect(controller.customVariables) == [
-                            "tier": .string("premium"), "count": .number(1), "is_pro": .bool(true),
+                            "tier": .string("updated"), "count": .number(1), "is_pro": .bool(true),
+                            "after_creation": .bool(true),
                         ]
                     }
                 }
