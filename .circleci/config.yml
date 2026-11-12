@@ -594,6 +594,18 @@ workflows:
       - deploy-android:
           name: android-deploy-dry-run
           dry_run: true
+      # TODO: remove before merging 21.0-dev into main (SDK-4600)
+      - deploy-android:
+          name: android-deploy-snapshot
+          lane: deploy_snapshot
+          context: maven-central-publishing
+          requires:
+            - test-android
+          filters:
+            branches:
+              only: 21.0-dev
+            tags:
+              ignore: /.*/
       - deploy-typescript:
           name: typescript-deploy-dry-run
           dry_run: true
