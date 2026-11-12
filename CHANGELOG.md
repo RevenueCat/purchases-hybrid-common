@@ -1,3 +1,8 @@
+## 20.9.0
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.102.3 => 5.103.0 (#2100) via RevenueCat Git Bot (@RCGitBot)
+
 ## 20.8.0
 ## RevenueCat SDK
 ### ✨ New Features
