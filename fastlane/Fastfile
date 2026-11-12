@@ -484,6 +484,36 @@ platform :ios do
     check_pods
   end
 
+  desc "Test Git-sourced CocoaPods installation without trunk specifications"
+  lane :test_cocoapods_installation do
+    require 'cocoapods'
+    repository_root = get_root_folder
+    directory = File.join(repository_root, 'ios/CocoaPodsInstallationTests')
+    Dir.chdir(directory) do
+      sh('bundle', 'exec', 'ruby', 'generate_project.rb')
+      cocoapods(podfile: File.join(directory, 'Podfile'), clean_install: true)
+
+      lockfile = Pod::Lockfile.from_file(Pathname('Podfile.lock'))
+      sources = lockfile.to_hash.fetch('EXTERNAL SOURCES')
+      %w[RevenueCat RevenueCatUI PurchasesHybridCommon PurchasesHybridCommonUI].each do |name|
+        UI.user_error!("#{name} must come from Git") unless sources.fetch(name).key?(:git)
+      end
+      %w[PurchasesHybridCommon PurchasesHybridCommonUI].each do |name|
+        expected = Pod::Specification.from_file(File.join(repository_root, "#{name}.podspec")).version
+        UI.user_error!("#{name} does not match the checkout's podspec") unless lockfile.version(name) == expected
+      end
+
+      scan(
+        workspace: File.join(directory, 'CocoaPodsInstallation.xcworkspace'),
+        scheme: 'CocoaPodsInstallation',
+        destination: ENV.fetch('PHC_COCOAPODS_TEST_DESTINATION', 'platform=iOS Simulator,name=iPhone 17,OS=27.0'),
+        derived_data_path: File.join(directory, 'build'),
+        output_directory: File.join(directory, 'test_output'),
+        xcargs: 'CODE_SIGNING_ALLOWED=NO'
+      )
+    end
+  end
+
   desc "replace API KEY for integration tests"
   lane :replace_api_key_integration_tests do
     folder = './ios/PurchasesHybridCommon/PurchasesHybridCommonIntegrationTests/'
@@ -664,19 +694,32 @@ def latest_published_version_number
 end
 
 def check_pods
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommonUI.podspec',
-    include_podspecs: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
+  require 'open-uri'
+  require 'tmpdir'
+
+  # External podspecs still download their sources from Git, without consulting trunk.
+  Dir.mktmpdir('phc-native-podspecs') do |directory|
+    %w[RevenueCat RevenueCatUI].each do |name|
+      url = "https://raw.githubusercontent.com/RevenueCat/purchases-ios/#{parse_previous_ios_native_version}/#{name}.podspec"
+      File.write(File.join(directory, "#{name}.podspec"), URI.open(url).read)
+    end
+
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommon.podspec',
+      external_podspecs: File.join(directory, 'RevenueCat.podspec'),
+      platforms: 'ios,osx,tvos,visionos',
+      fail_fast: true
+    )
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommonUI.podspec',
+      include_podspecs: 'PurchasesHybridCommon.podspec',
+      external_podspecs: File.join(directory, '*.podspec'),
+      platforms: 'ios,osx,tvos,visionos',
+      fail_fast: true
+    )
+  end
 end
 
 def is_snapshot_version?(version_name)

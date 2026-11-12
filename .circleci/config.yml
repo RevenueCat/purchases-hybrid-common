@@ -525,6 +525,14 @@ jobs:
           name: Lint Podspec
           command: bundle exec fastlane ios pod_lint
           no_output_timeout: 30m
+      - run:
+          name: Test Git-sourced CocoaPods installation
+          command: bundle exec fastlane ios test_cocoapods_installation
+          no_output_timeout: 30m
+      - store_test_results:
+          path: ios/CocoaPodsInstallationTests/test_output
+      - store_artifacts:
+          path: ios/CocoaPodsInstallationTests/test_output
 
   validate-circleci-config:
     docker:

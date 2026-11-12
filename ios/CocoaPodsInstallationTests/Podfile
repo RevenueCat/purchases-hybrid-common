@@ -1,0 +1,29 @@
+require 'open3'
+
+repository_root = File.expand_path('../..', __dir__)
+core_spec = Pod::Specification.from_file(File.join(repository_root, 'PurchasesHybridCommon.podspec'))
+ui_spec = Pod::Specification.from_file(File.join(repository_root, 'PurchasesHybridCommonUI.podspec'))
+native_version = core_spec.dependencies.find { |dependency| dependency.name == 'RevenueCat' }.requirement.requirements.fetch(0).fetch(1).to_s
+native_ui_version = ui_spec.dependencies.find { |dependency| dependency.name == 'RevenueCatUI' }.requirement.requirements.fetch(0).fetch(1).to_s
+revision, status = Open3.capture2('git', '-C', repository_root, 'rev-parse', 'HEAD')
+raise 'Could not determine the PHC revision' unless status.success?
+
+phc_source = {
+  :git => ENV.fetch('PHC_COCOAPODS_GIT_URL', 'https://github.com/RevenueCat/purchases-hybrid-common.git'),
+  :commit => revision.strip
+}
+native_source = 'https://github.com/RevenueCat/purchases-ios.git'
+
+platform :ios, '15.0'
+use_frameworks! :linkage => :static
+
+target 'CocoaPodsInstallation' do
+  pod 'RevenueCat', :git => native_source, :tag => native_version
+  pod 'RevenueCatUI', :git => native_source, :tag => native_ui_version
+  pod 'PurchasesHybridCommon', phc_source
+  pod 'PurchasesHybridCommonUI', phc_source
+
+  target 'CocoaPodsInstallationTests' do
+    inherit! :search_paths
+  end
+end
