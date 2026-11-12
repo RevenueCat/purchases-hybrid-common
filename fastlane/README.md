@@ -109,14 +109,6 @@ Tag current branch with current version number
 
 Resolve the iOS test project's Swift packages
 
-### wait_for_pods_on_cdn
-
-```sh
-[bundle exec] fastlane wait_for_pods_on_cdn
-```
-
-Waits until the pods for the current version are resolvable on the CocoaPods CDN
-
 ### wait_for_android_artifacts_on_maven_central
 
 ```sh
@@ -137,22 +129,6 @@ Run automatic bump in other repos
 
 
 ## iOS
-
-### ios push_pod_PHC
-
-```sh
-[bundle exec] fastlane ios push_pod_PHC
-```
-
-Release PurchasesHybridCommon to CocoaPods
-
-### ios push_pod_PHCUI
-
-```sh
-[bundle exec] fastlane ios push_pod_PHCUI
-```
-
-Release PurchasesHybridCommonUI to CocoaPods
 
 ### ios pod_lint
 

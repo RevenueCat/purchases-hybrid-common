@@ -219,30 +219,6 @@ jobs:
           path: ios/PurchasesHybridCommon/test_output
           destination: scan-output
 
-  deploy-ios-phc:
-    <<: *base-ios-job
-    steps:
-      - checkout
-      - revenuecat/install-gem-mac-dependencies:
-          cache-version: v1
-      - revenuecat/trust-github-key
-      - run:
-          name: Deploy PurchasesHybridCommon to Cocoapods
-          command: bundle exec fastlane ios push_pod_PHC
-          no_output_timeout: 30m
-
-  deploy-ios-phcui:
-    <<: *base-ios-job
-    steps:
-      - checkout
-      - revenuecat/install-gem-mac-dependencies:
-          cache-version: v1
-      - revenuecat/trust-github-key
-      - run:
-          name: Deploy PurchasesHybridCommonUI to Cocoapods
-          command: bundle exec fastlane ios push_pod_PHCUI
-          no_output_timeout: 30m
-
   detekt-android:
     executor:
       name: android/android-machine
@@ -436,16 +412,6 @@ jobs:
       - run:
           name: Wait for the Android artifacts to reach Maven Central
           command: bundle exec fastlane wait_for_android_artifacts_on_maven_central
-      # Blocks the bumps rather than each hybrid waiting on its own mac executors.
-      # The lane logs on every poll, so the default 10 minute no-output timeout
-      # wouldn't fire, but set it explicitly to sit just above the lane's own 3
-      # hour cap, otherwise a stalled CDN request kills the step at 10 minutes.
-      # If the step does fail, the bump steps below still run: they are all
-      # `when: always`.
-      - run:
-          name: Wait for the new pods to reach the CocoaPods CDN
-          command: bundle exec fastlane wait_for_pods_on_cdn
-          no_output_timeout: 190m
       - run:
           name: Kick off Flutter automatic dependency update
           command: |
@@ -643,12 +609,6 @@ workflows:
 
       # The jobs below publish the release. They only run on the tag that
       # tag-current-branch pushes above, so they never run on a branch pipeline.
-      - deploy-ios-phc:
-          <<: *release-tags
-      - deploy-ios-phcui:
-          <<: *release-tags
-          requires:
-            - deploy-ios-phc
       - deploy-android:
           <<: *release-tags
           context: maven-central-publishing
@@ -669,8 +629,6 @@ workflows:
             - deploy-typescript
             - deploy-typescript-esm
             - deploy-js-mappings
-            - deploy-ios-phc
-            - deploy-ios-phcui
       - trigger-dependent-updates:
           <<: *stable-release-tags
           requires:
