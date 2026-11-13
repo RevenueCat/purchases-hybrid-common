@@ -1,16 +1,10 @@
 ## RevenueCat SDK
-### ✨ New Features
-* Add configured ad rewards bridges and shared models (#2064) via Pol Miro (@polmiro)
 ### 📦 Dependency Updates
-* [AUTOMATIC] Android 11.2.0 => 11.2.1 (#2094) via RevenueCat Git Bot (@RCGitBot)
-* [RENOVATE] Update dependency revenuecat to v4.8.0 (#2087) via RevenueCat Git Bot (@RCGitBot)
-* [AUTOMATIC] iOS 5.102.2 => 5.102.3 Android 11.1.0 => 11.2.0 (#2083) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] Android 11.2.1 => 11.3.0 (#2114) via RevenueCat Git Bot (@RCGitBot)
+* [AUTOMATIC] iOS 5.102.3 => 5.103.0 (#2100) via RevenueCat Git Bot (@RCGitBot)
 
 ### 🔄 Other Changes
-* Fix flaky iOS log handler tests (#2081) via Cesar de la Vega (@vegaro)
-* feat(iam): bridge subscriber attribute retrieval (#2075) via Dave DeLong (@davedelong)
-* feat(iam): bridge virtual currency spending (#2073) via Dave DeLong (@davedelong)
-* Bridge IAM APIs (#2071) via Dave DeLong (@davedelong)
-* ci: re-enable CocoaPods publishing after trunk freeze (#2085) via Antonio Pallares (@ajpallares)
-* ci(android): sign Maven artifacts with the in-memory key (#2089) via Álvaro Brey (@AlvaroBrey)
-* Restrict GitHub tokens to the jobs that need them (#2090) via Antonio Pallares (@ajpallares)
+* ci: pass Maven Central credentials to Gradle as environment variables (#2113) via Álvaro Brey (@AlvaroBrey)
+* ci: stop storing test artifacts and xcresult bundles (#2110) via Rick (@rickvdl)
+* chore(deps): bump fastlane-plugin-revenuecat_internal from `6f0a9ec` to `52a8b95` (#2108) via dependabot[bot] (@dependabot[bot])
+* Fix CocoaPods lint for iOS 5.103.0 paywall callbacks (#2104) via Antonio Pallares (@ajpallares)
