@@ -16,6 +16,7 @@ import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Offerings
 import com.revenuecat.purchases.Package
+import com.revenuecat.purchases.PackagePurchaseReference
 import com.revenuecat.purchases.PresentedOfferingContext
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
@@ -54,8 +55,8 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
+import com.revenuecat.purchases.interfaces.GetPackagesForPurchaseCallback
 import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
-import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
@@ -481,19 +482,38 @@ fun purchaseProduct(
 }
 
 @OptIn(InternalRevenueCatAPI::class)
-private fun Purchases.getOfferingsForPurchaseWith(
+private fun Purchases.getPackagesForPurchaseWith(
+    packageReference: PackagePurchaseReference,
+    addOnPackageReferences: List<PackagePurchaseReference>,
     onError: (PurchasesError) -> Unit,
-    onSuccess: (Offerings) -> Unit,
+    onSuccess: (Package, List<Package>) -> Unit,
 ) {
-    getOfferingsForPurchase(object : ReceiveOfferingsCallback {
-        override fun onError(error: PurchasesError) = onError(error)
-        override fun onReceived(offerings: Offerings) = onSuccess(offerings)
-    })
+    getPackagesForPurchase(
+        packageReference,
+        addOnPackageReferences,
+        object : GetPackagesForPurchaseCallback {
+            override fun onError(error: PurchasesError) = onError(error)
+            override fun onReceived(packageToPurchase: Package, addOnPackages: List<Package>) =
+                onSuccess(packageToPurchase, addOnPackages)
+        },
+    )
 }
 
+@OptIn(InternalRevenueCatAPI::class)
+@Suppress("ThrowsCount")
+private fun addOnPackageReferences(rawAddOnPackages: List<Map<String, Any?>>?): List<PackagePurchaseReference> =
+    rawAddOnPackages.orEmpty().mapNotNull { addOnMap ->
+        val packageIdentifier = addOnMap["packageIdentifier"] as? String ?: return@mapNotNull null
+        val context = addOnMap["presentedOfferingContext"] as? Map<*, *>
+            ?: throw IllegalArgumentException("Missing presentedOfferingContext for add-on package $packageIdentifier")
+        val offeringIdentifier = context["offeringIdentifier"] as? String
+            ?: throw IllegalArgumentException("Missing offeringIdentifier for add-on package $packageIdentifier")
+        PackagePurchaseReference(offeringIdentifier, packageIdentifier)
+    }
+
 @JvmOverloads
-@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
-@Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod")
+@OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class, InternalRevenueCatAPI::class)
+@Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod", "ReturnCount")
 fun purchasePackage(
     activity: Activity?,
     packageIdentifier: String,
@@ -522,117 +542,88 @@ fun purchasePackage(
         return
     }
 
-    if (activity != null) {
-        Purchases.sharedInstance.getOfferingsForPurchaseWith(
-            { onResult.onError(it.map()) },
-            { offerings ->
-                val context = presentedOfferingContext.toPresentedOfferingContext()
-                if (context == null) {
-                    onResult.onError(
-                        PurchasesError(
-                            PurchasesErrorCode.PurchaseInvalidError,
-                            "There is no or invalid presented offering context data provided to make this purchase",
-                        ).map(),
-                    )
-                    return@getOfferingsForPurchaseWith
+    if (activity == null) {
+        onResult.onError(PurchasesError(PurchasesErrorCode.PurchaseInvalidError, "There is no current Activity").map())
+        return
+    }
+    val context = presentedOfferingContext.toPresentedOfferingContext()
+    if (context == null) {
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.PurchaseInvalidError,
+                "There is no or invalid presented offering context data provided to make this purchase",
+            ).map(),
+        )
+        return
+    }
+    val addOnReferences = try {
+        addOnPackageReferences(addOnPackages)
+    } catch (e: IllegalArgumentException) {
+        onResult.onError(PurchasesError(PurchasesErrorCode.PurchaseInvalidError, e.message).map())
+        return
+    }
+    Purchases.sharedInstance.getPackagesForPurchaseWith(
+        PackagePurchaseReference(context.offeringIdentifier, packageIdentifier),
+        addOnReferences,
+        onError = { onResult.onError(it.map()) },
+        onSuccess = { packageToBuy, resolvedAddOnPackages ->
+            val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
+            purchaseParams.presentedOfferingContext(context)
+
+            // Product upgrade
+            if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
+                purchaseParams.oldProductId(googleOldProductId)
+                if (storeReplacementMode != null) {
+                    purchaseParams.replacementMode(storeReplacementMode)
                 }
+            }
 
-                val packageToBuy =
-                    offerings[context.offeringIdentifier]?.availablePackages?.firstOrNull {
-                        it.identifier.equals(packageIdentifier, ignoreCase = true)
-                    }
-                if (packageToBuy != null) {
-                    val purchaseParams = PurchaseParams.Builder(activity, packageToBuy)
+            // Personalized price
+            googleIsPersonalizedPrice?.let {
+                purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
+            }
 
-                    purchaseParams.presentedOfferingContext(context)
+            // Add ons
+            if (!addOnStoreProducts.isNullOrEmpty() ||
+                !addOnSubscriptionOptions.isNullOrEmpty() ||
+                resolvedAddOnPackages.isNotEmpty()
+            ) {
+                fetchAddOnStoreProductsAndSubscriptionOptions(
+                    addOnStoreProducts = addOnStoreProducts,
+                    addOnSubscriptionOptions = addOnSubscriptionOptions,
+                    onError = { onResult.onError(it.map()) },
+                    onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
+                        addOnStoreProducts
+                            .takeUnless { it.isNullOrEmpty() }
+                            ?.let {
+                                purchaseParams.addOnStoreProducts(addOnStoreProducts = it)
+                            }
+                        addOnSubscriptionOptions
+                            .takeUnless { it.isNullOrEmpty() }
+                            ?.let {
+                                purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = it)
+                            }
 
-                    // Product upgrade
-                    if (googleOldProductId != null && googleOldProductId.isNotBlank()) {
-                        purchaseParams.oldProductId(googleOldProductId)
-                        if (storeReplacementMode != null) {
-                            purchaseParams.replacementMode(storeReplacementMode)
+                        resolvedAddOnPackages.takeIf { it.isNotEmpty() }?.let {
+                            purchaseParams.addOnPackages(it)
                         }
-                    }
 
-                    // Personalized price
-                    googleIsPersonalizedPrice?.let {
-                        purchaseParams.isPersonalizedPrice(googleIsPersonalizedPrice)
-                    }
-
-                    // Add ons
-                    if (!addOnStoreProducts.isNullOrEmpty() ||
-                        !addOnSubscriptionOptions.isNullOrEmpty() ||
-                        !addOnPackages.isNullOrEmpty()
-                    ) {
-                        fetchAddOnStoreProductsAndSubscriptionOptions(
-                            addOnStoreProducts = addOnStoreProducts,
-                            addOnSubscriptionOptions = addOnSubscriptionOptions,
-                            onError = { onResult.onError(it.map()) },
-                            onResult = { addOnStoreProducts, addOnSubscriptionOptions ->
-                                addOnStoreProducts
-                                    .takeUnless { it.isNullOrEmpty() }
-                                    ?.let {
-                                        purchaseParams.addOnStoreProducts(addOnStoreProducts = it)
-                                    }
-
-                                addOnSubscriptionOptions
-                                    .takeUnless { it.isNullOrEmpty() }
-                                    ?.let {
-                                        purchaseParams.addOnSubscriptionOptions(addOnSubscriptionOptions = it)
-                                    }
-
-                                try {
-                                    createAddOnPackages(
-                                        rawAddOnPackages = addOnPackages,
-                                        offerings = offerings,
-                                    )
-                                        .takeUnless { it.isNullOrEmpty() }
-                                        ?.let {
-                                            purchaseParams.addOnPackages(addOnPackages = it)
-                                        }
-                                } catch (e: IllegalArgumentException) {
-                                    onResult.onError(
-                                        PurchasesError(
-                                            PurchasesErrorCode.PurchaseInvalidError,
-                                            e.message,
-                                        ).map(),
-                                    )
-                                    return@fetchAddOnStoreProductsAndSubscriptionOptions
-                                }
-
-                                Purchases.sharedInstance.purchaseWith(
-                                    purchaseParams.build(),
-                                    onError = getPurchaseErrorFunction(onResult),
-                                    onSuccess = getPurchaseCompletedFunction(onResult),
-                                )
-                            },
-                        )
-                    } else {
-                        // Perform purchase
                         Purchases.sharedInstance.purchaseWith(
                             purchaseParams.build(),
                             onError = getPurchaseErrorFunction(onResult),
                             onSuccess = getPurchaseCompletedFunction(onResult),
                         )
-                    }
-                } else {
-                    onResult.onError(
-                        PurchasesError(
-                            PurchasesErrorCode.ProductNotAvailableForPurchaseError,
-                            "Couldn't find product for package $packageIdentifier",
-                        ).map(),
-                    )
-                }
-            },
-        )
-    } else {
-        onResult.onError(
-            PurchasesError(
-                PurchasesErrorCode.PurchaseInvalidError,
-                "There is no current Activity",
-            ).map(),
-        )
-    }
+                    },
+                )
+            } else {
+                Purchases.sharedInstance.purchaseWith(
+                    purchaseParams.build(),
+                    onError = getPurchaseErrorFunction(onResult),
+                    onSuccess = getPurchaseCompletedFunction(onResult),
+                )
+            }
+        },
+    )
 }
 
 @JvmOverloads
