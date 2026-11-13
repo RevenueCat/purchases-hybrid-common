@@ -33,13 +33,13 @@ import com.revenuecat.purchases.hybridcommon.mappers.MappedProductCategory
 import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
 import com.revenuecat.purchases.interfaces.Callback
+import com.revenuecat.purchases.interfaces.GetPackagesForPurchaseCallback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.GetStorefrontCallback
 import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
 import com.revenuecat.purchases.interfaces.LogInCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
-import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.models.BillingFeature
 import com.revenuecat.purchases.models.GoogleReplacementMode
@@ -85,7 +85,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalRevenueCatAPI::class)
 internal class CommonKtTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
@@ -1103,16 +1103,16 @@ internal class CommonKtTests {
         val expectedOldProductIdentifier = "old_product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
         val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -1163,16 +1163,16 @@ internal class CommonKtTests {
         val expectedOldProductIdentifier = "old_product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
         val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -1486,16 +1486,16 @@ internal class CommonKtTests {
         val expectedOldProductIdentifier = "old_product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
         val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -1615,16 +1615,16 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
         val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -1672,16 +1672,16 @@ internal class CommonKtTests {
         val expectedProductIdentifier = "product"
         var receivedResponse: MutableMap<String, *>? = null
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         val mockStoreProduct = TestUtilities.stubStoreProduct(expectedProductIdentifier)
         val mockTransaction = TestUtilities.createMockTransaction(expectedProductIdentifier)
 
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()

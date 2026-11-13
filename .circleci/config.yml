@@ -88,9 +88,6 @@ jobs:
             SCAN_DEVICE: iPhone 14 (16.4)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   test-ios-17:
     <<: *base-ios-job
@@ -108,9 +105,6 @@ jobs:
             SCAN_DEVICE: iPhone 15 (17.2)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   test-ios-18:
     <<: *base-ios-job
@@ -128,9 +122,6 @@ jobs:
             SCAN_DEVICE: iPhone 16 (18.5)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   test-ios-26:
     <<: *base-ios-job
@@ -152,9 +143,6 @@ jobs:
             SCAN_DEVICE: iPhone 17 (26.5)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   test-ios-27:
     <<: *base-ios-job
@@ -176,9 +164,6 @@ jobs:
             SCAN_DEVICE: iPhone 17 (27.0)
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   integration-test-ios:
     <<: *base-ios-job
@@ -211,20 +196,10 @@ jobs:
       # Xcode 27 can hang collecting simulator diagnostics after the tests finish.
       - run:
           name: Run ios tests
-          command: bundle exec fastlane scan --result_bundle=true --testplan=CI --xcargs "-collect-test-diagnostics never"
+          command: bundle exec fastlane scan --testplan=CI --xcargs "-collect-test-diagnostics never"
           working_directory: ios/PurchasesHybridCommon
-      - run:
-          name: Compress result bundle
-          command: |
-             tar -czf test_output/xcresult.tar.gz test_output/PurchasesHybridCommonIntegrationTests.xcresult && \
-             rm -r test_output/PurchasesHybridCommonIntegrationTests.xcresult
-          working_directory: ios/PurchasesHybridCommon
-          when: always
       - store_test_results:
           path: ios/PurchasesHybridCommon/test_output
-      - store_artifacts:
-          path: ios/PurchasesHybridCommon/test_output
-          destination: scan-output
 
   deploy-ios-phc:
     <<: *base-ios-job
@@ -296,8 +271,6 @@ jobs:
           working_directory: android
           command: ./gradlew lint test
       - android/save-build-cache
-      - store_artifacts:
-          path: android/build/reports
       - store_test_results:
           path: android/build/test-results
 
