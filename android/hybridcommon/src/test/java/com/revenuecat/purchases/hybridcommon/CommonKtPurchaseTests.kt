@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.PresentedOfferingContext
@@ -10,10 +11,12 @@ import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesAreCompletedBy
+import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.Store
 import com.revenuecat.purchases.common.PlatformInfo
 import com.revenuecat.purchases.hybridcommon.mappers.overrideMapperDispatcher
+import com.revenuecat.purchases.interfaces.GetPackagesForPurchaseCallback
 import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
@@ -38,7 +41,7 @@ import kotlin.test.assertTrue
 import kotlin.text.split
 
 @Suppress("LargeClass")
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalRevenueCatAPI::class)
 internal class CommonKtPurchaseTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
@@ -81,16 +84,16 @@ internal class CommonKtPurchaseTests {
 
         val mockStoreProduct = TestUtilities.stubStoreProduct("product_id")
         val mockTransaction = TestUtilities.createMockTransaction("product_id")
-        val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(
             mockStoreProduct,
             packageIdentifier = expectedPackageIdentifier,
         )
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedPurchaseCallback = slot<PurchaseCallback>()
@@ -181,16 +184,16 @@ internal class CommonKtPurchaseTests {
             )
         }
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
-        val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(
             baseStoreProduct,
             packageIdentifier = expectedPackageIdentifier,
         )
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedProductIds = slot<List<String>>()
@@ -283,11 +286,11 @@ internal class CommonKtPurchaseTests {
         val offering = requireNotNull(offerings[offeringIdentifier])
         every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, addOnPackages)
         }
 
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
@@ -369,11 +372,11 @@ internal class CommonKtPurchaseTests {
         val offering = requireNotNull(offerings[offeringIdentifier])
         every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
@@ -418,7 +421,7 @@ internal class CommonKtPurchaseTests {
         )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
-        assertTrue(capturedReceiveOfferingsCallback.isCaptured)
+        assertFalse(capturedReceiveOfferingsCallback.isCaptured)
     }
 
     @Suppress("LongMethod")
@@ -453,11 +456,11 @@ internal class CommonKtPurchaseTests {
         val offering = requireNotNull(offerings[offeringIdentifier])
         every { offering.availablePackages } returns listOf(packageToPurchase) + addOnPackages
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
@@ -507,7 +510,7 @@ internal class CommonKtPurchaseTests {
         )
         assertFalse(purchaseParamsSlot.isCaptured)
         assertFalse(capturedPurchaseCallback.isCaptured)
-        assertTrue(capturedReceiveOfferingsCallback.isCaptured)
+        assertFalse(capturedReceiveOfferingsCallback.isCaptured)
     }
 
     @Suppress("LongMethod", "MaxLineLength")
@@ -536,11 +539,17 @@ internal class CommonKtPurchaseTests {
             offering.availablePackages.first { it.identifier == requestedIdentifier }
         }
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onError(
+                PurchasesError(
+                    PurchasesErrorCode.PurchaseInvalidError,
+                    "Could not find package with identifier addon_package_one" +
+                        " in offering with identifier $offeringIdentifier",
+                ),
+            )
         }
 
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
@@ -613,16 +622,16 @@ internal class CommonKtPurchaseTests {
         val mockStoreProduct = TestUtilities.stubStoreProduct(baseProductId)
         val addOnStoreProducts = addOnProductIds.map { TestUtilities.stubStoreProduct(it) }
         val mockTransaction = TestUtilities.createMockTransaction(baseProductId)
-        val (offeringIdentifier, _, offerings) = TestUtilities.getOfferings(
+        val (offeringIdentifier, packageToPurchase, offerings) = TestUtilities.getOfferings(
             mockStoreProduct,
             packageIdentifier = expectedPackageIdentifier,
         )
 
-        val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
+        val capturedReceiveOfferingsCallback = slot<GetPackagesForPurchaseCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getPackagesForPurchase(any(), any(), capture(capturedReceiveOfferingsCallback))
         } answers {
-            capturedReceiveOfferingsCallback.captured.onReceived(offerings)
+            capturedReceiveOfferingsCallback.captured.onReceived(packageToPurchase, emptyList())
         }
 
         val capturedProductIds = slot<List<String>>()
