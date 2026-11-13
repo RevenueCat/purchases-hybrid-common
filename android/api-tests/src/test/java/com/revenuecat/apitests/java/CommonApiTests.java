@@ -37,6 +37,10 @@ class CommonApiTests {
         CommonKt.getOfferings(onResult);
     }
 
+    private void checkGetOffering(String offeringIdentifier, OnNullableResult onResult) {
+        CommonKt.getOffering(offeringIdentifier, onResult);
+    }
+
     private void checkGetProductInfo(List<String> productIDs,
                                      String type,
                                      OnResultList onResult) {

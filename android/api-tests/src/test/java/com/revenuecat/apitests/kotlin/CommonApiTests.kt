@@ -18,6 +18,7 @@ import com.revenuecat.purchases.hybridcommon.getAdRewards
 import com.revenuecat.purchases.hybridcommon.getAppUserID
 import com.revenuecat.purchases.hybridcommon.getCachedVirtualCurrencies
 import com.revenuecat.purchases.hybridcommon.getCustomerInfo
+import com.revenuecat.purchases.hybridcommon.getOffering
 import com.revenuecat.purchases.hybridcommon.getOfferings
 import com.revenuecat.purchases.hybridcommon.getProductInfo
 import com.revenuecat.purchases.hybridcommon.getPromotionalOffer
@@ -69,6 +70,10 @@ private class CommonApiTests {
 
     fun checkGetOfferings(onResult: OnResult) {
         getOfferings(onResult)
+    }
+
+    fun checkGetOffering(offeringIdentifier: String, onResult: OnNullableResult) {
+        getOffering(offeringIdentifier, onResult)
     }
 
     fun checkGetProductInfo(

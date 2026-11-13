@@ -69,6 +69,10 @@ NS_ASSUME_NONNULL_BEGIN
                                                              RCErrorContainer * _Nullable error) {
     }];
 
+    [RCCommonFunctionality getOfferingForIdentifier:@"" completionBlock:^(NSDictionary<NSString *,id> * _Nullable offering, RCErrorContainer * _Nullable error) {
+
+    }];
+
     [RCCommonFunctionality getCurrentOfferingForPlacement:@"" completionBlock:^(NSDictionary<NSString *,id> * _Nullable offering, RCErrorContainer * _Nullable error) {
 
     }];
