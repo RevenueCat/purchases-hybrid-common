@@ -55,6 +55,7 @@ import com.revenuecat.purchases.hybridcommon.mappers.map
 import com.revenuecat.purchases.hybridcommon.mappers.mapAsync
 import com.revenuecat.purchases.hybridcommon.mappers.toMap
 import com.revenuecat.purchases.interfaces.GetVirtualCurrenciesCallback
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
 import com.revenuecat.purchases.interfaces.RedeemWebPurchaseListener
 import com.revenuecat.purchases.interfaces.SyncAttributesAndOfferingsCallback
 import com.revenuecat.purchases.logInWith
@@ -479,6 +480,17 @@ fun purchaseProduct(
     }
 }
 
+@OptIn(InternalRevenueCatAPI::class)
+private fun Purchases.getOfferingsForPurchaseWith(
+    onError: (PurchasesError) -> Unit,
+    onSuccess: (Offerings) -> Unit,
+) {
+    getOfferingsForPurchase(object : ReceiveOfferingsCallback {
+        override fun onError(error: PurchasesError) = onError(error)
+        override fun onReceived(offerings: Offerings) = onSuccess(offerings)
+    })
+}
+
 @JvmOverloads
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)
 @Suppress("LongMethod", "LongParameterList", "CyclomaticComplexMethod")
@@ -511,7 +523,7 @@ fun purchasePackage(
     }
 
     if (activity != null) {
-        Purchases.sharedInstance.getOfferingsWith(
+        Purchases.sharedInstance.getOfferingsForPurchaseWith(
             { onResult.onError(it.map()) },
             { offerings ->
                 val context = presentedOfferingContext.toPresentedOfferingContext()
@@ -522,7 +534,7 @@ fun purchasePackage(
                             "There is no or invalid presented offering context data provided to make this purchase",
                         ).map(),
                     )
-                    return@getOfferingsWith
+                    return@getOfferingsForPurchaseWith
                 }
 
                 val packageToBuy =

@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.revenuecat.purchases.InternalRevenueCatAPI
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PackageType
 import com.revenuecat.purchases.PresentedOfferingContext
@@ -38,7 +39,7 @@ import kotlin.test.assertTrue
 import kotlin.text.split
 
 @Suppress("LargeClass")
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalRevenueCatAPI::class)
 internal class CommonKtPurchaseTests {
 
     private val mockApplicationContext = mockk<Application>(relaxed = true)
@@ -88,7 +89,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -188,7 +189,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -285,7 +286,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -371,7 +372,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -455,7 +456,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -538,7 +539,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -620,7 +621,7 @@ internal class CommonKtPurchaseTests {
 
         val capturedReceiveOfferingsCallback = slot<ReceiveOfferingsCallback>()
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }

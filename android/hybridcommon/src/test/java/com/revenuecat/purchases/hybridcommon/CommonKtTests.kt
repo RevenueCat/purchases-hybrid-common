@@ -1113,7 +1113,7 @@ internal class CommonKtTests {
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -1173,7 +1173,7 @@ internal class CommonKtTests {
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -1496,7 +1496,7 @@ internal class CommonKtTests {
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -1625,7 +1625,7 @@ internal class CommonKtTests {
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
@@ -1682,7 +1682,7 @@ internal class CommonKtTests {
         val (offeringIdentifier, packageToPurchase, offerings) = getOfferings(mockStoreProduct)
 
         every {
-            mockPurchases.getOfferings(capture(capturedReceiveOfferingsCallback))
+            mockPurchases.getOfferingsForPurchase(capture(capturedReceiveOfferingsCallback))
         } answers {
             capturedReceiveOfferingsCallback.captured.onReceived(offerings)
         }
