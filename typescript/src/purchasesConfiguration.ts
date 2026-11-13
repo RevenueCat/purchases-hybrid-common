@@ -145,4 +145,30 @@ export interface PurchasesConfiguration {
    * @experimental This API is experimental and may be changed or removed in a future release.
    */
   keychainAccessGroup?: string;
+
+  /**
+   * Settings that turn off safeguards of the SDK. See {@link DangerousSettings}.
+   *
+   * Hybrid SDKs that don't pass these settings on to the native SDK yet ignore them.
+   */
+  dangerousSettings?: DangerousSettings;
+}
+
+/**
+ * Settings that turn off safeguards of the SDK. Only enable a setting in the situations its
+ * documentation describes.
+ * @public
+ */
+export interface DangerousSettings {
+  /**
+   * Forces the SDK to allow using a Test Store API key in release builds. By default, configuring
+   * the SDK with a Test Store API key in a release build crashes the app, so that no build using the
+   * Test Store reaches the stores.
+   *
+   * Avoid enabling this except when necessary, e.g. for internal builds compiled in release mode
+   * that are never uploaded to the stores.
+   *
+   * Disabled by default.
+   */
+  forceAllowTestStoreInReleaseBuilds?: boolean;
 }
