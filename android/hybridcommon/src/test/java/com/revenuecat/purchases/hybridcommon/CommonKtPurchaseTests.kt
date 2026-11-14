@@ -70,6 +70,28 @@ internal class CommonKtPurchaseTests {
     }
 
     @Test
+    fun `purchase rejects introductory offer eligibility JWS without purchasing`() {
+        for (identifier in listOf("productIdentifier", "packageIdentifier")) {
+            var receivedError: ErrorContainer? = null
+            purchase(
+                activity = mockActivity,
+                options = mapOf(identifier to "item", "introductoryOfferEligibilityJWS" to "header.deny.signature"),
+                onResult = object : OnResult {
+                    override fun onReceived(map: MutableMap<String, *>) {
+                        fail("Expected an unsupported error")
+                    }
+
+                    override fun onError(error: ErrorContainer) {
+                        receivedError = error
+                    }
+                },
+            )
+            assertEquals(PurchasesErrorCode.UnsupportedError.code, receivedError?.code)
+        }
+        io.mockk.verify { mockPurchases wasNot io.mockk.Called }
+    }
+
+    @Test
     fun `purchase with packageIdentifier calls purchasePackage`() {
         configure(
             context = mockContext,
