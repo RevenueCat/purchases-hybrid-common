@@ -212,11 +212,11 @@ describe('mapOfferings', () => {
       },
       presentedOfferingIdentifier: 'premium_offering',
       price: 4.99,
-      pricePerMonth: 415833,
+      pricePerMonth: 0.415833,
       pricePerMonthString: '$0.42',
-      pricePerWeek: 96346,
+      pricePerWeek: 0.096346,
       pricePerWeekString: '$0.10',
-      pricePerYear: 4990000,
+      pricePerYear: 4.99,
       pricePerYearString: '$4.99',
       priceString: '$4.99',
       productCategory: 'SUBSCRIPTION',
@@ -319,11 +319,11 @@ describe('mapOfferings', () => {
       description: 'A $rc_monthly product with all features',
       defaultOption: expectedMonthlyOption,
       subscriptionOptions: [expectedMonthlyOption],
-      pricePerMonth: 4990000,
+      pricePerMonth: 4.99,
       pricePerMonthString: '$4.99',
-      pricePerWeek: 1151538,
+      pricePerWeek: 1.151538,
       pricePerWeekString: '$1.15',
-      pricePerYear: 59880000,
+      pricePerYear: 59.88,
       pricePerYearString: '$59.88',
       subscriptionPeriod: 'P1M',
       installmentsInfo: null,
@@ -423,11 +423,11 @@ describe('mapOfferings', () => {
       description: 'A $rc_weekly product with all features',
       defaultOption: expectedWeeklyOption,
       subscriptionOptions: [expectedWeeklyOption],
-      pricePerMonth: 4990000,
+      pricePerMonth: 4.99,
       pricePerMonthString: '$4.99',
-      pricePerWeek: 96346,
+      pricePerWeek: 0.096346,
       pricePerWeekString: '$0.10',
-      pricePerYear: 59880000,
+      pricePerYear: 59.88,
       pricePerYearString: '$59.88',
       subscriptionPeriod: 'P1W',
       installmentsInfo: null,
@@ -850,6 +850,65 @@ describe('mapOfferings', () => {
     expect(mappedOption.freePhase).toEqual(freePhase);
     expect(mappedOption.introPhase).toEqual(introPhase);
     expect(mappedOption.pricingPhases).toEqual([freePhase, introPhase, basePhase]);
+  });
+
+  describe('period prices in currency units', () => {
+    it.each(['Week', 'Month', 'Year'])('maps pricePer%s to major currency units', period => {
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Monthly);
+      const offering = {
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
+        availablePackages: [pkg],
+      } as Offering;
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
+      const mapped = (
+        result.current as { availablePackages: { product: Record<string, unknown> }[] }
+      ).availablePackages[0].product;
+      const input = (
+        pkg.product.defaultSubscriptionOption!.base as unknown as Record<
+          string,
+          { amountMicros: number; formattedPrice: string }
+        >
+      )['pricePer' + period];
+      expect(mapped['pricePer' + period]).toBe(input.amountMicros / 1_000_000);
+      expect(mapped['pricePer' + period + 'String']).toBe(input.formattedPrice);
+    });
+    it('preserves null period prices on lifetime products', () => {
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Lifetime);
+      const offering = {
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
+        availablePackages: [pkg],
+      } as Offering;
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
+      const mapped = (
+        result.current as { availablePackages: { product: Record<string, unknown> }[] }
+      ).availablePackages[0].product;
+      for (const period of ['Week', 'Month', 'Year'])
+        expect(mapped['pricePer' + period]).toBeNull();
+    });
+    it('preserves zero period prices', () => {
+      const pkg = createPackage('monthly_offering', 'monthly_offering', PackageType.Monthly);
+      const base = pkg.product.defaultSubscriptionOption!.base;
+      for (const period of ['Week', 'Month', 'Year']) {
+        (base as unknown as Record<string, unknown>)['pricePer' + period] = {
+          amountMicros: 0,
+          amount: 0,
+          currency: 'USD',
+          formattedPrice: '$0.00',
+        };
+      }
+      const offering = {
+        identifier: 'monthly_offering',
+        serverDescription: 'monthly_offering',
+        availablePackages: [pkg],
+      } as Offering;
+      const result = mapOfferings({ all: { monthly_offering: offering }, current: offering });
+      const mapped = (
+        result.current as { availablePackages: { product: Record<string, unknown> }[] }
+      ).availablePackages[0].product;
+      for (const period of ['Week', 'Month', 'Year']) expect(mapped['pricePer' + period]).toBe(0);
+    });
   });
 
   function createPackage(identifier: string, offeringId: string, packageType: PackageType): Package {
