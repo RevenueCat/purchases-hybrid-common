@@ -1,0 +1,6 @@
+build/
+test_output/
+Pods/
+Podfile.lock
+CocoaPodsInstallation.xcodeproj/
+CocoaPodsInstallation.xcworkspace/
