@@ -33,16 +33,42 @@ public class CustomerCenterProxy: NSObject {
     @objc public func present(
         resultHandler: @escaping () -> Void
     ) {
-        guard let rootController = Self.rootViewController else {
+        self.present(resultHandler: resultHandler, errorHandler: { error in
+            NSLog("Failed to present Customer Center: \(error.localizedDescription)")
+        })
+    }
+
+    /// Presents the Customer Center. `resultHandler` is called when it's dismissed.
+    /// `errorHandler` is called instead if the presentation could not happen, so callers can settle their promises.
+    @objc public func present(
+        resultHandler: @escaping () -> Void,
+        errorHandler: @escaping (NSError) -> Void
+    ) {
+        guard var presenter = Self.rootViewController else {
+            errorHandler(Self.presentationError("Could not find a view controller to present Customer Center from."))
             return
         }
+
+        // In case we are currently presenting a modal or any other
+        // view controller get to the top of the chain.
+        while let presentedVC = presenter.presentedViewController {
+            presenter = presentedVC
+        }
+
         let vc = createCustomerCenterViewController()
         resultByVC[vc] = resultHandler
 
         vc.modalPresentationStyle = .overCurrentContext
         vc.view.backgroundColor = .clear
 
-        rootController.present(vc, animated: true)
+        presenter.present(vc, animated: true)
+
+        // UIKit doesn't report failures (it only logs), but the presented view controller
+        // is set synchronously when the presentation is accepted.
+        if presenter.presentedViewController !== vc {
+            resultByVC.removeValue(forKey: vc)
+            errorHandler(Self.presentationError("UIKit refused to present Customer Center."))
+        }
     }
 
     // MARK: - Private
@@ -135,6 +161,12 @@ private extension CustomerCenterProxy {
 
         guard let windowScene = scene as? UIWindowScene else { return nil }
         return windowScene.keyWindow?.rootViewController
+    }
+
+    static func presentationError(_ message: String) -> NSError {
+        return NSError(domain: "com.revenuecat.purchaseshybridcommon.customercenter",
+                       code: 1,
+                       userInfo: [NSLocalizedDescriptionKey: message])
     }
 
     func createCustomerCenterViewController() -> CustomerCenterUIViewController {
