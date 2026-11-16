@@ -480,7 +480,7 @@ lane :bump_hybrid_dependencies do |options|
   # workspace). Only forward it to repos that declare the pipeline parameter; an
   # undeclared parameter makes the CircleCI trigger fail.
   js_mappings_sha = ENV['JS_MAPPINGS_SHA'].to_s.strip
-  if repo_name == 'purchases-flutter' && !js_mappings_sha.empty?
+  if repo_name == 'purchases-flutter_internal' && !js_mappings_sha.empty?
     parameters["js_mappings_sha"] = js_mappings_sha
   end
 

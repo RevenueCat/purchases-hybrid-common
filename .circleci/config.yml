@@ -423,7 +423,7 @@ jobs:
           name: Kick off Flutter automatic dependency update
           command: |
             export JS_MAPPINGS_SHA="$(cat js_mappings_sha.txt 2>/dev/null || true)"
-            bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
+            bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter_internal
           when: always
       - run:
           name: Kick off React Native automatic dependency update
