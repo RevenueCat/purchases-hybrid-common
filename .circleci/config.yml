@@ -439,7 +439,7 @@ jobs:
           when: always
       - run:
           name: Kick off Capacitor automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor_internal
           when: always
 
   typescript-lint:
