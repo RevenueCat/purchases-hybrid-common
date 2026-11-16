@@ -3,7 +3,7 @@
 
 orbs:
   android: circleci/android@2.4.0
-  revenuecat: revenuecat/sdks-common-config@4.8.0
+  revenuecat: revenuecat/sdks-common-config@4.9.0
   macos: circleci/macos@2.0.1
 
 version: 2.1
@@ -589,7 +589,7 @@ workflows:
           type: approval
           <<: *release-branches
       - revenuecat/tag-current-branch:
-          context: github-bot-public
+          context: github-bot-internal
           ruby_version: "3.3.0"
           requires:
             - wait-for-pr-approval
@@ -617,8 +617,14 @@ workflows:
 
       # The jobs below publish the release. They only run on the tag that
       # tag-current-branch pushes above, so they never run on a branch pipeline.
+      - revenuecat/mirror-to-public:
+          public_repo_name: purchases-hybrid-common
+          context: sdk-public-mirror
+          <<: *release-tags
       - deploy-ios-phc:
           <<: *release-tags
+          requires:
+            - revenuecat/mirror-to-public
       - deploy-ios-phcui:
           <<: *release-tags
           requires:
@@ -626,17 +632,25 @@ workflows:
       - deploy-android:
           <<: *release-tags
           context: maven-central-publishing
+          requires:
+            - revenuecat/mirror-to-public
       - deploy-typescript:
           context: npm-publishing
           <<: *release-tags
+          requires:
+            - revenuecat/mirror-to-public
       - deploy-typescript-esm:
           context: npm-publishing
           <<: *release-tags
+          requires:
+            - revenuecat/mirror-to-public
       - deploy-js-mappings:
           context: npm-publishing
           <<: *release-tags
+          requires:
+            - revenuecat/mirror-to-public
       - make-github-release:
-          context: github-bot-public
+          context: github-bot-public-release
           <<: *release-tags
           requires:
             - deploy-android
@@ -650,11 +664,25 @@ workflows:
           requires:
             - make-github-release
       - revenuecat/merge-release-pr:
-          context: github-bot-public
-          repo_name: purchases-hybrid-common
+          context: github-bot-internal
+          repo_name: purchases-hybrid-common_internal
           requires:
             - trigger-dependent-updates
           <<: *stable-release-tags
+
+  mirror:
+    when:
+      and:
+        - not:
+            equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ build, << pipeline.parameters.action >> ]
+    jobs:
+      - revenuecat/mirror-to-public:
+          public_repo_name: purchases-hybrid-common
+          context: sdk-public-mirror
+          filters:
+            branches:
+              only: main
 
   dependency-update:
     when:
@@ -665,7 +693,7 @@ workflows:
         - equal: [ dependency-update, << pipeline.parameters.action >> ]
     jobs:
       - dependency-update:
-          context: github-bot-public
+          context: github-bot-internal
 
   danger:
     when:
@@ -686,7 +714,7 @@ workflows:
       equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/update-error-codes:
-          context: github-bot-public
+          context: github-bot-internal
           platform: hybridCommon
           outputs: "error-codes.ts:typescript/src/generated/error-codes.ts"
           commit_paths: "typescript/src/generated/error-codes.ts,typescript/api-report"
@@ -716,7 +744,7 @@ workflows:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
-          context: github-bot-public
+          context: github-bot-internal
           ruby_version: "3.3.0"
           filters:
             tags:
@@ -729,5 +757,5 @@ workflows:
       equal: [ bump, << pipeline.parameters.action >> ]
     jobs:
       - revenuecat/automatic-bump:
-          context: github-bot-public
+          context: github-bot-internal
           ruby_version: "3.3.0"
