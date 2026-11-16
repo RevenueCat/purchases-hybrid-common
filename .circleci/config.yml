@@ -423,11 +423,11 @@ jobs:
           name: Kick off Flutter automatic dependency update
           command: |
             export JS_MAPPINGS_SHA="$(cat js_mappings_sha.txt 2>/dev/null || true)"
-            bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter
+            bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-flutter_internal
           when: always
       - run:
           name: Kick off React Native automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:react-native-purchases
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:react-native-purchases_internal
           when: always
       - run:
           name: Kick off Cordova automatic dependency update
@@ -435,11 +435,11 @@ jobs:
           when: always
       - run:
           name: Kick off Unity automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-unity
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-unity_internal
           when: always
       - run:
           name: Kick off Capacitor automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-capacitor_internal
           when: always
 
   typescript-lint:
