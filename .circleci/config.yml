@@ -531,8 +531,6 @@ jobs:
           no_output_timeout: 30m
       - store_test_results:
           path: ios/CocoaPodsInstallationTests/test_output
-      - store_artifacts:
-          path: ios/CocoaPodsInstallationTests/test_output
 
   validate-circleci-config:
     docker:
