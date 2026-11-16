@@ -138,6 +138,14 @@ Run automatic bump in other repos
 
 Lint Podspec
 
+### ios test_cocoapods_installation
+
+```sh
+[bundle exec] fastlane ios test_cocoapods_installation
+```
+
+Test Git-sourced CocoaPods installation without trunk specifications
+
 ### ios replace_api_key_integration_tests
 
 ```sh
