@@ -556,7 +556,8 @@ workflows:
         - not:
             equal: [ update_error_codes, << pipeline.parameters.action >> ]
     jobs:
-      - validate-circleci-config
+      - validate-circleci-config:
+          context: circleci-config-validation
       - test-ios-16
       - test-ios-17
       - test-ios-18
