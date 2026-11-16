@@ -427,7 +427,7 @@ jobs:
           when: always
       - run:
           name: Kick off React Native automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:react-native-purchases
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:react-native-purchases_internal
           when: always
       - run:
           name: Kick off Cordova automatic dependency update
