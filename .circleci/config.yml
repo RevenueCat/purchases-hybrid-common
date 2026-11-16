@@ -543,7 +543,6 @@ jobs:
           command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
       - run:
           name: Validate CircleCI config
-          # Outside the checkout the CLI doesn't attach the org, which the read-only CIRCLE_TOKEN can't compile against
           command: circleci config validate
 
 workflows:
