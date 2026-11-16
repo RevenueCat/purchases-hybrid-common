@@ -435,7 +435,7 @@ jobs:
           when: always
       - run:
           name: Kick off Unity automatic dependency update
-          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-unity
+          command: bundle exec fastlane bump_hybrid_dependencies repo_name:purchases-unity_internal
           when: always
       - run:
           name: Kick off Capacitor automatic dependency update
