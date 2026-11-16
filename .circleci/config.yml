@@ -544,7 +544,7 @@ jobs:
       - run:
           name: Validate CircleCI config
           # Outside the checkout the CLI doesn't attach the org, which the read-only CIRCLE_TOKEN can't compile against
-          command: config_path="$PWD/.circleci/config.yml" && cd /tmp && circleci config validate "$config_path"
+          command: circleci config validate
 
 workflows:
   version: 2
