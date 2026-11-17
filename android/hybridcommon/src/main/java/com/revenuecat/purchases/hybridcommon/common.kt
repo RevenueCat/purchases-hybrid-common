@@ -155,6 +155,15 @@ fun purchase(
     options: Map<String, Any?>,
     onResult: OnResult,
 ) {
+    if (options["introductoryOfferEligibilityJWS"] != null) {
+        onResult.onError(
+            PurchasesError(
+                PurchasesErrorCode.UnsupportedError,
+                "Introductory offer eligibility JWS is only supported by Apple StoreKit 2.",
+            ).map(),
+        )
+        return
+    }
     val purchaseParams = validatePurchaseParams(options).onFailure {
         onResult.onError((it as PurchasesException).error.map())
     }.getOrNull() ?: return

@@ -8,6 +8,7 @@
 
 import Quick
 import Foundation
+import StoreKit
 import Nimble
 @_spi(Internal) @testable import PurchasesHybridCommon
 @_spi(Internal) @testable import RevenueCat
@@ -237,6 +238,32 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                 }
             }
 
+            context("introductory offer eligibility on unsupported products") {
+                it("does not fall back to purchasing a StoreKit 1 or Test Store product") {
+                    let sk1Product = SKProduct()
+                    sk1Product.setValue("test_product", forKey: "productIdentifier")
+                    let products = [
+                        StoreProduct(sk1Product: sk1Product),
+                        TestStoreProduct(localizedTitle: "Test", price: 1, currencyCode: "USD", localizedPriceString: "$1",
+                                         productIdentifier: "test_product", productType: .autoRenewableSubscription,
+                                         localizedDescription: "Test", locale: Locale(identifier: "en_US")).toStoreProduct()
+                    ]
+                    for product in products {
+                        let mockPurchases = MockPurchases()
+                        CommonFunctionality.sharedInstance = mockPurchases
+                        var receivedError: ErrorContainer?
+                        CommonFunctionality.purchase(options: ["productIdentifier": "test_product"],
+                                                     introductoryOfferEligibilityJWS: "header.deny-intro.signature") {
+                            _, error in receivedError = error
+                        }
+                        mockPurchases.invokedProductsParameters?.completion([product])
+                        expect(receivedError?.code) == ErrorCode.unsupportedError.rawValue
+                        expect(mockPurchases.invokedPurchaseProductCount) == 0
+                        expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 0
+                    }
+                }
+            }
+
             context("package lookup") {
                 var mockPurchases: MockPurchases!
 
@@ -298,7 +325,7 @@ final class MockStoreTransaction: StoreTransactionType {
     let purchaseDate: Date
     let transactionIdentifier: String
     let quantity: Int
-    let storefront: Storefront?
+    let storefront: RevenueCat.Storefront?
     let jwsRepresentation: String?
     let environment: StoreEnvironment?
     let hasKnownPurchaseDate: Bool
@@ -312,7 +339,7 @@ final class MockStoreTransaction: StoreTransactionType {
         purchaseDate: Date,
         transactionIdentifier: String = UUID().uuidString,
         quantity: Int = 1,
-        storefront: Storefront? = nil,
+        storefront: RevenueCat.Storefront? = nil,
         jwsRepresentation: String? = nil,
         environment: StoreEnvironment? = nil
     ) {

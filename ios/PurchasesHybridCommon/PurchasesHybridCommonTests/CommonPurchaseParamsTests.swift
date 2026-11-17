@@ -86,6 +86,53 @@ class CommonPurchaseParamsTests: QuickSpec {
                 }
             }
 
+            context("introductory offer eligibility JWS") {
+                it("preserves a signed token unchanged for both purchase paths") {
+                    for identifier in ["productIdentifier", "packageIdentifier"] {
+                        let result = try CommonFunctionality.validatePurchaseParams([
+                            identifier: "test_item",
+                            "introductoryOfferEligibilityJWS": "header.deny-intro.signature"
+                        ])
+                        expect(result.introductoryOfferEligibilityJWS) == "header.deny-intro.signature"
+                    }
+                }
+
+                it("treats omitted and null tokens as absent") {
+                    for options: [String: Any] in [
+                        ["productIdentifier": "test_product"],
+                        ["productIdentifier": "test_product", "introductoryOfferEligibilityJWS": NSNull()]
+                    ] {
+                        let result = try CommonFunctionality.validatePurchaseParams(options)
+                        expect(result.introductoryOfferEligibilityJWS).to(beNil())
+                    }
+                }
+
+                it("rejects empty and incorrectly typed tokens instead of discarding them") {
+                    for value: Any in ["", false, 123, ["token"]] {
+                        expect {
+                            try CommonFunctionality.validatePurchaseParams([
+                                "productIdentifier": "test_product",
+                                "introductoryOfferEligibilityJWS": value
+                            ])
+                        }.to(throwError { error in
+                            expect((error as NSError).code) == ErrorCode.purchaseInvalidError.rawValue
+                        })
+                    }
+                }
+
+                it("rejects offer combinations rather than losing the eligibility token") {
+                    for offer in ["signedDiscountTimestamp", "winBackOfferID"] {
+                        expect {
+                            try CommonFunctionality.validatePurchaseParams([
+                                "productIdentifier": "test_product",
+                                "introductoryOfferEligibilityJWS": "header.deny-intro.signature",
+                                offer: "offer"
+                            ])
+                        }.to(throwError())
+                    }
+                }
+            }
+
             context("priority") {
                 it("prefers packageIdentifier over productIdentifier when both are present") {
                     let options: [String: Any] = [

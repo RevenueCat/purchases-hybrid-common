@@ -296,6 +296,10 @@ import StoreKit
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
         do {
             let validatedParams = try Self.validatePurchaseParams(options)
+            if validatedParams.introductoryOfferEligibilityJWS != nil {
+                Self.purchaseWithIntroductoryOfferEligibility(validatedParams, completion: completion)
+                return
+            }
             switch validatedParams.purchasableItem {
             case let .package(packageIdentifier):
                 if let presentedOfferingContext = validatedParams.presentedOfferingContext {
@@ -328,6 +332,73 @@ import StoreKit
         } catch {
             completion(nil, Self.createErrorContainer(error: error))
         }
+    }
+
+    /// Purchases with a developer-signed introductory offer eligibility JWS. Unsupported paths fail before purchase.
+    /// This selector also lets hybrid bridges detect support in their installed PHC version.
+    @objc(purchase:introductoryOfferEligibilityJWS:completionBlock:)
+    static func purchase(options: [String: Any],
+                         introductoryOfferEligibilityJWS: String,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        var options = options
+        options["introductoryOfferEligibilityJWS"] = introductoryOfferEligibilityJWS
+        Self.purchase(options: options, completion: completion)
+    }
+
+    @nonobjc private static func purchaseWithIntroductoryOfferEligibility(
+        _ params: CommonPurchaseParams,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        // Older native SDK builds and non-SK2 products can silently discard the JWS. Never fall back to a
+        // regular purchase: the token may deny an introductory offer that StoreKit would otherwise grant.
+        #if compiler(>=6.1)
+        if #available(iOS 15.0, macOS 15.4, tvOS 18.4, watchOS 11.4, visionOS 2.4, *) {
+            let purchase: (StoreProduct, Package?) -> Void = { product, package in
+                guard product.sk2Product != nil else {
+                    completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
+                    return
+                }
+                let builder = package.map { PurchaseParams.Builder(package: $0) }
+                    ?? PurchaseParams.Builder(product: product)
+                if let jws = params.introductoryOfferEligibilityJWS {
+                    _ = builder.with(introductoryOfferEligibilityJWS: jws)
+                }
+                Self.sharedInstance.purchase(builder.build(),
+                                             completion: Self.createPurchaseCompletionBlock(completion: completion))
+            }
+            switch params.purchasableItem {
+            case let .product(identifier):
+                Self.product(with: identifier) { product in
+                    guard let product = product else {
+                        completion(nil, Self.productNotFoundError(description: "Couldn't find product.", userCancelled: false))
+                        return
+                    }
+                    purchase(product, nil)
+                }
+            case let .package(identifier):
+                guard let context = params.presentedOfferingContext else {
+                    completion(nil, Self.purchaseInvalidError(
+                        "When purchasing a package, a presentedOfferingContext must be provided."
+                    ))
+                    return
+                }
+                Self.package(withIdentifier: identifier,
+                             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: context)) {
+                    result in
+                    switch result {
+                    case let .failure(error):
+                        completion(nil, ErrorContainer(error: error, extraPayload: [:]))
+                    case .success(nil):
+                        completion(nil, Self.productNotFoundError(description: "Couldn't find package", userCancelled: false))
+                    case let .success(package?):
+                        purchase(package.storeProduct, package)
+                    }
+                }
+            }
+            return
+        }
+        #endif
+        completion(nil, Self.createErrorContainer(error: ErrorCode.unsupportedError))
     }
 
     @objc(purchaseProduct:signedDiscountTimestamp:completionBlock:)
