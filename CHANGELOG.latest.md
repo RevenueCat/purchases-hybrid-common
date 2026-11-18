@@ -1,4 +1,6 @@
+## RevenueCat SDK
+### 📦 Dependency Updates
+* [AUTOMATIC] iOS 5.103.0 => 5.103.1 Android 11.3.0 => 11.4.0 JS 1.74.0 => 1.75.0 via RevenueCat Git Bot (@RCGitBot)
+
 ### 🔄 Other Changes
-* chore(deps): bump danger from 9.6.1 to 9.6.2 (#2109) via dependabot[bot] (@dependabot[bot])
-* ci: authenticate CircleCI config validation with a dedicated context (#2121) via Antonio Pallares (@ajpallares)
-* Add 19.17.2 hotfix release to changelog (#2118) via Rick (@rickvdl)
+* chore(deps): bump fastlane-plugin-revenuecat_internal from `32d32fe` to `a862068` via dependabot[bot] (@dependabot[bot])
