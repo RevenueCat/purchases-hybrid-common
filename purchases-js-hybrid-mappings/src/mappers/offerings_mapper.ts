@@ -60,9 +60,15 @@ function mapProduct(product: Product): Record<string, unknown> {
     currencyCode: product.currentPrice.currency,
     introPrice: mapIntroPrice(product),
     discounts: null,
-    pricePerWeek: defaultOptionBasePricingPhase?.pricePerWeek?.amountMicros ?? null,
-    pricePerMonth: defaultOptionBasePricingPhase?.pricePerMonth?.amountMicros ?? null,
-    pricePerYear: defaultOptionBasePricingPhase?.pricePerYear?.amountMicros ?? null,
+    pricePerWeek: defaultOptionBasePricingPhase?.pricePerWeek
+      ? defaultOptionBasePricingPhase.pricePerWeek.amountMicros / 1_000_000
+      : null,
+    pricePerMonth: defaultOptionBasePricingPhase?.pricePerMonth
+      ? defaultOptionBasePricingPhase.pricePerMonth.amountMicros / 1_000_000
+      : null,
+    pricePerYear: defaultOptionBasePricingPhase?.pricePerYear
+      ? defaultOptionBasePricingPhase.pricePerYear.amountMicros / 1_000_000
+      : null,
     pricePerWeekString: defaultOptionBasePricingPhase?.pricePerWeek?.formattedPrice ?? null,
     pricePerMonthString: defaultOptionBasePricingPhase?.pricePerMonth?.formattedPrice ?? null,
     pricePerYearString: defaultOptionBasePricingPhase?.pricePerYear?.formattedPrice ?? null,
