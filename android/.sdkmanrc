@@ -1,2 +1,2 @@
 # Deprecated: use `mise install` (see mise.toml).
-java=17.0.6-librca
+java=17.0.21.1+5-librca
