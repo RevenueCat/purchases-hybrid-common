@@ -1,3 +1,3 @@
 ## RevenueCat SDK
-### 🐞 Bugfixes
-* [EXTERNAL] Convert web period prices from micros to currency units (#2025) via @manyoneek via Álvaro Brey (@AlvaroBrey)
+### 📦 Dependency Updates
+* [AUTOMATIC] Android 11.4.0 => 11.4.1 JS 1.75.0 => 1.76.0 via RevenueCat Git Bot (@RCGitBot)
