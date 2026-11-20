@@ -8,6 +8,6 @@ compile = false
 
 [tools]
 java = "liberica-17.0.21.1+5"
-ruby = "3.3.0"
+ruby = "3.3.14"
 yarn = "1.22.22"
 swiftlint = "0.65.1"
