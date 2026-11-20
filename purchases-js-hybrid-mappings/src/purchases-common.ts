@@ -181,6 +181,22 @@ export class PurchasesCommon {
     }
   }
 
+  public async getOffering(offeringIdentifier: string): Promise<Record<string, unknown> | null> {
+    try {
+      const offerings = await this.purchases.getOfferings();
+      this.offeringsCache = offerings;
+      // On native, `current` carries the targeting context and `all[identifier]` does not, so the
+      // two differ for the current offering. Mirror the native preference here to keep the result
+      // identical across platforms.
+      const current = offerings.current;
+      const offering =
+        current?.identifier === offeringIdentifier ? current : offerings.all[offeringIdentifier];
+      return offering ? mapOffering(offering) : null;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
   public async getCurrentOfferingForPlacement(
     placementIdentifier: string,
   ): Promise<Record<string, unknown> | null> {
