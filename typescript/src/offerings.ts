@@ -88,7 +88,14 @@ export interface PurchasesStoreProduct {
    */
   readonly identifier: string;
   /**
-   * Description of the product.
+   * Description of the product. This can be an empty string.
+   *
+   * - **App Store** uses the localized description from App Store Connect
+   *   (`SKProduct.localizedDescription` in StoreKit 1 or `Product.description` in StoreKit 2).
+   * - **Google Play** uses `ProductDetails.getDescription()`, which returns an
+   *   empty string when no description is set in Play Console.
+   * - **RevenueCat Test Store** always returns an empty string.
+   * - **Web (RevenueCat Billing)** uses the product's configured description, which can be empty.
    */
   readonly description: string;
   /**
