@@ -73,6 +73,11 @@ export interface CustomerInfo {
 export type CustomerInfoUpdateListener = (customerInfo: CustomerInfo) => void;
 
 // @public
+export interface DangerousSettings {
+    forceAllowTestStoreInReleaseBuilds?: boolean;
+}
+
+// @public
 export enum ENTITLEMENT_VERIFICATION_MODE {
     DISABLED = "DISABLED",
     INFORMATIONAL = "INFORMATIONAL"
@@ -492,6 +497,7 @@ export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
     automaticDeviceIdentifierCollectionEnabled?: boolean;
+    dangerousSettings?: DangerousSettings;
     diagnosticsEnabled?: boolean;
     enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;
