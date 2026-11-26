@@ -1,3 +1,8 @@
+## 20.15.0
+## RevenueCat SDK
+### ✨ New Features
+* feat(ios): support passing a window scene for product and package purchases via Rick (@rickvdl)
+
 ## 20.14.0
 ## RevenueCat SDK
 ### ✨ New Features
