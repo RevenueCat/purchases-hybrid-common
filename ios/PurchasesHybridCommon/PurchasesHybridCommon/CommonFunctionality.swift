@@ -8,6 +8,9 @@
 
 import Foundation
 import StoreKit
+#if os(iOS)
+import UIKit
+#endif
 @_spi(Internal) import RevenueCat
 
 
@@ -86,8 +89,8 @@ import StoreKit
         }
     }
 
-    private static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
-    private static var winBackOffersByID: [String: WinBackOffer] = [:]
+    internal static var promoOffersByTimestamp: [String: PromotionalOffer] = [:]
+    internal static var winBackOffersByID: [String: WinBackOffer] = [:]
 
     @available(*, deprecated, message: "Use the set<NetworkId> functions instead")
     @objc public static func setAllowSharingStoreAccount(_ allowSharingStoreAccount: Bool) {
@@ -334,29 +337,43 @@ import StoreKit
     static func purchase(product productIdentifier: String,
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+        Self.purchase(product: productIdentifier,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      configure: nil,
+                      completion: completion)
+    }
 
+    #if os(iOS) && compiler(>=5.9)
+    /// The scene anchors StoreKit 2 confirmation UI and the RevenueCat Test Store dialog. StoreKit 1 ignores it.
+    @available(iOS 17.0, *)
+    @objc(purchaseProduct:signedDiscountTimestamp:confirmInScene:completionBlock:)
+    static func purchase(product productIdentifier: String,
+                         signedDiscountTimestamp: String?,
+                         confirmInScene: UIWindowScene,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(product: productIdentifier,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      configure: { _ = $0.with(confirmInScene: confirmInScene) },
+                      completion: completion)
+    }
+    #endif
+
+    @nonobjc private static func purchase(
+        product productIdentifier: String,
+        signedDiscountTimestamp: String?,
+        configure: ((PurchaseParams.Builder) -> Void)?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
         self.product(with: productIdentifier) { storeProduct in
             guard let storeProduct = storeProduct else {
                 completion(nil, productNotFoundError(description: "Couldn't find product.", userCancelled: false))
                 return
             }
 
-            if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(product: storeProduct,
-                                              promotionalOffer: promotionalOffer,
-                                              completion: hybridCompletion)
-                    return
-                }
-
-            }
-
-            Self.sharedInstance.purchase(product: storeProduct, completion: hybridCompletion)
+            Self.purchase(PurchaseParams.Builder(product: storeProduct),
+                          signedDiscountTimestamp: signedDiscountTimestamp,
+                          configure: configure,
+                          completion: completion)
         }
     }
 
@@ -365,8 +382,37 @@ import StoreKit
                          presentedOfferingContext: [String: Any],
                          signedDiscountTimestamp: String?,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
-        let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
+        Self.purchase(package: packageIdentifier,
+                      presentedOfferingContext: presentedOfferingContext,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      configure: nil,
+                      completion: completion)
+    }
 
+    #if os(iOS) && compiler(>=5.9)
+    /// The scene anchors StoreKit 2 confirmation UI and the RevenueCat Test Store dialog. StoreKit 1 ignores it.
+    @available(iOS 17.0, *)
+    @objc(purchasePackage:presentedOfferingContext:signedDiscountTimestamp:confirmInScene:completionBlock:)
+    static func purchase(package packageIdentifier: String,
+                         presentedOfferingContext: [String: Any],
+                         signedDiscountTimestamp: String?,
+                         confirmInScene: UIWindowScene,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(package: packageIdentifier,
+                      presentedOfferingContext: presentedOfferingContext,
+                      signedDiscountTimestamp: signedDiscountTimestamp,
+                      configure: { _ = $0.with(confirmInScene: confirmInScene) },
+                      completion: completion)
+    }
+    #endif
+
+    @nonobjc private static func purchase(
+        package packageIdentifier: String,
+        presentedOfferingContext: [String: Any],
+        signedDiscountTimestamp: String?,
+        configure: ((PurchaseParams.Builder) -> Void)?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
         Self.package(
             withIdentifier: packageIdentifier,
             presentedOfferingContext: Self.toPresentedOfferingContext(presentedOfferingContext: presentedOfferingContext)
@@ -384,22 +430,30 @@ import StoreKit
                 package = foundPackage
             }
 
-            if let signedDiscountTimestamp = signedDiscountTimestamp {
-                if #available(iOS 12.2, macOS 10.14.4, tvOS 12.2, *) {
-                    guard let promotionalOffer = self.promoOffersByTimestamp[signedDiscountTimestamp] else {
-                        completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
-                        return
-                    }
-                    Self.sharedInstance.purchase(package: package,
-                                                 promotionalOffer: promotionalOffer,
-                                                 completion: hybridCompletion)
-                    return
-                }
-            }
+            Self.purchase(PurchaseParams.Builder(package: package),
+                          signedDiscountTimestamp: signedDiscountTimestamp,
+                          configure: configure,
+                          completion: completion)
+        }
+    }
 
-            Self.sharedInstance.purchase(package: package, completion: hybridCompletion)
+    @nonobjc private static func purchase(
+        _ builder: PurchaseParams.Builder,
+        signedDiscountTimestamp: String?,
+        configure: ((PurchaseParams.Builder) -> Void)?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
+        let offer = signedDiscountTimestamp.flatMap { Self.promoOffersByTimestamp[$0] }
+        if signedDiscountTimestamp != nil && offer == nil {
+            completion(nil, productNotFoundError(description: "Couldn't find discount.", userCancelled: false))
+            return
         }
 
+        if let offer = offer {
+            _ = builder.with(promotionalOffer: offer)
+        }
+        configure?(builder)
+        Self.sharedInstance.purchase(builder.build(), completion: Self.createPurchaseCompletionBlock(completion: completion))
     }
 
     @objc(makeDeferredPurchase:completionBlock:)
@@ -1057,6 +1111,33 @@ private extension CommonFunctionality {
     static func purchase(product productIdentifier: String,
                          winBackOfferID: String,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(product: productIdentifier,
+                      winBackOfferID: winBackOfferID,
+                      configure: nil,
+                      completion: completion)
+    }
+
+    #if os(iOS) && compiler(>=5.9)
+    /// The scene anchors confirmation of the win-back purchase in the presenting window.
+    @available(iOS 18.0, *)
+    @objc(purchaseProduct:winBackOfferID:confirmInScene:completionBlock:)
+    static func purchase(product productIdentifier: String,
+                         winBackOfferID: String,
+                         confirmInScene: UIWindowScene,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(product: productIdentifier,
+                      winBackOfferID: winBackOfferID,
+                      configure: { _ = $0.with(confirmInScene: confirmInScene) },
+                      completion: completion)
+    }
+    #endif
+
+    @nonobjc private static func purchase(
+        product productIdentifier: String,
+        winBackOfferID: String,
+        configure: ((PurchaseParams.Builder) -> Void)?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         self.product(with: productIdentifier) { storeProduct in
@@ -1074,11 +1155,11 @@ private extension CommonFunctionality {
                     return
                 }
 
-                let purchaseParams = PurchaseParams.Builder(product: storeProduct)
+                let builder = PurchaseParams.Builder(product: storeProduct)
                     .with(winBackOffer: winBackOffer)
-                    .build()
+                configure?(builder)
 
-                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                Self.sharedInstance.purchase(builder.build(), completion: hybridCompletion)
                 return
             }
 
@@ -1091,6 +1172,37 @@ private extension CommonFunctionality {
                          presentedOfferingContext: [String: Any],
                          winBackOfferID: String,
                          completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(package: packageIdentifier,
+                      presentedOfferingContext: presentedOfferingContext,
+                      winBackOfferID: winBackOfferID,
+                      configure: nil,
+                      completion: completion)
+    }
+
+    #if os(iOS) && compiler(>=5.9)
+    /// The scene anchors confirmation of the win-back purchase in the presenting window.
+    @available(iOS 18.0, *)
+    @objc(purchasePackage:presentedOfferingContext:winBackOfferID:confirmInScene:completionBlock:)
+    static func purchase(package packageIdentifier: String,
+                         presentedOfferingContext: [String: Any],
+                         winBackOfferID: String,
+                         confirmInScene: UIWindowScene,
+                         completion: @escaping ([String: Any]?, ErrorContainer?) -> Void) {
+        Self.purchase(package: packageIdentifier,
+                      presentedOfferingContext: presentedOfferingContext,
+                      winBackOfferID: winBackOfferID,
+                      configure: { _ = $0.with(confirmInScene: confirmInScene) },
+                      completion: completion)
+    }
+    #endif
+
+    @nonobjc private static func purchase(
+        package packageIdentifier: String,
+        presentedOfferingContext: [String: Any],
+        winBackOfferID: String,
+        configure: ((PurchaseParams.Builder) -> Void)?,
+        completion: @escaping ([String: Any]?, ErrorContainer?) -> Void
+    ) {
         let hybridCompletion = Self.createPurchaseCompletionBlock(completion: completion)
 
         Self.package(
@@ -1119,11 +1231,11 @@ private extension CommonFunctionality {
                     return
                 }
 
-                let purchaseParams = PurchaseParams.Builder(package: package)
+                let builder = PurchaseParams.Builder(package: package)
                     .with(winBackOffer: winBackOffer)
-                    .build()
+                configure?(builder)
 
-                Self.sharedInstance.purchase(purchaseParams, completion: hybridCompletion)
+                Self.sharedInstance.purchase(builder.build(), completion: hybridCompletion)
                 return
             }
 

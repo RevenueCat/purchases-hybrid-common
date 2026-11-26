@@ -31,6 +31,7 @@
 		35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
+		CA60205E1A2283E0D0010001 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3BF79C840BA1C60FC5BAB44A /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = C4689DB181C4E40F59E642DD /* Nimble */; };
 		4B2F33BEFA94BEF3853961D7 /* PurchasesHybridCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 5C95F22DCD9FA6BC836B1AD8 /* PurchasesHybridCommon */; };
 		4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */; };
@@ -701,6 +702,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57FFDE3F286A777D0089A57B /* StoreKitIntegrationTests.swift in Sources */,
+				CA60205E1A2283E0D0010001 /* MockPurchases.swift in Sources */,
 				57FFDE46286B606A0089A57B /* XCTestCase+Expectations.swift in Sources */,
 				57FFDE41286A77E30089A57B /* CommonFunctionality+async.swift in Sources */,
 				57FFDE19286A566D0089A57B /* BaseIntegrationTests.swift in Sources */,

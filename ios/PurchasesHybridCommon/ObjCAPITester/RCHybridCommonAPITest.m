@@ -16,6 +16,29 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @implementation RCCommonFunctionalityAPITest
+#if TARGET_OS_IOS
+- (void)testPurchaseAPIWithScene:(UIWindowScene *)scene API_AVAILABLE(ios(17.0)) {
+    void (^completion)(NSDictionary * _Nullable, RCErrorContainer * _Nullable) =
+        ^(NSDictionary * _Nullable result, RCErrorContainer * _Nullable error) {};
+
+    [RCCommonFunctionality purchaseProduct:@""
+                   signedDiscountTimestamp:nil
+                            confirmInScene:scene
+                           completionBlock:completion];
+    [RCCommonFunctionality purchasePackage:@""
+                  presentedOfferingContext:@{}
+                   signedDiscountTimestamp:nil
+                            confirmInScene:scene
+                           completionBlock:completion];
+
+    if (@available(iOS 18.0, *)) {
+        [RCCommonFunctionality purchaseProduct:@"" winBackOfferID:@"" confirmInScene:scene completionBlock:completion];
+        [RCCommonFunctionality purchasePackage:@"" presentedOfferingContext:@{} winBackOfferID:@""
+                                confirmInScene:scene completionBlock:completion];
+    }
+}
+#endif
+
 - (void)testAPI {
     NSString *proxyURL __unused = [RCCommonFunctionality proxyURLString];
     BOOL simulatesAskToBuyInSandbox __unused = [RCCommonFunctionality simulatesAskToBuyInSandbox];

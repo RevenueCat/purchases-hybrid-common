@@ -135,7 +135,8 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                         mockPurchases.invokedProductsParameters?.completion([storeProduct])
 
                         DispatchQueue.main.async {
-                            if let purchaseParams = mockPurchases.invokedPurchaseProductParameters {
+                            if let purchaseParams = mockPurchases.invokedPurchaseParamsCompletionParameters {
+                                expect(purchaseParams.params.product).to(beIdenticalTo(storeProduct))
                                 purchaseParams.completion(mockTransaction, mockCustomerInfo, nil, false)
                             }
                         }
@@ -144,7 +145,28 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
                     expect(receivedError).to(beNil())
                     expect(receivedResult).toNot(beNil())
                     expect(receivedResult?["productIdentifier"] as? String) == "test_product_id"
-                    expect(mockPurchases.invokedPurchaseProductCount) == 1
+                    expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 1
+                }
+
+                it("rejects an unknown signed discount before charging for the product") {
+                    let product = TestStoreProduct(localizedTitle: "Monthly",
+                                                   price: 9.99,
+                                                   currencyCode: "USD",
+                                                   localizedPriceString: "$9.99",
+                                                   productIdentifier: "monthly",
+                                                   productType: .autoRenewableSubscription,
+                                                   localizedDescription: "Monthly subscription",
+                                                   locale: Locale(identifier: "en_US")).toStoreProduct()
+                    var receivedError: ErrorContainer?
+                    CommonFunctionality.purchase(product: product.productIdentifier,
+                                                 signedDiscountTimestamp: "missing-signature") { _, error in
+                        receivedError = error
+                    }
+                    mockPurchases.invokedProductsParameters?.completion([product])
+
+                    expect(receivedError?.code) == ErrorCode.productNotAvailableForPurchaseError.rawValue
+                    expect(mockPurchases.invokedPurchaseProductCount) == 0
+                    expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 0
                 }
 
                 it("successfully purchases a package") {
@@ -217,23 +239,23 @@ class CommonFunctionalityPurchaseTests: QuickSpec {
 
                         mockPurchases.invokedOfferingsParameters?.completion(mockOfferings, nil)
 
-                        let presentedOfferingContext = mockPurchases.invokedPurchasePackageParameters?.package.presentedOfferingContext
+                        let purchase = mockPurchases.invokedPurchaseParamsCompletionParameters
+                        expect(purchase?.params.package?.identifier) == mockPackage.identifier
+                        let presentedOfferingContext = purchase?.params.package?.presentedOfferingContext
                         expect(presentedOfferingContext?.offeringIdentifier) == "default"
                         expect(presentedOfferingContext?.placementIdentifier) == "placement_id"
                         expect(presentedOfferingContext?.targetingContext).to(beNil())
 
                         // Simulate the purchase completion
                         DispatchQueue.main.async {
-                            if let purchaseParams = mockPurchases.invokedPurchasePackageParameters {
-                                purchaseParams.completion(mockTransaction, mockCustomerInfo, nil, false)
-                            }
+                            purchase?.completion(mockTransaction, mockCustomerInfo, nil, false)
                         }
                     }
 
                     expect(receivedError).to(beNil())
                     expect(receivedResult).toNot(beNil())
                     expect(receivedResult?["productIdentifier"] as? String) == "monthly_product_id"
-                    expect(mockPurchases.invokedPurchasePackageCount) == 1
+                    expect(mockPurchases.invokedPurchaseParamsCompletionCount) == 1
                 }
             }
 

@@ -6,18 +6,135 @@
 //  Copyright © 2022 RevenueCat. All rights reserved.
 //
 
-import PurchasesHybridCommon
+@_spi(Internal) @testable import PurchasesHybridCommon
 
 import Nimble
-@testable import RevenueCat
+@_spi(Internal) @testable import RevenueCat
 import SnapshotTesting
 import StoreKit
 import StoreKitTest
+import UIKit
 import XCTest
 
 class StoreKit2IntegrationTests: StoreKit1IntegrationTests {
 
     override class var storeKitVersion: StoreKitVersion { return .storeKit2 }
+
+    @available(iOS 17.0, *)
+    @MainActor
+    func testProductAndPackageForwardPresentingSceneWithoutSignedDiscount() async throws {
+        let offerings = try await Purchases.shared.offerings()
+        let package = try XCTUnwrap(offerings.current?.monthly)
+        let product = package.storeProduct
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let original = CommonFunctionality.sharedInstance
+        defer { CommonFunctionality.sharedInstance = original }
+        let mock = MockPurchases()
+        CommonFunctionality.sharedInstance = mock
+
+        CommonFunctionality.purchase(product: product.productIdentifier, signedDiscountTimestamp: nil, confirmInScene: scene) { _, error in
+            XCTFail("Unexpected completion: \(String(describing: error))")
+        }
+        mock.invokedProductsParameters?.completion([product])
+        let productParams = try XCTUnwrap(mock.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertTrue(productParams.product === product)
+        XCTAssertTrue(productParams.presentationContext?.scene === scene)
+        XCTAssertNil(productParams.promotionalOffer)
+
+        CommonFunctionality.purchase(package: package.identifier,
+                                     presentedOfferingContext: ["offeringIdentifier": package.presentedOfferingContext.offeringIdentifier],
+                                     signedDiscountTimestamp: nil,
+                                     confirmInScene: scene) { _, error in
+            XCTFail("Unexpected completion: \(String(describing: error))")
+        }
+        mock.invokedOfferingsParameters?.completion(offerings, nil)
+        let packageParams = try XCTUnwrap(mock.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertEqual(packageParams.package?.identifier, package.identifier)
+        XCTAssertTrue(packageParams.presentationContext?.scene === scene)
+        XCTAssertNil(packageParams.promotionalOffer)
+    }
+
+    @available(iOS 17.0, *)
+    @MainActor
+    func testDirectProductForwardsSignedOfferAndPresentingScene() async throws {
+        let product = try await monthlyPackage.storeProduct
+        let discount = try XCTUnwrap(product.discounts.first { $0.offerIdentifier == Self.discountIdentifier })
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let signed = PromotionalOffer.SignedData(identifier: Self.discountIdentifier, keyIdentifier: "test",
+                                                nonce: UUID(), signature: "test-signature", timestamp: 42)
+        let offer = PromotionalOffer(discount: discount, signedData: signed)
+        let original = CommonFunctionality.sharedInstance
+        let timestamp = String(signed.timestamp)
+        let previousOffer = CommonFunctionality.promoOffersByTimestamp[timestamp]
+        defer {
+            CommonFunctionality.promoOffersByTimestamp[timestamp] = previousOffer
+            CommonFunctionality.sharedInstance = original
+        }
+        let mock = MockPurchases()
+        CommonFunctionality.sharedInstance = mock
+
+        CommonFunctionality.promotionalOffer(for: product.productIdentifier,
+                                             discountIdentifier: discount.offerIdentifier) { _, error in
+            XCTAssertNil(error)
+        }
+        mock.invokedProductsParameters?.completion([product])
+        mock.invokedGetPromotionalOfferParameters?.completion(offer, nil)
+
+        CommonFunctionality.purchase(product: product.productIdentifier,
+                                     signedDiscountTimestamp: timestamp,
+                                     confirmInScene: scene) { _, error in
+            XCTFail("Unexpected completion before mock purchase: \(String(describing: error))")
+        }
+        mock.invokedProductsParameters?.completion([product])
+        let params = try XCTUnwrap(mock.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertTrue(params.product === product)
+        XCTAssertTrue(params.promotionalOffer === offer)
+        XCTAssertTrue(params.presentationContext?.scene === scene)
+    }
+
+    @available(iOS 18.0, *)
+    @MainActor
+    func testWinBackPurchasesForwardOfferAndPresentingScene() async throws {
+        let offerings = try await Purchases.shared.offerings()
+        let package = try XCTUnwrap(offerings.current?.monthly)
+        let product = package.storeProduct
+        let scene = try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+        let id = "test-win-back"
+        let discount = TestStoreProductDiscount(identifier: id, price: 1, localizedPriceString: "$1",
+                                                paymentMode: .payAsYouGo, subscriptionPeriod: .init(value: 1, unit: .month),
+                                                numberOfPeriods: 1, type: .winBack)
+        let offer = WinBackOffer(discount: discount)
+        let original = CommonFunctionality.sharedInstance
+        let previousOffer = CommonFunctionality.winBackOffersByID.updateValue(offer, forKey: id)
+        defer {
+            CommonFunctionality.winBackOffersByID[id] = previousOffer
+            CommonFunctionality.sharedInstance = original
+        }
+        let mock = MockPurchases()
+        CommonFunctionality.sharedInstance = mock
+
+        CommonFunctionality.purchase(product: product.productIdentifier, winBackOfferID: id, confirmInScene: scene) { _, error in
+            XCTFail("Unexpected completion: \(String(describing: error))")
+        }
+        mock.invokedProductsParameters?.completion([product])
+        let productParams = try XCTUnwrap(mock.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertTrue(productParams.product === product)
+        XCTAssertTrue(productParams.winBackOffer === offer)
+        XCTAssertTrue(productParams.presentationContext?.scene === scene)
+
+        let context = ["offeringIdentifier": package.presentedOfferingContext.offeringIdentifier,
+                       "placementIdentifier": "win-back-placement"]
+        CommonFunctionality.purchase(package: package.identifier, presentedOfferingContext: context,
+                                     winBackOfferID: id, confirmInScene: scene) { _, error in
+            XCTFail("Unexpected completion: \(String(describing: error))")
+        }
+        mock.invokedOfferingsParameters?.completion(offerings, nil)
+        let packageParams = try XCTUnwrap(mock.invokedPurchaseParamsCompletionParameters?.params)
+        XCTAssertEqual(packageParams.package?.identifier, package.identifier)
+        XCTAssertEqual(packageParams.package?.presentedOfferingContext.placementIdentifier, "win-back-placement")
+        XCTAssertTrue(packageParams.winBackOffer === offer)
+        XCTAssertTrue(packageParams.presentationContext?.scene === scene)
+    }
 
 }
 
