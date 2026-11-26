@@ -421,36 +421,6 @@ lane :resolve_ios_packages do
   end
 end
 
-desc "Waits until the pods for the current version are resolvable on the CocoaPods CDN"
-lane :wait_for_pods_on_cdn do
-  version_number = current_version_number
-
-  # push_pod_PHC/PHCUI have already pushed to trunk, but the CDN index takes a
-  # while to catch up and `pod install` can't resolve the new version until it
-  # does. Wait here so the hybrid bump PRs don't open against a pod their iOS
-  # jobs can't install yet, which otherwise leaves them red until someone reruns
-  # them by hand.
-  #
-  # soft_fail so a timeout still opens the bump PRs. That's no worse than the
-  # behaviour we have today and each one can be rerun individually, whereas
-  # failing here would leave every hybrid without a PR at all.
-  #
-  # Three hours. CircleCI cancels a job that exceeds its max runtime, which would
-  # skip the bump steps entirely and defeat the soft_fail above, so this has to
-  # stay clear of that cap. We're on the Scale plan, so the cap is 5 hours and
-  # three leaves a couple of hours of headroom. Set explicitly rather than
-  # inheriting the action's default so a change there can't silently push us
-  # over.
-  wait_for_pods_in_cocoapods_cdn(
-    pods: {
-      'PurchasesHybridCommon' => version_number,
-      'PurchasesHybridCommonUI' => version_number
-    },
-    timeout: 3 * 60 * 60,
-    soft_fail: true
-  )
-end
-
 desc "Waits until the Android artifacts for the current version are resolvable from Maven Central"
 lane :wait_for_android_artifacts_on_maven_central do
   wait_for_artifacts_in_maven_central(
@@ -526,19 +496,40 @@ lane :bump_hybrid_dependencies do |options|
 end
 
 platform :ios do
-  desc "Release PurchasesHybridCommon to CocoaPods"
-  lane :push_pod_PHC do |options|
-    pod_push_with_error_handling(path: "PurchasesHybridCommon.podspec", synchronous: true)
-  end
-
-  desc "Release PurchasesHybridCommonUI to CocoaPods"
-  lane :push_pod_PHCUI do |options|
-    pod_push_with_error_handling(path: "PurchasesHybridCommonUI.podspec", synchronous: true)
-  end
-
   desc "Lint Podspec"
   lane :pod_lint do |options|
     check_pods
+  end
+
+  desc "Test Git-sourced CocoaPods installation without trunk specifications"
+  lane :test_cocoapods_installation do
+    require 'cocoapods'
+    repository_root = get_root_folder
+    directory = File.join(repository_root, 'ios/CocoaPodsInstallationTests')
+    Dir.chdir(directory) do
+      sh('bundle', 'exec', 'ruby', 'generate_project.rb')
+      cocoapods(podfile: File.join(directory, 'Podfile'), clean_install: true)
+
+      lockfile = Pod::Lockfile.from_file(Pathname('Podfile.lock'))
+      sources = lockfile.to_hash.fetch('EXTERNAL SOURCES')
+      %w[RevenueCat RevenueCatUI PurchasesHybridCommon PurchasesHybridCommonUI].each do |name|
+        UI.user_error!("#{name} must come from Git") unless sources.fetch(name).key?(:git)
+      end
+      %w[PurchasesHybridCommon PurchasesHybridCommonUI].each do |name|
+        expected = Pod::Specification.from_file(File.join(repository_root, "#{name}.podspec")).version
+        UI.user_error!("#{name} does not match the checkout's podspec") unless lockfile.version(name) == expected
+      end
+
+      scan(
+        workspace: File.join(directory, 'CocoaPodsInstallation.xcworkspace'),
+        scheme: 'CocoaPodsInstallation',
+        destination: ENV.fetch('PHC_COCOAPODS_TEST_DESTINATION', 'platform=iOS Simulator,name=iPhone 17,OS=27.0'),
+        derived_data_path: File.join(directory, 'build'),
+        output_directory: File.join(directory, 'test_output'),
+        # Match the smoke app's minimum when building pods on newer Xcode SDKs.
+        xcargs: 'CODE_SIGNING_ALLOWED=NO IPHONEOS_DEPLOYMENT_TARGET=15.0'
+      )
+    end
   end
 
   desc "replace API KEY for integration tests"
@@ -724,19 +715,32 @@ def latest_published_version_number
 end
 
 def check_pods
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
-  pod_lib_lint(
-    verbose: true,
-    podspec: 'PurchasesHybridCommonUI.podspec',
-    include_podspecs: 'PurchasesHybridCommon.podspec',
-    platforms: 'ios,osx,tvos,visionos',
-    fail_fast: true
-  )
+  require 'open-uri'
+  require 'tmpdir'
+
+  # External podspecs still download their sources from Git, without consulting trunk.
+  Dir.mktmpdir('phc-native-podspecs') do |directory|
+    %w[RevenueCat RevenueCatUI].each do |name|
+      url = "https://raw.githubusercontent.com/RevenueCat/purchases-ios/#{parse_previous_ios_native_version}/#{name}.podspec"
+      File.write(File.join(directory, "#{name}.podspec"), URI.open(url).read)
+    end
+
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommon.podspec',
+      external_podspecs: File.join(directory, 'RevenueCat.podspec'),
+      platforms: 'ios,osx,tvos,visionos',
+      fail_fast: true
+    )
+    pod_lib_lint(
+      verbose: true,
+      podspec: 'PurchasesHybridCommonUI.podspec',
+      include_podspecs: 'PurchasesHybridCommon.podspec',
+      external_podspecs: File.join(directory, '*.podspec'),
+      platforms: 'ios,osx,tvos,visionos',
+      fail_fast: true
+    )
+  end
 end
 
 def is_snapshot_version?(version_name)
