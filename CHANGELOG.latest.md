@@ -1,3 +1,5 @@
+Starting with 21.0.0, PHC stops publishing `PurchasesHybridCommon` and `PurchasesHybridCommonUI` to CocoaPods trunk. Swift Package Manager is the supported installation method for hybrid SDKs adopting PHC 21 on Apple platforms. Previously published CocoaPods versions remain available.
+
 ## RevenueCat SDK
-### ✨ New Features
-* feat(ios): support passing a window scene for product and package purchases via Rick (@rickvdl)
+### 💥 Breaking Changes
+* Prepare PHC 21 for the CocoaPods sunset via Antonio Pallares (@ajpallares)
