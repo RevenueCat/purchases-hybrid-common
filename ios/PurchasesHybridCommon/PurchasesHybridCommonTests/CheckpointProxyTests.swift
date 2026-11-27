@@ -136,7 +136,8 @@ final class CheckpointProxyTests: XCTestCase {
             error: NSError(domain: "TestDomain", code: errorCode,
                            userInfo: [NSLocalizedDescriptionKey: "something went wrong"]),
             customVariables: [:],
-            kind: kind
+            kind: kind,
+            presentationContext: nil
         )
     }
 
@@ -711,7 +712,8 @@ final class CheckpointProxyTests: XCTestCase {
             PaywallPresentationParams(checkpointIdentifier: "upgrade",
                                       customVariables: ["name": .string("Taylor"), "level": .number(12),
                                                         "premium": .bool(false)],
-                                      presentationMode: .modalFullScreen, offering: offering)
+                                      presentationMode: .modalFullScreen, offering: offering,
+                                      presentationContext: nil)
         ) { [unowned self] in self.presentationResults.append($0) }
     }
 

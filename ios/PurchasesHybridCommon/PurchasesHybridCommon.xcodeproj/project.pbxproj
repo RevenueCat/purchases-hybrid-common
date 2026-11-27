@@ -31,7 +31,6 @@
 		35A672FC295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A672FB295C9FC9009F986F /* StoreProduct+HybridAdditionsTests.swift */; };
 		35F6FD602673FE5600ABCB53 /* ErrorContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F6FD5F2673FE5600ABCB53 /* ErrorContainerTests.swift */; };
 		37E357D5014169A093450AD5 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
-		CA60205E1A2283E0D0010001 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		3BF79C840BA1C60FC5BAB44A /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = C4689DB181C4E40F59E642DD /* Nimble */; };
 		4B2F33BEFA94BEF3853961D7 /* PurchasesHybridCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 5C95F22DCD9FA6BC836B1AD8 /* PurchasesHybridCommon */; };
 		4F7D88D92AFAED1900855875 /* RCPaywallProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F7D88D72AFAED1900855875 /* RCPaywallProxyAPITest.m */; };
@@ -58,6 +57,7 @@
 		BE27455A29A0A87CFEBB7546 /* RewardVerificationToken+HybridAdditionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6403ECC6AD3E412FA777AF /* RewardVerificationToken+HybridAdditionsTests.swift */; };
 		C0DE0C4B0000000000000006 /* CheckpointProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000005 /* CheckpointProxyTests.swift */; };
 		C0DE0C4B0000000000000009 /* RCCheckpointProxyAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DE0C4B0000000000000008 /* RCCheckpointProxyAPITest.m */; };
+		CA60205E1A2283E0D0010001 /* MockPurchases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E351F858AE15D5BD2EAA5A /* MockPurchases.swift */; };
 		CD31AF907C9D87F84C45451F /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = AE5CF307428C6E049EDBFE18 /* RevenueCatUI */; };
 		D2651B6A64F2F1C748023D64 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 98549EB7046281B8C8D630E5 /* Nimble */; };
 		DCADC3169670A67C52961A8B /* Quick in Frameworks */ = {isa = PBXBuildFile; productRef = 284291E22AE337485C17B79C /* Quick */; };
@@ -1200,7 +1200,7 @@
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
 			requirement = {
 				kind = exactVersion;
-				version = 5.103.2;
+				version = 5.104.0;
 			};
 		};
 		57D6691C28DD19D900622DE6 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {

@@ -81,7 +81,7 @@ import Foundation
             configurationBuilder = configurationBuilder.with(diagnosticsEnabled: diagnosticsEnabled)
         }
 
-        configurationBuilder = configurationBuilder.with(
+        configurationBuilder = (configurationBuilder as ConfigurationBuilderDeprecatable).with(
             automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled
         )
 
@@ -324,6 +324,8 @@ extension LogLevel {
 protocol ConfigurationBuilderDeprecatable {
 
     func with(usesStoreKit2IfAvailable: Bool) -> Configuration.Builder
+
+    func with(automaticDeviceIdentifierCollectionEnabled: Bool) -> Configuration.Builder
 
 }
 

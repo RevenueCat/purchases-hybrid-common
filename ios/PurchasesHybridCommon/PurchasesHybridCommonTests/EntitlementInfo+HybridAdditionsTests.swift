@@ -38,6 +38,8 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
                         (.paddle, "PADDLE"),
                         (.testStore, "TEST_STORE"),
                         (.galaxy, "GALAXY"),
+                        (.roku, "ROKU"),
+                        (.payPal, "PAYPAL"),
                         (.unknownStore, "UNKNOWN_STORE")
                     ]
 
@@ -109,7 +111,8 @@ class EntitlementInfoHybridAdditionsTests: QuickSpec {
             ),
             sandboxEnvironmentDetector: MockSandboxEnvironmentDetector(),
             verification: .notRequested,
-            requestDate: .init()
+            requestDate: .init(),
+            dateProvider: DateProvider()
         )
     }
 }

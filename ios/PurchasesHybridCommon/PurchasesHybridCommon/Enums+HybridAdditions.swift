@@ -75,6 +75,10 @@ internal extension Store {
             return "TEST_STORE"
         case .galaxy:
             return "GALAXY"
+        case .roku:
+            return "ROKU"
+        case .payPal:
+            return "PAYPAL"
         @unknown default:
             return "UNKNOWN_STORE"
         }
