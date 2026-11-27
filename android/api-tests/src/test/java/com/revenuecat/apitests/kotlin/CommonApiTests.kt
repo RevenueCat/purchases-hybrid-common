@@ -504,6 +504,22 @@ private class CommonApiTests {
         configure(context, apiKey, appUserID, platformInfo = platformInfo, iamEnabled = iamEnabled)
     }
 
+    fun checkConfigureWithDeviceIdentifierCollectionMode(
+        context: Context,
+        apiKey: String,
+        appUserID: String?,
+        platformInfo: PlatformInfo,
+        deviceIdentifierCollectionMode: String?,
+    ) {
+        configure(
+            context,
+            apiKey,
+            appUserID,
+            platformInfo = platformInfo,
+            deviceIdentifierCollectionMode = deviceIdentifierCollectionMode,
+        )
+    }
+
     fun checkGetPromotionalOffer() {
         val errorContainer: ErrorContainer = getPromotionalOffer()
     }

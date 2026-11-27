@@ -383,7 +383,8 @@ class CommonApiTests {
                                 Boolean automaticDeviceIdentifierCollectionEnabled,
                                 String preferredLocale,
                                 String galaxyBillingMode,
-                                Boolean iamEnabled
+                                Boolean iamEnabled,
+                                String deviceIdentifierCollectionMode
     ) {
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo);
         CommonKt.configure(context, apiKey, appUserId, purchasesAreCompletedBy, platformInfo, store);
@@ -440,6 +441,23 @@ class CommonApiTests {
                 preferredLocale,
                 galaxyBillingMode,
                 iamEnabled);
+        CommonKt.configure(
+                context,
+                apiKey,
+                appUserId,
+                purchasesAreCompletedBy,
+                platformInfo,
+                store,
+                dangerousSettings,
+                shouldShowInAppMessagesAutomatically,
+                verificationMode,
+                pendingTransactionsForPrepaidPlansEnabled,
+                diagnosticsEnabled,
+                automaticDeviceIdentifierCollectionEnabled,
+                preferredLocale,
+                galaxyBillingMode,
+                iamEnabled,
+                deviceIdentifierCollectionMode);
     }
 
     private void checkGetPromotionalOffer() {

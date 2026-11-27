@@ -78,6 +78,13 @@ export interface DangerousSettings {
 }
 
 // @public
+export enum DEVICE_IDENTIFIER_COLLECTION_MODE {
+    AUTOMATIC = "AUTOMATIC",
+    FUNCTIONAL = "FUNCTIONAL",
+    MANUAL_ONLY = "MANUAL_ONLY"
+}
+
+// @public
 export enum ENTITLEMENT_VERIFICATION_MODE {
     DISABLED = "DISABLED",
     INFORMATIONAL = "INFORMATIONAL"
@@ -496,8 +503,10 @@ export type PurchasesAreCompletedByMyApp = {
 export interface PurchasesConfiguration {
     apiKey: string;
     appUserID?: string | null;
+    // @deprecated
     automaticDeviceIdentifierCollectionEnabled?: boolean;
     dangerousSettings?: DangerousSettings;
+    deviceIdentifierCollectionMode?: DEVICE_IDENTIFIER_COLLECTION_MODE;
     diagnosticsEnabled?: boolean;
     enableExternalPurchasesInSimulator?: boolean;
     entitlementVerificationMode?: ENTITLEMENT_VERIFICATION_MODE;

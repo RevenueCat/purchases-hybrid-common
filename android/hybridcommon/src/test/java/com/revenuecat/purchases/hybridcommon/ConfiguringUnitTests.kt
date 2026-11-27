@@ -3,6 +3,7 @@ package com.revenuecat.purchases.hybridcommon
 import android.app.Application
 import android.content.Context
 import com.revenuecat.purchases.DangerousSettings
+import com.revenuecat.purchases.DeviceIdentifierCollectionMode
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.Purchases
@@ -331,6 +332,85 @@ internal class ConfiguringUnitTests {
             platformInfo = expectedPlatformInfo,
         )
         assertFalse(purchasesConfigurationSlot.captured.iamEnabledValue())
+    }
+
+    @Test
+    fun `calling configure without device identifier collection options keeps the Android SDK default`() {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = null,
+            platformInfo = expectedPlatformInfo,
+        )
+        assertEquals(
+            PurchasesConfiguration.Builder(mockContext, "api_key").build().deviceIdentifierCollectionMode,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with device identifier collection mode automatic forwards it to Android SDK`() {
+        configureWithDeviceIdentifierCollection(mode = "AUTOMATIC", automaticCollectionEnabled = false)
+        assertEquals(
+            DeviceIdentifierCollectionMode.AUTOMATIC,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with device identifier collection mode manual only forwards it to Android SDK`() {
+        configureWithDeviceIdentifierCollection(mode = "MANUAL_ONLY")
+        assertEquals(
+            DeviceIdentifierCollectionMode.MANUAL_ONLY,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with device identifier collection mode functional configures manual only`() {
+        configureWithDeviceIdentifierCollection(mode = "FUNCTIONAL")
+        assertEquals(
+            DeviceIdentifierCollectionMode.MANUAL_ONLY,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with device identifier collection mode overrides automatic collection flag`() {
+        configureWithDeviceIdentifierCollection(mode = "MANUAL_ONLY", automaticCollectionEnabled = true)
+        assertEquals(
+            DeviceIdentifierCollectionMode.MANUAL_ONLY,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with automatic collection flag false and no mode configures manual only`() {
+        configureWithDeviceIdentifierCollection(mode = null, automaticCollectionEnabled = false)
+        assertEquals(
+            DeviceIdentifierCollectionMode.MANUAL_ONLY,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    @Test
+    fun `calling configure with unknown device identifier collection mode keeps the automatic collection flag`() {
+        configureWithDeviceIdentifierCollection(mode = "UNKNOWN", automaticCollectionEnabled = false)
+        assertEquals(
+            DeviceIdentifierCollectionMode.MANUAL_ONLY,
+            purchasesConfigurationSlot.captured.deviceIdentifierCollectionMode,
+        )
+    }
+
+    private fun configureWithDeviceIdentifierCollection(mode: String?, automaticCollectionEnabled: Boolean? = null) {
+        configure(
+            context = mockContext,
+            apiKey = "api_key",
+            appUserID = null,
+            platformInfo = expectedPlatformInfo,
+            automaticDeviceIdentifierCollectionEnabled = automaticCollectionEnabled,
+            deviceIdentifierCollectionMode = mode,
+        )
     }
 
     // iamEnabled is internal to the purchases module.

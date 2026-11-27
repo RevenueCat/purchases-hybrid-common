@@ -139,12 +139,13 @@ private extension BaseIntegrationTests {
             dangerousSettings: self.dangerousSettings,
             verificationMode: nil,
             diagnosticsEnabled: false,
-            automaticDeviceIdentifierCollectionEnabled: true,
+            automaticDeviceIdentifierCollectionEnabled: nil,
             preferredLocale: nil,
             useExternalPurchaseCustomLinks: false,
             enableExternalPurchasesInSimulator: true,
             iamEnabled: false,
-            keychainAccessGroup: nil
+            keychainAccessGroup: nil,
+            deviceIdentifierCollectionMode: "AUTOMATIC"
         )
         Purchases.logLevel = .debug
     }

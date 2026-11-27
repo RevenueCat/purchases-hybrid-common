@@ -18,10 +18,14 @@ import Foundation
     /// - Parameter iamEnabled: Experimental. Whether the SDK prefers token-based (IAM) user sessions.
     /// - Parameter keychainAccessGroup: Experimental. The keychain access group for IAM tokens, to share them with
     /// app extensions. Ignored unless `iamEnabled` is `true`.
+    /// - Parameter automaticDeviceIdentifierCollectionEnabled: Deprecated. `nil` keeps the SDK default.
+    /// - Parameter deviceIdentifierCollectionMode: `AUTOMATIC`, `FUNCTIONAL` or `MANUAL_ONLY`. `nil` keeps the SDK
+    /// default. Takes precedence over `automaticDeviceIdentifierCollectionEnabled`.
     @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
             platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
             verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
-            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:iamEnabled:keychainAccessGroup:)
+            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:iamEnabled:keychainAccessGroup:
+            deviceIdentifierCollectionMode:)
     static func configure(apiKey: String,
                           appUserID: String?,
                           purchasesAreCompletedBy: String?,
@@ -33,12 +37,13 @@ import Foundation
                           shouldShowInAppMessagesAutomatically: Bool = true,
                           verificationMode: String?,
                           diagnosticsEnabled: Bool = false,
-                          automaticDeviceIdentifierCollectionEnabled: Bool = true,
+                          automaticDeviceIdentifierCollectionEnabled: NSNumber?,
                           preferredLocale: String? = nil,
                           useExternalPurchaseCustomLinks: Bool,
                           enableExternalPurchasesInSimulator: Bool,
                           iamEnabled: Bool,
-                          keychainAccessGroup: String?) -> Purchases {
+                          keychainAccessGroup: String?,
+                          deviceIdentifierCollectionMode: String?) -> Purchases {
         var userDefaults: UserDefaults?
         if let userDefaultsSuiteName = userDefaultsSuiteName {
             userDefaults = UserDefaults(suiteName: userDefaultsSuiteName)
@@ -81,9 +86,20 @@ import Foundation
             configurationBuilder = configurationBuilder.with(diagnosticsEnabled: diagnosticsEnabled)
         }
 
-        configurationBuilder = (configurationBuilder as ConfigurationBuilderDeprecatable).with(
-            automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled
-        )
+        if let automaticDeviceIdentifierCollectionEnabled {
+            configurationBuilder = (configurationBuilder as ConfigurationBuilderDeprecatable).with(
+                automaticDeviceIdentifierCollectionEnabled: automaticDeviceIdentifierCollectionEnabled.boolValue
+            )
+        }
+
+        if let deviceIdentifierCollectionMode {
+            if let mode = DeviceIdentifierCollectionMode.named(deviceIdentifierCollectionMode) {
+                configurationBuilder = configurationBuilder.with(deviceIdentifierCollectionMode: mode)
+            } else {
+                NSLog("Attempted to configure with unknown device identifier collection mode: " +
+                      "'\(deviceIdentifierCollectionMode)'")
+            }
+        }
 
         if let verificationMode {
             if let mode = Configuration.EntitlementVerificationMode(name: verificationMode) {
@@ -115,6 +131,49 @@ import Foundation
         CommonFunctionality.sharedInstance = purchases
 
         return purchases
+    }
+
+    @available(*, deprecated, message: "Use the full configure method instead")
+    @objc(configureWithAPIKey:appUserID:purchasesAreCompletedBy:userDefaultsSuiteName:platformFlavor:
+            platformFlavorVersion:storeKitVersion:dangerousSettings:shouldShowInAppMessagesAutomatically:
+            verificationMode:diagnosticsEnabled:automaticDeviceIdentifierCollectionEnabled:preferredLocale:
+            useExternalPurchaseCustomLinks:enableExternalPurchasesInSimulator:iamEnabled:keychainAccessGroup:)
+    static func configure(apiKey: String,
+                          appUserID: String?,
+                          purchasesAreCompletedBy: String?,
+                          userDefaultsSuiteName: String?,
+                          platformFlavor: String?,
+                          platformFlavorVersion: String?,
+                          storeKitVersion: String = "DEFAULT",
+                          dangerousSettings: DangerousSettings?,
+                          shouldShowInAppMessagesAutomatically: Bool = true,
+                          verificationMode: String?,
+                          diagnosticsEnabled: Bool = false,
+                          automaticDeviceIdentifierCollectionEnabled: Bool = true,
+                          preferredLocale: String? = nil,
+                          useExternalPurchaseCustomLinks: Bool,
+                          enableExternalPurchasesInSimulator: Bool,
+                          iamEnabled: Bool,
+                          keychainAccessGroup: String?) -> Purchases {
+        return configure(apiKey: apiKey,
+                         appUserID: appUserID,
+                         purchasesAreCompletedBy: purchasesAreCompletedBy,
+                         userDefaultsSuiteName: userDefaultsSuiteName,
+                         platformFlavor: platformFlavor,
+                         platformFlavorVersion: platformFlavorVersion,
+                         storeKitVersion: storeKitVersion,
+                         dangerousSettings: dangerousSettings,
+                         shouldShowInAppMessagesAutomatically: shouldShowInAppMessagesAutomatically,
+                         verificationMode: verificationMode,
+                         diagnosticsEnabled: diagnosticsEnabled,
+                         automaticDeviceIdentifierCollectionEnabled:
+                            NSNumber(value: automaticDeviceIdentifierCollectionEnabled),
+                         preferredLocale: preferredLocale,
+                         useExternalPurchaseCustomLinks: useExternalPurchaseCustomLinks,
+                         enableExternalPurchasesInSimulator: enableExternalPurchasesInSimulator,
+                         iamEnabled: iamEnabled,
+                         keychainAccessGroup: keychainAccessGroup,
+                         deviceIdentifierCollectionMode: nil)
     }
 
     @available(*, deprecated, message: "Use the full configure method instead")
@@ -330,3 +389,16 @@ protocol ConfigurationBuilderDeprecatable {
 }
 
 extension Configuration.Builder: ConfigurationBuilderDeprecatable {}
+
+private extension DeviceIdentifierCollectionMode {
+
+    static func named(_ name: String) -> DeviceIdentifierCollectionMode? {
+        switch name {
+        case "AUTOMATIC": return .automatic
+        case "FUNCTIONAL": return .functional
+        case "MANUAL_ONLY": return .manualOnly
+        default: return nil
+        }
+    }
+
+}

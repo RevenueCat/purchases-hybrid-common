@@ -208,6 +208,38 @@ export enum PAYWALL_RESULT {
 }
 
 /**
+ * Which device identifiers the SDK collects and sends on its own.
+ * `Purchases.collectDeviceIdentifiers` collects them in every mode.
+ * @public
+ */
+export enum DEVICE_IDENTIFIER_COLLECTION_MODE {
+  /**
+   * When setting the identifier for an attribution network, for example with `Purchases.setAdjustID` or
+   * `Purchases.setAppsflyerID`, the SDK also collects device identifiers like the IDFA, IDFV, Android advertising ID
+   * or IP, if available, and sends them to RevenueCat. Some attribution networks need them to attribute installs and
+   * re-installs. On iOS, the SDK also sends the IDFV in the `X-Apple-Device-Identifier` header of its requests.
+   *
+   * This is the default.
+   */
+  AUTOMATIC = "AUTOMATIC",
+
+  /**
+   * iOS only: the SDK only sends the IDFV in the `X-Apple-Device-Identifier` header of its requests, and only
+   * collects device identifiers when calling `Purchases.collectDeviceIdentifiers`. Same as `MANUAL_ONLY` on Android.
+   */
+  FUNCTIONAL = "FUNCTIONAL",
+
+  /**
+   * The SDK sends no device identifiers on its own, and only collects them when calling
+   * `Purchases.collectDeviceIdentifiers`.
+   *
+   * On iOS, StoreKit 1 purchases made with a StoreKit Configuration file fail in this mode: RevenueCat needs the
+   * `X-Apple-Device-Identifier` header to validate those receipts. Use `FUNCTIONAL` to keep sending it.
+   */
+  MANUAL_ONLY = "MANUAL_ONLY",
+}
+
+/**
  * Defines which version of StoreKit may be used
  * @public
  */

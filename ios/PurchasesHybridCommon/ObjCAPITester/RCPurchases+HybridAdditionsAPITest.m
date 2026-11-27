@@ -50,6 +50,24 @@ NS_ASSUME_NONNULL_BEGIN
                                            enableExternalPurchasesInSimulator:YES
                                                                    iamEnabled:YES
                                                           keychainAccessGroup:nil];
+    RCPurchases *purchasesWithDeviceIdentifierCollectionMode __unused = [RCPurchases configureWithAPIKey:@""
+                                                                                            appUserID:@""
+                                                                              purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat
+                                                                                userDefaultsSuiteName:nil
+                                                                                       platformFlavor:nil
+                                                                                platformFlavorVersion:@""
+                                                                                      storeKitVersion:@""
+                                                                                    dangerousSettings:nil
+                                                                 shouldShowInAppMessagesAutomatically:NO
+                                                                                     verificationMode:@""
+                                                                                   diagnosticsEnabled:YES
+                                                           automaticDeviceIdentifierCollectionEnabled:nil
+                                                                                      preferredLocale:nil
+                                                                       useExternalPurchaseCustomLinks:NO
+                                                                   enableExternalPurchasesInSimulator:YES
+                                                                                           iamEnabled:YES
+                                                                                  keychainAccessGroup:nil
+                                                                       deviceIdentifierCollectionMode:@"MANUAL_ONLY"];
     RCPurchases *purchasesWithPreferredLocale __unused = [RCPurchases configureWithAPIKey:@""
                                                              appUserID:@""
                                                purchasesAreCompletedBy:RCPurchasesAreCompletedByRevenueCat

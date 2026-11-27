@@ -10,6 +10,7 @@ import com.revenuecat.purchases.AmazonLWAConsentStatus
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.DangerousSettings
 import com.revenuecat.purchases.DebugEventListener
+import com.revenuecat.purchases.DeviceIdentifierCollectionMode
 import com.revenuecat.purchases.EntitlementVerificationMode
 import com.revenuecat.purchases.ExperimentalPreviewRevenueCatPurchasesAPI
 import com.revenuecat.purchases.InternalRevenueCatAPI
@@ -1011,6 +1012,7 @@ fun configure(
     preferredLocale: String? = null,
     galaxyBillingMode: String? = null,
     iamEnabled: Boolean? = null,
+    deviceIdentifierCollectionMode: String? = null,
 ) {
     Purchases.platformInfo = platformInfo
 
@@ -1030,11 +1032,22 @@ fun configure(
             }
             pendingTransactionsForPrepaidPlansEnabled?.let { pendingTransactionsForPrepaidPlansEnabled(it) }
             diagnosticsEnabled?.let { diagnosticsEnabled(it) }
+            @Suppress("DEPRECATION")
             automaticDeviceIdentifierCollectionEnabled?.let { automaticDeviceIdentifierCollectionEnabled(it) }
+            deviceIdentifierCollectionMode?.let { configureDeviceIdentifierCollectionMode(it) }
             preferredLocale?.let { preferredUILocaleOverride(it) }
             configureGalaxyBillingModeIfNeeded(store, galaxyBillingMode)
             iamEnabled?.let { iamEnabled(it) }
         }.also { Purchases.configure(it.build()) }
+}
+
+private fun PurchasesConfiguration.Builder.configureDeviceIdentifierCollectionMode(mode: String) {
+    when (mode) {
+        "AUTOMATIC" -> deviceIdentifierCollectionMode(DeviceIdentifierCollectionMode.AUTOMATIC)
+        // Android sends no device identifier header, so FUNCTIONAL collects the same as MANUAL_ONLY.
+        "FUNCTIONAL", "MANUAL_ONLY" -> deviceIdentifierCollectionMode(DeviceIdentifierCollectionMode.MANUAL_ONLY)
+        else -> warnLog("Attempted to configure with unknown device identifier collection mode: $mode.")
+    }
 }
 
 @OptIn(ExperimentalPreviewRevenueCatPurchasesAPI::class)

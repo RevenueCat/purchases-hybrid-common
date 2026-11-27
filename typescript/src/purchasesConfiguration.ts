@@ -1,4 +1,5 @@
 import {
+  DEVICE_IDENTIFIER_COLLECTION_MODE,
   ENTITLEMENT_VERIFICATION_MODE,
   STOREKIT_VERSION,
   PurchasesAreCompletedBy,
@@ -88,8 +89,18 @@ export interface PurchasesConfiguration {
    * setting an attribution network ID AND the user has not limited ad tracking on their device.
    *
    * Default is enabled.
+   *
+   * @deprecated Use `deviceIdentifierCollectionMode`: `AUTOMATIC` for true, `FUNCTIONAL` for false.
    */
   automaticDeviceIdentifierCollectionEnabled?: boolean;
+
+  /**
+   * Which device identifiers the SDK collects and sends on its own. See {@link DEVICE_IDENTIFIER_COLLECTION_MODE}.
+   * Takes precedence over `automaticDeviceIdentifierCollectionEnabled`.
+   *
+   * Default is `AUTOMATIC`.
+   */
+  deviceIdentifierCollectionMode?: DEVICE_IDENTIFIER_COLLECTION_MODE;
 
   /**
    * Override the preferred UI locale for RevenueCat UI components at runtime. This affects both API requests and UI rendering.

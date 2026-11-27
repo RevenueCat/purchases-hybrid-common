@@ -264,6 +264,82 @@ class PurchasesHybridAdditionsTests: QuickSpec {
                     }
                 }
 
+        context("configure with deviceIdentifierCollectionMode") {
+                    func unsyncedAttributeKeysAfterSettingAdjustID(
+                        automaticDeviceIdentifierCollectionEnabled: NSNumber?,
+                        deviceIdentifierCollectionMode: String?
+                    ) -> Set<String> {
+                        let purchases = Purchases.configure(apiKey: "api key",
+                                                            appUserID: nil,
+                                                            purchasesAreCompletedBy: "REVENUECAT",
+                                                            userDefaultsSuiteName: UUID().uuidString,
+                                                            platformFlavor: "hybrid-platform",
+                                                            platformFlavorVersion: "1.2.3",
+                                                            dangerousSettings: nil,
+                                                            verificationMode: nil,
+                                                            automaticDeviceIdentifierCollectionEnabled:
+                                                                automaticDeviceIdentifierCollectionEnabled,
+                                                            useExternalPurchaseCustomLinks: false,
+                                                            enableExternalPurchasesInSimulator: true,
+                                                            iamEnabled: false,
+                                                            keychainAccessGroup: nil,
+                                                            deviceIdentifierCollectionMode:
+                                                                deviceIdentifierCollectionMode)
+                        purchases.attribution.setAdjustID("adjust-id")
+                        return Set(purchases.attribution.unsyncedAttributesByKey(appUserID: purchases.appUserID).keys)
+                    }
+
+                    let deviceIdentifierKeys: Set<String> = ["$ip", "$idfv", "$idfa", "$deviceVersion"]
+
+                    it("keeps the SDK default when nothing is passed") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: nil,
+                            deviceIdentifierCollectionMode: nil
+                        )
+                        expect(keys).to(contain("$adjustId", "$ip"))
+                    }
+
+                    it("collects device identifiers when AUTOMATIC") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: nil,
+                            deviceIdentifierCollectionMode: "AUTOMATIC"
+                        )
+                        expect(keys).to(contain("$adjustId", "$ip"))
+                    }
+
+                    it("does not collect device identifiers when FUNCTIONAL") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: nil,
+                            deviceIdentifierCollectionMode: "FUNCTIONAL"
+                        )
+                        expect(keys.intersection(deviceIdentifierKeys)).to(beEmpty())
+                    }
+
+                    it("does not collect device identifiers when MANUAL_ONLY") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: nil,
+                            deviceIdentifierCollectionMode: "MANUAL_ONLY"
+                        )
+                        expect(keys.intersection(deviceIdentifierKeys)).to(beEmpty())
+                    }
+
+                    it("takes precedence over automaticDeviceIdentifierCollectionEnabled") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: false,
+                            deviceIdentifierCollectionMode: "AUTOMATIC"
+                        )
+                        expect(keys).to(contain("$adjustId", "$ip"))
+                    }
+
+                    it("ignores an unknown mode") {
+                        let keys = unsyncedAttributeKeysAfterSettingAdjustID(
+                            automaticDeviceIdentifierCollectionEnabled: false,
+                            deviceIdentifierCollectionMode: "UNKNOWN"
+                        )
+                        expect(keys.intersection(deviceIdentifierKeys)).to(beEmpty())
+                    }
+                }
+
         context("configure with useExternalPurchaseCustomLinks") {
                     it("true") {
                         expect {
